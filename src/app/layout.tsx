@@ -19,13 +19,13 @@ export default function RootLayout({
         <header className="border-b border-neutral-200">
           <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
             <Link href="/" className="text-xl font-bold">
-              Bi<span className="text-blue-600">Learn</span>
+              Bi<span className="text-gold-700">Learn</span>
             </Link>
             <div className="flex gap-6 text-sm font-medium text-neutral-600">
-              <Link href="/" className="hover:text-blue-600">
+              <Link href="/" className="hover:text-gold-700">
                 Semua Track
               </Link>
-              <Link href="/paths" className="hover:text-blue-600">
+              <Link href="/paths" className="hover:text-gold-700">
                 Learning Path
               </Link>
             </div>

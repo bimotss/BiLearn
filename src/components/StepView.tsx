@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import type { Step } from "@/lib/types";
+import { InlineMarkdown } from "./MarkdownRenderer";
 
 interface Props {
   step: Step;
@@ -36,6 +37,86 @@ export default function StepView({ step, onPassed }: Props) {
       <\/style>
       <p class="cap">Yang kamu tulis (tidak dijalankan di preview):<\/p>
       <div class="term">${aman || "(masih kosong)"}<\/div>${body}`;
+    }
+
+    // Step React/TypeScript: JSX & anotasi tipe bukan JavaScript yang bisa
+    // langsung dijalankan browser. Kode dikompilasi dulu dengan Babel, lalu
+    // komponen terakhir yang terdefinisi dirender ke #root. Potongan kode yang
+    // belum utuh (mis. hanya `<Outlet />`) TIDAK ditampilkan sebagai error
+    // merah — pemula cukup diberi tahu sintaksnya sudah benar.
+    if (step.language === "jsx") {
+      const kodeJson = JSON.stringify(code).replace(/<\//g, "<\\/");
+      return `${base}<style>
+        #root{min-height:40px}
+        #bilearn-out{font-family:ui-monospace,monospace;font-size:12px;background:#0f172a;
+          color:#e2e8f0;padding:8px;border-radius:6px;white-space:pre-wrap;margin-top:8px}
+        #bilearn-out .err{color:#fca5a5}
+        #bilearn-out .ok{color:#86efac}
+      <\/style>
+      <div id="root"><\/div>
+      <pre id="bilearn-out"><\/pre>
+      <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7/babel.min.js"><\/script>
+      <script type="module">
+        const kode = ${kodeJson};
+        const out = document.getElementById('bilearn-out');
+        const show = (teks, cls) => {
+          const baris = document.createElement('div');
+          if (cls) baris.className = cls;
+          baris.textContent = teks;
+          out.appendChild(baris);
+        };
+        console.log = (...args) => show(args.map(v =>
+          typeof v === 'string' ? v : (() => { try { return JSON.stringify(v); } catch { return String(v); } })()
+        ).join(' '));
+
+        let React, createRoot;
+        try {
+          React = (await import('https://esm.sh/react@19')).default;
+          createRoot = (await import('https://esm.sh/react-dom@19/client')).createRoot;
+        } catch {
+          show('Preview React butuh koneksi internet untuk memuat pustaka React.', 'err');
+        }
+
+        if (React && typeof Babel === 'undefined') {
+          show('Kompiler JSX gagal dimuat. Periksa koneksi internetmu, lalu jalankan ulang.', 'err');
+        }
+
+        if (React && typeof Babel !== 'undefined') {
+          // import/export tidak bisa dievaluasi di dalam Function biasa
+          const bersih = kode
+            .replace(/^\\s*import[^;\\n]*;?$/gm, '')
+            .replace(/^\\s*export\\s+default\\s+/gm, '')
+            .replace(/^\\s*export\\s+/gm, '');
+          let hasil;
+          try {
+            hasil = Babel.transform(bersih, {
+              presets: [['react'], ['typescript']],
+              filename: 'latihan.tsx',
+            }).code;
+          } catch (e) {
+            show('Sintaks belum valid: ' + e.message, 'err');
+          }
+          if (hasil) {
+            const nama = [...bersih.matchAll(/(?:function\\s+([A-Z]\\w*)|(?:const|let|var)\\s+([A-Z]\\w*)\\s*=)/g)]
+              .map(m => m[1] || m[2]);
+            const target = nama[nama.length - 1];
+            const prelude = 'const {useState,useEffect,useRef,useMemo,useCallback,useContext,useReducer,createContext,Fragment,memo} = React;';
+            try {
+              const Komponen = new Function('React',
+                prelude + '\\n' + hasil + '\\n;return typeof ' + target + " === 'function' ? " + target + ' : null;'
+              )(React);
+              if (Komponen) {
+                createRoot(document.getElementById('root')).render(React.createElement(Komponen));
+                show('Komponen ' + target + ' berhasil dirender di atas.', 'ok');
+              } else {
+                show('Sintaks JSX/TypeScript sudah benar. Preview visual muncul kalau kamu menulis komponen utuh (fungsi berawalan huruf besar yang me-return JSX).', 'ok');
+              }
+            } catch (e) {
+              show('Sintaks sudah benar, tapi potongan ini belum bisa dijalankan sendiri (' + e.message + '). Itu wajar untuk cuplikan kode di dalam komponen.', 'ok');
+            }
+          }
+        }
+      <\/script>`;
     }
 
     if (step.language === "html") return `${tw}${code}`;
@@ -114,7 +195,9 @@ export default function StepView({ step, onPassed }: Props) {
     <div className="grid gap-6 lg:grid-cols-2">
       {/* Kiri: penjelasan + instruksi */}
       <div className="space-y-4">
-        <p className="text-neutral-700 leading-relaxed">{step.explanation}</p>
+        <p className="text-neutral-700 leading-relaxed">
+          <InlineMarkdown text={step.explanation} />
+        </p>
 
         {/* Contoh kerja: dilihat dulu sebelum mengerjakan */}
         <div className="rounded-lg border border-neutral-200 bg-neutral-50 p-4">
@@ -135,11 +218,13 @@ export default function StepView({ step, onPassed }: Props) {
           )}
         </div>
 
-        <div className="rounded-lg border-l-4 border-blue-500 bg-blue-50 p-4">
-          <p className="font-medium text-blue-900">
+        <div className="rounded-lg border-l-4 border-gold-400 bg-gold-50 p-4">
+          <p className="font-medium text-gold-900">
             📝 Sekarang giliranmu
           </p>
-          <p className="mt-1 text-blue-800">{step.instruction}</p>
+          <p className="mt-1 text-gold-900">
+            <InlineMarkdown text={step.instruction} />
+          </p>
         </div>
 
         {results.length > 0 && (
@@ -168,7 +253,7 @@ export default function StepView({ step, onPassed }: Props) {
         <div className="flex gap-3">
           <button
             onClick={runTests}
-            className="rounded-lg bg-blue-600 px-5 py-2.5 font-medium text-white hover:bg-blue-700"
+            className="rounded-lg bg-gold-500 px-5 py-2.5 font-medium text-neutral-900 hover:bg-gold-400"
           >
             Jalankan Tes
           </button>

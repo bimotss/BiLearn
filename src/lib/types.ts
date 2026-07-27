@@ -61,12 +61,15 @@ export interface Step {
   /** Kode awal di editor */
   starterCode: string;
   /**
-   * "html" | "css" | "js" → kode DIEKSEKUSI di preview.
+   * "html" | "css" | "js" → kode DIEKSEKUSI apa adanya di preview.
+   * "jsx" → kode dikompilasi dulu (Babel: JSX + TypeScript), lalu komponen
+   * terakhir yang terdefinisi dirender. Dipakai untuk React, Next.js, dan
+   * TypeScript — keduanya bukan JavaScript valid di browser.
    * "text" → tidak dieksekusi, hanya ditampilkan (untuk perintah shell/git,
-   * SQL, PHP, Python, formula spreadsheet, Markdown). Wajib dipakai untuk
-   * konten non-JS, kalau tidak preview akan melempar SyntaxError.
+   * SQL, PHP, Python, kode Node.js, formula spreadsheet, Markdown). Wajib
+   * dipakai untuk konten non-JS, kalau tidak preview akan melempar SyntaxError.
    */
-  language: "html" | "css" | "js" | "text";
+  language: "html" | "css" | "js" | "jsx" | "text";
   /**
    * Untuk step CSS/JS: markup yang di-style/dimanipulasi user, ditampilkan di
    * preview bersama kode user. Diabaikan untuk step HTML.

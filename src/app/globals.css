@@ -8,6 +8,20 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+
+  /* Palet emas BiLearn — warna aksen tunggal untuk seluruh aplikasi.
+     Ubah nilainya di sini kalau ingin emas yang lebih terang atau lebih tua;
+     seluruh tombol, link, dan progress bar ikut menyesuaikan. */
+  --color-gold-50: #fdfaf1;
+  --color-gold-100: #f8f0d8;
+  --color-gold-200: #efdfaa;
+  --color-gold-300: #e3c974;
+  --color-gold-400: #d4af37;
+  --color-gold-500: #c39a24;
+  --color-gold-600: #9a6f14;
+  --color-gold-700: #7e5a11;
+  --color-gold-800: #5f430d;
+  --color-gold-900: #45300a;
 }
 
 body {

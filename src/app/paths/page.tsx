@@ -36,7 +36,7 @@ export default function PathsPage() {
             <div
               key={path.slug}
               className={`rounded-xl border p-6 ${
-                active ? "border-blue-500 bg-blue-50" : "border-neutral-200"
+                active ? "border-gold-400 bg-gold-50" : "border-neutral-200"
               }`}
             >
               <div className="flex items-center gap-3">
@@ -68,8 +68,8 @@ export default function PathsPage() {
                 disabled={active}
                 className={`mt-5 w-full rounded-lg px-5 py-2.5 font-medium ${
                   active
-                    ? "cursor-default bg-blue-100 text-blue-700"
-                    : "bg-blue-600 text-white hover:bg-blue-700"
+                    ? "cursor-default bg-gold-100 text-gold-800"
+                    : "bg-gold-500 text-neutral-900 hover:bg-gold-400"
                 }`}
               >
                 {active ? "✓ Path aktif" : "Pilih path ini"}

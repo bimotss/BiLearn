@@ -25,7 +25,7 @@ export default function HomePage() {
       <section className="space-y-3">
         <h1 className="text-3xl font-bold">
           Belajar coding yang{" "}
-          <span className="text-blue-600">kepake di dunia kerja</span>
+          <span className="text-gold-700">kepake di dunia kerja</span>
         </h1>
         <p className="max-w-2xl text-neutral-600">
           Kurikulum disusun dari skill yang benar-benar diminta lowongan kerja.
@@ -35,24 +35,24 @@ export default function HomePage() {
       </section>
 
       {activePath ? (
-        <section className="rounded-xl border border-blue-200 bg-blue-50 p-5">
+        <section className="rounded-xl border border-gold-200 bg-gold-50 p-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <p className="text-sm font-medium text-blue-700">Path aktif</p>
-              <p className="text-lg font-bold text-blue-900">
+              <p className="text-sm font-medium text-gold-800">Path aktif</p>
+              <p className="text-lg font-bold text-gold-900">
                 {activePath.icon} {activePath.title}
               </p>
             </div>
             <div className="flex gap-3">
               <Link
                 href="/paths"
-                className="rounded-lg border border-blue-300 px-4 py-2 text-sm font-medium text-blue-700 hover:bg-blue-100"
+                className="rounded-lg border border-gold-300 px-4 py-2 text-sm font-medium text-gold-800 hover:bg-gold-100"
               >
                 Ganti path
               </Link>
               <button
                 onClick={() => setActivePath(undefined)}
-                className="rounded-lg px-4 py-2 text-sm text-blue-600 hover:bg-blue-100"
+                className="rounded-lg px-4 py-2 text-sm text-gold-700 hover:bg-gold-100"
               >
                 Lepas path
               </button>
@@ -67,7 +67,7 @@ export default function HomePage() {
           </p>
           <Link
             href="/paths"
-            className="rounded-lg bg-blue-600 px-5 py-2.5 font-medium text-white hover:bg-blue-700"
+            className="rounded-lg bg-gold-500 px-5 py-2.5 font-medium text-neutral-900 hover:bg-gold-400"
           >
             Pilih Learning Path
           </Link>
@@ -90,7 +90,7 @@ export default function HomePage() {
                 key={track.slug}
                 href={`/tracks/${track.slug}`}
                 className={`group rounded-xl border p-5 transition hover:shadow-md ${
-                  inPath ? "border-blue-300" : "border-neutral-200"
+                  inPath ? "border-gold-300" : "border-neutral-200"
                 }`}
               >
                 <div className="flex items-start justify-between">
@@ -100,12 +100,12 @@ export default function HomePage() {
                     {track.icon}
                   </span>
                   {activePath && inPath && (
-                    <span className="rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-700">
+                    <span className="rounded-full bg-gold-100 px-2.5 py-0.5 text-xs font-medium text-gold-800">
                       Langkah {i + 1}
                     </span>
                   )}
                 </div>
-                <h3 className="mt-3 font-bold group-hover:text-blue-600">
+                <h3 className="mt-3 font-bold group-hover:text-gold-700">
                   {track.title}
                 </h3>
                 <p className="mt-1 text-sm text-neutral-600">
@@ -124,7 +124,7 @@ export default function HomePage() {
                 {items.length > 0 && (
                   <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-neutral-100">
                     <div
-                      className="h-full rounded-full bg-blue-500 transition-all"
+                      className="h-full rounded-full bg-gold-500 transition-all"
                       style={{ width: `${pct}%` }}
                     />
                   </div>

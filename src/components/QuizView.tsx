@@ -116,7 +116,7 @@ function QuestionCard({
                   ? "border-green-500 bg-green-50"
                   : submitted && i === selected
                     ? "border-red-400 bg-red-50"
-                    : "border-neutral-200 hover:border-blue-400 hover:bg-blue-50"
+                    : "border-neutral-200 hover:border-gold-400 hover:bg-gold-50"
               }`}
             >
               {c}
@@ -131,13 +131,13 @@ function QuestionCard({
             onKeyDown={(e) => e.key === "Enter" && submitText()}
             disabled={submitted && correct}
             placeholder="Ketik jawabanmu…"
-            className="flex-1 rounded-lg border border-neutral-300 px-4 py-2.5 outline-none focus:border-blue-500"
+            className="flex-1 rounded-lg border border-neutral-300 px-4 py-2.5 outline-none focus:border-gold-400"
             aria-label="Jawaban isian"
           />
           <button
             onClick={submitText}
             disabled={submitted && correct}
-            className="rounded-lg bg-blue-600 px-5 py-2.5 font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+            className="rounded-lg bg-gold-500 px-5 py-2.5 font-medium text-neutral-900 hover:bg-gold-400 disabled:opacity-50"
           >
             Jawab
           </button>
