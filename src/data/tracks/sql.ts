@@ -31,7 +31,7 @@ export const sqlTrack: Track = {
           id: "sql-1-1",
           title: "Konsep Database Relasional",
           explanation:
-            "Bayangkan sebuah database relasional seperti aplikasi Microsoft Excel atau Google Sheets. Seluruh data disimpan dalam bentuk 'Tabel' yang strukturnya sangat rapi. Di dalam tabel, 'Kolom' (columns) berderet ke samping menentukan jenis informasi (misal: nama, umur, email). 'Baris' (rows) menyusun ke bawah menyimpan data nyata — setiap satu baris mewakili satu entitas (satu pengguna, satu produk). Struktur ketat inilah yang membuat database relasional sangat anadalan dalam mencari dan menghubungkan jutaan baris data secara kilat.",
+            "Bayangkan sebuah database relasional seperti aplikasi Microsoft Excel atau Google Sheets. Seluruh data disimpan dalam bentuk 'Tabel' yang strukturnya sangat rapi. Di dalam tabel, 'Kolom' (columns) berderet ke samping menentukan jenis informasi (misal: nama, umur, email). 'Baris' (rows) menyusun ke bawah menyimpan data nyata — setiap satu baris mewakili satu entitas (satu pengguna, satu produk). Struktur ketat inilah yang membuat database relasional sangat andalan dalam mencari dan menghubungkan jutaan baris data secara kilat.",
           example: {
             code: "-- Tabel 'users' memuat kolom id, name, email, dan created_at\nSELECT * FROM users;",
             output: "Seluruh baris dan kolom dari tabel users ditampilkan.",
@@ -45,7 +45,7 @@ export const sqlTrack: Track = {
             {
               pattern: "SELECT\\s+\\*\\s+FROM\\s+products\\s*;?",
               message: "Gunakan: SELECT * FROM products;",
-            },
+            }
           ],
           solution: "SELECT * FROM products;",
         },
@@ -68,7 +68,7 @@ export const sqlTrack: Track = {
             {
               pattern: "SELECT\\s+name\\s*,\\s*email\\s+FROM\\s+users\\s*;?",
               message: "Gunakan: SELECT name, email FROM users;",
-            },
+            }
           ],
           solution: "SELECT name, email FROM users;",
         },
@@ -91,7 +91,7 @@ export const sqlTrack: Track = {
             {
               pattern: "SELECT\\s+\\*\\s+FROM\\s+products\\s+WHERE\\s+price\\s*=\\s*10000\\s*;?",
               message: "Gunakan: SELECT * FROM products WHERE price = 10000;",
-            },
+            }
           ],
           solution: "SELECT * FROM products WHERE price = 10000;",
         },
@@ -114,7 +114,7 @@ export const sqlTrack: Track = {
             {
               pattern: "SELECT\\s+\\*\\s+FROM\\s+users\\s+WHERE\\s+status\\s*=\\s*['\"]active['\"]\\s+AND\\s+role\\s*=\\s*['\"]admin['\"]\\s*;?",
               message: "Gunakan: SELECT * FROM users WHERE status = 'active' AND role = 'admin';",
-            },
+            }
           ],
           solution: "SELECT * FROM users WHERE status = 'active' AND role = 'admin';",
         },
@@ -137,7 +137,7 @@ export const sqlTrack: Track = {
             {
               pattern: "SELECT\\s+\\*\\s+FROM\\s+users\\s+ORDER\\s+BY\\s+created_at\\s+DESC\\s+LIMIT\\s+10\\s*;?",
               message: "Gunakan: SELECT * FROM users ORDER BY created_at DESC LIMIT 10;",
-            },
+            }
           ],
           solution: "SELECT * FROM users ORDER BY created_at DESC LIMIT 10;",
         },
@@ -160,7 +160,7 @@ export const sqlTrack: Track = {
             {
               pattern: "SELECT\\s+DISTINCT\\s+role\\s+FROM\\s+users\\s*;?",
               message: "Gunakan: SELECT DISTINCT role FROM users;",
-            },
+            }
           ],
           solution: "SELECT DISTINCT role FROM users;",
         },
@@ -183,7 +183,7 @@ export const sqlTrack: Track = {
             {
               pattern: "SELECT\\s+\\*\\s+FROM\\s+orders\\s+WHERE\\s+paid_at\\s+IS\\s+NOT\\s+NULL\\s*;?",
               message: "Gunakan: SELECT * FROM orders WHERE paid_at IS NOT NULL;",
-            },
+            }
           ],
           solution: "SELECT * FROM orders WHERE paid_at IS NOT NULL;",
         },
@@ -195,7 +195,8 @@ export const sqlTrack: Track = {
             {
               id: "q1",
               type: "pilihan-ganda",
-              question: "Mengapa klausa `= NULL` tidak akan pernah menghasilkan data pada query SQL?",
+              question:
+                "Mengapa klausa `= NULL` tidak akan pernah menghasilkan data pada query SQL?",
               choices: [
                 "Karena NULL di SQL berarti data tidak diketahui (Unknown), sehingga wajib diperiksa dengan `IS NULL`",
                 "Karena NULL adalah kata terlarang",
@@ -203,23 +204,69 @@ export const sqlTrack: Track = {
                 "Karena NULL bernilai angka nol",
               ],
               answerIndex: 0,
-              explanation: "NULL merepresentasikan nilai yang tidak ada / unknown. Perbandingan kesetaraan dengan NULL wajib menggunakan operator `IS NULL`.",
+              explanation:
+                "NULL berarti 'nilainya tidak diketahui', bukan nol dan bukan string kosong. Membandingkan sesuatu yang tidak diketahui dengan nilai apa pun hasilnya juga tidak diketahui — bukan TRUE — sehingga barisnya tidak pernah lolos filter. Karena itu SQL menyediakan operator khusus IS NULL dan IS NOT NULL.",
             },
             {
               id: "q2",
               type: "pilihan-ganda",
-              question: "Klausul mana yang digunakan untuk mengurutkan hasil query?",
-              choices: ['ORDER BY', 'GROUP BY', 'SORT BY', 'LIMIT'],
-              answerIndex: 0,
-              explanation: "ORDER BY digunakan untuk mengurutkan."
+              question:
+                "Atasanmu minta daftar 10 produk termahal dari tabel `products`. Query mana yang benar?",
+              choices: [
+                "SELECT * FROM products LIMIT 10 ORDER BY price DESC;",
+                "SELECT * FROM products ORDER BY price DESC LIMIT 10;",
+                "SELECT TOP 10 * FROM products ORDER BY price;",
+                "SELECT * FROM products WHERE price = MAX(price) LIMIT 10;",
+              ],
+              answerIndex: 1,
+              explanation:
+                "Urutannya tetap: ORDER BY dulu, baru LIMIT. Database mengurutkan seluruh baris lebih dulu, baru memotong 10 teratas — kalau LIMIT ditulis duluan, sintaksnya error di MySQL maupun PostgreSQL. Kata kunci DESC dipakai karena termahal berarti dari besar ke kecil; tanpa DESC kamu justru mendapat 10 termurah.",
             },
             {
               id: "q3",
               type: "pilihan-ganda",
-              question: "Fungsi DISTINCT adalah untuk?",
-              choices: ['Menghapus baris', 'Menghilangkan nilai duplikat', 'Menggabungkan tabel', 'Menambah kolom'],
+              question:
+                "Tabel `customers` punya 5.000 baris dan banyak pelanggan berasal dari kota yang sama. Kamu butuh daftar nama kota tanpa pengulangan. Query mana yang tepat?",
+              choices: [
+                "SELECT city FROM customers;",
+                "SELECT DISTINCT city FROM customers;",
+                "SELECT city FROM customers GROUP BY id;",
+                "SELECT UNIQUE(city) FROM customers;",
+              ],
               answerIndex: 1,
-              explanation: "DISTINCT menghilangkan baris kembar."
+              explanation:
+                "DISTINCT membuang baris kembar dari hasil query sehingga setiap kota hanya muncul sekali. SELECT city biasa mengembalikan 5.000 baris penuh pengulangan, dan UNIQUE() bukan fungsi SQL standar. Alternatif yang juga benar adalah GROUP BY city — biasanya dipakai kalau kamu sekaligus ingin menghitung jumlah pelanggan per kota.",
+            },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question:
+                "Fitur pencarian pelanggan harus menemukan semua nama yang diawali huruf 'Bu' (Budi, Budiman, Bunga). Kondisi WHERE mana yang tepat?",
+              choices: [
+                "WHERE name = 'Bu'",
+                "WHERE name LIKE 'Bu%'",
+                "WHERE name LIKE '%Bu'",
+                "WHERE name IN ('Bu')",
+              ],
+              answerIndex: 1,
+              explanation:
+                "Operator LIKE dipakai untuk pencocokan pola, dan tanda % berarti 'karakter apa pun, sebanyak apa pun'. Karena % ditaruh di belakang, polanya berarti diawali 'Bu'. Kalau % ditaruh di depan artinya justru diakhiri 'Bu', sedangkan = 'Bu' hanya cocok untuk nama yang persis dua huruf itu.",
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question:
+                "Query ini seharusnya mengambil buku ATAU alat tulis yang stoknya masih ada, tapi hasilnya ikut memuat buku berstok 0. Kenapa?",
+              code: "SELECT * FROM products\nWHERE kategori = 'buku' OR kategori = 'alat tulis' AND stok > 0;",
+              choices: [
+                "Karena OR tidak boleh dipakai bersama AND",
+                "Karena AND dievaluasi lebih dulu daripada OR, sehingga syarat stok hanya berlaku untuk 'alat tulis'",
+                "Karena kolom stok bertipe angka",
+                "Karena SELECT * tidak boleh dipakai bersama WHERE",
+              ],
+              answerIndex: 1,
+              explanation:
+                "AND punya prioritas lebih tinggi daripada OR, jadi query itu dibaca sebagai kategori = 'buku' OR (kategori = 'alat tulis' AND stok > 0). Semua buku ikut lolos tanpa memandang stok. Perbaikannya: bungkus bagian OR dengan tanda kurung. Bug senyap seperti ini tidak memunculkan error dan sering lolos sampai production.",
             },
           ],
         },
@@ -245,23 +292,23 @@ export const sqlTrack: Track = {
           id: "sql-2-1",
           title: "Primary Key vs Foreign Key",
           explanation:
-            "Primary Key (PK) adalah identitas unik 1 baris di tabel asal, sedangkan Foreign Key (FK) adalah kolom di tabel lain yang menunjuk ke PK tersebut.",
+            "Primary Key (PK) adalah identitas unik 1 baris di tabel asal, sedangkan Foreign Key (FK) adalah kolom di tabel lain yang menunjuk ke PK tersebut. Keduanya merupakan fondasi utama dalam mendesain database relasional. Tanpa foreign key, relasi antar tabel tidak akan memiliki batasan referensial yang kuat. Oleh karena itu, selalu pastikan tabel anak mereferensikan tabel induk dengan benar.",
           example: {
-            code: "-- Tabel users memuat Primary Key (id)\n-- Tabel orders memuat Foreign Key (user_id) yang merujuk ke users(id)",
-            output: "Relasi One-to-Many terwujud antar tabel.",
+            code: "CREATE TABLE orders (\n  id INT PRIMARY KEY,\n  user_id INT,\n  FOREIGN KEY (user_id) REFERENCES users(id)\n);",
+            output: "Tabel orders dibuat dengan foreign key.",
             note: "FK menjamin integritas referensial data.",
           },
           instruction:
-            "Tulislah komentar berbahasa Inggris yang menyatakan bahwa Foreign Key menghubungkan sebuah kolom ke Primary Key di tabel lain.",
-          starterCode: "",
+            "Buat tabel `profiles` yang memiliki kolom `id` bertipe INT sebagai primary key dan kolom `user_id` bertipe INT sebagai foreign key yang merujuk ke tabel `users` kolom `id`.",
+          starterCode: "-- Tulis query di sini\n",
           language: "text",
           tests: [
             {
-              pattern: "//\\s*Foreign\\s+Key\\s+links\\s+a\\s+column\\s+to\\s+a\\s+Primary\\s+Key\\s+in\\s+another\\s+table",
-              message: "Tuliskan komentar yang diminta",
-            },
+              pattern: "CREATE\\s+TABLE\\s+profiles\\s*\\([\\s\\S]*?id\\s+INT\\s+PRIMARY\\s+KEY[\\s\\S]*?user_id\\s+INT[\\s\\S]*?FOREIGN\\s+KEY\\s*\\(\\s*user_id\\s*\\)\\s+REFERENCES\\s+users\\s*\\(\\s*id\\s*\\)[\\s\\S]*?\\)\\s*;",
+              message: "Gunakan CREATE TABLE profiles dengan PRIMARY KEY dan FOREIGN KEY yang benar",
+            }
           ],
-          solution: "// Foreign Key links a column to a Primary Key in another table",
+          solution: "CREATE TABLE profiles (\n  id INT PRIMARY KEY,\n  user_id INT,\n  FOREIGN KEY (user_id) REFERENCES users(id)\n);",
         },
         {
           kind: "step",
@@ -285,7 +332,7 @@ export const sqlTrack: Track = {
             {
               pattern: "SELECT\\s+orders\\.id\\s*,\\s*users\\.name\\s+FROM\\s+orders\\s+INNER\\s+JOIN\\s+users\\s+ON\\s+orders\\.user_id\\s*=\\s*users\\.id\\s*;?",
               message: "Gunakan: SELECT orders.id, users.name FROM orders INNER JOIN users ON orders.user_id = users.id;",
-            },
+            }
           ],
           solution: "SELECT orders.id, users.name FROM orders INNER JOIN users ON orders.user_id = users.id;",
         },
@@ -311,7 +358,7 @@ export const sqlTrack: Track = {
             {
               pattern: "SELECT\\s+users\\.name\\s*,\\s*orders\\.id\\s+FROM\\s+users\\s+LEFT\\s+JOIN\\s+orders\\s+ON\\s+users\\.id\\s*=\\s*orders\\.user_id\\s*;?",
               message: "Gunakan query LEFT JOIN sesuai instruksi",
-            },
+            }
           ],
           solution: "SELECT users.name, orders.id FROM users LEFT JOIN orders ON users.id = orders.user_id;",
         },
@@ -373,23 +420,23 @@ export const sqlTrack: Track = {
           id: "sql-2-6",
           title: "Many-to-Many & Junction Table",
           explanation:
-            "Relasi Banyak-ke-Banyak (Many-to-Many) dihubungkan menggunakan Tabel Perantara (Junction / Pivot Table).",
+            "Relasi Banyak-ke-Banyak (Many-to-Many) dihubungkan menggunakan Tabel Perantara (Junction / Pivot Table). Pendekatan ini memecah relasi M:N menjadi dua relasi 1:M. Biasanya junction table hanya berisi foreign key ke tabel-tabel utama yang direlasikan.",
           example: {
-            code: "-- Tabel 'student_courses' menghubungkan tabel 'students' dan 'courses'",
-            output: "Satu siswa bisa mengambil banyak kelas, dan satu kelas diambil banyak siswa.",
-            note: "Junction table menyimpan pasangan student_id dan course_id.",
+            code: "CREATE TABLE student_courses (\n  student_id INT,\n  course_id INT,\n  FOREIGN KEY (student_id) REFERENCES students(id),\n  FOREIGN KEY (course_id) REFERENCES courses(id)\n);",
+            output: "Tabel perantara berhasil dibuat.",
+            note: "Junction table menyimpan pasangan id dari tabel yang direlasikan.",
           },
           instruction:
-            "Tulis komentar bahwa Junction table menghubungkan relasi Many-to-Many.",
-          starterCode: "",
+            "Buat junction table `book_authors` untuk menghubungkan tabel `books` dan `authors`. Tabel ini harus memiliki kolom `book_id` (INT) dan `author_id` (INT) beserta foreign key-nya.",
+          starterCode: "-- Tulis query pembuatan tabel perantara di sini\n",
           language: "text",
           tests: [
             {
-              pattern: "//\\s*Junction\\s+table\\s+connects\\s+Many-to-Many\\s+relationships",
-              message: "Tuliskan komentar yang diminta",
-            },
+              pattern: "CREATE\\s+TABLE\\s+book_authors\\s*\\([\\s\\S]*?book_id\\s+INT[\\s\\S]*?author_id\\s+INT[\\s\\S]*?FOREIGN\\s+KEY\\s*\\(\\s*book_id\\s*\\)\\s+REFERENCES\\s+books\\s*\\(\\s*id\\s*\\)[\\s\\S]*?FOREIGN\\s+KEY\\s*\\(\\s*author_id\\s*\\)\\s+REFERENCES\\s+authors\\s*\\(\\s*id\\s*\\)[\\s\\S]*?\\)\\s*;",
+              message: "Gunakan CREATE TABLE book_authors dengan book_id dan author_id sebagai FK",
+            }
           ],
-          solution: "// Junction table connects Many-to-Many relationships",
+          solution: "CREATE TABLE book_authors (\n  book_id INT,\n  author_id INT,\n  FOREIGN KEY (book_id) REFERENCES books(id),\n  FOREIGN KEY (author_id) REFERENCES authors(id)\n);",
         },
         {
           kind: "step",
@@ -426,26 +473,72 @@ export const sqlTrack: Track = {
             {
               id: "q1",
               type: "pilihan-ganda",
-              question: "Jenis JOIN apa yang mengembalikan SELURUH baris dari tabel sebelah kiri, meskipun tidak ada pasangan data yang cocok di tabel kanan?",
+              question:
+                "Jenis JOIN apa yang mengembalikan SELURUH baris dari tabel sebelah kiri, meskipun tidak ada pasangan data yang cocok di tabel kanan?",
               choices: ["INNER JOIN", "LEFT JOIN", "RIGHT JOIN", "FULL JOIN"],
               answerIndex: 1,
-              explanation: "LEFT JOIN mempertahankan seluruh data dari tabel kiri dan mengisi nilai NULL pada baris kanan yang tidak berpasangan.",
+              explanation:
+                "LEFT JOIN mempertahankan seluruh baris tabel kiri dan mengisi NULL pada kolom kanan yang tidak berpasangan. Ini yang kamu pakai saat ingin 'semua pelanggan, beserta pesanannya kalau ada'. INNER JOIN akan diam-diam membuang pelanggan yang belum pernah memesan.",
             },
             {
               id: "q2",
               type: "pilihan-ganda",
-              question: "Apa itu Primary Key?",
-              choices: ['Kunci unik', 'Kunci tamu', 'Indeks', 'Tidak ada'],
-              answerIndex: 0,
-              explanation: "Primary key adalah unik."
+              question:
+                "Tabel `orders` punya kolom `user_id` yang menunjuk ke kolom `id` di tabel `users`. Apa sebutan kolom itu, dan apa untungnya dideklarasikan resmi ke database?",
+              choices: [
+                "Primary key — agar setiap pesanan punya identitas unik",
+                "Foreign key — database ikut menolak pesanan yang menunjuk user tidak ada",
+                "Index — semata-mata agar query lebih cepat",
+                "Alias — supaya nama kolom lebih pendek",
+              ],
+              answerIndex: 1,
+              explanation:
+                "Kolom yang menunjuk ke primary key tabel lain disebut foreign key. Kalau dideklarasikan dengan FOREIGN KEY (user_id) REFERENCES users(id), database ikut menjaga integritas data: pesanan dengan user_id yang tidak ada akan ditolak, dan user yang masih punya pesanan tidak bisa dihapus sembarangan. Tanpa itu, data yatim bisa masuk tanpa ketahuan.",
             },
             {
               id: "q3",
               type: "pilihan-ganda",
-              question: "Fungsi INNER JOIN?",
-              choices: ['Ambil semua', 'Hanya irisan', 'Gabung kiri', 'Gabung kanan'],
+              question:
+                "Laporan penjualan memakai `orders INNER JOIN users`. Ada 120 pesanan, 8 di antaranya dari akun tamu sehingga `user_id`-nya NULL. Berapa baris yang muncul di laporan?",
+              choices: [
+                "120 baris, karena INNER JOIN mengambil semua pesanan",
+                "112 baris, karena pesanan tanpa pasangan di tabel users tidak ikut",
+                "128 baris",
+                "0 baris, karena ada NULL",
+              ],
               answerIndex: 1,
-              explanation: "INNER JOIN mengambil irisan data."
+              explanation:
+                "INNER JOIN hanya mengembalikan baris yang punya pasangan di KEDUA tabel, jadi 8 pesanan tamu itu hilang dari laporan tanpa peringatan apa pun dan angka penjualanmu jadi lebih kecil dari kenyataan. Kalau semua pesanan harus ikut, pakai LEFT JOIN dari orders.",
+            },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question:
+                "Tim marketing minta daftar pelanggan yang BELUM PERNAH memesan sama sekali. Pola query mana yang tepat?",
+              choices: [
+                "INNER JOIN orders lalu WHERE orders.id IS NULL",
+                "LEFT JOIN orders lalu WHERE orders.id IS NULL",
+                "RIGHT JOIN orders lalu WHERE customers.id IS NULL",
+                "INNER JOIN orders lalu ORDER BY orders.id",
+              ],
+              answerIndex: 1,
+              explanation:
+                "Polanya disebut anti-join: LEFT JOIN membawa semua pelanggan, lalu pelanggan tanpa pasangan pesanan akan berkolom NULL — itulah yang disaring dengan WHERE orders.id IS NULL. INNER JOIN mustahil dipakai di sini karena ia justru membuang pelanggan tanpa pesanan sejak awal.",
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question:
+                "Satu buku bisa ditulis banyak penulis, dan satu penulis bisa menulis banyak buku. Bagaimana relasi ini dimodelkan dengan benar?",
+              choices: [
+                "Tambah kolom author_id di tabel books",
+                "Tambah kolom book_id di tabel authors",
+                "Buat tabel perantara book_authors berisi book_id dan author_id",
+                "Simpan daftar nama penulis dalam satu kolom teks dipisah koma",
+              ],
+              answerIndex: 2,
+              explanation:
+                "Relasi many-to-many butuh junction table yang menyimpan pasangan id dari kedua sisi. Satu kolom author_id di books hanya memuat satu penulis per buku, sedangkan menyimpan nama dipisah koma membuat data mustahil di-JOIN, difilter, atau dihitung — pelanggaran bentuk normal pertama yang sering ditemukan di database warisan.",
             },
           ],
         },
@@ -652,31 +745,77 @@ export const sqlTrack: Track = {
             {
               id: "q1",
               type: "pilihan-ganda",
-              question: "Apa perbedaan utama klausa `HAVING` dibanding `WHERE` di SQL?",
+              question:
+                "Apa perbedaan utama klausa `HAVING` dibanding `WHERE` di SQL?",
               choices: [
-                "WHERE menyaring data sebelum agregasi, sedangkan HAVING menyaring data hasil agregasi (GROUP BY)",
+                "WHERE menyaring data sebelum agregasi, sedangkan HAVING menyaring hasil agregasi (GROUP BY)",
                 "HAVING hanya bisa dipakai di MySQL",
                 "WHERE tidak bisa memfilter string",
                 "Tidak ada perbedaan",
               ],
               answerIndex: 0,
-              explanation: "WHERE memfilter baris mentah sebelum dikelompokkan, sedangkan HAVING memfilter grup hasil agregasi.",
+              explanation:
+                "WHERE bekerja pada baris mentah sebelum dikelompokkan, sementara HAVING bekerja pada hasil kelompok. Karena itu kamu tidak bisa menulis WHERE COUNT(*) > 5 — pada saat WHERE dievaluasi, COUNT belum dihitung. Filter yang tidak melibatkan fungsi agregat sebaiknya tetap ditaruh di WHERE agar barisnya berkurang lebih dulu dan query lebih ringan.",
             },
             {
               id: "q2",
               type: "pilihan-ganda",
-              question: "Fungsi yang menjumlahkan baris?",
-              choices: ['SUM', 'COUNT', 'MAX', 'MIN'],
+              question:
+                "Tabel `employees` punya 50 baris, tapi 12 karyawan belum mengisi kolom `phone` (NULL). Berapa hasil `COUNT(*)` dan `COUNT(phone)`?",
+              choices: [
+                "Keduanya 50",
+                "COUNT(*) = 50 dan COUNT(phone) = 38",
+                "Keduanya 38",
+                "COUNT(*) = 38 dan COUNT(phone) = 50",
+              ],
               answerIndex: 1,
-              explanation: "COUNT menghitung baris."
+              explanation:
+                "COUNT(*) menghitung baris, sedangkan COUNT(kolom) hanya menghitung baris yang kolomnya TIDAK NULL. Perbedaan ini jadi sumber laporan yang salah: memakai COUNT(phone) untuk 'jumlah karyawan' diam-diam mengecualikan yang datanya belum lengkap. Fungsi agregat lain seperti AVG dan SUM juga mengabaikan NULL.",
             },
             {
               id: "q3",
               type: "pilihan-ganda",
-              question: "Posisi GROUP BY?",
-              choices: ['Sebelum WHERE', 'Setelah WHERE sebelum ORDER BY', 'Setelah LIMIT', 'Paling akhir'],
+              question:
+                "Query `SELECT kategori, nama, SUM(harga) FROM produk GROUP BY kategori;` ditolak PostgreSQL. Apa sebabnya?",
+              choices: [
+                "SUM tidak bisa dipakai bersama GROUP BY",
+                "Kolom `nama` tidak diagregasi dan tidak ikut GROUP BY, sehingga nilainya ambigu",
+                "GROUP BY harus ditulis sebelum SELECT",
+                "Nama tabel harus jamak",
+              ],
               answerIndex: 1,
-              explanation: "Tepat setelah WHERE."
+              explanation:
+                "Aturan emas GROUP BY: setiap kolom di SELECT harus berupa kolom pengelompok atau berada di dalam fungsi agregat. Satu kategori berisi banyak produk, jadi database tidak tahu nama mana yang harus ditampilkan. Solusinya: ikutkan nama ke GROUP BY, atau agregasi (misal MIN(nama)). MySQL versi lama menerima query ini dan diam-diam memilih nilai acak — sumber bug yang sulit dilacak.",
+            },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question:
+                "Kamu perlu mengambil pelanggan yang total belanjanya di atas rata-rata seluruh pelanggan. Struktur mana yang paling tepat dan mudah dibaca?",
+              choices: [
+                "Dua query terpisah, lalu angkanya disalin manual ke query kedua",
+                "CTE `WITH total AS (...)` untuk menghitung total per pelanggan, lalu difilter memakai subquery rata-rata",
+                "ORDER BY total DESC lalu ambil separuh teratas",
+                "Menambahkan kolom baru bernama di_atas_rata_rata ke tabel",
+              ],
+              answerIndex: 1,
+              explanation:
+                "CTE (WITH) memberi nama pada hasil antara sehingga query bertingkat tetap terbaca dari atas ke bawah, dan hasilnya selalu terbaru karena dihitung ulang setiap dijalankan. Menyalin angka manual membuat laporan basi begitu ada transaksi baru, dan 'separuh teratas' bukan definisi di atas rata-rata.",
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question:
+                "Kamu ingin memberi nomor urut peringkat penjualan per wilayah, dan baris detail tiap transaksi tetap harus tampil. Fitur SQL apa yang tepat?",
+              choices: [
+                "GROUP BY wilayah",
+                "Window function ROW_NUMBER() OVER (PARTITION BY wilayah ORDER BY total DESC)",
+                "DISTINCT wilayah",
+                "HAVING COUNT(*) = 1",
+              ],
+              answerIndex: 1,
+              explanation:
+                "Window function menghitung nilai per kelompok TANPA meringkas barisnya — setiap transaksi tetap muncul, dengan tambahan kolom peringkat. GROUP BY sebaliknya: ia menciutkan banyak baris menjadi satu per wilayah, sehingga detail transaksinya hilang. Inilah alasan window function jadi materi wajib untuk kerja analitik.",
             },
           ],
         },
@@ -798,23 +937,23 @@ export const sqlTrack: Track = {
           id: "sql-4-5",
           title: "Prinsip Keandalan Transaksi ACID",
           explanation:
-            "ACID: **Atomicity** (semua atau tidak sama sekali), **Consistency** (data selalu sah), **Isolation** (transaksi independen), **Durability** (permanen tersimpan).",
+            "Transaksi SQL menjamin keamanan lewat sifat ACID (Atomicity, Consistency, Isolation, Durability). Atomicity berarti semua atau tidak sama sekali. Consistency menjamin data tetap valid. Isolation mencegah konflik antar transaksi. Durability memastikan data tersimpan permanen. Kombinasi keempat sifat ini membuat database andal.",
           example: {
-            code: "// Atomicity menjamin transfer bank tidak akan memotong uang pengirim jika penerima gagal menerima data",
-            output: "Integritas data transaksi keuangan terjamin.",
-            note: "Prinsip utama mengapa RDBMS dipilih untuk aplikasi finansial.",
+            code: "BEGIN;\nUPDATE stocks SET qty = qty - 1 WHERE id = 1;\nINSERT INTO logs (msg) VALUES ('Item sold');\nCOMMIT;",
+            output: "Transaksi berhasil dikomit.",
+            note: "Semua perintah akan dibatalkan jika terjadi error sebelum COMMIT.",
           },
           instruction:
-            "Tulis komentar yang menyatakan prinsip ACID menjamin transaksi database yang reliabel.",
-          starterCode: "",
+            "Buat blok transaksi (mulai dengan BEGIN). Kurangi saldo `balance` sebesar 500 dari tabel `accounts` dengan `id` = 1, lalu akhiri dengan COMMIT.",
+          starterCode: "-- Mulai transaksi dan update balance\n",
           language: "text",
           tests: [
             {
-              pattern: "//\\s*ACID\\s+principles\\s+guarantee\\s+reliable\\s+database\\s+transactions",
-              message: "Tuliskan komentar yang diminta",
-            },
+              pattern: "BEGIN\\s*;[\\s\\S]*?UPDATE\\s+accounts\\s+SET\\s+balance\\s*=\\s*balance\\s*-\\s*500\\s+WHERE\\s+id\\s*=\\s*1\\s*;[\\s\\S]*?COMMIT\\s*;",
+              message: "Gunakan BEGIN, diikuti UPDATE pada accounts, dan diakhiri COMMIT",
+            }
           ],
-          solution: "// ACID principles guarantee reliable database transactions",
+          solution: "BEGIN;\nUPDATE accounts SET balance = balance - 500 WHERE id = 1;\nCOMMIT;",
         },
         {
           kind: "step",
@@ -872,26 +1011,72 @@ export const sqlTrack: Track = {
             {
               id: "q1",
               type: "pilihan-ganda",
-              question: "Perintah SQL mana yang digunakan untuk membatalkan seluruh perubahan data dan mengembalikan kondisi ke sebelum transaksi (BEGIN) dimulai?",
+              question:
+                "Perintah SQL mana yang membatalkan seluruh perubahan sejak transaksi dimulai (BEGIN)?",
               choices: ["COMMIT", "ROLLBACK", "RESET", "UNDO"],
               answerIndex: 1,
-              explanation: "ROLLBACK membatalkan seluruh pernyataan SQL di dalam transaksi aktif dan mengembalikan kondisi database seperti semula.",
+              explanation:
+                "ROLLBACK mengembalikan kondisi database seperti sebelum transaksi dimulai. Selama belum COMMIT, perubahanmu hanya terlihat di sesi sendiri — inilah jaring pengaman saat kamu menjalankan UPDATE besar di production.",
             },
             {
               id: "q2",
               type: "pilihan-ganda",
-              question: "Perintah mengosongkan tabel cepat?",
-              choices: ['DELETE', 'TRUNCATE', 'DROP', 'REMOVE'],
+              question:
+                "Kamu perlu mengosongkan tabel `logs` berisi 10 juta baris di server development. Apa perbedaan penting DELETE dan TRUNCATE di sini?",
+              choices: [
+                "Keduanya identik, hanya beda nama",
+                "TRUNCATE jauh lebih cepat karena tidak menghapus baris satu per satu, tapi tidak bisa memakai WHERE dan tidak bisa di-rollback di sebagian database",
+                "DELETE menghapus struktur tabel, TRUNCATE hanya isinya",
+                "TRUNCATE hanya bekerja pada tabel kosong",
+              ],
               answerIndex: 1,
-              explanation: "TRUNCATE sangat cepat mengosongkan tabel."
+              explanation:
+                "DELETE menghapus baris satu per satu dan mencatat semuanya di log transaksi, sehingga lambat untuk tabel besar tapi bisa disaring dengan WHERE dan dibatalkan. TRUNCATE mengosongkan tabel sekaligus, jauh lebih cepat, mereset AUTO_INCREMENT, tapi tidak menerima WHERE. Keduanya berbeda dari DROP TABLE yang ikut menghapus struktur tabelnya.",
             },
             {
               id: "q3",
               type: "pilihan-ganda",
-              question: "Bahaya UPDATE tanpa WHERE?",
-              choices: ['Error', 'Semua baris terupdate', 'Data terhapus', 'Aman'],
+              question:
+                "Kamu menjalankan `UPDATE users SET status = 'aktif';` di production dan lupa klausa WHERE. Apa yang terjadi dan apa kebiasaan yang mencegahnya?",
+              choices: [
+                "Database menolak query tanpa WHERE secara otomatis",
+                "Seluruh baris ikut berubah; biasakan jalankan SELECT dulu dengan filter yang sama, dan bungkus dalam BEGIN sebelum COMMIT",
+                "Hanya baris pertama yang berubah",
+                "Perubahan otomatis kembali setelah 5 menit",
+              ],
               answerIndex: 1,
-              explanation: "Update akan berdampak pada seluruh baris."
+              explanation:
+                "UPDATE tanpa WHERE mengenai SEMUA baris dan tidak ada peringatan apa pun. Dua kebiasaan yang menyelamatkan: jalankan dulu SELECT dengan kondisi yang sama untuk melihat baris mana yang akan terkena, lalu bungkus perubahan dalam BEGIN ... COMMIT agar masih bisa ROLLBACK saat jumlah baris terpengaruh terlihat janggal.",
+            },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question:
+                "Aplikasi menyimpan setelan pengguna: kalau barisnya sudah ada, perbarui; kalau belum, buat baru. Cara SQL mana yang paling aman dari race condition?",
+              choices: [
+                "SELECT dulu, lalu putuskan INSERT atau UPDATE di kode aplikasi",
+                "UPSERT dalam satu perintah: INSERT ... ON CONFLICT DO UPDATE (PostgreSQL) atau ON DUPLICATE KEY UPDATE (MySQL)",
+                "DELETE lalu INSERT ulang setiap kali",
+                "TRUNCATE tabel setelan sebelum menyimpan",
+              ],
+              answerIndex: 1,
+              explanation:
+                "Pola SELECT-lalu-putuskan punya celah waktu: dua request bersamaan bisa sama-sama melihat 'belum ada' lalu sama-sama INSERT sehingga terjadi error atau data ganda. UPSERT menyelesaikannya dalam satu perintah atomik yang dijaga oleh constraint unik. DELETE lalu INSERT juga berisiko karena data sempat hilang dan id-nya berubah.",
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question:
+                "Transfer saldo memotong 500 dari rekening A lalu menambahkannya ke rekening B. Server mati tepat setelah perintah pertama. Sifat ACID apa yang menjamin uang itu tidak menguap?",
+              choices: [
+                "Atomicity — seluruh transaksi dianggap satu kesatuan, gagal sebagian berarti dibatalkan semua",
+                "Consistency — data selalu konsisten antar server",
+                "Isolation — transaksi lain tidak melihat perubahan yang belum di-commit",
+                "Durability — data tetap tersimpan setelah listrik mati",
+              ],
+              answerIndex: 0,
+              explanation:
+                "Atomicity berarti transaksi bersifat semua-atau-tidak-sama-sekali: karena COMMIT belum sempat dijalankan, potongan saldo A otomatis dibatalkan saat database pulih. Isolation dan Durability juga sifat ACID, tapi keduanya menjawab pertanyaan berbeda — siapa yang boleh melihat perubahan, dan apakah data bertahan setelah di-commit.",
             },
           ],
         },
@@ -917,69 +1102,69 @@ export const sqlTrack: Track = {
           id: "sql-5-1",
           title: "Normalisasi Database (1NF, 2NF, 3NF)",
           explanation:
-            "Normalisasi adalah proses menstrukturkan tabel untuk mengeliminasi duplikasi data: 1NF (nilai atomik), 2NF (tanpa ketergantungan parsial), 3NF (tanpa ketergantungan transitif).",
+            "Bentuk Normal Ketiga (3NF) mengharuskan tabel tidak memiliki dependensi transitif. Artinya, setiap kolom non-key harus bergantung langsung HANYA pada primary key, bukan pada kolom non-key lainnya. Memecah tabel yang melanggar aturan ini akan mengurangi redundansi dan anomali saat manipulasi data.",
           example: {
-            code: "// Pecah alamat rumah dari tabel User menjadi tabel tersendiri jika 1 user bisa punya banyak alamat",
-            output: "Mencegah anomali update, insert, dan delete data.",
-            note: "Struktur 3NF adalah standar ideal untuk aplikasi OLTP.",
+            code: "CREATE TABLE departments (\n  dept_id INT PRIMARY KEY,\n  dept_name VARCHAR(50)\n);",
+            output: "Tabel departments terpisah untuk normalisasi.",
+            note: "Pindahkan informasi departemen yang sebelumnya berulang di tabel pegawai.",
           },
           instruction:
-            "Tulis komentar bahwa 3NF mencegah duplikasi data yang redundan.",
-          starterCode: "",
+            "Buat tabel `categories` (kolom: `id` INT PRIMARY KEY, `name` VARCHAR(50)) agar data kategori produk memenuhi aturan 3NF.",
+          starterCode: "-- Tulis query pembuatan tabel 3NF di sini\n",
           language: "text",
           tests: [
             {
-              pattern: "//\\s*3NF\\s+prevents\\s+redundant\\s+data\\s+duplication",
-              message: "Tuliskan komentar yang diminta",
-            },
+              pattern: "CREATE\\s+TABLE\\s+categories\\s*\\(\\s*id\\s+INT\\s+PRIMARY\\s+KEY\\s*,\\s*name\\s+VARCHAR\\(50\\)\\s*\\)\\s*;",
+              message: "Buat tabel categories sesuai spesifikasi 3NF yang diminta",
+            }
           ],
-          solution: "// 3NF prevents redundant data duplication",
+          solution: "CREATE TABLE categories (\n  id INT PRIMARY KEY,\n  name VARCHAR(50)\n);",
         },
         {
           kind: "step",
           id: "sql-5-2",
           title: "Kapan Denormalisasi Masuk Akal?",
           explanation:
-            "Denormalisasi (seperti menyimpan `total_orders` di tabel `users`) sengaja mengorbankan duplikasi demi kecepatan membaca query analitis (OLAP/Read-Heavy).",
+            "Denormalisasi adalah proses sengaja melanggar aturan normalisasi dengan menggabungkan tabel atau menambahkan data redundan demi performa baca (READ) yang lebih cepat. Strategi ini sering digunakan pada aplikasi yang sangat mementingkan kecepatan query analitis atau pada sistem pelaporan, meski harus mengorbankan kecepatan tulis (WRITE).",
           example: {
-            code: "ALTER TABLE users ADD COLUMN total_orders INT DEFAULT 0;",
-            output: "Menghindari query COUNT(orders) yang lambat saat membaca daftar ribuan user.",
-            note: "Gunakan denormalisasi hanya jika ada masalah performa membaca nyata.",
+            code: "SELECT order_id, customer_name, total_price\nFROM denormalized_orders\nWHERE status = 'PAID';",
+            output: "Hasil lebih cepat karena tidak perlu melakukan JOIN ke tabel customers.",
+            note: "Denormalisasi menyimpan nama pelanggan langsung di tabel pesanan.",
           },
           instruction:
-            "Tulis komentar bahwa denormalisasi mengorbankan storage demi performa baca.",
-          starterCode: "",
+            "Lakukan query SELECT untuk mengambil `id`, `product_name`, dan `price` dari tabel denormalisasi `denormalized_sales` di mana `price` lebih dari 1000.",
+          starterCode: "-- Tulis query SELECT denormalisasi di sini\n",
           language: "text",
           tests: [
             {
-              pattern: "//\\s*Denormalization\\s+trade-offs\\s+storage\\s+for\\s+read\\s+performance",
-              message: "Tuliskan komentar yang diminta",
-            },
+              pattern: "SELECT\\s+id\\s*,\\s*product_name\\s*,\\s*price\\s+FROM\\s+denormalized_sales\\s+WHERE\\s+price\\s*>\\s*1000\\s*;",
+              message: "Ambil id, product_name, price dari denormalized_sales dengan kondisi price > 1000",
+            }
           ],
-          solution: "// Denormalization trade-offs storage for read performance",
+          solution: "SELECT id, product_name, price FROM denormalized_sales WHERE price > 1000;",
         },
         {
           kind: "step",
           id: "sql-5-3",
           title: "Entity Relationship Diagram (ERD)",
           explanation:
-            "ERD memvisualisasikan entitas tabel dan relasinya (1:1, 1:N, N:M) menggunakan simbol cardinality.",
+            "Entity Relationship Diagram (ERD) digambarkan ke dalam tabel nyata menggunakan constraint Foreign Key. Constraint ini memaksa aturan integritas data pada tingkat database. Tanpanya, diagram ERD hanya sebatas gambar yang tidak memberi perlindungan dari data yang tidak konsisten.",
           example: {
-            code: "// Customer (1) -------- (N) Order",
-            output: "Peta visual arsitektur database.",
-            note: "Rancang ERD sebelum mulai mengetik baris kode aplikasi.",
+            code: "CREATE TABLE comments (\n  id INT PRIMARY KEY,\n  post_id INT,\n  FOREIGN KEY (post_id) REFERENCES posts(id)\n);",
+            output: "Tabel comments berhasil dibuat dengan relasi ke posts.",
+            note: "Menghindari masuknya post_id fiktif ke tabel comments.",
           },
           instruction:
-            "Tulis komentar bahwa ERD memodelkan entitas dan relasi secara visual.",
-          starterCode: "",
+            "Buat tabel `reviews` yang memiliki kolom `id` (INT PRIMARY KEY) dan `product_id` (INT) sebagai constraint foreign key yang mereferensikan `products(id)`.",
+          starterCode: "-- Tulis query pembuatan tabel dengan FK di sini\n",
           language: "text",
           tests: [
             {
-              pattern: "//\\s*ERD\\s+models\\s+entities\\s+and\\s+relationships\\s+visually",
-              message: "Tuliskan komentar yang diminta",
-            },
+              pattern: "CREATE\\s+TABLE\\s+reviews\\s*\\([\\s\\S]*?id\\s+INT\\s+PRIMARY\\s+KEY[\\s\\S]*?product_id\\s+INT[\\s\\S]*?FOREIGN\\s+KEY\\s*\\(\\s*product_id\\s*\\)\\s+REFERENCES\\s+products\\s*\\(\\s*id\\s*\\)[\\s\\S]*?\\)\\s*;",
+              message: "Pastikan tabel reviews memiliki id dan product_id sebagai FK",
+            }
           ],
-          solution: "// ERD models entities and relationships visually",
+          solution: "CREATE TABLE reviews (\n  id INT PRIMARY KEY,\n  product_id INT,\n  FOREIGN KEY (product_id) REFERENCES products(id)\n);",
         },
         {
           kind: "step",
@@ -1037,23 +1222,23 @@ export const sqlTrack: Track = {
           id: "sql-5-6",
           title: "Kapan Index Membantu & Memperlambat",
           explanation:
-            "Index mempercepat operasi `SELECT`, namun MEMPERLAMBAT operasi `INSERT`, `UPDATE`, dan `DELETE` karena engine harus memperbarui pohon B-Tree index.",
+            "Index mempercepat proses pencarian (SELECT) dengan membuat struktur data B-Tree pada kolom tertentu. Namun, penggunaannya memiliki trade-off: proses INSERT, UPDATE, dan DELETE akan melambat karena database juga harus memperbarui index. Oleh karena itu, pasang index hanya pada kolom yang sering dijadikan filter WHERE atau JOIN.",
           example: {
-            code: "// Pasang Index HANYA pada kolom yang sering difilter di WHERE / JOIN\n// Hindari memasang index di seluruh kolom!",
-            output: "Keseimbangan performa antara read dan write.",
-            note: "Terlalu banyak index juga memboroskan ruang penyimpanan disk.",
+            code: "CREATE INDEX idx_user_email ON users(email);",
+            output: "Index idx_user_email berhasil dibuat.",
+            note: "Query pencarian berdasarkan email sekarang jauh lebih cepat.",
           },
           instruction:
-            "Tulis komentar bahwa Index mempercepat baca tapi memperlambat operasi tulis.",
-          starterCode: "",
+            "Buat index dengan nama `idx_order_status` pada kolom `status` di tabel `orders`.",
+          starterCode: "-- Tulis query pembuatan index di sini\n",
           language: "text",
           tests: [
             {
-              pattern: "//\\s*Indexes\\s+speed\\s+up\\s+reads\\s+but\\s+slow\\s+down\\s+write\\s+operations",
-              message: "Tuliskan komentar yang diminta",
-            },
+              pattern: "CREATE\\s+INDEX\\s+idx_order_status\\s+ON\\s+orders\\s*\\(\\s*status\\s*\\)\\s*;",
+              message: "Gunakan perintah CREATE INDEX idx_order_status ON orders(status);",
+            }
           ],
-          solution: "// Indexes speed up reads but slow down write operations",
+          solution: "CREATE INDEX idx_order_status ON orders(status);",
         },
         {
           kind: "step",
@@ -1086,31 +1271,77 @@ export const sqlTrack: Track = {
             {
               id: "q1",
               type: "pilihan-ganda",
-              question: "Apa efek samping dari memasang terlalu banyak Index pada sebuah tabel di database?",
+              question:
+                "Apa efek samping memasang terlalu banyak index pada sebuah tabel?",
               choices: [
                 "Ukuran database menjadi 0 byte",
                 "Mempercepat perintah INSERT dan DELETE",
-                "Memperlambat operasi penulisan data (INSERT/UPDATE/DELETE) karena index B-Tree harus ikut diperbarui",
-                "MenghapusPrimary Key",
+                "Memperlambat penulisan data (INSERT/UPDATE/DELETE) karena setiap index ikut diperbarui",
+                "Menghapus Primary Key",
               ],
               answerIndex: 2,
-              explanation: "Setiap penulisan data baru mewajibkan database memperbarui indeks B-Tree terkait sehingga memperlambat operasi write.",
+              explanation:
+                "Index mempercepat pembacaan tapi harus ikut diperbarui setiap kali data berubah, jadi tabel dengan belasan index akan terasa berat saat menulis. Index juga memakan ruang disk. Aturan praktisnya: pasang index berdasarkan query yang benar-benar sering dijalankan, lalu buktikan manfaatnya dengan EXPLAIN.",
             },
             {
               id: "q2",
               type: "pilihan-ganda",
-              question: "Normalisasi 3NF?",
-              choices: ['1NF', '2NF', 'Ideal untuk OLTP', 'Buruk'],
-              answerIndex: 2,
-              explanation: "Ideal."
+              question:
+                "Tabel `orders` menyimpan kolom `kota_id`, `kota_nama`, dan `kota_provinsi`. Aturan normalisasi mana yang dilanggar, dan kenapa itu berbahaya?",
+              choices: [
+                "1NF — karena ada kolom bertipe teks",
+                "3NF — kota_nama dan kota_provinsi bergantung pada kota_id, bukan pada primary key pesanan, sehingga data kota terduplikasi dan bisa tidak sinkron",
+                "Tidak melanggar apa pun",
+                "2NF — karena tabel punya lebih dari tiga kolom",
+              ],
+              answerIndex: 1,
+              explanation:
+                "3NF melarang kolom yang bergantung pada kolom non-key (transitive dependency). Nama kota diulang di ribuan baris pesanan; saat sebuah kota berganti nama, kamu harus memperbarui semuanya dan satu baris terlewat sudah cukup membuat laporan tidak konsisten. Solusinya: simpan kota di tabelnya sendiri dan sisakan kota_id sebagai foreign key.",
             },
             {
               id: "q3",
               type: "pilihan-ganda",
-              question: "Fungsi UNIQUE?",
-              choices: ['Tidak berguna', 'Mencegah duplikat', 'Enkripsi', 'Tidak ada'],
+              question:
+                "Kamu ingin memastikan tidak ada dua akun dengan email sama, sekalipun ada bug di aplikasi. Apa yang harus dipasang di database?",
+              choices: [
+                "Cukup validasi di form pendaftaran",
+                "Constraint UNIQUE pada kolom email",
+                "Kolom email dijadikan TEXT",
+                "Index biasa (non-unique) pada kolom email",
+              ],
               answerIndex: 1,
-              explanation: "Mencegah duplikasi."
+              explanation:
+                "Constraint UNIQUE membuat database sendiri menolak baris kedua dengan email sama, apa pun jalur masuknya — form, API, atau query manual. Validasi aplikasi tetap perlu demi pesan error yang ramah, tapi ia bisa dilewati dan punya celah race condition. Index biasa hanya mempercepat pencarian tanpa mencegah duplikat.",
+            },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question:
+                "Kolom `created_at` sudah diindeks, tapi query `WHERE YEAR(created_at) = 2026` tetap lambat dan EXPLAIN menunjukkan full scan. Kenapa?",
+              choices: [
+                "Index tidak berlaku untuk kolom tanggal",
+                "Karena kolom dibungkus fungsi, database harus menghitung YEAR() di setiap baris sehingga index tidak bisa dipakai",
+                "Karena tahun 2026 belum lewat",
+                "Karena index hanya bekerja pada kolom angka",
+              ],
+              answerIndex: 1,
+              explanation:
+                "Index menyimpan nilai kolom apa adanya dalam keadaan terurut. Begitu kolom dibungkus fungsi, nilai yang dicari tidak lagi cocok dengan yang tersimpan di index sehingga database terpaksa memindai seluruh tabel. Perbaikannya: ubah menjadi rentang — created_at >= '2026-01-01' AND created_at < '2027-01-01' — atau buat expression index khusus.",
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question:
+                "Kamu membuat index gabungan `(user_id, created_at)`. Query mana yang TIDAK bisa memanfaatkan index tersebut secara efisien?",
+              choices: [
+                "WHERE user_id = 7",
+                "WHERE user_id = 7 AND created_at > '2026-01-01'",
+                "WHERE created_at > '2026-01-01'",
+                "WHERE user_id = 7 ORDER BY created_at",
+              ],
+              answerIndex: 2,
+              explanation:
+                "Index gabungan bekerja seperti daftar isi yang diurutkan mulai dari kolom paling kiri (leftmost prefix). Kamu bisa memakainya dengan user_id saja, atau user_id ditambah created_at, tapi tidak bisa melompat langsung ke created_at tanpa menyebut user_id. Karena itu urutan kolom saat membuat index adalah keputusan desain, bukan selera.",
             },
           ],
         },
@@ -1309,6 +1540,36 @@ export const sqlTrack: Track = {
               answerIndex: 0,
               explanation: "\\dt (display tables) menampilkan seluruh daftar tabel pada schema aktif.",
             },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question:
+                "Kamu membuat tabel baru di PostgreSQL 18 dan butuh kolom id yang naik otomatis. Mana yang direkomendasikan sekarang, dan kenapa?",
+              choices: [
+                "SERIAL, karena paling singkat ditulis",
+                "GENERATED ALWAYS AS IDENTITY, karena sesuai standar SQL dan mencegah id diisi manual sehingga sequence tidak jadi tidak sinkron",
+                "Kolom TEXT berisi angka",
+                "Tidak perlu id sama sekali",
+              ],
+              answerIndex: 1,
+              explanation:
+                "SERIAL masih bekerja, tapi ia hanya gula sintaks lama yang membuat sequence terpisah dan tetap mengizinkan aplikasi menyisipkan id manual. Kalau itu terjadi, sequence tertinggal dan INSERT berikutnya gagal karena id-nya bentrok — jebakan yang sering muncul setelah restore data. GENERATED ALWAYS AS IDENTITY adalah bentuk standar SQL yang menutup celah itu.",
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question:
+                "Satu database dipakai banyak tenant, dan setiap tenant hanya boleh melihat barisnya sendiri walaupun mengakses lewat koneksi SQL langsung. Fitur PostgreSQL apa yang menegakkan aturan itu di level database?",
+              choices: [
+                "Row Level Security (RLS) dengan policy per tabel",
+                "Menambahkan WHERE tenant_id di setiap query aplikasi",
+                "Membuat index pada kolom tenant_id",
+                "Menyimpan data tenant di file terpisah",
+              ],
+              answerIndex: 0,
+              explanation:
+                "RLS memasang aturan penyaringan di tabel itu sendiri, sehingga siapa pun yang mengakses — termasuk lewat psql atau tool BI — otomatis hanya melihat baris yang diizinkan. Mengandalkan WHERE di aplikasi tetap perlu, tapi satu query yang lupa filter langsung membocorkan data tenant lain. Index hanya soal kecepatan, bukan keamanan.",
+            },
           ],
         },
       ],
@@ -1487,6 +1748,36 @@ export const sqlTrack: Track = {
               choices: ["LAST_INSERT_ID()", "GET_LAST_ID()", "NEW_AUTO_ID()", "MAX(id)"],
               answerIndex: 0,
               explanation: "LAST_INSERT_ID() mengembalikan ID auto-increment yang terlahir pada sesi koneksi aktif pengirim query.",
+            },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question:
+                "Aplikasimu melayani pengguna di beberapa zona waktu dan menyimpan waktu kejadian di MySQL. Apa beda praktis DATETIME dan TIMESTAMP?",
+              choices: [
+                "Tidak ada bedanya",
+                "TIMESTAMP dikonversi ke UTC saat disimpan dan dikembalikan mengikuti time_zone koneksi, sedangkan DATETIME disimpan apa adanya tanpa konversi",
+                "DATETIME hanya bisa menyimpan tanggal tanpa jam",
+                "TIMESTAMP tidak bisa dipakai di InnoDB",
+              ],
+              answerIndex: 1,
+              explanation:
+                "TIMESTAMP sadar zona waktu: nilainya disimpan sebagai UTC lalu dikonversi mengikuti pengaturan koneksi, sehingga cocok untuk mencatat kapan sesuatu terjadi. DATETIME menyimpan angka jam apa adanya — tepat untuk hal yang memang tidak boleh bergeser seperti jadwal acara lokal. Salah pilih membuat catatan waktu meleset berjam-jam saat server dan pengguna beda zona.",
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question:
+                "Di hosting lama, `INSERT` dengan tanggal '0000-00-00' dan teks yang lebih panjang dari kolom diterima begitu saja tanpa error. Apa penyebabnya?",
+              choices: [
+                "Versi MySQL-nya tidak punya validasi sama sekali",
+                "sql_mode belum memakai STRICT_TRANS_TABLES, sehingga MySQL memotong atau mengubah data invalid dan hanya memberi warning",
+                "Kolomnya bertipe JSON",
+                "Karena tabelnya memakai InnoDB",
+              ],
+              answerIndex: 1,
+              explanation:
+                "MySQL non-strict berusaha 'menolong' dengan memotong string yang kepanjangan dan menerima tanggal nol, lalu hanya mencatat warning — data rusak masuk tanpa disadari. MySQL 8 mengaktifkan STRICT_TRANS_TABLES secara default sehingga query semacam itu ditolak. Saat memindahkan aplikasi dari hosting lama, perbedaan sql_mode inilah yang sering memunculkan error yang sebelumnya tidak pernah terlihat.",
             },
           ],
         },
@@ -1716,6 +2007,32 @@ export const sqlTrack: Track = {
               answerIndex: 0,
               explanation: "GIN Index sangat efisien memetakan elemen-elemen internal di dalam dokumen biner JSONB, teks tsvector, maupun array.",
             },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Sebuah tabel memiliki jutaan baris dan kamu sering menjalankan query range (BETWEEN) pada kolom tanggal. Jenis indeks PostgreSQL apa yang paling tepat untuk query semacam ini?",
+              choices: [
+                "B-tree Index (default PostgreSQL)",
+                "GIN Index",
+                "Hash Index",
+                "BRIN Index"
+              ],
+              answerIndex: 0,
+              explanation: "B-tree Index adalah tipe indeks default PostgreSQL yang sangat efisien untuk operasi perbandingan seperti =, <, >, BETWEEN, dan ORDER BY karena struktur pohon binarinya memungkinkan pencarian logaritmik.",
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Tim kamu menemukan bahwa tabel 'orders' ukurannya 5x lebih besar dari data aktualnya. Setelah investigasi, ternyata ada banyak dead tuple. Selain mengandalkan autovacuum, perintah manual apa yang bisa menyusutkan ukuran fisik tabel secara agresif?",
+              choices: [
+                "VACUUM FULL",
+                "DELETE FROM orders",
+                "DROP TABLE orders",
+                "TRUNCATE orders"
+              ],
+              answerIndex: 0,
+              explanation: "VACUUM FULL menulis ulang seluruh isi tabel ke file baru tanpa dead tuple, mengklaim kembali ruang disk secara penuh. Namun ia mengunci tabel secara eksklusif selama prosesnya.",
+            },
           ],
         },
       ],
@@ -1939,6 +2256,32 @@ export const sqlTrack: Track = {
               answerIndex: 0,
               explanation: "FOR UPDATE mengunci baris data secara eksklusif untuk mencegah race condition (misal perebutan stok barang / saldo rekening).",
             },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Di MySQL, primary key pada tabel InnoDB disimpan bersama data baris dalam satu struktur yang disebut Clustered Index. Apa konsekuensi buruk jika kamu menggunakan UUID (36 karakter acak) sebagai primary key pada tabel bertrafik tinggi?",
+              choices: [
+                "Tidak ada dampak buruk sama sekali",
+                "Data baris harus terus-menerus diurutkan ulang secara fisik karena UUID tidak berurutan, menyebabkan page split berlebihan dan fragmentasi",
+                "MySQL akan otomatis mengonversi UUID menjadi integer",
+                "UUID membuat kolom lain tidak bisa diindeks"
+              ],
+              answerIndex: 1,
+              explanation: "Clustered Index InnoDB menyimpan data secara fisik terurut berdasarkan primary key. UUID yang acak menyebabkan penyisipan baris ke tengah-tengah halaman (page split), menurunkan performa INSERT dan memperbesar ukuran indeks.",
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Kamu menemukan query lambat di production MySQL. Fitur bawaan MySQL apa yang paling tepat untuk menemukan query-query paling berat secara otomatis?",
+              choices: [
+                "Slow Query Log",
+                "Error Log",
+                "Binary Log",
+                "General Query Log"
+              ],
+              answerIndex: 0,
+              explanation: "Slow Query Log secara otomatis mencatat query yang melebihi batas waktu tertentu (long_query_time), memudahkan identifikasi query yang perlu dioptimasi.",
+            },
           ],
         },
       ],
@@ -2136,6 +2479,32 @@ export const sqlTrack: Track = {
               ],
               answerIndex: 0,
               explanation: "PostgreSQL sangat unggul pada fitur data modern seperti JSONB ter-index GIN, ekstensi PostGIS, pencarian tsvector, serta optimasi query analitik.",
+            },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Saat melakukan migrasi dari MySQL ke PostgreSQL, kamu menemukan kolom TINYINT(1) yang dipakai sebagai boolean. Apa yang harus diperhatikan dalam proses konversi ini?",
+              choices: [
+                "Kolom TINYINT(1) MySQL harus dikonversi ke tipe BOOLEAN asli PostgreSQL, dan nilai 0/1 dipetakan ke FALSE/TRUE",
+                "Tidak perlu diubah karena keduanya identik",
+                "Cukup ganti nama kolom saja",
+                "TINYINT(1) harus diubah menjadi VARCHAR"
+              ],
+              answerIndex: 0,
+              explanation: "MySQL menyimpan boolean sebagai TINYINT(1) (angka 0 atau 1), sedangkan PostgreSQL memiliki tipe BOOLEAN asli. Tool migrasi seperti pgloader biasanya menangani konversi ini otomatis.",
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Ketika seorang interviewer bertanya 'Kenapa timmu memilih PostgreSQL dibanding MySQL?', jawaban mana yang paling kuat secara teknis?",
+              choices: [
+                "Karena PostgreSQL lebih populer di Google Trends",
+                "Karena kebutuhan kami pada JSONB ter-index untuk API fleksibel, full-text search bawaan, dan dukungan ekstensi seperti PostGIS untuk data geospasial",
+                "Karena MySQL tidak gratis",
+                "Karena PostgreSQL lebih mudah di-install"
+              ],
+              answerIndex: 1,
+              explanation: "Jawaban interview yang baik selalu menyebutkan fitur teknis spesifik yang menjadi kebutuhan proyek, bukan opini umum. Sebutkan fitur konkret yang tidak dimiliki alternatifnya.",
             },
           ],
         },
@@ -2348,6 +2717,32 @@ export const sqlTrack: Track = {
               answerIndex: 0,
               explanation: "Masalah N+1 terjadi ketika pengambil data relasi dilakukan di dalam perulangan N baris, memicu N+1 kali kueri ke server yang seharusnya cukup diselesaikan dalam 1 kueri JOIN/Eager Loading.",
             },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Dalam proyek nyata, kapan sebaiknya kamu memilih menggunakan Raw SQL Query daripada ORM?",
+              choices: [
+                "Ketika query sangat kompleks (multiple JOIN, window function, CTE) dan ORM malah menghasilkan query tidak optimal",
+                "Selalu, karena ORM tidak aman",
+                "Tidak pernah, karena ORM selalu lebih baik",
+                "Hanya saat database tidak mendukung ORM"
+              ],
+              answerIndex: 0,
+              explanation: "Raw SQL cocok untuk query analitik atau multi-join kompleks di mana abstraksi ORM justru menghasilkan SQL yang tidak efisien. Namun tetap gunakan parameterized query untuk keamanan.",
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Apa fungsi utama dari Database Migration dalam siklus pengembangan aplikasi?",
+              choices: [
+                "Mencatat setiap perubahan skema database secara berversi sehingga bisa di-apply dan rollback secara konsisten di semua environment",
+                "Memindahkan data dari satu server ke server lain",
+                "Mengenkripsi seluruh isi database",
+                "Menghapus database lama dan membuat yang baru"
+              ],
+              answerIndex: 0,
+              explanation: "Migration berfungsi sebagai version control untuk skema database, memastikan struktur tabel konsisten antara environment development, staging, dan production.",
+            }
           ],
         },
       ],

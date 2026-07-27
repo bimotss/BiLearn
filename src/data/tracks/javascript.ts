@@ -64,7 +64,7 @@ export const javascriptTrack: Track = {
           id: "js-1-2",
           title: "Template literal",
           explanation:
-            "Backtick (`` ` ``) memungkinkan menyisipkan nilai langsung ke dalam string dengan `${...}`, dan mendukung baris baru tanpa `\\n`. Ini menggantikan penggabungan string dengan `+` yang cepat jadi tidak terbaca begitu ada lebih dari dua variabel.",
+            "Backtick (`` ` ``) memungkinkan menyisipkan nilai langsung ke dalam string dengan `${...}`, dan mendukung baris baru tanpa `\\n`. Ini menggantikan penggabungan string dengan `+` yang cepat jadi tidak terbaca begitu ada lebih dari dua variabel. Backtick juga membuat string multi-baris jadi rapi tanpa tanda plus di setiap ujung baris, dan di dalam `${...}` kamu boleh menulis ekspresi apa pun, bukan sekadar nama variabel.",
           example: {
             code: "const produk = 'Kopi';\nconst harga = 25000;\n\n// cara lama, sulit dibaca\nconsole.log('Beli ' + produk + ' seharga ' + harga);\n\n// template literal\nconsole.log(`Beli ${produk} seharga ${harga}`);",
             output: "Beli Kopi seharga 25000\nBeli Kopi seharga 25000",
@@ -124,7 +124,7 @@ export const javascriptTrack: Track = {
           id: "js-1-4",
           title: "Kondisi if dan else if",
           explanation:
-            "Kondisi dievaluasi **berurutan dari atas**, dan yang pertama bernilai true langsung dijalankan — sisanya dilewati. Karena itu urutan pengecekan penting: kalau kamu menulis `nilai >= 60` sebelum `nilai >= 80`, nilai 90 akan salah masuk kategori.",
+            "Kondisi dievaluasi **berurutan dari atas**, dan yang pertama bernilai true langsung dijalankan — sisanya dilewati. Karena itu urutan pengecekan penting: kalau kamu menulis `nilai >= 60` sebelum `nilai >= 80`, nilai 90 akan salah masuk kategori. Susun kondisi dari yang paling ketat ke yang paling longgar, dan pakai `else` di akhir sebagai jaring pengaman agar tidak ada masukan yang lolos tanpa penanganan.",
           example: {
             code: "const suhu = 32;\n\nif (suhu >= 35) {\n  console.log('Panas sekali');\n} else if (suhu >= 28) {\n  console.log('Hangat');\n} else {\n  console.log('Sejuk');\n}",
             output: "Hangat",
@@ -160,7 +160,7 @@ export const javascriptTrack: Track = {
           id: "js-1-5",
           title: "Loop for",
           explanation:
-            "`for (let i = 1; i <= 5; i++)` punya tiga bagian: nilai awal, kondisi lanjut, dan perubahan tiap putaran. Kesalahan klasik: memakai `i <= panjang` saat mengakses array (indeks dimulai dari 0, jadi seharusnya `i < panjang`) — hasilnya `undefined` di putaran terakhir.",
+            "`for (let i = 1; i <= 5; i++)` punya tiga bagian: nilai awal, kondisi lanjut, dan perubahan tiap putaran. Kesalahan klasik: memakai `i <= panjang` saat mengakses array (indeks dimulai dari 0, jadi seharusnya `i < panjang`) — hasilnya `undefined` di putaran terakhir. Kalau yang kamu butuhkan hanya menelusuri isi array tanpa mengurus indeks, `for...of` lebih ringkas dan lebih kecil kemungkinannya salah batas.",
           example: {
             code: "// mulai 0, lanjut selama < 3, naik 1 tiap putaran\nfor (let i = 0; i < 3; i++) {\n  console.log('Putaran ' + i);\n}",
             output: "Putaran 0\nPutaran 1\nPutaran 2",
@@ -218,16 +218,50 @@ export const javascriptTrack: Track = {
             "console.log(Boolean(0));\nconsole.log(Boolean(''));\nconsole.log(Boolean([]));",
         },
         {
+          kind: "step",
+          id: "js-1-7",
+          title: "for...of dan while",
+          explanation:
+            "Selain `for` klasik, ada dua bentuk perulangan yang sering lebih tepat. `for...of` menelusuri isi array satu per satu tanpa kamu mengurus indeks — lebih pendek dan menghilangkan seluruh kelas kesalahan batas seperti `<=` yang kelebihan satu putaran. `while` dipakai ketika jumlah putarannya tidak diketahui di awal dan hanya bergantung pada sebuah kondisi, misalnya membaca data sampai habis. Bahaya `while` adalah lupa mengubah kondisinya di dalam blok: perulangan tidak pernah berhenti dan tab browser membeku. Pilih `for...of` untuk isi array, `for` klasik saat kamu benar-benar butuh indeksnya, dan `while` saat berhentinya ditentukan kondisi.",
+          example: {
+            code: "const antre = ['Ani', 'Budi'];\n\nfor (const nama of antre) {\n  console.log('Melayani ' + nama);\n}\n\nlet sisa = 2;\nwhile (sisa > 0) {\n  console.log('Sisa tiket: ' + sisa);\n  sisa = sisa - 1;\n}",
+            output: "Melayani Ani\nMelayani Budi\nSisa tiket: 2\nSisa tiket: 1",
+          },
+          instruction:
+            "Array `nilai` berisi beberapa angka. Cetak setiap angkanya satu per satu memakai bentuk perulangan yang menelusuri isi array tanpa memakai indeks.",
+          starterCode: "const nilai = [80, 92, 75];\n\n",
+          language: "js",
+          tests: [
+            {
+              pattern: "for\\s*\\(\\s*(const|let)\\s+\\w+\\s+of\\s+nilai\\s*\\)",
+              message:
+                "Pakai for (const n of nilai) { ... }",
+            },
+            {
+              pattern: "console\\.log\\(",
+              message:
+                "Cetak tiap angkanya dengan console.log().",
+            },
+            {
+              pattern: "nilai\\[",
+              mustNotMatch: true,
+              message:
+                "Di sini jangan mengakses lewat indeks — itulah gunanya for...of.",
+            },
+          ],
+          solution: "const nilai = [80, 92, 75];\n\nfor (const n of nilai) {\n  console.log(n);\n}",
+        },
+        {
           kind: "quiz",
           id: "js-1-kuis",
           title: "Kuis: Dasar JavaScript",
           questions: [
             {
               id: "q1",
-              type: "prediksi-output",
-              question: "Apa yang ditampilkan kode ini? (tulis true atau false)",
-              code: "console.log('5' === 5);",
-              acceptedAnswers: ["false"],
+              type: "pilihan-ganda",
+              question: "Apa yang ditampilkan oleh console.log('5' === 5)? Perhatikan operator perbandingan yang digunakan.",
+              choices: ["false", "true", "undefined", "TypeError"],
+              answerIndex: 0,
               explanation:
                 "false. Operator === membandingkan nilai DAN tipe tanpa konversi: string '5' bukan number 5. Dengan == hasilnya akan true karena ada konversi tipe otomatis — inilah kenapa === adalah pilihan default.",
             },
@@ -256,11 +290,10 @@ export const javascriptTrack: Track = {
             },
             {
               id: "q4",
-              type: "prediksi-output",
-              question:
-                "Berapa nilai terakhir yang ditampilkan loop ini? (tulis angkanya)",
-              code: "for (let i = 0; i < 3; i++) {\n  console.log(i);\n}",
-              acceptedAnswers: ["2"],
+              type: "pilihan-ganda",
+              question: "Sebuah loop ditulis: for (let i = 0; i < 3; i++) { console.log(i); } — berapa nilai TERAKHIR yang ditampilkan?",
+              choices: ["2", "3", "0", "1"],
+              answerIndex: 0,
               explanation:
                 "2. Loop mencetak 0, 1, 2 lalu berhenti karena kondisi i < 3 tidak lagi terpenuhi saat i menjadi 3. Kesalahan umum adalah mengira ia mencetak sampai 3.",
             },
@@ -368,7 +401,7 @@ export const javascriptTrack: Track = {
           id: "js-2-3",
           title: "Default parameter",
           explanation:
-            "Nilai default dipakai kalau argumen tidak diberikan atau bernilai `undefined`. Ini menghilangkan pola lama `harga = harga || 0` yang punya bug: kalau argumennya `0` (nilai falsy yang sah), pola `||` akan menimpanya. Default parameter tidak punya masalah itu.",
+            "Nilai default dipakai kalau argumen tidak diberikan atau bernilai `undefined`. Ini menghilangkan pola lama `harga = harga || 0` yang punya bug: kalau argumennya `0` (nilai falsy yang sah), pola `||` akan menimpanya. Default parameter tidak punya masalah itu. Nilai default juga boleh berupa hasil perhitungan atau parameter sebelumnya, misalnya `function luas(sisi, tinggi = sisi)`, sehingga satu fungsi bisa melayani dua bentuk pemanggilan.",
           example: {
             code: "function kirim(pesan, prioritas = 'normal') {\n  return `[${prioritas}] ${pesan}`;\n}\n\nconsole.log(kirim('Server down'));\nconsole.log(kirim('Server down', 'urgent'));",
             output: "[normal] Server down\n[urgent] Server down",
@@ -409,7 +442,7 @@ export const javascriptTrack: Track = {
           id: "js-2-4",
           title: "Scope: variabel punya wilayah",
           explanation:
-            "Variabel yang dibuat dengan `let`/`const` di dalam blok `{ }` **hanya hidup di dalam blok itu**. Fungsi bisa membaca variabel di luarnya (scope luar), tapi tidak sebaliknya. Memahami ini mencegah error 'x is not defined' yang membingungkan.",
+            "Variabel yang dibuat dengan `let`/`const` di dalam blok `{ }` **hanya hidup di dalam blok itu**. Fungsi bisa membaca variabel di luarnya (scope luar), tapi tidak sebaliknya. Memahami ini mencegah error 'x is not defined' yang membingungkan. Aturan ini juga alasan kenapa `var` ditinggalkan: `var` bocor keluar dari blok dan sering menimbulkan nilai yang berubah di tempat yang tidak kamu duga.",
           example: {
             code: "const global = 'terlihat semua';\n\nfunction contoh() {\n  const lokal = 'hanya di dalam';\n  console.log(global);   // ✅ boleh melihat ke luar\n  console.log(lokal);    // ✅ miliknya sendiri\n}\n\ncontoh();\n// console.log(lokal);   // ❌ ReferenceError: lokal is not defined",
             output: "terlihat semua\nhanya di dalam",
@@ -446,7 +479,7 @@ export const javascriptTrack: Track = {
           id: "js-2-5",
           title: "Closure",
           explanation:
-            "Closure sering terdengar mistis, padahal sederhana: **fungsi mengingat variabel dari tempat ia dibuat, bahkan setelah fungsi luarnya selesai berjalan**. Ini yang memungkinkan pembuatan counter privat — `hitung` tidak bisa diakses dari luar, hanya lewat fungsi yang dikembalikan.",
+            "Closure sering terdengar mistis, padahal sederhana: **fungsi mengingat variabel dari tempat ia dibuat, bahkan setelah fungsi luarnya selesai berjalan**. Ini yang memungkinkan pembuatan counter privat — `hitung` tidak bisa diakses dari luar, hanya lewat fungsi yang dikembalikan. Closure juga yang membuat callback di dalam `setTimeout` masih bisa membaca variabel di sekitarnya beberapa detik kemudian, jauh setelah fungsi induknya selesai.",
           example: {
             code: "function buatDompet() {\n  let saldo = 100;                 // privat, tak bisa disentuh dari luar\n  return function () {\n    saldo = saldo - 10;\n    return saldo;\n  };\n}\n\nconst tarik = buatDompet();\nconsole.log(tarik());\nconsole.log(tarik());",
             output: "90\n80",
@@ -490,7 +523,7 @@ export const javascriptTrack: Track = {
           id: "js-2-6",
           title: "Callback: fungsi sebagai argumen",
           explanation:
-            "Di JavaScript, fungsi adalah **nilai** — bisa disimpan di variabel dan dikirim sebagai argumen. Fungsi yang dikirim seperti itu disebut callback, dan ini fondasi dari `map`, `addEventListener`, dan semua kode asynchronous yang akan kamu tulis nanti.",
+            "Di JavaScript, fungsi adalah **nilai** — bisa disimpan di variabel dan dikirim sebagai argumen. Fungsi yang dikirim seperti itu disebut callback, dan ini fondasi dari `map`, `addEventListener`, dan semua kode asynchronous yang akan kamu tulis nanti. Perhatikan bedanya mengirim `fn` dengan `fn()`: yang pertama menyerahkan fungsinya, yang kedua menjalankan lebih dulu lalu menyerahkan hasilnya — sumber bug yang sangat sering terjadi.",
           example: {
             code: "function olah(teks, aksi) {\n  return aksi(teks);           // fungsi yang dikirim, dipanggil di sini\n}\n\nconsole.log(olah('halo', (t) => t.toUpperCase()));\nconsole.log(olah('halo', (t) => t.length));",
             output: "HALO\n4",
@@ -531,10 +564,10 @@ export const javascriptTrack: Track = {
           questions: [
             {
               id: "q1",
-              type: "prediksi-output",
-              question: "Apa yang ditampilkan kode ini?",
-              code: "function tambah(a, b) {\n  console.log(a + b);\n}\n\nconsole.log(tambah(2, 3));",
-              acceptedAnswers: ["5 undefined", "5, undefined", "5 dan undefined", "undefined"],
+              type: "pilihan-ganda",
+              question: "Fungsi tambah(a, b) hanya memanggil console.log(a + b) tanpa return. Apa yang ditampilkan oleh console.log(tambah(2, 3))?",
+              choices: ["5 undefined", "5", "undefined", "5 5"],
+              answerIndex: 0,
               explanation:
                 "Pertama tercetak 5 (dari console.log di dalam fungsi), lalu undefined — karena fungsi tidak punya return, nilai kembaliannya undefined. Inilah beda mendasar antara menampilkan (console.log) dan mengembalikan (return).",
             },
@@ -569,10 +602,10 @@ export const javascriptTrack: Track = {
             },
             {
               id: "q4",
-              type: "prediksi-output",
-              question: "Apa yang ditampilkan baris terakhir?",
-              code: "function buat() {\n  let n = 0;\n  return () => ++n;\n}\nconst a = buat();\na();\na();\nconsole.log(a());",
-              acceptedAnswers: ["3"],
+              type: "pilihan-ganda",
+              question: "Sebuah fungsi buat() mengembalikan closure () => ++n (dimulai dari n = 0). Setelah memanggil a() dua kali, berapa nilai yang ditampilkan oleh console.log(a()) pada pemanggilan ketiga?",
+              choices: ["3", "1", "undefined", "ReferenceError"],
+              answerIndex: 0,
               explanation:
                 "3. Variabel n dipertahankan oleh closure di antara pemanggilan, jadi nilainya bertambah terus: 1, 2, lalu 3. Kalau setiap pemanggilan membuat n baru, hasilnya akan selalu 1.",
             },
@@ -657,8 +690,8 @@ export const javascriptTrack: Track = {
           explanation:
             "`map` membuat **array baru** dengan panjang sama, di mana setiap elemen adalah hasil transformasi. Array aslinya tidak berubah. Ini method yang paling sering kamu pakai di React untuk mengubah data menjadi daftar komponen. Ingat: `map` selalu mengembalikan array baru — kalau kamu tidak memakai hasilnya, kamu salah memilih method (yang kamu butuh mungkin `forEach`).",
           example: {
-            code: "const harga = [10000, 20000];\n\nconst denganPajak = harga.map((h) => h * 1.11);\n\nconsole.log(denganPajak);\nconsole.log(harga);        // array asli TIDAK berubah",
-            output: "[11100,22200]\n[10000,20000]",
+            code: "const harga = [10000, 20000];\n\nconst diskon = harga.map((h) => h - 2500);\n\nconsole.log(diskon);\nconsole.log(harga);        // array asli TIDAK berubah",
+            output: "[7500,17500]\n[10000,20000]",
             note: "map selalu menghasilkan array BARU dengan panjang sama. Karena itu hasilnya harus disimpan ke variabel.",
           },
           instruction:
@@ -866,7 +899,7 @@ export const javascriptTrack: Track = {
           id: "js-3-8",
           title: "find dan includes",
           explanation:
-            "`find` mengembalikan **elemen pertama** yang cocok (atau `undefined` kalau tidak ada) — berbeda dari `filter` yang selalu mengembalikan array. `includes` mengembalikan true/false untuk keberadaan nilai sederhana. Memilih method yang tepat membuat maksud kode langsung terbaca.",
+            "`find` mengembalikan **elemen pertama** yang cocok (atau `undefined` kalau tidak ada) — berbeda dari `filter` yang selalu mengembalikan array. `includes` mengembalikan true/false untuk keberadaan nilai sederhana. Memilih method yang tepat membuat maksud kode langsung terbaca. Kalau kamu perlu tahu posisinya, bukan elemennya, pakai `findIndex`, dan ingat bahwa ia mengembalikan -1 saat tidak menemukan apa pun.",
           example: {
             code: "const produk = [\n  { kode: 'A1', nama: 'Kopi' },\n  { kode: 'B2', nama: 'Teh' },\n];\n\nconsole.log(produk.find((p) => p.kode === 'B2'));    // satu object\nconsole.log(produk.filter((p) => p.kode === 'B2'));  // array berisi satu\nconsole.log(produk.find((p) => p.kode === 'ZZ'));    // tidak ditemukan\nconsole.log(['a', 'b'].includes('c'));",
             output: '{"kode":"B2","nama":"Teh"}\n[{"kode":"B2","nama":"Teh"}]\nundefined\nfalse',
@@ -895,16 +928,49 @@ export const javascriptTrack: Track = {
             "const users = [\n  { id: 1, nama: 'Ana' },\n  { id: 2, nama: 'Budi' },\n];\n\nconst hasil = users.find((u) => u.id === 2);\nconsole.log(hasil);\nconsole.log(['a', 'b'].includes('b'));",
         },
         {
+          kind: "step",
+          id: "js-3-9",
+          title: "sort dan Jebakan Urutannya",
+          explanation:
+            "`sort` mengurutkan array **di tempat** — array aslinya ikut berubah, jadi salin dulu dengan spread bila kamu masih membutuhkan urutan semula. Jebakan terbesarnya: tanpa fungsi pembanding, `sort` mengubah setiap elemen menjadi string lalu mengurutkannya secara alfabet, sehingga `[10, 9, 1]` menjadi `[1, 10, 9]` dan terlihat seperti bug padahal itu perilaku resminya. Untuk angka, berikan pembanding `(a, b) => a - b` yang berarti naik, atau `b - a` untuk turun. Untuk teks berbahasa Indonesia, `localeCompare` menangani huruf besar-kecil dan aksen jauh lebih baik daripada perbandingan biasa.",
+          example: {
+            code: "const angka = [10, 9, 1];\n\nconsole.log([...angka].sort());              // alfabet, bukan angka\nconsole.log([...angka].sort((a, b) => a - b)); // benar",
+            output: "[1,10,9]\n[1,9,10]",
+          },
+          instruction:
+            "Array `harga` berisi angka. Buat `const urut` berisi salinan yang terurut dari termurah ke termahal, tanpa mengubah array `harga` aslinya, lalu cetak keduanya.",
+          starterCode: "const harga = [25000, 9000, 120000];\n\n",
+          language: "js",
+          tests: [
+            {
+              pattern: "const\\s+urut\\s*=\\s*\\[\\s*\\.\\.\\.harga\\s*\\]\\.sort\\(|const\\s+urut\\s*=\\s*harga\\.slice\\(\\s*\\)\\.sort\\(",
+              message:
+                "Salin dulu (misalnya [...harga]) sebelum memanggil sort agar array asli tidak berubah.",
+            },
+            {
+              pattern: "\\(\\s*a\\s*,\\s*b\\s*\\)\\s*=>\\s*a\\s*-\\s*b",
+              message:
+                "Beri fungsi pembanding (a, b) => a - b untuk urutan naik.",
+            },
+            {
+              pattern: "console\\.log\\([\\s\\S]*console\\.log\\(",
+              message:
+                "Cetak urut dan harga supaya terlihat array aslinya tidak berubah.",
+            },
+          ],
+          solution: "const harga = [25000, 9000, 120000];\n\nconst urut = [...harga].sort((a, b) => a - b);\nconsole.log(urut);\nconsole.log(harga);",
+        },
+        {
           kind: "quiz",
           id: "js-3-kuis",
           title: "Kuis: Array & Object",
           questions: [
             {
               id: "q1",
-              type: "prediksi-output",
-              question: "Apa isi array a setelah kode ini dijalankan?",
-              code: "const a = { n: 1 };\nconst b = a;\nb.n = 99;\nconsole.log(a.n);",
-              acceptedAnswers: ["99"],
+              type: "pilihan-ganda",
+              question: "Diberikan: const a = { n: 1 }; const b = a; b.n = 99; — Berapa nilai a.n setelah baris tersebut dieksekusi?",
+              choices: ["99", "1", "undefined", "TypeError"],
+              answerIndex: 0,
               explanation:
                 "99. const b = a tidak menyalin object — keduanya menunjuk ke data yang SAMA di memori, jadi mengubah b juga mengubah a. Untuk menyalin gunakan { ...a }. Ini penyebab bug 'data saya berubah sendiri' yang paling sering terjadi.",
             },
@@ -935,10 +1001,10 @@ export const javascriptTrack: Track = {
             },
             {
               id: "q4",
-              type: "prediksi-output",
-              question: "Apa yang ditampilkan kode ini?",
-              code: "const angka = [1, 2, 3, 4];\nconst hasil = angka.reduce((a, b) => a + b, 0);\nconsole.log(hasil);",
-              acceptedAnswers: ["10"],
+              type: "pilihan-ganda",
+              question: "Diberikan: const angka = [1, 2, 3, 4]; const hasil = angka.reduce((a, b) => a + b, 0); — Berapa nilai variabel hasil?",
+              choices: ["10", "0", "undefined", "NaN"],
+              answerIndex: 0,
               explanation:
                 "10. reduce menjumlahkan seluruh elemen dimulai dari nilai awal 0: 0+1+2+3+4 = 10. Nilai awal (argumen kedua) penting — tanpa itu, reduce pada array kosong akan melempar TypeError.",
             },
@@ -1046,7 +1112,7 @@ export const javascriptTrack: Track = {
           id: "js-4-3",
           title: "addEventListener",
           explanation:
-            "`addEventListener('click', fn)` menghubungkan aksi pengguna ke fungsi. Perhatikan: kirim **referensi fungsi**, bukan hasil pemanggilannya — `addEventListener('click', fn())` salah karena fungsinya langsung dijalankan sekali lalu hasilnya (biasanya `undefined`) yang dipasang.",
+            "`addEventListener('click', fn)` menghubungkan aksi pengguna ke fungsi. Perhatikan: kirim **referensi fungsi**, bukan hasil pemanggilannya — `addEventListener('click', fn())` salah karena fungsinya langsung dijalankan sekali lalu hasilnya (biasanya `undefined`) yang dipasang. Kalau kamu perlu mengirim argumen, bungkus dengan arrow function seperti `addEventListener('click', () => hapus(id))` agar fungsinya baru berjalan saat diklik.",
           example: {
             code: "const btn = document.querySelector('button');\n\n// ✅ kirim referensi fungsi\nbtn.addEventListener('click', () => {\n  console.log('Diklik!');\n});\n\n// ❌ ini salah: fungsi langsung jalan sekali\n// btn.addEventListener('click', sapa());",
             output: "Setiap kali tombol diklik, muncul 'Diklik!' di panel output.",
@@ -1116,7 +1182,7 @@ export const javascriptTrack: Track = {
           id: "js-4-5",
           title: "Merender list dari array",
           explanation:
-            "Inilah pola inti semua framework modern, dan sekarang kamu melakukannya manual: ambil data → ubah jadi HTML → masukkan ke DOM. Setelah memahami ini, `map` di React akan terasa jelas sebagai versi otomatis dari apa yang kamu tulis di sini.",
+            "Inilah pola inti semua framework modern, dan sekarang kamu melakukannya manual: ambil data → ubah jadi HTML → masukkan ke DOM. Setelah memahami ini, `map` di React akan terasa jelas sebagai versi otomatis dari apa yang kamu tulis di sini. Untuk daftar panjang, kumpulkan dulu elemennya di `DocumentFragment` lalu masukkan sekali — memasukkan satu per satu ke DOM memaksa browser menghitung ulang layout berkali-kali.",
           example: {
             code: "const data = ['Kopi', 'Teh'];\nconst ul = document.querySelector('ul');\n\ndata.forEach((nama) => {\n  const li = document.createElement('li');  // 1. buat elemen\n  li.textContent = nama;                    // 2. isi teksnya\n  ul.append(li);                            // 3. masukkan ke DOM\n});",
             output: "Muncul daftar berisi dua item: Kopi dan Teh.",
@@ -1243,10 +1309,10 @@ export const javascriptTrack: Track = {
             },
             {
               id: "q4",
-              type: "isian",
-              question:
-                "Method apa yang dipanggil pada event agar form tidak me-refresh halaman saat disubmit? (tulis nama methodnya)",
-              acceptedAnswers: ["preventDefault", "preventDefault()", "e.preventDefault()"],
+              type: "pilihan-ganda",
+              question: "Form-mu memuat ulang halaman setiap kali disubmit sehingga data yang baru diketik hilang. Method apa yang dipanggil pada objek event untuk mencegahnya?",
+              choices: ["preventDefault()", "stopPropagation()", "stopImmediatePropagation()", "return false"],
+              answerIndex: 0,
               explanation:
                 "e.preventDefault() membatalkan perilaku default browser (mengirim form dan memuat ulang halaman), sehingga kamu bisa menanganinya sendiri dengan JavaScript.",
             },
@@ -1415,7 +1481,7 @@ export const javascriptTrack: Track = {
           id: "js-5-5",
           title: "Shorthand property dan computed key",
           explanation:
-            "Kalau nama variabel sama dengan nama key, tulis sekali saja: `{ nama, umur }` alih-alih `{ nama: nama, umur: umur }`. Untuk key yang ditentukan saat runtime, pakai bracket: `{ [kunci]: nilai }` — sangat berguna saat membuat object dari input dinamis.",
+            "Kalau nama variabel sama dengan nama key, tulis sekali saja: `{ nama, umur }` alih-alih `{ nama: nama, umur: umur }`. Untuk key yang ditentukan saat runtime, pakai bracket: `{ [kunci]: nilai }` — sangat berguna saat membuat object dari input dinamis. Computed key juga berguna saat menangani form: `{ [e.target.name]: e.target.value }` memperbarui field yang benar tanpa menulis percabangan panjang.",
           example: {
             code: "const judul = 'Kopi';\nconst stok = 3;\nconst field = 'kategori';\n\n// cara panjang\nconst a = { judul: judul, stok: stok };\n\n// shorthand + computed key\nconst b = { judul, stok, [field]: 'minuman' };\n\nconsole.log(b);",
             output: '{"judul":"Kopi","stok":3,"kategori":"minuman"}',
@@ -1465,7 +1531,7 @@ export const javascriptTrack: Track = {
           instruction:
             "Tulis kode yang mengekspor fungsi `luas` sebagai named export DAN sebuah nilai sebagai default export. (Preview tidak menjalankan module, cukup tulis sintaksnya dengan benar.)",
           starterCode: "// tulis export di sini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern:
@@ -1488,10 +1554,10 @@ export const javascriptTrack: Track = {
           questions: [
             {
               id: "q1",
-              type: "prediksi-output",
-              question: "Apa yang ditampilkan kode ini? (tulis angkanya)",
-              code: "const stok = 0;\nconsole.log(stok ?? 10);",
-              acceptedAnswers: ["0"],
+              type: "pilihan-ganda",
+              question: "Diberikan: const stok = 0; console.log(stok ?? 10); — Apa yang ditampilkan? Ingat perbedaan operator ?? dengan ||.",
+              choices: ["0", "10", "null", "undefined"],
+              answerIndex: 0,
               explanation:
                 "0. Operator ?? hanya menggantikan nilai null atau undefined, dan 0 bukan keduanya. Kalau memakai || hasilnya 10 karena 0 bersifat falsy — perbedaan yang menentukan saat menangani angka, terutama nilai nol yang sah.",
             },
@@ -1581,7 +1647,7 @@ export const javascriptTrack: Track = {
           id: "js-6-1",
           title: "setTimeout dan urutan eksekusi",
           explanation:
-            "JavaScript **tidak menunggu**. `setTimeout` menjadwalkan fungsi untuk dijalankan nanti, lalu kode berikutnya langsung berjalan. Karena itu output kode ini bukan urut dari atas ke bawah — ini konsep pertama yang harus benar sebelum belajar Promise.",
+            "JavaScript **tidak menunggu**. `setTimeout` menjadwalkan fungsi untuk dijalankan nanti, lalu kode berikutnya langsung berjalan. Karena itu output kode ini bukan urut dari atas ke bawah — ini konsep pertama yang harus benar sebelum belajar Promise. Bahkan `setTimeout(fn, 0)` tetap dijalankan setelah seluruh kode sinkron selesai, karena tugas terjadwal baru diambil ketika antrean utama kosong.",
           example: {
             code: "console.log('Mulai');\n\nsetTimeout(() => {\n  console.log('Ditunda 1 detik');\n}, 1000);\n\nsetTimeout(() => {\n  console.log('Ditunda 0 detik');\n}, 0);\n\nconsole.log('Selesai');",
             output: "Mulai\nSelesai\nDitunda 0 detik\nDitunda 1 detik",
@@ -1645,7 +1711,7 @@ export const javascriptTrack: Track = {
           id: "js-6-3",
           title: "async/await",
           explanation:
-            "`async/await` adalah cara menulis Promise agar terlihat berurutan seperti kode biasa — jauh lebih mudah dibaca daripada rantai `.then()`. Dua aturan: `await` hanya bisa dipakai di dalam fungsi `async`, dan fungsi `async` **selalu** mengembalikan Promise.",
+            "`async/await` adalah cara menulis Promise agar terlihat berurutan seperti kode biasa — jauh lebih mudah dibaca daripada rantai `.then()`. Dua aturan: `await` hanya bisa dipakai di dalam fungsi `async`, dan fungsi `async` **selalu** mengembalikan Promise. Perlu diingat `await` menghentikan hanya fungsi tempat ia berada, bukan seluruh program — bagian lain aplikasimu tetap berjalan seperti biasa.",
           example: {
             code: "const tunggu = (ms) =>\n  new Promise((r) => setTimeout(() => r('selesai ' + ms + 'ms'), ms));\n\n// dengan .then (bertingkat)\ntunggu(200).then((a) => console.log(a));\n\n// dengan async/await (rata, mudah dibaca)\nasync function jalan() {\n  const hasil = await tunggu(400);\n  console.log(hasil);\n}\njalan();",
             output: "selesai 200ms\nselesai 400ms",
@@ -1716,7 +1782,7 @@ export const javascriptTrack: Track = {
           id: "js-6-5",
           title: "try/catch pada async",
           explanation:
-            "Kode async yang gagal tanpa `try/catch` menghasilkan *unhandled rejection* — aplikasi bisa diam tanpa pesan, dan pengguna melihat layar kosong tanpa tahu apa yang terjadi. Pola produksi selalu: `try` untuk alur normal, `catch` untuk kegagalan, dan beri pesan yang bermanfaat.",
+            "Kode async yang gagal tanpa `try/catch` menghasilkan *unhandled rejection* — aplikasi bisa diam tanpa pesan, dan pengguna melihat layar kosong tanpa tahu apa yang terjadi. Pola produksi selalu: `try` untuk alur normal, `catch` untuk kegagalan, dan beri pesan yang bermanfaat. Ingat juga bahwa `fetch` tidak melempar error saat server membalas 404 atau 500, jadi periksa `res.ok` di dalam `try` sebelum memproses datanya.",
           example: {
             code: "async function muat() {\n  try {\n    const res = await fetch('https://alamat-palsu-xyz.test/data');\n    const data = await res.json();\n    console.log(data);\n  } catch (error) {\n    console.log('Gagal memuat: ' + error.message);\n  } finally {\n    console.log('Loading dimatikan');   // selalu jalan\n  }\n}\n\nmuat();",
             output: "Gagal memuat: Failed to fetch\nLoading dimatikan",
@@ -1784,11 +1850,10 @@ export const javascriptTrack: Track = {
           questions: [
             {
               id: "q1",
-              type: "prediksi-output",
-              question:
-                "Urutan output kode ini apa? (tulis ketiganya dipisah spasi)",
-              code: "console.log('A');\nsetTimeout(() => console.log('B'), 0);\nconsole.log('C');",
-              acceptedAnswers: ["A C B", "A, C, B", "a c b"],
+              type: "pilihan-ganda",
+              question: "Diberikan kode: console.log('A'); setTimeout(() => console.log('B'), 0); console.log('C'); — Apa urutan output yang benar?",
+              choices: ["A C B", "A B C", "B A C", "C B A"],
+              answerIndex: 0,
               explanation:
                 "A C B. Meski delay-nya 0 ms, callback setTimeout masuk ke task queue dan baru dijalankan setelah seluruh kode sinkron selesai. Ini demonstrasi paling ringkas dari cara kerja event loop.",
             },
@@ -1905,7 +1970,7 @@ export const javascriptTrack: Track = {
           id: "js-7-2",
           title: "try/catch/finally",
           explanation:
-            "`try` menjalankan kode berisiko, `catch` menangkap kegagalan, `finally` **selalu** dijalankan — berhasil maupun gagal. `finally` itulah tempat mematikan indikator loading, karena kalau kamu menaruhnya hanya di `try`, spinner akan berputar selamanya saat terjadi error.",
+            "`try` menjalankan kode berisiko, `catch` menangkap kegagalan, `finally` **selalu** dijalankan — berhasil maupun gagal. `finally` itulah tempat mematikan indikator loading, karena kalau kamu menaruhnya hanya di `try`, spinner akan berputar selamanya saat terjadi error. Tangkap error yang spesifik bila memungkinkan, dan jangan pernah mengosongkan blok `catch` — kegagalan yang ditelan diam-diam adalah bug yang paling mahal untuk ditemukan.",
           example: {
             code: "function proses(teks) {\n  try {\n    const data = JSON.parse(teks);\n    console.log('Berhasil:', data.nama);\n  } catch (e) {\n    console.log('Format salah:', e.name);\n  } finally {\n    console.log('--- proses berakhir ---');\n  }\n}\n\nproses('{\"nama\":\"Ana\"}');\nproses('bukan json');",
             output:
@@ -1946,7 +2011,7 @@ export const javascriptTrack: Track = {
           id: "js-7-3",
           title: "throw: melempar error sendiri",
           explanation:
-            "Fungsi yang menerima input tidak valid sebaiknya **gagal dengan jelas dan segera** (`throw`), bukan mengembalikan `undefined` diam-diam yang baru meledak jauh di tempat lain. Prinsip ini disebut *fail fast* — error yang muncul dekat dengan penyebabnya jauh lebih murah untuk diperbaiki.",
+            "Fungsi yang menerima input tidak valid sebaiknya **gagal dengan jelas dan segera** (`throw`), bukan mengembalikan `undefined` diam-diam yang baru meledak jauh di tempat lain. Prinsip ini disebut *fail fast* — error yang muncul dekat dengan penyebabnya jauh lebih murah untuk diperbaiki. Sertakan pesan yang menyebut nilai penyebabnya, misalnya `throw new Error('Umur tidak valid: ' + umur)`, agar log-nya bisa langsung menunjuk sumber masalah.",
           example: {
             code: "function daftarUmur(umur) {\n  if (umur < 0) {\n    throw new Error('Umur tidak boleh negatif');\n  }\n  return 'Terdaftar: ' + umur;\n}\n\ntry {\n  console.log(daftarUmur(25));\n  console.log(daftarUmur(-5));   // berhenti di sini\n} catch (e) {\n  console.log('Ditolak: ' + e.message);\n}",
             output: "Terdaftar: 25\nDitolak: Umur tidak boleh negatif",
@@ -2021,7 +2086,7 @@ export const javascriptTrack: Track = {
           id: "js-7-5",
           title: "Debugging sistematis",
           explanation:
-            "Cara amatir: mengubah kode secara acak sampai jalan. Cara profesional: **reproduce** (buat error muncul konsisten) → **isolate** (persempit sampai kode terkecil yang masih gagal) → **fix** → **verify**. Fungsi di bawah punya bug klasik; temukan lewat isolasi, bukan tebakan.",
+            "Cara amatir: mengubah kode secara acak sampai jalan. Cara profesional: **reproduce** (buat error muncul konsisten) → **isolate** (persempit sampai kode terkecil yang masih gagal) → **fix** → **verify**. Fungsi di bawah punya bug klasik; temukan lewat isolasi, bukan tebakan. Setelah bug ditemukan, tulis satu test kecil yang gagal sebelum perbaikan dan lulus sesudahnya — itu cara termurah memastikan bug yang sama tidak kembali.",
           example: {
             code: "// BUG: kenapa hasilnya undefined?\nfunction ambilPertama(arr) {\n  return arr[1];        // ← isolasi: cek asumsi indeks\n}\nconsole.log(ambilPertama(['a', 'b']));   // 'b', bukan 'a'\n\n// PERBAIKAN: indeks pertama adalah 0\nfunction ambilPertamaBenar(arr) {\n  return arr[0];\n}\nconsole.log(ambilPertamaBenar(['a', 'b']));",
             output: "b\na",
@@ -2114,10 +2179,10 @@ export const javascriptTrack: Track = {
             },
             {
               id: "q5",
-              type: "isian",
-              question:
-                "Method console apa yang menampilkan array of object dalam bentuk tabel? (tulis lengkap, mis. console.xxx)",
-              acceptedAnswers: ["console.table", "table"],
+              type: "pilihan-ganda",
+              question: "Kamu men-debug array berisi 20 object dan console.log menampilkannya bertumpuk sulit dibaca. Method console apa yang menampilkannya sebagai tabel?",
+              choices: ["console.table()", "console.log()", "console.dir()", "console.group()"],
+              answerIndex: 0,
               explanation:
                 "console.table(data) menampilkan data terstruktur sebagai tabel dengan kolom yang bisa diurutkan — jauh lebih mudah dibaca daripada console.log untuk data dari API.",
             },
@@ -2145,7 +2210,7 @@ export const javascriptTrack: Track = {
           id: "js-8-1",
           title: "Class dan constructor",
           explanation:
-            "`class` adalah cetakan untuk membuat object serupa. `constructor` dijalankan otomatis saat `new` dipanggil, dan `this` menunjuk ke instance yang sedang dibuat. Meski kode modern lebih sering memakai fungsi dan object literal, kamu **pasti** menemui class saat membaca codebase yang sudah ada.",
+            "`class` adalah cetakan untuk membuat object serupa. `constructor` dijalankan otomatis saat `new` dipanggil, dan `this` menunjuk ke instance yang sedang dibuat. Meski kode modern lebih sering memakai fungsi dan object literal, kamu **pasti** menemui class saat membaca codebase yang sudah ada. Awali nama class dengan huruf kapital sebagai konvensi, dan ingat bahwa lupa menulis `new` membuat `this` tidak menunjuk ke instance mana pun.",
           example: {
             code: "class Buku {\n  constructor(judul, halaman) {\n    this.judul = judul;      // this = instance yang sedang dibuat\n    this.halaman = halaman;\n  }\n\n  ringkas() {\n    return `${this.judul} (${this.halaman} hlm)`;\n  }\n}\n\nconst b1 = new Buku('Atomic Habits', 320);\nconst b2 = new Buku('Sapiens', 500);\nconsole.log(b1.ringkas());\nconsole.log(b2.ringkas());",
             output: "Atomic Habits (320 hlm)\nSapiens (500 hlm)",
@@ -2185,7 +2250,7 @@ export const javascriptTrack: Track = {
           id: "js-8-2",
           title: "Inheritance dengan extends",
           explanation:
-            "`extends` mewarisi properti dan method dari class induk, dan `super()` **wajib** dipanggil di constructor anak sebelum memakai `this`. Peringatan dari pengalaman: pewarisan berlapis-lapis membuat kode sulit dilacak — di praktik modern, **komposisi lebih disukai daripada pewarisan**.",
+            "`extends` mewarisi properti dan method dari class induk, dan `super()` **wajib** dipanggil di constructor anak sebelum memakai `this`. Peringatan dari pengalaman: pewarisan berlapis-lapis membuat kode sulit dilacak — di praktik modern, **komposisi lebih disukai daripada pewarisan**. Sebelum memakai `extends`, tanyakan apakah hubungannya benar-benar 'adalah sebuah', bukan sekadar 'punya beberapa kemiripan' — pertanyaan itu mencegah hierarki yang menyulitkan.",
           example: {
             code: "class Hewan {\n  constructor(nama) { this.nama = nama; }\n  suara() { return '...'; }\n}\n\nclass Kucing extends Hewan {\n  constructor(nama, warna) {\n    super(nama);          // WAJIB duluan, sebelum pakai this\n    this.warna = warna;\n  }\n  suara() { return 'Meong'; }   // menimpa method induk\n}\n\nconst k = new Kucing('Oyen', 'kuning');\nconsole.log(k.nama, k.warna, k.suara());",
             output: "Oyen kuning Meong",
@@ -2223,7 +2288,7 @@ export const javascriptTrack: Track = {
           id: "js-8-3",
           title: "this yang hilang di callback",
           explanation:
-            "Ini bug klasik: method yang dipakai sebagai callback **kehilangan `this`**, karena nilai `this` ditentukan oleh *cara pemanggilan*, bukan tempat penulisan. Solusi modern: pakai arrow function, yang mengambil `this` dari tempat ia didefinisikan.",
+            "Ini bug klasik: method yang dipakai sebagai callback **kehilangan `this`**, karena nilai `this` ditentukan oleh *cara pemanggilan*, bukan tempat penulisan. Solusi modern: pakai arrow function, yang mengambil `this` dari tempat ia didefinisikan. Alternatif lama yang masih sering kamu temui di codebase adalah `fn.bind(this)`, jadi kenali bentuknya walaupun kamu sendiri memilih arrow function.",
           example: {
             code: "class Timer {\n  constructor() { this.label = 'TIMER'; }\n\n  jalan() {\n    // ❌ function biasa: this berubah, jadi undefined\n    setTimeout(function () {\n      console.log('A:', this?.label);\n    }, 50);\n\n    // ✅ arrow: this tetap milik instance\n    setTimeout(() => {\n      console.log('B:', this.label);\n    }, 100);\n  }\n}\n\nnew Timer().jalan();",
             output: "A: undefined\nB: TIMER",
@@ -2254,7 +2319,7 @@ export const javascriptTrack: Track = {
           id: "js-8-4",
           title: "Pure function",
           explanation:
-            "Fungsi **pure** punya dua sifat: hasilnya hanya bergantung pada argumennya, dan ia tidak mengubah apa pun di luar dirinya. Fungsi pure mudah diuji (tanpa setup), mudah dipahami, dan aman dipakai ulang. Fungsi yang memutasi argumennya adalah sumber bug yang sulit dilacak.",
+            "Fungsi **pure** punya dua sifat: hasilnya hanya bergantung pada argumennya, dan ia tidak mengubah apa pun di luar dirinya. Fungsi pure mudah diuji (tanpa setup), mudah dipahami, dan aman dipakai ulang. Fungsi yang memutasi argumennya adalah sumber bug yang sulit dilacak. Fungsi yang menyentuh jaringan, waktu, atau DOM tidak mungkin pure — pisahkan bagian itu ke tepi program dan biarkan inti logikanya tetap pure agar mudah diuji.",
           example: {
             code: "// ❌ TIDAK pure: mengubah object milik pemanggil\nfunction naikkanHargaBuruk(p) {\n  p.harga = p.harga + 1000;\n  return p;\n}\n\n// ✅ pure: object baru, aslinya utuh\nfunction naikkanHarga(p) {\n  return { ...p, harga: p.harga + 1000 };\n}\n\nconst produk = { nama: 'Kopi', harga: 5000 };\nconst baru = naikkanHarga(produk);\nconsole.log(produk.harga, baru.harga);",
             output: "5000 6000",
@@ -2286,7 +2351,7 @@ export const javascriptTrack: Track = {
           id: "js-8-5",
           title: "Higher-order function",
           explanation:
-            "Higher-order function adalah fungsi yang menerima fungsi dan/atau mengembalikan fungsi. Kamu sudah memakainya (`map`, `filter`), sekarang kamu membuatnya. Pola ini dipakai untuk membuat fungsi terspesialisasi dari satu template umum.",
+            "Higher-order function adalah fungsi yang menerima fungsi dan/atau mengembalikan fungsi. Kamu sudah memakainya (`map`, `filter`), sekarang kamu membuatnya. Pola ini dipakai untuk membuat fungsi terspesialisasi dari satu template umum. Pola ini juga yang dipakai middleware dan dekorator: satu fungsi membungkus fungsi lain untuk menambah perilaku tanpa mengubah isinya.",
           example: {
             code: "function buatSapaan(sapaan) {\n  return (nama) => `${sapaan}, ${nama}!`;\n}\n\nconst formal = buatSapaan('Selamat pagi');\nconst santai = buatSapaan('Woi');\n\nconsole.log(formal('Bu Ani'));\nconsole.log(santai('Bimo'));",
             output: "Selamat pagi, Bu Ani!\nWoi, Bimo!",
@@ -2385,10 +2450,10 @@ export const javascriptTrack: Track = {
             },
             {
               id: "q5",
-              type: "prediksi-output",
-              question: "Apa yang ditampilkan kode ini? (tulis angkanya)",
-              code: "function pengali(f) {\n  return (n) => n * f;\n}\nconsole.log(pengali(4)(3));",
-              acceptedAnswers: ["12"],
+              type: "pilihan-ganda",
+              question: "Diberikan: function pengali(f) { return (n) => n * f; } — Berapa nilai pengali(4)(3)?",
+              choices: ["12", "7", "undefined", "TypeError"],
+              answerIndex: 0,
               explanation:
                 "12. pengali(4) mengembalikan fungsi yang mengingat f = 4 (closure), lalu fungsi itu langsung dipanggil dengan 3 sehingga 3 × 4 = 12. Pola pemanggilan berantai seperti ini umum di library fungsional.",
             },
@@ -2452,7 +2517,7 @@ export const javascriptTrack: Track = {
           id: "js-9-2",
           title: "URLSearchParams",
           explanation:
-            "Mengurai query string secara manual dengan `split` rapuh dan mudah salah. `URLSearchParams` menanganinya dengan benar, termasuk encoding karakter khusus. Dipakai untuk filter dan pencarian yang bisa di-bookmark serta dibagikan.",
+            "Mengurai query string secara manual dengan `split` rapuh dan mudah salah. `URLSearchParams` menanganinya dengan benar, termasuk encoding karakter khusus. Dipakai untuk filter dan pencarian yang bisa di-bookmark serta dibagikan. Objek `URLSearchParams` juga bisa diubah lalu ditempel kembali ke alamat halaman, sehingga hasil filter tetap benar ketika pengguna menekan tombol kembali.",
           example: {
             code: "const p = new URLSearchParams('?kategori=kopi&urut=harga');\n\nconsole.log(p.get('kategori'));\nconsole.log(p.get('tidakAda'));    // null kalau tidak ada\nconsole.log(p.has('urut'));\n\np.set('halaman', '3');             // tambah/ubah parameter\nconsole.log(p.toString());",
             output: "kopi\nnull\ntrue\nkategori=kopi&urut=harga&halaman=3",
@@ -2484,7 +2549,7 @@ export const javascriptTrack: Track = {
           id: "js-9-3",
           title: "Debounce dengan timer",
           explanation:
-            "Kalau kamu memanggil API di setiap ketikan, mengetik 'sepatu' berarti 6 request. **Debounce** menunda eksekusi sampai pengguna berhenti mengetik sejenak: setiap ketikan membatalkan timer sebelumnya. Ini teknik optimasi paling sering diminta pada fitur pencarian.",
+            "Kalau kamu memanggil API di setiap ketikan, mengetik 'sepatu' berarti 6 request. **Debounce** menunda eksekusi sampai pengguna berhenti mengetik sejenak: setiap ketikan membatalkan timer sebelumnya. Ini teknik optimasi paling sering diminta pada fitur pencarian. Jangan tertukar dengan throttle: debounce menunggu sampai aktivitas berhenti, sedangkan throttle membatasi frekuensi eksekusi pada rentang waktu tetap.",
           example: {
             code: "function debounce(fn, jeda) {\n  let timer;                       // diingat lewat closure\n  return function (...args) {\n    clearTimeout(timer);           // batalkan jadwal sebelumnya\n    timer = setTimeout(() => fn(...args), jeda);\n  };\n}\n\nconst simpan = debounce((v) => console.log('Menyimpan: ' + v), 200);\n\nsimpan('a');\nsimpan('ab');\nsimpan('abc');   // hanya yang terakhir yang benar-benar jalan",
             output: "Menyimpan: abc",
@@ -2609,10 +2674,10 @@ export const javascriptTrack: Track = {
             },
             {
               id: "q4",
-              type: "isian",
-              question:
-                "API apa yang dipakai untuk mengumpulkan semua nilai input form sekaligus berdasarkan atribut name? (tulis nama API-nya)",
-              acceptedAnswers: ["FormData", "new FormData", "formdata"],
+              type: "pilihan-ganda",
+              question: "Form-mu punya 12 input dan kamu tidak ingin membaca satu per satu dengan querySelector. API apa yang mengumpulkan semua nilainya sekaligus berdasarkan atribut name?",
+              choices: ["FormData", "URLSearchParams", "JSON.stringify()", "Object.keys()"],
+              answerIndex: 0,
               explanation:
                 "new FormData(form) mengumpulkan seluruh nilai berdasarkan atribut name, dan wajib dipakai untuk upload file. Object.fromEntries(formData) mengubahnya menjadi object biasa.",
             },
@@ -2655,7 +2720,7 @@ export const javascriptTrack: Track = {
           id: "js-10-1",
           title: "Anatomi sebuah test",
           explanation:
-            "Struktur test standar: `describe` mengelompokkan, `it`/`test` mendeskripsikan satu perilaku, `expect` memeriksa hasilnya. Nama test yang baik menjelaskan **perilaku**, bukan implementasi: 'mengembalikan 0 untuk array kosong' jauh lebih berguna daripada 'test fungsi total'.",
+            "Struktur test standar: `describe` mengelompokkan, `it`/`test` mendeskripsikan satu perilaku, `expect` memeriksa hasilnya. Nama test yang baik menjelaskan **perilaku**, bukan implementasi: 'mengembalikan 0 untuk array kosong' jauh lebih berguna daripada 'test fungsi total'. Satu test sebaiknya memeriksa satu perilaku saja, supaya ketika gagal kamu langsung tahu bagian mana yang rusak tanpa membaca isinya.",
           example: {
             code: "function diskon(harga, persen) {\n  return harga - (harga * persen) / 100;\n}\n\ndescribe('diskon', () => {\n  it('mengurangi harga sesuai persentase', () => {\n    expect(diskon(100000, 10)).toBe(90000);\n  });\n\n  it('mengembalikan harga utuh saat diskon 0', () => {\n    expect(diskon(100000, 0)).toBe(100000);\n  });\n});",
             output:
@@ -2692,7 +2757,7 @@ export const javascriptTrack: Track = {
           id: "js-10-2",
           title: "toBe vs toEqual",
           explanation:
-            "`toBe` membandingkan identitas (seperti `===`) — cocok untuk angka, string, boolean. Untuk object dan array **wajib** `toEqual`, karena dua object dengan isi sama tetap merupakan object berbeda. Salah memilih di sini adalah kebingungan nomor satu bagi yang baru menulis test.",
+            "`toBe` membandingkan identitas (seperti `===`) — cocok untuk angka, string, boolean. Untuk object dan array **wajib** `toEqual`, karena dua object dengan isi sama tetap merupakan object berbeda. Salah memilih di sini adalah kebingungan nomor satu bagi yang baru menulis test. Untuk angka pecahan, hindari `toBe` karena hasil perhitungan seperti 0,1 + 0,2 tidak persis — pakai `toBeCloseTo` yang memang disediakan untuk itu.",
           example: {
             code: "// nilai sederhana → toBe\nexpect(5 * 2).toBe(10);\nexpect('ab').toBe('ab');\nexpect(true).toBe(true);\n\n// object & array → toEqual\nexpect({ a: 1 }).toEqual({ a: 1 });   // ✅ lolos\n// expect({ a: 1 }).toBe({ a: 1 });   // ❌ gagal: dua object berbeda",
             output:
@@ -2723,7 +2788,7 @@ export const javascriptTrack: Track = {
           id: "js-10-3",
           title: "Arrange–Act–Assert",
           explanation:
-            "Pola tiga langkah yang membuat test mudah dibaca: **Arrange** (siapkan data), **Act** (jalankan yang diuji), **Assert** (periksa hasilnya). Test yang mencampur ketiganya jadi sulit dipahami saat gagal — dan test yang gagal tanpa penjelasan jelas hampir tidak berguna.",
+            "Pola tiga langkah yang membuat test mudah dibaca: **Arrange** (siapkan data), **Act** (jalankan yang diuji), **Assert** (periksa hasilnya). Test yang mencampur ketiganya jadi sulit dipahami saat gagal — dan test yang gagal tanpa penjelasan jelas hampir tidak berguna. Menjaga urutan ini juga memudahkan orang lain menambah kasus baru: cukup menyalin blok yang sama dan mengganti bagian Arrange-nya.",
           example: {
             code: "function rataRata(arr) {\n  return arr.reduce((a, b) => a + b, 0) / arr.length;\n}\n\nit('menghitung rata-rata nilai ujian', () => {\n  // Arrange — siapkan\n  const nilai = [80, 90, 100];\n\n  // Act — jalankan\n  const hasil = rataRata(nilai);\n\n  // Assert — periksa\n  expect(hasil).toBe(90);\n});",
             output: "✓ menghitung rata-rata nilai ujian",
@@ -2758,7 +2823,7 @@ export const javascriptTrack: Track = {
           id: "js-10-4",
           title: "Menguji edge case",
           explanation:
-            "Test untuk kasus normal (*happy path*) mudah dan jarang menemukan bug. Bug bersembunyi di **edge case**: array kosong, nilai nol, angka negatif, `null`, string kosong. Kalau kamu hanya punya waktu menulis dua test, tulis satu happy path dan satu edge case.",
+            "Test untuk kasus normal (*happy path*) mudah dan jarang menemukan bug. Bug bersembunyi di **edge case**: array kosong, nilai nol, angka negatif, `null`, string kosong. Kalau kamu hanya punya waktu menulis dua test, tulis satu happy path dan satu edge case. Daftar edge case terbaik biasanya datang dari bug yang pernah terjadi di produksi, jadi biasakan menambah test setiap kali menemukan satu.",
           example: {
             code: "function potong(teks, maks) {\n  if (teks.length <= maks) return teks;\n  return teks.slice(0, maks) + '…';\n}\n\n// happy path\nit('memotong teks panjang', () => {\n  expect(potong('abcdefg', 3)).toBe('abc…');\n});\n\n// edge case\nit('tidak memotong teks yang sudah pendek', () => {\n  expect(potong('ab', 5)).toBe('ab');\n});\n\nit('menangani teks kosong', () => {\n  expect(potong('', 5)).toBe('');\n});",
             output: "✓ tiga test lolos",
@@ -2791,7 +2856,7 @@ export const javascriptTrack: Track = {
           id: "js-10-5",
           title: "Menguji error dengan toThrow",
           explanation:
-            "Untuk memeriksa bahwa fungsi **melempar error**, `expect` harus menerima **fungsi**, bukan hasil pemanggilannya: `expect(() => bagi(1, 0)).toThrow()`. Kalau kamu menulis `expect(bagi(1, 0))`, errornya terjadi sebelum expect berjalan dan test gagal dengan pesan yang menyesatkan.",
+            "Untuk memeriksa bahwa fungsi **melempar error**, `expect` harus menerima **fungsi**, bukan hasil pemanggilannya: `expect(() => bagi(1, 0)).toThrow()`. Kalau kamu menulis `expect(bagi(1, 0))`, errornya terjadi sebelum expect berjalan dan test gagal dengan pesan yang menyesatkan. Kamu juga bisa memeriksa isi pesannya dengan `toThrow('Pembagi tidak boleh nol')`, berguna saat sebuah fungsi bisa melempar lebih dari satu jenis kesalahan.",
           example: {
             code: "function ambilUmur(umur) {\n  if (umur < 0) throw new Error('Umur tidak valid');\n  return umur;\n}\n\n// ✅ expect menerima FUNGSI, jadi ia bisa menangkap errornya\nit('menolak umur negatif', () => {\n  expect(() => ambilUmur(-1)).toThrow();\n  expect(() => ambilUmur(-1)).toThrow('Umur tidak valid');\n});\n\n// ❌ salah: error meledak sebelum expect berjalan\n// expect(ambilUmur(-1)).toThrow();",
             output: "✓ menolak umur negatif",

@@ -31,15 +31,15 @@ export const spreadsheetTrack: Track = {
           id: "sheet-1-1",
           title: "Sel, Range & Tipe Data",
           explanation:
-            "Setiap kotak di spreadsheet disebut **Sel** (misal A1). Kumpulan beberapa sel disebut **Range** (misal A1:B10). Tipe data meliputi Teks, Angka, dan Tanggal.",
+            "Setiap kotak di spreadsheet disebut **Sel**, dialamati dengan huruf kolom + nomor baris (misal `A1`). Kumpulan sel yang berdampingan disebut **Range**, ditulis dengan titik dua (`A1:B10`). Setiap sel punya tipe data — Teks, Angka, atau Tanggal — dan tipe inilah yang menentukan apakah sel bisa dihitung. Jebakan pemula: angka yang tersimpan sebagai teks (biasanya rata kiri) akan diabaikan SUM sehingga totalmu diam-diam salah.",
           example: {
             code: "=B1 + C1",
-            output: "Menjumlahkan nilai sel A1 dan B1.",
-            note: "Formula di Excel/Sheets selalu diawali dengan tanda sama dengan (=).",
+            output: "Jika B1 berisi 3000 dan C1 berisi 4500, sel formula menampilkan 7500.",
+            note: "Formula di Excel/Sheets selalu diawali dengan tanda sama dengan (=), lalu alamat selnya, bukan angkanya.",
           },
           instruction:
-            "Hitung total penjumlahan dari sel A1 dan B1.",
-          starterCode: "// Tulis formula di sini\n",
+            "Sel A1 berisi harga barang dan sel B1 berisi ongkos kirim. Tulis formula yang menampilkan total yang harus dibayar pembeli.",
+          starterCode: "",
           language: "text",
           tests: [
             {
@@ -62,7 +62,7 @@ export const spreadsheetTrack: Track = {
           },
           instruction:
             "Hitung nilai rata-rata dari rentang sel B1 hingga B10.",
-          starterCode: "// Tulis formula AVERAGE di sini\n",
+          starterCode: "",
           language: "text",
           tests: [
             {
@@ -85,7 +85,7 @@ export const spreadsheetTrack: Track = {
           },
           instruction:
             "Kalikan nilai pada sel A2 dengan sel C1, dan pastikan referensi C1 terkunci secara absolut (baris dan kolom).",
-          starterCode: "// Tulis formula absolut di sini\n",
+          starterCode: "",
           language: "text",
           tests: [
             {
@@ -108,7 +108,7 @@ export const spreadsheetTrack: Track = {
           },
           instruction:
             "Konversikan data tanggal pada sel A1 menjadi nama hari lengkap menggunakan fungsi TEXT.",
-          starterCode: "// Tulis formula TEXT di sini\n",
+          starterCode: "",
           language: "text",
           tests: [
             {
@@ -131,7 +131,7 @@ export const spreadsheetTrack: Track = {
           },
           instruction:
             "Hitung persentase rasio realisasi penjualan pada sel A2 terhadap target pada sel B2.",
-          starterCode: "// Tulis formula persentase di sini\n",
+          starterCode: "",
           language: "text",
           tests: [
             {
@@ -154,7 +154,7 @@ export const spreadsheetTrack: Track = {
           },
           instruction:
             "Gunakan fungsi FILTER untuk menyaring data rentang A2:B20 di mana nilai pada kolom B (B2:B20) lebih besar dari 100.",
-          starterCode: "// Tulis formula FILTER di sini\n",
+          starterCode: "",
           language: "text",
           tests: [
             {
@@ -177,7 +177,7 @@ export const spreadsheetTrack: Track = {
           },
           instruction:
             "Hitung banyaknya baris data yang terisi pada rentang A2:A100 di bawah baris judul menggunakan fungsi COUNTA.",
-          starterCode: "// Tulis formula COUNTA di sini\n",
+          starterCode: "",
           language: "text",
           tests: [
             {
@@ -198,7 +198,7 @@ export const spreadsheetTrack: Track = {
               question: "Simbol apa yang digunakan untuk mengunci referensi sel menjadi Absolut (seperti $A$1) di Excel/Google Sheets?",
               choices: ["$", "#", "@", "%"],
               answerIndex: 0,
-                            explanation: "Simbol Dolar ($) mengunci referensi kolom dan baris agar tidak bergeser saat formula di-copy ke sel lain.",
+              explanation: "Simbol Dolar ($) mengunci referensi kolom dan baris agar tidak bergeser saat formula di-copy ke sel lain.",
             },
             {
               id: "q2",
@@ -211,10 +211,33 @@ export const spreadsheetTrack: Track = {
             {
               id: "q3",
               type: "pilihan-ganda",
-              question: "Manakah format tampilan yang TIDAK merubah nilai asli pada sel?",
-              choices: ["Semua benar", "Percentage", "Currency", "Accounting"],
+              question:
+                "Sel A1 berisi angka 0,25. Kamu mengubah formatnya menjadi Percentage sehingga tampil 25%. Apa yang terjadi pada nilai yang dipakai formula lain?",
+              choices: [
+                "Nilainya ikut berubah menjadi 25",
+                "Nilainya tetap 0,25 — format hanya mengubah tampilan, bukan isi sel",
+                "Sel menjadi teks dan tidak bisa dihitung",
+                "Formula lain otomatis error",
+              ],
+              answerIndex: 1,
+              explanation:
+                "Format (Percentage, Currency, Date) hanya lapisan tampilan; nilai yang tersimpan tetap 0,25 sehingga perhitungan lain tidak berubah. Yang benar-benar mengubah isi sel adalah formula seperti =A1*100. Kebalikannya juga penting diingat: angka yang tersimpan sebagai TEKS akan terlihat normal tapi diabaikan oleh SUM.",
+            },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Jika kamu ingin menjumlahkan angka secara cepat tanpa mengetik satu per satu dari rentang sel A1 hingga A20, fungsi apa yang paling tepat digunakan?",
+              choices: ["SUM(A1:A20)", "ADD(A1:A20)", "COUNT(A1:A20)", "TOTAL(A1:A20)"],
               answerIndex: 0,
-              explanation: "Format sel (Percentage, Currency, Date, dsb.) hanya mengubah tampilan visual tanpa merubah nilai matematis asli di latar belakang.",
+              explanation: "Fungsi SUM digunakan untuk menjumlahkan semua angka dalam rentang sel yang dipilih secara otomatis.",
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Fungsi apakah yang digunakan untuk menghitung banyaknya sel yang berisikan teks atau angka, asalkan tidak kosong?",
+              choices: ["COUNTA", "COUNT", "SUM", "AVERAGE"],
+              answerIndex: 0,
+              explanation: "Fungsi COUNTA menghitung jumlah sel yang berisi data apa pun (termasuk teks), berbeda dengan COUNT yang hanya menghitung sel berisikan angka.",
             },
           ],
         },
@@ -248,7 +271,7 @@ export const spreadsheetTrack: Track = {
           },
           instruction:
             'Bandingkan nilai di sel sebelah (B2). Bila melebihi angka seribu, nyatakan sebagai Bonus. Sebaliknya, nyatakan Standar. Susun fungsi logika untuk kondisi ini.',
-          starterCode: "// Tulis formula IF di sini\n",
+          starterCode: "",
           language: "text",
           tests: [
             {
@@ -271,7 +294,7 @@ export const spreadsheetTrack: Track = {
           },
           instruction:
             'Hitung total nilai di kolom C khusus untuk baris yang statusnya "Lunas" di kolom A. Susun fungsi SUMIFS-nya.',
-          starterCode: "// Tulis formula SUMIFS di bawah ini\n",
+          starterCode: "",
           language: "text",
           tests: [
             {
@@ -294,7 +317,7 @@ export const spreadsheetTrack: Track = {
           },
           instruction:
             'Gunakan VLOOKUP untuk mencari nilai tepat (exact match) A2 di rentang C1:D50, dan kembalikan nilai dari kolom ke-2.',
-          starterCode: "// Tulis VLOOKUP di sini\n",
+          starterCode: "",
           language: "text",
           tests: [
             {
@@ -317,7 +340,7 @@ export const spreadsheetTrack: Track = {
           },
           instruction:
             "Gunakan fungsi pencarian modern XLOOKUP untuk mencari nilai A2 pada kolom B, dan mengembalikan hasil dari kolom C.",
-          starterCode: "// Tulis XLOOKUP di sini\n",
+          starterCode: "",
           language: "text",
           tests: [
             {
@@ -340,7 +363,7 @@ export const spreadsheetTrack: Track = {
           },
           instruction:
             "Hapus semua spasi ekstra di awal, akhir, maupun antar kata pada sel A2.",
-          starterCode: "// Tulis formula TRIM di bawah ini\n",
+          starterCode: "",
           language: "text",
           tests: [
             {
@@ -363,7 +386,7 @@ export const spreadsheetTrack: Track = {
           },
           instruction:
             "Gunakan fungsi yang bisa memanggil tanggal hari ini secara dinamis setiap kali lembar kerja dibuka.",
-          starterCode: "// Tulis formula TODAY di sini\n",
+          starterCode: "",
           language: "text",
           tests: [
             {
@@ -386,7 +409,7 @@ export const spreadsheetTrack: Track = {
           },
           instruction:
             'Ketikkan fungsi VLOOKUP exact match untuk mencari A2 di B:C kolom 2, lalu bungkus fungsi tersebut dengan IFERROR agar menampilkan angka 0 jika error.',
-          starterCode: "// Tulis IFERROR di bawah ini\n",
+          starterCode: "",
           language: "text",
           tests: [
             {
@@ -407,7 +430,7 @@ export const spreadsheetTrack: Track = {
               question: "Fungsi pencarian modern apa di Excel/Google Sheets yang direkomendasikan menggantikan VLOOKUP karena bisa mencari ke arah kiri dan tidak rawan rusak saat disisipi kolom?",
               choices: ["XLOOKUP", "HLOOKUP", "SUMIF", "LOOKUP_LEFT"],
               answerIndex: 0,
-                            explanation: "XLOOKUP adalah pengganti modern VLOOKUP yang lebih fleksibel, cepat, dan tangguh.",
+              explanation: "XLOOKUP adalah pengganti modern VLOOKUP yang lebih fleksibel, cepat, dan tangguh.",
             },
             {
               id: "q2",
@@ -424,6 +447,22 @@ export const spreadsheetTrack: Track = {
               choices: ["COUNTIF", "SUMIF", "AVERAGEIF", "COUNT"],
               answerIndex: 0,
               explanation: "COUNTIF bertugas menghitung BANYAKNYA kemunculan sel, sedangkan SUMIF menghitung TOTAL nilainya.",
+            },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Jika kita ingin menampilkan kata 'Berhasil' jika nilai penjualan di B2 lebih dari 1000, dan 'Gagal' jika kurang, formula mana yang tepat?",
+              choices: ["=IF(B2>1000, \"Berhasil\", \"Gagal\")", "=IF(B2>1000, \"Gagal\", \"Berhasil\")", "=IF(B2<1000, \"Berhasil\", \"Gagal\")", "=IF(B2=1000, \"Berhasil\", \"Gagal\")"],
+              answerIndex: 0,
+              explanation: "Fungsi IF menguji kondisi pertama, lalu menampilkan argumen kedua jika kondisi bernilai TRUE, dan argumen ketiga jika bernilai FALSE.",
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Untuk memotong dan mengambil tepat 4 karakter huruf dari sebelah kiri pada teks di sel A1, fungsi apa yang harus dipakai?",
+              choices: ["=LEFT(A1, 4)", "=RIGHT(A1, 4)", "=MID(A1, 4)", "=TRIM(A1, 4)"],
+              answerIndex: 0,
+              explanation: "Fungsi LEFT mengambil sejumlah karakter tertentu yang dimulai dari sisi paling kiri sebuah teks atau string.",
             },
           ],
         },
@@ -457,7 +496,7 @@ export const spreadsheetTrack: Track = {
           },
           instruction:
             "Hapus seluruh spasi berlebih pada teks sel A2 menggunakan fungsi TRIM.",
-          starterCode: "// Tulis formula TRIM di sini\n",
+          starterCode: "",
           language: "text",
           tests: [
             {
@@ -480,7 +519,7 @@ export const spreadsheetTrack: Track = {
           },
           instruction:
             "Hasilkan daftar nilai yang unik saja (tanpa pengulangan) dari rentang sel A1 hingga A50.",
-          starterCode: "// Tulis formula UNIQUE di sini\n",
+          starterCode: "",
           language: "text",
           tests: [
             {
@@ -503,7 +542,7 @@ export const spreadsheetTrack: Track = {
           },
           instruction:
             'Pisahkan teks pada sel A2 ke dalam beberapa kolom berdasarkan karakter koma (,).',
-          starterCode: "// Tulis formula SPLIT di sini\n",
+          starterCode: "",
           language: "text",
           tests: [
             {
@@ -526,7 +565,7 @@ export const spreadsheetTrack: Track = {
           },
           instruction:
             'Gantikan setiap karakter strip (-) yang ada pada teks di sel A2 menjadi kosong (tanpa spasi/tidak ada karakter).',
-          starterCode: "// Tulis formula SUBSTITUTE di sini\n",
+          starterCode: "",
           language: "text",
           tests: [
             {
@@ -549,7 +588,7 @@ export const spreadsheetTrack: Track = {
           },
           instruction:
             "Periksa apakah teks sel A2 bernilai 'Lunas' atau 'Pending' menggunakan kombinasi IF dan OR. Jika valid kembalikan A2, jika salah kembalikan 'Invalid'.",
-          starterCode: "// Tulis formula validasi di bawah ini\n",
+          starterCode: "",
           language: "text",
           tests: [
             {
@@ -572,7 +611,7 @@ export const spreadsheetTrack: Track = {
           },
           instruction:
             "Ubah format teks pada sel A2 menjadi berawalan huruf kapital pada setiap kata (Title Case).",
-          starterCode: "// Tulis formula PROPER di sini\n",
+          starterCode: "",
           language: "text",
           tests: [
             {
@@ -595,7 +634,7 @@ export const spreadsheetTrack: Track = {
           },
           instruction:
             "Hitung berapa banyak baris duplikat di rentang A1:A50 dengan mengurangkan COUNTA(A1:A50) dan COUNTA(UNIQUE(A1:A50)).",
-          starterCode: "// Tulis formula hitung duplikat di bawah ini\n",
+          starterCode: "",
           language: "text",
           tests: [
             {
@@ -616,7 +655,7 @@ export const spreadsheetTrack: Track = {
               question: "Fungsi teks apa di Spreadsheet yang digunakan untuk mengubah string teks menjadi format kapital pada setiap awal kata (Title Case)?",
               choices: ["PROPER", "UPPER", "CAPITAL", "TITLE"],
               answerIndex: 0,
-                            explanation: "Fungsi PROPER mengubah karakter pertama setiap kata menjadi huruf besar dan huruf sisanya menjadi kecil.",
+              explanation: "Fungsi PROPER mengubah karakter pertama setiap kata menjadi huruf besar dan huruf sisanya menjadi kecil.",
             },
             {
               id: "q2",
@@ -633,6 +672,22 @@ export const spreadsheetTrack: Track = {
               choices: ["TRIM", "CLEAN", "STRIP", "SPLIT"],
               answerIndex: 0,
               explanation: "TRIM secara otomatis sangat membantu ketika kita mengopi data yang kotor dari situs web atau sistem lain ke spreadsheet.",
+            },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Saat data yang kamu terima berisi teks nama depan dan belakang yang menyatu (contoh 'Budi,Sudarsono') dan kamu ingin memisahkan mereka ke kolom berbeda, fitur apa yang paling efisien digunakan?",
+              choices: ["Text to Columns (atau fungsi SPLIT)", "Remove Duplicates", "Conditional Formatting", "Find and Replace"],
+              answerIndex: 0,
+              explanation: "Text to Columns dan fungsi SPLIT dapat membagi teks dalam satu sel menjadi beberapa kolom berdasarkan karakter pemisah (delimiter) tertentu.",
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Untuk menghasilkan daftar nama unik klien dari kolom yang berisi ribuan baris namun banyak terjadi duplikasi penginputan, fungsi mana yang paling praktis?",
+              choices: ["=UNIQUE(range)", "=FILTER(range)", "=SUMIF(range)", "=VLOOKUP(range)"],
+              answerIndex: 0,
+              explanation: "Fungsi UNIQUE mengekstrak data dan hanya menampilkan satu entri unik dari setiap nilai, membuang semua duplikat.",
             },
           ],
         },
@@ -656,163 +711,214 @@ export const spreadsheetTrack: Track = {
         {
           kind: "step",
           id: "sheet-4-1",
-          title: "Agregasi Total per Kategori (SUMIF)",
+          title: "Membuat Pivot Table Pertamamu",
           explanation:
-            "Formula `=SUMIF(A2:A100, \"Elektronik\", B2:B100)` mereplikasi agregasi Pivot Table untuk total nilai kategori tertentu.",
+            "Pivot table adalah alat peringkas: ribuan baris transaksi mentah diubah menjadi tabel ringkasan hanya dengan menyeret nama kolom, tanpa menulis satu formula pun. Ia dibuat dari sebuah rentang data yang rapi — satu baris header di atas, satu baris berisi satu transaksi, tanpa baris kosong di tengah. Di Excel jalurnya `Insert > PivotTable`, di Google Sheets `Insert > Pivot table`, lalu kamu menentukan rentang sumbernya. Kesalahan paling sering di langkah ini adalah memilih rentang yang tidak mencakup seluruh baris data, sehingga transaksi terbaru tidak pernah ikut terhitung.",
           example: {
-            code: '=SUMIF(A2:A50, "Pakaian", B2:B50)',
-            output: "7500000",
-            note: "Alat agregasi cepat tanpa harus mengubah tata letak sheet.",
+            code: "Insert > Pivot table\nSumber data: Sheet1!A1:D2000",
+            output: "Sheet baru terbuka berisi panel Pivot table editor dengan daftar kolom: Tanggal, Wilayah, Kategori, Penjualan.",
+            note: "Sertakan baris header di dalam rentang — nama kolomnya yang akan muncul sebagai field di editor.",
           },
           instruction:
-            "Hitung total nilai penjualan untuk kategori 'Elektronik' pada rentang Kategori A2:A100 dan Nilai B2:B100 menggunakan fungsi SUMIF.",
-          starterCode: "// Tulis SUMIF di sini\n",
+            "Data transaksimu ada di `Sheet1` mulai sel A1 (header) sampai D5000. Tulis dua baris: jalur menu untuk menyisipkan pivot table, lalu rentang sumber datanya lengkap dengan nama sheet.",
+          starterCode: "",
           language: "text",
           tests: [
             {
-              pattern: "=\\s*SUMIF\\(\\s*A2:A100\\s*,\\s*[\"']Elektronik[\"']\\s*,\\s*B2:B100\\s*\\)",
-              message: "Gunakan: =SUMIF(A2:A100, \"Elektronik\", B2:B100)",
+              pattern: "insert\\s*>\\s*pivot",
+              flags: "i",
+              message:
+                "Tulis jalur menunya: Insert > Pivot table (atau Insert > PivotTable).",
+            },
+            {
+              pattern: "Sheet1!\\s*A1:D5000",
+              flags: "i",
+              message:
+                "Sebutkan rentang sumbernya: Sheet1!A1:D5000.",
             },
           ],
-          solution: '=SUMIF(A2:A100, "Elektronik", B2:B100)',
+          solution: "Insert > Pivot table\nSumber data: Sheet1!A1:D5000",
         },
         {
           kind: "step",
           id: "sheet-4-2",
-          title: "Hitung Proporsi Kategori terhadap Total",
+          title: "Empat Area: Rows, Columns, Values, Filters",
           explanation:
-            "Hitung kontribusi persentase kategori terhadap total keseluruhan dengan formula `=SUMIF(A2:A100, \"Elektronik\", B2:B100) / SUM(B2:B100)`.",
+            "Isi pivot table ditentukan oleh penempatan field pada empat area. Area **Rows** membuat setiap nilai unik menjadi satu baris ke bawah; **Columns** melakukan hal serupa tapi melebar ke samping; **Values** berisi angka yang diagregasi; dan **Filters** menyaring seluruh tabel sekaligus. Pertanyaan bisnis biasanya langsung memberi tahu penempatannya: 'total penjualan per kategori' berarti Kategori di Rows dan Penjualan di Values. Jebakan pemula: menaruh kolom angka di Rows sehingga setiap nominal menjadi barisnya sendiri dan tabel jadi sepanjang data mentahnya.",
           example: {
-            code: '=SUMIF(A2:A50, "Pakaian", B2:B50) / SUM(B2:B50)',
-            output: "0.20 (tampilan 20%)",
-            note: "Sangat berguna untuk analisis kontribusi penjualan (Pareto).",
+            code: "Rows: Wilayah\nValues: SUM of Penjualan",
+            output: "Tabel ringkasan 2 kolom: Jakarta 12.400.000 | Bandung 8.150.000 | Grand Total 20.550.000",
           },
           instruction:
-            "Hitung proporsi persentase penjualan kategori 'Elektronik' (A2:A100, B2:B100) terhadap total seluruh penjualan SUM(B2:B100).",
-          starterCode: "// Tulis formula proporsi di bawah ini\n",
+            "Susun konfigurasi pivot untuk menjawab 'berapa total penjualan tiap kategori produk?'. Tulis dua baris: satu untuk area yang memuat field `Kategori`, satu lagi untuk area yang memuat agregasi jumlah dari field `Penjualan`.",
+          starterCode: "",
           language: "text",
           tests: [
             {
-              pattern: "=\\s*SUMIF\\(\\s*A2:A100\\s*,\\s*[\"']Elektronik[\"']\\s*,\\s*B2:B100\\s*\\)\\s*/\\s*SUM\\(\\s*B2:B100\\s*\\)",
-              message: "Gunakan: =SUMIF(A2:A100, \"Elektronik\", B2:B100) / SUM(B2:B100)",
+              pattern: "rows\\s*:\\s*kategori",
+              flags: "i",
+              message:
+                "Taruh Kategori di area Rows.",
+            },
+            {
+              pattern: "values\\s*:\\s*(sum|jumlah)[^\\n]*penjualan",
+              flags: "i",
+              message:
+                "Taruh SUM of Penjualan di area Values.",
             },
           ],
-          solution: '=SUMIF(A2:A100, "Elektronik", B2:B100) / SUM(B2:B100)',
+          solution: "Rows: Kategori\nValues: SUM of Penjualan",
         },
         {
           kind: "step",
           id: "sheet-4-3",
-          title: "Pengelompokan Bulan dan Tahun",
+          title: "Mengganti Jenis Agregasi di Area Values",
           explanation:
-            "Konversi tanggal pada sel A2 menjadi format tahun-bulan (`\"yyyy-mm\"`) menggunakan fungsi `=TEXT(A2, \"yyyy-mm\")`.",
+            "Secara bawaan pivot table menjumlahkan angka yang kamu taruh di Values, padahal pertanyaannya belum tentu soal total. 'Berapa rata-rata nilai transaksi?' butuh AVERAGE, 'berapa banyak transaksi?' butuh COUNT (atau COUNTA untuk kolom teks), dan 'berapa transaksi terbesar?' butuh MAX. Menggantinya dilakukan lewat opsi `Summarize by` di Excel atau `Summarise by` di Google Sheets. Perhatikan satu jebakan: COUNT hanya menghitung sel berisi angka, jadi memakai kolom yang berisi teks akan menghasilkan nol dan membuatmu mengira datanya kosong.",
           example: {
-            code: '=TEXT(B2, "yyyy-mm")',
-            output: "2026-07",
-            note: "Memudahkan pengelompokan laporan berkala bulanan.",
+            code: "Values: Penjualan\nSummarize by: AVERAGE",
+            output: "Kolom nilai berubah dari total 20.550.000 menjadi rata-rata 342.500 per transaksi.",
           },
           instruction:
-            "Ekstrak kelompok tahun dan bulan dari tanggal sel A2 menjadi format \"yyyy-mm\" menggunakan fungsi TEXT.",
-          starterCode: "// Tulis formula TEXT tanggal di sini\n",
+            "Manajemen ingin tahu **rata-rata** nilai transaksi per wilayah, bukan totalnya. Tulis tiga baris konfigurasi: field di area Rows, field di area Values, dan jenis agregasi yang kamu pilih.",
+          starterCode: "",
           language: "text",
           tests: [
             {
-              pattern: "=\\s*TEXT\\(\\s*A2\\s*,\\s*[\"']yyyy-mm[\"']\\s*\\)",
-              message: "Gunakan: =TEXT(A2, \"yyyy-mm\")",
+              pattern: "rows\\s*:\\s*wilayah",
+              flags: "i",
+              message:
+                "Taruh Wilayah di area Rows.",
+            },
+            {
+              pattern: "values\\s*:[^\\n]*penjualan",
+              flags: "i",
+              message:
+                "Taruh Penjualan di area Values.",
+            },
+            {
+              pattern: "(summari[sz]e\\s*by|agregasi)\\s*:\\s*average",
+              flags: "i",
+              message:
+                "Ganti agregasinya menjadi AVERAGE.",
             },
           ],
-          solution: '=TEXT(A2, "yyyy-mm")',
+          solution: "Rows: Wilayah\nValues: Penjualan\nSummarize by: AVERAGE",
         },
         {
           kind: "step",
           id: "sheet-4-4",
-          title: "Kalkulasi Profit Margin",
+          title: "Menampilkan Proporsi: % of Grand Total",
           explanation:
-            "Hitung nilai keuntungan (Profit) dengan mengurangkan Omset di sel B2 dengan Modal di sel C2 (`=B2 - C2`).",
+            "Angka total menjawab 'berapa', tapi tidak menjawab 'seberapa besar dibanding keseluruhan'. Pivot table bisa mengubah tampilan nilai menjadi persentase terhadap grand total tanpa formula tambahan, lewat opsi `Show values as` di Excel atau `Show as` di Google Sheets. Ini yang dipakai untuk analisis kontribusi — misalnya menemukan bahwa dua kategori menyumbang 80 persen omset. Selalu sebutkan basis persentasenya saat melaporkan, karena persen terhadap total keseluruhan, terhadap total baris, dan terhadap total kolom menghasilkan angka yang berbeda.",
           example: {
-            code: "=D2 - E2",
-            output: "250000",
-            note: "Dapat dijadikan calculated field atau kolom kalkulasi mandiri.",
+            code: "Values: Jumlah Transaksi\nShow as: % of Row Total",
+            output: "Tiap baris wilayah menampilkan proporsi transaksinya sendiri: Jakarta 62% online, 38% offline.",
           },
           instruction:
-            "Hitung nilai keuntungan bersih pada sel B2 (Omset) dikurangi sel C2 (Modal).",
-          starterCode: "// Tulis formula pengurangan di sini\n",
+            "Ubah kolom nilai pada pivot penjualan per kategori agar menampilkan kontribusi tiap kategori terhadap keseluruhan. Tulis dua baris: field yang ada di area Values, dan opsi tampilan yang kamu pilih.",
+          starterCode: "",
           language: "text",
           tests: [
             {
-              pattern: "=\\s*B2\\s*-\\s*C2",
-              message: "Tuliskan: =B2 - C2",
+              pattern: "values\\s*:[^\\n]*penjualan",
+              flags: "i",
+              message:
+                "Sebutkan field Penjualan di area Values.",
+            },
+            {
+              pattern: "show\\s*(values\\s*)?as\\s*:\\s*%\\s*of\\s*grand\\s*total",
+              flags: "i",
+              message:
+                "Pilih Show as: % of Grand Total.",
             },
           ],
-          solution: "=B2 - C2",
+          solution: "Values: Penjualan\nShow as: % of Grand Total",
         },
         {
           kind: "step",
           id: "sheet-4-5",
-          title: "Multi-Kriteria Agregasi (SUMIFS)",
+          title: "Calculated Field: Metrik yang Tidak Ada di Data Mentah",
           explanation:
-            "Gunakan `=SUMIFS(C2:C100, A2:A100, \"Jakarta\", B2:B100, \"Budi\")` untuk menghitung total penjualan bertingkat berdasarkan Wilayah dan Salesman.",
+            "Margin, harga rata-rata per unit, dan rasio lain sering tidak tersedia sebagai kolom di data mentah. Calculated field membuat kolom hitungan **di dalam** pivot table, jadi kamu tidak perlu menambah kolom bantu di data sumber yang bisa mengacaukan rentang atau memberatkan file. Formulanya memakai nama field, misalnya `=Profit / Penjualan`. Yang perlu kamu pahami: hasilnya dihitung dari nilai yang sudah diagregasi, sehingga rasio pada baris total mengikuti total profit dibagi total penjualan — bukan rata-rata rasio tiap baris.",
           example: {
-            code: '=SUMIFS(C2:C50, A2:A50, "Bandung", B2:B50, "Siti")',
-            output: "4200000",
-            note: "SUMIFS menerima banyak pasangan kondisi (rentang_kriteria, kriteria).",
+            code: "Calculated field\nNama: Harga Rata-rata\nFormula: =Penjualan / Qty",
+            output: "Kolom Harga Rata-rata muncul di pivot: Elektronik 2.450.000 | Pakaian 185.000",
           },
           instruction:
-            "Hitung total nilai C2:C100 untuk Wilayah 'Jakarta' (A2:A100) dan Salesman 'Budi' (B2:B100) menggunakan fungsi SUMIFS.",
-          starterCode: "// Tulis SUMIFS multi-kriteria di bawah ini\n",
+            "Data pivot punya field `Profit` dan `Penjualan`. Buat calculated field bernama `Margin` yang menghitung profit dibagi penjualan. Tulis nama field-nya dan formulanya (diawali tanda `=`).",
+          starterCode: "",
           language: "text",
           tests: [
             {
-              pattern: "=\\s*SUMIFS\\(\\s*C2:C100\\s*,\\s*A2:A100\\s*,\\s*[\"']Jakarta[\"']\\s*,\\s*B2:B100\\s*,\\s*[\"']Budi[\"']\\s*\\)",
-              message: "Gunakan: =SUMIFS(C2:C100, A2:A100, \"Jakarta\", B2:B100, \"Budi\")",
+              pattern: "(nama|name)\\s*:\\s*margin",
+              flags: "i",
+              message:
+                "Beri nama field-nya: Margin.",
+            },
+            {
+              pattern: "=\\s*Profit\\s*/\\s*Penjualan",
+              flags: "i",
+              message:
+                "Formulanya =Profit / Penjualan.",
             },
           ],
-          solution: '=SUMIFS(C2:C100, A2:A100, "Jakarta", B2:B100, "Budi")',
+          solution: "Calculated field\nNama: Margin\nFormula: =Profit / Penjualan",
         },
         {
           kind: "step",
           id: "sheet-4-6",
-          title: "Penyaringan Data Berstatus Lunas",
+          title: "Slicer: Filter yang Bisa Diklik Atasanmu",
           explanation:
-            "Gunakan `=FILTER(A2:C100, C2:C100 = \"Lunas\")` untuk mengambil seluruh baris data berstatus Lunas.",
+            "Filter bawaan pivot table berfungsi baik untukmu sendiri, tapi orang non-teknis jarang mau membuka menu dropdown bertingkat. Slicer menyediakan tombol-tombol filter yang terlihat langsung di atas tabel atau dashboard, sehingga siapa pun bisa mengklik 'Jakarta' lalu melihat seluruh angka menyesuaikan. Di Excel jalurnya `Insert > Slicer`, di Google Sheets `Data > Add a slicer`, lalu kamu memilih field yang jadi tombolnya. Satu slicer bisa dikaitkan ke beberapa pivot sekaligus — itulah cara membuat dashboard terasa satu kesatuan.",
           example: {
-            code: '=FILTER(A2:C50, C2:C50 = "Proses")',
-            output: "Baris data yang statusnya Proses.",
-            note: "Menyediakan data dinamis untuk dashboard tanpa membuat pivot baru.",
+            code: "Insert > Slicer\nField: Wilayah",
+            output: "Kotak berisi tombol Jakarta, Bandung, Surabaya muncul di atas pivot; mengklik salah satunya menyaring seluruh tabel.",
           },
           instruction:
-            "Saring seluruh baris data dari rentang A2:C100 di mana nilai kolom C (C2:C100) bernilai 'Lunas' menggunakan FILTER.",
-          starterCode: "// Tulis FILTER status Lunas di sini\n",
+            "Dashboard penjualanmu perlu tombol filter agar manajer bisa memilih periode. Tulis dua baris: jalur menu untuk menambahkan slicer, dan field yang kamu jadikan tombolnya (`Bulan`).",
+          starterCode: "",
           language: "text",
           tests: [
             {
-              pattern: "=\\s*FILTER\\(\\s*A2:C100\\s*,\\s*C2:C100\\s*=\\s*[\"']Lunas[\"']\\s*\\)",
-              message: "Gunakan: =FILTER(A2:C100, C2:C100 = \"Lunas\")",
+              pattern: "(insert\\s*>\\s*slicer|data\\s*>\\s*add\\s*a\\s*slicer)",
+              flags: "i",
+              message:
+                "Tulis jalur menunya: Insert > Slicer (Excel) atau Data > Add a slicer (Sheets).",
+            },
+            {
+              pattern: "(field|kolom)\\s*:\\s*bulan",
+              flags: "i",
+              message:
+                "Pilih field Bulan sebagai tombol filternya.",
             },
           ],
-          solution: '=FILTER(A2:C100, C2:C100 = "Lunas")',
+          solution: "Insert > Slicer\nField: Bulan",
         },
         {
           kind: "step",
           id: "sheet-4-7",
-          title: "Tabel Agregasi Otomatis dengan QUERY",
+          title: "Refresh: Kenapa Angka Pivot Tidak Ikut Berubah",
           explanation:
-            "Gunakan `=QUERY(A1:B100, \"SELECT A, SUM(B) GROUP BY A\")` untuk membuat tabel ringkasan dinamis yang otomatis ter-update.",
+            "Berbeda dari formula biasa yang langsung menghitung ulang, pivot table membaca salinan data di memori (pivot cache) agar tetap ringan meski datanya puluhan ribu baris. Akibatnya, mengubah angka di data sumber tidak otomatis mengubah pivot — kamu harus me-refresh lewat `PivotTable Analyze > Refresh` di Excel, sementara Google Sheets memperbaruinya otomatis saat rentangnya berubah. Ini penyebab paling umum laporan yang 'angkanya beda' padahal datanya sudah diperbaiki. Kalau baris baru terus bertambah, jadikan sumbernya sebuah Table (Ctrl+T) agar rentangnya ikut memanjang sendiri.",
           example: {
-            code: '=QUERY(A1:B50, "SELECT A, AVERAGE(B) GROUP BY A")',
-            output: "Tabel 2 kolom berisi Kategori dan Rata-rata Penjualan.",
-            note: "Fungsi QUERY sangat powerful di Google Sheets menggunakan sintaks mirip SQL.",
+            code: "Data > Refresh all",
+            output: "Seluruh pivot di workbook ikut diperbarui; total Elektronik berubah dari 9.500.000 menjadi 9.800.000.",
+            note: "Kalau lupa refresh, seluruh laporanmu menampilkan angka basi tanpa satu pun pesan error.",
           },
           instruction:
-            "Buat agregasi total penjualan (SUM(B)) per kategori (GROUP BY A) dari rentang data A1:B100 menggunakan fungsi QUERY.",
-          starterCode: "// Tulis QUERY agregasi di sini\n",
+            "Kamu memperbaiki dua angka penjualan di data sumber, tapi pivot masih menampilkan angka lama. Tulis jalur menu yang kamu tempuh di Excel untuk memperbaruinya.",
+          starterCode: "",
           language: "text",
           tests: [
             {
-              pattern: "=\\s*QUERY\\(\\s*A1:B100\\s*,\\s*[\"']SELECT A, SUM\\(B\\) GROUP BY A[\"']\\s*\\)",
-              message: "Gunakan: =QUERY(A1:B100, \"SELECT A, SUM(B) GROUP BY A\")",
+              pattern: "(pivottable\\s*analyze|analyze|data)\\s*>\\s*refresh",
+              flags: "i",
+              message:
+                "Tulis jalur menu refresh-nya, misalnya PivotTable Analyze > Refresh.",
             },
           ],
-          solution: '=QUERY(A1:B100, "SELECT A, SUM(B) GROUP BY A")',
+          solution: "PivotTable Analyze > Refresh",
         },
         {
           kind: "quiz",
@@ -825,7 +931,7 @@ export const spreadsheetTrack: Track = {
               question: "Fitur visual apa di Excel/Sheets yang menyediakan tombol filter interaktif di atas Pivot Table untuk mempermudah eksekutif menyaring data?",
               choices: ["Slicer", "Calculated Field", "Sparkline", "VLOOKUP"],
               answerIndex: 0,
-                            explanation: "Slicer adalah tombol filter visual interaktif yang memudahkan penyaringan data di Pivot Table dan Dashboard.",
+              explanation: "Slicer adalah tombol filter visual interaktif yang memudahkan penyaringan data di Pivot Table dan Dashboard.",
             },
             {
               id: "q2",
@@ -842,6 +948,22 @@ export const spreadsheetTrack: Track = {
               choices: ["Calculated Field", "Pivot Formula", "Custom Metrics", "Slicer Formula"],
               answerIndex: 0,
               explanation: "Calculated Field sangat membantu membuat metrik seperti 'Laba Bersih' atau rasio-rasio tanpa harus memberatkan file data sumber aslinya.",
+            },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Di dalam panel menu pembuat Pivot Table, ke kotak bagian manakah (area/field) kamu biasanya menaruh 'Kategori Produk' jika kamu menginginkan data itu menjadi label berjejer ke bawah?",
+              choices: ["Rows", "Values", "Columns", "Filters"],
+              answerIndex: 0,
+              explanation: "Area Rows menempatkan item data secara vertikal dari atas ke bawah pada baris-baris berurutan Pivot Table.",
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Apabila kamu menginginkan analisis total penjualan Pivot Table-mu agar menampilkan persentase tiap produk terhadap grand total, opsi perhitungan apakah di 'Values' yang kamu butuhkan?",
+              choices: ["% of Grand Total", "Average", "Count", "Max"],
+              answerIndex: 0,
+              explanation: "Opsi '% of Grand Total' otomatis membagi setiap nilai dengan total keseluruhan, menghemat banyak waktu kalkulasi proporsi.",
             },
           ],
         },
@@ -864,140 +986,182 @@ export const spreadsheetTrack: Track = {
         {
           kind: "step",
           id: "sheet-5-1",
-          title: "Menghitung Rata-rata Bergerak (Moving Average)",
+          title: "Memilih Jenis Chart dari Bentuk Pertanyaan",
           explanation:
-            "Hitung rata-rata 3 periode terakhir `=AVERAGE(B2:B4)` untuk memperhalus grafik tren penjualan.",
+            "Jenis chart bukan soal selera, melainkan mengikuti pertanyaan yang ingin dijawab. Pertanyaan tentang perubahan sepanjang waktu dijawab line chart, karena garis menekankan arah dan kecepatan perubahan. Perbandingan antar kategori dijawab bar atau column chart, sebab mata manusia membandingkan panjang batang jauh lebih akurat daripada luas juring. Pie chart hanya layak dipakai untuk dua sampai tiga bagian dari satu keseluruhan; lebih dari itu pembaca menyerah membandingkannya. Untuk hubungan antara dua angka, gunakan scatter plot.",
           example: {
-            code: "=AVERAGE(C2:C5)",
-            output: "18500000",
-            note: "Digunakan untuk menghaluskan fluktuasi grafik garis tren.",
+            code: "Insert > Chart\nChart type: Column chart\nData: Kategori (X), Penjualan (Y)",
+            output: "Grafik batang berisi 4 kategori muncul; batang tertinggi terlihat jelas tanpa perlu membaca angkanya.",
           },
           instruction:
-            "Hitung rata-rata penjualan 3 bulan pertama (sel B2 hingga B4) menggunakan fungsi AVERAGE.",
-          starterCode: "// Tulis AVERAGE di sini\n",
+            "Kamu diminta menampilkan **tren penjualan bulanan sepanjang 2026**. Tulis dua baris: jalur menu untuk menyisipkan grafik, dan jenis chart yang paling tepat untuk pertanyaan itu.",
+          starterCode: "",
           language: "text",
           tests: [
             {
-              pattern: "=\\s*AVERAGE\\(\\s*B2:B4\\s*\\)",
-              message: "Gunakan: =AVERAGE(B2:B4)",
+              pattern: "insert\\s*>\\s*chart",
+              flags: "i",
+              message:
+                "Tulis jalur menunya: Insert > Chart.",
+            },
+            {
+              pattern: "(chart\\s*type|jenis)\\s*:\\s*line",
+              flags: "i",
+              message:
+                "Data sepanjang waktu paling tepat memakai Line chart.",
             },
           ],
-          solution: "=AVERAGE(B2:B4)",
+          solution: "Insert > Chart\nChart type: Line chart",
         },
         {
           kind: "step",
           id: "sheet-5-2",
-          title: "Kalkulasi Rentang Variasi Data",
+          title: "Sumbu yang Jujur: Mulai dari Nol",
           explanation:
-            "Hitung rentang selisih antara nilai tertinggi dan terendah pada kolom data B2:B30 (`=MAX(B2:B30) - MIN(B2:B30)`).",
+            "Grafik batang yang sumbu Y-nya tidak dimulai dari nol membuat selisih kecil terlihat seperti lonjakan besar — dan itu tetap menyesatkan meski setiap angkanya benar. Untuk bar dan column chart, memulai dari nol adalah aturan baku karena panjang batang mewakili besarannya. Line chart untuk data yang bergerak di rentang sempit boleh dipotong, asalkan kamu menyebutkannya secara terbuka pada judul atau catatan kaki. Pengaturannya ada di chart editor bagian sumbu vertikal, lewat isian nilai minimum.",
           example: {
-            code: "=MAX(C2:C10) - MIN(C2:C10)",
-            output: "1200000",
-            note: "Menilai skala sebaran data sebelum menentukan batas sumbu grafik.",
+            code: "Chart editor > Vertical axis > Max: 120",
+            output: "Batas atas sumbu terkunci di 120 sehingga batang tertinggi tidak menyentuh tepi grafik.",
           },
           instruction:
-            "Hitung selisih antara nilai tertinggi MAX(B2:B30) dan terendah MIN(B2:B30) dari rentang sel B2:B30.",
-          starterCode: "// Tulis formula rentang di sini\n",
+            "Grafik batang perbandingan omset dua cabangmu terlihat berlebihan karena sumbunya terpotong. Tulis satu baris pengaturan chart editor yang menetapkan nilai minimum sumbu vertikal menjadi 0.",
+          starterCode: "",
           language: "text",
           tests: [
             {
-              pattern: "=\\s*MAX\\(\\s*B2:B30\\s*\\)\\s*-\\s*MIN\\(\\s*B2:B30\\s*\\)",
-              message: "Gunakan: =MAX(B2:B30) - MIN(B2:B30)",
+              pattern: "(vertical\\s*axis|sumbu\\s*(vertikal|y))",
+              flags: "i",
+              message:
+                "Sebutkan bagian sumbu vertikal di chart editor.",
+            },
+            {
+              pattern: "min[^\\n]*:?\\s*0\\b",
+              flags: "i",
+              message:
+                "Tetapkan nilai minimumnya 0.",
             },
           ],
-          solution: "=MAX(B2:B30) - MIN(B2:B30)",
+          solution: "Chart editor > Vertical axis > Min: 0",
         },
         {
           kind: "step",
           id: "sheet-5-3",
-          title: "Formula Pengondisian Sel Negatif",
+          title: "Decluttering: Membuang Tinta yang Tidak Bermakna",
           explanation:
-            "Evaluasi apakah nilai sel B2 kurang dari 0 dengan `=B2 < 0` yang mengembalikan `TRUE` atau `FALSE`.",
+            "Setiap elemen di grafik menghabiskan perhatian pembaca, dan perhatian itu terbatas. Gridline tebal, bingkai kotak, latar berwarna, dan legenda yang mengulang informasi judul tidak menambah pemahaman apa pun — mereka justru mengaburkan garis datamu sendiri. Karena itu praktik standar adalah menyamarkan atau menghapus gridline, membuang bingkai, dan memberi label langsung pada garis alih-alih memakai legenda. Ukuran keberhasilannya sederhana: kalau elemen itu dihapus dan pemahaman pembaca tidak berkurang, memang seharusnya dihapus.",
           example: {
-            code: "=C2 < 0",
-            output: "FALSE",
-            note: "Digunakan sebagai dasar aturan Conditional Formatting.",
+            code: "Chart editor > Legend > Position: None",
+            output: "Legenda hilang dan judul seri dipindah sebagai label langsung di ujung garis.",
           },
           instruction:
-            "Tuliskan formula evaluasi logika untuk mengecek apakah nilai di sel B2 bernilai negatif (kurang dari 0).",
-          starterCode: "// Tulis logika B2 kurang dari 0 di sini\n",
+            "Grafik trenmu penuh garis bantu abu-abu yang mengganggu. Tulis satu baris pengaturan chart editor untuk mematikan gridline utama pada grafik itu.",
+          starterCode: "",
           language: "text",
           tests: [
             {
-              pattern: "=\\s*B2\\s*<\\s*0",
-              message: "Gunakan: =B2 < 0",
+              pattern: "gridlines?\\s*>|>\\s*gridlines?",
+              flags: "i",
+              message:
+                "Sebutkan pengaturan gridline di chart editor.",
+            },
+            {
+              pattern: "(hapus|matikan|hilangkan|none|off|uncheck)",
+              flags: "i",
+              message:
+                "Nyatakan bahwa gridline-nya dihapus atau dimatikan.",
             },
           ],
-          solution: "=B2 < 0",
+          solution: "Chart editor > Gridlines > Hapus centang Major gridlines",
         },
         {
           kind: "step",
           id: "sheet-5-4",
-          title: "Grafik Mini di Dalam Sel (Sparklines)",
+          title: "Conditional Formatting: Warna yang Bekerja Otomatis",
           explanation:
-            "Gunakan fungsi `=SPARKLINE(A1:L1)` untuk menggambar grafik tren mini di dalam 1 sel tabel.",
+            "Mewarnai sel secara manual selalu berakhir sama: begitu datanya diperbarui, warnanya tertinggal di sel yang salah dan justru menyesatkan. Conditional formatting memasang aturan, bukan warna — misalnya 'kalau nilainya kurang dari 0, beri latar merah' — sehingga tampilannya menyesuaikan sendiri setiap kali angkanya berubah. Ini yang membuat dashboard bisa dipakai berulang tanpa perawatan. Batasi jumlah aturannya: kalau semua sel berwarna, tidak ada yang menonjol dan pembaca kembali harus membaca satu per satu.",
           example: {
-            code: '=SPARKLINE(A1:L1, {"charttype", "line"})',
-            output: "Grafik garis mini muncul di dalam sel.",
-            note: "Sangat menghemat ruang pada lembar kerja KPI executive summary.",
+            code: "Format > Conditional formatting\nRentang: C2:C100\nAturan: Less than 0\nWarna: latar merah",
+            output: "Sel bernilai -250.000 langsung berlatar merah, sedangkan sel positif tetap putih.",
           },
           instruction:
-            "Gambarkan grafik mini tunggal di dalam sel berdasarkan deretan nilai dari A1 hingga A12.",
-          starterCode: "// Tulis formula SPARKLINE di sini\n",
+            "Kolom `D2:D200` berisi selisih target dan realisasi. Tulis tiga baris aturan conditional formatting agar sel bernilai negatif otomatis diberi latar merah: sebutkan jalur menunya, rentangnya, dan kondisinya.",
+          starterCode: "",
           language: "text",
           tests: [
             {
-              pattern: "=\\s*SPARKLINE\\(\\s*A1:A12\\s*\\)",
-              message: "Tuliskan: =SPARKLINE(A1:A12)",
+              pattern: "conditional\\s*formatting",
+              flags: "i",
+              message:
+                "Sebutkan jalur menunya: Format > Conditional formatting.",
+            },
+            {
+              pattern: "D2:D200",
+              flags: "i",
+              message:
+                "Sebutkan rentang yang diberi aturan: D2:D200.",
+            },
+            {
+              pattern: "(less\\s*than|kurang\\s*dari|<)\\s*0",
+              flags: "i",
+              message:
+                "Kondisinya: nilai kurang dari 0.",
             },
           ],
-          solution: "=SPARKLINE(A1:A12)",
+          solution: "Format > Conditional formatting\nRentang: D2:D200\nAturan: Less than 0 (latar merah)",
         },
         {
           kind: "step",
           id: "sheet-5-5",
-          title: "Hitung Metrik KPI Utama",
+          title: "Sparkline: Grafik Mini di Dalam Satu Sel",
           explanation:
-            "Hitung akumulasi total omset pada rentang B2:B100 dengan `=SUM(B2:B100)` untuk kartu KPI utama dashboard.",
+            "Kadang kamu butuh menunjukkan tren tanpa memberi ruang sebesar grafik penuh — misalnya satu kolom kecil di samping nama tiap cabang. Sparkline menggambar grafik mini di dalam satu sel, sehingga tabel ringkasanmu sekaligus menampilkan arah pergerakan. Di Google Sheets fungsinya `=SPARKLINE(rentang)`, dan jenisnya bisa diatur menjadi garis, batang, atau kolom lewat opsi tambahan. Karena ukurannya kecil, sparkline hanya menyampaikan arah — jangan berharap pembaca bisa membaca nilai persisnya dari situ.",
           example: {
-            code: "=SUM(C2:C50)",
-            output: "120000000",
-            note: "Angka KPI utama diletakkan di posisi paling atas dashboard.",
+            code: "=SPARKLINE(B2:M2, {\"charttype\", \"column\"})",
+            output: "Deretan batang mini muncul di dalam satu sel, memperlihatkan bulan mana yang paling tinggi.",
           },
           instruction:
-            "Hitung total akumulasi angka penjualan di seluruh kolom B (B2:B100) menggunakan fungsi SUM.",
-          starterCode: "// Tulis SUM KPI di sini\n",
+            "Baris data penjualan 12 bulan berada di rentang `C2:N2`. Tulis formula yang menggambar grafik mini di dalam sel untuk deret itu.",
+          starterCode: "",
           language: "text",
           tests: [
             {
-              pattern: "=\\s*SUM\\(\\s*B2:B100\\s*\\)",
-              message: "Gunakan: =SUM(B2:B100)",
+              pattern: "=\\s*SPARKLINE\\(",
+              flags: "i",
+              message:
+                "Pakai fungsi =SPARKLINE(...).",
+            },
+            {
+              pattern: "C2:N2",
+              flags: "i",
+              message:
+                "Rentang datanya C2:N2.",
             },
           ],
-          solution: "=SUM(B2:B100)",
+          solution: "=SPARKLINE(C2:N2)",
         },
         {
           kind: "step",
           id: "sheet-5-6",
-          title: "Penentuan Status Poin Sorotan",
+          title: "Kartu KPI: Angka Utama di Kepala Dashboard",
           explanation:
-            "Gunakan `=IF(B2 = MAX($B$2:$B$12), \"Highlight\", \"Normal\")` untuk menandai titik tertinggi pada chart.",
+            "Bagian paling atas dashboard sebaiknya menjawab pertanyaan terpenting dalam satu angka besar, karena di situlah mata pembaca mendarat lebih dulu. Angka ini biasanya berupa agregat sederhana — total omset, jumlah transaksi, rata-rata nilai pesanan — yang dihitung dari seluruh rentang data. Rapikan tampilannya dengan format angka dan beri label periode yang jelas, misalnya 'Omset Juli 2026'. Angka KPI tanpa keterangan periode adalah salah satu penyebab paling sering rapat berubah menjadi perdebatan soal angka, bukan soal keputusan.",
           example: {
-            code: '=IF(C2 = MAX($C$2:$C$10), "Top", "Other")',
-            output: "Top",
-            note: "Memberikan penanda visual otomatis pada titik data maksimum.",
+            code: "=SUM(D2:D5000)",
+            output: "Menampilkan 128.394.500 sebagai total omset seluruh transaksi pada rentang tersebut.",
           },
           instruction:
-            "Buat pengondisian logika IF: jika nilai B2 sama dengan nilai tertinggi MAX($B$2:$B$12), kembalikan 'Highlight', jika tidak kembalikan 'Normal'.",
-          starterCode: "// Tulis IF highlight di sini\n",
+            "Kolom `E2:E5000` berisi nilai tiap transaksi. Tulis formula untuk kartu KPI yang menampilkan total seluruh transaksi di rentang itu.",
+          starterCode: "",
           language: "text",
           tests: [
             {
-              pattern: "=\\s*IF\\(\\s*B2\\s*=\\s*MAX\\(\\s*\\$B\\$2:\\$B\\$12\\s*\\)\\s*,\\s*[\"']Highlight[\"']\\s*,\\s*[\"']Normal[\"']\\s*\\)",
-              message: 'Gunakan: =IF(B2 = MAX($B$2:$B$12), "Highlight", "Normal")',
+              pattern: "=\\s*SUM\\(\\s*E2:E5000\\s*\\)",
+              flags: "i",
+              message:
+                "Pakai =SUM(E2:E5000) untuk menjumlahkan seluruh rentang.",
             },
           ],
-          solution: '=IF(B2 = MAX($B$2:$B$12), "Highlight", "Normal")',
+          solution: "=SUM(E2:E5000)",
         },
         {
           kind: "quiz",
@@ -1010,7 +1174,7 @@ export const spreadsheetTrack: Track = {
               question: "Jenis grafik apa di Spreadsheet yang paling tepat digunakan untuk menggambarkan Tren perubahan data dari waktu ke waktu (time-series)?",
               choices: ["Line Chart (Grafik Garis)", "Pie Chart", "Scatter Plot", "Radar Chart"],
               answerIndex: 0,
-                            explanation: "Line Chart (Grafik Garis) adalah pilihan paling tepat untuk menggambarkan tren kontinuitas data seiring berjalannya waktu.",
+              explanation: "Line Chart (Grafik Garis) adalah pilihan paling tepat untuk menggambarkan tren kontinuitas data seiring berjalannya waktu.",
             },
             {
               id: "q2",
@@ -1027,6 +1191,22 @@ export const spreadsheetTrack: Track = {
               choices: ["Membuatnya transparan/menghapusnya agar fokus tertuju ke data grafik", "Mewarnainya merah supaya jelas pembacaan sumbu Y-nya", "Mempertebal garisnya supaya angka presisi", "Diubah bentuknya ke garis putus-putus berwarna emas"],
               answerIndex: 0,
               explanation: "Semakin bersih sebuah grafik dari tinta/elemen yang kurang bermakna, semakin tajam dan jelas pesan datanya.",
+            },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Fitur apakah di Spreadsheet yang sangat berguna untuk otomatis mewarnai sel menjadi merah ketika nilainya negatif, dan hijau ketika positif?",
+              choices: ["Conditional Formatting", "Cell Styles", "Data Validation", "Find and Replace"],
+              answerIndex: 0,
+              explanation: "Conditional Formatting mengubah warna latar atau teks pada sel secara dinamis berdasarkan nilai atau kondisi logika tertentu.",
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Jika kita perlu membandingkan nilai ukuran 5 divisi berbeda secara proporsional dalam sebuah laporan tertulis, jenis chart apakah yang mudah dibaca selain Pie chart?",
+              choices: ["Bar Chart (Grafik Batang)", "Line Chart", "Radar Chart", "Area Chart"],
+              answerIndex: 0,
+              explanation: "Bar/Column Chart sangat baik untuk membandingkan jumlah kuantitatif antar kategori/divisi tanpa membingungkan audiens dibandingkan Pie Chart bersegmen banyak.",
             },
           ],
         },
@@ -1058,7 +1238,7 @@ export const spreadsheetTrack: Track = {
           },
           instruction:
             "Bersihkan spasi berlebih dan format huruf kapital awal kata pada teks sel A2 menggunakan kombinasi TRIM dan PROPER.",
-          starterCode: "// Tulis TRIM PROPER di sini\n",
+          starterCode: "",
           language: "text",
           tests: [
             {
@@ -1081,7 +1261,7 @@ export const spreadsheetTrack: Track = {
           },
           instruction:
             "Hitung rasio Gross Margin jika sel C2 adalah Pendapatan (Penjualan) dan sel D2 adalah Harga Pokok Penjualan (HPP).",
-          starterCode: "// Tulis formula Gross Margin di sini\n",
+          starterCode: "",
           language: "text",
           tests: [
             {
@@ -1104,7 +1284,7 @@ export const spreadsheetTrack: Track = {
           },
           instruction:
             'Hitung ada berapa banyak baris di rentang A1 hingga A100 yang memiliki teks persis "Resign".',
-          starterCode: "// Tulis COUNTIF Resign di sini\n",
+          starterCode: "",
           language: "text",
           tests: [
             {
@@ -1176,7 +1356,7 @@ export const spreadsheetTrack: Track = {
                 "Menyimpan file sebagai PDF saja",
               ],
               answerIndex: 0,
-                            explanation: "Angka analisis baru memberikan nilai bisnis nyata ketika disertai Executive Summary dan Rekomendasi Aksi yang jelas.",
+              explanation: "Angka analisis baru memberikan nilai bisnis nyata ketika disertai Executive Summary dan Rekomendasi Aksi yang jelas.",
             },
             {
               id: "q2",
@@ -1193,6 +1373,22 @@ export const spreadsheetTrack: Track = {
               choices: ["Cleaning (Pembersihan dan Merapikan Data)", "Pivot Table", "Mempercantik Dashboard", "Menulis Rekomendasi"],
               answerIndex: 0,
               explanation: "Pembersihan (Data Cleaning) konon menghabiskan hingga 80% dari total pengerjaan sebuah project analisis bisnis nyata.",
+            },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Saat menghadapi kasus ribuan data transaksi berantakan, langkah pertama yang paling wajib dilakukan analis sebelum membuat Pivot Table atau Dashboard adalah...",
+              choices: ["Membersihkan, menstandarisasi, dan mengecek duplikat data (Data Cleaning)", "Langsung membuat grafik Pie", "Memberi warna-warni pada tabel mentah", "Menambahkan baris untuk rata-rata di bawah tabel asli"],
+              answerIndex: 0,
+              explanation: "Data yang kotor akan menghasilkan analisis yang salah (Garbage In, Garbage Out), sehingga pembersihan adalah tahap fondasi terpenting.",
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Rumus perhitungan manakah yang paling mendasar untuk mengkalkulasikan Net Profit atau Keuntungan Bersih suatu usaha dari tabel laporan?",
+              choices: ["Pendapatan Total dikurangi seluruh Biaya (HPP dan Operasional)", "Hanya Harga Pokok Penjualan (HPP) dibagi Penjualan", "Total Aset dikurangi Hutang", "Rata-rata penjualan harian dikali jumlah karyawan"],
+              answerIndex: 0,
+              explanation: "Keuntungan bersih (Net Profit) dihitung dengan mengurangkan seluruh total biaya dan pengeluaran operasional dari pendapatan kotor.",
             },
           ],
         },

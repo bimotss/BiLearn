@@ -245,6 +245,32 @@ export const dataAnalysisTrack: Track = {
               answerIndex: 0,
               explanation: "`.isin([val1, val2])` memeriksa keberadaan nilai sel di dalam kumpulan array/list yang diberikan secara presisi.",
             },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Jika ingin mengelompokkan data berdasarkan departemen dan menghitung nilai maksimum serta rata-rata gajinya sekaligus, metode apa yang paling tepat digunakan?",
+              choices: [
+                "df.groupby('dept').agg({'salary': ['max', 'mean']})",
+                "df.groupby('dept').sum()",
+                "df.sort_values('salary')",
+                "df.pivot_table(columns='dept')"
+              ],
+              answerIndex: 0,
+              explanation: "Metode `.agg()` pada pandas memungkinkan penerapan fungsi agregasi ganda (seperti max dan mean) secara bersamaan pada kelompok data.",
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Kapan saat yang paling tepat untuk menggunakan fungsi `.apply()` pada pandas?",
+              choices: [
+                "Saat perlu menerapkan operasi transformasi kustom baris demi baris yang sulit diselesaikan dengan metode bawaan",
+                "Saat ingin menampilkan data dari database relasional",
+                "Saat membuat visualisasi grafik lingkaran",
+                "Saat ingin mengganti nama kolom"
+              ],
+              answerIndex: 0,
+              explanation: "Fungsi `.apply()` ampuh untuk logika kustom kompleks tingkat baris, namun sebaiknya hindari jika ada operasi vektor bawaan yang lebih efisien.",
+            },
           ],
         },
       ],
@@ -315,14 +341,14 @@ export const dataAnalysisTrack: Track = {
           id: "da-2-3",
           title: "Pembersihan Teks dengan .str Accessor",
           explanation:
-            "Gunakan `.str.lower()`, `.str.strip()`, dan `.str.replace()` untuk merapikan karakter string pada kolom DataFrame.",
+            "Kolom teks di data mentah hampir selalu kotor: ada spasi di ujung, huruf besar-kecil campur, atau karakter sisa dari sistem lain. Accessor `.str` membuat kamu bisa memakai method string Python pada seluruh Series sekaligus tanpa perulangan — `.str.strip()`, `.str.lower()`, `.str.replace()`. Ini penting sebelum `groupby` atau `merge`, karena `' Budi'` dan `'budi'` dianggap dua nilai berbeda dan akan memecah hasil agregasimu.",
           example: {
-            code: "import pandas as pd\ndf = pd.DataFrame({'email': [' BUDI@TEST.COM ']}\ndf['email'] = df['email'].str.strip().str.lower()\nprint(df['email'].iloc[0])",
+            code: "import pandas as pd\ndf = pd.DataFrame({'email': [' BUDI@TEST.COM ']})\ndf['email'] = df['email'].str.strip().str.lower()\nprint(df['email'].iloc[0])",
             output: "budi@test.com",
             note: "str accessor memungkinkan operasi teks vektor pada seluruh elemen Series.",
           },
           instruction:
-            "Tuliskan pembersihan kolom `'email'` pada `df` dengan menghapus spasi dan mengubah huruf menjadi kecil (`.str.strip().str.lower()`).",
+            "Kolom `'email'` pada `df` berisi alamat dengan spasi di ujung dan huruf kapital acak. Rapikan kolom itu agar tidak ada spasi tersisa dan semua huruf menjadi kecil, lalu simpan kembali ke kolom yang sama.",
           starterCode: "# Tulis str.lower di sini\n",
           language: "text",
           tests: [
@@ -459,6 +485,32 @@ export const dataAnalysisTrack: Track = {
               answerIndex: 0,
               explanation: "Batas bawah outlier didefinisikan sebagai 1.5 kali IQR di bawah Kuartil Pertama (Q1).",
             },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Metode pandas apa yang sangat efektif untuk merapikan karakter string pada kolom, seperti mengubah teks menjadi huruf kecil semua dan menghapus spasi awal/akhir?",
+              choices: [
+                ".str.strip().str.lower()",
+                ".replace_all()",
+                ".format_string()",
+                ".clean_text()"
+              ],
+              answerIndex: 0,
+              explanation: "Accessor `.str` di pandas memungkinkan operasi manipulasi string secara tervektorisasi pada seluruh elemen series DataFrame sekaligus.",
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Metode apa yang digunakan untuk menyeragamkan penulisan kategori yang berbeda-beda maknanya (misal: 'jkt' dan 'jakarta')?",
+              choices: [
+                ".replace({'jkt': 'jakarta'})",
+                ".join()",
+                ".drop_duplicates()",
+                ".sort_values()"
+              ],
+              answerIndex: 0,
+              explanation: "Dengan melewatkan dictionary ke `.replace()`, pandas dapat menstandarisasi sinonim penulisan ke format baku tunggal.",
+            },
           ],
         },
       ],
@@ -481,30 +533,32 @@ export const dataAnalysisTrack: Track = {
         {
           kind: "step",
           id: "da-3-1",
-          title: "Mean vs Median: Kapan Rata-Rata Menipu?",
+          title: "Mean vs Median: Kapan Rata-Rata Menipu",
           explanation:
-            "Bayangkan ada 9 orang biasa di sebuah bar dengan gaji rata-rata 5 juta. Tiba-tiba Bill Gates masuk. Secara rata-rata (Mean), kini semua orang di bar itu menjadi miliarder! Inilah kelemahan Mean — ia sangat mudah ditipu oleh nilai ekstrem (pencilan / outlier). Untuk data yang rentangnya jomplang seperti gaji, gunakan Median (nilai posisi tengah setelah data diurutkan) karena ia memberikan gambaran realitas yang jauh lebih jujur.",
+            "Mean (rata-rata) menjumlahkan semua nilai lalu membaginya, sehingga satu nilai ekstrem bisa menariknya jauh dari kenyataan. Median mengambil nilai tengah setelah data diurutkan, jadi ia tahan terhadap pencilan. Untuk data yang sebarannya miring — gaji, harga rumah, nilai transaksi — median hampir selalu menggambarkan 'orang kebanyakan' dengan lebih jujur. Kebiasaan yang menyelamatkan laporanmu: hitung keduanya, dan kalau selisihnya besar, itu tanda ada pencilan yang harus kamu jelaskan.",
           example: {
-            code:
-              "function getBestCentralTendency(isSkewed) {\n" +
-              "  return isSkewed ? 'median' : 'mean';\n" +
-              "}\n" +
-              "console.log(getBestCentralTendency(true));",
-            output: "median",
-            note: "Selalu bandingkan Mean dan Median sebelum menarik kesimpulan.",
+            code: "import pandas as pd\ngaji = pd.Series([5, 5, 6, 6, 7, 200])\nprint(gaji.mean())\nprint(gaji.median())",
+            output: "38.166666666666664\n6.0",
+            note: "Mean 38 juta padahal lima dari enam orang bergaji 5–7 juta. Itulah cara rata-rata menipu.",
           },
           instruction:
-            "Buat fungsi `getBestCentralTendency(isSkewed)` yang mengembalikan string `'median'` jika `isSkewed` bernilai `true`, dan `'mean'` jika `false`.",
-          starterCode: "// Tulis fungsi getBestCentralTendency di bawah ini\n",
-          language: "js",
+            "Series `harga` berisi harga rumah dalam juta rupiah dan ada satu rumah mewah yang jauh lebih mahal. Cetak nilai tengahnya memakai fungsi pandas yang tahan pencilan.",
+          starterCode: "# Cetak ukuran pemusatan yang tahan pencilan\n",
+          language: "text",
           tests: [
             {
-              pattern: "return\\s+isSkewed\\s*\\?\\s*['\"]median['\"]\\s*:\\s*['\"]mean['\"]",
-              message: "Gunakan pengondisian: isSkewed ? 'median' : 'mean'",
+              pattern: "print\\(\\s*harga\\.median\\(\\s*\\)\\s*\\)",
+              message:
+                "Cetak harga.median() — median tahan terhadap pencilan.",
+            },
+            {
+              pattern: "\\.mean\\(",
+              mustNotMatch: true,
+              message:
+                "Jangan pakai mean di sini; satu rumah mewah akan menariknya naik.",
             },
           ],
-          solution:
-            "function getBestCentralTendency(isSkewed) {\n  return isSkewed ? 'median' : 'mean';\n}",
+          solution: "print(harga.median())",
         },
         {
           kind: "step",
@@ -513,7 +567,7 @@ export const dataAnalysisTrack: Track = {
           explanation:
             "**Standar Deviasi (std)** mengukur seberapa jauh variasi data dari rata-rata. **Persentil ke-90** (P90) berarti 90% data berada di bawah nilai tersebut.",
           example: {
-            code: "import pandas as pd\ndf = pd.DataFrame({'latency': [10, 20, 30, 40, 100]})\np95 = df['latency'].quantile(0.95)\nprint(p95)",
+            code: "import pandas as pd\ndf = pd.DataFrame({'latency': [10, 20, 30, 40, 100]})\np95 = df['latency'].quantile(0.95)\nprint(round(p95, 2))",
             output: "88.0",
             note: "P95 dan P99 adalah metrik standar pengujian latency di sistem backend.",
           },
@@ -532,58 +586,65 @@ export const dataAnalysisTrack: Track = {
         {
           kind: "step",
           id: "da-3-3",
-          title: "Korelasi ≠ Kausalitas",
+          title: "Korelasi Bukan Kausalitas",
           explanation:
-            "Dua variabel yang saling berkorelasi erat TIDAK BERARTI yang satu menyebabkan yang lain (Correlation does not imply Causation).",
+            "Dua angka bisa naik-turun bersamaan tanpa yang satu menyebabkan yang lain. Penjualan es krim dan kasus tenggelam sama-sama naik di musim panas, tapi es krim tidak membuat orang tenggelam — ada faktor ketiga, yaitu cuaca. Di pekerjaan analis, kesalahan ini mahal: rekomendasi 'perbanyak diskon karena berkorelasi dengan penjualan' bisa saja salah arah kalau diskon dan penjualan sama-sama naik saat gajian. Korelasi hanya boleh menjadi kausalitas kalau ada eksperimen terkontrol, misalnya A/B test dengan pembagian acak.",
           example: {
-            code:
-              "function validateCausality(hasCorrelation, hasControlledExperiment) {\n" +
-              "  return Boolean(hasCorrelation && hasControlledExperiment);\n" +
-              "}\n" +
-              "console.log(validateCausality(true, false));",
-            output: "false",
-            note: "Variabel pengganggu yang tidak terukur disebut Confounding Variable.",
+            code: "import pandas as pd\ndf = pd.DataFrame({'es_krim': [10, 20, 30], 'tenggelam': [1, 2, 3]})\nprint(df['es_krim'].corr(df['tenggelam']))",
+            output: "1.0",
+            note: "Korelasi 1.0 sempurna, tapi hubungan sebab-akibatnya tidak ada sama sekali.",
           },
           instruction:
-            "Buat fungsi `validateCausality(hasCorrelation, hasControlledExperiment)` yang mengembalikan `true` hanya jika terdapat korelasi DAN eksperimen terkontrol.",
-          starterCode: "// Tulis fungsi validateCausality di sini\n",
-          language: "js",
+            "DataFrame `df` punya kolom `iklan` dan `penjualan`. Cetak koefisien korelasi antara keduanya memakai method `.corr()` — ingat, angka tinggi belum membuktikan iklan menyebabkan penjualan.",
+          starterCode: "# Cetak korelasi antara kolom iklan dan penjualan\n",
+          language: "text",
           tests: [
             {
-              pattern: "Boolean\\s*\\(\\s*hasCorrelation\\s*&&\\s*hasControlledExperiment\\s*\\)",
-              message: "Periksa: hasCorrelation && hasControlledExperiment",
+              pattern: "df\\[\\s*['\"]iklan['\"]\\s*\\]\\.corr\\(\\s*df\\[\\s*['\"]penjualan['\"]\\s*\\]\\s*\\)",
+              message:
+                "Pakai df['iklan'].corr(df['penjualan']).",
+            },
+            {
+              pattern: "print\\(",
+              message:
+                "Cetak hasilnya dengan print().",
             },
           ],
-          solution:
-            "function validateCausality(hasCorrelation, hasControlledExperiment) {\n  return Boolean(hasCorrelation && hasControlledExperiment);\n}",
+          solution: "print(df['iklan'].corr(df['penjualan']))",
         },
         {
           kind: "step",
           id: "da-3-4",
-          title: "Sampling & Bias Seleksi Data",
+          title: "Sampling & Bias Seleksi",
           explanation:
-            "Bias Seleksi terjadi jika sampel data yang dikumpulkan tidak mewakili keseluruhan populasi sejati (misal: hanya mensurvei pengguna iPhone saat mengukur pendapatan masyarakat).",
+            "Kesimpulanmu hanya sebaik data yang kamu pakai. Kalau survei kepuasan hanya diisi pelanggan yang masih aktif, pelanggan yang kecewa sudah pergi dan suaranya tidak pernah terhitung — inilah survivorship bias. Sampel acak (random sampling) mengurangi risiko itu karena setiap anggota populasi punya peluang sama untuk terpilih. Sebelum menganalisis, biasakan bertanya: siapa yang TIDAK ada di data ini, dan apakah ketidakhadiran mereka mengubah kesimpulan?",
           example: {
-            code:
-              "function checkSamplingBias(sampleType) {\n" +
-              "  return sampleType === 'random_stratified' ? 'unbiased' : 'biased';\n" +
-              "}\n" +
-              "console.log(checkSamplingBias('random_stratified'));",
-            output: "unbiased",
-            note: "Pastikan metode pengambilan sampel bersifat acak dan representatif.",
+            code: "import pandas as pd\ndf = pd.DataFrame({'id': range(1, 101)})\nsampel = df.sample(n=10, random_state=42)\nprint(len(sampel))",
+            output: "10",
+            note: "random_state membuat sampel acakmu bisa direproduksi — penting agar hasil analisis bisa diperiksa ulang.",
           },
           instruction:
-            "Buat fungsi `checkSamplingBias(sampleType)` yang mengembalikan `'unbiased'` jika `sampleType === 'random_stratified'` dan `'biased'` jika sebaliknya.",
-          starterCode: "// Tulis fungsi checkSamplingBias di bawah ini\n",
-          language: "js",
+            "DataFrame `pelanggan` berisi 5.000 baris. Ambil sampel acak sebanyak 200 baris dan simpan ke variabel `sampel`, dengan `random_state=42` agar hasilnya bisa diulang orang lain.",
+          starterCode: "# Ambil sampel acak yang bisa direproduksi\n",
+          language: "text",
           tests: [
             {
-              pattern: "sampleType\\s*===\\s*['\"]random_stratified['\"]\\s*\\?\\s*['\"]unbiased['\"]\\s*:\\s*['\"]biased['\"]",
-              message: "Gunakan: sampleType === 'random_stratified' ? 'unbiased' : 'biased'",
+              pattern: "sampel\\s*=\\s*pelanggan\\.sample\\(",
+              message:
+                "Pakai pelanggan.sample(...) lalu simpan ke variabel sampel.",
+            },
+            {
+              pattern: "n\\s*=\\s*200",
+              message:
+                "Ambil 200 baris dengan n=200.",
+            },
+            {
+              pattern: "random_state\\s*=\\s*42",
+              message:
+                "Sertakan random_state=42 agar hasilnya bisa diulang.",
             },
           ],
-          solution:
-            "function checkSamplingBias(sampleType) {\n  return sampleType === 'random_stratified' ? 'unbiased' : 'biased';\n}",
+          solution: "sampel = pelanggan.sample(n=200, random_state=42)",
         },
         {
           kind: "step",
@@ -611,58 +672,73 @@ export const dataAnalysisTrack: Track = {
         {
           kind: "step",
           id: "da-3-6",
-          title: "Jebakan Agregasi: Simpson's Paradox",
+          title: "Simpson's Paradox: Jebakan Agregasi",
           explanation:
-            "Paradoks Simpson adalah fenomena di mana sebuah tren terlihat pada beberapa kelompok terpisah, namun HILANG atau TERBALIK saat kelompok-kelompok tersebut digabungkan.",
+            "Simpson's paradox terjadi saat tren pada data gabungan berkebalikan dengan tren di setiap kelompoknya. Contoh nyatanya: obat A terlihat lebih unggul secara total, tapi ketika dipisah menjadi pasien ringan dan berat, obat B justru lebih unggul di kedua kelompok — karena komposisi pasiennya timpang. Akibatnya keputusan yang diambil dari angka total bisa berlawanan dengan kenyataan. Pertahanan paling murah adalah kebiasaan: setiap kali melaporkan angka agregat, pecah dulu berdasarkan kelompok penting seperti wilayah, segmen, atau periode.",
           example: {
-            code:
-              "function detectSimpsonParadox(overall, sub) {\n" +
-              "  return sub.some(t => t !== overall);\n" +
-              "}\n" +
-              "console.log(detectSimpsonParadox('up', ['down', 'down']));",
-            output: "true",
-            note: "Menghindari jebakan salah interpretasi data agregat.",
+            code: "import pandas as pd\ndf = pd.DataFrame({\n    'grup': ['A', 'A', 'B', 'B'],\n    'kanal': ['web', 'apps', 'web', 'apps'],\n    'konversi': [0.10, 0.30, 0.12, 0.32],\n})\nprint(df.groupby('grup')['konversi'].mean())",
+            output: "grup\nA    0.20\nB    0.22\nName: konversi, dtype: float64",
           },
           instruction:
-            "Buat fungsi `detectSimpsonParadox(overallTrend, subgroupTrends)` yang mengembalikan `true` jika setidaknya ada elemen `subgroupTrends` yang berbeda dari `overallTrend`.",
-          starterCode: "// Tulis fungsi detectSimpsonParadox di sini\n",
-          language: "js",
+            "DataFrame `df` berisi kolom `wilayah`, `segmen`, dan `konversi`. Sebelum percaya pada angka total, hitung rata-rata konversi per pasangan `wilayah` dan `segmen`, lalu cetak hasilnya.",
+          starterCode: "# Pecah agregat berdasarkan dua kelompok sekaligus\n",
+          language: "text",
           tests: [
             {
-              pattern: "subgroupTrends\\.some\\(\\s*t\\s*=>\\s*t\\s*!==\\s*overallTrend\\s*\\)",
-              message: "Gunakan: subgroupTrends.some(t => t !== overallTrend)",
+              pattern: "groupby\\(\\s*\\[\\s*['\"]wilayah['\"]\\s*,\\s*['\"]segmen['\"]\\s*\\]\\s*\\)",
+              message:
+                "Kelompokkan berdasarkan dua kolom: groupby(['wilayah', 'segmen']).",
+            },
+            {
+              pattern: "\\[\\s*['\"]konversi['\"]\\s*\\]\\s*\\.mean\\(\\s*\\)",
+              message:
+                "Hitung rata-rata kolom konversi.",
+            },
+            {
+              pattern: "print\\(",
+              message:
+                "Cetak hasilnya dengan print().",
             },
           ],
-          solution:
-            "function detectSimpsonParadox(overallTrend, subgroupTrends) {\n  return subgroupTrends.some(t => t !== overallTrend);\n}",
+          solution: "print(df.groupby(['wilayah', 'segmen'])['konversi'].mean())",
         },
         {
           kind: "step",
           id: "da-3-7",
-          title: "Melaporkan Ketidakpastian (Margin of Error)",
+          title: "Melaporkan Ketidakpastian dengan Jujur",
           explanation:
-            "Sajikan hasil analisis bersama Confidence Interval (Rentang Kepercayaan), misal: 'Estimasi kenaikan omset adalah 15% ± 2% dengan tingkat kepercayaan 95%'.",
+            "Angka hasil sampel tidak pernah persis sama dengan angka populasi, jadi melaporkan '43% pelanggan puas' tanpa keterangan apa pun memberi kesan pasti yang menyesatkan. Cara jujur menuliskannya adalah menyertakan margin of error: '43% ± 3%'. Semakin kecil sampelnya, semakin lebar rentangnya — itulah kenapa survei 30 orang tidak boleh dipakai untuk keputusan besar. Menyebut ketidakpastian bukan tanda lemah; justru itu yang membedakan analis yang dipercaya dari yang sekadar meyakinkan.",
           example: {
-            code:
-              "function formatCI(mean, margin) {\n" +
-              "  return mean + ' +/- ' + margin;\n" +
-              "}\n" +
-              "console.log(formatCI('15%', '2%'));",
-            output: "15% +/- 2%",
-            note: "Menyampaikan ketidakpastian secara transparan kepada pemangku kepentingan.",
+            code: "rata = 43.0\nmargin = 3.2\nprint(f\"{rata:.1f}% +/- {margin:.1f}%\")",
+            output: "43.0% +/- 3.2%",
           },
           instruction:
-            "Buat fungsi `formatConfidenceInterval(mean, margin)` yang mengembalikan string terformat `\"${mean} +/- ${margin}\"`.",
-          starterCode: "// Tulis fungsi formatConfidenceInterval di bawah ini\n",
-          language: "js",
+            "Kamu punya variabel `rata` dan `margin`. Cetak hasilnya dalam satu baris berbentuk `12.5% +/- 1.4%` (satu angka di belakang koma) memakai f-string.",
+          starterCode: "# Laporkan hasil beserta margin of error-nya\n",
+          language: "text",
           tests: [
             {
-              pattern: "mean\\s*\\+\\s*['\"] \\+/- ['\"]\\s*\\+\\s*margin|`\\$\\{mean\\}\\s*\\+/-\\s*\\$\\{margin\\}`",
-              message: "Format string: `${mean} +/- ${margin}`",
+              pattern: "print\\(\\s*f[\"']",
+              message:
+                "Pakai f-string di dalam print().",
+            },
+            {
+              pattern: "\\{\\s*rata[^}]*\\}%",
+              message:
+                "Sertakan nilai rata diikuti tanda persen.",
+            },
+            {
+              pattern: "\\+/-|±",
+              message:
+                "Sertakan penanda margin, misalnya +/-.",
+            },
+            {
+              pattern: "\\{\\s*margin[^}]*\\}%",
+              message:
+                "Sertakan nilai margin diikuti tanda persen.",
             },
           ],
-          solution:
-            "function formatConfidenceInterval(mean, margin) {\n  return `${mean} +/- ${margin}`;\n}",
+          solution: "print(f\"{rata:.1f}% +/- {margin:.1f}%\")",
         },
         {
           kind: "quiz",
@@ -697,6 +773,32 @@ export const dataAnalysisTrack: Track = {
               choices: ["P95 (Persentil ke-95)", "Mean (Rata-rata)", "Modus", "IQR"],
               answerIndex: 0,
               explanation: "P95 memastikan 95% pengguna mengalami waktu respon di bawah angka tersebut, mengabaikan 5% outlier paling ekstrem.",
+            },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Meskipun dua variabel memiliki nilai korelasi statistik yang sangat tinggi, hal itu belum tentu membuktikan adanya...",
+              choices: [
+                "Kausalitas (hubungan sebab-akibat langsung)",
+                "Kesalahan perhitungan pada dataset",
+                "Kebutuhan visualisasi scatter plot",
+                "Keberadaan nilai negatif di dalam data"
+              ],
+              answerIndex: 0,
+              explanation: "Korelasi hanyalah indikasi dua tren yang sejalan. Tanpa pengujian eksperimen yang terkontrol, kita tidak bisa memastikan yang satu menyebabkan yang lain.",
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Bagaimana cara terbaik melaporkan nilai perkiraan metrik bisnis (misal prediksi omset) kepada pihak manajemen secara transparan dan jujur?",
+              choices: [
+                "Melaporkan estimasi utama diikuti margin error atau interval kepercayaannya (misal: ± 2%)",
+                "Memberikan jaminan pasti angka tersebut 100% akurat",
+                "Mengabaikan data pencilan secara acak",
+                "Hanya memberikan angka rata-rata tanpa konteks lain"
+              ],
+              answerIndex: 0,
+              explanation: "Menyampaikan rentang margin of error mencerminkan kejujuran terkait ketidakpastian yang tidak dapat dipisahkan dalam prediksi statistik apa pun.",
             },
           ],
         },
@@ -812,30 +914,35 @@ export const dataAnalysisTrack: Track = {
         {
           kind: "step",
           id: "da-4-5",
-          title: "Anotasi & Highlight Poin Penting",
+          title: "Anotasi: Menunjuk Titik yang Ingin Kamu Bicarakan",
           explanation:
-            "Gunakan `ax.annotate()` untuk memberikan penjelasan langsung pada puncak poin data penting di grafik.",
+            "Grafik yang bagus tidak membuat pembacanya mencari sendiri bagian pentingnya. Anotasi menempelkan keterangan langsung pada titik data — misalnya menandai bulan saat penjualan anjlok beserta sebabnya. Di matplotlib, `ax.annotate(teks, xy=(x, y))` menempatkan teks pada koordinat data yang kamu tunjuk. Aturan praktisnya: satu grafik cukup satu anotasi utama; kalau semuanya ditandai, tidak ada yang menonjol.",
           example: {
-            code:
-              "function addChartAnnotation(ax, text, x, y) {\n" +
-              "  ax.annotate(text, { xy: [x, y] });\n" +
-              "}\n" +
-              "console.log('Annotated');",
-            output: "Annotated",
-            note: "Anotasi menjadikan grafik bercerita secara mandiri.",
+            code: "import matplotlib.pyplot as plt\nfig, ax = plt.subplots()\nax.plot([1, 2, 3], [10, 4, 9])\nax.annotate('Server down', xy=(2, 4))\nprint(len(ax.texts))",
+            output: "1",
           },
           instruction:
-            "Buat fungsi `addChartAnnotation(ax, text, x, y)` yang memanggil `ax.annotate(text, { xy: [x, y] })`.",
-          starterCode: "// Tulis fungsi addChartAnnotation di sini\n",
-          language: "js",
+            "Grafik penjualan sudah ada di objek `ax`. Tambahkan anotasi bertuliskan `Stok habis` tepat pada koordinat x=5 dan y=120.",
+          starterCode: "# Tandai titik penting pada grafik\n",
+          language: "text",
           tests: [
             {
-              pattern: "ax\\.annotate\\(\\s*text\\s*,\\s*\\{\\s*xy\\s*:\\s*\\[\\s*x\\s*,\\s*y\\s*\\]\\s*\\}\\s*\\)",
-              message: "Panggil ax.annotate(text, { xy: [x, y] })",
+              pattern: "ax\\.annotate\\(",
+              message:
+                "Pakai ax.annotate(...).",
+            },
+            {
+              pattern: "['\"]Stok habis['\"]",
+              message:
+                "Teks anotasinya 'Stok habis'.",
+            },
+            {
+              pattern: "xy\\s*=\\s*\\(\\s*5\\s*,\\s*120\\s*\\)",
+              message:
+                "Tunjuk koordinatnya dengan xy=(5, 120).",
             },
           ],
-          solution:
-            "function addChartAnnotation(ax, text, x, y) {\n  ax.annotate(text, { xy: [x, y] });\n}",
+          solution: "ax.annotate('Stok habis', xy=(5, 120))",
         },
         {
           kind: "step",
@@ -894,6 +1001,32 @@ export const dataAnalysisTrack: Track = {
               answerIndex: 0,
               explanation: "`bbox_inches='tight'` menyesuaikan area bounding box grafik secara presisi mengelilingi seluruh elemen teks.",
             },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Fungsi Matplotlib mana yang paling ideal digunakan untuk menunjukkan sebaran dua variabel kontinu sekaligus guna mendeteksi pola korelasinya?",
+              choices: [
+                "ax.scatter()",
+                "ax.pie()",
+                "ax.bar()",
+                "ax.hist()"
+              ],
+              answerIndex: 0,
+              explanation: "Scatter plot sangat efektif dalam mengekspos persebaran data individual antar dua sumbu numerik yang berkorelasi.",
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Apa keuntungan utama menggunakan pemisahan anatomi `fig, ax = plt.subplots()` di Matplotlib?",
+              choices: [
+                "Memudahkan pengelolaan banyak sub-grafik (subplots) secara independen di dalam satu kanvas",
+                "Secara otomatis mendeteksi korelasi data statistik",
+                "Mempercepat waktu unduh file CSV dari internet",
+                "Menghapus nilai kosong (missing values) pada dataset"
+              ],
+              answerIndex: 0,
+              explanation: "Penggunaan objek spesifik Axes (`ax`) mempermudah kostumisasi terpisah di tiap diagram apabila figure menampung lebih dari 1 grafik (subplots).",
+            },
           ],
         },
       ],
@@ -918,196 +1051,241 @@ export const dataAnalysisTrack: Track = {
           id: "da-5-1",
           title: "Konsep BI: Dimensi vs Metrik",
           explanation:
-            "**Dimensi** adalah data kualitatif/kategori untuk mengelompokkan (misal: Kota, Kategori, Tanggal). **Metrik** adalah data kuantitatif/angka untuk dihitung (misal: Total Penjualan, Profit).",
+            "Setiap dashboard dibangun dari dua jenis kolom. Dimensi adalah kolom kategori yang dipakai untuk memecah data — wilayah, kategori produk, tanggal. Metrik adalah angka yang diagregasi — jumlah penjualan, rata-rata nilai pesanan, banyaknya transaksi. Kalimat pertanyaan bisnis hampir selalu berbentuk 'metrik dipecah per dimensi', misalnya 'total penjualan per wilayah'. Membiasakan diri memisahkan keduanya membuatmu cepat merancang chart di Looker Studio, Tableau, maupun Power BI, karena ketiganya memakai konsep yang sama.",
           example: {
-            code:
-              "function classifyBIFIeld(fieldType) {\n" +
-              "  return fieldType === 'numeric_sum' ? 'metric' : 'dimension';\n" +
-              "}\n" +
-              "console.log(classifyBIFIeld('numeric_sum'));",
-            output: "metric",
-            note: "Memahami beda Dimensi vs Metrik mempermudah penguasaan seluruh alat BI.",
+            code: "import pandas as pd\ndf = pd.DataFrame({\n    'wilayah': ['Jakarta', 'Bandung', 'Jakarta'],\n    'penjualan': [100, 150, 200],\n})\nprint(df.groupby('wilayah')['penjualan'].sum())",
+            output: "wilayah\nBandung    150\nJakarta    300\nName: penjualan, dtype: int64",
           },
           instruction:
-            "Buat fungsi `classifyBIFIeld(fieldType)` yang mengembalikan `'metric'` jika `fieldType === 'numeric_sum'` dan `'dimension'` jika sebaliknya.",
-          starterCode: "// Tulis fungsi classifyBIFIeld di bawah ini\n",
-          language: "js",
+            "Pertanyaan bisnisnya: 'berapa total penjualan per kategori produk?'. Dengan pandas, kelompokkan `df` berdasarkan dimensi `kategori` lalu jumlahkan metrik `penjualan`, dan cetak hasilnya.",
+          starterCode: "# Metrik dipecah per dimensi\n",
+          language: "text",
           tests: [
             {
-              pattern: "fieldType\\s*===\\s*['\"]numeric_sum['\"]\\s*\\?\\s*['\"]metric['\"]\\s*:\\s*['\"]dimension['\"]",
-              message: "Gunakan: fieldType === 'numeric_sum' ? 'metric' : 'dimension'",
+              pattern: "groupby\\(\\s*['\"]kategori['\"]\\s*\\)",
+              message:
+                "Kelompokkan berdasarkan dimensi kategori.",
+            },
+            {
+              pattern: "\\[\\s*['\"]penjualan['\"]\\s*\\]\\s*\\.sum\\(\\s*\\)",
+              message:
+                "Jumlahkan metrik penjualan dengan .sum().",
+            },
+            {
+              pattern: "print\\(",
+              message:
+                "Cetak hasilnya.",
             },
           ],
-          solution:
-            "function classifyBIFIeld(fieldType) {\n  return fieldType === 'numeric_sum' ? 'metric' : 'dimension';\n}",
+          solution: "print(df.groupby('kategori')['penjualan'].sum())",
         },
         {
           kind: "step",
           id: "da-5-2",
-          title: "Looker Studio: Koneksi Data & Kartu Scorecard",
+          title: "Scorecard: Satu Angka yang Langsung Terbaca",
           explanation:
-            "Looker Studio (Google Data Studio) terhubung gratis ke BigQuery, Google Sheets, atau PostgreSQL. Gunakan **Scorecard** untuk menampilkan KPI angka besar di bagian atas.",
+            "Kartu scorecard adalah elemen paling atas hampir semua dashboard: satu angka besar yang menjawab satu pertanyaan, misalnya total omset bulan ini. Nilainya harus diformat sesuai kebiasaan pembacanya — di Indonesia berarti pemisah ribuan titik dan awalan Rp, bukan format bawaan Inggris. Angka mentah seperti 128394500 memaksa pembaca menghitung digit, dan di rapat itu berarti pertanyaan pertama bukan tentang isinya melainkan tentang angkanya. Sebelum memformat, pastikan periodenya jelas — angka tanpa keterangan periode selalu memicu salah paham.",
           example: {
-            code:
-              "function formatScorecardValue(num) {\n" +
-              "  return 'Rp ' + num.toLocaleString('id-ID');\n" +
-              "}\n" +
-              "console.log(formatScorecardValue(1500000));",
-            output: "Rp 1.500.000",
-            note: "Looker Studio tidak memungut biaya lisensi pengguna.",
+            code: "total = 12500000\nprint('Rp ' + format(total, ',d').replace(',', '.'))",
+            output: "Rp 12.500.000",
           },
           instruction:
-            "Buat fungsi `formatScorecardValue(num)` yang mengembalikan string terformat `'Rp '` ditambah nilai `num.toLocaleString('id-ID')`.",
-          starterCode: "// Tulis fungsi formatScorecardValue di bawah ini\n",
-          language: "js",
+            "Variabel `omset` berisi angka bulat. Cetak nilainya sebagai teks scorecard bergaya Indonesia: diawali `Rp ` dan memakai titik sebagai pemisah ribuan.",
+          starterCode: "# Format angka omset untuk kartu scorecard\n",
+          language: "text",
           tests: [
             {
-              pattern: "['\"]Rp ['\"]\\s*\\+\\s*num\\.toLocaleString\\(\\s*['\"]id-ID['\"]\\s*\\)",
-              message: "Format angka dengan: 'Rp ' + num.toLocaleString('id-ID')",
+              pattern: "['\"]Rp",
+              message:
+                "Awali hasilnya dengan 'Rp '.",
+            },
+            {
+              pattern: "format\\(\\s*omset\\s*,\\s*['\"],d['\"]\\s*\\)|f['\"]\\{omset:,\\}",
+              message:
+                "Pakai format(omset, ',d') atau f-string dengan pemisah ribuan.",
+            },
+            {
+              pattern: "replace\\(\\s*['\"],['\"]\\s*,\\s*['\"]\\.['\"]\\s*\\)",
+              message:
+                "Ganti koma menjadi titik agar sesuai gaya Indonesia.",
             },
           ],
-          solution:
-            "function formatScorecardValue(num) {\n  return 'Rp ' + num.toLocaleString('id-ID');\n}",
+          solution: "print('Rp ' + format(omset, ',d').replace(',', '.'))",
         },
         {
           kind: "step",
           id: "da-5-3",
-          title: "Interaktivitas Dashboard: Date Range Control & Slicers",
+          title: "Filter Rentang Tanggal: Nyawa Sebuah Dashboard",
           explanation:
-            "Tambahkan kontrol **Date Range Picker** dan **Drop-down Filter** agar pemangku kepentingan dapat mengubah rentang tanggal dan wilayah analisis secara mandiri.",
+            "Dashboard tanpa filter tanggal hampir tidak berguna, karena pertanyaan manajemen selalu terikat periode: bulan ini, kuartal lalu, tahun berjalan. Di BI tools filter itu berupa date range control; di balik layar ia berubah menjadi kondisi rentang pada query atau DataFrame. Perhatikan batasnya: pakai lebih besar-sama-dengan pada tanggal awal dan lebih kecil-sama-dengan pada tanggal akhir, agar transaksi di hari pertama dan terakhir ikut terhitung. Kesalahan satu hari di batas periode termasuk bug laporan yang paling sering terjadi dan paling sulit disadari.",
           example: {
-            code:
-              "function buildDateFilterQuery(startDate, endDate) {\n" +
-              "  return `date >= '${startDate}' AND date <= '${endDate}'`;\n" +
-              "}\n" +
-              "console.log(buildDateFilterQuery('2024-01-01', '2024-01-31'));",
-            output: "date >= '2024-01-01' AND date <= '2024-01-31'",
-            note: "Menghilangkan permintaan laporan manual berulang dari manajemen.",
+            code: "import pandas as pd\ndf = pd.DataFrame({'tanggal': pd.to_datetime(['2026-06-30', '2026-07-15'])})\nhasil = df[(df['tanggal'] >= '2026-07-01') & (df['tanggal'] <= '2026-07-31')]\nprint(len(hasil))",
+            output: "1",
           },
           instruction:
-            "Buat fungsi `buildDateFilterQuery(startDate, endDate)` yang mengembalikan string query `\"date >= '\${startDate}' AND date <= '\${endDate}'\"`.",
-          starterCode: "// Tulis fungsi buildDateFilterQuery di bawah ini\n",
-          language: "js",
+            "Saring `df` agar hanya memuat transaksi dengan kolom `tanggal` antara `'2026-01-01'` sampai `'2026-03-31'` (kedua batas ikut terhitung), lalu simpan hasilnya ke variabel `q1`.",
+          starterCode: "# Saring transaksi kuartal pertama\n",
+          language: "text",
           tests: [
             {
-              pattern: "date\\s*>=\\s*['\"]?\\$\\{startDate\\}['\"]?\\s*AND\\s*date\\s*<=\\s*['\"]?\\$\\{endDate\\}['\"]?",
-              message: "Format query string: date >= '${startDate}' AND date <= '${endDate}'",
+              pattern: "q1\\s*=\\s*df\\[",
+              message:
+                "Simpan hasil penyaringan ke variabel q1.",
+            },
+            {
+              pattern: ">=\\s*['\"]2026-01-01['\"]",
+              message:
+                "Batas awal memakai >= '2026-01-01' agar hari pertama ikut.",
+            },
+            {
+              pattern: "<=\\s*['\"]2026-03-31['\"]",
+              message:
+                "Batas akhir memakai <= '2026-03-31' agar hari terakhir ikut.",
+            },
+            {
+              pattern: "&",
+              message:
+                "Gabungkan kedua kondisi dengan operator & di dalam tanda kurung.",
             },
           ],
-          solution:
-            "function buildDateFilterQuery(startDate, endDate) {\n  return `date >= '${startDate}' AND date <= '${endDate}'`;\n}",
+          solution: "q1 = df[(df['tanggal'] >= '2026-01-01') & (df['tanggal'] <= '2026-03-31')]",
         },
         {
           kind: "step",
           id: "da-5-4",
-          title: "Calculated Field di BI Tools",
+          title: "Calculated Field: Metrik Turunan",
           explanation:
-            "Buat metrik hitungan baru di Looker Studio/Tableau menggunakan Calculated Field (misal: `SUM(Profit) / SUM(Revenue)` untuk Margin %).",
+            "Tidak semua angka yang dibutuhkan tersedia sebagai kolom; margin, konversi, dan rata-rata nilai transaksi harus dihitung dari kolom lain. Di BI tools ini disebut calculated field, dan di pandas kamu membuatnya sebagai kolom baru. Aturan penting: rasio dihitung dari total, bukan dari rata-rata rasio per baris — menjumlahkan persentase lalu membaginya menghasilkan angka yang keliru saat ukuran tiap barisnya berbeda. Selalu periksa juga penyebut yang mungkin bernilai nol, karena satu baris seperti itu cukup untuk membuat seluruh laporan menampilkan galat.",
           example: {
-            code:
-              "function calculateMarginPercentage(profit, revenue) {\n" +
-              "  return (profit / revenue) * 100;\n" +
-              "}\n" +
-              "console.log(calculateMarginPercentage(30, 100));",
-            output: "30",
-            note: "Perhitungan agregasi dilakukan di level BI Tool.",
+            code: "import pandas as pd\ndf = pd.DataFrame({'profit': [30, 50], 'revenue': [100, 200]})\nmargin_total = df['profit'].sum() / df['revenue'].sum() * 100\nprint(round(margin_total, 2))",
+            output: "26.67",
           },
           instruction:
-            "Buat fungsi `calculateMarginPercentage(profit, revenue)` yang mengembalikan rasio persentase `(profit / revenue) * 100`.",
-          starterCode: "// Tulis fungsi calculateMarginPercentage di bawah ini\n",
-          language: "js",
+            "DataFrame `df` punya kolom `profit` dan `revenue`. Buat kolom baru bernama `margin` yang berisi persentase profit terhadap revenue untuk setiap baris.",
+          starterCode: "# Buat metrik turunan margin (persen)\n",
+          language: "text",
           tests: [
             {
-              pattern: "\\(\\s*profit\\s*/\\s*revenue\\s*\\)\\s*\\*\\s*100",
-              message: "Hitung: (profit / revenue) * 100",
+              pattern: "df\\[\\s*['\"]margin['\"]\\s*\\]\\s*=",
+              message:
+                "Buat kolom baru df['margin'].",
+            },
+            {
+              pattern: "df\\[\\s*['\"]profit['\"]\\s*\\]\\s*/\\s*df\\[\\s*['\"]revenue['\"]\\s*\\]",
+              message:
+                "Bagi kolom profit dengan kolom revenue.",
+            },
+            {
+              pattern: "\\*\\s*100",
+              message:
+                "Kalikan 100 agar hasilnya berbentuk persen.",
             },
           ],
-          solution:
-            "function calculateMarginPercentage(profit, revenue) {\n  return (profit / revenue) * 100;\n}",
+          solution: "df['margin'] = df['profit'] / df['revenue'] * 100",
         },
         {
           kind: "step",
           id: "da-5-5",
-          title: "Desain Dashboard: Dari Pertanyaan Bisnis ke Layout",
+          title: "Merancang Dashboard dari Pertanyaan Bisnis",
           explanation:
-            "Tata letak membaca pola Z: 1. Kiri Atas -> KPI Utama, 2. Kanan Atas -> Tren Waktu, 3. Bawah -> Rincian Breakdown Kategori.",
+            "Dashboard yang berantakan hampir selalu lahir dari urutan kerja yang terbalik: membuat chart dulu, memikirkan pertanyaannya belakangan. Mulailah dari daftar pertanyaan yang benar-benar ditanyakan pemakainya, lalu petakan tiap pertanyaan ke satu elemen visual. Susunannya mengikuti cara mata membaca: angka ringkasan di kiri atas, tren di bawahnya, rincian paling bawah. Kalau ada chart yang tidak menjawab pertanyaan mana pun di daftarmu, chart itu harus dibuang — bukan diperkecil.",
           example: {
-            code:
-              "function getDashboardLayoutZone(pos) {\n" +
-              "  return pos === 'top_left' ? 'kpi_header' : 'breakdown_table';\n" +
-              "}\n" +
-              "console.log(getDashboardLayoutZone('top_left'));",
-            output: "kpi_header",
-            note: "Hindari meletakkan grafik detail di area paling atas.",
+            code: "rencana = {\n    'Berapa omset bulan ini?': 'scorecard',\n    'Bagaimana trennya 12 bulan terakhir?': 'line chart',\n}\nfor pertanyaan, elemen in rencana.items():\n    print(pertanyaan, '->', elemen)",
+            output: "Berapa omset bulan ini? -> scorecard\nBagaimana trennya 12 bulan terakhir? -> line chart",
           },
           instruction:
-            "Buat fungsi `getDashboardLayoutZone(pos)` yang mengembalikan `'kpi_header'` untuk posisi `'top_left'` dan `'breakdown_table'` untuk posisi lainnya.",
-          starterCode: "// Tulis fungsi getDashboardLayoutZone di sini\n",
-          language: "js",
+            "Buat dictionary bernama `rencana_dashboard` yang memetakan dua pertanyaan bisnis ke elemen visualnya: pertanyaan tentang total omset dipetakan ke `'scorecard'`, dan pertanyaan tentang perbandingan antar kategori dipetakan ke `'bar chart'`.",
+          starterCode: "# Petakan pertanyaan bisnis ke elemen dashboard\n",
+          language: "text",
           tests: [
             {
-              pattern: "pos\\s*===\\s*['\"]top_left['\"]\\s*\\?\\s*['\"]kpi_header['\"]\\s*:\\s*['\"]breakdown_table['\"]",
-              message: "Gunakan: pos === 'top_left' ? 'kpi_header' : 'breakdown_table'",
+              pattern: "rencana_dashboard\\s*=\\s*\\{",
+              message:
+                "Buat dictionary bernama rencana_dashboard.",
+            },
+            {
+              pattern: "['\"]scorecard['\"]",
+              message:
+                "Pertanyaan total omset dijawab dengan 'scorecard'.",
+            },
+            {
+              pattern: "['\"]bar chart['\"]",
+              message:
+                "Perbandingan antar kategori dijawab dengan 'bar chart'.",
             },
           ],
-          solution:
-            "function getDashboardLayoutZone(pos) {\n  return pos === 'top_left' ? 'kpi_header' : 'breakdown_table';\n}",
+          solution: "rencana_dashboard = {\n    'Berapa total omset bulan ini?': 'scorecard',\n    'Kategori mana yang paling laku?': 'bar chart',\n}",
         },
         {
           kind: "step",
           id: "da-5-6",
-          title: "Pengenalan Tableau & Power BI",
+          title: "Looker Studio, Tableau, Power BI: Konsep yang Sama",
           explanation:
-            "Tableau & Power BI menggunakan konsep yang sama persis dengan Looker Studio (Data Model -> Dimensions/Metrics -> Dashboards).",
+            "Ketiga alat ini terlihat berbeda di permukaan, tapi konsepnya identik: sambungkan sumber data, tentukan dimensi dan metrik, buat calculated field bila perlu, lalu susun chart beserta filternya. Karena itu menguasai satu alat membuatmu bisa berpindah ke alat lain dalam hitungan hari. Yang membedakan adalah biaya dan ekosistem: Looker Studio gratis dan terhubung erat dengan Google Sheets serta BigQuery, sedangkan Tableau dan Power BI berbayar dan lebih sering dipakai perusahaan besar. Di lowongan Indonesia, menyebut satu alat yang benar-benar kamu kuasai lebih bernilai daripada menyebut tiga alat sekaligus tanpa portofolio.",
           example: {
-            code:
-              "function getSupportedBITools() {\n" +
-              "  return ['Looker Studio', 'Tableau', 'Power BI'];\n" +
-              "}\n" +
-              "console.log(getSupportedBITools());",
-            output: '["Looker Studio", "Tableau", "Power BI"]',
-            note: "Fokus pada penguasaan konsep dasar BI.",
+            code: "alat = {\n    'looker studio': 'gratis',\n    'tableau': 'berbayar',\n    'power bi': 'berbayar',\n}\nprint([nama for nama, harga in alat.items() if harga == 'gratis'])",
+            output: "['looker studio']",
           },
           instruction:
-            "Buat fungsi `getSupportedBITools()` yang mengembalikan array string `['Looker Studio', 'Tableau', 'Power BI']`.",
-          starterCode: "// Tulis fungsi getSupportedBITools di bawah ini\n",
-          language: "js",
+            "Buat dictionary bernama `alat_bi` berisi tiga alat: `'looker studio'` bernilai `'gratis'`, `'tableau'` bernilai `'berbayar'`, dan `'power bi'` bernilai `'berbayar'`.",
+          starterCode: "# Petakan alat BI dan status biayanya\n",
+          language: "text",
           tests: [
             {
-              pattern: "\\[\\s*['\"]Looker Studio['\"]\\s*,\\s*['\"]Tableau['\"]\\s*,\\s*['\"]Power BI['\"]\\s*\\]",
-              message: "Kembalikan ['Looker Studio', 'Tableau', 'Power BI']",
+              pattern: "alat_bi\\s*=\\s*\\{",
+              message:
+                "Buat dictionary bernama alat_bi.",
+            },
+            {
+              pattern: "['\"]looker studio['\"]\\s*:\\s*['\"]gratis['\"]",
+              message:
+                "Looker Studio bernilai 'gratis'.",
+            },
+            {
+              pattern: "['\"]tableau['\"]\\s*:\\s*['\"]berbayar['\"]",
+              message:
+                "Tableau bernilai 'berbayar'.",
+            },
+            {
+              pattern: "['\"]power bi['\"]\\s*:\\s*['\"]berbayar['\"]",
+              message:
+                "Power BI bernilai 'berbayar'.",
             },
           ],
-          solution:
-            "function getSupportedBITools() {\n  return ['Looker Studio', 'Tableau', 'Power BI'];\n}",
+          solution: "alat_bi = {\n    'looker studio': 'gratis',\n    'tableau': 'berbayar',\n    'power bi': 'berbayar',\n}",
         },
         {
           kind: "step",
           id: "da-5-7",
-          title: "Berbagi Laporan & Scheduled Email Delivery",
+          title: "Berbagi Laporan & Pengiriman Terjadwal",
           explanation:
-            "Atur **Scheduled Email Delivery** di Looker Studio agar PDF ringkasan dashboard otomatis terkirim ke email jajaran direksi setiap Senin jam 8 pagi.",
+            "Laporan yang bagus tidak berguna kalau tidak sampai ke orang yang mengambil keputusan. Dua hal yang perlu kamu atur: hak akses (siapa boleh melihat apa) dan jadwal pengiriman otomatis, misalnya setiap Senin pagi lewat email. Jadwal ditulis dengan format cron di banyak alat: lima kolom yang berarti menit, jam, tanggal, bulan, dan hari dalam pekan. Sebelum menyalakan pengiriman terjadwal, pastikan datanya sudah ter-refresh lebih dulu — laporan otomatis yang isinya basi lebih berbahaya daripada tidak ada laporan sama sekali.",
           example: {
-            code:
-              "function createEmailScheduleConfig(email, cron) {\n" +
-              "  return { recipient: email, cron: cron, format: 'pdf' };\n" +
-              "}\n" +
-              "console.log(createEmailScheduleConfig('ceo@company.com', 'weekly'));",
-            output: '{ recipient: "ceo@company.com", cron: "weekly", format: "pdf" }',
-            note: "Menjamin manajemen menerima informasi terupdate secara teratur.",
+            code: "jadwal = {'penerima': 'manajer@toko.id', 'cron': '0 7 * * 1'}\nprint(jadwal['cron'])",
+            output: "0 7 * * 1",
           },
           instruction:
-            "Buat fungsi `createEmailScheduleConfig(email, cron)` yang mengembalikan objek `{ recipient: email, cron: cron, format: 'pdf' }`.",
-          starterCode: "// Tulis fungsi createEmailScheduleConfig di bawah ini\n",
-          language: "js",
+            "Buat dictionary bernama `jadwal_laporan` dengan kunci `'penerima'` berisi `'direktur@toko.id'` dan kunci `'cron'` berisi jadwal setiap hari Senin pukul 08.00 (`'0 8 * * 1'`).",
+          starterCode: "# Susun konfigurasi pengiriman laporan terjadwal\n",
+          language: "text",
           tests: [
             {
-              pattern: "recipient\\s*:\\s*email\\s*,\\s*cron\\s*:\\s*cron\\s*,\\s*format\\s*:\\s*['\"]pdf['\"]",
-              message: "Kembalikan objek: { recipient: email, cron: cron, format: 'pdf' }",
+              pattern: "jadwal_laporan\\s*=\\s*\\{",
+              message:
+                "Buat dictionary bernama jadwal_laporan.",
+            },
+            {
+              pattern: "['\"]penerima['\"]\\s*:\\s*['\"]direktur@toko\\.id['\"]",
+              message:
+                "Kunci 'penerima' berisi 'direktur@toko.id'.",
+            },
+            {
+              pattern: "['\"]cron['\"]\\s*:\\s*['\"]0 8 \\* \\* 1['\"]",
+              message:
+                "Kunci 'cron' berisi '0 8 * * 1' untuk Senin pukul 08.00.",
             },
           ],
-          solution:
-            "function createEmailScheduleConfig(email, cron) {\n  return { recipient: email, cron: cron, format: 'pdf' };\n}",
+          solution: "jadwal_laporan = {\n    'penerima': 'direktur@toko.id',\n    'cron': '0 8 * * 1',\n}",
         },
         {
           kind: "quiz",
@@ -1138,6 +1316,32 @@ export const dataAnalysisTrack: Track = {
               answerIndex: 0,
               explanation: "Pola Z (Top-Left KPI ➔ Top-Right Trend ➔ Bottom Breakdown) mengikuti alur baca alami mata manusia.",
             },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Apa fungsi utama fitur 'Calculated Field' pada sebuah aplikasi BI Tools?",
+              choices: [
+                "Membuat metrik rumusan baru berbasis rasio/agregasi langsung di dalam level BI tanpa mengubah database mentah",
+                "Menghubungkan aplikasi BI dengan perangkat mobile",
+                "Menjadwalkan pengiriman email PDF ke manajemen",
+                "Mencetak file laporan ke mesin printer lokal"
+              ],
+              answerIndex: 0,
+              explanation: "Calculated Field sangat krusial untuk membuat turunan rasio baru (seperti Margin %) saat melakukan eksplorasi data agregat.",
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Komponen interaktif apa yang paling tepat ditambahkan agar pihak direksi dapat mengganti rentang waktu analisis tanpa perlu merepotkan tim analis data?",
+              choices: [
+                "Date Range Control (Slicer Tanggal)",
+                "Tombol Delete Database",
+                "Grafik Pie 3 Dimensi",
+                "Tabel relasional statis"
+              ],
+              answerIndex: 0,
+              explanation: "Kontrol pemilih rentang tanggal (Date Slicer) memberi otonomi kepada audiens untuk menggeser periode laporan yang mereka inginkan (misal YTD atau bulanan).",
+            },
           ],
         },
       ],
@@ -1161,178 +1365,205 @@ export const dataAnalysisTrack: Track = {
           id: "da-6-1",
           title: "Kenali Audiens: Eksekutif vs Tim Teknis",
           explanation:
-            "**Eksekutif** butuh kesimpulan singkat, dampak omset, dan rekomendasi aksi. **Tim Teknis** butuh rincian metodologi, kualitas sampel, dan statistik p-value.",
+            "Isi analisismu boleh sama, tapi cara menyajikannya harus berbeda. Eksekutif butuh kesimpulan dan keputusan yang diminta darinya dalam satu menit pertama: apa temuannya, berapa dampaknya, apa yang harus dilakukan. Tim teknis butuh hal yang justru dibuang dari ringkasan itu: dari mana datanya, bagaimana pembersihannya, dan asumsi apa yang kamu pakai. Kesalahan yang paling sering dilakukan analis pemula adalah membawa presentasi metodologi ke ruang direksi, lalu kehilangan perhatian sebelum sampai ke rekomendasi.",
           example: {
-            code:
-              "function formatPresentationDetail(aud) {\n" +
-              "  return aud === 'executive' ? 'executive_summary' : 'statistical_methodology';\n" +
-              "}\n" +
-              "console.log(formatPresentationDetail('executive'));",
-            output: "executive_summary",
-            note: "Sesuaikan bahasa presentasi dengan latar belakang pendengar.",
+            code: "ringkasan = {\n    'eksekutif': ['temuan', 'dampak rupiah', 'rekomendasi'],\n    'teknis': ['sumber data', 'metode cleaning', 'asumsi'],\n}\nprint(ringkasan['eksekutif'][0])",
+            output: "temuan",
           },
           instruction:
-            "Buat fungsi `formatPresentationDetail(audience)` yang mengembalikan `'executive_summary'` jika `audience === 'executive'` dan `'statistical_methodology'` jika sebaliknya.",
-          starterCode: "// Tulis fungsi formatPresentationDetail di bawah ini\n",
-          language: "js",
+            "Buat dictionary bernama `isi_presentasi` dengan dua kunci: `'eksekutif'` berisi list `['temuan', 'dampak', 'rekomendasi']`, dan `'teknis'` berisi list `['sumber data', 'metode', 'asumsi']`.",
+          starterCode: "# Susun isi presentasi menurut audiensnya\n",
+          language: "text",
           tests: [
             {
-              pattern: "audience\\s*===\\s*['\"]executive['\"]\\s*\\?\\s*['\"]executive_summary['\"]\\s*:\\s*['\"]statistical_methodology['\"]",
-              message: "Gunakan: audience === 'executive' ? 'executive_summary' : 'statistical_methodology'",
+              pattern: "isi_presentasi\\s*=\\s*\\{",
+              message:
+                "Buat dictionary bernama isi_presentasi.",
+            },
+            {
+              pattern: "['\"]eksekutif['\"]\\s*:\\s*\\[[^\\]]*rekomendasi",
+              message:
+                "Bagian eksekutif memuat temuan, dampak, dan rekomendasi.",
+            },
+            {
+              pattern: "['\"]teknis['\"]\\s*:\\s*\\[[^\\]]*asumsi",
+              message:
+                "Bagian teknis memuat sumber data, metode, dan asumsi.",
             },
           ],
-          solution:
-            "function formatPresentationDetail(audience) {\n  return audience === 'executive' ? 'executive_summary' : 'statistical_methodology';\n}",
+          solution: "isi_presentasi = {\n    'eksekutif': ['temuan', 'dampak', 'rekomendasi'],\n    'teknis': ['sumber data', 'metode', 'asumsi'],\n}",
         },
         {
           kind: "step",
           id: "da-6-2",
-          title: "Struktur Narasi Storytelling (Context -> Finding -> Action)",
+          title: "Struktur Narasi: Konteks, Temuan, Aksi",
           explanation:
-            "Struktur Storytelling yang efektif: 1. **Konteks** (Latar Masalah), 2. **Temuan Data** (Insight Angka), 3. **Rekomendasi Aksi** (Langkah Konkret).",
+            "Data tidak bercerita dengan sendirinya; kamu yang menyusun ceritanya. Struktur yang paling mudah diikuti pendengar terdiri dari tiga bagian: konteks (kondisi yang jadi latar), temuan (apa yang ditunjukkan data), dan aksi (apa yang sebaiknya dilakukan). Tanpa konteks, temuanmu terdengar seperti angka acak; tanpa aksi, presentasimu berakhir dengan 'lalu?'. Susun ketiganya dalam kalimat pendek, dan pastikan aksinya bisa dikerjakan oleh orang yang hadir di ruangan itu.",
           example: {
-            code:
-              "const storyArc = {\n" +
-              "  context: 'High churn',\n" +
-              "  finding: 'Payment fails',\n" +
-              "  action: 'Fix gateway'\n" +
-              "};\n" +
-              "console.log(storyArc.finding);",
-            output: "Payment fails",
-            note: "Jangan berhenti hanya pada menyajikan chart tanpa rekomendasi.",
+            code: "cerita = {\n    'konteks': 'Churn naik 3 bulan berturut-turut',\n    'temuan': '62 persen churn terjadi setelah pembayaran gagal',\n    'aksi': 'Aktifkan percobaan ulang pembayaran otomatis',\n}\nfor bagian in ['konteks', 'temuan', 'aksi']:\n    print(bagian.upper(), ':', cerita[bagian])",
+            output: "KONTEKS : Churn naik 3 bulan berturut-turut\nTEMUAN : 62 persen churn terjadi setelah pembayaran gagal\nAKSI : Aktifkan percobaan ulang pembayaran otomatis",
           },
           instruction:
-            "Buat objek `storyArc` yang memiliki tiga properti: `context: 'High churn'`, `finding: 'Payment fails'`, dan `action: 'Fix gateway'`.",
-          starterCode: "// Tulis objek storyArc di sini\n",
-          language: "js",
+            "Buat dictionary bernama `narasi` berisi tiga kunci — `'konteks'`, `'temuan'`, dan `'aksi'` — untuk kasus penjualan yang turun setelah pengiriman sering terlambat. Isi tiap kunci dengan kalimatmu sendiri.",
+          starterCode: "# Susun narasi tiga bagian\n",
+          language: "text",
           tests: [
             {
-              pattern: "context\\s*:\\s*['\"]High churn['\"]",
-              message: "Set context: 'High churn'",
+              pattern: "narasi\\s*=\\s*\\{",
+              message:
+                "Buat dictionary bernama narasi.",
             },
             {
-              pattern: "finding\\s*:\\s*['\"]Payment fails['\"]",
-              message: "Set finding: 'Payment fails'",
+              pattern: "['\"]konteks['\"]\\s*:\\s*['\"][^'\"]{15,}",
+              message:
+                "Isi 'konteks' dengan kalimat, bukan satu kata.",
             },
             {
-              pattern: "action\\s*:\\s*['\"]Fix gateway['\"]",
-              message: "Set action: 'Fix gateway'",
+              pattern: "['\"]temuan['\"]\\s*:\\s*['\"][^'\"]{15,}",
+              message:
+                "Isi 'temuan' dengan kalimat berisi apa yang ditunjukkan data.",
+            },
+            {
+              pattern: "['\"]aksi['\"]\\s*:\\s*['\"][^'\"]{15,}",
+              message:
+                "Isi 'aksi' dengan langkah yang bisa dikerjakan.",
             },
           ],
-          solution:
-            "const storyArc = {\n  context: 'High churn',\n  finding: 'Payment fails',\n  action: 'Fix gateway'\n};",
+          solution: "narasi = {\n    'konteks': 'Penjualan turun 12 persen sejak Mei',\n    'temuan': 'Keterlambatan kirim naik dua kali lipat di wilayah yang sama',\n    'aksi': 'Tambah satu kurir mitra di wilayah tersebut selama Juli',\n}",
         },
         {
           kind: "step",
           id: "da-6-3",
-          title: "Prinsip Satu Slide Satu Pesan Utama",
+          title: "Satu Slide, Satu Pesan",
           explanation:
-            "Setiap slide presentasi harus fokus menyampaiakan **1 Pesan Utama**. Tuliskan pesan utama tersebut sebagai Judul Slide.",
+            "Judul slide adalah tempat pesanmu, bukan label grafik. 'Grafik Penjualan' tidak memberi tahu apa pun; 'Penjualan turun 12% sejak kenaikan ongkir' langsung menyampaikan temuan bahkan bila pendengar tidak sempat membaca grafiknya. Aturan praktis yang dipakai konsultan: kalau seluruh slide-mu ditutup dan hanya judulnya yang terbaca, cerita utamamu harus tetap sampai. Kalau satu slide memuat dua pesan sekaligus, pecah menjadi dua slide.",
           example: {
-            code:
-              "function validateSlideTitle(title) {\n" +
-              "  if (title === 'Grafik Penjualan') throw new Error('Title too generic');\n" +
-              "}\n" +
-              "console.log('Title Validated');",
-            output: "Title Validated",
-            note: "Judul slide yang informatif mempermudah pemahaman audiens.",
+            code: "judul = 'Penjualan turun 12 persen sejak ongkir naik'\nprint(len(judul.split()) >= 5)",
+            output: "True",
           },
           instruction:
-            "Buat fungsi `validateSlideTitle(title)` yang melempar error `\"Title too generic\"` jika `title === 'Grafik Penjualan'`.",
-          starterCode: "// Tulis fungsi validateSlideTitle di bawah ini\n",
-          language: "js",
+            "Variabel `judul_slide` masih berisi label generik. Ganti isinya dengan judul yang memuat pesan: sebutkan arah perubahan (naik atau turun), angkanya, dan penyebab atau periodenya.",
+          starterCode: "judul_slide = 'Grafik Penjualan'\n# Ganti dengan judul yang membawa pesan\n",
+          language: "text",
           tests: [
             {
-              pattern: "if\\s*\\(\\s*title\\s*===\\s*['\"]Grafik Penjualan['\"]\\s*\\)\\s*throw\\s+new\\s+Error",
-              message: "Gunakan: if (title === 'Grafik Penjualan') throw new Error('Title too generic');",
+              pattern: "judul_slide\\s*=\\s*['\"][^'\"]{25,}['\"]",
+              message:
+                "Tulis judul yang cukup panjang untuk memuat pesan, bukan label.",
+            },
+            {
+              pattern: "(naik|turun|meningkat|menurun)",
+              flags: "i",
+              message:
+                "Sebutkan arah perubahannya.",
+            },
+            {
+              pattern: "\\d",
+              message:
+                "Sertakan angkanya agar pesannya konkret.",
             },
           ],
-          solution:
-            'function validateSlideTitle(title) {\n  if (title === "Grafik Penjualan") throw new Error("Title too generic");\n}',
+          solution: "judul_slide = 'Penjualan turun 12 persen sejak ongkir naik pada Mei'",
         },
         {
           kind: "step",
           id: "da-6-4",
-          title: "Menulis Actionable Insights",
+          title: "Insight yang Bisa Ditindaklanjuti",
           explanation:
-            "Ganti data mentah 'Penjualan Kopi naik 5%' menjadi **Actionable Insight**: 'Penjualan Kopi Robusta naik 5% di Cabang A. Rekomendasi: Alokasikan anggaran pemasaran ekstra ke Kopi Robusta'.",
+            "'Penjualan naik 5%' bukan insight, itu pembacaan angka. Insight menjelaskan apa yang terjadi, kenapa itu penting, dan apa yang sebaiknya dilakukan — dengan penanggung jawab dan ukuran keberhasilan bila memungkinkan. Perbedaannya terasa saat rapat: pembacaan angka memicu pertanyaan 'lalu kita harus apa?', sedangkan insight memicu keputusan. Latihan paling cepat untuk membiasakannya adalah menempelkan kata 'sehingga sebaiknya' di belakang setiap temuan yang kamu tulis.",
           example: {
-            code:
-              "function createActionableInsight(obs, rec) {\n" +
-              "  return `${obs}. Recommendation: ${rec}`;\n" +
-              "}\n" +
-              "console.log(createActionableInsight('Sales up 5%', 'Boost ads'));",
-            output: "Sales up 5%. Recommendation: Boost ads",
-            note: "Fokus pada dampak aksi terhadap tujuan bisnis.",
+            code: "temuan = 'Konversi di HP 40 persen lebih rendah daripada desktop'\naksi = 'Perbaiki tata letak tombol bayar di tampilan HP bulan ini'\nprint(f'{temuan}, sehingga sebaiknya {aksi.lower()}')",
+            output: "Konversi di HP 40 persen lebih rendah daripada desktop, sehingga sebaiknya perbaiki tata letak tombol bayar di tampilan hp bulan ini",
           },
           instruction:
-            "Buat fungsi `createActionableInsight(dataObservation, recommendedAction)` yang mengembalikan string gabungan `\"\${dataObservation}. Recommendation: \${recommendedAction}\"`.",
-          starterCode: "// Tulis fungsi createActionableInsight di bawah ini\n",
-          language: "js",
+            "Variabel `temuan_pengiriman` berisi fakta bahwa 30 persen pesanan terlambat di wilayah Bekasi. Buat variabel `insight` berisi satu kalimat yang menggabungkan temuan itu dengan tindakan yang kamu sarankan.",
+          starterCode: "temuan_pengiriman = '30 persen pesanan Bekasi terlambat lebih dari 2 hari'\n# Susun insight yang bisa ditindaklanjuti\n",
+          language: "text",
           tests: [
             {
-              pattern: "`\\$\\{dataObservation\\}\\.\\s*Recommendation:\\s*\\$\\{recommendedAction\\}`|dataObservation\\s*\\+\\s*['\"]\\. Recommendation: ['\"]\\s*\\+\\s*recommendedAction",
-              message: "Format: `${dataObservation}. Recommendation: ${recommendedAction}`",
+              pattern: "insight\\s*=",
+              message:
+                "Buat variabel bernama insight.",
+            },
+            {
+              pattern: "temuan_pengiriman",
+              message:
+                "Gunakan isi temuan_pengiriman di dalam insight-mu.",
+            },
+            {
+              pattern: "(sebaiknya|rekomendasi|perlu|tambah|perbaiki|ubah)",
+              flags: "i",
+              message:
+                "Sertakan tindakan yang disarankan, bukan hanya fakta.",
             },
           ],
-          solution:
-            "function createActionableInsight(dataObservation, recommendedAction) {\n  return `${dataObservation}. Recommendation: ${recommendedAction}`;\n}",
+          solution: "insight = f'{temuan_pengiriman}, sehingga sebaiknya kita tambah satu mitra kurir di Bekasi bulan ini'",
         },
         {
           kind: "step",
           id: "da-6-5",
-          title: "Menghadapi Pertanyaan Sanggahan Data",
+          title: "Menghadapi Sanggahan atas Datamu",
           explanation:
-            "Jika pemangku kepentingan mempertanyakan hasil analisis: Dengarkan dengan empati, akui batasan asumsi data, dan tawarkan pengujian data susulan.",
+            "Cepat atau lambat seseorang akan berkata 'saya rasa angkanya salah'. Reaksi yang merusak kredibilitas adalah bertahan mati-matian atau langsung menyerah. Yang dilakukan analis berpengalaman ada tiga langkah: akui pertanyaannya sebagai hal yang wajar, sebutkan sumber dan periode datamu secara spesifik, lalu tawarkan pemeriksaan ulang dengan tenggat yang jelas. Sikap ini mengubah sanggahan menjadi kerja sama, dan sering kali justru memperkuat kepercayaan pada laporan berikutnya.",
           example: {
-            code:
-              "function handleDataObjection(objection) {\n" +
-              "  return { acknowledged: true, followUpAction: 'run_extended_period_test' };\n" +
-              "}\n" +
-              "console.log(handleDataObjection('Data is short'));",
-            output: '{ acknowledged: true, followUpAction: "run_extended_period_test" }',
-            note: "Jangan bersikap defensif terhadap pertanyaan kritis audiens.",
+            code: "tanggapan = {\n    'akui': 'Pertanyaan yang bagus, wajar ditanyakan',\n    'sumber': 'Angka ini dari tabel orders periode 1-30 Juni',\n    'tindak_lanjut': 'Saya cek ulang dan kirim hasilnya besok siang',\n}\nprint(tanggapan['tindak_lanjut'])",
+            output: "Saya cek ulang dan kirim hasilnya besok siang",
           },
           instruction:
-            "Buat fungsi `handleDataObjection(objection)` yang mengembalikan objek `{ acknowledged: true, followUpAction: 'run_extended_period_test' }`.",
-          starterCode: "// Tulis fungsi handleDataObjection di sini\n",
-          language: "js",
+            "Buat dictionary bernama `tanggapan_sanggahan` dengan tiga kunci: `'akui'`, `'sumber'`, dan `'tindak_lanjut'`, masing-masing berisi satu kalimat tanggapanmu.",
+          starterCode: "# Susun tanggapan atas sanggahan data\n",
+          language: "text",
           tests: [
             {
-              pattern: "acknowledged\\s*:\\s*true\\s*,\\s*followUpAction\\s*:\\s*['\"]run_extended_period_test['\"]",
-              message: "Kembalikan { acknowledged: true, followUpAction: 'run_extended_period_test' }",
+              pattern: "tanggapan_sanggahan\\s*=\\s*\\{",
+              message:
+                "Buat dictionary bernama tanggapan_sanggahan.",
+            },
+            {
+              pattern: "['\"]akui['\"]\\s*:\\s*['\"][^'\"]{10,}",
+              message:
+                "Isi 'akui' dengan kalimat yang mengakui pertanyaannya wajar.",
+            },
+            {
+              pattern: "['\"]sumber['\"]\\s*:\\s*['\"][^'\"]{10,}",
+              message:
+                "Isi 'sumber' dengan asal data dan periodenya.",
+            },
+            {
+              pattern: "['\"]tindak_lanjut['\"]\\s*:\\s*['\"][^'\"]{10,}",
+              message:
+                "Isi 'tindak_lanjut' dengan tawaran pemeriksaan ulang beserta waktunya.",
             },
           ],
-          solution:
-            "function handleDataObjection(objection) {\n  return { acknowledged: true, followUpAction: 'run_extended_period_test' };\n}",
+          solution: "tanggapan_sanggahan = {\n    'akui': 'Wajar ditanyakan, angkanya memang berbeda dari laporan bulan lalu',\n    'sumber': 'Datanya dari tabel orders periode 1-30 Juni, status selain batal',\n    'tindak_lanjut': 'Saya periksa ulang definisinya dan kirim hasilnya besok siang',\n}",
         },
         {
           kind: "step",
           id: "da-6-6",
-          title: "Etika Data Storytelling: Persuasi vs Manipulasi",
+          title: "Etika Visualisasi: Persuasi atau Manipulasi",
           explanation:
-            "Batas Etika: **Persuasi** menonjolkan temuan jujur untuk membantu keputusan. **Manipulasi** sengaja memotong grafik atau menyembunyikan data yang bertolak belakang dengan klaim.",
+            "Grafik bisa berbohong tanpa satu angka pun dipalsukan. Memotong sumbu Y agar tidak dimulai dari nol membuat kenaikan 2 persen terlihat seperti lonjakan besar, dan memilih periode tertentu saja bisa menyembunyikan tren sebaliknya. Batasnya sederhana: persuasi menonjolkan hal yang penting tanpa mengubah kesan besarannya, sedangkan manipulasi membuat pembaca menyimpulkan sesuatu yang tidak didukung data. Untuk bar chart, mulai sumbu dari nol adalah aturan baku — dan kalau kamu memang harus memotongnya, katakan secara terbuka.",
           example: {
-            code:
-              "function isEthicalChart(truncatedYAxis) {\n" +
-              "  return !truncatedYAxis;\n" +
-              "}\n" +
-              "console.log(isEthicalChart(false));",
-            output: "true",
-            note: "Integritas analisis adalah aset paling berharga seorang Data Analyst.",
+            code: "import matplotlib.pyplot as plt\nfig, ax = plt.subplots()\nax.bar(['Jan', 'Feb'], [98, 100])\nax.set_ylim(bottom=0)\nprint(ax.get_ylim()[0])",
+            output: "0.0",
           },
           instruction:
-            "Buat fungsi `isEthicalChart(truncatedYAxis)` yang mengembalikan `false` jika `truncatedYAxis === true` dan `true` jika `false`.",
-          starterCode: "// Tulis fungsi isEthicalChart di sini\n",
-          language: "js",
+            "Grafik batang `ax` sudah dibuat. Pastikan penyajiannya jujur dengan mengatur batas bawah sumbu Y agar dimulai dari nol.",
+          starterCode: "# Pastikan sumbu Y dimulai dari nol\n",
+          language: "text",
           tests: [
             {
-              pattern: "!truncatedYAxis|truncatedYAxis\\s*===\\s*false",
-              message: "Kembalikan !truncatedYAxis",
+              pattern: "ax\\.set_ylim\\(",
+              message:
+                "Pakai ax.set_ylim(...).",
+            },
+            {
+              pattern: "bottom\\s*=\\s*0|\\(\\s*0\\s*,",
+              message:
+                "Tetapkan batas bawahnya 0.",
             },
           ],
-          solution:
-            "function isEthicalChart(truncatedYAxis) {\n  return !truncatedYAxis;\n}",
+          solution: "ax.set_ylim(bottom=0)",
         },
         {
           kind: "quiz",
@@ -1378,6 +1609,32 @@ export const dataAnalysisTrack: Track = {
               answerIndex: 0,
               explanation: "Actionable Insight melangkah lebih jauh dari sekadar melihat tren angka dengan mengusulkan keputusan bisnis yang harus diambil.",
             },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Jika kamu akan presentasi di depan tim jajaran eksekutif level-C, komponen apa yang paling butuh ditegaskan di halaman pertama laporan?",
+              choices: [
+                "Executive Summary yang merangkum langsung dampak bisnis utama dan ringkasan langkah ke depan",
+                "Pemaparan panjang lebar soal jumlah sel missing values",
+                "Detail rumus probabilitas yang digunakan pada model statistik",
+                "Rincian kode program Python matplotlib yang dibuat"
+              ],
+              answerIndex: 0,
+              explanation: "Kalangan eksekutif sangat menghargai waktu. Executive Summary (Ikhtisar Eksekutif) yang jelas dan ringkas menjawab inti keputusan bisnis lebih baik daripada detail teknis panjang.",
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Sikap etis terbaik yang harus ditunjukkan ketika pemangku kepentingan (stakeholder) meragukan kesahihan datamu di tengah presentasi adalah...",
+              choices: [
+                "Mendengarkan dengan objektif, menyepakati asumsi dasar, dan menawarkan pengujian data (uji silang) lanjutan setelah rapat",
+                "Membantah sekeras mungkin untuk mempertahankan harga diri analis",
+                "Secara diam-diam memanipulasi rentang sumbu grafik Y agar kesimpulan terlihat benar",
+                "Berhenti bekerja di perusahaan tersebut keesokan harinya"
+              ],
+              answerIndex: 0,
+              explanation: "Terbuka pada masukan memperlihatkan integritas data analyst yang tinggi serta menghadirkan rasa percaya pemangku bisnis jangka panjang.",
+            },
           ],
         },
       ],
@@ -1399,141 +1656,180 @@ export const dataAnalysisTrack: Track = {
         {
           kind: "step",
           id: "da-7-1",
-          title: "Pemilihan Dataset Publik Indonesia",
+          title: "Memilih Dataset Publik Indonesia",
           explanation:
-            "Gunakan dataset publik nyata (seperti portal data BPS, Data.go.id, atau Kaggle) untuk membangun portofolio analisis berkonteks lokal.",
+            "Portofolio analis paling meyakinkan kalau datanya relevan dengan pasar tempatmu melamar. Untuk konteks Indonesia, sumber yang layak dipakai antara lain BPS untuk statistik resmi, Satu Data Indonesia untuk data pemerintah lintas instansi, dan Kaggle untuk dataset bertema global. Sebelum mengunduh, periksa tiga hal: lisensinya memperbolehkan pemakaian ulang, ada keterangan kolom, dan periodenya cukup panjang untuk melihat tren. Dataset yang tidak jelas asalnya membuat seluruh analisismu sulit dipertanggungjawabkan saat ditanya pewawancara.",
           example: {
-            code:
-              "function selectDatasetSource(region) {\n" +
-              "  return region === 'indonesia' ? 'bps_go_id' : 'kaggle';\n" +
-              "}\n" +
-              "console.log(selectDatasetSource('indonesia'));",
-            output: "bps_go_id",
-            note: "Data nyata lokal memberi nilai tambah dibanding dataset umum standar tutorial.",
+            code: "sumber = {\n    'bps': 'https://bps.go.id',\n    'satu data': 'https://data.go.id',\n}\nprint(list(sumber.keys()))",
+            output: "['bps', 'satu data']",
           },
           instruction:
-            "Buat fungsi `selectDatasetSource(region)` yang mengembalikan `'bps_go_id'` jika `region === 'indonesia'` dan `'kaggle'` untuk wilayah lainnya.",
-          starterCode: "// Tulis fungsi selectDatasetSource di bawah ini\n",
-          language: "js",
+            "Buat dictionary bernama `sumber_data` berisi minimal dua sumber dataset publik Indonesia beserta alamatnya — sertakan `'bps'` sebagai salah satunya.",
+          starterCode: "# Daftar sumber dataset yang akan kamu pakai\n",
+          language: "text",
           tests: [
             {
-              pattern: "region\\s*===\\s*['\"]indonesia['\"]\\s*\\?\\s*['\"]bps_go_id['\"]\\s*:\\s*['\"]kaggle['\"]",
-              message: "Gunakan: region === 'indonesia' ? 'bps_go_id' : 'kaggle'",
+              pattern: "sumber_data\\s*=\\s*\\{",
+              message:
+                "Buat dictionary bernama sumber_data.",
+            },
+            {
+              pattern: "['\"]bps['\"]\\s*:",
+              message:
+                "Sertakan 'bps' sebagai satu di antaranya.",
+            },
+            {
+              pattern: "https?://[^'\"]+['\"]\\s*,[\\s\\S]*https?://",
+              message:
+                "Sertakan minimal dua sumber beserta alamatnya.",
             },
           ],
-          solution:
-            "function selectDatasetSource(region) {\n  return region === 'indonesia' ? 'bps_go_id' : 'kaggle';\n}",
+          solution: "sumber_data = {\n    'bps': 'https://www.bps.go.id',\n    'satu data indonesia': 'https://data.go.id',\n}",
         },
         {
           kind: "step",
           id: "da-7-2",
-          title: "Merumuskan Pertanyaan Bisnis Kunci",
+          title: "Merumuskan Pertanyaan Sebelum Menyentuh Data",
           explanation:
-            "Sebelum menyentuh kode/data, tuliskan 3-5 **Pertanyaan Bisnis Kunci** yang ingin dijawab (misal: 'Kategori mana yang menyumbang keutungan terbesar di Jawa Barat?').",
+            "Analisis tanpa pertanyaan berubah menjadi jalan-jalan tanpa tujuan: kamu membuat banyak grafik, menghabiskan waktu, dan tidak menghasilkan keputusan apa pun. Pertanyaan yang baik bersifat spesifik, terikat periode, dan jawabannya bisa mengubah tindakan seseorang. Bandingkan 'bagaimana penjualan kita?' dengan 'kategori produk mana yang marginnya turun sepanjang kuartal ini?' — hanya yang kedua yang menuntun ke aksi. Tulis pertanyaanmu lebih dulu, karena daftar itu juga menjadi kerangka laporan akhirmu nanti.",
           example: {
-            code:
-              "const businessQuestions = [\n" +
-              "  'Mana kategori paling profit?',\n" +
-              "  'Bagaimana tren bulanan?'\n" +
-              "];\n" +
-              "console.log(businessQuestions.length);",
+            code: "pertanyaan = [\n    'Kategori mana yang marginnya turun pada Q2?',\n    'Wilayah mana yang biaya kirimnya naik paling tajam?',\n]\nprint(len(pertanyaan))",
             output: "2",
-            note: "Mencegah eksplorasi tanpa arah yang membuang waktu.",
           },
           instruction:
-            "Buat array `businessQuestions` berisi minimal 2 string pertanyaan bisnis.",
-          starterCode: "// Tulis array businessQuestions di sini\n",
-          language: "js",
+            "Buat list bernama `pertanyaan_bisnis` berisi tiga pertanyaan analisis untuk data penjualan toko online. Setiap pertanyaan harus berupa kalimat tanya yang spesifik dan diakhiri tanda tanya.",
+          starterCode: "# Tulis pertanyaan bisnis sebelum membuka data\n",
+          language: "text",
           tests: [
             {
-              pattern: "Array\\.isArray\\(\\s*businessQuestions\\s*\\)|const\\s+businessQuestions\\s*=\\s*\\[",
-              message: "Definisikan array businessQuestions",
+              pattern: "pertanyaan_bisnis\\s*=\\s*\\[",
+              message:
+                "Buat list bernama pertanyaan_bisnis.",
+            },
+            {
+              pattern: "\\?['\"][\\s\\S]*\\?['\"][\\s\\S]*\\?['\"]",
+              message:
+                "Tulis tiga pertanyaan, masing-masing diakhiri tanda tanya.",
+            },
+            {
+              pattern: "['\"][^'\"]{30,}\\?['\"]",
+              message:
+                "Pertanyaannya harus spesifik, bukan sepotong kalimat pendek.",
             },
           ],
-          solution:
-            "const businessQuestions = [\n  'Mana kategori paling profit?',\n  'Bagaimana tren bulanan?'\n];",
+          solution: "pertanyaan_bisnis = [\n    'Kategori produk mana yang marginnya paling turun pada kuartal ini?',\n    'Wilayah mana yang tingkat pembatalan pesanannya di atas rata-rata?',\n    'Jam berapa transaksi paling ramai sepanjang tiga bulan terakhir?',\n]",
         },
         {
           kind: "step",
           id: "da-7-3",
-          title: "Siklus Lengkap Analisis Data (Full Cycle)",
+          title: "Siklus Penuh: dari Data Mentah ke Keputusan",
           explanation:
-            "Siklus Utuh: **SQL** (Ekstraksi) -> **pandas** (Pembersihan & Transformasi) -> **Matplotlib/Seaborn** (Eksplorasi Visual) -> **Looker Studio** (Dashboard Final).",
+            "Pekerjaan analis mengikuti urutan yang selalu sama: ambil data (SQL atau file), bersihkan (pandas), analisis, visualisasikan, lalu sampaikan rekomendasi. Melompati tahap pembersihan adalah kesalahan yang paling mahal, karena seluruh analisis di atasnya ikut salah tanpa terlihat. Menuliskan tahapan sebagai daftar juga membantumu memperkirakan waktu: di proyek nyata, pembersihan biasanya memakan porsi terbesar. Simpan urutan ini di README repomu supaya orang lain bisa mengulang pekerjaanmu.",
           example: {
-            code:
-              "const pipelineStages = ['sql_extract', 'pandas_clean', 'eda_viz', 'bi_dashboard'];\n" +
-              "console.log(pipelineStages.join(' -> '));",
-            output: "sql_extract -> pandas_clean -> eda_viz -> bi_dashboard",
-            note: "Proyek end-to-end adalah pembuktian terbaik di resume.",
+            code: "tahap = ['ambil', 'bersihkan', 'analisis', 'visualisasi', 'rekomendasi']\nfor i, nama in enumerate(tahap, start=1):\n    print(i, nama)",
+            output: "1 ambil\n2 bersihkan\n3 analisis\n4 visualisasi\n5 rekomendasi",
           },
           instruction:
-            "Buat array `pipelineStages` yang memuat empat elemen string urutan tahap: `'sql_extract'`, `'pandas_clean'`, `'eda_viz'`, dan `'bi_dashboard'`.",
-          starterCode: "// Tulis array pipelineStages di bawah ini\n",
-          language: "js",
+            "Buat list bernama `tahapan` yang memuat lima tahap analisis secara berurutan, dimulai dari pengambilan data dan diakhiri penyampaian rekomendasi. Pastikan tahap pembersihan ada di dalamnya.",
+          starterCode: "# Tulis urutan tahapan analisismu\n",
+          language: "text",
           tests: [
             {
-              pattern: "\\[\\s*['\"]sql_extract['\"]\\s*,\\s*['\"]pandas_clean['\"]\\s*,\\s*['\"]eda_viz['\"]\\s*,\\s*['\"]bi_dashboard['\"]\\s*\\]",
-              message: "Gunakan array: ['sql_extract', 'pandas_clean', 'eda_viz', 'bi_dashboard']",
+              pattern: "tahapan\\s*=\\s*\\[",
+              message:
+                "Buat list bernama tahapan.",
+            },
+            {
+              pattern: "(cleaning|bersihkan|pembersihan)",
+              flags: "i",
+              message:
+                "Sertakan tahap pembersihan data.",
+            },
+            {
+              pattern: "(visual|chart|grafik)",
+              flags: "i",
+              message:
+                "Sertakan tahap visualisasi.",
+            },
+            {
+              pattern: "(rekomendasi|laporan|insight)",
+              flags: "i",
+              message:
+                "Akhiri dengan tahap rekomendasi atau pelaporan.",
             },
           ],
-          solution:
-            "const pipelineStages = ['sql_extract', 'pandas_clean', 'eda_viz', 'bi_dashboard'];",
+          solution: "tahapan = [\n    'ambil data dari SQL',\n    'cleaning dengan pandas',\n    'analisis & agregasi',\n    'visualisasi',\n    'rekomendasi ke stakeholder',\n]",
         },
         {
           kind: "step",
           id: "da-7-4",
-          title: "Penerbitan Dashboard Interaktif Final",
+          title: "Menerbitkan Dashboard Final",
           explanation:
-            "Publikasikan Dashboard Looker Studio yang saling terhubung dengan skema data bersih dari PostgreSQL / Google Sheets.",
+            "Dashboard yang hanya bisa dibuka di komputermu belum selesai. Menerbitkannya berarti mengatur tiga hal: siapa yang boleh mengakses, apakah datanya menyegar otomatis, dan bagaimana orang lain menemukannya. Untuk portofolio, tautan publik yang bisa dibuka pewawancara jauh lebih meyakinkan daripada tangkapan layar. Yang wajib kamu periksa sebelum membagikan: pastikan tidak ada data pribadi asli — pakai data contoh atau samarkan nama pelanggan.",
           example: {
-            code:
-              "function getEmbedUrl(reportId) {\n" +
-              "  return `https://lookerstudio.google.com/embed/reporting/${reportId}`;\n" +
-              "}\n" +
-              "console.log(getEmbedUrl('12345'));",
-            output: "https://lookerstudio.google.com/embed/reporting/12345",
-            note: "Sertakan tautan dashboard aktif di dalam file README.md repository.",
+            code: "report_id = 'abc123'\nprint(f'https://lookerstudio.google.com/reporting/{report_id}')",
+            output: "https://lookerstudio.google.com/reporting/abc123",
           },
           instruction:
-            "Buat fungsi `getEmbedUrl(reportId)` yang mengembalikan string URL `\"https://lookerstudio.google.com/embed/reporting/\${reportId}\"`.",
-          starterCode: "// Tulis fungsi getEmbedUrl di bawah ini\n",
-          language: "js",
+            "Variabel `report_id` berisi id laporanmu. Buat variabel `tautan_publik` berisi URL lengkap laporan Looker Studio memakai f-string.",
+          starterCode: "report_id = 'x9f2k'\n# Susun tautan publik laporanmu\n",
+          language: "text",
           tests: [
             {
-              pattern: "https://lookerstudio\\.google\\.com/embed/reporting/\\$\\{reportId\\}",
-              message: "Format URL: https://lookerstudio.google.com/embed/reporting/${reportId}",
+              pattern: "tautan_publik\\s*=",
+              message:
+                "Buat variabel bernama tautan_publik.",
+            },
+            {
+              pattern: "lookerstudio\\.google\\.com",
+              message:
+                "Pakai domain lookerstudio.google.com.",
+            },
+            {
+              pattern: "\\{\\s*report_id\\s*\\}",
+              message:
+                "Sisipkan report_id memakai f-string, jangan tulis id-nya manual.",
             },
           ],
-          solution:
-            "function getEmbedUrl(reportId) {\n  return `https://lookerstudio.google.com/embed/reporting/${reportId}`;\n}",
+          solution: "tautan_publik = f'https://lookerstudio.google.com/reporting/{report_id}'",
         },
         {
           kind: "step",
           id: "da-7-5",
-          title: "Menulis Laporan Eksekutif + Rekomendasi Bisnis",
+          title: "Laporan Eksekutif: Ringkas tapi Lengkap",
           explanation:
-            "Lengkapi proyek dengan laporan tertulis di file `REPORT.md` yang memuat kesimpulan ringkas dan 3 rekomendasi strategis bagi bisnis.",
+            "Laporan akhir yang dibaca pimpinan biasanya hanya satu halaman, dan bagian yang paling menentukan adalah paragraf pertama. Susunlah tiga bagian: ringkasan temuan dalam beberapa kalimat, rekomendasi yang bisa dikerjakan, dan catatan keterbatasan data. Bagian keterbatasan sering dilewati padahal justru menambah kepercayaan — ia menunjukkan kamu tahu batas kesimpulanmu sendiri. Simpan rincian metodologi di lampiran agar halaman pertama tetap bisa dibaca dalam satu menit.",
           example: {
-            code:
-              "function buildExecutiveReport(summary, recs) {\n" +
-              "  return { summary: summary, recommendations: recs };\n" +
-              "}\n" +
-              "console.log(buildExecutiveReport('Sales Up', ['Ad budget']).summary);",
-            output: "Sales Up",
-            note: "Menunjukkan kemampuan komunikasi tertulis pengembang.",
+            code: "laporan = {\n    'ringkasan': 'Pembatalan naik 8 persen, terpusat di dua wilayah',\n    'rekomendasi': ['Audit mitra kurir wilayah A', 'Tambah opsi ganti jadwal kirim'],\n    'keterbatasan': 'Data Mei tidak lengkap karena migrasi sistem',\n}\nprint(len(laporan['rekomendasi']))",
+            output: "2",
           },
           instruction:
-            "Buat fungsi `buildExecutiveReport(summary, recommendations)` yang mengembalikan objek `{ summary: summary, recommendations: recommendations }`.",
-          starterCode: "// Tulis fungsi buildExecutiveReport di bawah ini\n",
-          language: "js",
+            "Buat dictionary bernama `laporan_akhir` dengan tiga kunci: `'ringkasan'` berisi kalimat temuan, `'rekomendasi'` berisi list minimal dua tindakan, dan `'keterbatasan'` berisi catatan batas datamu.",
+          starterCode: "# Susun laporan eksekutif tiga bagian\n",
+          language: "text",
           tests: [
             {
-              pattern: "summary\\s*:\\s*summary\\s*,\\s*recommendations\\s*:\\s*recommendations|\\{\\s*summary\\s*,\\s*recommendations\\s*\\}",
-              message: "Kembalikan { summary, recommendations }",
+              pattern: "laporan_akhir\\s*=\\s*\\{",
+              message:
+                "Buat dictionary bernama laporan_akhir.",
+            },
+            {
+              pattern: "['\"]ringkasan['\"]\\s*:\\s*['\"][^'\"]{20,}",
+              message:
+                "Isi 'ringkasan' dengan kalimat temuan.",
+            },
+            {
+              pattern: "['\"]rekomendasi['\"]\\s*:\\s*\\[[^\\]]*,[^\\]]*\\]",
+              message:
+                "Isi 'rekomendasi' dengan list minimal dua tindakan.",
+            },
+            {
+              pattern: "['\"]keterbatasan['\"]\\s*:\\s*['\"][^'\"]{15,}",
+              message:
+                "Isi 'keterbatasan' dengan catatan batas datamu.",
             },
           ],
-          solution:
-            "function buildExecutiveReport(summary, recommendations) {\n  return { summary: summary, recommendations: recommendations };\n}",
+          solution: "laporan_akhir = {\n    'ringkasan': 'Pembatalan pesanan naik 8 persen dan terpusat di dua wilayah',\n    'rekomendasi': ['Audit mitra kurir wilayah Bekasi', 'Tambah opsi ubah jadwal kirim'],\n    'keterbatasan': 'Data Mei tidak lengkap karena migrasi sistem kasir',\n}",
         },
         {
           kind: "step",
@@ -1596,6 +1892,32 @@ export const dataAnalysisTrack: Track = {
               ],
               answerIndex: 0,
               explanation: "Penggunaan dataset lokal memperlihatkan kemampuan analis dalam menyelesaikan masalah bernilai bisnis nyata di lingkungan kerja Indonesia.",
+            },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Pada siklus hidup proyek analitik penuh (Full Cycle), tahapan pembersihan dan transformasi rumit biasanya dilakukan menggunakan alat apa (sebelum masuk tahap visualisasi akhir)?",
+              choices: [
+                "Library Python pandas (atau dbt/SQL tingkat mahir)",
+                "Microsoft Word",
+                "Aplikasi Editor Gambar Photoshop",
+                "Formulir survei pendaftaran akun"
+              ],
+              answerIndex: 0,
+              explanation: "Pembersihan dataset kotor menjadi siap konsumsi umumnya mengandalkan kekuatan manipulasi transformasional di library pandas.",
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Kompilasi dokumen esensial yang sebaiknya dimuat ke dalam repository GitHub portofoliomu mencakup...",
+              choices: [
+                "README, Notebook eksperimen bersih, skrip source code utuh, dan rujukan dataset asal",
+                "File instalasi sistem operasi sebesar 2 GB",
+                "Video rekaman bermain game selama 10 jam",
+                "Kata sandi akun server pangkalan data internal perusahaan"
+              ],
+              answerIndex: 0,
+              explanation: "Repositori yang bersih, terstruktur rapi, lengkap dengan referensi reproduksi penelitian adalah bukti kompetensi nyata analis di hadapan tim teknis.",
             },
           ],
         },

@@ -33,13 +33,13 @@ export const nodeExpressTrack: Track = {
             "Pernahkah kamu membuat website dan mendapati JavaScript hanya bisa berjalan di browser (seperti Chrome)? Node.js hadir untuk mengubah hal itu. Node.js adalah 'mesin' yang memungkinkanmu menjalankan kode JavaScript langsung di komputermu — layaknya sebuah program biasa atau server backend. Karena tidak berjalan di browser, Node.js tidak memiliki fitur visual seperti `window` atau `document` (DOM). Sebagai gantinya, Node.js memberimu akses ke sistem operasi: membaca file, mengakses database, dan membangun API. Jebakan: jangan coba alert() di Node.js — pasti error!",
           example: {
             code: "const platform = process.platform;\nconsole.log(platform);",
-            output: "darwin",
-            note: "Objek 'process' menyediakan informasi seputar lingkungan runtime Node.js.",
+            output: "linux",
+            note: "Objek 'process' menyediakan informasi seputar lingkungan runtime Node.js. Hasilnya mengikuti sistem operasimu: 'linux' di server, 'darwin' di macOS, 'win32' di Windows.",
           },
           instruction:
             "Tuliskan perintah JavaScript Node.js untuk mencetak string versi runtime Node.js yang sedang berjalan menggunakan objek global `process`.",
           starterCode: "// Tulis kode console.log di bawah ini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "console\\.log\\(\\s*process\\.version\\s*\\)\\s*;?",
@@ -62,7 +62,7 @@ export const nodeExpressTrack: Track = {
           instruction:
             "Buat dan ekspor fungsi bernama `multiply` yang menerima dua parameter `(a, b)` dan mengembalikan hasil perkalian keduanya (`a * b`).",
           starterCode: "// Tulis ekspor fungsi di sini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "export\\s+const\\s+multiply\\s*=\\s*\\(\\s*a\\s*,\\s*b\\s*\\)\\s*=>\\s*a\\s*\\*\\s*b\\s*;?",
@@ -108,7 +108,7 @@ export const nodeExpressTrack: Track = {
           instruction:
             "Tuliskan panggilan asinkron `fs.writeFile` untuk membuat file `'file.txt'` yang berisi konten teks `'Halo'`. Gunakan kata kunci `await` di awal.",
           starterCode: "// Tulis fs.writeFile di sini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "await\\s+fs\\.writeFile\\(\\s*['\"]file\\.txt['\"]\\s*,\\s*['\"]Halo['\"]\\s*\\)",
@@ -131,7 +131,7 @@ export const nodeExpressTrack: Track = {
           instruction:
             "Deklarasikan konstanta `dbUrl` yang nilainya diambil dari variabel lingkungan `DATABASE_URL` pada objek `process.env`.",
           starterCode: "// Tulis pembacaan process.env di sini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "const\\s+dbUrl\\s*=\\s*process\\.env\\.DATABASE_URL\\s*;?",
@@ -154,7 +154,7 @@ export const nodeExpressTrack: Track = {
           instruction:
             "Picu peristiwa bernama `'login'` pada objek `emitter` dengan membawa argumen variabel `data` menggunakan metode `.emit()`.",
           starterCode: "// Tulis emitter.emit di sini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "emitter\\.emit\\(\\s*['\"]login['\"]\\s*,\\s*data\\s*\\)\\s*;?",
@@ -195,31 +195,42 @@ export const nodeExpressTrack: Track = {
               id: "q1",
               type: "pilihan-ganda",
               question: "Objek bawaan Node.js apa yang digunakan untuk membaca environment variables sistem (seperti PORT atau DATABASE_URL)?",
-              choices: ["window.env", "process.env", "document.env", "global.env"],
+              choices: ["window.env","process.env","document.env","global.env"],
               answerIndex: 1,
-              explanation: "process.env menyimpan seluruh variabel lingkungan yang disuntikkan ke runtime Node.js.",
+              explanation: "process.env menyimpan seluruh variabel lingkungan yang disuntikkan ke runtime Node.js."
             },
             {
               id: "q2",
               type: "pilihan-ganda",
-              question: "Properti sintaks apa di `package.json` yang harus dikonfigurasi agar Node.js memperlakukan berkas `.js` sebagai ES Modules (bukan CommonJS)?",
-              choices: ['"type": "module"', '"module": true', '"format": "esm"', '"target": "esnext"'],
+              question: "Properti sintaks apa di package.json yang harus dikonfigurasi agar Node.js memperlakukan berkas .js sebagai ES Modules (bukan CommonJS)?",
+              choices: ["\"type\": \"module\"","\"module\": true","\"format\": \"esm\"","\"target\": \"esnext\""],
               answerIndex: 0,
-              explanation: '"type": "module" memberitahu Node.js untuk mengeksekusi berkas JavaScript menggunakan kata kunci import/export.',
+              explanation: "\"type\": \"module\" memberitahu Node.js untuk mengeksekusi berkas JavaScript menggunakan kata kunci import/export."
             },
             {
               id: "q3",
               type: "pilihan-ganda",
               question: "Manakah perbedaan utama antara browser JavaScript runtime dan Node.js runtime?",
-              choices: [
-                "Node.js tidak memiliki objek DOM (window, document), tetapi memiliki akses ke File System lokal dan variabel process",
-                "Browser menggunakan bahasa Python sedangkan Node.js menggunakan C++",
-                "Node.js hanya bisa berjalan di HP Android",
-                "Browser tidak mendukung fungsi matematika",
-              ],
+              choices: ["Node.js tidak memiliki objek DOM (window, document), tetapi memiliki akses ke File System lokal dan variabel process","Browser menggunakan bahasa Python sedangkan Node.js menggunakan C++","Node.js hanya bisa berjalan di HP Android","Browser tidak mendukung fungsi matematika"],
               answerIndex: 0,
-              explanation: "Node.js dirancang untuk server-side sehingga tidak memuat API tampilan browser seperti document dan window.",
+              explanation: "Node.js dirancang untuk server-side sehingga tidak memuat API tampilan browser seperti document dan window."
             },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Perintah npm mana yang secara khusus digunakan untuk menginstal paket dependensi yang hanya dibutuhkan selama tahap pengembangan (development), seperti library testing atau TypeScript?",
+              choices: ["npm install --prod","npm install -D (atau --save-dev)","npm add","npm init"],
+              answerIndex: 1,
+              explanation: "Flag -D / --save-dev mencatat package ke dalam atribut devDependencies di package.json."
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Di lingkungan Node.js modern, modul built-in mana yang sebaiknya di-import untuk melakukan pembacaan/penulisan file dengan dukungan API Promise bawaan (asynchronous tanpa callback)?",
+              choices: ["node:fs","node:http","node:fs/promises","node:path"],
+              answerIndex: 2,
+              explanation: "node:fs/promises memuat API File System yang khusus mengembalikan Promise, sehingga dapat menggunakan async/await dengan mudah."
+            }
           ],
         },
       ],
@@ -253,7 +264,7 @@ export const nodeExpressTrack: Track = {
           instruction:
             "Deklarasikan instansi aplikasi Express baru dan simpan ke dalam konstanta `app`.",
           starterCode: "// Tulis inisialisasi Express di sini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "const\\s+app\\s*=\\s*express\\(\\)\\s*;?",
@@ -276,7 +287,7 @@ export const nodeExpressTrack: Track = {
           instruction:
             "Buat rute GET pada path `\"/ping\"` yang merespon dengan mengirimkan string `'pong'` menggunakan `res.send`.",
           starterCode: "// Tulis route ping di bawah ini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "app\\.get\\(\\s*['\"]/ping['\"]\\s*,\\s*\\(\\s*req\\s*,\\s*res\\s*\\)\\s*=>\\s*res\\.send\\(\\s*['\"]pong['\"]\\s*\\)\\s*\\)\\s*;?",
@@ -299,7 +310,7 @@ export const nodeExpressTrack: Track = {
           instruction:
             "Lakukan destructuring variabel `id` dari properti parameter jalur URL `req.params`.",
           starterCode: "// Tulis ekstraksi req.params di sini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "const\\s+\\{\\s*id\\s*\\}\\s*=\\s*req\\.params\\s*;?",
@@ -322,7 +333,7 @@ export const nodeExpressTrack: Track = {
           instruction:
             "Kirimkan balasan HTTP status 404 yang dikombinasikan dengan payload JSON `{ error: \"Not Found\" }`.",
           starterCode: "// Tulis res.status(404) di sini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "res\\.status\\(\\s*404\\s*\\)\\.json\\(\\s*\\{\\s*error\\s*:\\s*['\"]Not Found['\"]\\s*\\}\\s*\\)\\s*;?",
@@ -345,7 +356,7 @@ export const nodeExpressTrack: Track = {
           instruction:
             "Panggil fungsi kelanjutan middleware `next()` tanpa argumen untuk melanjutkan alur eksekusi request Express.",
           starterCode: "// Tulis panggilan fungsi berikutnya di bawah ini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "next\\(\\)\\s*;?",
@@ -368,7 +379,7 @@ export const nodeExpressTrack: Track = {
           instruction:
             "Inisialisasikan sebuah instansi objek `Router` dari Express dan simpan dalam konstanta bernama `router`.",
           starterCode: "// Tulis Router() di sini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "const\\s+router\\s*=\\s*Router\\(\\)\\s*;?",
@@ -391,7 +402,7 @@ export const nodeExpressTrack: Track = {
           instruction:
             "Pasang middleware penangkap rute tak dikenal di akhir rantai `app.use` yang mengembalikan status code 404 beserta JSON `{ error: \"404\" }`.",
           starterCode: "// Tulis handler 404 di bawah ini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "app\\.use\\(\\s*\\(\\s*req\\s*,\\s*res\\s*\\)\\s*=>\\s*\\{\\s*res\\.status\\(\\s*404\\s*\\)",
@@ -409,26 +420,42 @@ export const nodeExpressTrack: Track = {
               id: "q1",
               type: "pilihan-ganda",
               question: "Fungsi apa yang WAJIB dipanggil di dalam fungsi Middleware Express agar proses request dapat berlanjut ke handler berikutnya?",
-              choices: ["next()", "continue()", "res.send()", "express.next()"],
+              choices: ["next()","continue()","res.send()","express.next()"],
               answerIndex: 0,
-              explanation: "Fungsi next() memberitahu Express untuk melanjutkan eksekusi ke middleware atau route handler berikutnya.",
+              explanation: "Fungsi next() memberitahu Express untuk melanjutkan eksekusi ke middleware atau route handler berikutnya."
             },
             {
               id: "q2",
               type: "pilihan-ganda",
               question: "Middleware bawaan Express apa yang harus dipasang agar server dapat mengurai (parse) body request berformat JSON?",
-              choices: ["express.json()", "express.urlencoded()", "express.bodyParser()", "express.parse()"],
+              choices: ["express.json()","express.urlencoded()","express.bodyParser()","express.parse()"],
               answerIndex: 0,
-              explanation: "express.json() adalah middleware bawaan yang mengubah payload JSON dari req.body menjadi objek JavaScript.",
+              explanation: "express.json() adalah middleware bawaan yang mengubah payload JSON dari req.body menjadi objek JavaScript."
             },
             {
               id: "q3",
               type: "pilihan-ganda",
               question: "Properti req mana yang digunakan untuk mengekstrak parameter dinamis dari URL path (seperti `:id` pada `/users/:id`)?",
-              choices: ["req.params", "req.query", "req.body", "req.headers"],
+              choices: ["req.params","req.query","req.body","req.headers"],
               answerIndex: 0,
-              explanation: "req.params memuat objek parameter rute dinamis yang dicocokkan dari segmen URL path.",
+              explanation: "req.params memuat objek parameter rute dinamis yang dicocokkan dari segmen URL path."
             },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Dalam pengembangan server Express, apa peran metode 'res.status()'?",
+              choices: ["Untuk mengubah status koneksi internet","Untuk mengatur HTTP Status Code yang akan dikirim kembali (contoh: res.status(404))","Untuk mengecek apakah server berjalan atau error","Untuk mengirim status ke database"],
+              answerIndex: 1,
+              explanation: "res.status(code) menyetel HTTP Status Code yang akan dikembalikan oleh respon secara semantik."
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Bagaimana cara terbaik untuk memecah daftar ratusan rute Express menjadi berkas terpisah yang modular dan bersih?",
+              choices: ["Mendeklarasikan banyak objek app.js","Menggunakan kelas Router bawaan dengan express.Router()","Membuat fungsi callback kustom berlapis","Menggunakan middleware eksternal"],
+              answerIndex: 1,
+              explanation: "express.Router() menyediakan sistem routing mini yang bisa digunakan untuk memecah endpoint logis menjadi modul terpisah, lalu diimpor ke aplikasi utama."
+            }
           ],
         },
       ],
@@ -462,7 +489,7 @@ export const nodeExpressTrack: Track = {
           instruction:
             "Buat fungsi `getEndpoint(resourceName)` yang mengembalikan string URL RESTful terformat `\"/api/v1/\${resourceName}\"`.",
           starterCode: "// Tulis fungsi getEndpoint di bawah ini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "`/api/v1/\\$\\{resourceName\\}`|['\"]/api/v1/['\"]\\s*\\+\\s*resourceName",
@@ -486,7 +513,7 @@ export const nodeExpressTrack: Track = {
           instruction:
             "Buat fungsi `getUpdateMethod(isPartial)` yang mengembalikan string `'PATCH'` jika `isPartial` bernilai `true` dan `'PUT'` jika `false`.",
           starterCode: "// Tulis fungsi getUpdateMethod di bawah ini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "isPartial\\s*\\?\\s*['\"]PATCH['\"]\\s*:\\s*['\"]PUT['\"]",
@@ -510,7 +537,7 @@ export const nodeExpressTrack: Track = {
           instruction:
             "Tuliskan perintah balasan Express untuk mengembalikan HTTP status 204 No Content tanpa payload body (`res.status(204).send()`).",
           starterCode: "// Tulis res.status(204) di sini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "res\\.status\\(\\s*204\\s*\\)\\.send\\(\\)\\s*;?",
@@ -533,7 +560,7 @@ export const nodeExpressTrack: Track = {
           instruction:
             "Kirimkan data variabel `users` di dalam pembungkus respon JSON terstandar `{ success: true, data: users }`.",
           starterCode: "// Tulis res.json di bawah ini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "res\\.json\\(\\s*\\{\\s*success\\s*:\\s*true\\s*,\\s*data\\s*:\\s*users\\s*\\}\\s*\\)\\s*;?",
@@ -556,7 +583,7 @@ export const nodeExpressTrack: Track = {
           instruction:
             "Daftarkan modul `postRouter` ke aplikasi Express pada jalur prefix versi 1 (`\"/api/v1/posts\"`) menggunakan `app.use`.",
           starterCode: "// Tulis app.use v1 di sini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "app\\.use\\(\\s*['\"]/api/v1/posts['\"]\\s*,\\s*postRouter\\s*\\)\\s*;?",
@@ -579,7 +606,7 @@ export const nodeExpressTrack: Track = {
           instruction:
             "Konversikan nilai query `req.query.limit` ke tipe angka menggunakan `Number()` dan berikan fallback default `10` jika nilainya falsy.",
           starterCode: "// Tulis pembacaan limit di sini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "const\\s+limit\\s*=\\s*Number\\(\\s*req\\.query\\.limit\\s*\\)\\s*\\|\\|\\s*10\\s*;?",
@@ -602,7 +629,7 @@ export const nodeExpressTrack: Track = {
           instruction:
             "Buat fungsi `isIdempotentMethod(httpMethod)` yang mengembalikan `true` jika metode HTTP adalah `'GET'`, `'PUT'`, atau `'DELETE'`. Gunakan `['GET', 'PUT', 'DELETE'].includes(httpMethod)`.",
           starterCode: "// Tulis fungsi isIdempotentMethod di bawah ini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "\\[\\s*['\"]GET['\"]\\s*,\\s*['\"]PUT['\"]\\s*,\\s*['\"]DELETE['\"]\\s*\\]\\.includes\\(\\s*httpMethod\\s*\\)",
@@ -620,37 +647,43 @@ export const nodeExpressTrack: Track = {
             {
               id: "q1",
               type: "pilihan-ganda",
-              question: "Apa perbedaan utama antara HTTP Method `PUT` dan `PATCH`?",
-              choices: [
-                "PUT hanya bisa dipakai di browser Chrome",
-                "PUT memperbarui seluruh bidang objek, sedangkan PATCH memperbarui sebagian bidang objek",
-                "PATCH menghapus seluruh database",
-                "Tidak ada perbedaan",
-              ],
+              question: "Apa perbedaan utama antara HTTP Method PUT dan PATCH?",
+              choices: ["PUT hanya bisa dipakai di browser Chrome","PUT memperbarui seluruh bidang objek, sedangkan PATCH memperbarui sebagian bidang objek","PATCH menghapus seluruh database","Tidak ada perbedaan"],
               answerIndex: 1,
-              explanation: "PUT digunakan untuk mengganti penuh resource, sedangkan PATCH digunakan untuk pembaruan sebagian bidang (partial update).",
+              explanation: "PUT digunakan untuk mengganti penuh resource, sedangkan PATCH digunakan untuk pembaruan sebagian bidang (partial update)."
             },
             {
               id: "q2",
               type: "pilihan-ganda",
               question: "HTTP Status Code manakah yang paling sesuai dikembalikan saat server berhasil memproses pembuatan data baru (misal pendaftaran pengguna sukses)?",
-              choices: ["200 OK", "201 Created", "204 No Content", "302 Found"],
+              choices: ["200 OK","201 Created","204 No Content","302 Found"],
               answerIndex: 1,
-              explanation: "HTTP 201 Created mengindikasikan bahwa request berhasil dan sebuah resource baru telah berhasil dibuat di server.",
+              explanation: "HTTP 201 Created mengindikasikan bahwa request berhasil dan sebuah resource baru telah berhasil dibuat di server."
             },
             {
               id: "q3",
               type: "pilihan-ganda",
               question: "Mengapa HTTP Method POST tidak dikategorikan sebagai operasi yang Idempotent?",
-              choices: [
-                "Karena mengeksekusi request POST sebanyak 10 kali secara berulang akan menghasilkan 10 data resource baru di database",
-                "Karena POST tidak membutuhkan kata sandi",
-                "Karena POST tidak bisa menerima payload JSON",
-                "Karena POST selalu mengembalikan error 500",
-              ],
+              choices: ["Karena mengeksekusi request POST sebanyak 10 kali secara berulang akan menghasilkan 10 data resource baru di database","Karena POST tidak membutuhkan kata sandi","Karena POST tidak bisa menerima payload JSON","Karena POST selalu mengembalikan error 500"],
               answerIndex: 0,
-              explanation: "Operasi Idempotent mengembalikan state akhir yang identik meski dipanggil berkali-kali. POST menciptakan entitas baru setiap dipanggil.",
+              explanation: "Operasi Idempotent mengembalikan state akhir yang identik meski dipanggil berkali-kali. POST menciptakan entitas baru setiap dipanggil."
             },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Menurut konvensi desain RESTful standar, manakah bentuk penamaan endpoint URL di bawah ini yang paling direkomendasikan?",
+              choices: ["/api/v1/getUsers","/api/v1/users","/api/v1/user/getAll","/api/v1/fetch_users"],
+              answerIndex: 1,
+              explanation: "REST API berprinsip URL merepresentasikan kata benda (Resource Jamak), sedangkan aksinya didefinisikan lewat HTTP Method (GET, POST)."
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Bagaimana sebuah endpoint API GET standar menangani opsi operasi seperti Pagination, Filtering, dan Sorting?",
+              choices: ["Melalui input form HTML form-data","Dengan membacanya dari body JSON request","Menggunakan parameter Query String URL (contoh: ?page=1&limit=10)","Melalui custom HTTP Headers"],
+              answerIndex: 2,
+              explanation: "Query string (req.query) adalah mekanisme alami HTTP untuk menyaring data GET secara fleksibel tanpa mengubah endpoint sumber."
+            }
           ],
         },
       ],
@@ -706,7 +739,7 @@ export const nodeExpressTrack: Track = {
           instruction:
             "Tuliskan kueri Prisma Client untuk mencari satu data spesifik pada tabel `user` berdasarkan kunci unik `id`.",
           starterCode: "// Tulis findUnique di bawah ini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "await\\s+prisma\\.user\\.findUnique\\(\\s*\\{\\s*where\\s*:\\s*\\{\\s*id\\s*\\}\\s*\\}\\s*\\)",
@@ -729,7 +762,7 @@ export const nodeExpressTrack: Track = {
           instruction:
             "Jalankan pencarian `findMany` pada tabel `user` dengan menyertakan relasi tabel `profile` menggunakan opsi `include`.",
           starterCode: "// Tulis query include di sini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "await\\s+prisma\\.user\\.findMany\\(\\s*\\{\\s*include\\s*:\\s*\\{\\s*profile\\s*:\\s*true\\s*\\}\\s*\\}\\s*\\)",
@@ -752,7 +785,7 @@ export const nodeExpressTrack: Track = {
           instruction:
             "Bungkus sekumpulan perintah database di dalam fungsi transaksi atomic `prisma.$transaction()` yang menerima array kosong `[]` sebagai argumen dasar.",
           starterCode: "// Tulis $transaction di bawah ini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "await\\s+prisma\\.\\$transaction\\(\\s*\\[\\s*\\]\\s*\\)",
@@ -798,7 +831,7 @@ export const nodeExpressTrack: Track = {
           instruction:
             "Lengkapi properti `findById` pada objek `UserRepository` agar mengembalikan kueri `prisma.user.findUnique({ where: { id } })`.",
           starterCode: "// Tulis findById repo di sini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "findById\\s*:\\s*\\(?id\\)?\\s*=>\\s*prisma\\.user\\.findUnique\\(",
@@ -816,26 +849,42 @@ export const nodeExpressTrack: Track = {
               id: "q1",
               type: "pilihan-ganda",
               question: "Opsi query Prisma apa yang digunakan untuk mengikutsertakan data dari tabel relasi (seperti mengambil User beserta daftar Post)?",
-              choices: ["join", "include", "with", "attach"],
+              choices: ["join","include","with","attach"],
               answerIndex: 1,
-              explanation: "Properti `include: { relasi: true }` digunakan di Prisma Client untuk melakukan Eager Loading data relasi.",
+              explanation: "Properti `include: { relasi: true }` digunakan di Prisma Client untuk melakukan Eager Loading data relasi."
             },
             {
               id: "q2",
               type: "pilihan-ganda",
-              question: "Perintah Prisma CLI manakah yang digunakan untuk menyelaraskan skema `schema.prisma` ke database development dan menghasilkan berkas migrasi baru?",
-              choices: ["npx prisma migrate dev", "npx prisma push", "npx prisma db sync", "npx prisma generate"],
+              question: "Perintah Prisma CLI manakah yang digunakan untuk menyelaraskan skema schema.prisma ke database development dan menghasilkan berkas migrasi baru?",
+              choices: ["npx prisma migrate dev","npx prisma push","npx prisma db sync","npx prisma generate"],
               answerIndex: 0,
-              explanation: "npx prisma migrate dev membuat berkas migrasi SQL baru dan menerapkan perubahan skema ke database lokal.",
+              explanation: "npx prisma migrate dev membuat berkas migrasi SQL baru dan menerapkan perubahan skema ke database lokal."
             },
             {
               id: "q3",
               type: "pilihan-ganda",
               question: "Fitur Prisma Client manakah yang memastikan bahwa serangkaian query database dieksekusi secara atomic (jika 1 query gagal, seluruh perubahan dibatalkan)?",
-              choices: ["prisma.$transaction()", "prisma.$batch()", "prisma.$queryRaw()", "prisma.$rollback()"],
+              choices: ["prisma.$transaction()","prisma.$batch()","prisma.$queryRaw()","prisma.$rollback()"],
               answerIndex: 0,
-              explanation: "prisma.$transaction() membungkus kueri ke dalam transaksi database tunggal untuk menjamin konsistensi ACID.",
+              explanation: "prisma.$transaction() membungkus kueri ke dalam transaksi database tunggal untuk menjamin konsistensi ACID."
             },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Saat mendefinisikan arsitektur aplikasi backend berskala besar, mengapa disarankan memisahkan semua kueri Prisma (database logic) dari Express Route Controller dan meletakkannya di kelas/fungsi tersendiri?",
+              choices: ["Agar aplikasi mengonsumsi lebih sedikit RAM","Karena ini adalah pola Repository yang memisahkan urusan akses data dari urusan HTTP Request","Agar bisa menggunakan MySQL dan PostgreSQL bersamaan","Kewajiban dari dokumentasi Express"],
+              answerIndex: 1,
+              explanation: "Pola Repository memisahkan lapisan Data Access Object dengan logika Controller, mempermudah pengujian (mocking) dan pemeliharaan kode."
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Perintah Prisma apa yang membuka antarmuka GUI browser instan untuk melihat dan memodifikasi isi tabel database kamu dengan mudah?",
+              choices: ["npx prisma dashboard","npx prisma db admin","npx prisma studio","npx prisma view"],
+              answerIndex: 2,
+              explanation: "Prisma Studio meluncurkan antarmuka visual gratis untuk berinteraksi langsung dengan data di database selama pengembangan."
+            }
           ],
         },
       ],
@@ -868,7 +917,7 @@ export const nodeExpressTrack: Track = {
           instruction:
             "Lakukan verifikasi kecocokan password mentah `input` dengan string enkripsi `hash` menggunakan `bcrypt.compare` secara async.",
           starterCode: "// Tulis bcrypt.compare di sini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "const\\s+isValid\\s*=\\s*await\\s+bcrypt\\.compare\\(\\s*input\\s*,\\s*hash\\s*\\)\\s*;?",
@@ -891,7 +940,7 @@ export const nodeExpressTrack: Track = {
           instruction:
             "Terbitkan token JWT berisi payload `{ id: user.id }` menggunakan kunci rahasia `secret` dengan masa kadaluarsa 1 jam (`expiresIn: '1h'`).",
           starterCode: "// Tulis jwt.sign di bawah ini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "const\\s+token\\s*=\\s*jwt\\.sign\\(\\s*\\{\\s*id\\s*:\\s*user\\.id\\s*\\}\\s*,\\s*secret\\s*,\\s*\\{\\s*expiresIn\\s*:\\s*['\"]1h['\"]\\s*\\}\\s*\\)\\s*;?",
@@ -914,7 +963,7 @@ export const nodeExpressTrack: Track = {
           instruction:
             "Simpan ID pengguna `user.id` ke dalam properti `req.session.userId` pada objek sesi request.",
           starterCode: "// Tulis req.session di sini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "req\\.session\\.userId\\s*=\\s*user\\.id\\s*;?",
@@ -937,7 +986,7 @@ export const nodeExpressTrack: Track = {
           instruction:
             "Periksa keberadaan token. Jika variabel `token` tidak ada (falsy), hentikan proses dengan mengembalikan status code 401 (`res.sendStatus(401)`).",
           starterCode: "// Tulis pengecekan token di sini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "if\\s*\\(\\s*!token\\s*\\)\\s*return\\s+res\\.sendStatus\\(\\s*401\\s*\\)\\s*;?",
@@ -960,7 +1009,7 @@ export const nodeExpressTrack: Track = {
           instruction:
             "Kirimkan cookie bernama `'token'` yang membawa nilai `token` dengan menyertakan opsi perlindungan `httpOnly: true`.",
           starterCode: "// Tulis res.cookie di bawah ini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "res\\.cookie\\(\\s*['\"]token['\"]\\s*,\\s*token\\s*,\\s*\\{\\s*httpOnly\\s*:\\s*true\\s*\\}\\s*\\)\\s*;?",
@@ -983,7 +1032,7 @@ export const nodeExpressTrack: Track = {
           instruction:
             "Tuliskan perintah balasan Express untuk menghapus cookie autentikasi bernama `'token'` saat proses logout.",
           starterCode: "// Tulis clearCookie di sini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "res\\.clearCookie\\(\\s*['\"]token['\"]\\s*\\)\\s*;?",
@@ -1001,36 +1050,42 @@ export const nodeExpressTrack: Track = {
               id: "q1",
               type: "pilihan-ganda",
               question: "Opsi keamanan cookie apa yang wajib diaktifkan agar nilai cookie autentikasi tidak bisa dicuri oleh skrip JavaScript XSS penyerang di browser?",
-              choices: ["httpOnly: true", "domain: '*'", "path: '/'", "express: true"],
+              choices: ["httpOnly: true","domain: '*'","path: '/'","express: true"],
               answerIndex: 0,
-              explanation: "httpOnly: true melarang akses JavaScript client-side (document.cookie) ke cookie tersebut.",
+              explanation: "httpOnly: true melarang akses JavaScript client-side (document.cookie) ke cookie tersebut."
             },
             {
               id: "q2",
               type: "pilihan-ganda",
               question: "Mengapa menyimpan plain-text password pengguna di database dianggap sebagai pelanggaran keamanan paling fatal?",
-              choices: [
-                "Karena jika database bocor, penyerang langsung mengetahui password asli seluruh pengguna tanpa perlu mendekripsi",
-                "Karena database akan menolak menyimpan string biasa",
-                "Karena plain-text password membuat ukuran database membengkak 100 kali lipat",
-                "Karena bcrypt berbayar",
-              ],
+              choices: ["Karena jika database bocor, penyerang langsung mengetahui password asli seluruh pengguna tanpa perlu mendekripsi","Karena database akan menolak menyimpan string biasa","Karena plain-text password membuat ukuran database membengkak 100 kali lipat","Karena bcrypt berbayar"],
               answerIndex: 0,
-              explanation: "Password harus selalu di-hash menggunakan algoritma satu arah seperti bcrypt/argon2 agar nilai aslinya tidak dapat direkonstruksi.",
+              explanation: "Password harus selalu di-hash menggunakan algoritma satu arah seperti bcrypt/argon2 agar nilai aslinya tidak dapat direkonstruksi."
             },
             {
               id: "q3",
               type: "pilihan-ganda",
               question: "Bagaimana cara kerja skema autentikasi JSON Web Token (JWT)?",
-              choices: [
-                "Server menandatangani payload JSON dengan secret key, lalu client mengirimkan token tersebut pada header Authorization Bearer di tiap request",
-                "Server menyimpan seluruh data sesi di RAM server",
-                "JWT mengompresi gambar file profil",
-                "JWT menghapus cookie secara otomatis tiap 5 detik",
-              ],
+              choices: ["Server menandatangani payload JSON dengan secret key, lalu client mengirimkan token tersebut pada header Authorization Bearer di tiap request","Server menyimpan seluruh data sesi di RAM server","JWT mengompresi gambar file profil","JWT menghapus cookie secara otomatis tiap 5 detik"],
               answerIndex: 0,
-              explanation: "JWT bersifat stateless; server memverifikasi keabsahan tanda tangan (signature) token tanpa perlu membaca memori sesi server.",
+              explanation: "JWT bersifat stateless; server memverifikasi keabsahan tanda tangan (signature) token tanpa perlu membaca memori sesi server."
             },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Dalam implementasi autentikasi JWT di Express, nilai apakah yang krusial untuk dimasukkan di fungsi `jwt.sign(payload, secret, { expiresIn: '...' })` demi keamanan sesi aplikasi?",
+              choices: ["Pesan enkripsi statis","Waktu kadaluarsa token (expiresIn)","Password asli pengguna dalam payload","Alamat IP pengguna server"],
+              answerIndex: 1,
+              explanation: "Menetapkan durasi kedaluwarsa token (seperti '1h') mencegah penggunaan token yang terkompromi/tercuri dalam jangka waktu yang tak terbatas."
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Kamu menggunakan middleware `authenticateToken` yang memverifikasi JWT dan meletakkan informasi pengguna ke `req.user`. Jika klien tidak mengirimkan token yang sah, status HTTP apa yang lazim dikembalikan?",
+              choices: ["401 Unauthorized","500 Internal Server Error","404 Not Found","200 OK"],
+              answerIndex: 0,
+              explanation: "Status HTTP 401 Unauthorized secara tegas menyatakan bahwa klien belum terotentikasi dan permintaannya ditolak untuk sumber daya yang diproteksi."
+            }
           ],
         },
       ],
@@ -1063,7 +1118,7 @@ export const nodeExpressTrack: Track = {
           instruction:
             "Jalankan validasi penguraian objek input `req.body` menggunakan skema `UserSchema.parse()` dan simpan hasilnya di konstanta `data`.",
           starterCode: "// Tulis Zod parse di sini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "const\\s+data\\s*=\\s*UserSchema\\.parse\\(\\s*req\\.body\\s*\\)\\s*;?",
@@ -1086,7 +1141,7 @@ export const nodeExpressTrack: Track = {
           instruction:
             "Daftarkan fungsi penanganan error terpusat pada Express yang memiliki empat parameter lengkap `(err, req, res, next)`.",
           starterCode: "// Tulis middleware error di sini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "app\\.use\\(\\s*\\(\\s*err\\s*,\\s*req\\s*,\\s*res\\s*,\\s*next\\s*\\)\\s*=>",
@@ -1109,7 +1164,7 @@ export const nodeExpressTrack: Track = {
           instruction:
             "Picu (throw) instansi error kustom `AppError` baru dengan pesan `'Unauthorized'` dan status code `401`.",
           starterCode: "// Tulis throw AppError di sini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "throw\\s+new\\s+AppError\\(\\s*['\"]Unauthorized['\"]\\s*,\\s*401\\s*\\)\\s*;?",
@@ -1132,7 +1187,7 @@ export const nodeExpressTrack: Track = {
           instruction:
             "Bungkus eksekusi fungsi handler `fn(req, res, next)` dengan `Promise.resolve()` dan tangkap penolakannya (`.catch(next)`).",
           starterCode: "// Tulis asyncHandler catch di sini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "Promise\\.resolve\\(\\s*fn\\(\\s*req\\s*,\\s*res\\s*,\\s*next\\s*\\)\\s*\\)\\.catch\\(\\s*next\\s*\\)\\s*;?",
@@ -1155,7 +1210,7 @@ export const nodeExpressTrack: Track = {
           instruction:
             "Tuliskan pencatatan log tingkat informasi menggunakan `logger.info` dengan pesan `'Server started'`.",
           starterCode: "// Tulis logger.info di bawah ini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "logger\\.info\\(\\s*['\"]Server started['\"]\\s*\\)\\s*;?",
@@ -1178,7 +1233,7 @@ export const nodeExpressTrack: Track = {
           instruction:
             "Buat konstanta boolean `isProd` yang memeriksa apakah `process.env.NODE_ENV` persis sama dengan string `'production'`.",
           starterCode: "// Tulis pengecekan isProd di sini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "const\\s+isProd\\s*=\\s*process\\.env\\.NODE_ENV\\s*===\\s*['\"]production['\"]\\s*;?",
@@ -1196,31 +1251,42 @@ export const nodeExpressTrack: Track = {
               id: "q1",
               type: "pilihan-ganda",
               question: "Berapa jumlah parameter wajib pada fungsi middleware Express agar dikenali secara khusus sebagai Error Handler Terpusat?",
-              choices: ["2 (req, res)", "3 (req, res, next)", "4 (err, req, res, next)", "1 (err)"],
+              choices: ["2 (req, res)","3 (req, res, next)","4 (err, req, res, next)","1 (err)"],
               answerIndex: 2,
-              explanation: "Express membedakan middleware biasa dan error handler berdasarkan aritas (jumlah parameter) 4: (err, req, res, next).",
+              explanation: "Express membedakan middleware biasa dan error handler berdasarkan aritas (jumlah parameter) 4: (err, req, res, next)."
             },
             {
               id: "q2",
               type: "pilihan-ganda",
               question: "Library schema validation TypeScript populer apa yang umum digunakan di Node.js untuk memvalidasi req.body dan melempar type-safe error?",
-              choices: ["Zod", "Axios", "Prisma", "Pino"],
+              choices: ["Zod","Axios","Prisma","Pino"],
               answerIndex: 0,
-              explanation: "Zod memungkinkan pembuatan skema tipe data deklaratif yang memvalidasi objek input runtime sekaligus mengekstrak tipe TypeScript.",
+              explanation: "Zod memungkinkan pembuatan skema tipe data deklaratif yang memvalidasi objek input runtime sekaligus mengekstrak tipe TypeScript."
             },
             {
               id: "q3",
               type: "pilihan-ganda",
-              question: "Mengapa membocorkan `err.stack` (stacktrace) lengkap ke respon JSON di lingkungan produksi sangat dilarang?",
-              choices: [
-                "Karena stacktrace membeberkan struktur direktori server dan versi pustaka internal yang bisa dimanfaatkan peretas untuk mengeksploitasi celah keamanan",
-                "Karena stacktrace otomatis menghapus berkas database",
-                "Karena stacktrace tidak bisa dibaca oleh browser",
-                "Karena membuat koneksi jaringan terputus",
-              ],
+              question: "Mengapa membocorkan err.stack (stacktrace) lengkap ke respon JSON di lingkungan produksi sangat dilarang?",
+              choices: ["Karena stacktrace membeberkan struktur direktori server dan versi pustaka internal yang bisa dimanfaatkan peretas untuk mengeksploitasi celah keamanan","Karena stacktrace otomatis menghapus berkas database","Karena stacktrace tidak bisa dibaca oleh browser","Karena membuat koneksi jaringan terputus"],
               answerIndex: 0,
-              explanation: "Stacktrace membeberkan informasi sensitif internal arsitektur server yang sangat berguna bagi analisis serangan peretas.",
+              explanation: "Stacktrace membeberkan informasi sensitif internal arsitektur server yang sangat berguna bagi analisis serangan peretas."
             },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Pada server Node.js + Express modern, library manakah yang paling umum digunakan untuk mencatat (logging) error dan request dalam format JSON terstruktur untuk monitoring server?",
+              choices: ["Zod","Pino (atau Winston)","Bcrypt","Mongoose"],
+              answerIndex: 1,
+              explanation: "Pino dan Winston mencatat log dalam format JSON. Format ini sangat penting untuk platform pengumpulan log (Datadog, Elastic) di lingkungan produksi."
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Dalam penulisan handler Route secara Asynchronous, mengapa penting membungkus promise atau menggunakan penanganan `catch(next)` pada Express (terutama di Express v4)?",
+              choices: ["Karena janji kosong tidak disetujui","Agar server bisa dimatikan","Agar reject promise asinkron diteruskan (di-passing) ke error handler terpusat express, menghindari crash aplikasi atau unhandled rejection","Untuk mendapatkan bonus poin TypeScript"],
+              answerIndex: 2,
+              explanation: "Node menghentikan aplikasi secara mendadak pada 'Unhandled Promise Rejection'. Meneruskannya via next(err) menjaga stabilitas proses."
+            }
           ],
         },
       ],
@@ -1251,7 +1317,7 @@ export const nodeExpressTrack: Track = {
           instruction:
             "Panggil middleware `upload.single` untuk memproses unggahan satu file tunggal yang dikirimkan pada field bernama `'avatar'`.",
           starterCode: "// Tulis upload.single di sini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "upload\\.single\\(\\s*['\"]avatar['\"]\\s*\\)",
@@ -1274,7 +1340,7 @@ export const nodeExpressTrack: Track = {
           instruction:
             "Buat perintah instansi `PutObjectCommand` dari AWS SDK v3 dengan melewatkan objek opsi `{ Bucket, Key, Body }`.",
           starterCode: "// Tulis PutObjectCommand di bawah ini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "new\\s+PutObjectCommand\\(\\s*\\{\\s*Bucket\\s*,\\s*Key\\s*,\\s*Body\\s*\\}\\s*\\)",
@@ -1297,7 +1363,7 @@ export const nodeExpressTrack: Track = {
           instruction:
             "Jalankan fungsi pengiriman email asinkron `transporter.sendMail()` dengan melewatkan objek opsi `{ from, to, subject, html }`.",
           starterCode: "// Tulis transporter.sendMail di sini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "await\\s+transporter\\.sendMail\\(\\s*\\{\\s*from\\s*,\\s*to\\s*,\\s*subject\\s*,\\s*html\\s*\\}\\s*\\)",
@@ -1320,7 +1386,7 @@ export const nodeExpressTrack: Track = {
           instruction:
             "Tambahkan pekerjaan baru bernama `'sendEmail'` ke dalam antrean `emailQueue` membawa muatan objek `data` menggunakan kata kunci `await`.",
           starterCode: "// Tulis emailQueue.add di sini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "await\\s+emailQueue\\.add\\(\\s*['\"]sendEmail['\"]\\s*,\\s*data\\s*\\)",
@@ -1343,7 +1409,7 @@ export const nodeExpressTrack: Track = {
           instruction:
             "Pasang middleware statis Express `express.static('public')` pada awalan jalur URL `\"/static\"` menggunakan `app.use`.",
           starterCode: "// Tulis express.static di bawah ini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "app\\.use\\(\\s*['\"]/static['\"]\\s*,\\s*express\\.static\\(\\s*['\"]public['\"]\\s*\\)\\s*\\)\\s*;?",
@@ -1361,36 +1427,42 @@ export const nodeExpressTrack: Track = {
               id: "q1",
               type: "pilihan-ganda",
               question: "Library Node.js populer apa yang biasa digunakan sebagai middleware untuk menangani upload file multipart/form-data di Express?",
-              choices: ["multer", "nodemailer", "bcrypt", "cors"],
+              choices: ["multer","nodemailer","bcrypt","cors"],
               answerIndex: 0,
-              explanation: "Multer adalah middleware khusus untuk menangani multipart/form-data yang digunakan saat mengunggah file.",
+              explanation: "Multer adalah middleware khusus untuk menangani multipart/form-data yang digunakan saat mengunggah file."
             },
             {
               id: "q2",
               type: "pilihan-ganda",
               question: "Mengapa menyimpan berkas terunggah (seperti foto profil) langsung di folder disk lokal server Heroku/Vercel sangat tidak direkomendasikan?",
-              choices: [
-                "Karena penyimpanannya bersifat ephemeral (sementara) dan akan terhapus otomatis tiap kali server melakukan restart atau redeploy",
-                "Karena berkas di disk lokal tidak bisa dikompresi",
-                "Karena Node.js melarang penggunaan disk",
-                "Karena disk lokal memerlukan lisensi berbayar",
-              ],
+              choices: ["Karena penyimpanannya bersifat ephemeral (sementara) dan akan terhapus otomatis tiap kali server melakukan restart atau redeploy","Karena berkas di disk lokal tidak bisa dikompresi","Karena Node.js melarang penggunaan disk","Karena disk lokal memerlukan lisensi berbayar"],
               answerIndex: 0,
-              explanation: "Lingkungan server cloud menggunakan ephemeral filesystem; simpanlah berkas terunggah ke Cloud Object Storage seperti S3 atau Cloudflare R2.",
+              explanation: "Lingkungan server cloud menggunakan ephemeral filesystem; simpanlah berkas terunggah ke Cloud Object Storage seperti S3 atau Cloudflare R2."
             },
             {
               id: "q3",
               type: "pilihan-ganda",
               question: "Apa fungsi utama memasukkan pekerjaan pengiriman email ke dalam Background Queue (seperti BullMQ + Redis)?",
-              choices: [
-                "Mencegah request HTTP user terhenti (hanging) menunggu pengiriman email SMTP yang lambat selesai",
-                "Menjadikan isi email terenkripsi otomatis",
-                "Menghilangkan kebutuhan SMTP server",
-                "Mengubah format email menjadi PDF",
-              ],
+              choices: ["Mencegah request HTTP user terhenti (hanging) menunggu pengiriman email SMTP yang lambat selesai","Menjadikan isi email terenkripsi otomatis","Menghilangkan kebutuhan SMTP server","Mengubah format email menjadi PDF"],
               answerIndex: 0,
-              explanation: "Background Queue mengeksekusi tugas berdurasi lama secara terpisah dari main thread request HTTP Express agar respon ke pengguna tetap instan.",
+              explanation: "Background Queue mengeksekusi tugas berdurasi lama secara terpisah dari main thread request HTTP Express agar respon ke pengguna tetap instan."
             },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Aplikasi Express kamu butuh menyajikan file gambar dari folder bernama 'public' ke pengguna secara langsung. Konfigurasi middleware apa yang tepat untuk melakukannya?",
+              choices: ["app.use(express.static('public'))","app.use(multer('public'))","app.set('public')","app.get('public', res.download)"],
+              answerIndex: 0,
+              explanation: "express.static() adalah fungsi bawaan yang menyediakan kapabilitas file-serving statis untuk menyajikan direktori aset murni (HTML, CSS, gambar) dengan aman."
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Untuk menjalankan pengiriman email terprogram di dalam aplikasi Express, paket Node standar apakah yang menjadi solusi andalan (sering dipadukan dengan layanan pengiriman SMTP)?",
+              choices: ["Bcrypt","Nodemailer","Zod","Multer"],
+              answerIndex: 1,
+              explanation: "Nodemailer memfasilitasi pengiriman email dari dalam kode Node.js dengan menghubungkan ke SMTP/Transport layaknya server pengiriman."
+            }
           ],
         },
       ],
@@ -1422,7 +1494,7 @@ export const nodeExpressTrack: Track = {
           instruction:
             "Buat fungsi `getTestType(isFullFlow)` yang mengembalikan `'integration'` jika `isFullFlow` bernilai `true` dan `'unit'` jika `false`.",
           starterCode: "// Tulis fungsi getTestType di bawah ini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "isFullFlow\\s*\\?\\s*['\"]integration['\"]\\s*:\\s*['\"]unit['\"]",
@@ -1446,7 +1518,7 @@ export const nodeExpressTrack: Track = {
           instruction:
             "Gunakan `supertest` untuk melakukan permintaan HTTP GET ke endpoint `\"/ping\"` pada aplikasi `app` dan simpan responnya ke variabel `res`.",
           starterCode: "// Tulis request supertest di bawah ini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "const\\s+res\\s*=\\s*await\\s+request\\(\\s*app\\s*\\)\\.get\\(\\s*['\"]/ping['\"]\\s*\\)\\s*;?",
@@ -1469,7 +1541,7 @@ export const nodeExpressTrack: Track = {
           instruction:
             "Di dalam kait pengujian `beforeEach`, hapus seluruh data catatan pengguna dari tabel database menggunakan metode pembersihan massal Prisma Client.",
           starterCode: "// Tulis deleteMany di sini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "await\\s+prisma\\.user\\.deleteMany\\(\\)\\s*;?",
@@ -1492,7 +1564,7 @@ export const nodeExpressTrack: Track = {
           instruction:
             "Suntikkan header otorisasi Bearer token pada pembuka rute Supertest menggunakan `.set('Authorization', `Bearer ${token}`)`.",
           starterCode: "// Tulis set Authorization di sini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "\\.set\\(\\s*['\"]Authorization['\"]\\s*,\\s*`Bearer\\s+\\$\\{token\\}`\\s*\\)",
@@ -1533,36 +1605,42 @@ export const nodeExpressTrack: Track = {
               id: "q1",
               type: "pilihan-ganda",
               question: "Library Node.js apa yang digunakan untuk mensimulasikan HTTP Request ke aplikasi Express saat membuat Integration Test?",
-              choices: ["supertest", "express-test", "axios", "fetch"],
+              choices: ["supertest","express-test","axios","fetch"],
               answerIndex: 0,
-              explanation: "supertest memungkinkan kita menguji HTTP assertion pada aplikasi Express tanpa harus menjalankan server listen() sesungguhnya.",
+              explanation: "supertest memungkinkan kita menguji HTTP assertion pada aplikasi Express tanpa harus menjalankan server listen() sesungguhnya."
             },
             {
               id: "q2",
               type: "pilihan-ganda",
               question: "Mengapa pembersihan (cleanup) data di database pengujian wajib dilakukan sebelum/sesudah setiap test case berjalan?",
-              choices: [
-                "Agar setiap test case berjalan secara independen tanpa terpengaruh oleh sisa data dari test case sebelumnya",
-                "Agar ukuran database menjadi 0 byte",
-                "Karena database akan otomatis terkunci jika tidak dibersihkan",
-                "Untuk mempercepat jaringan internet",
-              ],
+              choices: ["Agar setiap test case berjalan secara independen tanpa terpengaruh oleh sisa data dari test case sebelumnya","Agar ukuran database menjadi 0 byte","Karena database akan otomatis terkunci jika tidak dibersihkan","Untuk mempercepat jaringan internet"],
               answerIndex: 0,
-              explanation: "Test case yang baik harus terisolasi; data sisa dari test sebelumnya dapat menyebabkan flaky test (hasil test tidak konsisten).",
+              explanation: "Test case yang baik harus terisolasi; data sisa dari test sebelumnya dapat menyebabkan flaky test (hasil test tidak konsisten)."
             },
             {
               id: "q3",
               type: "pilihan-ganda",
               question: "Apa tujuan utama penulisan Integration Test pada API backend?",
-              choices: [
-                "Memverifikasi alur penuh dari HTTP request, middleware, controller, hingga interaksi database secara nyata",
-                "Memastikan warna tampilan tombol di frontend sudah sesuai",
-                "Mengecek apakah kodingan ditulis dalam bahasa Inggris",
-                "Mengganti tugas server deployment",
-              ],
+              choices: ["Memverifikasi alur penuh dari HTTP request, middleware, controller, hingga interaksi database secara nyata","Memastikan warna tampilan tombol di frontend sudah sesuai","Mengecek apakah kodingan ditulis dalam bahasa Inggris","Mengganti tugas server deployment"],
               answerIndex: 0,
-              explanation: "Integration Test menjamin bahwa seluruh komponen arsitektur backend terhubung dan bekerja dengan benar sesuai kontrak API.",
+              explanation: "Integration Test menjamin bahwa seluruh komponen arsitektur backend terhubung dan bekerja dengan benar sesuai kontrak API."
             },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Dalam pengujian route terproteksi dengan Supertest, kamu harus mengatur header otorisasi simulasi pada Request HTTP. Bagaimana cara melakukan hal tersebut?",
+              choices: ["Dengan mendeklarasikan variabel global token","Melampirkannya melalui URL sebagai string params","Menggunakan chain method `.set('Authorization', 'Bearer <token>')` di supertest","Menonaktifkan otorisasi secara paksa di router"],
+              answerIndex: 2,
+              explanation: "Objek supertest memungkinkan kita mengatur header secara kustom via '.set()' yang mereplikasikan pengiriman token seperti client sungguhan."
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Saat mengukur kualitas pengujian dari Code Coverage, apa saran yang ditekankan oleh arsitek perangkat lunak berpengalaman?",
+              choices: ["Mendapatkan skor pas 100% adalah kewajiban mutlak","Mencapai angka 10% sudah lebih dari cukup","Lebih difokuskan pada pengujian jalur penting bisnis (Happy Path + Validasi Error) alih-alih hanya mengejar angka metrik acak 100%","Coverage hanya diukur untuk Frontend"],
+              answerIndex: 2,
+              explanation: "Mengejar metrik buatan (100% coverage) cenderung menghasilkan tes rapuh dan redundan; memfokuskan pengujian pada skenario dunia nyata memberi perlindungan bernilai tinggi."
+            }
           ],
         },
       ],
@@ -1596,7 +1674,7 @@ export const nodeExpressTrack: Track = {
           instruction:
             "Buat fungsi `isSafeQuery(usesORM)` yang mengembalikan nilai boolean dari parameter `usesORM`.",
           starterCode: "// Tulis fungsi isSafeQuery di bawah ini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "Boolean\\s*\\(\\s*usesORM\\s*\\)|return\\s+usesORM",
@@ -1620,7 +1698,7 @@ export const nodeExpressTrack: Track = {
           instruction:
             "Buat fungsi `sanitizeHtmlInput(inputString)` yang menghapus tag `<script>` dari string menggunakan `inputString.replace(/<script.*?>.*?<\\/script>/gi, '')`.",
           starterCode: "// Tulis fungsi sanitizeHtmlInput di bawah ini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "replace\\(\\s*/<script\\.\\*\\?>\\.\\*\\?<\\\\/script>/gi\\s*,\\s*['\"]['\"]\\s*\\)",
@@ -1644,7 +1722,7 @@ export const nodeExpressTrack: Track = {
           instruction:
             "Pasang middleware `cors` pada aplikasi Express dengan membatasi asal domain (`origin`) hanya untuk `'https://myapp.com'`.",
           starterCode: "// Tulis cors di bawah ini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "app\\.use\\(\\s*cors\\(\\s*\\{\\s*origin\\s*:\\s*['\"]https://myapp\\.com['\"]\\s*\\}\\s*\\)\\s*\\)\\s*;?",
@@ -1667,7 +1745,7 @@ export const nodeExpressTrack: Track = {
           instruction:
             "Terapkan middleware `limiter` khusus pada rute login `\"/api/v1/login\"` menggunakan `app.use`.",
           starterCode: "// Tulis app.use limiter di sini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "app\\.use\\(\\s*['\"]/api/v1/login['\"]\\s*,\\s*limiter\\s*\\)\\s*;?",
@@ -1690,7 +1768,7 @@ export const nodeExpressTrack: Track = {
           instruction:
             "Pasang middleware pengaman header HTTP `helmet()` di aplikasi Express menggunakan `app.use`.",
           starterCode: "// Tulis helmet di sini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "app\\.use\\(\\s*helmet\\(\\)\\s*\\)\\s*;?",
@@ -1736,7 +1814,7 @@ export const nodeExpressTrack: Track = {
           instruction:
             "Buat fungsi `checkSecurityReadiness(checksArray)` yang mengembalikan `true` jika seluruh elemen boolean dalam `checksArray` bernilai `true` menggunakan `checksArray.every(c => c === true)`.",
           starterCode: "// Tulis fungsi checkSecurityReadiness di bawah ini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "checksArray\\.every\\(\\s*c\\s*=>\\s*c\\s*===\\s*true\\s*\\)",
@@ -1755,36 +1833,42 @@ export const nodeExpressTrack: Track = {
               id: "q1",
               type: "pilihan-ganda",
               question: "Library Express populer apa yang digunakan untuk menginjeksi HTTP Security Headers secara otomatis demi melindungi server dari berbagai serangan umum?",
-              choices: ["helmet", "cors", "morgan", "dotenv"],
+              choices: ["helmet","cors","morgan","dotenv"],
               answerIndex: 0,
-              explanation: "Helmet mengkonfigurasi HTTP headers keamanan standar untuk mengamankan aplikasi Express secara instan.",
+              explanation: "Helmet mengkonfigurasi HTTP headers keamanan standar untuk mengamankan aplikasi Express secara instan."
             },
             {
               id: "q2",
               type: "pilihan-ganda",
-              question: "Mengapa mengaktifkan Rate Limiting (seperti `express-rate-limit`) sangat penting pada endpoint login API?",
-              choices: [
-                "Untuk mencegah serangan Brute Force di mana peretas mencoba ribuan kombinasi password per detik secara otomatis",
-                "Agar database tidak pernah penuh",
-                "Untuk mengompresi response JSON menjadi Gzip",
-                "Agar user tidak perlu menggunakan password",
-              ],
+              question: "Mengapa mengaktifkan Rate Limiting (seperti express-rate-limit) sangat penting pada endpoint login API?",
+              choices: ["Untuk mencegah serangan Brute Force di mana peretas mencoba ribuan kombinasi password per detik secara otomatis","Agar database tidak pernah penuh","Untuk mengompresi response JSON menjadi Gzip","Agar user tidak perlu menggunakan password"],
               answerIndex: 0,
-              explanation: "Rate limiting membatasi jumlah request per IP dalam jendela waktu tertentu, menggagalkan upaya pencobaan password masif secara paksa.",
+              explanation: "Rate limiting membatasi jumlah request per IP dalam jendela waktu tertentu, menggagalkan upaya pencobaan password masif secara paksa."
             },
             {
               id: "q3",
               type: "pilihan-ganda",
-              question: "Apa risiko keamanan terbesar jika berkas `.env` tidak sengaja ter-push ke repository GitHub publik?",
-              choices: [
-                "Kredensial rahasia (seperti password database, API key, JWT secret) dapat dicuri dan disalahgunakan oleh siapa saja",
-                "Repository GitHub akan terhapus",
-                "Ukuran kode repository membengkak 1GB",
-                "Node.js tidak bisa lagi di-install",
-              ],
+              question: "Apa risiko keamanan terbesar jika berkas .env tidak sengaja ter-push ke repository GitHub publik?",
+              choices: ["Kredensial rahasia (seperti password database, API key, JWT secret) dapat dicuri dan disalahgunakan oleh siapa saja","Repository GitHub akan terhapus","Ukuran kode repository membengkak 1GB","Node.js tidak bisa lagi di-install"],
               answerIndex: 0,
-              explanation: "File .env menyimpan rahasia tingkat tinggi. Jika bocor ke publik, peretas dapat mengakses database dan infrastruktur server secara penuh.",
+              explanation: "File .env menyimpan rahasia tingkat tinggi. Jika bocor ke publik, peretas dapat mengakses database dan infrastruktur server secara penuh."
             },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Ketika melayani data lintas domain dari server Node ke aplikasi React Frontend yang beda origin (misal Frontend port 3000, Backend port 8000), pengaturan keamanan apakah yang harus dieksekusi agar tidak ditolak oleh Browser?",
+              choices: ["Bypass Router","Mengganti SSL Certificate","Mengkonfigurasi aturan CORS (Cross-Origin Resource Sharing) middleware di backend","Menghapus .env File"],
+              answerIndex: 2,
+              explanation: "CORS adalah mekanisme keamanan berbasis Browser yang mengatur asal domain (origin) mana saja yang disetujui server untuk menelusuri API."
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Sebuah celah di mana penyerang berhasil membubuhi payload jahat `<script>alert('Ter-hack')</script>` dalam isi input komentar, lalu dijalankan oleh browser pengguna lain, disebut serangan apa?",
+              choices: ["SQL Injection","XSS (Cross-Site Scripting)","DDoS","CSRF"],
+              answerIndex: 1,
+              explanation: "Cross-Site Scripting (XSS) adalah ancaman keamanan dari masukan (input) yang tidak di-sanitasi dengan semestinya, sehingga dirender sebagai kode script mentah di mesin peramban pengguna lain."
+            }
           ],
         },
       ],

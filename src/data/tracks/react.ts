@@ -31,23 +31,38 @@ export const reactTrack: Track = {
           id: "react-1-1",
           title: "Kenapa React Ada?",
           explanation:
-            "Di JavaScript biasa, kamu harus memberi perintah manual satu per satu untuk mengubah tampilan halaman. React menggunakan cara 'deklaratif' — mirip seperti memesan makanan di restoran: kamu cukup bilang apa yang kamu mau, dan koki (React) yang sibuk di dapur mengurus semuanya. Kamu cukup memberi tahu React data terbarunya (state), dan React akan otomatis memperbarui tampilan di layar. Pendekatan ini membuat kode jauh lebih rapi saat aplikasi semakin besar dan kompleks.",
+            "Dengan JavaScript biasa kamu memberi perintah langkah demi langkah: cari elemennya di halaman, lalu ganti isinya sendiri (`document.querySelector(...).textContent = ...`). Cara ini disebut **imperatif**, dan jadi melelahkan begitu halaman punya puluhan bagian yang bisa berubah. React memakai cara **deklaratif**: kamu cukup menulis 'seperti apa tampilannya untuk data ini', lalu React yang mengurus perubahan di halaman. Satu kalimat yang perlu kamu ingat sepanjang track ini: tampilan adalah hasil dari data.",
           example: {
-            code: "// Di React, UI otomatis diperbarui saat data (state) berubah tanpa document.getElementById().innerHTML manual",
-            output: "Mental model: UI = f(data)",
-            note: "React menangani pembaruan DOM di balik layar menggunakan Virtual DOM.",
+            code:
+              "// cara lama (imperatif) — kamu yang mengatur DOM sendiri\n" +
+              'document.querySelector("#judul").textContent = "Beranda";\n\n' +
+              "// cara React (deklaratif) — kamu cukup mendeskripsikan hasilnya\n" +
+              "function Beranda() {\n" +
+              "  return <h1>Beranda</h1>;\n" +
+              "}",
+            output:
+              "Keduanya menampilkan judul yang sama, tapi versi React tidak menyentuh document sama sekali.",
+            note: "Perhatikan: di versi React tidak ada perintah 'cari elemen lalu ubah'. Yang ada hanya deskripsi hasil akhirnya.",
           },
           instruction:
-            "Tuliskan sebuah fungsi bernama `Formula` yang mengembalikan string 'UI = f(data)'.",
-          starterCode: "// Tulis fungsi Formula di bawah ini\n",
-          language: "js",
+            "Sebuah halaman dashboard perlu judul bertuliskan `Dashboard`. Tulis versi React-nya: sebuah fungsi bernama `Judul` yang mengembalikan elemen `<h1>` berisi teks itu — tanpa menyentuh `document`.",
+          starterCode: "// Tulis fungsi Judul di bawah ini\n",
+          language: "jsx",
           tests: [
             {
-              pattern: "function\\s+Formula\\s*\\(\\s*\\)\\s*\\{\\s*return\\s*['\"]UI\\s*=\\s*f\\(data\\)['\"]\\s*;?\\s*\\}",
-              message: "Definisikan fungsi Formula yang mengembalikan 'UI = f(data)'",
+              pattern:
+                "function\\s+Judul\\s*\\(\\s*\\)\\s*\\{[\\s\\S]*return\\s*\\(?\\s*<h1>\\s*Dashboard\\s*</h1>",
+              message:
+                "Buat function Judul() yang me-return elemen <h1> berisi teks Dashboard.",
+            },
+            {
+              pattern: "document\\.",
+              mustNotMatch: true,
+              message:
+                "Di React kamu tidak perlu memakai document — cukup kembalikan JSX-nya.",
             },
           ],
-          solution: "function Formula() {\n  return 'UI = f(data)';\n}",
+          solution: "function Judul() {\n  return <h1>Dashboard</h1>;\n}",
         },
         {
           kind: "step",
@@ -66,7 +81,7 @@ export const reactTrack: Track = {
           instruction:
             'Buat komponen `function Button()` yang mengembalikan `<button className="btn">Klik Saya</button>`.',
           starterCode: "// Tulis komponen Button di bawah ini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "function\\s+Button\\s*\\(\\s*\\)\\s*\\{\\s*return\\s*<button\\s+className=[\"']btn[\"']>\\s*Klik Saya\\s*</button>\\s*;?\\s*\\}",
@@ -98,7 +113,7 @@ export const reactTrack: Track = {
           instruction:
             'Buat komponen `function Title()` dengan `const judul = "BiLearn"`, lalu kembalikan `<h1>{judul}</h1>`.',
           starterCode: "// Tulis komponen Title di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "const\\s+judul\\s*=\\s*['\"]BiLearn['\"]",
@@ -129,7 +144,7 @@ export const reactTrack: Track = {
           instruction:
             "Terapkan render kondisional menggunakan operator `&&`. Jika `isLoggedIn` bernilai true, kembalikan elemen `<button>Logout</button>`.",
           starterCode: "// Tulis return kondisional di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "\\{\\s*isLoggedIn\\s*&&\\s*<button>\\s*Logout\\s*</button>\\s*\\}",
@@ -160,7 +175,7 @@ export const reactTrack: Track = {
           instruction:
             "Buat komponen `function Menu()` dengan `const hobi = ['Koding', 'Membaca']` lalu render list `<ul>` menggunakan `map()` dengan prop `key`.",
           starterCode: "// Tulis komponen Menu di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "hobi\\.map",
@@ -211,7 +226,7 @@ export const reactTrack: Track = {
           instruction:
             "Lakukan export default pada sebuah fungsi komponen bernama `Card` yang mengembalikan elemen `<div>Card</div>`.",
           starterCode: "// Tulis export default di bawah ini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "export\\s+default\\s+function\\s+Card\\s*\\(\\s*\\)\\s*\\{\\s*return\\s*<div>\\s*Card\\s*</div>\\s*;?\\s*\\}",
@@ -264,7 +279,33 @@ export const reactTrack: Track = {
               answerIndex: 1,
               explanation: "React membedakan elemen HTML biasa (seperti <div>) dan komponen kustom dengan memeriksa apakah nama tag diawali dengan huruf kapital.",
             },
-          ],
+              {
+                            id: "q4",
+                            type: "pilihan-ganda",
+                            question: "Tim kamu sering menjumpai error saat merender list. Ketika sebuah array kosong dipetakan (map) di JSX, apa yang akan dirender oleh React?",
+                            choices: [
+                              "Error eksekusi",
+                              "Menampilkan tulisan 'undefined'",
+                              "Tidak merender apapun (kosong)",
+                              "Elemen <div> kosong"
+                            ],
+                            answerIndex: 2,
+                            explanation: "Jika array kosong, array.map() mengembalikan array kosong, dan JSX akan secara aman mengabaikannya tanpa merender apapun."
+                          },
+              {
+                            id: "q5",
+                            type: "pilihan-ganda",
+                            question: "Apakah kamu bisa menggunakan nama fungsi 'headerComponent()' (berawalan huruf kecil) untuk membuat sebuah komponen React kustom yang valid?",
+                            choices: [
+                              "Bisa, asalkan mereturn JSX yang valid",
+                              "Tidak, React akan menganggapnya sebagai elemen HTML standar (seperti div) dan bukan komponen",
+                              "Bisa, namun performanya akan lebih lambat",
+                              "Tidak, JavaScript akan langsung melemparkan SyntaxError"
+                            ],
+                            answerIndex: 1,
+                            explanation: "React membedakan elemen HTML bawaan (huruf kecil) dan komponen kustom (huruf besar/PascalCase)."
+                          }
+        ],
         },
       ],
     },
@@ -356,7 +397,7 @@ export const reactTrack: Track = {
           instruction:
             "Buatlah elemen JSX di mana komponen `<Card>` membungkus komponen `<Header />` di dalamnya.",
           starterCode: "// Tulis elemen JSX di bawah ini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "<Card>\\s*<Header\\s*/>\\s*</Card>",
@@ -379,7 +420,7 @@ export const reactTrack: Track = {
           instruction:
             "Buat komponen `ParentComponent` yang mengembalikan elemen `<div>` berisi `<ChildA />` dan `<ChildB />`.",
           starterCode: "// Tulis komponen ParentComponent di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "function\\s+ParentComponent\\s*\\(\\s*\\)\\s*\\{\\s*return\\s*<div>\\s*<ChildA\\s*/>\\s*<ChildB\\s*/>\\s*</div>\\s*;?\\s*\\}",
@@ -405,7 +446,7 @@ export const reactTrack: Track = {
           instruction:
             'Tulis parameter fungsi komponen `function Avatar({ size = 40 }: AvatarProps)`.',
           starterCode: "// Tulis parameter komponen Avatar di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "function\\s+Avatar\\s*\\(\\s*\\{\\s*size\\s*=\\s*40\\s*\\}\\s*:\\s*AvatarProps\\s*\\)",
@@ -428,7 +469,7 @@ export const reactTrack: Track = {
           instruction:
             "Buat komponen `function App()` yang mengembalikan `<main><Navbar /></main>`.",
           starterCode: "// Tulis komponen App di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "function\\s+App\\s*\\(\\s*\\)\\s*\\{\\s*return\\s*<main>\\s*<Navbar\\s*/>\\s*</main>\\s*;?\\s*\\}",
@@ -481,7 +522,33 @@ export const reactTrack: Track = {
               answerIndex: 1,
               explanation: "Komposisi (seperti menyusun blok LEGO) membuat komponen lebih fleksibel, mudah diuji, dan mengurangi prop drilling dibandingkan komponen raksasa.",
             },
-          ],
+              {
+                            id: "q4",
+                            type: "pilihan-ganda",
+                            question: "Komponen A memanggil Komponen B. B butuh data dari A. Apa mekanisme yang disediakan React untuk mengalirkan data ini?",
+                            choices: [
+                              "Menggunakan inheritance (pewarisan kelas)",
+                              "Melalui props yang dioper (passed down) dari A ke B",
+                              "Menggunakan localStorage untuk bertukar data",
+                              "A membaca state B secara langsung"
+                            ],
+                            answerIndex: 1,
+                            explanation: "Di React, data selalu mengalir satu arah ke bawah (one-way data flow) melalui mekanisme props."
+                          },
+              {
+                            id: "q5",
+                            type: "pilihan-ganda",
+                            question: "Jika kamu menggunakan properti 'children' untuk membungkus konten dalam komponen Card, kamu sedang menerapkan pola desain apa?",
+                            choices: [
+                              "Prop Drilling",
+                              "Render Props",
+                              "Komposisi (Composition)",
+                              "Higher Order Components (HOC)"
+                            ],
+                            answerIndex: 2,
+                            explanation: "Penggunaan 'children' merupakan contoh klasik dari Komposisi, di mana sebuah komponen menjadi kontainer pembungkus tanpa perlu tahu komponen anak apa yang ada di dalamnya."
+                          }
+        ],
         },
       ],
     },
@@ -516,7 +583,7 @@ export const reactTrack: Track = {
           instruction:
             "Deklarasikan variabel state bernama `count` dengan fungsi setternya `setCount`, dan beri nilai awal `0`.",
           starterCode: "// Tulis useState di bawah ini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "const\\s*\\[\\s*count\\s*,\\s*setCount\\s*\\]\\s*=\\s*useState\\(\\s*0\\s*\\)",
@@ -545,7 +612,7 @@ export const reactTrack: Track = {
           instruction:
             "Di dalam fungsi handler form, panggil metode pada objek event `e` untuk mencegah halaman termuat ulang secara default.",
           starterCode: "// Tulis kode pemanggilan fungsi di bawah ini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "e\\.preventDefault\\(\\)",
@@ -568,7 +635,7 @@ export const reactTrack: Track = {
           instruction:
             "Buat fungsi `IncrementTwice` yang memanggil `setCount(count + 1)` sebanyak dua kali berturut-turut untuk melihat efek snapshot.",
           starterCode: "// Tulis fungsi di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "function\\s+IncrementTwice\\s*\\(\\s*\\)\\s*\\{\\s*setCount\\(\\s*count\\s*\\+\\s*1\\s*\\)\\s*;?\\s*setCount\\(\\s*count\\s*\\+\\s*1\\s*\\)\\s*;?\\s*\\}",
@@ -591,7 +658,7 @@ export const reactTrack: Track = {
           instruction:
             "Panggil `setScore` dengan menggunakan updater function untuk menambah state sebelumnya (`prev`) dengan `10`.",
           starterCode: "// Tulis setScore di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "setScore\\(\\s*prev\\s*=>\\s*prev\\s*\\+\\s*10\\s*\\)",
@@ -614,7 +681,7 @@ export const reactTrack: Track = {
           instruction:
             "Perbarui array `items` dengan menambahkan elemen string 'Baru' ke akhir array tanpa memutasi array asli.",
           starterCode: "// Tulis setItems di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "setItems\\(\\s*\\[\\s*\\.\\.\\.items\\s*,\\s*['\"]Baru['\"]\\s*\\]\\s*\\)",
@@ -637,7 +704,7 @@ export const reactTrack: Track = {
           instruction:
             "Hitung string `fullName` dari `firstName` dan `lastName` secara langsung saat komponen di-render.",
           starterCode: "// Tulis variabel fullName di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "const\\s+fullName\\s*=\\s*firstName\\s*\\+\\s*['\"]\\s*['\"]\\s*\\+\\s*lastName",
@@ -690,7 +757,33 @@ export const reactTrack: Track = {
               answerIndex: 1,
               explanation: "Data turunan yang bisa dihitung dari props atau state yang sudah ada sebaiknya tidak dimasukkan ke dalam state baru untuk menghindari redundant data (sumber kebenaran ganda).",
             },
-          ],
+              {
+                            id: "q4",
+                            type: "pilihan-ganda",
+                            question: "Pada kasus seperti apa kamu wajib memberikan 'updater function' (contoh: setCount(prev => prev + 1)) alih-alih langsung memberikan nilai (contoh: setCount(count + 1))?",
+                            choices: [
+                              "Ketika state terbaru dihitung berdasarkan nilai state sebelumnya dan bisa dipanggil beberapa kali dalam satu handler event",
+                              "Ketika mengubah nilai string pada state",
+                              "Setiap kali fungsi setState dipanggil agar performa lebih cepat",
+                              "Saat merender elemen kondisional"
+                            ],
+                            answerIndex: 0,
+                            explanation: "Updater function memastikan React menggunakan snapshot state terbaru secara real-time pada saat antrean update dieksekusi."
+                          },
+              {
+                            id: "q5",
+                            type: "pilihan-ganda",
+                            question: "Sebuah aplikasi mengubah state objek menggunakan cara ini: 'user.name = \"Budi\"; setUser(user);'. Kenapa layar TIDAK memperbarui namanya?",
+                            choices: [
+                              "Karena React tidak mendukung state berupa objek",
+                              "Karena referensi memori variabel 'user' tidak berubah, sehingga React menganggap tidak ada update",
+                              "Karena nama Budi sudah ada di database",
+                              "Karena kurang memanggil user.save()"
+                            ],
+                            answerIndex: 1,
+                            explanation: "React menggunakan perbandingan identitas objek (Object.is). Jika objek yang sama dimutasi, referensinya tetap, dan re-render tidak akan dipicu. Gunakan spread operator: setUser({ ...user, name: 'Budi' })."
+                          }
+        ],
         },
       ],
     },
@@ -722,7 +815,7 @@ export const reactTrack: Track = {
           instruction:
             "Buatlah sebuah elemen `<input>` teks yang dikendalikan (controlled). Kaitkan nilainya dengan state `text` dan perbarui nilainya pada event `onChange`.",
           starterCode: "// Tulis input di bawah ini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "<input\\s+value=\\{\\s*text\\s*\\}\\s+onChange=\\{\\s*\\(?e\\)?\\s*=>\\s*setText\\(\\s*e\\.target\\.value\\s*\\)\\s*\\}\\s*/?>",
@@ -748,7 +841,7 @@ export const reactTrack: Track = {
           instruction:
             "Di dalam fungsi handler input, perbarui state `form` dengan mempertahankan nilai-nilai yang ada sebelumnya, lalu perbarui hanya field yang memicu event secara dinamis menggunakan sintaks array (computed property).",
           starterCode: "// Tulis setForm di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "setForm\\(\\s*\\{\\s*\\.\\.\\.form\\s*,\\s*\\[\\s*e\\.target\\.name\\s*\\]\\s*:\\s*e\\.target\\.value\\s*\\}\\s*\\)",
@@ -771,7 +864,7 @@ export const reactTrack: Track = {
           instruction:
             "Terapkan logika validasi yang memeriksa apakah nilai variabel `text` bernilai truthy. Jika tidak (falsy), atur error state dengan memanggil `setError` dan berikan argumen 'Wajib diisi!'.",
           starterCode: "// Tulis validasi di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "if\\s*\\(\\s*!text\\s*\\)\\s*setError\\(\\s*['\"]Wajib diisi!['\"]\\s*\\)",
@@ -794,7 +887,7 @@ export const reactTrack: Track = {
           instruction:
             "Perbarui array `items` dengan menghapus elemen yang memiliki `item.id` yang sama dengan argumen `id` menggunakan metode `.filter()`.",
           starterCode: "// Tulis setItems filter di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "setItems\\(\\s*items\\.filter\\(\\s*item\\s*=>\\s*item\\.id\\s*!==\\s*id\\s*\\)\\s*\\)",
@@ -817,7 +910,7 @@ export const reactTrack: Track = {
           instruction:
             "Deklarasikan variabel `filtered` yang menyaring array `items`, sehingga hanya menyisakan item yang nama (`name`)-nya mengandung teks dalam `query`.",
           starterCode: "// Tulis pencarian filtered di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "const\\s+filtered\\s*=\\s*items\\.filter\\(\\s*i\\s*=>\\s*i\\.name\\.includes\\(\\s*query\\s*\\)\\s*\\)",
@@ -840,7 +933,7 @@ export const reactTrack: Track = {
           instruction:
             "Buatlah sebuah input bertipe checkbox yang dikendalikan oleh state. Gunakan properti `agree` untuk mengikat nilainya, dan perbarui melalui fungsi `setAgree` saat event perubahannya (change) terjadi.",
           starterCode: "// Tulis input checkbox di bawah ini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "<input\\s+type=[\"']checkbox[\"']\\s+checked=\\{\\s*agree\\s*\\}\\s+onChange=\\{\\s*\\(?e\\)?\\s*=>\\s*setAgree\\(\\s*e\\.target\\.checked\\s*\\)\\s*\\}\\s*/?>",
@@ -888,7 +981,33 @@ export const reactTrack: Track = {
               answerIndex: 3,
               explanation: "Metode .filter() mengembalikan array baru yang tidak berisi elemen yang dihapus, sehingga menjaga array state tetap immutable.",
             },
-          ],
+              {
+                            id: "q4",
+                            type: "pilihan-ganda",
+                            question: "Apa tujuan utama menggunakan pola 'Controlled Components' (Komponen Terkendali) pada elemen input form di React?",
+                            choices: [
+                              "Untuk memblokir input dari hacker",
+                              "Agar state React menjadi 'Single Source of Truth', dan nilai input selalu sejalan dengan state tersebut",
+                              "Untuk mencegah form disubmit ke server",
+                              "Agar browser bisa otomatis mengisi (autocomplete) data formulir"
+                            ],
+                            answerIndex: 1,
+                            explanation: "Dengan mengaitkan nilai input (value={state}) dan mendengarkan event perubahannya (onChange), form selalu disinkronisasi dengan state secara langsung."
+                          },
+              {
+                            id: "q5",
+                            type: "pilihan-ganda",
+                            question: "Dalam implementasi fitur 'Hapus Data' pada tabel interaktif, metode array JavaScript apa yang paling tepat (immutable) untuk menghilangkan data berdasarkan ID?",
+                            choices: [
+                              ".splice()",
+                              ".pop()",
+                              ".filter()",
+                              ".delete()"
+                            ],
+                            answerIndex: 2,
+                            explanation: ".filter() mengembalikan array salinan baru dengan menghilangkan item yang tidak lulus kriteria pengecekan, mempertahankan imutabilitas state."
+                          }
+        ],
         },
       ],
     },
@@ -920,7 +1039,7 @@ export const reactTrack: Track = {
           instruction:
             "Di dalam useEffect, ubah judul tab browser dengan memodifikasi `document.title` menjadi 'BiLearn'.",
           starterCode: "// Tulis baris document.title di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "document\\.title\\s*=\\s*['\"]BiLearn['\"]",
@@ -943,7 +1062,7 @@ export const reactTrack: Track = {
           instruction:
             "Tulis `useEffect` yang mengamati variabel `id` di dependency array `[id]`.",
           starterCode: "// Tulis useEffect dengan dependency [id] di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "useEffect\\(\\s*\\(\\s*\\)\\s*=>\\s*\\{[\\s\\S]*\\}\\s*,\\s*\\[\\s*id\\s*\\]\\s*\\)",
@@ -970,7 +1089,7 @@ export const reactTrack: Track = {
           instruction:
             "Tuliskan fungsi kembalian (return) dari useEffect yang akan membersihkan `timer` dengan menggunakan fungsi bawaan `clearInterval`.",
           starterCode: "// Tulis cleanup function di bawah ini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "return\\s*\\(\\s*\\)\\s*=>\\s*clearInterval\\(\\s*timer\\s*\\)",
@@ -998,7 +1117,7 @@ export const reactTrack: Track = {
           instruction:
             "Untuk mencegah request diteruskan saat komponen sudah di-unmount, panggil metode `abort()` pada objek `controller` di dalam fungsi cleanup.",
           starterCode: "// Tulis kode di bawah ini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "controller\\.abort\\(\\)",
@@ -1021,7 +1140,7 @@ export const reactTrack: Track = {
           instruction:
             "Buat sebuah variabel bernama `devMode` dan isi dengan string 'strict', ini mensimulasikan mode development di React.",
           starterCode: "// Tulis variabel devMode di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "const\\s+devMode\\s*=\\s*['\"]strict['\"]",
@@ -1044,7 +1163,7 @@ export const reactTrack: Track = {
           instruction:
             "Hitung variabel boolean bernama `isAdult` langsung dari properti/state `age` (yang dianggap bernilai angka). Variabel ini bernilai true jika age 18 ke atas.",
           starterCode: "// Tulis variabel isAdult di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "const\\s+isAdult\\s*=\\s*age\\s*>=\\s*18",
@@ -1097,7 +1216,33 @@ export const reactTrack: Track = {
               answerIndex: 2,
               explanation: "Dengan me-mount, lalu unmount, lalu mount lagi, React StrictMode segera mengungkap jika ada efek samping (seperti timer atau listener) yang tidak dibersihkan dengan benar.",
             },
-          ],
+              {
+                            id: "q4",
+                            type: "pilihan-ganda",
+                            question: "Sebuah komponen dipasang (mount) ke DOM, namun effect fetch API kamu dipanggil berulang-ulang tanpa henti (infinite loop). Apa penyebab paling masuk akal?",
+                            choices: [
+                              "URL API yang dimasukkan salah",
+                              "Kamu lupa menyertakan array dependensi (dependency array) sebagai argumen kedua pada useEffect yang melakukan update state",
+                              "Server API mengalami down",
+                              "Fungsi fetch tidak direturn"
+                            ],
+                            answerIndex: 1,
+                            explanation: "Tanpa dependency array, useEffect dijalankan setiap selesai render. Jika effect mengubah state, komponen akan render ulang, lalu effect jalan lagi (loop tak terbatas)."
+                          },
+              {
+                            id: "q5",
+                            type: "pilihan-ganda",
+                            question: "Untuk apa 'cleanup function' (fungsi yang di-return dari dalam useEffect) biasanya digunakan?",
+                            choices: [
+                              "Untuk memformat data hasil fetch menjadi JSON",
+                              "Untuk membersihkan efek samping (seperti menghapus interval timer, event listener, atau abort request) sebelum komponen di-unmount atau sebelum efek dijalankan ulang",
+                              "Untuk menghapus cookie dari browser",
+                              "Untuk memicu re-render ulang"
+                            ],
+                            answerIndex: 1,
+                            explanation: "Cleanup function melindungi aplikasi dari memory leak (kebocoran memori) yang disebabkan langganan atau listener yang tertinggal."
+                          }
+        ],
         },
       ],
     },
@@ -1128,7 +1273,7 @@ export const reactTrack: Track = {
           instruction:
             "Buatlah sebuah komponen `Header` yang mendeklarasikan `const [theme] = useState('dark');` di tingkat teratas komponen, mematuhi Aturan Hooks.",
           starterCode: "// Tulis komponen Header di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "function\\s+Header\\s*\\(\\s*\\)\\s*\\{\\s*const\\s*\\[\\s*theme\\s*\\]\\s*=\\s*useState\\(\\s*['\"]dark['\"]\\s*\\)\\s*;?[\\s\\S]*\\}",
@@ -1156,7 +1301,7 @@ export const reactTrack: Track = {
           instruction:
             "Definisikan deklarasi fungsi Custom Hook `function useFetch(url)`.",
           starterCode: "// Tulis fungsi useFetch di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "function\\s+useFetch\\s*\\(\\s*url\\s*\\)",
@@ -1182,7 +1327,7 @@ export const reactTrack: Track = {
           instruction:
             "Deklarasikan variabel `inputRef` dan gunakan hook yang tepat untuk menyimpannya dengan nilai awal `null`.",
           starterCode: "// Tulis useRef di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "const\\s+inputRef\\s*=\\s*useRef\\(\\s*null\\s*\\)",
@@ -1205,7 +1350,7 @@ export const reactTrack: Track = {
           instruction:
             "Gunakan `useMemo` untuk memanggil fungsi `hitung(data)` dan me-return hasilnya. Jadikan array berisi `data` sebagai dependensinya.",
           starterCode: "// Tulis useMemo di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "useMemo\\(\\s*\\(\\s*\\)\\s*=>\\s*hitung\\(\\s*data\\s*\\)\\s*,\\s*\\[\\s*data\\s*\\]\\s*\\)",
@@ -1228,7 +1373,7 @@ export const reactTrack: Track = {
           instruction:
             "Panggil hook `useQuery()` dan lakukan destructuring pada objek yang dikembalikan untuk mengambil nilai `data` dan `isLoading`.",
           starterCode: "// Tulis destructuring useQuery di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "const\\s+\\{\\s*data\\s*,\\s*isLoading\\s*\\}\\s*=\\s*useQuery\\(\\)",
@@ -1281,7 +1426,33 @@ export const reactTrack: Track = {
               answerIndex: 2,
               explanation: "Rules of Hooks secara tegas melarang memanggil hook di dalam kondisi bersyarat, perulangan, atau fungsi bersarang, untuk memastikan urutan eksekusi selalu sama.",
             },
-          ],
+              {
+                            id: "q4",
+                            type: "pilihan-ganda",
+                            question: "Kamu sedang mendesain sistem routing berbasis React Router v6. Untuk mendeklarasikan navigasi bersarang dengan UI bersama (layouting), fitur apa yang biasa digunakan?",
+                            choices: [
+                              "Komponen <Outlet />",
+                              "Metode window.location.href",
+                              "Fungsi useNavigate",
+                              "Tag <a> standar browser"
+                            ],
+                            answerIndex: 0,
+                            explanation: "<Outlet /> digunakan di dalam komponen rute induk untuk menandai di mana komponen rute anak akan dirender."
+                          },
+              {
+                            id: "q5",
+                            type: "pilihan-ganda",
+                            question: "Manakah cara terbaik untuk berpindah halaman (navigasi) secara programatis (misal setelah pengguna berhasil login) di React Router?",
+                            choices: [
+                              "Memanggil fungsi yang dikembalikan oleh hook useNavigate()",
+                              "Mengganti nilai window.location.href secara langsung",
+                              "Menggunakan elemen <Link> yang di-klik otomatis lewat ref",
+                              "Menggunakan useHref()"
+                            ],
+                            answerIndex: 0,
+                            explanation: "Hook useNavigate() direkomendasikan untuk navigasi secara dinamis atau berdasarkan logika bisnis."
+                          }
+        ],
         },
       ],
     },
@@ -1313,7 +1484,7 @@ export const reactTrack: Track = {
           instruction:
             "Buatlah sebuah komponen kosong bernama `UserProfile` yang mendestrukturisasi properti `user` dari objek props yang diterimanya.",
           starterCode: "// Tulis komponen UserProfile di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "function\\s+UserProfile\\s*\\(\\s*\\{\\s*user\\s*\\}\\s*\\)\\s*\\{",
@@ -1340,7 +1511,7 @@ export const reactTrack: Track = {
           instruction:
             "Bungkus komponen `<Card />` dengan menggunakan `ThemeContext.Provider`. Berikan nilai properti `value` dengan string 'dark'.",
           starterCode: "// Tulis Provider di bawah ini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "<ThemeContext\\.Provider\\s+value=[\"']dark[\"']>\\s*<Card\\s*/>\\s*</ThemeContext\\.Provider>",
@@ -1363,7 +1534,7 @@ export const reactTrack: Track = {
           instruction:
             "Panggil hook `useReducer` dengan memberikan argumen `reducer` dan status awal `initial`. Lakukan destructuring untuk mengambil `state` dan fungsi `dispatch`.",
           starterCode: "// Tulis useReducer di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "const\\s*\\[\\s*state\\s*,\\s*dispatch\\s*\\]\\s*=\\s*useReducer\\(\\s*reducer\\s*,\\s*initial\\s*\\)",
@@ -1386,7 +1557,7 @@ export const reactTrack: Track = {
           instruction:
             "Panggil custom hook `useAuth()` dan lakukan destructuring pada hasil objeknya untuk mendapatkan properti `user` serta fungsi `logout`.",
           starterCode: "// Tulis useAuth di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "const\\s+\\{\\s*user\\s*,\\s*logout\\s*\\}\\s*=\\s*useAuth\\(\\)",
@@ -1409,7 +1580,7 @@ export const reactTrack: Track = {
           instruction:
             "Buat sebuah struktur JSX di mana `AuthProvider` membungkus `ThemeProvider` untuk memisahkan konteks state (auth state dan theme state) agar pembaruan bisa dikelola secara terpisah.",
           starterCode: "// Tulis Provider di bawah ini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "<AuthProvider>\\s*<ThemeProvider>",
@@ -1437,7 +1608,7 @@ export const reactTrack: Track = {
           instruction:
             "Gunakan fungsi `create` dari library Zustand untuk membuat sebuah store bernama `useStore`. State awalnya berisi nilai `count` sebesar 0.",
           starterCode: "// Tulis create Zustand di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "const\\s+useStore\\s*=\\s*create\\(\\s*\\(?set\\)?\\s*=>\\s*\\(\\s*\\{\\s*count\\s*:\\s*0\\s*\\}\\s*\\)\\s*\\)",
@@ -1490,7 +1661,33 @@ export const reactTrack: Track = {
               answerIndex: 2,
               explanation: "React Context Provider tidak memiliki kapabilitas selector secara bawaan; setiap kali prop 'value' berubah referensinya, semua konsumennya dipaksa me-render ulang. Itulah sebabnya context harus dipecah (split) berdasarkan kategori perubahannya.",
             },
-          ],
+              {
+                            id: "q4",
+                            type: "pilihan-ganda",
+                            question: "Masalah 'Prop Drilling' terjadi ketika data harus diteruskan melewati komponen-komponen perantara yang sebenarnya tidak memerlukan data tersebut. Solusi bawaan React untuk masalah ini adalah:",
+                            choices: [
+                              "React Router",
+                              "React Context",
+                              "useState",
+                              "useEffect"
+                            ],
+                            answerIndex: 1,
+                            explanation: "Context API memungkinkan komponen manapun di bawah sebuah Provider untuk mengakses data tanpa harus meneruskannya manual sebagai props pada setiap level."
+                          },
+              {
+                            id: "q5",
+                            type: "pilihan-ganda",
+                            question: "Ketika menggunakan hook useReducer, aksi (action) untuk memodifikasi state didefinisikan sebagai objek konvensional yang setidaknya memiliki properti apa?",
+                            choices: [
+                              "name dan payload",
+                              "type dan payload",
+                              "method dan body",
+                              "id dan value"
+                            ],
+                            answerIndex: 1,
+                            explanation: "Berdasarkan konvensi Redux/useReducer, objek aksi memuat 'type' untuk mengidentifikasi aksi, dan 'payload' (opsional) untuk membawa data."
+                          }
+        ],
         },
       ],
     },
@@ -1525,7 +1722,7 @@ export const reactTrack: Track = {
           instruction:
             "Terapkan early return untuk menangani status loading. Jika `isLoading` bernilai true, kembalikan elemen `<p>Loading...</p>`.",
           starterCode: "// Tulis if isLoading di bawah ini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "if\\s*\\(\\s*isLoading\\s*\\)\\s*return\\s*<p>\\s*Loading\\.\\.\\.\\s*</p>\\s*;?",
@@ -1548,7 +1745,7 @@ export const reactTrack: Track = {
           instruction:
             "Tuliskan sebuah array literal `[usersPromise, postsPromise]` lalu bungkus ke dalam pemanggilan `Promise.all()` agar kedua permintaan tersebut bisa berjalan secara paralel tanpa waterfall.",
           starterCode: "// Tulis Promise.all di bawah ini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "Promise\\.all\\(\\s*\\[\\s*usersPromise\\s*,\\s*postsPromise\\s*\\]\\s*\\)",
@@ -1575,7 +1772,7 @@ export const reactTrack: Track = {
           instruction:
             "Panggil hook `useQuery` dengan melewatkan sebuah objek argumen. Objek tersebut harus memiliki properti `queryKey` bernilai `['users']` dan properti `queryFn` bernilai fungsi `fetchUsers`.",
           starterCode: "// Tulis useQuery di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "useQuery\\(\\s*\\{\\s*queryKey\\s*:\\s*\\[\\s*['\"]users['\"]\\s*\\]\\s*,\\s*queryFn\\s*:\\s*fetchUsers\\s*\\}\\s*\\)",
@@ -1598,7 +1795,7 @@ export const reactTrack: Track = {
           instruction:
             "Lakukan perbaruan state `todos` secara optimis dengan memasukkan item baru `newTodo` ke dalam salinan array `todos` yang ada.",
           starterCode: "// Tulis optimisitik update di bawah ini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "setTodos\\(\\s*\\[\\s*\\.\\.\\.todos\\s*,\\s*newTodo\\s*\\]\\s*\\)",
@@ -1621,7 +1818,7 @@ export const reactTrack: Track = {
           instruction:
             "Tentukan properti `queryKey` di dalam objek argumen berupa array yang berisi string 'items' diikuti dengan variabel `page` agar cache data terpisah untuk setiap halaman.",
           starterCode: "// Tulis queryKey di bawah ini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "queryKey\\s*:\\s*\\[\\s*['\"]items['\"]\\s*,\\s*page\\s*\\]",
@@ -1647,7 +1844,7 @@ export const reactTrack: Track = {
           instruction:
             "Definisikan objek `headers` yang mendefinisikan kunci `Authorization`. Isinya adalah sebuah template literal (menggunakan backtick) yang menggabungkan kata 'Bearer ' dengan variabel `${token}`.",
           starterCode: "// Tulis objek headers di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "headers\\s*:\\s*\\{\\s*Authorization\\s*:\\s*`Bearer\\s+\\$\\{token\\}`\\s*\\}",
@@ -1700,7 +1897,33 @@ export const reactTrack: Track = {
               answerIndex: 2,
               explanation: "Header Authorization dengan skema Bearer token adalah standar autentikasi industri untuk mengamankan komunikasi API REST.",
             },
-          ],
+              {
+                            id: "q4",
+                            type: "pilihan-ganda",
+                            question: "Bolehkah kita membuat Custom Hook (contoh: useFetch) yang di dalamnya tidak memanggil hook React bawaan sama sekali?",
+                            choices: [
+                              "Boleh, namun secara fungsional ia sama saja dengan fungsi JS biasa (utility) dan konvensi kata 'use' menjadi tidak bermakna di React",
+                              "Tidak, React akan memblokirnya di console",
+                              "Boleh dan sangat dianjurkan untuk perhitungan matematis biasa",
+                              "Tidak boleh, nama use wajib diikuti hook lain"
+                            ],
+                            answerIndex: 0,
+                            explanation: "Tujuan custom hook adalah membagikan logika stateful (logika yang memakai hook lain). Jika murni fungsi stateless tanpa hooks, sebaiknya buat fungsi helper biasa."
+                          },
+              {
+                            id: "q5",
+                            type: "pilihan-ganda",
+                            question: "Apa syarat utama penamaan sebuah Custom Hook di React yang akan dicek otomatis oleh ESLint plugin-react-hooks?",
+                            choices: [
+                              "Namanya harus mengandung kata 'Hook'",
+                              "Namanya harus berakhiran 'Component'",
+                              "Namanya harus dimulai dengan awalan 'use' dan huruf kapital, contohnya 'useWindowSize'",
+                              "Tidak ada aturan penamaan"
+                            ],
+                            answerIndex: 2,
+                            explanation: "Awalan 'use' (contoh: useFetchData) memberi tahu React dan linter bahwa fungsi ini adalah hook dan harus mematuhi Aturan Hooks."
+                          }
+        ],
         },
       ],
     },
@@ -1732,7 +1955,7 @@ export const reactTrack: Track = {
           instruction:
             "Gunakan komponen `<Link>` dari React Router untuk membuat tautan ke rute `/profil` dengan teks tampilan 'Profil'.",
           starterCode: "// Tulis elemen Link di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "<Link\\s+to=[\"']/profil[\"']>\\s*Profil\\s*</Link>",
@@ -1760,7 +1983,7 @@ export const reactTrack: Track = {
           instruction:
             "Panggil hook `useParams` dan lakukan destructuring pada objek yang dikembalikan untuk mengekstrak nilai parameter `id`.",
           starterCode: "// Tulis useParams di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "const\\s+\\{\\s*id\\s*\\}\\s*=\\s*useParams\\(\\)",
@@ -1791,7 +2014,7 @@ export const reactTrack: Track = {
           instruction:
             "Render elemen placeholder khusus dari React Router DOM di dalam komponen layout agar konten rute anak (child route) dapat ditampilkan.",
           starterCode: "// Tulis elemen Outlet di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "<Outlet\\s*/?>",
@@ -1818,7 +2041,7 @@ export const reactTrack: Track = {
           instruction:
             "Panggil fungsi `navigate` (yang sebelumnya sudah diinisiasi dari `useNavigate()`) dengan argumen string `'/login'` untuk melakukan navigasi ke halaman login.",
           starterCode: "// Tulis navigate di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "navigate\\(\\s*['\"]/login['\"]\\s*\\)",
@@ -1841,7 +2064,7 @@ export const reactTrack: Track = {
           instruction:
             "Buat elemen `<Route>` penangkap (catch-all) dengan `path=\"*\"` yang akan menampilkan elemen `<NotFound />` jika tidak ada rute lain yang cocok.",
           starterCode: "// Tulis Route 404 di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "<Route\\s+path=[\"']\\*[\"']\\s+element=\\{<NotFound\\s*/>\\}\\s*/?>",
@@ -1866,7 +2089,7 @@ export const reactTrack: Track = {
           instruction:
             "Bungkus komponen `<Home />` menggunakan `<Suspense>`. Berikan elemen `<p>Memuat...</p>` pada properti `fallback` agar tampil selama Home masih diunduh.",
           starterCode: "// Tulis Suspense di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "<Suspense\\s+fallback=\\{<p>Memuat\\.\\.\\.</p>\\}>\\s*<Home\\s*/>\\s*</Suspense>",
@@ -1914,7 +2137,33 @@ export const reactTrack: Track = {
               answerIndex: 2,
               explanation: "Hook useParams() mereturn objek dari URL dinamis yang cocok dengan pola route yang didefinisikan (:slug).",
             },
-          ],
+              {
+                id: "q4",
+                type: "pilihan-ganda",
+                question: "Dalam React Router, bagaimana cara mendeklarasikan rute fallback (catch-all) untuk menangani halaman yang tidak ditemukan (404 Error)?",
+                choices: [
+                  "Menggunakan path='*'",
+                  "Menggunakan path='/404'",
+                  "Menggunakan komponen <NotFound /> tanpa atribut path",
+                  "Mengatur fallback={true} pada <Routes />"
+                ],
+                answerIndex: 0,
+                explanation: "React Router menggunakan wildcard asterisk (*) sebagai rute penangkap-semua (catch-all) yang cocok dengan URL apapun yang belum didefinisikan sebelumnya.",
+              },
+              {
+                id: "q5",
+                type: "pilihan-ganda",
+                question: "Apa fungsi utama dari hook useNavigate() dalam React Router?",
+                choices: [
+                  "Untuk mengambil parameter dinamis dari URL (misal ID artikel)",
+                  "Untuk melakukan navigasi halaman secara terprogram, misalnya setelah form berhasil di-submit",
+                  "Untuk menyimpan history penjelajahan pengguna ke database",
+                  "Untuk membuat navbar yang menunjukkan link mana yang sedang aktif"
+                ],
+                answerIndex: 1,
+                explanation: "Hook useNavigate() mengembalikan sebuah fungsi yang bisa dipanggil untuk berpindah halaman melalui kode JavaScript, sangat berguna untuk redirect usai suatu aksi (seperti submit form).",
+              }
+        ],
         },
       ],
     },
@@ -1946,7 +2195,7 @@ export const reactTrack: Track = {
           instruction:
             "Tuliskan perintah RTL `screen` untuk mengambil elemen tombol di layar berdasarkan peran (role) aksesibilitasnya, lalu simpan di konstanta `btn`.",
           starterCode: "// Tulis getByRole di bawah ini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "const\\s+btn\\s*=\\s*screen\\.getByRole\\(\\s*['\"]button['\"]\\s*\\)",
@@ -1971,7 +2220,7 @@ export const reactTrack: Track = {
           instruction:
             "Tuliskan pengujian ekspektasi Jest/Testing Library untuk memastikan variabel `element` benar-benar berada di dalam DOM virtual (`toBeInTheDocument`).",
           starterCode: "// Tulis expect di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "expect\\(\\s*element\\s*\\)\\.toBeInTheDocument\\(\\)",
@@ -1996,7 +2245,7 @@ export const reactTrack: Track = {
           instruction:
             "Jalankan fungsi asinkron dari pustaka `userEvent` untuk memicu aksi klik pada variabel `button`.",
           starterCode: "// Tulis userEvent.click di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "await\\s+userEvent\\.click\\(\\s*button\\s*\\)",
@@ -2021,7 +2270,7 @@ export const reactTrack: Track = {
           instruction:
             "Simulasikan pengguna mengetikkan teks `'Halo'` secara asinkron ke dalam elemen `input` menggunakan `userEvent.type`.",
           starterCode: "// Tulis userEvent.type di bawah ini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "await\\s+userEvent\\.type\\(\\s*input\\s*,\\s*['\"]Halo['\"]\\s*\\)",
@@ -2048,7 +2297,7 @@ export const reactTrack: Track = {
           instruction:
             "Buat fungsi `mockApiHandler(path, data)` yang mengembalikan objek handler palsu `{ path: path, response: data }`.",
           starterCode: "// Tulis fungsi mockApiHandler di bawah ini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "path\\s*:\\s*path\\s*,\\s*response\\s*:\\s*data|\\{\\s*path\\s*,\\s*response\\s*:\\s*data\\s*\\}",
@@ -2076,7 +2325,7 @@ export const reactTrack: Track = {
           instruction:
             "Buat fungsi `shouldTestItem(targetType)` yang mengembalikan `true` jika `targetType === 'user_behavior'` dan `false` jika sebaliknya.",
           starterCode: "// Tulis fungsi shouldTestItem di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "targetType\\s*===\\s*['\"]user_behavior['\"]",
@@ -2120,7 +2369,33 @@ export const reactTrack: Track = {
               answerIndex: 0,
               explanation: "`userEvent` mensimulasikan kejadian pengguna secara realistis lengkap dengan urutan event browser asli.",
             },
-          ],
+              {
+                id: "q4",
+                type: "pilihan-ganda",
+                question: "Dalam pengujian komponen yang melakukan fetch data ke API eksternal, mengapa praktik terbaik menyarankan penggunaan alat seperti MSW (Mock Service Worker)?",
+                choices: [
+                  "Untuk mempercepat loading CSS komponen yang sedang diuji",
+                  "Agar pengujian tidak bergantung pada server asli dan tidak membuat perubahan data permanen di database",
+                  "Karena React Testing Library tidak mengizinkan pemakaian fungsi fetch sama sekali",
+                  "Untuk menjalankan browser tanpa UI (headless browser) dalam mode background"
+                ],
+                answerIndex: 1,
+                explanation: "Memalsukan (mock) API request di level network menjamin unit test berjalan independen secara lokal, terisolasi dari potensi downtime server asli, dan bisa dijalankan tanpa koneksi internet.",
+              },
+              {
+                id: "q5",
+                type: "pilihan-ganda",
+                question: "Bagaimana cara mensimulasikan interaksi pengguna yang kompleks seperti mengetik teks ke dalam elemen input teks menggunakan alat pengujian modern di ekosistem RTL?",
+                choices: [
+                  "Menggunakan metode fireEvent.change() saja",
+                  "Memanipulasi value input menggunakan document.getElementById().value",
+                  "Menggunakan userEvent.type()",
+                  "Men-dispatch event keyboard murni dari browser"
+                ],
+                answerIndex: 2,
+                explanation: "Pustaka userEvent didesain lebih mendekati interaksi pengguna di dunia nyata, dengan userEvent.type() yang mensimulasikan event keydown, keypress, dan keyup persis seperti yang dilakukan browser.",
+              }
+        ],
         },
       ],
     },
@@ -2157,7 +2432,7 @@ export const reactTrack: Track = {
           instruction:
             "Buat fungsi `getFeaturePath(featureName)` yang mengembalikan string path `\"src/features/\${featureName}\"`.",
           starterCode: "// Tulis fungsi getFeaturePath di bawah ini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "`src/features/\\$\\{featureName\\}`|['\"]src/features/['\"]\\s*\\+\\s*featureName",
@@ -2185,7 +2460,7 @@ export const reactTrack: Track = {
           instruction:
             "Buat fungsi `classifyComponent(hasState)` yang mengembalikan `'container'` jika `hasState` bernilai `true` dan `'presentational'` jika `false`.",
           starterCode: "// Tulis fungsi classifyComponent di bawah ini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "hasState\\s*\\?\\s*['\"]container['\"]\\s*:\\s*['\"]presentational['\"]",
@@ -2209,7 +2484,7 @@ export const reactTrack: Track = {
           instruction:
             "Lindungi komponen `<Profile />` dari kecelakaan render dengan membungkusnya di dalam komponen pelindung error (`ErrorBoundary`) yang menampilkan teks `<p>Error</p>` saat terjadi masalah.",
           starterCode: "// Tulis ErrorBoundary di bawah ini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "<ErrorBoundary\\s+fallback=\\{<p>Error</p>\\}>\\s*<Profile\\s*/>\\s*</ErrorBoundary>",
@@ -2232,7 +2507,7 @@ export const reactTrack: Track = {
           instruction:
             "Deklarasikan konstanta `url` yang membaca nilai environment variable `import.meta.env.VITE_API_URL`.",
           starterCode: "// Tulis variabel url di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "const\\s+url\\s*=\\s*import\\.meta\\.env\\.VITE_API_URL",
@@ -2259,7 +2534,7 @@ export const reactTrack: Track = {
           instruction:
             "Buat fungsi `getOnboardingSteps()` yang mengembalikan array string `['package.json', 'entrypoint', 'router']`.",
           starterCode: "// Tulis fungsi getOnboardingSteps di bawah ini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "\\[\\s*['\"]package\\.json['\"]\\s*,\\s*['\"]entrypoint['\"]\\s*,\\s*['\"]router['\"]\\s*\\]",
@@ -2287,7 +2562,7 @@ export const reactTrack: Track = {
           instruction:
             "Buat fungsi `validatePRChecklist(hasKeys, hasCleanups)` yang mengembalikan `true` hanya jika `hasKeys` DAN `hasCleanups` keduanya bernilai `true`.",
           starterCode: "// Tulis fungsi validatePRChecklist di bawah ini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "Boolean\\s*\\(\\s*hasKeys\\s*&&\\s*hasCleanups\\s*\\)|hasKeys\\s*&&\\s*hasCleanups",
@@ -2311,7 +2586,7 @@ export const reactTrack: Track = {
           instruction:
             "Tuliskan elemen JSX `<label>` yang terhubung ke input berpembeda ID `'username'` menggunakan atribut `htmlFor` berisi teks `'Username'`.",
           starterCode: "// Tulis elemen label di bawah ini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "<label\\s+htmlFor=[\"']username[\"']>\\s*Username\\s*</label>",
@@ -2359,7 +2634,33 @@ export const reactTrack: Track = {
               answerIndex: 0,
               explanation: "Error Boundary menjaga agar bug pada satu komponen kecil tidak memadamkan seluruh aplikasi web secara menyeluruh.",
             },
-          ],
+              {
+                id: "q4",
+                type: "pilihan-ganda",
+                question: "Di Vite, variabel lingkungan (environment variable) untuk menyimpan URL API (contoh: VITE_API_URL) hanya bisa diakses di klien melalui sintaks yang mana?",
+                choices: [
+                  "process.env.VITE_API_URL",
+                  "window.VITE_API_URL",
+                  "import.meta.env.VITE_API_URL",
+                  "require('dotenv').VITE_API_URL"
+                ],
+                answerIndex: 2,
+                explanation: "Vite mengekspos environment variables di sisi klien melalui objek khusus import.meta.env, bukan menggunakan process.env seperti pada Node.js murni atau Create React App.",
+              },
+              {
+                id: "q5",
+                type: "pilihan-ganda",
+                question: "Mana dari pernyataan berikut yang menggambarkan perbedaan utama antara Komponen Container dan Komponen Presentational?",
+                choices: [
+                  "Container menggunakan class, sementara Presentational menggunakan function",
+                  "Presentational bertanggung jawab pada tampilan UI dan menerima data dari props, sementara Container mengurus fetching data dan logika aplikasi",
+                  "Container harus selalu berada di file index.js, sedangkan Presentational ada di folder /styles",
+                  "Presentational tidak boleh menggunakan hook sama sekali, sedangkan Container bebas"
+                ],
+                answerIndex: 1,
+                explanation: "Pemisahan ini membuat komponen tampilan lebih reusabel (dapat digunakan kembali) karena tidak terikat langsung pada sumber datanya, sedangkan komponen container yang menyuplai data.",
+              }
+        ],
         },
       ],
     },

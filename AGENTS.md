@@ -20,7 +20,10 @@ Rujukan kualitas: `src/data/tracks/html.ts`, `css.ts`, `javascript.ts`, dan **mo
 2. **Setiap step wajib punya `example`** berisi `code` + `output`. Kasusnya harus BERBEDA dari `solution`, dan `output` harus hasil nyata — bukan klaim manfaat seperti "menghemat waktu".
 3. **Explanation step minimal 4 kalimat ATAU 350 karakter** yang menjelaskan APA, KENAPA, KAPAN dipakai, dan jebakan umum.
 4. **Kuis WAJIB 5–7 soal per modul**, dan SEMUA soal wajib ber-tipe `"pilihan-ganda"` dengan `explanation` kunci jawaban.
-5. **Kode non-JavaScript wajib `language: "text"`.** Perintah git/shell, SQL, PHP, Python, formula spreadsheet, Markdown — semuanya. Memakai `"js"` membuat preview mengeksekusinya dan melempar SyntaxError.
+5. **Pilih `language` sesuai isi kode:**
+   - `"js"` — JavaScript murni yang bisa dijalankan browser apa adanya.
+   - `"jsx"` — React, JSX, dan TypeScript. Preview mengompilasinya dulu dengan Babel lalu merender komponen terakhir yang terdefinisi. JSX/TS dengan `"js"` = SyntaxError merah.
+   - `"text"` — semua sisanya: perintah git/shell, SQL, PHP, Python, kode Node.js, formula spreadsheet, jalur menu, Markdown. Ditampilkan tanpa dieksekusi.
 6. **Instruksi tidak boleh memuat jawaban utuh.** Beri skenario, biar user yang menyusun perintahnya.
 7. **Tugas tidak boleh cuma "tulis komentar"** berisi kalimat yang sudah diberikan.
 

@@ -28,140 +28,211 @@ export const aiDevTrack: Track = {
         {
           kind: "step",
           id: "ai-1-1",
-          title: "Prediksi Token: Mental Model LLM",
+          title: "Prediksi Token: Kenapa AI Bisa Salah dengan Percaya Diri",
           explanation:
-            "Pernahkah kamu menggunakan fitur autocorrect atau tebakan kata di keyboard HP? Large Language Model (LLM) bekerja dengan cara yang sangat mirip, tapi dalam skala raksasa! LLM tidak 'berpikir' atau 'memahami' makna layaknya manusia. Ia hanya menebak token (potongan kata) apa yang paling masuk akal muncul berikutnya berdasarkan pola dari miliaran teks yang pernah ia baca. Jadi ketika ChatGPT menulis kode untukmu, ia sebenarnya melakukan tebakan beruntun yang sangat canggih — bukan memahami kode itu secara mendalam.",
+            "LLM tidak 'memahami' kode seperti kamu. Ia memprediksi potongan teks (token) yang paling mungkin muncul berikutnya berdasarkan pola dari miliaran baris kode yang pernah dibacanya. Karena itu jawabannya selalu terdengar yakin — bahkan saat salah, sebab yang dinilai model adalah 'sepertinya begini polanya', bukan 'ini sudah saya uji'. Konsekuensi praktisnya cuma satu dan berlaku seumur karier: apa pun yang AI tulis, kamu jalankan dan buktikan sendiri sebelum percaya.",
           example: {
-            code: "// LLM menerima prompt 'function sum(a, b) {' -> memprediksi token tersering 'return a + b; }'",
-            output: "Generasi kode berbasis asosiasi statistik terluas.",
-            note: "Memahami ini mencegah ekspektasi berlebihan pada kemampuan nalar LLM.",
+            code: "// AI menyarankan: 'pakai toFixed(2) untuk format harga'\nconst harga = 1250000;\nconsole.log(harga.toFixed(2));",
+            output: "1250000.00",
+            note: "Perhatikan: saran AI menghasilkan '1250000.00' — bentuk yang tidak dipakai orang Indonesia. Menjalankan kodenya sendiri langsung memperlihatkan itu.",
           },
           instruction:
-            "Tugaskan sebuah variabel konstan bernama `modelName` dengan nilai string 'GPT-4'.",
-          starterCode: "",
+            "AI menyarankan `harga.toFixed(2)` untuk menampilkan harga rupiah, tapi kamu belum tahu apakah hasilnya sesuai. Buktikan sendiri: cetak ke konsol hasil pemformatan `harga` memakai `toLocaleString` dengan locale `id-ID`, lalu bandingkan dengan saran AI di panel contoh.",
+          starterCode: "const harga = 1250000;\n// Cetak hasil pemformatan versi Indonesia di bawah ini\n",
           language: "js",
           tests: [
             {
-              pattern: "const\\s+modelName\\s*=\\s*(['\"])GPT-4\\1",
-              message: "Tulis: const modelName = 'GPT-4';",
+              pattern: "console\\.log\\([\\s\\S]*toLocaleString\\(\\s*['\"]id-ID['\"]",
+              message:
+                "Cetak hasilnya dengan console.log(harga.toLocaleString('id-ID')).",
             },
           ],
-          solution: "const modelName = 'GPT-4';",
+          solution: "const harga = 1250000;\nconsole.log(harga.toLocaleString('id-ID'));",
         },
         {
           kind: "step",
           id: "ai-1-2",
-          title: "Halusinasi Kode & Solusinya",
+          title: "Halusinasi: Method yang Terdengar Masuk Akal tapi Tidak Ada",
           explanation:
-            "Halusinasi terjadi saat LLM mengarang fungsi atau parameter library yang sebenarnya TIDAK ADA dengan percaya diri. Selalu verifikasi API sintaks dengan dokumentasi resmi.",
+            "Halusinasi terjadi saat model menghasilkan nama fungsi, parameter, atau library yang tidak pernah ada, tapi terdengar sangat wajar karena mengikuti pola penamaan yang lazim. Ini bahaya khas pemula: kode terlihat rapi, namanya 'masuk akal', dan baru gagal saat dijalankan. Cara mendeteksinya cepat: jalankan kodenya, atau cari nama method itu di dokumentasi resmi — kalau tidak ketemu, itu karangan. Jangan pernah memperbaiki halusinasi dengan meminta AI 'yakin tidak?', karena ia akan tetap menjawab yakin.",
           example: {
-            code: "// ❌ AI menghasilkan: array.groupByColumn('id'); (API Fiktif/Halusinasi!)\n// ✅ Kode Sejati: array.reduce(...) atau Object.groupBy(array, fn)",
-            output: "Verifikasi manusia mencegah error runtime pada kode buatan AI.",
-            note: "Jangan langsung menyalin kode AI tanpa menguji eksekusinya.",
+            code: "// ❌ kode dari AI: method groupByColumn() tidak ada di JavaScript\n// const hasil = data.groupByColumn('kategori');\n\n// ✅ API yang benar-benar ada:\nconst angka = [1, 2, 3, 4];\nconsole.log(angka.filter((n) => n % 2 === 0));",
+            output: "[2,4]",
+            note: "Pola pengecekan: kalau sebuah method tidak muncul di dokumentasi MDN, kemungkinan besar ia halusinasi.",
           },
           instruction:
-            "Buatlah deklarasi variabel `isValid` yang memanggil fungsi `checkAPI()` untuk memverifikasi keaslian API.",
-          starterCode: "",
+            "AI memberimu kode di editor yang memakai `produk.sortBy('harga')` — method itu tidak ada di JavaScript. Ganti baris itu agar produk benar-benar terurut dari harga termurah memakai `sort` bawaan, lalu cetak hasilnya.",
+          starterCode: "const produk = [\n  { nama: 'Pensil', harga: 3000 },\n  { nama: 'Buku', harga: 12000 },\n  { nama: 'Penghapus', harga: 1500 },\n];\n\n// Kode hasil AI (tidak jalan) — perbaiki baris di bawah\nconst urut = produk.sortBy('harga');\nconsole.log(urut);\n",
           language: "js",
           tests: [
             {
-              pattern: "const\\s+isValid\\s*=\\s*checkAPI\\(\\)",
-              message: "Tulis: const isValid = checkAPI();",
+              pattern: "\\.sort\\(",
+              message:
+                "Pakai method sort() bawaan JavaScript.",
+            },
+            {
+              pattern: "a\\.harga\\s*-\\s*b\\.harga|harga\\s*<\\s*|localeCompare",
+              message:
+                "Beri fungsi pembanding di dalam sort, misalnya (a, b) => a.harga - b.harga.",
+            },
+            {
+              pattern: "sortBy",
+              mustNotMatch: true,
+              message:
+                "Hapus pemanggilan sortBy() — method itu memang tidak ada.",
             },
           ],
-          solution: "const isValid = checkAPI();",
+          solution: "const produk = [\n  { nama: 'Pensil', harga: 3000 },\n  { nama: 'Buku', harga: 12000 },\n  { nama: 'Penghapus', harga: 1500 },\n];\n\nconst urut = [...produk].sort((a, b) => a.harga - b.harga);\nconsole.log(urut);",
         },
         {
           kind: "step",
           id: "ai-1-3",
-          title: "Context Window: Mengapa AI 'Lupa'",
+          title: "Context Window: Kenapa AI Tiba-tiba 'Lupa'",
           explanation:
-            "Context Window adalah batas jumlah token maksimum yang dapat dibaca LLM dalam 1 sesi obrolan. Jika percakapan terlalu panjang, pesan awal akan terdorong keluar (dilupakan).",
+            "Context window adalah jumlah token maksimum yang bisa dibaca model dalam satu percakapan — mencakup pertanyaanmu, kode yang kamu tempel, dan seluruh jawaban sebelumnya. Begitu batas itu terlampaui, bagian paling awal terdorong keluar, dan di situlah AI mulai melupakan keputusan yang sudah kalian sepakati di awal. Sebagai patokan kasar untuk kode, satu token kira-kira 4 karakter, jadi file 8.000 karakter menghabiskan sekitar 2.000 token. Kebiasaan yang menolong: buka sesi baru untuk masalah baru, dan tempel hanya potongan kode yang relevan.",
           example: {
-            code: "// Sesi Obrolan > 128k Token -> AI mulai lupa variabel yang dibuat di awal percakapan",
-            output: "Buka sesi obrolan baru untuk masalah/fitur baru.",
-            note: "Menjaga obrolan tetap singkat dan spesifik meningkatkan akurasi AI.",
+            code: "const kodeDitempel = 'a'.repeat(20000);\nconsole.log(Math.ceil(kodeDitempel.length / 4));",
+            output: "5000",
+            note: "8.000 token untuk satu file saja sudah memakan porsi besar percakapan — itulah kenapa AI 'lupa' instruksi awalmu.",
           },
           instruction:
-            "Buat variabel `maxTokens` dengan nilai angka 128000.",
-          starterCode: "",
+            "Kamu hendak menempelkan sebuah file berisi 32.000 karakter ke chat AI. Hitung dan cetak perkiraan jumlah tokennya memakai patokan 4 karakter per token, dengan hasil dibulatkan ke atas.",
+          starterCode: "const jumlahKarakter = 32000;\n// Hitung perkiraan token, lalu cetak\n",
           language: "js",
           tests: [
             {
-              pattern: "const\\s+maxTokens\\s*=\\s*128000",
-              message: "Tulis: const maxTokens = 128000;",
+              pattern: "Math\\.ceil\\(",
+              message:
+                "Bulatkan ke atas memakai Math.ceil().",
+            },
+            {
+              pattern: "jumlahKarakter\\s*/\\s*4",
+              message:
+                "Bagi jumlah karakter dengan 4 untuk memperkirakan token.",
+            },
+            {
+              pattern: "console\\.log\\(",
+              message:
+                "Cetak hasilnya dengan console.log().",
             },
           ],
-          solution: "const maxTokens = 128000;",
+          solution: "const jumlahKarakter = 32000;\nconst perkiraanToken = Math.ceil(jumlahKarakter / 4);\nconsole.log(perkiraanToken);",
         },
         {
           kind: "step",
           id: "ai-1-4",
-          title: "Kekuatan Utama AI (Boilerplate & Conversion)",
+          title: "Kekuatan Nyata AI: Boilerplate & Terjemahan Pola",
           explanation:
-            "AI paling unggul untuk: 1. Generasi boilerplate, 2. Translasi sintaks (misal JS ke TS), 3. Penjelasan kode kompleks.",
+            "Ada satu jenis pekerjaan yang benar-benar dikuasai AI: mengubah sesuatu yang sudah jelas bentuknya menjadi bentuk lain — respons JSON menjadi tipe TypeScript, data menjadi tabel, JavaScript menjadi TypeScript. Pekerjaan ini bersifat mekanis, polanya berulang, dan kebenarannya mudah kamu periksa dalam hitungan detik. Di sinilah AI benar-benar menghemat waktumu tanpa menambah risiko. Aturan mainnya tetap: kamu harus tahu bentuk hasil yang benar, karena kamu yang memeriksanya.",
           example: {
-            code: "// Prompt: 'Ubah fungsi JavaScript berikut menjadi TypeScript dengan interface eksplisit'",
-            output: "Translasi tipe data yang rapi dalam hitungan detik.",
-            note: "Menghemat waktu dari mengetik tugas berulang.",
+            code: "// respons API\n// { \"id\": 7, \"aktif\": true }\ntype Akun = {\n  id: number;\n  aktif: boolean;\n};",
+            output: "Tipe Akun cocok dengan bentuk respons: id angka, aktif boolean.",
+            note: "Perhatikan bahwa tipe mengikuti BENTUK data, bukan nama propertinya — id bisa saja string.",
           },
           instruction:
-            "Definisikan tipe TypeScript `User` yang memiliki properti `id` bertipe `string`.",
-          starterCode: "",
-          language: "text",
+            "Endpoint profil mengembalikan JSON `{ \"id\": \"u-1\", \"nama\": \"Bimo\", \"umur\": 20 }`. Tulis satu tipe TypeScript bernama `User` yang menggambarkan bentuk respons itu dengan tipe yang tepat untuk setiap properti.",
+          starterCode: "// Tulis tipe User di bawah ini\n",
+          language: "jsx",
           tests: [
             {
-              pattern: "type\\s+User\\s*=\\s*\\{\\s*id\\s*:\\s*string\\s*;?\\s*\\}",
-              message: "Tulis: type User = { id: string };",
+              pattern: "type\\s+User\\s*=\\s*\\{",
+              message:
+                "Buat type User = { ... }.",
+            },
+            {
+              pattern: "id\\s*:\\s*string",
+              message:
+                "Properti id bertipe string karena nilainya 'u-1'.",
+            },
+            {
+              pattern: "nama\\s*:\\s*string",
+              message:
+                "Properti nama bertipe string.",
+            },
+            {
+              pattern: "umur\\s*:\\s*number",
+              message:
+                "Properti umur bertipe number, bukan string.",
             },
           ],
-          solution: "type User = { id: string };",
+          solution: "type User = {\n  id: string;\n  nama: string;\n  umur: number;\n};",
         },
         {
           kind: "step",
           id: "ai-1-5",
-          title: "Kelemahan AI (Logika Bisnis Unik)",
+          title: "Kelemahan Nyata AI: Logika Bisnis yang Cuma Ada di Perusahaanmu",
           explanation:
-            "AI lemah dalam merancang logika bisnis spesifik perusahaan, arsitektur sistem skala besar, dan fitur terbaru yang rilis setelah tanggal pemotongan data training.",
+            "AI mengenal pola umum, bukan aturan spesifik tempatmu bekerja. Kalau kamu meminta 'fungsi diskon', ia akan menuliskan potongan persentase standar — bukan aturan yang disepakati tim produkmu, karena aturan itu tidak pernah ada di data latihannya. Semakin unik logikanya, semakin besar kemungkinan AI menghasilkan kode yang rapi tapi salah secara bisnis. Karena itu tugasmu bergeser: menerjemahkan aturan bisnis dengan tepat, lalu memakai AI untuk bagian mekanisnya saja.",
           example: {
-            code: "// Logika unik aturan diskon toko Anda tetap membutuhkan rancangan manusia!",
-            output: "Manusia yang menentukan arah arsitektur dan logika bisnis.",
-            note: "AI adalah asisten, bukan pengganti arsitek perangkat lunak.",
+            code: "// Aturan: ongkir gratis di atas 300rb, selain itu 20rb\nfunction ongkir(total) {\n  return total > 300000 ? 0 : 20000;\n}\nconsole.log(ongkir(150000));",
+            output: "20000",
+            note: "Fungsi contoh benar secara sintaks tapi tidak tahu aturan tokomu — persis kesalahan yang dibuat AI.",
           },
           instruction:
-            "Buat fungsi `calculateDiscount` yang menerima parameter `price` dan mengembalikan nilai tersebut dikali 0.9.",
-          starterCode: "// Buat fungsi calculateDiscount di sini\n",
+            "Aturan diskon di tokomu: hanya berlaku untuk member, besarnya 10% dari harga, dan **maksimal Rp50.000**. Tulis fungsi `hitungDiskon(harga, isMember)` yang mengembalikan nilai diskon sesuai aturan itu — kode AI di panel contoh tidak mengenal aturan ini.",
+          starterCode: "// Tulis fungsi hitungDiskon di bawah ini\n",
           language: "js",
           tests: [
             {
-              pattern: "function\\s+calculateDiscount\\(price\\)\\s*\\{\\s*return\\s+price\\s*\\*\\s*0\\.9;?\\s*\\}",
-              message: "Tulis: function calculateDiscount(price) { return price * 0.9; }",
+              pattern: "function\\s+hitungDiskon\\s*\\(\\s*harga\\s*,\\s*isMember\\s*\\)|const\\s+hitungDiskon\\s*=",
+              message:
+                "Buat fungsi hitungDiskon(harga, isMember).",
+            },
+            {
+              pattern: "\\bisMember\\b",
+              message:
+                "Diskon hanya berlaku kalau isMember bernilai true.",
+            },
+            {
+              pattern: "0\\.1|\\*\\s*10\\s*/\\s*100|/\\s*10",
+              message:
+                "Diskonnya 10% dari harga.",
+            },
+            {
+              pattern: "Math\\.min\\(|>\\s*50000|>=\\s*50000",
+              message:
+                "Batasi diskon maksimal 50000.",
             },
           ],
-          solution: "function calculateDiscount(price) { return price * 0.9; }",
+          solution: "function hitungDiskon(harga, isMember) {\n  if (!isMember) return 0;\n  return Math.min(harga * 0.1, 50000);\n}\n\nconsole.log(hitungDiskon(800000, true));",
         },
         {
           kind: "step",
           id: "ai-1-6",
-          title: "Lanskap Tool AI (Copilot, Claude, Cursor)",
+          title: "Memilih Alat: Autocomplete, Chat, atau Agent",
           explanation:
-            "Gunakan **Copilot** untuk autocomplete real-time. Gunakan **Claude** untuk analisis logika kompleks. Gunakan **Cursor / Antigravity** untuk penyuntingan multi-file.",
+            "Tiga bentuk bantuan AI punya tugas berbeda. Autocomplete di editor (Copilot) unggul untuk melanjutkan baris yang polanya sudah jelas. Chat panjang (Claude, ChatGPT) unggul saat kamu perlu menalar: membaca error, membandingkan pendekatan, atau memahami kode asing. Agent/composer (Cursor, Antigravity) unggul untuk perubahan yang menyentuh banyak file sekaligus. Salah memilih alat membuang waktu — misalnya mengandalkan autocomplete untuk merancang arsitektur, atau memakai agent untuk hal yang cukup satu baris.",
           example: {
-            code: "// Copilot -> Autocomplete cepat saat ngoding\n// Cursor/Antigravity -> Refactoring multi-file otomatis",
-            output: "['Copilot', 'Claude', 'Cursor']",
-            note: "Gunakan alat AI yang tepat sesuai dengan tugas yang dikerjakan.",
+            code: "const tugasKeAlat = {\n  melanjutkanBarisBerulang: 'copilot',\n  membacaStackTracePanjang: 'chat',\n};\nconsole.log(tugasKeAlat.membacaStackTracePanjang);",
+            output: "chat",
           },
           instruction:
-            "Buat sebuah array `aiTools` yang berisi string 'Copilot', 'Claude', dan 'Cursor'.",
-          starterCode: "",
+            "Buat objek `pilihanAlat` yang memetakan tiga situasi ke alat yang paling tepat: properti `menulisTestBerulang` bernilai `'copilot'`, `membandingkanDuaPendekatan` bernilai `'chat'`, dan `mengubahNamaFungsiDi12File` bernilai `'agent'`.",
+          starterCode: "// Buat objek pilihanAlat di bawah ini\n",
           language: "js",
           tests: [
             {
-              pattern: "const\\s+aiTools\\s*=\\s*\\[\\s*(['\"])Copilot\\1\\s*,\\s*(['\"])Claude\\2\\s*,\\s*(['\"])Cursor\\3\\s*\\]",
-              message: "Tulis: const aiTools = ['Copilot', 'Claude', 'Cursor'];",
+              pattern: "pilihanAlat\\s*=\\s*\\{",
+              message:
+                "Buat objek bernama pilihanAlat.",
+            },
+            {
+              pattern: "menulisTestBerulang\\s*:\\s*['\"]copilot['\"]",
+              message:
+                "menulisTestBerulang cocok untuk autocomplete: 'copilot'.",
+            },
+            {
+              pattern: "membandingkanDuaPendekatan\\s*:\\s*['\"]chat['\"]",
+              message:
+                "membandingkanDuaPendekatan butuh penalaran: 'chat'.",
+            },
+            {
+              pattern: "mengubahNamaFungsiDi12File\\s*:\\s*['\"]agent['\"]",
+              message:
+                "Perubahan lintas file adalah tugas 'agent'.",
             },
           ],
-          solution: "const aiTools = ['Copilot', 'Claude', 'Cursor'];",
+          solution: "const pilihanAlat = {\n  menulisTestBerulang: 'copilot',\n  membandingkanDuaPendekatan: 'chat',\n  mengubahNamaFungsiDi12File: 'agent',\n};\n\nconsole.log(pilihanAlat);",
         },
         {
           kind: "quiz",
@@ -189,6 +260,20 @@ export const aiDevTrack: Track = {
               choices: ["AI tidak tahu logika bisnis spesifik dan aturan unik perusahaan", "AI tidak bisa mengetik cepat", "AI akan menghapus kode secara otomatis", "AI selalu menggunakan bahasa Assembly"],
               answerIndex: 0,
               explanation: "AI dilatih dengan data publik, sehingga ia tidak tahu aturan bisnis, struktur, atau sistem internal spesifik di perusahaanmu yang bersifat rahasia."
+            }, {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Apa tujuan utama dari fitur Context Window pada model LLM?",
+              choices: ["Menyimpan data percakapan selamanya di server", "Menentukan jumlah batas maksimal memori atau token yang bisa diingat dalam satu sesi", "Meningkatkan kecepatan pengetikan AI", "Menerjemahkan bahasa secara otomatis"],
+              answerIndex: 1,
+              explanation: "Context window adalah batas jumlah token maksimal yang dapat diproses oleh LLM dalam satu waktu. Jika melebihi batas, model akan mulai melupakan konteks dari awal percakapan.",
+            }, {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Pekerjaan apa yang sangat cocok dan efisien diserahkan kepada AI?",
+              choices: ["Membuat arsitektur sistem skala besar tanpa pengawasan", "Menerjemahkan sintaks antar bahasa atau membuat kode boilerplate", "Menulis aturan bisnis unik perusahaan yang belum pernah ada", "Mengambil keputusan pemecatan karyawan"],
+              answerIndex: 1,
+              explanation: "AI sangat andal dalam translasi sintaks dan pembuatan kode berulang (boilerplate) karena tugas tersebut didasarkan pada pola umum yang banyak ditemukan di data pelatihannya.",
             }]
         },
       ],
@@ -210,140 +295,218 @@ export const aiDevTrack: Track = {
         {
           kind: "step",
           id: "ai-2-1",
-          title: "Prinsip Konteks Cukup",
+          title: "Prompt Berkonteks: Kode, Error, dan Tujuan",
           explanation:
-            "Saat meminta bantuan AI, sertakan 3 hal wajib: 1. Kode terkait, 2. Log error lengkap, 3. Hasil akhir yang diinginkan.",
+            "Kualitas jawaban AI hampir seluruhnya ditentukan konteks yang kamu berikan. Prompt 'kodeku error, tolong perbaiki' memaksa model menebak, dan tebakan itu biasanya meleset. Prompt yang berguna memuat tiga hal: potongan kode yang relevan, pesan error lengkap apa adanya (jangan diringkas), dan hasil akhir yang kamu inginkan. Menuliskan ketiganya juga menguntungkanmu sendiri — sering kali kamu menemukan penyebabnya sebelum sempat menekan kirim.",
           example: {
-            code: "// Prompt Bagus: 'Saya pakai Next.js 14 App Router. Berikut error di terminal [...]. Saya ingin merender [...]'",
-            output: "AI memberikan solusi yang langsung pas tanpa perlu banyak pertanyaan balasan.",
-            note: "Kualitas jawaban AI berbanding lurus dengan kejelasan konteks yang kamu berikan.",
+            code: "Saya memakai Node 20 + Express 5.\nSaat POST /login, terminal menampilkan:\nTypeError: Cannot read properties of undefined (reading 'email')\n    at login (src/auth.js:12)\n\nKode: const { email } = req.body;\nYang saya inginkan: req.body terbaca sebagai JSON.",
+            output: "AI langsung menunjuk penyebabnya: middleware express.json() belum dipasang, bukan menebak-nebak sepuluh kemungkinan.",
           },
           instruction:
-            "Panggil fungsi `console.error()` dengan meneruskan parameter `error.message`.",
-          starterCode: "",
-          language: "js",
+            "Tulis prompt untuk meminta bantuan pada kasus ini: aplikasi **React 19** gagal build, terminal menampilkan `Module not found: Can't resolve './Header'`, dan yang kamu inginkan halaman kembali bisa di-build. Prompt-mu wajib memuat ketiganya — versi/teknologi, pesan error persis, dan tujuan akhir.",
+          starterCode: "# Tulis prompt-mu di bawah ini (boleh beberapa baris)\n",
+          language: "text",
           tests: [
             {
-              pattern: "console\\.error\\(error\\.message\\)",
-              message: "Tulis: console.error(error.message);",
+              pattern: "\\breact\\s*(19)?\\b",
+              flags: "i",
+              message:
+                "Sebutkan teknologi dan versinya (React 19) agar AI tidak menebak.",
+            },
+            {
+              pattern: "Module not found[\\s\\S]*Header",
+              flags: "i",
+              message:
+                "Tempelkan pesan error persis seperti yang muncul di terminal.",
+            },
+            {
+              pattern: "(ingin|tujuan|harapan|supaya|agar)[\\s\\S]*build",
+              flags: "i",
+              message:
+                "Sebutkan hasil akhir yang kamu inginkan, misalnya 'agar build berhasil lagi'.",
             },
           ],
-          solution: "console.error(error.message);",
+          solution: "Saya memakai React 19 dengan Vite.\nSaat menjalankan build, muncul error:\nModule not found: Can't resolve './Header'\n\nYang saya inginkan: build berhasil lagi dan komponen Header tetap tampil.\nTolong bantu temukan penyebabnya.",
         },
         {
           kind: "step",
           id: "ai-2-2",
-          title: "Prompting Spesifik dengan Constraint",
+          title: "Constraint: Membatasi Ruang Jawaban AI",
           explanation:
-            "Sebutkan versi spesifik dan batasan library (misal: 'Gunakan TypeScript, batasi tanpa library luar, gunakan async/await').",
+            "Tanpa batasan, AI akan memilih jalur paling umum di data latihannya — biasanya menambah library baru, memakai sintaks lama, atau menulis gaya kode yang tidak sesuai timmu. Constraint adalah aturan main yang kamu tetapkan di depan: bahasa dan versinya, boleh atau tidak menambah dependensi, gaya penulisan, serta hal yang tidak boleh dipakai. Constraint juga membuat hasilnya lebih mudah kamu review, karena ruang kemungkinannya menyempit. Ini keterampilan yang membedakan orang yang 'nanya AI' dengan orang yang mengarahkan AI.",
           example: {
-            code: "// Constraint: 'Gunakan Zod versi 3, jangan gunakan any, tulis dalam bentuk arrow function'",
-            output: "Kode buatan AI mengikuti standar coding style tim-mu.",
-            note: "Mencegah AI menggunakan sintaks usang dari versi lama.",
+            code: "Tulis fungsi validasi email.\nConstraint:\n- TypeScript, tanpa library eksternal\n- kembalikan boolean, bukan throw\n- jangan pakai regex sepanjang satu baris penuh, beri komentar singkat",
+            output: "AI mengembalikan fungsi TypeScript pendek tanpa dependensi tambahan, sesuai batasan yang diminta.",
           },
           instruction:
-            "Gunakan Zod untuk mendefinisikan skema objek yang memiliki properti `id` bertipe string. Simpan dalam variabel `schema`.",
-          starterCode: "",
-          language: "js",
+            "Kamu butuh fungsi pemformat tanggal Indonesia. Tulis prompt yang menyertakan minimal tiga constraint: sebut **TypeScript**, larang penambahan library eksternal (mis. tanpa moment/dayjs), dan sebutkan bentuk keluaran yang diinginkan (mis. `31 Juli 2026`).",
+          starterCode: "# Tulis prompt beserta constraint-nya di bawah ini\n",
+          language: "text",
           tests: [
             {
-              pattern: "const\\s+schema\\s*=\\s*z\\.object\\(\\{\\s*id\\s*:\\s*z\\.string\\(\\)\\s*\\}\\)",
-              message: "Tulis: const schema = z.object({ id: z.string() });",
+              pattern: "\\btypescript\\b",
+              flags: "i",
+              message:
+                "Sebutkan bahasanya: TypeScript.",
+            },
+            {
+              pattern: "(tanpa|jangan|tidak boleh)[\\s\\S]*(library|dependensi|paket|moment|dayjs)",
+              flags: "i",
+              message:
+                "Larang penambahan library eksternal secara eksplisit.",
+            },
+            {
+              pattern: "(31|Juli|format)",
+              flags: "i",
+              message:
+                "Sebutkan bentuk keluaran yang kamu inginkan, misalnya '31 Juli 2026'.",
             },
           ],
-          solution: "const schema = z.object({ id: z.string() });",
+          solution: "Tulis fungsi TypeScript formatTanggal(tanggal: Date): string.\nConstraint:\n- tanpa library eksternal (jangan pakai moment atau dayjs)\n- keluaran berbentuk '31 Juli 2026' dengan nama bulan bahasa Indonesia\n- kembalikan string, jangan mencetak ke konsol",
         },
         {
           kind: "step",
           id: "ai-2-3",
-          title: "Prompting Berulang (Iterative Refinement)",
+          title: "Iterasi: Mempersempit, Bukan Mengulang Permintaan yang Sama",
           explanation:
-            "Jangan ulangi prompt dari awal jika AI memberi hasil yang kurang pas. Persempit instruksi secara bertahap pada balasan berikutnya.",
+            "Saat jawaban pertama meleset, refleks pemula adalah mengetik ulang permintaan yang sama dengan nada lebih tegas. Hasilnya nyaris selalu sama karena informasinya tidak bertambah. Iterasi yang benar bersifat mempersempit: sebutkan bagian mana yang sudah benar, apa yang salah pada percobaan sebelumnya, dan apa yang sudah kamu coba. Dengan begitu setiap putaran memangkas ruang kemungkinan, bukan mengocok ulang dadu yang sama.",
           example: {
-            code: "// Balasan 2: 'Bagus, sekarang ubah fungsi tersebut agar menangani kasus array kosong'",
-            output: "Solusi terasah menjadi sempurna melalui dialog interaktif.",
-            note: "Iterasi bertahap jauh lebih cepat dibanding membuat prompt raksasa sekali jalan.",
+            code: "Fungsi yang kamu berikan sudah benar untuk angka positif,\ntapi mengembalikan NaN saat input berupa string kosong.\nSaya sudah mencoba menambahkan Number(input) dan hasilnya tetap NaN.\nPerbaiki hanya penanganan input kosong, sisanya biarkan.",
+            output: "AI fokus memperbaiki satu kasus itu saja dan tidak menulis ulang seluruh fungsi.",
           },
           instruction:
-            "Buat fungsi `processArray` yang menerima parameter `arr` dengan nilai default array kosong, dan langsung me-return parameter tersebut.",
-          starterCode: "// Buat fungsi processArray di sini\n",
-          language: "js",
+            "Jawaban pertama AI membuat fungsi keranjang belanja yang benar untuk 1 item, tapi salah menghitung total saat item lebih dari satu. Tulis prompt iterasi yang menyebut: bagian yang **sudah benar**, bagian yang **salah**, dan apa yang **sudah kamu coba**.",
+          starterCode: "# Tulis prompt iterasi di bawah ini\n",
+          language: "text",
           tests: [
             {
-              pattern: "function\\s+processArray\\(arr\\s*=\\s*\\[\\]\\)\\s*\\{\\s*return\\s+arr;?\\s*\\}",
-              message: "Tulis: function processArray(arr = []) { return arr; }",
+              pattern: "(sudah benar|sudah tepat|berhasil untuk)",
+              flags: "i",
+              message:
+                "Sebutkan bagian yang sudah benar agar tidak ikut ditulis ulang.",
+            },
+            {
+              pattern: "(salah|keliru|gagal|meleset)",
+              flags: "i",
+              message:
+                "Sebutkan persis bagian mana yang belum benar.",
+            },
+            {
+              pattern: "(sudah saya coba|saya sudah|sudah dicoba)",
+              flags: "i",
+              message:
+                "Sebutkan apa yang sudah kamu coba supaya AI tidak mengulanginya.",
             },
           ],
-          solution: "function processArray(arr = []) { return arr; }",
+          solution: "Fungsi hitungTotal sudah benar untuk keranjang berisi 1 item.\nYang salah: saat keranjang berisi 3 item, totalnya hanya menghitung item terakhir.\nSudah saya coba mengganti forEach menjadi for biasa, hasilnya tetap sama.\nPerbaiki hanya bagian penjumlahannya.",
         },
         {
           kind: "step",
           id: "ai-2-4",
-          title: "Meminta Alternatif & Trade-off",
+          title: "Minta Alternatif dan Trade-off, Bukan Satu Jawaban",
           explanation:
-            "Minta AI memberikan 2-3 pilihan pendekatan beserta perbandingan kelebihan dan kekurangannya.",
+            "AI cenderung menyodorkan satu solusi seolah tidak ada pilihan lain, padahal keputusan teknik hampir selalu punya konsekuensi. Meminta dua atau tiga alternatif beserta kelebihan-kekurangannya mengubah AI dari 'pemberi jawaban' menjadi 'penyaji opsi', dan keputusan tetap di tanganmu. Cara ini juga melatihmu untuk technical interview, karena pertanyaan 'kenapa kamu pilih X?' dijawab dengan perbandingan, bukan selera. Selalu sebutkan kriteria pembandingnya — performa, kemudahan perawatan, atau kecepatan pengerjaan.",
           example: {
-            code: "// Prompt: 'Berikan 2 alternatif cara memfilter array ini di JS beserta analisis performanya'",
-            output: "Memunculkan dua pendekatan filtering dengan perbandingan kecepatan di terminal",
-            note: "Mendorong berpikir kritis daripada menerima solusi pertama secara mentah.",
+            code: "Beri 3 cara menyimpan sesi login di aplikasi Next.js.\nUntuk tiap cara sebutkan kelebihan, kekurangan, dan kapan sebaiknya dipakai.\nKriteria saya: keamanan lebih penting daripada kemudahan.",
+            output: "AI menyajikan tabel perbandingan cookie httpOnly, JWT di localStorage, dan session server — beserta risikonya masing-masing.",
           },
           instruction:
-            "Filter array `arr` dari nilai falsy dengan menggunakan `arr.filter(Boolean)` dan simpan hasilnya di variabel `filtered`.",
-          starterCode: "",
-          language: "js",
+            "Kamu harus memilih cara menyimpan file yang diunggah pengguna. Tulis prompt yang meminta **minimal 2 alternatif**, meminta **kelebihan dan kekurangan** tiap alternatif, dan menyebut **kriteria** yang kamu pakai untuk memutuskan.",
+          starterCode: "# Tulis prompt permintaan alternatif di bawah ini\n",
+          language: "text",
           tests: [
             {
-              pattern: "const\\s+filtered\\s*=\\s*arr\\.filter\\(Boolean\\)",
-              message: "Tulis: const filtered = arr.filter(Boolean);",
+              pattern: "(2|dua|3|tiga|beberapa)\\s*(alternatif|opsi|cara|pendekatan)",
+              flags: "i",
+              message:
+                "Minta lebih dari satu alternatif secara eksplisit.",
+            },
+            {
+              pattern: "(kelebihan|kekurangan|trade-?off|plus minus)",
+              flags: "i",
+              message:
+                "Minta kelebihan dan kekurangan tiap alternatif.",
+            },
+            {
+              pattern: "(kriteria|prioritas|paling penting|utamakan)",
+              flags: "i",
+              message:
+                "Sebutkan kriteria keputusanmu, misalnya biaya atau kecepatan.",
             },
           ],
-          solution: "const filtered = arr.filter(Boolean);",
+          solution: "Beri 2 alternatif penyimpanan file unggahan pengguna untuk aplikasi Node.js.\nUntuk tiap alternatif sebutkan kelebihan dan kekurangannya.\nKriteria saya: biaya bulanan serendah mungkin, dan file harus tetap aman kalau server diganti.",
         },
         {
           kind: "step",
           id: "ai-2-5",
-          title: "Prompt untuk Belajar vs Produksi",
+          title: "Prompt untuk Belajar vs Prompt untuk Produksi",
           explanation:
-            "Gunakan prompt 'Jelaskan cara kerja baris 5-10 ini' saat belajar, dan 'Optimasi fungsi ini tanpa merubah return type' saat produksi.",
+            "Dua tujuan berbeda menuntut prompt yang berbeda. Saat kamu sedang belajar, mintalah penjelasan bertahap dan alasan di balik setiap keputusan — kode yang langsung jadi justru merampas proses berpikirmu. Saat kamu sedang mengejar deadline pada bagian yang sudah kamu kuasai, mintalah kode siap pakai lengkap dengan penanganan error. Bahaya terbesar bagi pemula adalah memakai mode produksi terus-menerus: pekerjaan selesai, tapi kemampuanmu tidak bertambah dan kamu tidak bisa mempertahankan kodemu saat ditanya.",
           example: {
-            code: "// Prompt Belajar: 'Jelaskan konsep Closure di fungsi berikut dengan analogi sederhana'",
-            output: "AI berperan sebagai mentor pemograman pribadi.",
-            note: "Manfaatkan AI untuk mempercepat pemahaman materi baru.",
+            code: "Mode belajar:\n\"Jelaskan langkah demi langkah cara kerja closure di JavaScript,\nberi 1 contoh kecil, JANGAN tulis solusi tugas saya.\"",
+            output: "AI menjelaskan konsepnya dan menahan diri memberi jawaban jadi, sehingga kamu tetap yang menulis kodenya.",
           },
           instruction:
-            "Buat fungsi `Counter` yang mendeklarasikan `let count = 0` dan me-return fungsi anonim yang meng-increment `count`.",
-          starterCode: "// Buat fungsi Counter di sini\n",
-          language: "js",
+            "Kamu sedang belajar `reduce` dan tidak ingin diberi jawaban jadi. Tulis prompt mode belajar yang meminta **penjelasan** cara kerjanya, meminta **contoh** kecil yang berbeda dari tugasmu, dan **melarang** AI menuliskan solusi tugasmu.",
+          starterCode: "# Tulis prompt mode belajar di bawah ini\n",
+          language: "text",
           tests: [
             {
-              pattern: "function\\s+Counter\\(\\)\\s*\\{\\s*let\\s+count\\s*=\\s*0;?\\s*return\\s+\\(\\)\\s*=>\\s*count\\+\\+;?\\s*\\}",
-              message: "Tulis: function Counter() { let count = 0; return () => count++; }",
+              pattern: "(jelaskan|penjelasan|bagaimana cara kerja)",
+              flags: "i",
+              message:
+                "Minta penjelasan, bukan kode jadi.",
+            },
+            {
+              pattern: "\\bcontoh\\b",
+              flags: "i",
+              message:
+                "Minta satu contoh kecil sebagai pembanding.",
+            },
+            {
+              pattern: "(jangan|tanpa|hindari)[\\s\\S]*(solusi|jawaban|kode tugas|kerjakan)",
+              flags: "i",
+              message:
+                "Larang AI menuliskan solusi tugasmu.",
             },
           ],
-          solution: "function Counter() { let count = 0; return () => count++; }",
+          solution: "Jelaskan cara kerja Array.reduce langkah demi langkah, termasuk peran nilai awal.\nBeri satu contoh kecil menjumlahkan angka.\nJangan tuliskan solusi untuk tugas saya — saya ingin mencobanya sendiri dulu.",
         },
         {
           kind: "step",
           id: "ai-2-6",
-          title: "Anti-pattern: Single-shot Prompting Kompleks",
+          title: "Anti-pattern: Satu Prompt untuk Seluruh Fitur",
           explanation:
-            "HINDARI meminta AI membuat seluruh aplikasi e-commerce sekaligus dalam 1 prompt raksasa (Single-shot mega prompt). Pecahlah menjadi tugas-tugas kecil.",
+            "Meminta 'buatkan aplikasi kasir lengkap dengan login, stok, dan laporan' dalam satu prompt menghasilkan tumpukan kode yang tidak bisa kamu verifikasi, memakai asumsi yang tidak pernah kamu setujui, dan gagal di tempat yang sulit dilacak. Cara kerja yang sehat: pecah menjadi langkah kecil yang masing-masing bisa diuji — satu endpoint, satu komponen, satu perbaikan. Ini bukan soal AI-nya lemah, tapi soal kemampuanmu memeriksa hasilnya. Aturan praktis: kalau kamu tidak sanggup me-review hasilnya dalam 5 menit, permintaanmu terlalu besar.",
           example: {
-            code: "// ❌ 'Buatkan saya seluruh aplikasi marketplace Tokopedia lengkap'\n// ✅ 'Buatkan saya skema TypeScript untuk model produk toko'",
-            output: "Hasil kode berkualitas tinggi dan teruji.",
-            note: "Memecah tugas besar menjadi sub-task adalah kunci sukses software engineering.",
+            code: "❌ 'Buatkan sistem inventori lengkap dengan auth dan laporan PDF.'\n\n✅ Langkah 1: 'Buat satu endpoint GET /produk yang mengembalikan daftar produk dari array sementara.'",
+            output: "Permintaan kecil menghasilkan kode yang bisa langsung kamu jalankan dan uji sebelum melangkah ke bagian berikutnya.",
           },
           instruction:
-            "Definisikan antarmuka TypeScript `Product` dengan properti `id` (string) dan `price` (number).",
-          starterCode: "// Buat interface Product di sini\n",
+            "Fitur besar: 'checkout e-commerce lengkap'. Pecah menjadi rencana bertahap: tulis **tiga langkah bernomor**, masing-masing satu pekerjaan kecil yang bisa diuji sendiri (misalnya hitung total, validasi stok, simpan pesanan).",
+          starterCode: "# Tulis rencana bertahapmu di bawah ini\n",
           language: "text",
           tests: [
             {
-              pattern: "interface\\s+Product\\s*\\{\\s*id\\s*:\\s*string;?\\s*price\\s*:\\s*number;?\\s*\\}",
-              message: "Tulis: interface Product { id: string; price: number; }",
+              pattern: "^\\s*1[.)]",
+              flags: "im",
+              message:
+                "Tulis langkah pertama dengan penomoran 1.",
+            },
+            {
+              pattern: "^\\s*2[.)]",
+              flags: "im",
+              message:
+                "Tulis langkah kedua dengan penomoran 2.",
+            },
+            {
+              pattern: "^\\s*3[.)]",
+              flags: "im",
+              message:
+                "Tulis langkah ketiga dengan penomoran 3.",
             },
           ],
-          solution: "interface Product { id: string; price: number; }",
+          solution: "1. Hitung total belanja dari daftar item di keranjang (tanpa ongkir dulu).\n2. Validasi stok tiap item sebelum pesanan boleh lanjut.\n3. Simpan pesanan ke database dan kembalikan nomor pesanan.",
         },
         {
           kind: "quiz",
@@ -376,6 +539,20 @@ export const aiDevTrack: Track = {
               choices: ["Sangat efektif untuk aplikasi kompleks", "Hanya bisa digunakan oleh pengguna berbayar", "AI sering gagal menghasilkan kode berkualitas karena tugasnya terlalu besar dan tidak fokus", "Menghasilkan kode yang 100% sempurna tanpa bug"],
               answerIndex: 2,
               explanation: "Memecah tugas besar menjadi bagian kecil (modular) jauh lebih efektif karena AI dapat fokus pada satu masalah spesifik di setiap prompt."
+            }, {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Apa yang sebaiknya dilakukan jika jawaban AI tidak sesuai dengan harapanmu pada percobaan pertama?",
+              choices: ["Membuat obrolan baru dan mengulangi prompt dari awal persis sama", "Melakukan prompting iteratif dengan memberikan umpan balik untuk mempersempit instruksi", "Menyerah dan tidak lagi menggunakan AI", "Memarahi AI agar ia meminta maaf"],
+              answerIndex: 1,
+              explanation: "Menggunakan pendekatan iteratif dengan memberikan konteks tambahan atau koreksi jauh lebih efektif daripada memulai ulang dari nol.",
+            }, {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Mengapa menyebutkan batasan (constraint) seperti 'tanpa menggunakan library eksternal' pada prompt itu penting?",
+              choices: ["Agar AI merasa tertantang", "Memastikan AI menghasilkan kode yang sesuai dengan pedoman atau batasan di proyek kita", "Supaya kodenya tidak bisa dibaca oleh orang lain", "Meningkatkan kecepatan respons AI secara drastis"],
+              answerIndex: 1,
+              explanation: "Constraint memastikan AI tidak memberikan solusi yang tidak bisa kita gunakan, seperti menambahkan library berukuran besar yang tidak diizinkan di proyek.",
             }]
         },
       ],
@@ -397,140 +574,209 @@ export const aiDevTrack: Track = {
         {
           kind: "step",
           id: "ai-3-1",
-          title: "Kapan Menerima & Menolak Autocomplete Copilot",
+          title: "Menerima atau Menolak Saran Autocomplete",
           explanation:
-            "Terima saran Autocomplete saat mengetik kode berulang/standar (seperti interface atau mock data). Tolak (Tekan Esc) jika saran mengubah logika bisnis utama.",
+            "Autocomplete menyodorkan kelanjutan kode berdasarkan pola, bukan berdasarkan aturan proyekmu. Saran yang sekadar melanjutkan pola berulang biasanya aman diterima. Saran yang menyangkut angka, batas, atau aturan bisnis wajib kamu baca dulu — di situlah kesalahan paling sering menyelinap dan paling mahal akibatnya. Kebiasaan yang perlu kamu bangun: baca saran sampai selesai sebelum menekan Tab, dan curigai setiap angka ajaib yang muncul begitu saja.",
           example: {
-            code: "// Tekan [Tab] untuk menerima saran autocomplete Copilot\n// Tekan [Esc] untuk menolak saran yang salah",
-            output: "Alur pengetikan menjadi sangat lancar.",
-            note: "Jangan menekan Tab secara mekanis tanpa membaca saran kodenya terlebih dahulu!",
+            code: "// saran Copilot untuk pajak: PPN 10%\nconst pajak = harga * 0.1;\n\n// tarif PPN Indonesia saat ini 11% — angka dari AI tertinggal versi\nconst pajakBenar = harga * 0.11;",
+            output: "Untuk harga 100000, saran AI memberi 10000 sedangkan angka yang benar 11000.",
+            note: "Pola bahaya: angka yang muncul sendiri dari autocomplete. Selalu cocokkan dengan aturan yang berlaku.",
           },
           instruction:
-            "Buat interface `MockData` dengan properti `name` bertipe `string`.",
-          starterCode: "",
-          language: "text",
+            "Copilot menyarankan `const ongkir = 15000;` untuk semua pesanan, padahal aturan tokomu: ongkir gratis bila total belanja minimal Rp300.000, selain itu Rp15.000. Tulis fungsi `hitungOngkir(total)` yang menerapkan aturan tokomu.",
+          starterCode: "// Saran AI: const ongkir = 15000;\n// Tulis fungsi hitungOngkir yang benar di bawah ini\n",
+          language: "js",
           tests: [
             {
-              pattern: "interface\\s+MockData\\s*\\{\\s*name\\s*:\\s*string;?\\s*\\}",
-              message: "Tulis: interface MockData { name: string; }",
+              pattern: "function\\s+hitungOngkir\\s*\\(|const\\s+hitungOngkir\\s*=",
+              message:
+                "Buat fungsi hitungOngkir(total).",
+            },
+            {
+              pattern: "300000",
+              message:
+                "Sertakan ambang gratis ongkir 300000.",
+            },
+            {
+              pattern: "15000",
+              message:
+                "Ongkir selain itu 15000.",
+            },
+            {
+              pattern: "\\breturn\\b",
+              message:
+                "Kembalikan nilai ongkirnya dengan return.",
             },
           ],
-          solution: "interface MockData { name: string; }",
+          solution: "function hitungOngkir(total) {\n  return total >= 300000 ? 0 : 15000;\n}\n\nconsole.log(hitungOngkir(250000));",
         },
         {
           kind: "step",
           id: "ai-3-2",
-          title: "AI Chat untuk Desain Arsitektur",
+          title: "Memakai Chat untuk Merancang Sebelum Menulis Kode",
           explanation:
-            "Gunakan AI Chat untuk mendiskusikan rancangan struktur database / skema API SEBELUM kamu mulai mengetik baris kode pertama.",
+            "Kesalahan desain jauh lebih mahal daripada kesalahan sintaks, karena baru terasa setelah kodenya menyebar ke mana-mana. Chat AI berguna sebagai lawan bicara di tahap perancangan: kamu menjelaskan kebutuhan, ia menawarkan beberapa bentuk struktur data atau alur, lalu kamu yang memutuskan. Kunci agar sesi ini berguna adalah menyebutkan kebutuhan nyata dan batasannya — jumlah pengguna, data yang wajib disimpan, dan hal yang harus dihindari. Hasil yang kamu bawa dari sesi ini bukan kode, melainkan keputusan yang bisa kamu pertanggungjawabkan.",
           example: {
-            code: "// Diskusi Chat: 'Bagaimana cara terbaik memodelkan fitur keranjang belanja di Redis vs SQL?'",
-            output: "Mendapat gambaran arsitektur jernih sejak awal.",
-            note: "Mencegah salah desain skema yang berisiko refactoring berat belakangan.",
+            code: "Saya butuh menyimpan keranjang belanja untuk pengguna yang belum login.\nData wajib: id produk, jumlah, harga saat ditambahkan.\nBatasan: tanpa server tambahan.\nTawarkan 2 bentuk penyimpanan beserta risikonya.",
+            output: "AI menawarkan localStorage dan cookie, lengkap dengan risiko data hilang saat ganti perangkat.",
           },
           instruction:
-            "Deklarasikan variabel `cartSchema` yang menginisialisasi class `Schema` dengan objek `{ userId: String }`.",
-          starterCode: "",
-          language: "js",
+            "Kamu merancang penyimpanan riwayat pesanan. Tulis prompt perancangan yang memuat: **data apa saja yang wajib disimpan**, **batasan** yang harus dipatuhi, dan permintaan **alternatif struktur** untuk dipilih.",
+          starterCode: "# Tulis prompt perancanganmu di bawah ini\n",
+          language: "text",
           tests: [
             {
-              pattern: "const\\s+cartSchema\\s*=\\s*new\\s+Schema\\(\\{\\s*userId\\s*:\\s*String\\s*\\}\\)",
-              message: "Tulis: const cartSchema = new Schema({ userId: String });",
+              pattern: "(data|field|kolom|menyimpan)",
+              flags: "i",
+              message:
+                "Sebutkan data apa saja yang wajib disimpan.",
+            },
+            {
+              pattern: "(batas|tanpa|harus|maksimal|constraint)",
+              flags: "i",
+              message:
+                "Sebutkan batasan yang harus dipatuhi.",
+            },
+            {
+              pattern: "(alternatif|opsi|pilihan|bandingkan)",
+              flags: "i",
+              message:
+                "Minta beberapa alternatif struktur, jangan satu jawaban.",
             },
           ],
-          solution: "const cartSchema = new Schema({ userId: String });",
+          solution: "Saya merancang penyimpanan riwayat pesanan untuk aplikasi kasir kecil.\nData wajib: nomor pesanan, tanggal, daftar item, total, metode bayar.\nBatasan: satu database MySQL, tanpa layanan tambahan berbayar.\nTawarkan 2 alternatif struktur tabel beserta kelebihan dan kekurangannya.",
         },
         {
           kind: "step",
           id: "ai-3-3",
-          title: "AI Agent untuk Perubahan Multi-File",
+          title: "Menugaskan Perubahan Multi-File ke Agent",
           explanation:
-            "Alat seperti Cursor / Antigravity Agent mampu melakukan refactoring otomatis yang menyentuh puluhan berkas file sekaligus secara konsisten.",
+            "Agent bisa menyunting banyak file sekaligus, dan justru itulah yang membuatnya berisiko: satu instruksi kabur bisa mengubah puluhan berkas yang tidak kamu maksud. Instruksi yang aman menyebut ruang lingkupnya (file atau folder mana), hasil yang diharapkan, dan hal yang tidak boleh disentuh. Selalu jalankan agent di repositori yang bersih tanpa perubahan belum di-commit, supaya kamu bisa membaca diff-nya sebagai satu kesatuan dan membatalkannya dengan mudah. Membaca diff adalah bagian pekerjaanmu, bukan formalitas.",
           example: {
-            code: "// Agent Prompt: 'Ubah nama properti user_id menjadi userId di seluruh skema model dan controller'",
-            output: "Seluruh berkas terkait diperbarui konsisten dalam 1 operasi.",
-            note: "Periksa git diff setelah agent selesai melakukan pengeditan multi-file.",
+            code: "Ganti nama fungsi getUser menjadi fetchUser di seluruh folder src/services.\nJangan sentuh folder tests dan jangan ubah tanda tangan parameternya.\nTampilkan daftar file yang diubah setelah selesai.",
+            output: "Agent hanya menyunting berkas di src/services dan melaporkan 4 file yang berubah.",
           },
           instruction:
-            "Buat variabel `userId` yang nilainya diambil dari `user.id`.",
-          starterCode: "",
-          language: "js",
+            "Tulis instruksi untuk agent yang mengganti pemakaian `var` menjadi `const` atau `let` di folder `src/utils`. Instruksimu wajib menyebut **ruang lingkup folder**, **hasil yang diharapkan**, dan **bagian yang tidak boleh disentuh**.",
+          starterCode: "# Tulis instruksi untuk agent di bawah ini\n",
+          language: "text",
           tests: [
             {
-              pattern: "const\\s+userId\\s*=\\s*user\\.id",
-              message: "Tulis: const userId = user.id;",
+              pattern: "src/utils",
+              flags: "i",
+              message:
+                "Sebutkan ruang lingkupnya: folder src/utils.",
+            },
+            {
+              pattern: "\\b(const|let)\\b",
+              flags: "i",
+              message:
+                "Sebutkan hasil yang diharapkan: var diganti const atau let.",
+            },
+            {
+              pattern: "(jangan|tanpa mengubah|kecuali|tidak boleh)",
+              flags: "i",
+              message:
+                "Sebutkan bagian yang tidak boleh disentuh.",
             },
           ],
-          solution: "const userId = user.id;",
+          solution: "Ganti semua deklarasi var menjadi const, atau let bila nilainya memang diubah, di seluruh file dalam folder src/utils.\nJangan mengubah nama variabel, logika, maupun file di luar folder itu.\nTampilkan ringkasan file yang berubah setelah selesai.",
         },
         {
           kind: "step",
           id: "ai-3-4",
-          title: "Menerbitkan Unit Test dengan AI",
+          title: "Meminta AI Membuat Kasus Uji dari Spesifikasi",
           explanation:
-            "AI sangat hebat dalam membuat kasus uji unit test (termasuk edge cases input null/kosong/ekstrem) dari fungsi yang kamu berikan.",
+            "AI cukup andal menulis kerangka test, tapi ia condong menguji jalur yang normal saja — input wajar, hasil wajar. Nilai tambahmu ada pada kasus tepi: nilai nol, input kosong, angka negatif, dan data yang tidak lengkap. Karena itu perlakukan test buatan AI sebagai titik awal, lalu tambahkan kasus yang benar-benar sering merusak aplikasi di dunia nyata. Test yang bagus juga berfungsi sebagai spesifikasi: orang berikutnya membaca test-mu untuk tahu perilaku yang diharapkan.",
           example: {
-            code: "// Prompt: 'Buatkan Jest unit test lengkap untuk fungsi calculateDiscount() ini termasuk edge case harga 0'",
-            output: "Suite unit test dibuat otomatis dengan coverage tinggi.",
-            note: "Mempercepat pembuatan test suite aplikasi.",
+            code: "test('diskon member 10 persen', () => {\n  expect(hitungDiskon(100000, true)).toBe(10000);\n});",
+            output: "1 test lolos — tapi kasus bukan member dan diskon maksimal belum diuji sama sekali.",
           },
           instruction:
-            "Tuliskan sebuah unit test Jest sederhana menggunakan blok `test` yang menguji `expect(true).toBe(true)`.",
-          starterCode: "",
+            "AI sudah menulis satu test untuk jalur normal. Tambahkan **satu test kasus tepi**: pastikan `hitungDiskon(100000, false)` untuk pengguna yang bukan member menghasilkan `0`. Pakai bentuk `test('...', () => { expect(...).toBe(...) })`.",
+          starterCode: "// test dari AI (jalur normal)\ntest('diskon member 10 persen', () => {\n  expect(hitungDiskon(100000, true)).toBe(10000);\n});\n\n// Tambahkan test kasus tepi di bawah ini\n",
           language: "js",
           tests: [
             {
-              pattern: "test\\(['\"]should pass['\"],\\s*\\(\\)\\s*=>\\s*\\{\\s*expect\\(true\\)\\.toBe\\(true\\);?\\s*\\}\\)",
-              message: "Tulis: test('should pass', () => { expect(true).toBe(true); });",
+              pattern: "test\\([\\s\\S]*hitungDiskon\\(\\s*100000\\s*,\\s*false\\s*\\)",
+              message:
+                "Tulis test yang memanggil hitungDiskon(100000, false).",
+            },
+            {
+              pattern: "toBe\\(\\s*0\\s*\\)",
+              message:
+                "Pastikan hasil yang diharapkan adalah 0.",
             },
           ],
-          solution: "test('should pass', () => { expect(true).toBe(true); });",
+          solution: "test('diskon member 10 persen', () => {\n  expect(hitungDiskon(100000, true)).toBe(10000);\n});\n\ntest('bukan member tidak dapat diskon', () => {\n  expect(hitungDiskon(100000, false)).toBe(0);\n});",
         },
         {
           kind: "step",
           id: "ai-3-5",
-          title: "AI untuk Dokumentasi & Commit Message",
+          title: "Commit Message & Dokumentasi dengan Bantuan AI",
           explanation:
-            "Gunakan AI untuk membuat JSDoc, file README.md, serta menyusun pesan commit berbasis standar `Conventional Commits` dari `git diff`.",
+            "AI bisa merangkum diff menjadi pesan commit, tapi ia hanya melihat APA yang berubah — bukan KENAPA. Padahal alasan perubahanlah yang dicari orang (termasuk kamu enam bulan lagi) saat membuka riwayat. Karena itu terima bantuan AI untuk baris judulnya, lalu kamu sendiri yang menambahkan konteksnya. Ikuti Conventional Commits: `fix:` untuk perbaikan bug, `feat:` untuk fitur baru — tipe yang salah membuat penomoran versi dan changelog otomatis jadi menyesatkan.",
           example: {
-            code: "// Prompt: 'Buatkan commit message Conventional Commits dari git diff berikut'",
-            output: "Pesan commit rapi seperti 'feat(auth): add OAuth Google provider'.",
-            note: "Menjaga kerapian riwayat git log repository.",
+            code: "fix(cart): cegah total minus saat kupon lebih besar dari subtotal\n\nKupon 50rb pada belanja 30rb membuat total -20rb.\nTotal sekarang dibatasi minimal 0.",
+            output: "Riwayat commit menjelaskan penyebab dan dampaknya, bukan sekadar 'update cart.js'.",
           },
           instruction:
-            "Tugaskan string pesan commit 'feat(auth): add OAuth Google provider' ke dalam variabel bernama `commitMsg`.",
-          starterCode: "",
-          language: "js",
+            "Kamu memperbaiki bug: form login bisa dikirim dua kali sehingga akun ganda terbuat. Tulis pesan commit berformat Conventional Commits — baris pertama diawali `fix(` dengan scope dan ringkasannya, lalu baris penjelasan yang menyebut **kenapa** perubahan ini perlu.",
+          starterCode: "# Tulis pesan commit di bawah ini (judul, baris kosong, lalu penjelasan)\n",
+          language: "text",
           tests: [
             {
-              pattern: "const\\s+commitMsg\\s*=\\s*(['\"])feat\\(auth\\):\\s*add\\s*OAuth\\s*Google\\s*provider\\1",
-              message: "Tulis: const commitMsg = 'feat(auth): add OAuth Google provider';",
+              pattern: "^fix\\([a-z-]+\\):\\s*\\S+",
+              flags: "im",
+              message:
+                "Awali dengan tipe fix( scope ): ringkasan singkat.",
+            },
+            {
+              pattern: "[\\s\\S]*\\n[\\s\\S]*\\S",
+              message:
+                "Tambahkan baris penjelasan di bawah judul, bukan judul saja.",
+            },
+            {
+              pattern: "(karena|akibat|menyebabkan|sebab|agar|sehingga|supaya)",
+              flags: "i",
+              message:
+                "Jelaskan KENAPA perubahan ini dibutuhkan.",
             },
           ],
-          solution: "const commitMsg = 'feat(auth): add OAuth Google provider';",
+          solution: "fix(auth): matikan tombol submit setelah login dikirim\n\nTombol yang masih aktif membuat pengguna menekan dua kali,\nsehingga permintaan pendaftaran terkirim ganda dan akun duplikat terbuat.",
         },
         {
           kind: "step",
           id: "ai-3-6",
-          title: "Menjaga Flow & Kontrol Engineer",
+          title: "Menjaga Kendali: Kode yang Tidak Kamu Pahami Tidak Boleh Masuk",
           explanation:
-            "AI adalah alat bantu konsentrasi (flow booster). Kamu adalah pengemudi (pilot) yang memegang kendali penuh atas keputusan arsitektur.",
+            "Godaan terbesar memakai AI adalah menerima kode panjang yang 'kelihatannya jalan'. Masalahnya muncul nanti: saat kode itu error di production, kamu tidak punya peta mentalnya, dan memperbaikinya jadi jauh lebih lama daripada menulis sendiri sejak awal. Aturan yang dipakai banyak tim: kamu harus bisa menjelaskan setiap baris yang kamu commit. Kalau ada bagian yang tidak kamu pahami, minta AI menyederhanakannya atau tulis ulang dengan cara yang kamu kuasai — pendek dan dimengerti lebih berharga daripada pintar tapi asing.",
           example: {
-            code: "// AI membantu mengetik sintaks -> Manusia memegang arah arsitektur dan kualitas rilis",
-            output: "Kolaborasi ideal manusia dan AI.",
-            note: "Jangan biarkan AI mengambil alih keputusan desain tanpa pengawasan.",
+            code: "// versi AI: 3 baris, sulit dibaca pemula\nconst unik = [...new Set(data.map((d) => d.id))];\n\n// versi yang kamu pahami dan bisa kamu jelaskan\nconst ids = data.map((d) => d.id);\nconst unikJelas = ids.filter((id, i) => ids.indexOf(id) === i);",
+            output: "Keduanya menghasilkan daftar id unik yang sama.",
           },
           instruction:
-            "Buat sebuah kelas kosong bernama `ArchitectureManager`.",
-          starterCode: "",
+            "AI memberi kode `const aktif = user?.profil?.status === 'aktif' ?? false;` yang membingungkanmu. Tulis ulang menjadi versi yang kamu pahami: buat variabel `status` yang mengambil `user.profil.status` dengan optional chaining, lalu variabel `aktif` yang membandingkannya dengan `'aktif'`.",
+          starterCode: "// Tulis ulang jadi dua langkah yang kamu pahami\n",
           language: "js",
           tests: [
             {
-              pattern: "class\\s+ArchitectureManager\\s*\\{\\s*\\}",
-              message: "Tulis: class ArchitectureManager {}",
+              pattern: "const\\s+status\\s*=\\s*user\\??\\.?\\s*profil",
+              message:
+                "Buat variabel status dari user?.profil?.status.",
+            },
+            {
+              pattern: "\\?\\.",
+              message:
+                "Pakai optional chaining (?.) agar tidak error saat profil kosong.",
+            },
+            {
+              pattern: "const\\s+aktif\\s*=\\s*status\\s*===\\s*['\"]aktif['\"]",
+              message:
+                "Buat variabel aktif hasil perbandingan status === 'aktif'.",
             },
           ],
-          solution: "class ArchitectureManager {}",
+          solution: "const status = user?.profil?.status;\nconst aktif = status === 'aktif';\n\nconsole.log(aktif);",
         },
         {
           kind: "quiz",
@@ -563,6 +809,20 @@ export const aiDevTrack: Track = {
               choices: ["Meminta AI langsung membuatkan seluruh file .js", "Gunakan sesi chat interaktif untuk berdiskusi tentang struktur tabel atau API sebelum menulis kode", "Gunakan AI Agent untuk langsung mengedit file produksi", "Abaikan arsitektur dan langsung jalankan kode"],
               answerIndex: 1,
               explanation: "Membahas konsep dan arsitektur terlebih dahulu di chat membantu menghindari kesalahan fundamental sebelum kode aktual mulai ditulis."
+            }, {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Apa keunggulan utama menggunakan AI untuk menghasilkan unit test?",
+              choices: ["AI dapat menguji kode secara otomatis tanpa perlu dijalankan", "AI mampu memikirkan banyak edge case dan menulis suite test dalam waktu singkat", "AI bisa menggantikan seluruh peran QA Engineer", "Kode test buatan AI tidak perlu dicek lagi"],
+              answerIndex: 1,
+              explanation: "AI sangat kuat dalam membuat boilerplate test dan mengidentifikasi edge case (seperti input kosong atau null) yang mungkin terlewat oleh developer.",
+            }, {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Apa tujuan menggunakan standar seperti 'Conventional Commits' saat meminta AI membuat pesan commit?",
+              choices: ["Membuat riwayat Git menjadi lebih berwarna", "Menjaga kerapian, struktur, dan konsistensi riwayat git log dalam tim", "Menyembunyikan detail perubahan dari manajer", "Menghapus pesan error dari terminal"],
+              answerIndex: 1,
+              explanation: "Format yang terstruktur memudahkan tim untuk membaca riwayat versi dan bahkan memungkinkan otomatisasi pembuatan changelog atau rilis.",
             }]
         },
       ],
@@ -584,140 +844,207 @@ export const aiDevTrack: Track = {
         {
           kind: "step",
           id: "ai-4-1",
-          title: "Bug Khas Kode Hasil AI",
+          title: "Bug Khas Kode AI: Kasus Tepi yang Terlewat",
           explanation:
-            "Bug paling umum dari AI: 1. Lupa menangani nilai `null` / `undefined`, 2. Memadukan sintaks versi usang & baru, 3. Lupa melakukan validasi sanitasi input.",
+            "Kode dari AI umumnya benar untuk jalur yang mulus: data lengkap, angka wajar, jaringan sehat. Yang sering terlewat justru keadaan yang biasa terjadi di produksi — properti kosong, array tanpa isi, respons gagal, dan pembagian dengan nol. Pola review yang cepat: untuk setiap akses properti bertingkat, tanyakan 'kalau bagian tengahnya belum ada, apa yang terjadi?'. Optional chaining membuat aksesnya aman, tapi kamu tetap perlu memutuskan nilai penggantinya saat data memang tidak ada.",
           example: {
-            code: "// ❌ AI Code: user.address.city (Crash jika user.address null!)\n// ✅ Fix: user?.address?.city",
-            output: "Memperbaiki potensi crash akibat optional chaining terlewat.",
-            note: "Selalu uji kode AI dengan input ekstrem.",
+            code: "const daftar = [];\nconsole.log(daftar[0].nama);          // TypeError\nconsole.log(daftar[0]?.nama ?? '-');  // aman",
+            output: "TypeError: Cannot read properties of undefined (reading 'nama')\n-",
           },
           instruction:
-            "Berikan pengaman optional chaining pada objek `user` dan properti `address` sebelum mengakses `city`, simpan hasilnya di variabel `city`.",
-          starterCode: "// Ambil city dengan aman\n",
+            "Kode AI di editor error saat pengguna belum mengisi alamat. Perbaiki agar aman: pakai optional chaining untuk mengakses `user.alamat.kota`, dan tampilkan teks `'Belum diisi'` ketika kotanya tidak ada.",
+          starterCode: "const user = { nama: 'Bimo' }; // alamat belum diisi\n\n// Kode hasil AI — perbaiki baris di bawah\nconst kota = user.alamat.city;\nconsole.log(kota);\n",
           language: "js",
           tests: [
             {
-              pattern: "const\\s+city\\s*=\\s*user\\?\.address\\?\.city",
-              message: "Gunakan: const city = user?.address?.city;",
+              pattern: "user\\?\\.alamat\\?\\.kota|user\\?\\.alamat\\?\\.\\w+",
+              message:
+                "Akses alamat dengan optional chaining: user?.alamat?.kota.",
+            },
+            {
+              pattern: "\\?\\?\\s*['\"]Belum diisi['\"]|\\|\\|\\s*['\"]Belum diisi['\"]",
+              message:
+                "Beri nilai pengganti 'Belum diisi' saat data kosong.",
+            },
+            {
+              pattern: "console\\.log\\(",
+              message:
+                "Cetak hasilnya agar terlihat di preview.",
             },
           ],
-          solution: "const city = user?.address?.city;",
+          solution: "const user = { nama: 'Bimo' };\n\nconst kota = user?.alamat?.kota ?? 'Belum diisi';\nconsole.log(kota);",
         },
         {
           kind: "step",
           id: "ai-4-2",
-          title: "Checklist Review Kode AI Sebelum Commit",
+          title: "Menulis Komentar Review untuk Kode Buatan AI",
           explanation:
-            "Checklist: 1. Apakah ada API halusinasi? 2. Apakah tipe TypeScript sudah eksplisit? 3. Apakah sudah ada error handling try/catch? 4. Apakah tes otomatis lolos?",
+            "Review kode AI berbeda dari review kode rekan: kamu tidak bisa bertanya 'kenapa kamu menulis ini?' dan mendapat alasan yang bertanggung jawab. Karena itu kamu sendiri yang harus menyebutkan masalahnya secara spesifik — apa yang salah, kenapa berbahaya, dan apa gantinya. Menuliskannya juga melatih keterampilan yang dinilai saat interview senior. Dua hal yang paling sering muncul di kode generated: rahasia yang tertulis langsung di kode, dan kegagalan jaringan yang tidak ditangani.",
           example: {
-            code: "// AI Review Checklist: Valid Types ✅ Error Handling ✅ No Magic Strings ✅",
-            output: "Kode bersih dan aman untuk masuk ke repository tim.",
-            note: "Jadikan checklist ini kebiasaan sebelum membuat Pull Request.",
+            code: "// contoh komentar review yang berguna\n// 1. Query digabung dengan string input pengguna -> celah SQL injection.\n//    Gunakan parameter binding.\n// 2. Hasil parseInt tidak dicek NaN -> total bisa jadi NaN diam-diam.",
+            output: "Komentar menyebut masalah, risikonya, dan saran perbaikannya.",
           },
           instruction:
-            "Bungkus pemanggilan `riskyFunction()` dengan blok `try...catch`. Di blok catch, tangkap error ke variabel `e` dan panggil `console.error(e)`.",
-          starterCode: "// Bungkus dengan try catch\n",
-          language: "js",
+            "Baca kode hasil AI di editor. Ada dua masalah serius. Tulis komentar review (boleh beberapa baris diawali `//`) yang menyebut keduanya: **kunci API yang ditulis langsung di kode** dan **kegagalan fetch yang tidak ditangani**.",
+          starterCode: "// Kode hasil AI:\n// const apiKey = 'sk-live-8823-rahasia';\n// const res = await fetch(url, { headers: { Authorization: apiKey } });\n// const data = await res.json();\n\n// Tulis komentar review-mu di bawah ini\n",
+          language: "text",
           tests: [
             {
-              pattern: "try\\s*\\{\\s*riskyFunction\\(\\);?\\s*\\}\\s*catch\\s*\\(e\\)\\s*\\{\\s*console\\.error\\(e\\);?\\s*\\}",
-              message: "Tulis: try { riskyFunction(); } catch (e) { console.error(e); }",
+              pattern: "(api\\s?key|kunci|secret|rahasia)",
+              flags: "i",
+              message:
+                "Sebutkan masalah kunci API yang tertulis langsung di kode.",
+            },
+            {
+              pattern: "(env|environment|\\.env|variabel lingkungan)",
+              flags: "i",
+              message:
+                "Sebutkan gantinya: simpan di environment variable.",
+            },
+            {
+              pattern: "(gagal|error|status|try|catch|ok)",
+              flags: "i",
+              message:
+                "Sebutkan bahwa kegagalan fetch belum ditangani.",
             },
           ],
-          solution: "try { riskyFunction(); } catch (e) { console.error(e); }",
+          solution: "// 1. API key ditulis langsung di kode. Kalau repo ini ter-push, key aktif ikut bocor.\n//    Pindahkan ke environment variable (process.env.API_KEY).\n// 2. Hasil fetch tidak diperiksa: fetch tidak melempar error saat status 401/500,\n//    jadi res.json() bisa gagal diam-diam. Periksa res.ok dan bungkus dengan try/catch.",
         },
         {
           kind: "step",
           id: "ai-4-3",
-          title: "Keamanan: Mencegah Injeksi & Secrets di AI Code",
+          title: "Keamanan: Rahasia dan Injeksi di Kode Generated",
           explanation:
-            "Hati-hati! Kode buatan AI kadang menyertakan `eval()`, query SQL mentah tanpa sanitasi, atau hardcoded API key rahasia.",
+            "Model belajar dari kode publik, termasuk contoh tutorial yang sengaja disederhanakan — dan penyederhanaan itulah yang sering berbahaya. Dua pola paling sering muncul: kredensial yang ditulis langsung di berkas, dan query database yang dirangkai dengan menyambung string masukan pengguna. Keduanya lolos review sepintas karena kodenya berjalan normal saat diuji dengan data yang wajar. Perbaikannya baku: rahasia dibaca dari environment variable, dan query memakai parameter binding sehingga masukan pengguna tidak pernah menjadi bagian perintah SQL.",
           example: {
-            code: "// ❌ AI Code: const key = 'sk_test_123456789';\n// ✅ Fix: const key = process.env.SECRET_KEY;",
-            output: "Mencegah kebocoran rahasia ke repository publik.",
-            note: "Selalu audit berkas buatan AI dari celah keamanan.",
+            code: "// ❌ rawan SQL injection\n// db.query('SELECT * FROM users WHERE email = ' + email);\n\n// ✅ parameter binding\n// db.query('SELECT * FROM users WHERE email = ?', [email]);",
+            output: "Dengan binding, masukan berisi kutip atau kata kunci SQL diperlakukan sebagai data biasa, bukan perintah.",
           },
           instruction:
-            "Simpan nilai `process.env.SECRET_KEY` ke dalam variabel konstanta bernama `key`.",
-          starterCode: "// Baca dari env\n",
-          language: "js",
+            "Perbaiki kode AI di editor: baca kunci dari environment variable ke dalam variabel `apiKey`, lalu ganti query rawan injeksi menjadi bentuk berparameter dengan tanda `?` dan array `[email]`.",
+          starterCode: "// Kode hasil AI\nconst apiKey = 'sk-live-8823-rahasia';\ndb.query('SELECT * FROM users WHERE email = ' + email);\n",
+          language: "text",
           tests: [
             {
-              pattern: "const\\s+key\\s*=\\s*process\\.env\\.SECRET_KEY",
-              message: "Gunakan: const key = process.env.SECRET_KEY;",
+              pattern: "process\\.env\\.\\w+",
+              message:
+                "Baca kunci dari process.env, jangan tulis nilainya di kode.",
+            },
+            {
+              pattern: "sk-live-8823-rahasia",
+              mustNotMatch: true,
+              message:
+                "Hapus kunci asli dari kode.",
+            },
+            {
+              pattern: "\\?['\"]\\s*,\\s*\\[\\s*email\\s*\\]",
+              message:
+                "Pakai query berparameter: '... = ?', [email].",
             },
           ],
-          solution: "const key = process.env.SECRET_KEY;",
+          solution: "const apiKey = process.env.API_KEY;\ndb.query('SELECT * FROM users WHERE email = ?', [email]);",
         },
         {
           kind: "step",
           id: "ai-4-4",
-          title: "Lisensi & Kode Hasil Training",
+          title: "Lisensi: Kode yang Mirip Persis dengan Milik Orang Lain",
           explanation:
-            "Pastikan kode buatan AI tidak menjiplak langsung potongan algoritma berlisensi GPL/Kritis tanpa izin dari dataset training.",
+            "Model dilatih dari kode publik, dan sebagian kode publik punya lisensi yang mewajibkan atribusi atau melarang pemakaian komersial. Saat AI menghasilkan blok panjang yang terasa 'terlalu rapi dan spesifik', ada kemungkinan itu hafalan dari repositori tertentu. Kebiasaan aman: untuk utilitas umum, pakai library yang sudah jadi dependensi resmi proyek — jelas lisensinya, terawat, dan sudah teruji. Menyalin utilitas panjang ke dalam proyek justru menambah beban perawatan tanpa keuntungan.",
           example: {
-            code: "// Gunakan fitur Copilot 'Filter code matching public code' untuk mencegah penjiplakan lisensi",
-            output: "Repository perusahaan aman dari masalah hukum lisensi cipta.",
-            note: "Penting bagi kepatuhan legal di perusahaan skala besar.",
+            code: "// daripada menyalin 40 baris implementasi debounce dari AI:\nimport { debounce } from 'lodash';\n\nconst cari = debounce((kata) => kirimPencarian(kata), 300);",
+            output: "Fungsi cari hanya dijalankan 300 ms setelah pengguna berhenti mengetik.",
           },
           instruction:
-            "Tugaskan nilai boolean `true` ke variabel konstanta bernama `isPublicCode`.",
-          starterCode: "",
-          language: "js",
+            "AI menempelkan 40 baris implementasi `debounce` yang mencurigakan miripnya dengan sebuah library. Ganti dengan pemakaian library `lodash` yang sudah ada di proyek: impor `debounce` dari `lodash`, lalu buat `const cariProduk` yang men-debounce `kirimPencarian` selama 300 ms.",
+          starterCode: "// Ganti salinan panjang dari AI dengan pemakaian library\n",
+          language: "text",
           tests: [
             {
-              pattern: "const\\s+isPublicCode\\s*=\\s*true",
-              message: "Tulis: const isPublicCode = true;",
+              pattern: "import\\s*\\{\\s*debounce\\s*\\}\\s*from\\s*['\"]lodash['\"]|require\\(['\"]lodash['\"]\\)",
+              message:
+                "Impor debounce dari lodash.",
+            },
+            {
+              pattern: "const\\s+cariProduk\\s*=\\s*debounce\\(",
+              message:
+                "Buat const cariProduk memakai debounce().",
+            },
+            {
+              pattern: "300",
+              message:
+                "Beri jeda 300 ms.",
             },
           ],
-          solution: "const isPublicCode = true;",
+          solution: "import { debounce } from 'lodash';\n\nconst cariProduk = debounce((kata) => kirimPencarian(kata), 300);",
         },
         {
           kind: "step",
           id: "ai-4-5",
-          title: "Latihan Audit Bug di Kode AI",
+          title: "Latihan Audit: Menemukan Bug di Kode AI",
           explanation:
-            "Temukan bug pada kode AI: `function divide(a, b) { return a / b; }` (Lupa mengecek kondisi b === 0!).",
+            "Cara tercepat menjadi reviewer yang tajam adalah berlatih pada kode yang memang mengandung bug. Fungsi pembagian adalah contoh klasik: AI menuliskannya benar secara matematis, tapi lupa bahwa penyebut bisa bernilai nol — dan di JavaScript hasilnya bukan error melainkan `Infinity`, yang lalu menyebar diam-diam ke seluruh perhitungan. Pola yang perlu kamu tanam: setiap masukan dari luar diperiksa dulu sebelum dipakai, dan kegagalan sebaiknya berisik (melempar error) daripada senyap.",
           example: {
-            code: "function divide(a, b) {\n  if (b === 0) throw new Error('Division by zero');\n  return a / b;\n}",
-            output: "Fungsi aman dari pembagian dengan angka nol.",
-            note: "Selalu pertanyakan skenario input 0, negative, dan null.",
+            code: "console.log(10 / 0);\nconsole.log(Number.isFinite(10 / 0));",
+            output: "Infinity\nfalse",
           },
           instruction:
-            "Tuliskan pengondisian yang akan melakukan `throw new Error(\'Division by zero\')` jika variabel `b` sama dengan nilai nol.",
-          starterCode: "// Tulis pengondisian b === 0 di bawah ini\n",
+            "Lengkapi fungsi `bagi(a, b)` di editor agar aman: kalau `b` bernilai 0, lemparkan error baru bertuliskan `'Pembagi tidak boleh nol'`; selain itu kembalikan hasil pembagiannya.",
+          starterCode: "// Kode hasil AI — tambahkan penjagaannya\nfunction bagi(a, b) {\n  return a / b;\n}\n",
           language: "js",
           tests: [
             {
-              pattern: "if\\s*\\(\\s*b\\s*===\\s*0\\s*\\)\\s*throw\\s+new\\s+Error\\((['\"])Division\\s*by\\s*zero\\1\\)",
-              message: "Tuliskan pengondisian pembagian angka nol",
+              pattern: "if\\s*\\(\\s*b\\s*===?\\s*0\\s*\\)",
+              message:
+                "Periksa dulu apakah b bernilai 0.",
+            },
+            {
+              pattern: "throw\\s+new\\s+Error\\(\\s*['\"]Pembagi tidak boleh nol['\"]",
+              message:
+                "Lemparkan Error dengan pesan 'Pembagi tidak boleh nol'.",
+            },
+            {
+              pattern: "return\\s+a\\s*/\\s*b",
+              message:
+                "Tetap kembalikan a / b untuk kasus normal.",
             },
           ],
-          solution: "if (b === 0) throw new Error('Division by zero');",
+          solution: "function bagi(a, b) {\n  if (b === 0) throw new Error('Pembagi tidak boleh nol');\n  return a / b;\n}\n\nconsole.log(bagi(10, 2));",
         },
         {
           kind: "step",
           id: "ai-4-6",
-          title: "Prinsip Tanggung Jawab Akhir Engineer",
+          title: "Kamu yang Menekan Commit, Kamu yang Bertanggung Jawab",
           explanation:
-            "Ingat: **Kamu yang menandatangani commit, kamu yang bertanggung jawab penuh** jika kode produksi crash — bukan AI!",
+            "Di tim mana pun, nama yang tercatat pada commit adalah namamu — bukan nama modelnya. Kalau kode itu merusak produksi, pertanyaannya bukan 'AI-nya salah ya?' melainkan 'kenapa lolos review-mu?'. Karena itu biasakan menulis deskripsi Pull Request yang menyatakan apa yang kamu ubah, bagaimana kamu mengujinya, dan risiko yang kamu sadari. Kebiasaan ini melindungi timmu sekaligus menunjukkan kematangan yang dicari saat penilaian kinerja.",
           example: {
-            code: "// 'AI yang bikin' BUKANLAH alasan yang bisa diterima saat terjadi insiden outage produksi!",
-            output: "Tanggung jawab profesional seorang Software Engineer.",
-            note: "Kepemilikan kode (ownership) berada 100% pada diri developer.",
+            code: "## Perubahan\nMenambah validasi kupon kedaluwarsa.\n\n## Pengujian\nDiuji manual dengan kupon aktif, kupon lewat tanggal, dan tanpa kupon.\n\n## Risiko\nKupon lama yang masih beredar akan ditolak — sudah dikonfirmasi ke tim marketing.",
+            output: "Reviewer tahu persis apa yang diuji dan apa yang bisa berdampak ke pengguna.",
           },
           instruction:
-            "Simpan string nama kamu ke dalam variabel bernama `commitOwner`.",
-          starterCode: "",
-          language: "js",
+            "Kamu memakai AI untuk menulis fungsi perhitungan pajak, dan kamu sudah memeriksanya. Tulis deskripsi Pull Request yang memuat tiga bagian: apa yang **diubah**, bagaimana kamu **menguji**, dan **risiko** yang kamu sadari.",
+          starterCode: "# Tulis deskripsi Pull Request di bawah ini\n",
+          language: "text",
           tests: [
             {
-              pattern: "const\\s+commitOwner\\s*=\\s*(['\"]).+\\1",
-              message: "Tulis: const commitOwner = 'Developer';",
+              pattern: "(perubahan|diubah|menambah|mengubah)",
+              flags: "i",
+              message:
+                "Jelaskan apa yang kamu ubah.",
+            },
+            {
+              pattern: "(uji|test|diuji|pengujian)",
+              flags: "i",
+              message:
+                "Jelaskan bagaimana kamu mengujinya.",
+            },
+            {
+              pattern: "(risiko|dampak|perhatian|catatan)",
+              flags: "i",
+              message:
+                "Sebutkan risiko atau dampak yang kamu sadari.",
             },
           ],
-          solution: "const commitOwner = 'Developer';",
+          solution: "## Perubahan\nMenambah fungsi hitungPajak(total) dengan tarif PPN 11 persen.\n\n## Pengujian\nDiuji dengan total 0, total kecil, dan total besar; hasilnya dibandingkan manual dengan kalkulator.\n\n## Risiko\nTarif ditulis sebagai konstanta. Kalau tarif berubah, satu baris ini harus diperbarui.",
         },
         {
           kind: "quiz",
@@ -750,6 +1077,20 @@ export const aiDevTrack: Track = {
               choices: ["Kode tersebut mungkin akan kadaluarsa besok", "Bisa menyebabkan rahasia perusahaan bocor atau digunakan oleh pihak tak bertanggung jawab", "Membuat ukuran file membesar", "AI akan meminta bayaran ekstra"],
               answerIndex: 1,
               explanation: "API key hardcoded yang didapat dari atau dibagikan ke sistem publik berpotensi tinggi memicu pelanggaran keamanan dan kerugian finansial."
+            }, {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Mengapa kode buatan AI sering kali gagal menangani nilai null atau undefined?",
+              choices: ["AI memang diprogram untuk benci nilai null", "AI cenderung menghasilkan kode jalur bahagia (happy path) dan melupakan kondisi ekstrem", "Bahasa pemrograman tidak mendukung null", "Nilai null selalu menyebabkan komputer rusak"],
+              answerIndex: 1,
+              explanation: "Karena dilatih untuk mencari solusi yang paling umum, AI sering menulis kode yang berasumsi input selalu valid (happy path) tanpa error handling.",
+            }, {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Apa risiko hukum terbesar jika kita langsung menyalin algoritma kompleks yang dihasilkan oleh AI tanpa memeriksanya?",
+              choices: ["Menurunkan performa komputer perusahaan", "AI akan meminta bagian saham dari perusahaan", "Kode tersebut mungkin menjiplak lisensi hak cipta dari repository open source yang membatasi penggunaan komersial", "Ukuran font kode akan berubah menjadi tidak standar"],
+              answerIndex: 2,
+              explanation: "Beberapa kode mungkin dihasilkan dari dataset berlisensi (seperti GPL) yang mengharuskan kodemu ikut bersifat open source, sehingga membahayakan rahasia dagang.",
             }]
         },
       ],
@@ -771,140 +1112,203 @@ export const aiDevTrack: Track = {
         {
           kind: "step",
           id: "ai-5-1",
-          title: "Debugging dengan Reproducible Example Minimal",
+          title: "Reproducible Example: Potongan Terkecil yang Masih Error",
           explanation:
-            "Isolasi bug menjadi potongan kode kecil (reproducible snippet) sebelum mengirimkannya ke AI untuk analisis perbaikan.",
+            "Menempelkan seluruh file ke chat membuat AI sibuk menebak bagian mana yang penting. Yang jauh lebih efektif adalah minimal reproducible example: potongan terkecil yang masih memunculkan error, lengkap dengan pesan error dan versi yang kamu pakai. Proses menyusutkan kode ini punya efek samping yang menyenangkan — sekitar separuh kasus terpecahkan sebelum kamu sempat bertanya, karena kamu menemukan sendiri baris penyebabnya. Ini juga etika standar saat melapor bug ke repositori open source.",
           example: {
-            code: "// Berikan potongan 10 baris fungsi bermasalah alih-alih melempar 1.000 baris file proyek utuh",
-            output: "AI menemukan bug dengan presisi tinggi.",
-            note: "Meminimalkan gangguan noise informasi yang tidak relevan.",
+            code: "Node 20, tanpa framework. Potongan terkecil yang masih error:\n\nconst data = JSON.parse('{ nama: \"Bimo\" }');\n\nError: SyntaxError: Expected property name or '}' in JSON at position 2\nYang saya harapkan: objek dengan properti nama.",
+            output: "AI langsung menunjuk penyebabnya: kunci JSON wajib memakai tanda kutip ganda.",
           },
           instruction:
-            "Buat fungsi `bugSnippet` yang selalu me-return nilai boolean `true`.",
-          starterCode: "// Buat fungsi bugSnippet di sini\n",
-          language: "js",
+            "Kamu menemukan bug pada perhitungan total keranjang. Tulis laporan minimal reproducible example yang memuat: **potongan kode kecil** penyebabnya, **pesan error atau hasil yang salah**, dan **hasil yang kamu harapkan**.",
+          starterCode: "# Tulis laporan minimal reproducible example di bawah ini\n",
+          language: "text",
           tests: [
             {
-              pattern: "function\\s+bugSnippet\\(\\)\\s*\\{\\s*return\\s+true;?\\s*\\}",
-              message: "Tulis: function bugSnippet() { return true; }",
+              pattern: "(const|function|let|=>)",
+              message:
+                "Sertakan potongan kode kecil yang memunculkan bug-nya.",
+            },
+            {
+              pattern: "(error|hasil|keluar|muncul|NaN|undefined)",
+              flags: "i",
+              message:
+                "Sebutkan pesan error atau hasil keliru yang muncul.",
+            },
+            {
+              pattern: "(harap|seharusnya|diinginkan|ekspektasi|semestinya)",
+              flags: "i",
+              message:
+                "Sebutkan hasil yang seharusnya.",
             },
           ],
-          solution: "function bugSnippet() { return true; }",
+          solution: "Node 20. Potongan terkecil yang masih bermasalah:\n\nconst items = [{ harga: '10000' }, { harga: '5000' }];\nconst total = items.reduce((a, b) => a + b.harga, 0);\n\nHasil yang muncul: '0100005000' (string tersambung).\nSeharusnya: 15000 sebagai angka.",
         },
         {
           kind: "step",
           id: "ai-5-2",
-          title: "AI sebagai Interactive Rubber Duck",
+          title: "AI sebagai Rubber Duck yang Menjawab",
           explanation:
-            "Dalam dunia programming, ada teknik unik bernama Rubber Duck Debugging: programmer menceritakan masalah kodenya keras-keras kepada mainan bebek karet. Seringkali, hanya dengan mencoba menjelaskan alur logikanya, kamu akan menyadari sendiri di mana letak kesalahannya. Nah, kamu bisa menggunakan AI sebagai 'bebek karet' yang interaktif! Jelaskan alur logikamu ke AI, lalu minta AI mendeteksi apakah ada asumsi yang terlewat atau salah.",
+            "Teknik rubber ducking klasik: kamu menjelaskan masalahmu kalimat per kalimat ke bebek karet, dan sering kali jawabannya muncul di tengah penjelasan. AI membuat teknik ini lebih tajam karena ia bisa menantang balik asumsimu. Kuncinya adalah menulis dugaan dan hal yang sudah kamu coba, bukan menyerahkan masalah mentah-mentah. Kebiasaan menyusun dugaan juga melatihmu berpikir sistematis: menyempitkan kemungkinan satu per satu, bukan mengubah kode secara acak sampai kebetulan jalan.",
           example: {
-            code: "// Prompt: 'Saya mengasumsikan variabel A bernilai 10 di baris ini. Apakah ada skenario di mana A bisa bernilai null?'",
-            output: "AI menyoroti: 'Jika A berasal dari database, ia bisa bernilai null'",
-            note: "Proses diskusi interaktif memperjelas peta pikiran pengembang.",
+            code: "Dugaan saya: state tidak ter-update karena objeknya dimutasi langsung.\nSudah saya coba: menambah console.log sebelum setState — nilainya benar di situ.\nYang belum saya cek: apakah komponen ini memang re-render.\nMenurutmu bagian mana yang paling mungkin?",
+            output: "AI menyoroti satu kemungkinan yang belum diperiksa, bukan mengulang saran umum.",
           },
           instruction:
-            "Buat pengondisian `if` yang mengecek apakah variabel `A` bernilai sama persis dengan `null`. Jika ya, kembalikan string 'is null'.",
-          starterCode: "// Buat pengecekan null di sini\n",
-          language: "js",
+            "Fitur pencarianmu tidak menampilkan hasil apa pun. Tulis catatan rubber duck yang memuat: **dugaanmu**, **apa yang sudah kamu coba**, dan **bagian yang belum kamu periksa**.",
+          starterCode: "# Tulis catatan rubber duck-mu di bawah ini\n",
+          language: "text",
           tests: [
             {
-              pattern: "if\\s*\\(\\s*A\\s*===\\s*null\\s*\\)\\s*\\{\\s*return\\s+(['\"])is\\s*null\\1;?\\s*\\}",
-              message: "Tulis: if (A === null) { return 'is null'; }",
+              pattern: "(dugaan|kemungkinan|menurut saya|curiga)",
+              flags: "i",
+              message:
+                "Tulis dugaanmu tentang penyebabnya.",
+            },
+            {
+              pattern: "(sudah saya coba|sudah dicoba|saya sudah)",
+              flags: "i",
+              message:
+                "Tulis apa yang sudah kamu coba.",
+            },
+            {
+              pattern: "(belum|belum saya|belum dicek|belum diperiksa)",
+              flags: "i",
+              message:
+                "Tulis bagian yang belum kamu periksa.",
             },
           ],
-          solution: "if (A === null) { return 'is null'; }",
+          solution: "Dugaan saya: query dikirim sebelum state kata kunci sempat diperbarui.\nSudah saya coba: mencetak kata kunci di dalam handler, isinya selalu tertinggal satu ketikan.\nBelum saya periksa: apakah pemanggilan API sebaiknya dipindah ke useEffect dengan dependensi kata kunci.",
         },
         {
           kind: "step",
           id: "ai-5-3",
-          title: "Refactoring Terarah (1 Tujuan per Request)",
+          title: "Refactoring Terarah: Satu Tujuan per Permintaan",
           explanation:
-            "Saat melakukan refactoring dengan AI, fokus pada 1 tujuan spesifik saja per permintaan (misal: 'Ekstrak fungsi ini' atau 'Gunakan async/await').",
+            "Meminta AI 'rapikan kode ini' menghasilkan perubahan serabutan: nama variabel berubah, struktur bergeser, dan kamu tidak lagi bisa membedakan mana perbaikan mana kerusakan. Refactoring yang bisa direview selalu punya satu tujuan yang jelas — misalnya mengubah callback bertingkat menjadi async/await, tanpa menyentuh hal lain. Dengan satu tujuan, diff-nya kecil, mudah diuji, dan mudah dibatalkan kalau ternyata salah. Prinsip ini berlaku juga saat kamu refactor tanpa AI.",
           example: {
-            code: "// Prompt 1: Ekstrak logika database -> Prompt 2: Tambahkan type annotation -> Prompt 3: Optimasi loop",
-            output: "Hasil refactoring aman dan mudah di-review.",
-            note: "Jangan meminta 5 jenis refactoring sekaligus dalam 1 prompt.",
+            code: "// sebelum: callback bertingkat\nambilUser(id, (user) => {\n  ambilPesanan(user.id, (pesanan) => {\n    console.log(pesanan);\n  });\n});",
+            output: "Kode berjalan, tapi penanganan error harus ditulis di setiap tingkat callback.",
           },
           instruction:
-            "Ubah fungsi anonim biasa menjadi fungsi asynchronous bernama `fetchData` yang melakukan `await fetch(\'/api\')`.",
-          starterCode: "// Buat async function fetchData di sini\n",
+            "Ubah fungsi callback di editor menjadi versi `async/await`: buat `async function tampilkanPesanan(id)` yang meng-`await` `ambilUser(id)` lalu `ambilPesanan(user.id)`, dan cetak hasilnya. Jangan mengubah nama fungsi yang dipanggil.",
+          starterCode: "// versi lama (callback)\n// ambilUser(id, (user) => ambilPesanan(user.id, (p) => console.log(p)));\n\n// Tulis versi async/await di bawah ini\n",
           language: "js",
           tests: [
             {
-              pattern: "async\\s+function\\s+fetchData\\(\\)\\s*\\{\\s*await\\s+fetch\\((['\"])/api\\1\\);?\\s*\\}",
-              message: "Tulis: async function fetchData() { await fetch('/api'); }",
+              pattern: "async\\s+function\\s+tampilkanPesanan\\s*\\(\\s*id\\s*\\)",
+              message:
+                "Buat async function tampilkanPesanan(id).",
+            },
+            {
+              pattern: "await\\s+ambilUser\\(\\s*id\\s*\\)",
+              message:
+                "Pakai await saat memanggil ambilUser(id).",
+            },
+            {
+              pattern: "await\\s+ambilPesanan\\(",
+              message:
+                "Pakai await saat memanggil ambilPesanan(...).",
+            },
+            {
+              pattern: "console\\.log\\(",
+              message:
+                "Cetak hasil pesanannya.",
             },
           ],
-          solution: "async function fetchData() { await fetch('/api'); }",
+          solution: "async function tampilkanPesanan(id) {\n  const user = await ambilUser(id);\n  const pesanan = await ambilPesanan(user.id);\n  console.log(pesanan);\n}",
         },
         {
           kind: "step",
           id: "ai-5-4",
-          title: "Memahami Codebase Asing dengan AI",
+          title: "Memahami Codebase Asing dengan Bantuan AI",
           explanation:
-            "Minta AI menjelaskan arsitektur berkas kode legacy yang rumit: 'Jelaskan alur data di file ini dalam bentuk poin-poin sederhana'.",
+            "Hari pertama di proyek baru selalu terasa seperti masuk kota asing tanpa peta. AI mempercepat orientasi kalau kamu bertanya secara terstruktur: mana titik masuk aplikasinya, ke mana data mengalir, dan file mana yang paling sering disentuh untuk fitur tertentu. Yang tidak boleh kamu lakukan adalah menelan jawabannya bulat-bulat — verifikasi dengan membuka file yang disebut. Anggap AI sebagai rekan yang sudah membaca sekilas, bukan sebagai dokumentasi resmi.",
           example: {
-            code: "// Prompt: 'Jelaskan apa yang dilakukan fungsi regex 50 karakter ini dan berikan 3 contoh input yang cocok'",
-            output: "Memahami kode rumit dalam waktu singkat.",
-            note: "Memangkas waktu orientasi pada proyek legacy baru.",
+            code: "Saya baru di repo ini. Berdasarkan struktur folder yang saya tempel:\n1. Mana titik masuk aplikasinya?\n2. Ke mana alur data dari form pendaftaran?\n3. File mana yang harus saya buka untuk mengubah aturan validasi?",
+            output: "AI menyebut src/main.tsx sebagai titik masuk dan menunjuk dua file yang perlu dibuka lebih dulu.",
           },
           instruction:
-            "Buat variabel `regex` yang berisi regular expression untuk mencocokkan hanya huruf kecil (a-z) dan angka (0-9) dengan batas awal (^) dan akhir ($).",
-          starterCode: "",
-          language: "js",
+            "Kamu ditugaskan mengubah alur checkout di codebase yang belum pernah kamu buka. Tulis prompt orientasi yang menanyakan **titik masuk**, **alur data**, dan **file yang perlu diubah** untuk tugas itu.",
+          starterCode: "# Tulis prompt orientasi codebase di bawah ini\n",
+          language: "text",
           tests: [
             {
-              pattern: "const\\s+regex\\s*=\\s*/\\^\\[a-z0-9\\]\\+\\$/",
-              message: "Tulis: const regex = /^[a-z0-9]+$/;",
+              pattern: "(titik masuk|entry point|mulai dari mana|file utama)",
+              flags: "i",
+              message:
+                "Tanyakan titik masuk aplikasinya.",
+            },
+            {
+              pattern: "(alur|flow|mengalir|dari mana ke mana)",
+              flags: "i",
+              message:
+                "Tanyakan alur datanya.",
+            },
+            {
+              pattern: "(file|berkas|folder)",
+              flags: "i",
+              message:
+                "Tanyakan file mana yang perlu kamu buka atau ubah.",
             },
           ],
-          solution: "const regex = /^[a-z0-9]+$/;",
+          solution: "Saya baru di codebase ini dan harus mengubah alur checkout.\n1. Mana titik masuk aplikasinya?\n2. Bagaimana alur data dari tombol Bayar sampai pesanan tersimpan?\n3. File mana saja yang perlu saya buka untuk menambah metode pembayaran baru?",
         },
         {
           kind: "step",
           id: "ai-5-5",
-          title: "Migrasi Versi Framework dengan AI + Verifikasi",
+          title: "Migrasi Versi dengan AI, Verifikasi oleh Kamu",
           explanation:
-            "Gunakan AI untuk memperbarui sintaks usang ke versi baru (misal React Class Component ke Functional Hooks), lalu jalankan unit test untuk verifikasi.",
+            "Migrasi antarversi framework adalah pekerjaan yang polanya jelas, jadi AI cukup membantu — tapi ia juga rawan mencampur sintaks lama dan baru karena keduanya ada di data latihannya. Contoh klasik di React: `componentDidMount` pada class component digantikan `useEffect` dengan array dependensi kosong pada function component. Setelah migrasi, wajib kamu verifikasi sendiri: jalankan aplikasinya, jalankan test, dan periksa perilaku yang bergantung pada siklus hidup komponen. Kode yang 'kelihatannya sudah modern' belum tentu berperilaku sama.",
           example: {
-            code: "// Prompt: 'Konversi React Class Component ini ke Functional Component dengan useState'",
-            output: "Migrasi kode berjalan cepat dan terstruktur.",
-            note: "Selalu jalankan unit test pasca migrasi untuk menjamin tidak ada regresi.",
+            code: "// pola lama (class component)\n// componentDidMount() { muatData(); }\n\n// pola baru (function component)\nuseEffect(() => {\n  muatData();\n}, []);",
+            output: "Efek dijalankan sekali setelah render pertama, sama seperti componentDidMount.",
           },
           instruction:
-            "Deklarasikan state React `count` beserta setter-nya dengan nilai awal 0 menggunakan hooks `useState`.",
-          starterCode: "",
-          language: "js",
+            "Migrasikan potongan class component di editor: tulis pemanggilan `useEffect` yang menjalankan `muatData()` sekali saja setelah render pertama (perhatikan array dependensinya).",
+          starterCode: "// componentDidMount() {\n//   muatData();\n// }\n\n// Tulis padanannya dengan useEffect di bawah ini\n",
+          language: "jsx",
           tests: [
             {
-              pattern: "const\\s*\\[\\s*count\\s*,\\s*setCount\\s*\\]\\s*=\\s*useState\\(\\s*0\\s*\\)",
-              message: "Tulis: const [count, setCount] = useState(0);",
+              pattern: "useEffect\\(\\s*\\(\\s*\\)\\s*=>",
+              message:
+                "Panggil useEffect dengan fungsi arrow.",
+            },
+            {
+              pattern: "muatData\\(\\s*\\)",
+              message:
+                "Jalankan muatData() di dalam efek.",
+            },
+            {
+              pattern: "\\}\\s*,\\s*\\[\\s*\\]\\s*\\)",
+              message:
+                "Beri array dependensi kosong agar hanya berjalan sekali.",
             },
           ],
-          solution: "const [count, setCount] = useState(0);",
+          solution: "useEffect(() => {\n  muatData();\n}, []);",
         },
         {
           kind: "step",
           id: "ai-5-6",
-          title: "Kapan Harus Berhenti (Rabbit Hole Detection)",
+          title: "Tanda Kamu Sudah Masuk Lubang Kelinci",
           explanation:
-            "Jika kamu sudah berdikusi 15 menit dengan AI dan kode makin berantakan/rusak, STOP! Revert git commit ke kondisi bersih dan atur ulang pendekatan secara manual.",
+            "Ada titik di mana meminta perbaikan berikutnya justru memperburuk keadaan: sudah lebih dari tiga putaran tanpa kemajuan, kodenya makin panjang, dan kamu tidak lagi bisa menjelaskan apa yang berubah. Itu tanda untuk berhenti, membuang perubahan lokal, dan kembali ke kondisi bersih terakhir. Membuang satu jam pekerjaan yang membingungkan lebih murah daripada mempertahankan kode yang tidak kamu pahami. Setelah bersih, kerjakan ulang dengan langkah yang jauh lebih kecil — dan kali ini commit setiap kali satu bagian berhasil.",
           example: {
-            code: "git checkout . # Revert perubahan jika terjebak di lubang kelinci halusinasi AI",
-            output: "Kembali ke kondisi kode stabil dan memikirkan solusi alternatif.",
-            note: "Jangan memaksakan menumpuk kode perbaikan AI yang salah arah.",
+            code: "git status\ngit stash",
+            output: "On branch main\nChanges not staged for commit:\n  modified:   src/checkout.js\nSaved working directory and index state WIP on main",
           },
           instruction:
-            "Tuliskan perintah yang membuang (revert) seluruh perubahan lokal agar file kembali ke kondisi bersih pada cabang aktif saat ini.",
-          starterCode: "# Ketik perintah di bawah ini\n",
+            "Setelah lima putaran tanpa kemajuan, kamu memutuskan kembali ke kondisi bersih. Tulis perintah Git yang membuang seluruh perubahan lokal yang belum di-commit pada direktori kerja saat ini.",
+          starterCode: "# Tulis perintah Git di bawah ini\n",
           language: "text",
           tests: [
             {
-              pattern: "git\\s+checkout\\s+\\.",
-              message: "Gunakan perintah: git checkout .",
+              pattern: "git\\s+(checkout\\s+\\.|restore\\s+\\.|reset\\s+--hard)",
+              message:
+                "Pakai git restore . (atau git checkout .) untuk membuang perubahan lokal.",
             },
           ],
-          solution: "git checkout .",
+          solution: "git restore .",
         },
         {
           kind: "quiz",
@@ -937,6 +1341,20 @@ export const aiDevTrack: Track = {
               choices: ["Minta AI merombak seluruh sistem dalam satu kali request", "Fokus pada satu tujuan spesifik saja per permintaan (misal: ekstrak fungsi atau ubah ke async/await)", "Jangan pernah mereview hasil refactoring", "AI selalu tahu cara terbaik merombak kode"],
               answerIndex: 1,
               explanation: "Refactoring bertahap (incremental) jauh lebih aman, meminimalisir bug baru, dan memudahkan manusia untuk meninjau perubahan per tahap."
+            }, {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Apa analogi yang tepat saat menggunakan AI untuk menceritakan masalah logika dan mencari asumsi yang salah?",
+              choices: ["Interactive Rubber Duck", "Black Box Testing", "Pair Programming", "Brute Force Attack"],
+              answerIndex: 0,
+              explanation: "Seperti Rubber Duck Debugging, menjelaskan masalah kepada AI sering kali membantu kita sendiri menemukan letak kesalahannya, ditambah respons kritis dari AI.",
+            }, {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Bagaimana AI dapat membantu saat kita harus berhadapan dengan codebase legacy (kode lawas) yang asing?",
+              choices: ["Menghapus kode lawas tersebut tanpa perlu dibaca", "Memberikan penjelasan tingkat tinggi mengenai arsitektur dan alur data dari kode tersebut", "Mengubah bahasa kode menjadi bahasa Latin", "Mematikan server produksi jika kodenya buruk"],
+              answerIndex: 1,
+              explanation: "AI dapat membaca file panjang dan merangkum tujuan, input, dan output fungsinya, sehingga mempercepat proses orientasi pada sistem baru.",
             }]
         },
       ],
@@ -957,117 +1375,192 @@ export const aiDevTrack: Track = {
         {
           kind: "step",
           id: "ai-6-1",
-          title: "Kebijakan Kode Rahasia & LLM Publik",
+          title: "Kode Rahasia Perusahaan dan LLM Publik",
           explanation:
-            "JANGAN PERNAH menempelkan kredensial rahasia, data pelanggan, atau source code hak cipta perusahaan ke layanan AI publik jika tidak diizinkan oleh kebijakan keamanan perusahaan.",
+            "Banyak perusahaan melarang menempelkan kode internal, data pelanggan, atau kredensial ke layanan AI publik — dan pelanggarannya bisa berujung sanksi serius, bukan sekadar teguran. Bahkan tanpa larangan resmi, menempelkan data asli pelanggan tetap tidak pantas secara etika. Kebiasaan yang aman: bersihkan potongan kode sebelum dikirim — ganti kunci, nama pelanggan, dan endpoint internal dengan nilai contoh. Kalau setelah dibersihkan masalahnya tidak lagi bisa dijelaskan, itu tanda kamu memang harus bertanya ke rekan kerja, bukan ke AI.",
           example: {
-            code: "// Gunakan Enterprise AI Plan dengan perlindungan 'Data Privacy' (No Training on User Data)",
-            output: "Mencegah kebocoran rahasia dagang ke dataset publik.",
-            note: "Patuhi kebijakan NDA dan IT Security perusahaanmu.",
+            code: "// sebelum dikirim ke AI\n// const key = 'sk-live-2291-produksi';\n// const email = 'siti.rahayu@bankxyz.co.id';\n\n// versi bersih\nconst key = process.env.API_KEY;\nconst email = 'user@example.com';",
+            output: "Potongan kode tetap menggambarkan masalahnya, tanpa membawa data asli.",
           },
           instruction:
-            "Buat variabel konstanta bernama `isSafe` dengan nilai boolean `false`.",
-          starterCode: "",
-          language: "js",
+            "Bersihkan potongan kode di editor sebelum kamu tempel ke chat AI: ganti nilai kunci agar dibaca dari `process.env`, dan ganti email pelanggan asli menjadi `user@example.com`.",
+          starterCode: "const key = 'sk-live-2291-produksi';\nconst email = 'siti.rahayu@bankxyz.co.id';\nkirimLaporan(key, email);\n",
+          language: "text",
           tests: [
             {
-              pattern: "const\\s+isSafe\\s*=\\s*false",
-              message: "Tulis: const isSafe = false;",
+              pattern: "process\\.env\\.\\w+",
+              message:
+                "Ganti kunci asli dengan process.env.API_KEY.",
+            },
+            {
+              pattern: "user@example\\.com",
+              message:
+                "Ganti email pelanggan dengan user@example.com.",
+            },
+            {
+              pattern: "sk-live-2291-produksi",
+              mustNotMatch: true,
+              message:
+                "Hapus kunci produksi dari potongan yang akan kamu kirim.",
+            },
+            {
+              pattern: "siti\\.rahayu@bankxyz\\.co\\.id",
+              mustNotMatch: true,
+              message:
+                "Hapus data pelanggan asli.",
             },
           ],
-          solution: "const isSafe = false;",
+          solution: "const key = process.env.API_KEY;\nconst email = 'user@example.com';\nkirimLaporan(key, email);",
         },
         {
           kind: "step",
           id: "ai-6-2",
-          title: "Etika Penggunaan AI di Technical Interview",
+          title: "AI di Technical Interview: Aturannya Berbeda-beda",
           explanation:
-            "Tanyakan aturan penggunaan AI kepada interviewer. Saat diperbolehkan, jelaskan alur pemikiranmu secara lisan sewaktu menggunakan AI.",
+            "Sebagian perusahaan mempersilakan AI saat tes teknis karena itu mencerminkan pekerjaan sehari-hari; sebagian lain melarang total karena yang ingin mereka lihat adalah cara berpikirmu. Yang berlaku universal: tanyakan aturannya di awal, dan jangan pernah memakai AI diam-diam saat dilarang. Kalau diizinkan, tunjukkan proses berpikirmu dengan suara — sebutkan alasan memilih pendekatan, apa yang kamu minta ke AI, dan bagaimana kamu memverifikasi hasilnya. Kandidat yang lolos biasanya bukan yang tercepat, tapi yang paling jelas alasannya.",
           example: {
-            code: "// Interviewer ingin melihat CARA BERPIKIR dan Kemampuan Problem Solving-mu, bukan sekadar hasil jawaban akhir",
-            output: "Menunjukkan kejujuran dan profesionalisme tinggi.",
-            note: "Menyontek rahasia dengan AI saat interview akan langsung terdeteksi saat sesi wawancara tatap muka.",
+            code: "Sebelum mulai:\n\"Boleh saya memakai bantuan AI untuk bagian boilerplate?\nKalau tidak boleh, saya kerjakan manual — saya ikut aturan Anda.\"",
+            output: "Pewawancara menjawab aturannya sejak awal, dan tidak ada kecurigaan di tengah sesi.",
           },
           instruction:
-            "Buat fungsi `interviewAnswer` yang me-return string 'I think aloud'.",
-          starterCode: "// Buat fungsi interviewAnswer di sini\n",
-          language: "js",
+            "Kamu masuk sesi live coding dan belum tahu aturan pemakaian AI. Tulis kalimat pembuka yang kamu ucapkan: **tanyakan aturannya**, sebutkan **kesediaanmu mengikuti** aturan itu, dan tawarkan **menjelaskan proses berpikirmu** selama mengerjakan.",
+          starterCode: "# Tulis kalimat pembukamu di bawah ini\n",
+          language: "text",
           tests: [
             {
-              pattern: "function\\s+interviewAnswer\\(\\)\\s*\\{\\s*return\\s+(['\"])I\\s*think\\s*aloud\\1;?\\s*\\}",
-              message: "Tulis: function interviewAnswer() { return 'I think aloud'; }",
+              pattern: "(boleh|apakah|aturan|izin)",
+              flags: "i",
+              message:
+                "Tanyakan dulu aturan pemakaian AI di sesi ini.",
+            },
+            {
+              pattern: "(ikut|mengikuti|patuh|sesuai aturan|tidak apa)",
+              flags: "i",
+              message:
+                "Nyatakan kesediaanmu mengikuti aturan itu.",
+            },
+            {
+              pattern: "(jelaskan|menjelaskan|berpikir|alasan)",
+              flags: "i",
+              message:
+                "Tawarkan menjelaskan proses berpikirmu.",
             },
           ],
-          solution: "function interviewAnswer() { return 'I think aloud'; }",
+          solution: "Sebelum mulai, boleh saya tanya aturannya: apakah saya diizinkan memakai bantuan AI di sesi ini?\nApa pun aturannya saya ikuti.\nSaya akan menjelaskan proses berpikir saya sambil mengerjakan supaya Anda bisa melihat alasan tiap keputusan.",
         },
         {
           kind: "step",
           id: "ai-6-3",
-          title: "Skill bernilai Tinggi di Era AI",
+          title: "Skill yang Justru Naik Nilainya",
           explanation:
-            "Di era AI, skill yang justru MAKIN bernilai mahal adalah: 1. Arsitektur Sistem, 2. Kemampuan Code Review, 3. Pemahaman Domain Bisnis, 4. Komunikasi & Empati.",
+            "Ketika menulis kode menjadi murah, yang mahal adalah memutuskan kode apa yang layak ditulis. Tiga kemampuan naik nilainya: merumuskan kebutuhan menjadi kriteria yang bisa diuji, meninjau pekerjaan orang lain (termasuk mesin), dan menjelaskan keputusan teknis kepada orang non-teknis. Ketiganya butuh konteks yang tidak dimiliki model: siapa penggunamu, apa risiko bisnisnya, dan apa yang sudah pernah gagal di tim ini. Melatihnya sederhana — biasakan menulis kriteria penerimaan sebelum menulis kode.",
           example: {
-            code: "// Menulis kode sintaks menjadi lebih murah, namun Merancang Sistem yang Tepat menjadi jauh lebih berharga!",
-            output: "Fokus pada pengembangan fundamental software engineering.",
-            note: "Jadilah Problem Solver, bukan sekadar pengetik sintaks.",
+            code: "Fitur: lupa password\n- Pengguna memasukkan email terdaftar lalu menerima tautan reset maksimal 1 menit.\n- Tautan kedaluwarsa setelah 30 menit dan hanya bisa dipakai sekali.\n- Email tak terdaftar tetap menampilkan pesan sama (tidak membocorkan keberadaan akun).",
+            output: "Kriteria ini bisa langsung diuji satu per satu dan tidak menyisakan tafsir ganda.",
           },
           instruction:
-            "Buat sebuah kelas kosong bernama `SystemArchitect`.",
-          starterCode: "",
-          language: "js",
+            "Tulis **tiga kriteria penerimaan** (satu per baris, diawali `- `) untuk fitur 'unggah foto profil'. Minimal satu kriteria harus menyebut batasan teknis (ukuran atau format file), dan satu lagi menyebut perilaku saat terjadi kegagalan.",
+          starterCode: "# Tulis kriteria penerimaan di bawah ini\n",
+          language: "text",
           tests: [
             {
-              pattern: "class\\s+SystemArchitect\\s*\\{\\s*\\}",
-              message: "Tulis: class SystemArchitect {}",
+              pattern: "(^|\\n)\\s*-\\s+\\S+[\\s\\S]*(\\n)\\s*-\\s+\\S+[\\s\\S]*(\\n)\\s*-\\s+\\S+",
+              message:
+                "Tulis tiga kriteria, masing-masing satu baris diawali tanda -.",
+            },
+            {
+              pattern: "(mb|kb|jpg|png|ukuran|format)",
+              flags: "i",
+              message:
+                "Sebutkan batasan teknis seperti ukuran atau format file.",
+            },
+            {
+              pattern: "(gagal|error|ditolak|kedaluwarsa|tidak valid)",
+              flags: "i",
+              message:
+                "Sebutkan perilaku saat terjadi kegagalan.",
             },
           ],
-          solution: "class SystemArchitect {}",
+          solution: "- Pengguna dapat mengunggah foto berformat JPG atau PNG berukuran maksimal 2 MB.\n- Foto yang berhasil diunggah langsung tampil di halaman profil tanpa perlu refresh.\n- Jika file ditolak, pesan error menyebut alasannya dan foto lama tetap dipakai.",
         },
         {
           kind: "step",
           id: "ai-6-4",
-          title: "Aturan 'Coba Dulu' Mencegah Ketergantungan",
+          title: "Aturan 'Coba Dulu' agar Tidak Tergantung",
           explanation:
-            "Terapkan Aturan 'Coba Dulu': Saat menghadapi bug/konsep baru, usahakan memikirkan & memecahkannya secara mandiri selama 15 menit SEBELUM bertanya pada AI.",
+            "Ketergantungan pada AI terbentuk pelan-pelan: setiap kali mentok, kamu bertanya sebelum sempat berpikir. Setelah beberapa bulan pekerjaan tetap selesai, tapi kemampuan menyelesaikan masalahmu sendiri tidak tumbuh — dan itu terlihat jelas saat interview atau saat internet tim mati. Aturan sederhana yang dipakai banyak orang: coba sendiri dulu 15 menit, tulis dugaanmu, baru bertanya. Latihan kecil yang kamu kerjakan sendiri hari ini adalah investasi untuk momen ketika tidak ada yang bisa kamu tanyai.",
           example: {
-            code: "// 15 Menit Berpikir Mandiri -> Baca Dokumentasi -> Tanya AI jika tetap buntu",
-            output: "Membentuk otot berpikir kritis agar tidak tumpul.",
-            note: "Ketergantungan instan pada AI memperlambat pertumbuhan skill-mu.",
+            code: "function huruf(kata) {\n  return kata[0].toUpperCase() + kata.slice(1);\n}\nconsole.log(huruf('kopi'));",
+            output: "Kopi",
           },
           instruction:
-            "Buat fungsi `thinkFor15Mins` yang selalu me-return nilai boolean `true`.",
-          starterCode: "// Buat fungsi thinkFor15Mins di sini\n",
+            "Kerjakan sendiri tanpa bantuan: buat fungsi `kapitalisasi(kalimat)` yang mengubah huruf pertama **setiap kata** menjadi kapital, lalu cetak hasilnya untuk `'belajar coding itu seru'`.",
+          starterCode: "// Kerjakan sendiri dulu, minimal 15 menit sebelum bertanya\n",
           language: "js",
           tests: [
             {
-              pattern: "function\\s+thinkFor15Mins\\(\\)\\s*\\{\\s*return\\s+true;?\\s*\\}",
-              message: "Tulis: function thinkFor15Mins() { return true; }",
+              pattern: "function\\s+kapitalisasi\\s*\\(|const\\s+kapitalisasi\\s*=",
+              message:
+                "Buat fungsi kapitalisasi(kalimat).",
+            },
+            {
+              pattern: "split\\(",
+              message:
+                "Pecah kalimat menjadi kata-kata dengan split().",
+            },
+            {
+              pattern: "toUpperCase\\(\\)",
+              message:
+                "Ubah huruf pertama tiap kata dengan toUpperCase().",
+            },
+            {
+              pattern: "join\\(|reduce\\(",
+              message:
+                "Gabungkan kembali kata-katanya, misalnya dengan join(' ').",
+            },
+            {
+              pattern: "console\\.log\\(",
+              message:
+                "Cetak hasilnya.",
             },
           ],
-          solution: "function thinkFor15Mins() { return true; }",
+          solution: "function kapitalisasi(kalimat) {\n  return kalimat\n    .split(' ')\n    .map((kata) => kata[0].toUpperCase() + kata.slice(1))\n    .join(' ');\n}\n\nconsole.log(kapitalisasi('belajar coding itu seru'));",
         },
         {
           kind: "step",
           id: "ai-6-5",
-          title: "Portofolio di Era AI: Proses > Hasil Akhir",
+          title: "Portofolio di Era AI: Proses Lebih Bernilai dari Hasil",
           explanation:
-            "Di portofoliomu, jelaskan **PROSES** pembuatan aplikasi: Mengapa memilih teknologi tersebut, bagaimana arsitektur kodenya, dan tantangan yang kamu selesaikan.",
+            "Ketika siapa pun bisa menghasilkan aplikasi yang tampak rapi, hasil akhir berhenti menjadi pembeda. Yang membedakan adalah jejak keputusanmu: kenapa memilih database ini, apa yang kamu tolak, dan apa yang kamu pelajari saat gagal. Cara termurah merekamnya adalah menulis catatan keputusan singkat di repositori — konteks, keputusan, dan konsekuensinya. Dokumen sependek lima baris ini sering jadi bahan obrolan paling menarik saat interview, jauh melebihi tangkapan layar aplikasimu.",
           example: {
-            code: "// Dokumentasikan keputusan desain dan trade-off di README repository portofolio",
-            output: "Teks deskripsi: 'Saya memilih PostgreSQL karena...'",
-            note: "Hasil akhir UI cantik mudah dibuat AI, namun proses berpikir tidak bisa dipalsukan.",
+            code: "## Konteks\nData pesanan saling terhubung dan butuh laporan gabungan.\n\n## Keputusan\nMemakai PostgreSQL, bukan MongoDB.\n\n## Konsekuensi\nSkema harus dirancang di awal; perubahan bentuk data butuh migration.",
+            output: "Pembaca tahu alasan pilihanmu dan apa yang kamu korbankan.",
           },
           instruction:
-            "Buat variabel konstanta bernama `markdownDecision` yang berisi string 'Chosen PostgreSQL for relational integrity'.",
-          starterCode: "",
-          language: "js",
+            "Tulis catatan keputusan singkat untuk pilihan 'memakai Tailwind CSS di proyek portofoliomu'. Wajib memuat tiga bagian: **Konteks**, **Keputusan**, dan **Konsekuensi**.",
+          starterCode: "# Tulis catatan keputusan di bawah ini\n",
+          language: "text",
           tests: [
             {
-              pattern: "const\\s+markdownDecision\\s*=\\s*(['\"])Chosen\\s*PostgreSQL\\s*for\\s*relational\\s*integrity\\1",
-              message: "Tulis: const markdownDecision = 'Chosen PostgreSQL for relational integrity';",
+              pattern: "##?\\s*konteks|\\bkonteks\\s*:",
+              flags: "i",
+              message:
+                "Sertakan bagian Konteks: situasi yang melatarbelakangi.",
+            },
+            {
+              pattern: "##?\\s*keputusan|\\bkeputusan\\s*:",
+              flags: "i",
+              message:
+                "Sertakan bagian Keputusan: apa yang kamu pilih.",
+            },
+            {
+              pattern: "##?\\s*konsekuensi|\\bkonsekuensi\\s*:",
+              flags: "i",
+              message:
+                "Sertakan bagian Konsekuensi: apa yang kamu korbankan.",
             },
           ],
-          solution: "const markdownDecision = 'Chosen PostgreSQL for relational integrity';",
+          solution: "## Konteks\nSaya bekerja sendiri dan butuh UI konsisten tanpa memikirkan penamaan kelas.\n\n## Keputusan\nMemakai Tailwind CSS, bukan menulis CSS terpisah per komponen.\n\n## Konsekuensi\nMarkup jadi lebih panjang dan perlu waktu membiasakan diri, tapi tidak ada file CSS yang membengkak seiring proyek bertambah besar.",
         },
         {
           kind: "quiz",
@@ -1100,6 +1593,20 @@ export const aiDevTrack: Track = {
               choices: ["Menyembunyikannya sepenuhnya", "Mengklaim bahwa 100% kodenya ditulis tanpa bantuan alat apapun", "Menjelaskan proses, keputusan engineering, dan trade-off di balik kode tersebut", "Hanya menampilkan screenshot kode yang dihasilkan AI"],
               answerIndex: 2,
               explanation: "Perekrut ingin melihat alur pemikiran, cara pengambilan keputusan, dan pemahamanmu terhadap sistem, bukan sekadar kemampuan men-generate kode."
+            }, {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Apa kebijakan terpenting sebelum memasukkan source code perusahaan ke dalam layanan AI seperti ChatGPT?",
+              choices: ["Menyembunyikan nama penulis asli", "Memastikan kebijakan perusahaan mengizinkan dan platform AI tersebut tidak menggunakan datamu untuk pelatihan ulang", "Mengubah nama variabel menjadi bahasa Indonesia", "Menggunakan mode gelap pada browser"],
+              answerIndex: 1,
+              explanation: "Kode perusahaan adalah aset rahasia. Memasukkannya ke platform publik tanpa perlindungan privasi dapat membocorkan rahasia dagang.",
+            }, {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Mengapa arsitektur sistem dan komunikasi empati menjadi jauh lebih mahal nilainya di era AI?",
+              choices: ["Karena AI tidak bisa berbicara", "Karena kemampuan teknis mengetik sintaks telah menjadi komoditas murah yang mudah diotomatisasi", "Karena pengguna internet semakin sedikit", "Karena sekolah sudah tidak mengajarkan pemrograman"],
+              answerIndex: 1,
+              explanation: "AI dapat menulis kode dengan cepat, tetapi menghubungkan berbagai komponen sistem dan memahami kebutuhan manusia hanya bisa dilakukan oleh engineer handal.",
             }]
         },
       ],

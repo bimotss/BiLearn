@@ -198,13 +198,22 @@ for (const track of tracks) {
             /^\s*(View|Data|Insert|Format|File)\s*>/m.test(kode) || // jalur menu UI
             /^\s*(def\s|import\s+pandas|print\()/m.test(kode) ||
             /^\s*<\?php/m.test(kode) ||
-            /^\s*##?\s+\S/m.test(kode) ||
-            // TypeScript juga bukan JavaScript valid di browser
-            /(^|\n)\s*(type\s+\w+\s*=|interface\s+\w+\s*\{)/.test(kode) ||
-            /\w\s*:\s*(string|number|boolean)\b/.test(kode);
+            /^\s*##?\s+\S/m.test(kode);
           if (bukanJs) {
             lapor(
               `language "js" tapi isinya bukan JavaScript → preview error. Ganti ke "text": ${s.id}`
+            );
+          }
+
+          // JSX & TypeScript perlu dikompilasi dulu → language "jsx"
+          const perluKompilasi =
+            /<[A-Za-z][^>]*\/?>/.test(kode) ||
+            /(^|\n)\s*(type\s+\w+\s*=|interface\s+\w+\s*\{)/.test(kode) ||
+            /\w\s*:\s*(string|number|boolean|unknown)\b/.test(kode) ||
+            /\bfunction\s+\w+\s*<[A-Z]/.test(kode);
+          if (perluKompilasi) {
+            lapor(
+              `language "js" tapi isinya JSX/TypeScript → preview SyntaxError. Ganti ke "jsx": ${s.id}`
             );
           }
         }

@@ -30,6 +30,35 @@ export const cssTrack: Track = {
       items: [
         {
           kind: "step",
+          id: "css-1-0",
+          title: "Tiga Cara Memasang CSS",
+          explanation:
+            "Sebelum menulis satu aturan pun, kamu perlu tahu bagaimana CSS menempel ke HTML. Ada tiga cara: **inline** lewat atribut `style` langsung di elemen, **internal** lewat tag `<style>` di dalam `<head>`, dan **external** lewat `<link rel=\"stylesheet\" href=\"style.css\">` yang menunjuk berkas terpisah. Cara ketiga yang dipakai di semua proyek nyata, karena satu berkas bisa melayani ratusan halaman, bisa disimpan cache browser, dan gaya tidak bercampur dengan struktur. Inline style dihindari karena specificity-nya sangat tinggi sehingga sulit ditimpa, dan gayanya tidak bisa dipakai ulang.",
+          example: {
+            code: "<!-- inline: sulit dirawat, specificity tertinggi -->\n<p style=\"color: red\">Teks</p>\n\n<!-- internal: hanya untuk satu halaman -->\n<style>\n  p { color: red; }\n</style>",
+            output: "Keduanya menghasilkan teks merah, tapi versi inline harus diulang di setiap elemen.",
+            note: "External stylesheet menang karena bisa dipakai ulang dan disimpan cache — dua hal yang tidak bisa dilakukan inline style.",
+          },
+          instruction:
+            "Halamanmu perlu memuat berkas gaya bernama `style.css` yang berada satu folder dengan HTML-nya. Tulis satu elemen `<link>` di dalam `<head>` yang memasang berkas itu sebagai stylesheet.",
+          starterCode: "<head>\n  <title>Profil</title>\n</head>\n",
+          language: "html",
+          tests: [
+            {
+              pattern: "<link[^>]*rel=\"stylesheet\"",
+              message:
+                "Pakai <link> dengan rel=\"stylesheet\".",
+            },
+            {
+              pattern: "<link[^>]*href=\"\\.?/?style\\.css\"",
+              message:
+                "Tunjuk berkasnya lewat href=\"style.css\".",
+            },
+          ],
+          solution: "<head>\n  <title>Profil</title>\n  <link rel=\"stylesheet\" href=\"style.css\">\n</head>",
+        },
+        {
+          kind: "step",
           id: "css-1-1",
           title: "Selector pertamamu",
           explanation:
@@ -186,7 +215,7 @@ export const cssTrack: Track = {
           id: "css-1-6",
           title: "rem: unit untuk ukuran yang bisa diakses",
           explanation:
-            "`px` bersifat mutlak. `rem` relatif terhadap ukuran font root (default 16px, jadi `1rem` = 16px) — dan ikut membesar kalau pengguna memperbesar ukuran font di pengaturan browser. Untuk teks dan spacing, `rem` lebih ramah aksesibilitas; `px` masih wajar untuk border tipis.",
+            "`px` bersifat mutlak. `rem` relatif terhadap ukuran font root (default 16px, jadi `1rem` = 16px) — dan ikut membesar kalau pengguna memperbesar ukuran font di pengaturan browser. Untuk teks dan spacing, `rem` lebih ramah aksesibilitas; `px` masih wajar untuk border tipis. Patokan praktisnya: ukuran font, padding, dan margin memakai rem, sedangkan garis tepi tipis boleh tetap px.",
           example: {
             code: "/* root default 16px */\n.judul  { font-size: 2rem;    }  /* = 32px */\n.isi    { font-size: 0.875rem; }  /* = 14px */\n.tombol { padding: 0.75rem 1.5rem; }  /* = 12px 24px */",
             output:
@@ -210,6 +239,64 @@ export const cssTrack: Track = {
           ],
           solution:
             ".konten {\n  background: #f1f5f9;\n  font-size: 1.25rem;\n  padding: 2rem;\n}",
+        },
+        {
+          kind: "step",
+          id: "css-1-7",
+          title: "Combinator: Menargetkan Berdasarkan Posisi",
+          explanation:
+            "Selector bisa digabung untuk menargetkan elemen berdasarkan hubungannya. Spasi berarti **descendant** — `.kartu p` memilih semua `<p>` di dalam `.kartu`, sedalam apa pun letaknya. Tanda `>` berarti **child langsung** — `.menu > li` hanya memilih `li` yang menjadi anak persis dari `.menu`, bukan cucunya. Ada juga `+` untuk saudara tepat setelahnya dan `~` untuk semua saudara sesudahnya. Menggunakan child selector membuat gayamu tidak bocor ke komponen bersarang, masalah yang sering muncul saat menu bertingkat mewarisi gaya yang tidak diinginkan.",
+          example: {
+            code: "/* semua a di dalam nav, sedalam apa pun */\nnav a { color: navy; }\n\n/* hanya li yang anak LANGSUNG dari .menu */\n.menu > li { font-weight: bold; }",
+            output: "Semua tautan di dalam nav menjadi biru tua, sementara penebalan hanya kena item tingkat pertama — sub-menu di dalamnya tidak ikut.",
+          },
+          instruction:
+            "Beri warna `#b91c1c` hanya pada elemen `<li>` yang merupakan anak langsung dari `.daftar`, sehingga item di sub-daftar tidak ikut berubah.",
+          starterCode: ".daftar {\n  padding-left: 20px;\n}\n",
+          language: "css",
+          previewHtml: "<ul class=\"daftar\">\n  <li>Item pertama\n    <ul><li>Sub item</li></ul>\n  </li>\n  <li>Item kedua</li>\n</ul>",
+          tests: [
+            {
+              pattern: "\\.daftar\\s*>\\s*li\\s*\\{",
+              message:
+                "Pakai child combinator: .daftar > li { ... }",
+            },
+            {
+              pattern: "color:\\s*#b91c1c",
+              message:
+                "Beri color: #b91c1c.",
+            },
+          ],
+          solution: ".daftar {\n  padding-left: 20px;\n}\n\n.daftar > li {\n  color: #b91c1c;\n}",
+        },
+        {
+          kind: "step",
+          id: "css-1-8",
+          title: "Menulis Warna: hex, rgb, dan hsl",
+          explanation:
+            "CSS menerima warna dalam beberapa notasi. **Hex** (`#2563eb`) paling sering kamu temui karena itulah yang diberikan berkas desain. **rgb()** menuliskan komponen merah, hijau, biru dari 0–255, dan versi empat nilainya menambahkan transparansi: `rgb(0 0 0 / 0.5)` berarti hitam setengah tembus pandang. **hsl()** memakai rona, kejenuhan, dan kecerahan — jauh lebih mudah kalau kamu ingin membuat versi lebih terang atau lebih gelap dari warna yang sama, cukup ubah angka ketiganya. Hindari mengatur transparansi lewat properti `opacity` bila kamu hanya ingin latarnya tembus pandang, karena `opacity` ikut membuat teks di dalamnya pudar.",
+          example: {
+            code: "/* tiga notasi, warna yang sama persis */\n.a { color: #2563eb; }\n.b { color: rgb(37 99 235); }\n.c { color: hsl(221 83% 53%); }",
+            output: "Ketiga elemen tampil dengan warna biru yang identik.",
+          },
+          instruction:
+            "Beri `.kotak` latar hitam yang setengah tembus pandang memakai notasi `rgb` dengan nilai alpha 0.5, lalu beri teksnya warna putih.",
+          starterCode: ".kotak {\n  padding: 16px;\n}\n",
+          language: "css",
+          previewHtml: "<div style=\"background:#fde68a;padding:20px\"><div class=\"kotak\">Teks di atas latar transparan</div></div>",
+          tests: [
+            {
+              pattern: "background(-color)?:\\s*rgb\\(\\s*0\\s*[ ,]\\s*0\\s*[ ,]\\s*0\\s*(/|,)\\s*0?\\.5\\s*\\)",
+              message:
+                "Pakai rgb(0 0 0 / 0.5) sebagai background.",
+            },
+            {
+              pattern: "color:\\s*(white|#fff|#ffffff)",
+              message:
+                "Beri teksnya warna putih.",
+            },
+          ],
+          solution: ".kotak {\n  padding: 16px;\n  background: rgb(0 0 0 / 0.5);\n  color: white;\n}",
         },
         {
           kind: "quiz",
@@ -255,10 +342,10 @@ export const cssTrack: Track = {
             },
             {
               id: "q4",
-              type: "isian",
-              question:
-                "Unit apa yang relatif terhadap font-size elemen root dan ikut membesar saat pengguna memperbesar font browser? (tulis nama unitnya)",
-              acceptedAnswers: ["rem"],
+              type: "pilihan-ganda",
+              question: "Kamu ingin ukuran teks tetap menghormati pengaturan font browser pengguna. Unit mana yang relatif terhadap font-size elemen root <html>?",
+              choices: ["px", "rem", "em", "vh"],
+              answerIndex: 1,
               explanation:
                 "rem (root em) relatif terhadap font-size elemen <html>, default 16px. Memakai rem untuk teks dan spacing membuat halaman menghormati preferensi ukuran font pengguna — poin aksesibilitas yang sering muncul di audit.",
             },
@@ -336,7 +423,7 @@ export const cssTrack: Track = {
           id: "css-2-2",
           title: "position: relative + absolute",
           explanation:
-            "`position: absolute` memposisikan elemen relatif terhadap **leluhur terdekat yang punya position selain static**. Jadi polanya selalu berpasangan: parent diberi `position: relative`, anak diberi `position: absolute`. Lupa memberi relative pada parent membuat elemen melompat ke sudut halaman — bug paling umum di materi ini.",
+            "`position: absolute` memposisikan elemen relatif terhadap **leluhur terdekat yang punya position selain static**. Jadi polanya selalu berpasangan: parent diberi `position: relative`, anak diberi `position: absolute`. Lupa memberi relative pada parent membuat elemen melompat ke sudut halaman — bug paling umum di materi ini. Perhatikan juga bahwa `top`, `right`, `bottom`, dan `left` baru berpengaruh setelah position elemennya bukan static.",
           example: {
             code: ".kartu {\n  position: relative;   /* ← acuan bagi anak */\n  height: 80px;\n}\n\n.label {\n  position: absolute;   /* ← menempel ke .kartu */\n  bottom: 4px;\n  left: 4px;\n}",
             output:
@@ -377,7 +464,7 @@ export const cssTrack: Track = {
           id: "css-2-3",
           title: "position: sticky",
           explanation:
-            "`sticky` adalah hibrida: elemen berperilaku normal sampai batas scroll tertentu, lalu 'menempel'. Wajib menyertakan nilai offset (`top: 0`) — tanpa itu sticky tidak melakukan apa pun, dan ini kebingungan yang sangat sering terjadi. Dipakai untuk header navigasi dan header tabel.",
+            "`sticky` adalah hibrida: elemen berperilaku normal sampai batas scroll tertentu, lalu 'menempel'. Wajib menyertakan nilai offset (`top: 0`) — tanpa itu sticky tidak melakukan apa pun, dan ini kebingungan yang sangat sering terjadi. Dipakai untuk header navigasi dan header tabel. Penyebab kedua sticky gagal adalah salah satu elemen induknya memakai `overflow: hidden` atau `overflow: auto`, karena itu memutus konteks scroll yang dibutuhkan sticky.",
           example: {
             code: ".judul-tabel {\n  position: sticky;\n  top: 0;          /* ← WAJIB, ini titik menempelnya */\n  background: white;\n}",
             output:
@@ -410,7 +497,7 @@ export const cssTrack: Track = {
           id: "css-2-4",
           title: "z-index dan stacking",
           explanation:
-            "`z-index` menentukan siapa di atas siapa — **tapi hanya bekerja pada elemen yang punya position selain static**. Nilai besar tidak selalu menang: elemen di dalam parent dengan z-index rendah terkurung di lapisan parent-nya (stacking context). Praktik baik: pakai skala kecil dan konsisten (10, 20, 30), bukan `z-index: 99999`.",
+            "`z-index` menentukan siapa di atas siapa — **tapi hanya bekerja pada elemen yang punya position selain static**. Nilai besar tidak selalu menang: elemen di dalam parent dengan z-index rendah terkurung di lapisan parent-nya (stacking context). Praktik baik: pakai skala kecil dan konsisten (10, 20, 30), bukan `z-index: 99999`. Kalau elemen tetap tertimpa padahal nilainya sudah tinggi, periksa induknya: begitu induk punya z-index sendiri, anaknya tidak bisa keluar dari lapisan itu.",
           example: {
             code: "/* z-index DIABAIKAN: position masih static */\n.a { z-index: 999; }\n\n/* z-index BERLAKU */\n.b { position: relative; z-index: 2; }",
             output:
@@ -443,7 +530,7 @@ export const cssTrack: Track = {
           id: "css-2-5",
           title: "Centering klasik dengan margin auto",
           explanation:
-            "Untuk memusatkan elemen block secara horizontal, dua hal harus ada bersamaan: **lebar yang terbatas** dan `margin-inline: auto` (atau `margin: 0 auto`). Tanpa width, elemen block sudah selebar penuh sehingga tidak ada ruang untuk dipusatkan — inilah kenapa `margin: 0 auto` sering 'tidak berefek'.",
+            "Untuk memusatkan elemen block secara horizontal, dua hal harus ada bersamaan: **lebar yang terbatas** dan `margin-inline: auto` (atau `margin: 0 auto`). Tanpa width, elemen block sudah selebar penuh sehingga tidak ada ruang untuk dipusatkan — inilah kenapa `margin: 0 auto` sering 'tidak berefek'. Untuk memusatkan secara vertikal, margin auto tidak cukup — itu tugas Flexbox atau Grid yang kamu pelajari di modul berikutnya.",
           example: {
             code: "/* TIDAK berefek: elemen sudah selebar penuh */\n.a { margin: 0 auto; }\n\n/* BERHASIL: ada batas lebar dulu */\n.b { max-width: 400px; margin: 0 auto; }",
             output:
@@ -469,6 +556,30 @@ export const cssTrack: Track = {
           ],
           solution:
             ".wadah {\n  background: #ddd6fe;\n  padding: 16px;\n  max-width: 300px;\n  margin: 0 auto;\n}",
+        },
+        {
+          kind: "step",
+          id: "css-2-6",
+          title: "overflow: Saat Isi Melebihi Kotaknya",
+          explanation:
+            "Ketika isi lebih besar daripada kotaknya, `overflow` menentukan apa yang terjadi. Nilai `visible` (bawaan) membiarkannya meluber keluar, `hidden` memotongnya tanpa scrollbar, `scroll` selalu menampilkan scrollbar, dan `auto` hanya menampilkannya saat memang dibutuhkan — inilah yang paling sering dipakai. Untuk membatasi hanya satu arah, ada `overflow-x` dan `overflow-y`. Satu efek samping yang wajib kamu ingat: memasang `overflow: hidden` atau `auto` pada elemen induk akan mematikan `position: sticky` pada anaknya, dan itu penyebab bug yang sering memakan waktu berjam-jam untuk ditemukan.",
+          example: {
+            code: ".kode {\n  height: 60px;\n  overflow: hidden;   /* isi yang lebih tinggi terpotong tanpa scrollbar */\n}",
+            output: "Isi yang lebih tinggi dari 60px terpotong dan bagian bawahnya tidak bisa dijangkau pengguna.",
+          },
+          instruction:
+            "Kotak `.log` tingginya dibatasi 80px dan isinya lebih panjang. Buat isinya tetap bisa dibaca dengan menggulir, dan pastikan scrollbar hanya muncul saat memang diperlukan.",
+          starterCode: ".log {\n  height: 80px;\n  border: 1px solid #94a3b8;\n  padding: 8px;\n}\n",
+          language: "css",
+          previewHtml: "<div class=\"log\">Baris 1<br>Baris 2<br>Baris 3<br>Baris 4<br>Baris 5<br>Baris 6<br>Baris 7<br>Baris 8</div>",
+          tests: [
+            {
+              pattern: "overflow(-y)?:\\s*auto",
+              message:
+                "Pakai overflow: auto agar scrollbar hanya muncul saat dibutuhkan.",
+            },
+          ],
+          solution: ".log {\n  height: 80px;\n  border: 1px solid #94a3b8;\n  padding: 8px;\n  overflow: auto;\n}",
         },
         {
           kind: "quiz",
@@ -574,7 +685,7 @@ export const cssTrack: Track = {
           id: "css-3-1",
           title: "display: flex",
           explanation:
-            "`display: flex` pada **parent** membuat anak-anaknya berbaris. Ini poin penting: kamu mengatur flex di container, bukan di item. Secara default arah barisnya horizontal (row), dan anak-anak menyusut/melebar sesuai ruang.",
+            "`display: flex` pada **parent** membuat anak-anaknya berbaris. Ini poin penting: kamu mengatur flex di container, bukan di item. Secara default arah barisnya horizontal (row), dan anak-anak menyusut/melebar sesuai ruang. Anak-anaknya tidak perlu diberi properti apa pun untuk mulai berbaris, jadi memasang `display: flex` di item justru tidak menghasilkan efek yang kamu harapkan.",
           example: {
             code: "/* HTML:\n<div class=\"menu\">\n  <span>Satu</span>\n  <span>Dua</span>\n</div> */\n\n.menu {\n  display: flex;   /* di PARENT, bukan di anak */\n  gap: 20px;\n}",
             output:
@@ -607,7 +718,7 @@ export const cssTrack: Track = {
           id: "css-3-2",
           title: "justify-content: sepanjang main axis",
           explanation:
-            "Peta mental yang harus benar: `justify-content` bekerja **sepanjang main axis**. Saat `flex-direction: row` (default), main axis horizontal — jadi justify-content mengatur kiri-kanan. Nilai yang sering dipakai: `flex-start`, `center`, `space-between` (dorong ke ujung, jarak di tengah — pola navbar), `space-around`.",
+            "Peta mental yang harus benar: `justify-content` bekerja **sepanjang main axis**. Saat `flex-direction: row` (default), main axis horizontal — jadi justify-content mengatur kiri-kanan. Nilai yang sering dipakai: `flex-start`, `center`, `space-between` (dorong ke ujung, jarak di tengah — pola navbar), `space-around`. Ingat juga bahwa justify-content hanya membagi ruang SISA — kalau item sudah memenuhi seluruh lebar container, mengubah nilainya tidak akan terlihat.",
           example: {
             code: ".a { display: flex; justify-content: flex-start; }  /* semua menumpuk di kiri  */\n.b { display: flex; justify-content: center;     }  /* semua di tengah         */\n.c { display: flex; justify-content: space-between; } /* dorong ke dua ujung  */",
             output:
@@ -636,7 +747,7 @@ export const cssTrack: Track = {
           id: "css-3-3",
           title: "align-items: menyilang main axis",
           explanation:
-            "`align-items` bekerja pada **cross axis** — tegak lurus dari main axis. Pada row, cross axis vertikal, jadi align-items mengatur atas-bawah. Kombinasi `justify-content: center` + `align-items: center` adalah cara paling ringkas memusatkan sesuatu secara sempurna, menggantikan trik-trik lama yang rumit.",
+            "`align-items` bekerja pada **cross axis** — tegak lurus dari main axis. Pada row, cross axis vertikal, jadi align-items mengatur atas-bawah. Kombinasi `justify-content: center` + `align-items: center` adalah cara paling ringkas memusatkan sesuatu secara sempurna, menggantikan trik-trik lama yang rumit. Nilai bawaannya `stretch`, dan itulah sebabnya kartu-kartu dalam satu baris flex otomatis sama tinggi meski panjang isinya berbeda.",
           example: {
             code: ".pembungkus {\n  display: flex;\n  height: 200px;\n  justify-content: center;  /* kiri-kanan (main axis)  */\n  align-items: center;      /* atas-bawah (cross axis) */\n}",
             output:
@@ -667,7 +778,7 @@ export const cssTrack: Track = {
           id: "css-3-4",
           title: "flex-direction: column",
           explanation:
-            "Mengubah `flex-direction: column` **memutar kedua axis**: main axis jadi vertikal, cross axis jadi horizontal. Konsekuensinya sering mengejutkan — sekarang `justify-content` mengatur atas-bawah dan `align-items` mengatur kiri-kanan. Ingat prinsipnya, jangan hafal 'justify = horizontal'.",
+            "Mengubah `flex-direction: column` **memutar kedua axis**: main axis jadi vertikal, cross axis jadi horizontal. Konsekuensinya sering mengejutkan — sekarang `justify-content` mengatur atas-bawah dan `align-items` mengatur kiri-kanan. Ingat prinsipnya, jangan hafal 'justify = horizontal'. Karena itu ketika layout terasa terbalik setelah kamu mengganti direction, yang perlu ditukar adalah justify-content dengan align-items.",
           example: {
             code: ".daftar {\n  display: flex;\n  flex-direction: column;\n  justify-content: center;  /* sekarang ATAS-BAWAH  */\n  align-items: flex-end;    /* sekarang KIRI-KANAN  */\n  height: 200px;\n}",
             output:
@@ -700,7 +811,7 @@ export const cssTrack: Track = {
           id: "css-3-5",
           title: "flex: 1 untuk mengisi ruang sisa",
           explanation:
-            "`flex: 1` pada item berarti 'ambil semua ruang sisa'. Ini shorthand dari `flex-grow: 1; flex-shrink: 1; flex-basis: 0%`. Pola paling berguna: sidebar berlebar tetap + konten `flex: 1` yang menyesuaikan sisa ruang — layout aplikasi klasik dalam dua baris CSS.",
+            "`flex: 1` pada item berarti 'ambil semua ruang sisa'. Ini shorthand dari `flex-grow: 1; flex-shrink: 1; flex-basis: 0%`. Pola paling berguna: sidebar berlebar tetap + konten `flex: 1` yang menyesuaikan sisa ruang — layout aplikasi klasik dalam dua baris CSS. Perlu diingat `flex: 1` membuat item mengabaikan lebar aslinya, jadi kalau kamu butuh lebar minimum tetap, tulis lengkap seperti `flex: 1 1 200px`.",
           example: {
             code: ".wadah { display: flex; }\n.kiri  { width: 80px; }   /* lebar tetap        */\n.kanan { flex: 1;     }   /* ambil semua sisanya */",
             output:
@@ -728,7 +839,7 @@ export const cssTrack: Track = {
           id: "css-3-6",
           title: "flex-wrap agar tidak gepeng di layar kecil",
           explanation:
-            "Secara default item flex **memaksa diri tetap satu baris** dan menyusut sampai gepeng. `flex-wrap: wrap` mengizinkan mereka turun ke baris berikutnya. Kombinasi `flex-wrap: wrap` + `flex-basis` minimum adalah cara membuat grid kartu responsif tanpa satu pun media query.",
+            "Secara default item flex **memaksa diri tetap satu baris** dan menyusut sampai gepeng. `flex-wrap: wrap` mengizinkan mereka turun ke baris berikutnya. Kombinasi `flex-wrap: wrap` + `flex-basis` minimum adalah cara membuat grid kartu responsif tanpa satu pun media query. Perhitungkan juga `gap` saat menentukan lebar basis, karena jarak antar item ikut memakan ruang saat item turun baris.",
           example: {
             code: ".galeri { display: flex; flex-wrap: wrap; gap: 12px; }\n\n/* flex: grow shrink basis */\n.item { flex: 1 1 200px; }  /* minimal 200px, boleh melebar */",
             output:
@@ -802,10 +913,10 @@ export const cssTrack: Track = {
             },
             {
               id: "q4",
-              type: "isian",
-              question:
-                "Properti apa yang harus ditambahkan agar flex item boleh turun ke baris berikutnya saat ruang habis? (tulis nama propertinya)",
-              acceptedAnswers: ["flex-wrap"],
+              type: "pilihan-ganda",
+              question: "Deretan kartu di navbar gepeng saat layar menyempit karena semua dipaksa tetap satu baris. Properti apa yang membuat item boleh turun ke baris berikutnya?",
+              choices: ["flex-wrap", "flex-direction", "justify-content", "align-items"],
+              answerIndex: 0,
               explanation:
                 "flex-wrap: wrap. Tanpa itu, default-nya nowrap: item memaksa tetap satu baris dan menyusut sampai isinya gepeng — sering terlihat sebagai 'layout rusak di HP'.",
             },
@@ -885,7 +996,7 @@ export const cssTrack: Track = {
           id: "css-4-2",
           title: "repeat() dan minmax()",
           explanation:
-            "`repeat(3, 1fr)` lebih ringkas daripada menulis `1fr` tiga kali. `minmax(200px, 1fr)` berarti 'jangan lebih sempit dari 200px, tapi silakan melebar'. Kombinasi keduanya adalah fondasi grid responsif.",
+            "`repeat(3, 1fr)` lebih ringkas daripada menulis `1fr` tiga kali. `minmax(200px, 1fr)` berarti 'jangan lebih sempit dari 200px, tapi silakan melebar'. Kombinasi keduanya adalah fondasi grid responsif. `repeat()` juga menerima susunan campuran seperti `repeat(2, 1fr) 200px`, berguna ketika kolom terakhir harus berlebar tetap.",
           example: {
             code: "/* panjang */\ngrid-template-columns: 1fr 1fr 1fr 1fr;\n\n/* sama artinya, lebih ringkas */\ngrid-template-columns: repeat(4, 1fr);\n\n/* dengan batas minimum */\ngrid-template-columns: repeat(4, minmax(80px, 1fr));",
             output:
@@ -945,7 +1056,7 @@ export const cssTrack: Track = {
           id: "css-4-4",
           title: "Membentangkan item dengan span",
           explanation:
-            "Item grid bisa menempati lebih dari satu kolom dengan `grid-column: span 2`. Untuk posisi presisi, pakai nomor garis: `grid-column: 1 / 3` berarti dari garis 1 sampai garis 3 (yaitu menutupi 2 kolom). Perhatikan: yang dihitung adalah **garis**, bukan kolom — sumber kebingungan yang umum.",
+            "Item grid bisa menempati lebih dari satu kolom dengan `grid-column: span 2`. Untuk posisi presisi, pakai nomor garis: `grid-column: 1 / 3` berarti dari garis 1 sampai garis 3 (yaitu menutupi 2 kolom). Perhatikan: yang dihitung adalah **garis**, bukan kolom — sumber kebingungan yang umum. Untuk membentang penuh berapa pun jumlah kolomnya, `grid-column: 1 / -1` lebih aman daripada menghitung nomor garis terakhir secara manual.",
           example: {
             code: "/* grid 4 kolom */\n.banner { grid-column: span 3; }   /* menutupi 3 kolom */\n.penuh  { grid-column: 1 / -1;  }   /* dari awal sampai akhir */",
             output:
@@ -975,7 +1086,7 @@ export const cssTrack: Track = {
           id: "css-4-5",
           title: "grid-template-areas: layout yang bisa dibaca",
           explanation:
-            "`grid-template-areas` membuat layout yang **terlihat seperti bentuknya** di dalam CSS — sangat mudah dibaca saat maintenance. Setiap area diberi nama, lalu item ditempatkan dengan `grid-area: nama`. Cocok untuk layout halaman utuh: header, sidebar, main, footer.",
+            "`grid-template-areas` membuat layout yang **terlihat seperti bentuknya** di dalam CSS — sangat mudah dibaca saat maintenance. Setiap area diberi nama, lalu item ditempatkan dengan `grid-area: nama`. Cocok untuk layout halaman utuh: header, sidebar, main, footer. Setiap baris string wajib memuat jumlah nama area yang sama; kalau tidak, seluruh aturan diabaikan browser tanpa pesan error apa pun.",
           example: {
             code: '.app {\n  display: grid;\n  grid-template-areas:\n    "atas  atas"\n    "menu  isi"\n    "bawah bawah";\n}\n\n.navbar { grid-area: atas;  }\n.menu   { grid-area: menu;  }\n.konten { grid-area: isi;   }\n.footer { grid-area: bawah; }',
             output:
@@ -1067,10 +1178,10 @@ export const cssTrack: Track = {
             },
             {
               id: "q5",
-              type: "isian",
-              question:
-                "Properti apa yang memungkinkan kamu menuliskan layout dengan nama area seperti \"header header\" / \"sidebar main\"? (tulis nama propertinya)",
-              acceptedAnswers: ["grid-template-areas"],
+              type: "pilihan-ganda",
+              question: "Kamu ingin struktur layout langsung terbaca di CSS dalam bentuk peta seperti \"header header\" / \"sidebar main\". Properti Grid apa yang menyediakannya?",
+              choices: ["grid-template-areas", "grid-template-columns", "grid-auto-flow", "grid-area"],
+              answerIndex: 0,
               explanation:
                 "grid-template-areas membuat struktur layout terlihat langsung di CSS dalam bentuk visual. Sangat membantu maintenance, karena orang berikutnya bisa memahami layout tanpa menggambar sendiri.",
             },
@@ -1128,7 +1239,7 @@ export const cssTrack: Track = {
           id: "css-5-2",
           title: "Dari satu kolom ke banyak kolom",
           explanation:
-            "Pola responsif paling umum: default satu kolom (mobile), lalu di layar lebar menjadi beberapa kolom. Perhatikan bahwa aturan dasar tidak perlu media query sama sekali — hanya penyesuaian yang perlu.",
+            "Pola responsif paling umum: default satu kolom (mobile), lalu di layar lebar menjadi beberapa kolom. Perhatikan bahwa aturan dasar tidak perlu media query sama sekali — hanya penyesuaian yang perlu. Perhatikan urutannya: aturan di dalam media query harus ditulis SETELAH aturan dasarnya, karena keduanya bernilai specificity sama dan yang belakangan yang menang.",
           example: {
             code: ".produk {\n  display: grid;\n  grid-template-columns: 1fr;      /* HP: 1 kolom */\n  gap: 12px;\n}\n\n@media (min-width: 900px) {\n  .produk {\n    grid-template-columns: 1fr 1fr 1fr;  /* desktop: 3 kolom */\n  }\n}",
             output:
@@ -1184,7 +1295,7 @@ export const cssTrack: Track = {
           id: "css-5-4",
           title: "Gambar yang tidak meluber",
           explanation:
-            "Gambar dengan lebar asli 2000px akan merusak layout mobile. Perbaikan bakunya dua baris: `max-width: 100%` (jangan melebihi wadahnya) dan `height: auto` (jaga rasio agar tidak gepeng). Ini salah satu aturan pertama yang ditulis di hampir setiap proyek nyata.",
+            "Gambar dengan lebar asli 2000px akan merusak layout mobile. Perbaikan bakunya dua baris: `max-width: 100%` (jangan melebihi wadahnya) dan `height: auto` (jaga rasio agar tidak gepeng). Ini salah satu aturan pertama yang ditulis di hampir setiap proyek nyata. Tambahkan `display: block` bila muncul jarak kecil di bawah gambar — celah itu berasal dari sifat inline yang menyisakan ruang untuk garis dasar teks.",
           example: {
             code: "/* aturan yang hampir selalu ditulis di setiap proyek */\nimg, video {\n  max-width: 100%;\n  height: auto;\n}",
             output:
@@ -1315,7 +1426,7 @@ export const cssTrack: Track = {
           id: "css-6-1",
           title: "font-family dan font stack",
           explanation:
-            "`font-family` menerima **daftar** font, dibaca dari kiri: kalau font pertama tidak tersedia, browser mencoba berikutnya. Karena itu selalu akhiri dengan kategori generik (`sans-serif`, `serif`, `monospace`) sebagai jaring pengaman. Nama font yang mengandung spasi harus dikutip.",
+            "`font-family` menerima **daftar** font, dibaca dari kiri: kalau font pertama tidak tersedia, browser mencoba berikutnya. Karena itu selalu akhiri dengan kategori generik (`sans-serif`, `serif`, `monospace`) sebagai jaring pengaman. Nama font yang mengandung spasi harus dikutip. Untuk halaman yang mengutamakan kecepatan, mulailah dari font sistem seperti `system-ui`: tidak ada berkas yang perlu diunduh sehingga teks langsung tampil.",
           example: {
             code: 'body {\n  font-family: Georgia, "Times New Roman", serif;\n}\n\ncode {\n  font-family: Consolas, monospace;\n}',
             output:
@@ -1376,7 +1487,7 @@ export const cssTrack: Track = {
           id: "css-6-3",
           title: "Memotong teks yang terlalu panjang",
           explanation:
-            "Untuk **satu baris**, kombinasi tiga properti wajib bersama: `white-space: nowrap` (jangan turun baris), `overflow: hidden` (sembunyikan luapan), `text-overflow: ellipsis` (beri tanda …). Menghilangkan salah satunya membuat efeknya gagal — inilah kenapa orang sering bilang 'ellipsis saya tidak muncul'.",
+            "Untuk **satu baris**, kombinasi tiga properti wajib bersama: `white-space: nowrap` (jangan turun baris), `overflow: hidden` (sembunyikan luapan), `text-overflow: ellipsis` (beri tanda …). Menghilangkan salah satunya membuat efeknya gagal — inilah kenapa orang sering bilang 'ellipsis saya tidak muncul'. Untuk memotong pada beberapa baris sekaligus, pakai `-webkit-line-clamp` bersama `display: -webkit-box`, yang kini didukung semua browser besar.",
           example: {
             code: ".nama-file {\n  width: 150px;\n  white-space: nowrap;      /* 1. jangan turun baris */\n  overflow: hidden;         /* 2. sembunyikan luapan */\n  text-overflow: ellipsis;  /* 3. beri tanda …       */\n}",
             output:
@@ -1446,7 +1557,7 @@ export const cssTrack: Track = {
           id: "css-6-5",
           title: "transition: animasi paling berguna",
           explanation:
-            "`transition` membuat perubahan nilai berlangsung mulus, bukan patah. Aturan penting: **pasang transition di keadaan normal, bukan di `:hover`** — kalau dipasang di hover, animasinya mulus saat masuk tapi patah saat keluar. Sebutkan properti spesifik (`background-color`) daripada `all` agar performanya terjaga.",
+            "`transition` membuat perubahan nilai berlangsung mulus, bukan patah. Aturan penting: **pasang transition di keadaan normal, bukan di `:hover`** — kalau dipasang di hover, animasinya mulus saat masuk tapi patah saat keluar. Sebutkan properti spesifik (`background-color`) daripada `all` agar performanya terjaga. Pilih durasi yang wajar pula: 150–300 ms terasa responsif, sedangkan di atas 500 ms mulai terasa lambat bagi pengguna.",
           example: {
             code: ".link {\n  color: gray;\n  transition: color 0.2s ease;  /* ← di keadaan NORMAL */\n}\n\n.link:hover {\n  color: black;                 /* ← hanya perubahan nilainya */\n}",
             output:
@@ -1481,7 +1592,7 @@ export const cssTrack: Track = {
           id: "css-6-6",
           title: "transform: menggerakkan tanpa mengganggu layout",
           explanation:
-            "`transform` mengubah tampilan elemen (geser, perbesar, putar) **tanpa memicu ulang perhitungan layout** — karena itu jauh lebih hemat daripada menganimasikan `width`, `top`, atau `margin`. Efek 'kartu terangkat saat disentuh' dibuat dengan `translateY(-4px)` plus bayangan.",
+            "`transform` mengubah tampilan elemen (geser, perbesar, putar) **tanpa memicu ulang perhitungan layout** — karena itu jauh lebih hemat daripada menganimasikan `width`, `top`, atau `margin`. Efek 'kartu terangkat saat disentuh' dibuat dengan `translateY(-4px)` plus bayangan. Karena transform tidak mengubah ruang yang ditempati elemen, tetangganya tidak ikut bergeser — itulah alasan efek hover terasa halus tanpa layout melompat.",
           example: {
             code: "/* beberapa transform ditulis dalam SATU properti, dipisah spasi */\n.ikon:hover {\n  transform: rotate(15deg) scale(1.1);\n}\n\n/* SALAH: properti kedua menimpa yang pertama */\n.salah:hover {\n  transform: rotate(15deg);\n  transform: scale(1.1);   /* hanya ini yang berlaku */\n}",
             output:
@@ -1619,10 +1730,10 @@ export const cssTrack: Track = {
             },
             {
               id: "q5",
-              type: "isian",
-              question:
-                "Media feature apa yang dipakai untuk menghormati pengguna yang mematikan animasi di pengaturan sistemnya? (tulis nama fiturnya, tanpa nilai)",
-              acceptedAnswers: ["prefers-reduced-motion"],
+              type: "pilihan-ganda",
+              question: "Sebagian pengguna mematikan animasi di pengaturan sistem karena gerakan membuat mereka pusing. Media feature apa yang mendeteksi preferensi itu?",
+              choices: ["prefers-reduced-motion", "prefers-color-scheme", "prefers-contrast", "prefers-reduced-data"],
+              answerIndex: 0,
               explanation:
                 "@media (prefers-reduced-motion: reduce). Sebagian orang mengalami pusing atau mual akibat gerakan di layar. Menonaktifkan atau meredakan animasi untuk mereka adalah standar profesional dan sering diperiksa saat audit aksesibilitas.",
             },
@@ -1650,7 +1761,7 @@ export const cssTrack: Track = {
           id: "css-7-1",
           title: "Custom properties (variabel CSS)",
           explanation:
-            "Variabel CSS dideklarasikan dengan dua tanda hubung dan dipakai lewat `var()`. Biasanya ditaruh di `:root` agar berlaku global. Bedanya dengan variabel Sass: ini **hidup di browser**, bisa berubah saat runtime dan diwarisi oleh anak — dasar dari theming dan dark mode modern.",
+            "Variabel CSS dideklarasikan dengan dua tanda hubung dan dipakai lewat `var()`. Biasanya ditaruh di `:root` agar berlaku global. Bedanya dengan variabel Sass: ini **hidup di browser**, bisa berubah saat runtime dan diwarisi oleh anak — dasar dari theming dan dark mode modern. Karena sifatnya diwarisi, variabel yang dideklarasikan di sebuah komponen hanya berlaku untuk komponen itu beserta turunannya — cara sederhana membuat tema lokal.",
           example: {
             code: ":root {\n  --biru: #0284c7;\n  --radius: 6px;\n}\n\n.tombol { background: var(--biru); border-radius: var(--radius); }\n.tautan { color: var(--biru); }",
             output:
@@ -1685,7 +1796,7 @@ export const cssTrack: Track = {
           id: "css-7-2",
           title: "Nilai fallback pada var()",
           explanation:
-            "`var(--nama, nilaiCadangan)` memakai nilai cadangan jika variabelnya belum terdefinisi. Ini penting saat membangun komponen yang bisa dikustomisasi: komponenmu tetap tampil benar walau pengguna tidak menyetel variabelnya.",
+            "`var(--nama, nilaiCadangan)` memakai nilai cadangan jika variabelnya belum terdefinisi. Ini penting saat membangun komponen yang bisa dikustomisasi: komponenmu tetap tampil benar walau pengguna tidak menyetel variabelnya. Nilai cadangannya boleh berupa variabel lain, misalnya `var(--pad, var(--pad-dasar, 8px))`, sehingga kamu bisa menyusun rantai prioritas.",
           example: {
             code: "/* --gap belum didefinisikan, jadi 8px yang dipakai */\n.daftar { gap: var(--gap, 8px); }\n\n/* pengguna komponen bisa menimpanya kapan saja */\n.daftar-rapat { --gap: 2px; }",
             output:
@@ -1742,7 +1853,7 @@ export const cssTrack: Track = {
           id: "css-7-4",
           title: "aspect-ratio dan object-fit",
           explanation:
-            "`aspect-ratio: 16 / 9` menjaga perbandingan sisi tanpa trik padding lama. Pasangannya `object-fit: cover` membuat gambar mengisi kotak **tanpa gepeng** — bagian yang berlebih dipotong, bukan diregangkan. Kombinasi ini adalah cara baku menampilkan thumbnail dengan ukuran seragam.",
+            "`aspect-ratio: 16 / 9` menjaga perbandingan sisi tanpa trik padding lama. Pasangannya `object-fit: cover` membuat gambar mengisi kotak **tanpa gepeng** — bagian yang berlebih dipotong, bukan diregangkan. Kombinasi ini adalah cara baku menampilkan thumbnail dengan ukuran seragam. Pasangkan dengan `object-position` bila bagian penting gambar ikut terpotong, misalnya wajah pada foto profil.",
           example: {
             code: ".avatar {\n  width: 64px;\n  aspect-ratio: 1 / 1;    /* persegi sempurna */\n  object-fit: cover;      /* isi penuh, kelebihan dipotong */\n  border-radius: 50%;\n}",
             output:
@@ -1779,7 +1890,7 @@ export const cssTrack: Track = {
           id: "css-7-5",
           title: "Dark mode dengan variabel",
           explanation:
-            "Inilah kenapa variabel CSS begitu berharga: definisikan warna sekali, lalu **ganti nilainya saja** di dalam `@media (prefers-color-scheme: dark)`. Seluruh halaman ikut berubah tanpa menulis ulang satu pun aturan komponen. Pendekatan ini yang dipakai hampir semua situs modern.",
+            "Inilah kenapa variabel CSS begitu berharga: definisikan warna sekali, lalu **ganti nilainya saja** di dalam `@media (prefers-color-scheme: dark)`. Seluruh halaman ikut berubah tanpa menulis ulang satu pun aturan komponen. Pendekatan ini yang dipakai hampir semua situs modern. Sediakan juga pilihan manual di antarmuka bila memungkinkan, karena sebagian pengguna ingin memaksa satu tema tanpa mengubah pengaturan sistemnya.",
           example: {
             code: ":root {\n  --kartu: #ffffff;\n  --teks: #111111;\n}\n\n@media (prefers-color-scheme: dark) {\n  :root {\n    --kartu: #1f2937;\n    --teks: #f9fafb;\n  }\n}\n\n.kartu { background: var(--kartu); color: var(--teks); }",
             output:
@@ -1814,7 +1925,7 @@ export const cssTrack: Track = {
           id: "css-7-6",
           title: ":is() untuk selector yang rapi",
           explanation:
-            "`:is()` meringkas selector panjang: `:is(h1, h2, h3) { margin-block: 0.5em }` menggantikan tiga aturan terpisah. Catatan penting untuk debugging: specificity `:is()` mengikuti argumen **terkuat** di dalamnya, sedangkan `:where()` yang mirip selalu bernilai **nol** — pakai `:where()` untuk gaya dasar yang mudah ditimpa.",
+            "`:is()` meringkas selector panjang: `:is(h1, h2, h3) { margin-block: 0.5em }` menggantikan tiga aturan terpisah. Catatan penting untuk debugging: specificity `:is()` mengikuti argumen **terkuat** di dalamnya, sedangkan `:where()` yang mirip selalu bernilai **nol** — pakai `:where()` untuk gaya dasar yang mudah ditimpa. `:is()` juga memangkas selector panjang seperti `.artikel h1, .artikel h2, .artikel h3` menjadi satu baris yang jauh lebih mudah dirawat.",
           example: {
             code: "/* panjang dan berulang */\n.menu a, .menu button, .menu span { padding: 4px; }\n\n/* ringkas, sama artinya */\n.menu :is(a, button, span) { padding: 4px; }",
             output: "Ketiga jenis elemen di dalam .menu mendapat padding yang sama.",
@@ -1901,10 +2012,10 @@ export const cssTrack: Track = {
             },
             {
               id: "q5",
-              type: "isian",
-              question:
-                "Media feature apa yang mendeteksi bahwa pengguna memilih tema gelap di sistemnya? (tulis nama fiturnya saja)",
-              acceptedAnswers: ["prefers-color-scheme"],
+              type: "pilihan-ganda",
+              question: "Kamu ingin situsmu otomatis gelap kalau sistem pengguna memakai tema gelap. Media feature apa yang kamu pakai?",
+              choices: ["prefers-color-scheme", "prefers-reduced-motion", "color-theme", "theme-mode"],
+              answerIndex: 0,
               explanation:
                 "@media (prefers-color-scheme: dark). Dikombinasikan dengan custom property, kamu hanya perlu mengganti nilai variabel di dalamnya — seluruh komponen ikut menyesuaikan tanpa aturan tambahan.",
             },
@@ -1966,7 +2077,7 @@ export const cssTrack: Track = {
           id: "css-8-2",
           title: "Skala spacing Tailwind",
           explanation:
-            "Angka pada kelas Tailwind mengikuti skala tetap: **1 satuan = 0,25rem = 4px**. Jadi `p-2` = 8px, `p-4` = 16px, `p-8` = 32px. Skala terbatas ini justru kelebihannya — desain jadi konsisten karena tidak ada lagi campuran 13px, 15px, 17px yang muncul saat semua orang bebas memilih angka.",
+            "Angka pada kelas Tailwind mengikuti skala tetap: **1 satuan = 0,25rem = 4px**. Jadi `p-2` = 8px, `p-4` = 16px, `p-8` = 32px. Skala terbatas ini justru kelebihannya — desain jadi konsisten karena tidak ada lagi campuran 13px, 15px, 17px yang muncul saat semua orang bebas memilih angka. Kalau kamu benar-benar butuh nilai di luar skala, Tailwind menyediakan sintaks kurung siku seperti `p-[13px]` — pakai seperlunya, karena di situlah konsistensi mulai bocor.",
           example: {
             code: '<!-- p-2=8px  p-4=16px  p-8=32px  (kelipatan 4px) -->\n<div class="p-3 mt-2 rounded shadow-sm">Kartu kecil</div>\n\n<!-- arah spesifik: t=top r=right b=bottom l=left, x=kiri-kanan, y=atas-bawah -->\n<div class="px-4 py-2">Padding horizontal 16px, vertikal 8px</div>',
             output:
@@ -2004,7 +2115,7 @@ export const cssTrack: Track = {
           id: "css-8-3",
           title: "Flexbox versi Tailwind",
           explanation:
-            "Semua konsep Flexbox yang kamu pelajari berlaku sama, hanya namanya berubah: `flex` = `display: flex`, `justify-between` = `justify-content: space-between`, `items-center` = `align-items: center`, `gap-4` = `gap: 1rem`. Inilah keuntungan belajar CSS murni lebih dulu — Tailwind jadi sekadar kosakata baru.",
+            "Semua konsep Flexbox yang kamu pelajari berlaku sama, hanya namanya berubah: `flex` = `display: flex`, `justify-between` = `justify-content: space-between`, `items-center` = `align-items: center`, `gap-4` = `gap: 1rem`. Inilah keuntungan belajar CSS murni lebih dulu — Tailwind jadi sekadar kosakata baru. Karena penamaannya mengikuti CSS aslinya, kamu bisa membaca kelas Tailwind milik orang lain tanpa membuka dokumentasi begitu CSS murninya sudah kamu kuasai.",
           example: {
             code: '<!-- CSS: display:flex; align-items:center; gap:8px -->\n<div class="flex items-center gap-2">\n  <img class="w-8 h-8 rounded-full" src="a.jpg" alt="">\n  <span>Nama Pengguna</span>\n</div>',
             output:
@@ -2043,7 +2154,7 @@ export const cssTrack: Track = {
           id: "css-8-4",
           title: "Responsive variant: mobile-first",
           explanation:
-            "Prefix seperti `md:` berarti 'berlaku mulai breakpoint md ke atas' — persis `@media (min-width: 768px)`. Karena itu Tailwind **mobile-first**: kelas tanpa prefix adalah dasar untuk layar kecil, kelas berprefix menimpanya di layar lebih besar. Contoh: `grid-cols-1 md:grid-cols-3`.",
+            "Prefix seperti `md:` berarti 'berlaku mulai breakpoint md ke atas' — persis `@media (min-width: 768px)`. Karena itu Tailwind **mobile-first**: kelas tanpa prefix adalah dasar untuk layar kecil, kelas berprefix menimpanya di layar lebih besar. Contoh: `grid-cols-1 md:grid-cols-3`. Hindari menulis `sm:` untuk sesuatu yang seharusnya menjadi dasar; kalau tampilan HP sudah membutuhkannya, tulis kelas itu tanpa prefix.",
           example: {
             code: '<!-- teks kecil di HP, besar di layar lebar -->\n<h1 class="text-xl md:text-3xl lg:text-5xl">Judul</h1>\n\n<!-- sembunyi di HP, tampil dari md ke atas -->\n<nav class="hidden md:block">Menu desktop</nav>',
             output:
@@ -2083,7 +2194,7 @@ export const cssTrack: Track = {
           id: "css-8-5",
           title: "State variant: hover dan focus",
           explanation:
-            "Prefix state bekerja sama seperti pseudo-class: `hover:bg-blue-700` = `:hover { background: ... }`. Jangan lupakan `focus:` — pengguna keyboard bergantung pada indikator fokus, dan menghapus outline tanpa menggantinya adalah kesalahan aksesibilitas yang sangat umum di proyek Tailwind.",
+            "Prefix state bekerja sama seperti pseudo-class: `hover:bg-blue-700` = `:hover { background: ... }`. Jangan lupakan `focus:` — pengguna keyboard bergantung pada indikator fokus, dan menghapus outline tanpa menggantinya adalah kesalahan aksesibilitas yang sangat umum di proyek Tailwind. Tailwind juga punya `focus-visible:` yang hanya menyala saat pengguna memakai keyboard, sehingga indikator tidak muncul mengganggu ketika tombol diklik mouse.",
           example: {
             code: '<a class="text-gray-600 hover:text-black hover:underline transition">\n  Tautan\n</a>\n\n<input class="border focus:border-blue-500 focus:outline-none">',
             output:
@@ -2119,7 +2230,7 @@ export const cssTrack: Track = {
           id: "css-8-6",
           title: "Kartu lengkap: menyusun semuanya",
           explanation:
-            "Sekarang gabungkan: layout, spacing, tipografi, dan state dalam satu komponen kartu yang realistis. Perhatikan bahwa kelas dibaca berkelompok — biasakan urutan yang konsisten (layout → spacing → warna → tipografi → state) agar mudah dibaca orang lain.",
+            "Sekarang gabungkan: layout, spacing, tipografi, dan state dalam satu komponen kartu yang realistis. Perhatikan bahwa kelas dibaca berkelompok — biasakan urutan yang konsisten (layout → spacing → warna → tipografi → state) agar mudah dibaca orang lain. Kalau satu elemen sudah memuat lebih dari sekitar lima belas kelas, itu tanda komponennya perlu dipecah — bukan tanda kamu butuh @apply.",
           example: {
             code: '<!-- urutan kelas: layout → ukuran → spacing → warna → teks → state -->\n<div class="flex flex-col w-64 p-4 bg-gray-100 rounded-lg">\n  <h4 class="text-lg font-semibold mb-1">Judul</h4>\n  <p class="text-sm text-gray-500">Keterangan singkat</p>\n</div>',
             output:
@@ -2215,10 +2326,10 @@ export const cssTrack: Track = {
             },
             {
               id: "q4",
-              type: "isian",
-              question:
-                "Prefix state apa yang harus ditambahkan agar indikator fokus muncul bagi pengguna keyboard? (tulis prefiksnya saja, mis. 'xxx:')",
-              acceptedAnswers: ["focus:", "focus"],
+              type: "pilihan-ganda",
+              question: "Tombolmu punya efek hover, tapi pengguna keyboard tidak melihat penanda apa pun saat berpindah dengan Tab. Prefix state Tailwind apa yang kamu tambahkan?",
+              choices: ["focus:", "hover:", "active:", "visited:"],
+              answerIndex: 0,
               explanation:
                 "focus: (misal focus:ring-2). Banyak proyek hanya menangani hover: dan melupakan focus:, padahal pengguna keyboard tidak punya kursor — tanpa indikator fokus mereka tidak tahu sedang di elemen mana.",
             },
@@ -2260,7 +2371,7 @@ export const cssTrack: Track = {
           id: "css-9-1",
           title: "Design token dari spesifikasi desain",
           explanation:
-            "Langkah pertama saat menerima desain **bukan** langsung membuat komponen, tapi mengekstrak **design token**: warna, spacing, radius, dan font yang dipakai berulang. Simpan sebagai custom property. Kalau desainer nanti mengubah warna brand, kamu hanya mengedit satu baris.",
+            "Langkah pertama saat menerima desain **bukan** langsung membuat komponen, tapi mengekstrak **design token**: warna, spacing, radius, dan font yang dipakai berulang. Simpan sebagai custom property. Kalau desainer nanti mengubah warna brand, kamu hanya mengedit satu baris. Simpan token itu di satu berkas terpisah agar mudah ditemukan, dan beri nama berdasarkan perannya (`--warna-primer`) bukan wujudnya (`--biru`).",
           example: {
             code: "/* Dari panel Figma:\n   Primary  #0ea5e9\n   Danger   #dc2626\n   Radius   8px          */\n\n:root {\n  --primary: #0ea5e9;\n  --danger: #dc2626;\n  --radius: 8px;\n}\n\n.btn-utama { background: var(--primary); border-radius: var(--radius); }\n.btn-hapus { background: var(--danger);  border-radius: var(--radius); }",
             output:
@@ -2338,7 +2449,7 @@ export const cssTrack: Track = {
           id: "css-9-3",
           title: "Keadaan yang tidak digambar desainer",
           explanation:
-            "Desainer sering hanya menggambar keadaan normal. Tugasmu sebagai frontend adalah melengkapi yang hilang: **hover, focus, disabled, loading, error, dan empty state**. Menanyakan ini ke desainer sebelum mulai coding adalah tanda developer berpengalaman — bukan menebak sendiri lalu diminta revisi.",
+            "Desainer sering hanya menggambar keadaan normal. Tugasmu sebagai frontend adalah melengkapi yang hilang: **hover, focus, disabled, loading, error, dan empty state**. Menanyakan ini ke desainer sebelum mulai coding adalah tanda developer berpengalaman — bukan menebak sendiri lalu diminta revisi. Sepakati juga apa yang terjadi saat data kosong atau gagal dimuat — dua keadaan yang paling sering absen dari berkas desain.",
           example: {
             code: ".input { border: 1px solid #d1d5db; }\n\n.input:hover         { border-color: #9ca3af; }\n.input:focus-visible { outline: 2px solid #3b82f6; }\n.input:disabled      { background: #f3f4f6; cursor: not-allowed; }\n.input[aria-invalid=\"true\"] { border-color: #dc2626; }",
             output:

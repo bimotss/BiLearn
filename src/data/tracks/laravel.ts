@@ -200,27 +200,43 @@ export const laravelTrack: Track = {
             {
               id: "q1",
               type: "pilihan-ganda",
-              question: "Variabel superglobal PHP mana yang digunakan untuk membaca data yang dikirimkan melalui URL Query String (misal /search?q=kopi)?",
-              choices: ["$_POST", "$_GET", "$_SERVER", "$_ENV"],
+              question: "Saat pengguna mencari produk menggunakan form pencarian, data dikirim melalui URL (contoh: /search?q=sepatu). Variabel superglobal PHP mana yang tepat untuk mengambil nilai pencarian tersebut?",
+              choices: ["$_POST","$_GET","$_SERVER","$_SESSION"],
               answerIndex: 1,
-              explanation: "$_GET menyimpan data key-value yang dikirimkan melalui URL query string.",
+              explanation: "$_GET menyimpan data dari URL query string, yang biasa digunakan untuk operasi aman seperti pencarian."
             },
             {
               id: "q2",
               type: "pilihan-ganda",
-              question: "Manakah pernyataan di bawah ini yang paling tepat tentang fitur yang disediakan Laravel?",
-              choices: ["Tidak memerlukan web server untuk production", "Memiliki ORM bawaan bernama Eloquent", "Hanya bisa diakses via API", "Memerlukan konfigurasi XML yang sangat banyak"],
-              answerIndex: 1,
-              explanation: "Laravel menyertakan Eloquent ORM secara default untuk berinteraksi dengan database secara mudah."
+              question: "Kamu ingin menampilkan daftar nama barang dari array menggunakan perulangan. Sintaks mana yang paling disarankan dan natural di PHP untuk mengiterasi array tanpa perlu menghitung indeks secara manual?",
+              choices: ["for ($i=0; $i<count($items); $i++)","while ($item = current($items))","foreach ($items as $item)","loop ($items)"],
+              answerIndex: 2,
+              explanation: "Perulangan foreach dirancang khusus untuk melintasi elemen array di PHP dengan sintaks yang bersih dan mudah dibaca."
             },
             {
               id: "q3",
               type: "pilihan-ganda",
-              question: "Apa fungsi utama dari file .env di aplikasi Laravel?",
-              choices: ["Menyimpan seluruh logika database", "Mengatur styling CSS utama", "Menyimpan konfigurasi rahasia seperti kredensial database yang spesifik per environment", "Menjadi file utama yang dieksekusi oleh server"],
-              answerIndex: 2,
-              explanation: "File .env digunakan khusus untuk variabel lingkungan yang bisa berbeda antara development dan production."
+              question: "Dalam sebuah aplikasi, kamu harus menghentikan proses eksekusi kode jika file konfigurasi utama tidak ditemukan. Fungsi impor mana yang paling tepat untuk digunakan?",
+              choices: ["include_once","require_once","import","load"],
+              answerIndex: 1,
+              explanation: "require_once akan menghentikan eksekusi script dengan fatal error jika file tidak ditemukan, sangat cocok untuk file esensial seperti konfigurasi."
             },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Seorang pengguna menginputkan data sensitif melalui form login. Mengapa sangat dianjurkan untuk menggunakan metode POST daripada GET?",
+              choices: ["POST lebih cepat dieksekusi oleh server","POST tidak menampilkan data di URL sehingga lebih aman dari rekaman riwayat browser","POST otomatis mengenkripsi password menggunakan SSL","GET hanya bisa mengirim tipe data angka"],
+              answerIndex: 1,
+              explanation: "Data POST dikirim dalam body request dan tidak terlihat di URL, sehingga lebih aman untuk data sensitif seperti password."
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Kamu ingin memberikan nilai default 'Guest' jika variabel peran ($role) tidak terdefinisi di array $user. Fitur modern PHP 8 mana yang menyediakan sintaks paling ringkas untuk hal ini?",
+              choices: ["Ternary operator ($user['role'] ? $user['role'] : 'Guest')","Null coalescing operator ($user['role'] ?? 'Guest')","Fungsi isset()","Operator or (||)"],
+              answerIndex: 1,
+              explanation: "Null coalescing operator (??) adalah cara paling ringkas untuk memberikan nilai fallback jika sebuah variabel bernilai null atau belum terdefinisi."
+            }
           ],
         },
       ],
@@ -360,13 +376,14 @@ export const laravelTrack: Track = {
             note: "Autoloading PSR-4 menghilangkan kebutuhan menulis ratusan require_once manual.",
           },
           instruction:
-            "Tuliskan deklarasi namespace `namespace App\\Services;`.",
+            "File ini akan berisi class layanan di folder `app/Services`. Tulis deklarasi namespace yang sesuai dengan lokasi folder itu (ingat aturan PSR-4: nama folder = nama namespace).",
           starterCode: "<?php\n// Tulis namespace di bawah ini\n",
           language: "text",
           tests: [
             {
               pattern: "namespace\\s+App\\\\Services\\s*;",
-              message: "Tuliskan: namespace App\\Services;",
+              message:
+                "Deklarasikan namespace App\\Services diakhiri titik koma.",
             },
           ],
           solution: "<?php\nnamespace App\\Services;",
@@ -425,32 +442,43 @@ export const laravelTrack: Track = {
             {
               id: "q1",
               type: "pilihan-ganda",
-              question: "Apa kegunaan utama `Trait` di PHP?",
-              choices: [
-                "Menyimpan password ke database",
-                "Membagikan sekumpulan method (behavior) antar kelas yang berbeda tanpa hirarki inheritance",
-                "Menggantikan file composer.json",
-                "Menghapus folder vendor",
-              ],
-              answerIndex: 1,
-              explanation: "Trait adalah mekanisme reuse kode horisontal untuk menyuntikkan method ke kelas-kelas tanpa harus extend kelas induk yang sama.",
+              question: "Sebuah aplikasi memiliki kelas 'Bird' dan 'Airplane' yang sama-sama membutuhkan kemampuan terbang (fly), tetapi mereka tidak memiliki kelas induk yang sama. Fitur PHP apa yang sebaiknya kamu gunakan untuk berbagi method 'fly' ini?",
+              choices: ["Interface","Abstract Class","Trait","Namespace"],
+              answerIndex: 2,
+              explanation: "Trait memungkinkan berbagi method (kemampuan) secara horizontal ke kelas-kelas berbeda tanpa memerlukan pewarisan."
             },
             {
               id: "q2",
               type: "pilihan-ganda",
-              question: "Manakah pernyataan di bawah ini yang paling tepat tentang fitur yang disediakan Laravel?",
-              choices: ["Tidak memerlukan web server untuk production", "Memiliki ORM bawaan bernama Eloquent", "Hanya bisa diakses via API", "Memerlukan konfigurasi XML yang sangat banyak"],
+              question: "Kamu sedang mengembangkan library pembayaran yang mengharuskan setiap payment gateway memiliki method 'pay'. Fitur apa yang sebaiknya dipakai untuk memaksakan kontrak ini ke setiap kelas gateway?",
+              choices: ["Trait","Interface","Private methods","Composer"],
               answerIndex: 1,
-              explanation: "Laravel menyertakan Eloquent ORM secara default untuk berinteraksi dengan database secara mudah."
+              explanation: "Interface mendefinisikan kontrak method yang WAJIB diimplementasikan oleh kelas turunannya."
             },
             {
               id: "q3",
               type: "pilihan-ganda",
-              question: "Apa fungsi utama dari file .env di aplikasi Laravel?",
-              choices: ["Menyimpan seluruh logika database", "Mengatur styling CSS utama", "Menyimpan konfigurasi rahasia seperti kredensial database yang spesifik per environment", "Menjadi file utama yang dieksekusi oleh server"],
-              answerIndex: 2,
-              explanation: "File .env digunakan khusus untuk variabel lingkungan yang bisa berbeda antara development dan production."
+              question: "Saat mendefinisikan properti sensitif seperti saldo akun ($balance), praktik enkapsulasi terbaik apa yang harus dilakukan?",
+              choices: ["Menggunakan visibility 'public' agar mudah diakses","Menggunakan visibility 'private' dan membuat method getter/setter","Menjadikannya variabel global","Menghapus visibility agar menjadi default"],
+              answerIndex: 1,
+              explanation: "Visibility 'private' mencegah perubahan langsung dari luar kelas, menjaga keamanan dan validitas data."
             },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Dalam proyek besar, banyak kelas yang mungkin memiliki nama yang sama (misal kelas User dari library A dan library B). Fitur PHP apa yang memecahkan masalah bentrokan nama ini?",
+              choices: ["Composer","Trait","Namespace","Constructor Property Promotion"],
+              answerIndex: 2,
+              explanation: "Namespace mengelompokkan kelas ke dalam 'ruang nama' yang berbeda, mencegah bentrokan nama."
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Kamu baru saja membuat project PHP baru dan ingin memasang library pihak ketiga. File manakah yang akan mencatat daftar library (dependensi) tersebut saat kamu menjalankan 'composer require'?",
+              choices: ["composer.lock","vendor/autoload.php","composer.json","index.php"],
+              answerIndex: 2,
+              explanation: "composer.json adalah file konfigurasi yang mencatat seluruh dependensi proyek beserta versinya."
+            }
           ],
         },
       ],
@@ -649,32 +677,43 @@ export const laravelTrack: Track = {
             {
               id: "q1",
               type: "pilihan-ganda",
-              question: "Perintah Artisan apa yang digunakan untuk membuat Controller baru lengkap dengan 7 method CRUD?",
-              choices: [
-                "php artisan make:controller UserController --resource",
-                "php artisan create:controller UserController --crud",
-                "php artisan make:resource UserController",
-                "php artisan controller:new UserController",
-              ],
-              answerIndex: 0,
-              explanation: "Flag --resource menginstruksikan Artisan untuk menyusun 7 method standar RESTful di dalam controller.",
+              question: "Kamu ingin membuat sistem routing yang efisien. Mengapa memberikan nama pada route menggunakan '->name()' dianggap sebagai praktik terbaik di Laravel?",
+              choices: ["Agar URL terlihat lebih menarik bagi pengguna","Untuk memudahkan perubahan path URL di masa depan tanpa harus merusak link di seluruh view","Agar Laravel berjalan lebih cepat","Karena itu diwajibkan oleh server"],
+              answerIndex: 1,
+              explanation: "Named route memungkinkan kamu memanggil URL berdasarkan namanya (misal route('login')). Jika path-nya berubah, link di view tidak akan rusak."
             },
             {
               id: "q2",
               type: "pilihan-ganda",
-              question: "Manakah pernyataan di bawah ini yang paling tepat tentang fitur yang disediakan Laravel?",
-              choices: ["Tidak memerlukan web server untuk production", "Memiliki ORM bawaan bernama Eloquent", "Hanya bisa diakses via API", "Memerlukan konfigurasi XML yang sangat banyak"],
-              answerIndex: 1,
-              explanation: "Laravel menyertakan Eloquent ORM secara default untuk berinteraksi dengan database secara mudah."
+              question: "Sebuah aplikasi membutuhkan 7 endpoint standar CRUD untuk fitur Artikel. Perintah Artisan manakah yang paling tepat untuk membuat controller lengkap dengan semua method tersebut?",
+              choices: ["php artisan make:controller ArticleController --resource","php artisan make:controller ArticleController --crud","php artisan create:resource ArticleController","php artisan generate:controller Article"],
+              answerIndex: 0,
+              explanation: "Flag --resource otomatis membuat controller beserta method index, create, store, show, edit, update, dan destroy."
             },
             {
               id: "q3",
               type: "pilihan-ganda",
-              question: "Apa fungsi utama dari file .env di aplikasi Laravel?",
-              choices: ["Menyimpan seluruh logika database", "Mengatur styling CSS utama", "Menyimpan konfigurasi rahasia seperti kredensial database yang spesifik per environment", "Menjadi file utama yang dieksekusi oleh server"],
-              answerIndex: 2,
-              explanation: "File .env digunakan khusus untuk variabel lingkungan yang bisa berbeda antara development dan production."
+              question: "Kamu ingin memastikan bahwa sebuah halaman hanya dapat diakses oleh pengguna yang sudah login. Komponen Laravel apa yang bertugas sebagai pos penjagaan sebelum request mencapai controller?",
+              choices: ["Blade Template","Middleware","Eloquent","Artisan"],
+              answerIndex: 1,
+              explanation: "Middleware bertindak sebagai perantara yang dapat memeriksa, memodifikasi, atau menolak request (misal memeriksa status login) sebelum masuk ke Controller."
             },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Dalam pengembangan web, kita sering butuh menyimpan pesan notifikasi (seperti 'Data berhasil disimpan') yang hanya muncul sekali di halaman berikutnya. Fitur apa yang sebaiknya dipakai?",
+              choices: ["Database Table","Session Flash Message","Global Variable","Cookie permanen"],
+              answerIndex: 1,
+              explanation: "Session Flash Message menyimpan data di session khusus yang akan otomatis terhapus setelah dibaca satu kali pada request berikutnya."
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Di mana tempat yang paling aman dan disarankan untuk menyimpan rahasia seperti kata sandi database pada proyek Laravel?",
+              choices: ["Di dalam file config/database.php langsung","Di dalam file routes/web.php","Di dalam file .env","Di dalam public/index.php"],
+              answerIndex: 2,
+              explanation: "File .env menyimpan variabel lingkungan spesifik yang bersifat rahasia dan tidak boleh di-commit ke version control."
+            }
           ],
         },
       ],
@@ -876,27 +915,43 @@ export const laravelTrack: Track = {
             {
               id: "q1",
               type: "pilihan-ganda",
-              question: "Teknik apa di Eloquent yang digunakan untuk memecahkan masalah N+1 Query saat membaca data relasi?",
-              choices: ["Lazy Loading", "Eager Loading (menggunakan Post::with(...))", "Database Seeding", "Raw SQL Join"],
-              answerIndex: 1,
-              explanation: "Eager Loading (dengan `with()`) mengambil seluruh data relasi dalam 1 query awal sehingga mencegah query berulang di dalam loop.",
+              question: "Tim kamu akan merombak struktur tabel database. Untuk memastikan seluruh anggota tim memiliki struktur database yang sama, fitur Laravel apa yang harus kalian andalkan?",
+              choices: ["Eloquent ORM","Database Seeder","Database Migrations","Artisan Tinker"],
+              answerIndex: 2,
+              explanation: "Migrations berfungsi sebagai version control untuk database, memastikan skema tersinkronisasi di setiap environment."
             },
             {
               id: "q2",
               type: "pilihan-ganda",
-              question: "Manakah pernyataan di bawah ini yang paling tepat tentang fitur yang disediakan Laravel?",
-              choices: ["Tidak memerlukan web server untuk production", "Memiliki ORM bawaan bernama Eloquent", "Hanya bisa diakses via API", "Memerlukan konfigurasi XML yang sangat banyak"],
+              question: "Kamu ingin menampilkan daftar Artikel di halaman utama, namun kamu tidak ingin query mengambil seluruh data sekaligus yang bisa memberatkan server. Solusi apa yang paling tepat?",
+              choices: ["Menggunakan loop foreach dengan batasan indeks","Menggunakan metode paginate() dari Eloquent","Menghapus sebagian data di database","Menggunakan middleware khusus"],
               answerIndex: 1,
-              explanation: "Laravel menyertakan Eloquent ORM secara default untuk berinteraksi dengan database secara mudah."
+              explanation: "Metode paginate() memotong data secara efisien langsung di query database dan menyediakan tautan navigasi halaman untuk UI."
             },
             {
               id: "q3",
               type: "pilihan-ganda",
-              question: "Apa fungsi utama dari file .env di aplikasi Laravel?",
-              choices: ["Menyimpan seluruh logika database", "Mengatur styling CSS utama", "Menyimpan konfigurasi rahasia seperti kredensial database yang spesifik per environment", "Menjadi file utama yang dieksekusi oleh server"],
-              answerIndex: 2,
-              explanation: "File .env digunakan khusus untuk variabel lingkungan yang bisa berbeda antara development dan production."
+              question: "Sebuah aplikasi menampilkan daftar Pengguna beserta Postingan terakhir mereka. Jika tidak hati-hati, aplikasi akan menjalankan satu query untuk pengguna, lalu puluhan query tambahan untuk setiap postingan. Apa nama masalah ini dan bagaimana Eloquent mengatasinya?",
+              choices: ["Mass Assignment / menggunakan $fillable","N+1 Problem / menggunakan Eager Loading (with())","Memory Leak / menggunakan pagination","SQL Injection / menggunakan PDO"],
+              answerIndex: 1,
+              explanation: "Masalah N+1 terjadi saat meload relasi di dalam perulangan. Eager loading (menggunakan with) mengatasinya dengan mengambil semua relasi dalam satu atau dua query saja."
             },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Kamu sedang membuat fitur pendaftaran pengguna yang otomatis menambahkan poin. Jika penambahan poin gagal, maka pembuatan akun juga harus dibatalkan. Fitur apa yang menjamin operasi 'berhasil semua atau gagal semua'?",
+              choices: ["Eager Loading","Database Transactions (DB::transaction)","Model Factory","Soft Deletes"],
+              answerIndex: 1,
+              explanation: "Transaksi database (ACID) memastikan bahwa jika salah satu langkah operasi gagal, seluruh perubahan sebelumnya akan di-rollback."
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Seorang peretas mencoba menyuntikkan field 'is_admin = 1' saat memperbarui profil melalui form request mass assignment. Properti apa pada Model yang melindungi data dari serangan ini?",
+              choices: ["$hidden","$casts","$fillable atau $guarded","$table"],
+              answerIndex: 2,
+              explanation: "Properti $fillable mendefinisikan kolom mana saja yang diizinkan untuk diisi secara massal, mencegah perubahan kolom sensitif yang tidak terdaftar."
+            }
           ],
         },
       ],
@@ -1003,7 +1058,7 @@ export const laravelTrack: Track = {
             note: "Jalankan php artisan storage:link agar file di storage/ bisa diakses publik dari web.",
           },
           instruction:
-            "Gunakan fungsi validasi bawaan pada Request untuk memastikan input 'title' diisi, berformat string, dan maksimal 255 karakter.",
+            "Simpan berkas foto yang diunggah pengguna ('photo') ke dalam folder 'photos' pada penyimpanan publik, lalu assign path-nya ke variabel `$path`.",
           starterCode: "// Tulis kode upload file di sini\n",
           language: "text",
           tests: [
@@ -1026,7 +1081,7 @@ export const laravelTrack: Track = {
             note: "Bisa juga membuat tampilan custom untuk error 500, 403, dan 419.",
           },
           instruction:
-            "Buatlah instance custom Request class bernama 'StorePostRequest' menggunakan perintah artisan untuk memisahkan logika validasi dari controller.",
+            "Berikan komentar yang menuliskan lokasi file kustom untuk halaman error 404.",
           starterCode: "",
           language: "text",
           tests: [
@@ -1068,32 +1123,43 @@ export const laravelTrack: Track = {
             {
               id: "q1",
               type: "pilihan-ganda",
-              question: "Apa akibatnya jika kamu lupa mencantumkan direktif `@csrf` pada form HTML method POST di Laravel?",
-              choices: [
-                "Form tetap terkirim normal",
-                "Laravel akan menolak request dan mengembalikan HTTP 419 Page Expired Error",
-                "Database akan otomatis terhapus",
-                "Password user akan ditampilkan di layar",
-              ],
+              question: "Setiap kali pengguna mengirim form dengan metode POST di Laravel, aplikasi akan menolak permintaan dengan status 419 Page Expired jika kamu melupakan satu hal penting. Apa itu?",
+              choices: ["Fungsi dd()","Direktif @csrf","Tag <meta>","Fungsi session()"],
               answerIndex: 1,
-              explanation: "Direktif `@csrf` menyuntikkan token keamanan wajib untuk memverifikasi bahwa request dikirim oleh user yang sah.",
+              explanation: "Direktif @csrf menyuntikkan token keamanan yang wajib ada untuk memverifikasi bahwa form benar-benar dikirim dari aplikasi kita (mencegah eksploitasi CSRF)."
             },
             {
               id: "q2",
               type: "pilihan-ganda",
-              question: "Manakah pernyataan di bawah ini yang paling tepat tentang fitur yang disediakan Laravel?",
-              choices: ["Tidak memerlukan web server untuk production", "Memiliki ORM bawaan bernama Eloquent", "Hanya bisa diakses via API", "Memerlukan konfigurasi XML yang sangat banyak"],
-              answerIndex: 1,
-              explanation: "Laravel menyertakan Eloquent ORM secara default untuk berinteraksi dengan database secara mudah."
+              question: "Formulir pendaftaran pengguna memiliki puluhan validasi aturan. Agar Controller tetap bersih, di mana praktik terbaik untuk meletakkan aturan validasi ini di Laravel?",
+              choices: ["Di dalam file Route","Di dalam kelas Model","Di dalam Form Request Class terpisah","Di dalam Blade view"],
+              answerIndex: 2,
+              explanation: "Form Request class memisahkan logika validasi dan otorisasi dari Controller, membuat kode lebih bersih dan terorganisir."
             },
             {
               id: "q3",
               type: "pilihan-ganda",
-              question: "Apa fungsi utama dari file .env di aplikasi Laravel?",
-              choices: ["Menyimpan seluruh logika database", "Mengatur styling CSS utama", "Menyimpan konfigurasi rahasia seperti kredensial database yang spesifik per environment", "Menjadi file utama yang dieksekusi oleh server"],
-              answerIndex: 2,
-              explanation: "File .env digunakan khusus untuk variabel lingkungan yang bisa berbeda antara development dan production."
+              question: "Saat validasi form gagal, Laravel akan meredirect kembali ke halaman form. Bagaimana cara menampilkan nilai input sebelumnya agar pengguna tidak perlu mengetik ulang dari awal?",
+              choices: ["Menggunakan fungsi $_POST","Menggunakan helper fungsi old()","Menyimpan data di database sementara","Menyematkannya di URL parameter"],
+              answerIndex: 1,
+              explanation: "Helper old('nama_field') mengambil nilai input dari session flash sebelumnya yang disimpan saat validasi gagal."
             },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Saat mengunggah foto profil, di direktori manakah (disk storage) sebaiknya file disimpan agar aman dan dapat diatur akses publiknya melalui symlink?",
+              choices: ["Di folder public/images langsung","Di dalam disk 'public' pada storage/app/public","Di root direktori aplikasi","Di dalam database sebagai BLOB"],
+              answerIndex: 1,
+              explanation: "Menyimpan di storage/app/public dengan disk 'public' merupakan praktik standar. Setelah itu, buat symbolic link agar file bisa diakses web."
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Kamu ingin menampilkan halaman 'Halaman Tidak Ditemukan' dengan desain kustom yang elegan. Apa yang harus kamu buat?",
+              choices: ["File view resources/views/errors/404.blade.php","Route kustom untuk path '/404'","Mengubah kode sumber framework","Sebuah Controller khusus 404"],
+              answerIndex: 0,
+              explanation: "Laravel secara otomatis mencari tampilan di direktori resources/views/errors/ berdasarkan kode status HTTP (misal 404.blade.php)."
+            }
           ],
         },
       ],
@@ -1151,7 +1217,7 @@ export const laravelTrack: Track = {
             note: "session()->regenerate() wajib dipanggil setelah login sukses.",
           },
           instruction:
-            "Hasilkan format array dari sebuah koleksi Eloquent, lalu ambil datanya.",
+            "Panggil metode dari request session untuk meregenerasi (regenerate) ID sesi saat ini demi keamanan pengguna.",
           starterCode: "// Tulis regenerate session di sini\n",
           language: "text",
           tests: [
@@ -1230,7 +1296,7 @@ export const laravelTrack: Track = {
             note: "Di Blade, periksa dengan direktif @can('admin-only')...@endcan.",
           },
           instruction:
-            "Akses koleksi data yang sudah diload, dan modifikasi setiap nilainya menggunakan method transform atau sejenisnya.",
+            "Kelilingi link HTML `<a href=\"/admin\">Admin</a>` dengan direktif Blade `@can` agar hanya muncul jika pengguna memiliki izin 'admin-only'.",
           starterCode: "<!-- Tulis direktif @can di sini -->\n",
           language: "text",
           tests: [
@@ -1275,27 +1341,43 @@ export const laravelTrack: Track = {
             {
               id: "q1",
               type: "pilihan-ganda",
-              question: "Direktif Blade apa yang digunakan untuk mengecek izin akses Gate/Policy secara kondisional di tampilan UI?",
-              choices: ["@ifAuth", "@can('perm')", "@allow", "@check"],
+              question: "Kamu ingin membatasi bahwa aksi 'Edit Artikel' hanya boleh dilakukan oleh penulis asli dari artikel tersebut. Fitur otorisasi Laravel manakah yang dirancang khusus untuk menangani hak akses per-model ini?",
+              choices: ["Middleware Auth","Policy","Model Events","Form Requests"],
               answerIndex: 1,
-              explanation: "Direktif `@can('nama-izin')` mengecek apakah user yang sedang login memiliki izin terkait sebelum menampilkan elemen UI.",
+              explanation: "Policy adalah kelas yang mengatur logika otorisasi spesifik untuk operasi CRUD terhadap model tertentu."
             },
             {
               id: "q2",
               type: "pilihan-ganda",
-              question: "Manakah pernyataan di bawah ini yang paling tepat tentang fitur yang disediakan Laravel?",
-              choices: ["Tidak memerlukan web server untuk production", "Memiliki ORM bawaan bernama Eloquent", "Hanya bisa diakses via API", "Memerlukan konfigurasi XML yang sangat banyak"],
+              question: "Setelah pengguna berhasil divalidasi login menggunakan `Auth::attempt()`, metode krusial apa yang harus segera dipanggil pada session untuk mencegah serangan 'Session Fixation'?",
+              choices: ["session()->flush()","session()->regenerate()","session()->put()","session()->forget()"],
               answerIndex: 1,
-              explanation: "Laravel menyertakan Eloquent ORM secara default untuk berinteraksi dengan database secara mudah."
+              explanation: "Regenerasi session ID mengamankan sesi pengguna dengan memberikan identifier baru setelah otentikasi berhasil."
             },
             {
               id: "q3",
               type: "pilihan-ganda",
-              question: "Apa fungsi utama dari file .env di aplikasi Laravel?",
-              choices: ["Menyimpan seluruh logika database", "Mengatur styling CSS utama", "Menyimpan konfigurasi rahasia seperti kredensial database yang spesifik per environment", "Menjadi file utama yang dieksekusi oleh server"],
+              question: "Apa starter kit resmi Laravel yang paling cepat untuk membuat sistem Login, Register, dan Profil lengkap dengan tampilan Blade yang minimalis?",
+              choices: ["Laravel Telescope","Laravel Sanctum","Laravel Breeze","Laravel Horizon"],
               answerIndex: 2,
-              explanation: "File .env digunakan khusus untuk variabel lingkungan yang bisa berbeda antara development dan production."
+              explanation: "Laravel Breeze adalah starter kit implementasi autentikasi ringan dengan scaffolding views dasar."
             },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Untuk pengecekan hak akses global (seperti memastikan pengguna adalah Super Admin) tanpa memandang Model tertentu, apa metode yang tepat?",
+              choices: ["Gate::define()","Blade @auth","Database Role Table","Auth::user()"],
+              answerIndex: 0,
+              explanation: "Gate sangat cocok untuk izin umum yang tidak terkait langsung dengan instansi model tertentu."
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Di antarmuka Blade, kamu memiliki tombol 'Hapus' yang hanya boleh dirender (ditampilkan) untuk pengguna dengan izin 'delete-post'. Direktif Blade manakah yang digunakan untuk ini?",
+              choices: ["@ifAuth","@can('delete-post')","@allow","@hasRole"],
+              answerIndex: 1,
+              explanation: "Direktif @can terintegrasi langsung dengan Gate dan Policy untuk merender elemen HTML secara kondisional berdasarkan hak akses."
+            }
           ],
         },
       ],
@@ -1327,7 +1409,7 @@ export const laravelTrack: Track = {
             note: "Laravel 11 menggunakan php artisan install:api untuk mengaktifkan routes/api.php.",
           },
           instruction:
-            "Buat event baru bernama UserRegistered menggunakan artisan command.",
+            "Definisikan sebuah route HTTP GET untuk endpoint `/users` yang memanggil method `index` pada `UserController`.",
           starterCode: "// Tulis route API di sini\n",
           language: "text",
           tests: [
@@ -1380,7 +1462,7 @@ export const laravelTrack: Track = {
             note: "Client menyertakan token ini di header Authorization: Bearer <token>.",
           },
           instruction:
-            "Dispatch event UserRegistered yang sudah dibuat.",
+            "Buatlah token autentikasi API baru dengan nama 'token-name' untuk entitas user, kemudian simpan nilai token plain-text tersebut ke dalam variabel `$token`.",
           starterCode: "// Tulis pembuatan token di bawah ini\n",
           language: "text",
           tests: [
@@ -1403,7 +1485,7 @@ export const laravelTrack: Track = {
             note: "Status code yang tepat mempermudah error handling di frontend React/Flutter.",
           },
           instruction:
-            "Buat listener bernama SendWelcomeEmail untuk menangani event registrasi.",
+            "Kembalikan respon HTTP berformat JSON dengan array asosiatif berisi pesan 'Sukses', lengkap dengan HTTP status code 201.",
           starterCode: "// Tulis return response di sini\n",
           language: "text",
           tests: [
@@ -1426,7 +1508,7 @@ export const laravelTrack: Track = {
             note: "Memudahkan komponen pagination di frontend.",
           },
           instruction:
-            "Daftarkan SendWelcomeEmail listener ke dalam EventServiceProvider.",
+            "Gunakan `UserResource` untuk menyusun ulang format kumpulan objek (collection) pengguna yang diambil melalui paginasi sebanyak 10 per halaman.",
           starterCode: "// Tulis return collection di sini\n",
           language: "text",
           tests: [
@@ -1449,7 +1531,7 @@ export const laravelTrack: Track = {
             note: "Laravel melempar HTTP status 429 Too Many Requests jika limit terlampaui.",
           },
           instruction:
-            "Jalankan job queue dispatch untuk memproses pekerjaan di antrean.",
+            "Pasang pembatas laju pengaksesan API (rate limiting) pada definisi route dengan middleware 'throttle' yang diatur sebanyak 60 request per 1 menit.",
           starterCode: "// Tulis throttle middleware di bawah ini\n",
           language: "text",
           tests: [
@@ -1472,7 +1554,7 @@ export const laravelTrack: Track = {
             note: "Meningkatkan produktivitas kolaborasi tim backend & frontend.",
           },
           instruction:
-            "Buat kelas Job baru bernama SendEmailJob menggunakan perintah artisan untuk pemrosesan latar belakang.",
+            "Tuliskan sebuah komentar berbahasa Inggris yang menyatakan untuk meng-generate dokumentasi API secara otomatis menggunakan Scramble.",
           starterCode: "",
           language: "text",
           tests: [
@@ -1491,27 +1573,43 @@ export const laravelTrack: Track = {
             {
               id: "q1",
               type: "pilihan-ganda",
-              question: "Package bawaan Laravel apa yang digunakan untuk mengelola autentikasi berbasis Bearer Token pada SPA dan aplikasi mobile?",
-              choices: ["Laravel Sanctum", "Laravel Breeze", "Laravel Telescope", "Laravel Sail"],
-              answerIndex: 0,
-              explanation: "Laravel Sanctum menyediakan sistem token autentikasi ringan khusus untuk SPA, mobile app, dan API token sederhana.",
+              question: "Dalam membangun REST API dengan Laravel, kita mengubah model Eloquent menjadi format JSON khusus agar data yang disajikan konsisten. Kelas apa yang bertugas melakukan transformasi ini?",
+              choices: ["JSON Helper","API Resource / Eloquent Resource","Resource Controller","Route Middleware"],
+              answerIndex: 1,
+              explanation: "API Resource menyediakan layer transformasi elegan antara model Eloquent dan respon JSON yang dikirimkan ke pengguna."
             },
             {
               id: "q2",
               type: "pilihan-ganda",
-              question: "Manakah pernyataan di bawah ini yang paling tepat tentang fitur yang disediakan Laravel?",
-              choices: ["Tidak memerlukan web server untuk production", "Memiliki ORM bawaan bernama Eloquent", "Hanya bisa diakses via API", "Memerlukan konfigurasi XML yang sangat banyak"],
+              question: "Paket bawaan Laravel apakah yang difokuskan untuk menerbitkan API Token (Personal Access Tokens) yang cocok digunakan untuk autentikasi SPA dan aplikasi mobile?",
+              choices: ["Laravel Passport","Laravel Sanctum","Laravel Octane","Laravel Breeze"],
               answerIndex: 1,
-              explanation: "Laravel menyertakan Eloquent ORM secara default untuk berinteraksi dengan database secara mudah."
+              explanation: "Laravel Sanctum merupakam sistem autentikasi ringan khusus SPA, aplikasi mobile, dan token API sederhana."
             },
             {
               id: "q3",
               type: "pilihan-ganda",
-              question: "Apa fungsi utama dari file .env di aplikasi Laravel?",
-              choices: ["Menyimpan seluruh logika database", "Mengatur styling CSS utama", "Menyimpan konfigurasi rahasia seperti kredensial database yang spesifik per environment", "Menjadi file utama yang dieksekusi oleh server"],
-              answerIndex: 2,
-              explanation: "File .env digunakan khusus untuk variabel lingkungan yang bisa berbeda antara development dan production."
+              question: "Kamu mendaftarkan route API pada file `routes/api.php`. Apa dua perbedaan utama route tersebut dibandingkan file `routes/web.php`?",
+              choices: ["Tidak butuh controller dan lebih cepat","Mendapat prefix otomatis '/api/' dan tidak terlindungi CSRF protection","Harus menggunakan XML dan XML-RPC","Tidak mendukung metode POST"],
+              answerIndex: 1,
+              explanation: "Route di api.php otomatis dikelompokkan dengan prefix '/api' dan middleware grup 'api' yang stateless (tanpa session/CSRF)."
             },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "API publikmu diserang dengan ribuan request per detik secara acak. Middleware standar apa di Laravel yang bisa kamu pasang di rute tersebut untuk membatasi frekuensi request dari satu IP (Rate Limiting)?",
+              choices: ["throttle:api","auth:sanctum","cors","cache:clear"],
+              answerIndex: 0,
+              explanation: "Middleware throttle digunakan untuk mengaplikasikan Rate Limiting (misal maksimal 60 request per menit)."
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Dalam desain API, kamu berhasil menyimpan data pendaftaran anggota baru ke dalam database. Status HTTP apa yang paling semantik untuk disertakan dalam respon JSON?",
+              choices: ["200 OK","201 Created","400 Bad Request","204 No Content"],
+              answerIndex: 1,
+              explanation: "Status 201 Created secara spesifik mengisyaratkan keberhasilan eksekusi permintaan yang menghasilkan sumber daya baru di server."
+            }
           ],
         },
       ],
@@ -1542,7 +1640,7 @@ export const laravelTrack: Track = {
             note: "Jalankan worker antrean di server dengan php artisan queue:work.",
           },
           instruction:
-            "Tulis definisi route group yang menerapkan middleware khusus 'api'.",
+            "Lakukan delegasi (dispatch) antrean pekerjaan bernama `SendEmailJob` ke latar belakang dengan membawa parameter instance pengguna.",
           starterCode: "// Tulis dispatch job di bawah ini\n",
           language: "text",
           tests: [
@@ -1565,7 +1663,7 @@ export const laravelTrack: Track = {
             note: "Server cukup menjalankan 1 perintah cron: * * * * * php artisan schedule:run.",
           },
           instruction:
-            "Kembalikan respon berbentuk JSON yang memuat status sukses dan kode 200 HTTP.",
+            "Atur penjadwalan fungsi artisan secara periodik menggunakan objek fasad `Schedule` untuk mengeksekusi perintah 'backup:run' setiap hari.",
           starterCode: "// Tulis schedule daily di sini\n",
           language: "text",
           tests: [
@@ -1611,7 +1709,7 @@ export const laravelTrack: Track = {
             note: "Gunakan Mailtrap di dev mode untuk menguji pengiriman email secara aman.",
           },
           instruction:
-            "Hasilkan kelas resource controller khusus API menggunakan artisan (dengan flag --api).",
+            "Gunakan fasad layanan persuratan untuk menargetkan pengguna secara spesifik, kemudian kirimkan kelas pengiriman (mailable) `OrderShipped` kepadanya.",
           starterCode: "// Tulis pengiriman Mail di sini\n",
           language: "text",
           tests: [
@@ -1634,7 +1732,7 @@ export const laravelTrack: Track = {
             note: "Menciptakan arsitektur kode yang modular dan mudah dikembangkan.",
           },
           instruction:
-            "Konversi model Eloquent menjadi representasi array menggunakan API Resource class.",
+            "Picukan kejadian (dispatch) sebuah sistem event pada Laravel menggunakan kelas `OrderPlaced` dengan muatan data berupa objek pesanan.",
           starterCode: "// Tulis dispatch event di sini\n",
           language: "text",
           tests: [
@@ -1676,32 +1774,43 @@ export const laravelTrack: Track = {
             {
               id: "q1",
               type: "pilihan-ganda",
-              question: "Apa fungsi utama fitur Queue di Laravel?",
-              choices: [
-                "Menghapus database setiap malam",
-                "Memindahkan proses berat (seperti kirim email) ke antrean background agar respon HTTP ke user tetap instan",
-                "Mengubah file PHP menjadi HTML",
-                "Membuat tabel database baru",
-              ],
+              question: "Kamu sedang mengembangkan fitur checkout e-commerce. Proses pengiriman email tanda terima membutuhkan waktu 3 detik, membuat pengguna harus menunggu loading. Bagaimana cara terbaik menyelesaikannya di Laravel?",
+              choices: ["Menggunakan AJAX di frontend","Mengirim email menggunakan Queue & Job agar diproses di background","Mengurangi ukuran font pada email","Mengabaikan pengiriman email"],
               answerIndex: 1,
-              explanation: "Queue memproses tugas-tugas berat secara asynchronous di background sehingga aplikasi terasa sangat cepat.",
+              explanation: "Job dan Queue menunda proses eksekusi berat ke latar belakang sehingga respon HTTP kembali ke pengguna secara instan."
             },
             {
               id: "q2",
               type: "pilihan-ganda",
-              question: "Manakah pernyataan di bawah ini yang paling tepat tentang fitur yang disediakan Laravel?",
-              choices: ["Tidak memerlukan web server untuk production", "Memiliki ORM bawaan bernama Eloquent", "Hanya bisa diakses via API", "Memerlukan konfigurasi XML yang sangat banyak"],
-              answerIndex: 1,
-              explanation: "Laravel menyertakan Eloquent ORM secara default untuk berinteraksi dengan database secara mudah."
+              question: "Kamu harus memastikan sebuah program pembersihan database dieksekusi secara otomatis setiap tengah malam. Daripada menambahkan cron job terpisah di OS Linux, fitur Laravel apa yang bisa digunakan?",
+              choices: ["Task Scheduling (di routes/console.php)","Event Listeners","Laravel Horizon","Job Queues"],
+              answerIndex: 0,
+              explanation: "Task Scheduling memungkinkan penjadwalan secara ekspresif (seperti ->daily()) langsung di dalam kode Laravel, hanya membutuhkan satu entry Cron di OS."
             },
             {
               id: "q3",
               type: "pilihan-ganda",
-              question: "Apa fungsi utama dari file .env di aplikasi Laravel?",
-              choices: ["Menyimpan seluruh logika database", "Mengatur styling CSS utama", "Menyimpan konfigurasi rahasia seperti kredensial database yang spesifik per environment", "Menjadi file utama yang dieksekusi oleh server"],
-              answerIndex: 2,
-              explanation: "File .env digunakan khusus untuk variabel lingkungan yang bisa berbeda antara development dan production."
+              question: "Aplikasi Laravelmu sudah di-deploy ke server produksi, namun waktu pemuatan rutenya terasa lambat. Perintah Artisan manakah yang wajib dijalankan untuk mempercepat kinerja di lingkungan produksi?",
+              choices: ["php artisan serve","php artisan optimize","php artisan migrate","php artisan route:cache dan config:cache"],
+              answerIndex: 3,
+              explanation: "Proses cache konfigurasi dan rute akan mengompilasi semuanya ke file flat yang sangat cepat dibaca oleh framework."
             },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Kamu menghadapi error 500 di server staging dan butuh alat untuk memantau request, error exception, dan query database secara visual. Paket Laravel mana yang khusus dibuat untuk debugging ini?",
+              choices: ["Laravel Sanctum","Laravel Horizon","Laravel Telescope","Laravel Sail"],
+              answerIndex: 2,
+              explanation: "Telescope menyediakan antarmuka indah yang mencatat setiap detail aktivitas aplikasi untuk kebutuhan debugging di environment lokal/staging."
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Di dalam struktur aplikasi, ketika pengguna baru mendaftar, kamu ingin mengirimkan email salam, mencatat ke log, dan memberikan poin loyalitas. Pola desain apa yang memisahkan logika-logika tersebut dari Controller utama?",
+              choices: ["Pola Repository","Pola Event dan Listener","Pola MVC","Pola Dependency Injection"],
+              answerIndex: 1,
+              explanation: "Event (misal UserRegistered) dilemparkan, lalu berbagai Listener terpisah bereaksi pada event tersebut tanpa membuat Controller bengkak."
+            }
           ],
         },
       ],
@@ -1736,7 +1845,7 @@ export const laravelTrack: Track = {
             note: "Jalankan pengujian dengan perintah php artisan test atau ./vendor/bin/pest.",
           },
           instruction:
-            "Buat kelas test baru bernama UserTest melalui CLI artisan.",
+            "Berikan pernyataan asersi pada objek respon permintaan agar sistem memvalidasi bahwa nilai kembaliannya mempunyai HTTP status OK (200).",
           starterCode: "// Tulis assertStatus di sini\n",
           language: "text",
           tests: [
@@ -1761,7 +1870,7 @@ export const laravelTrack: Track = {
             note: "Gunakan assertDatabaseHas untuk memverifikasi isi tabel.",
           },
           instruction:
-            "Susun skenario pengujian dasar (basic test) yang memverifikasi bahwa kondisi nilai true benar-benar bernilai true.",
+            "Lakukan verifikasi otomatis dengan cara mengecek bahwa di dalam tabel 'users' yang ada di basis data memuat email bernilai 'a@b.com'.",
           starterCode: "// Tulis assertDatabaseHas di bawah ini\n",
           language: "text",
           tests: [
@@ -1784,7 +1893,7 @@ export const laravelTrack: Track = {
             note: "Mencegah pencemaran data antar pengujian.",
           },
           instruction:
-            "Simulasikan request HTTP tipe GET menuju endpoint profil pengguna pada kode pengujian.",
+            "Panggil fitur penyegaran basis data yang merupakan bawaan core Laravel (`RefreshDatabase`) pada file test agar memori kembali bersih di tiap blok ujian.",
           starterCode: "// Tulis uses RefreshDatabase di sini\n",
           language: "text",
           tests: [
@@ -1810,7 +1919,7 @@ export const laravelTrack: Track = {
             note: "Sangat penting untuk menguji route terproteksi middleware auth.",
           },
           instruction:
-            "Periksa (assert) bahwa response HTTP yang diterima mengembalikan status kode HTTP 200.",
+            "Palsukan sesi otentikasi (acting as) pada request agar sistem pengujian menganggap akun `$user` sedang login di aplikasi.",
           starterCode: "// Tulis actingAs di bawah ini\n",
           language: "text",
           tests: [
@@ -1836,7 +1945,7 @@ export const laravelTrack: Track = {
             note: "Mencegah tagihan API asli & mempercepat durasi test suite.",
           },
           instruction:
-            "Lakukan verifikasi menggunakan assertion database bahwa terdapat data dengan email 'test@test.com' di tabel users.",
+            "Gunakan fasad HTTP untuk mencegat dan memalsukan (fake) setiap request internet keluar yang dipanggil selama berlangsungnya proses pengujian.",
           starterCode: "// Tulis Http::fake di sini\n",
           language: "text",
           tests: [
@@ -1859,7 +1968,7 @@ export const laravelTrack: Track = {
             note: "Fokus pada alur bisnis yang paling krusial bagi aplikasi.",
           },
           instruction:
-            "Aktifkan trait penyegaran (RefreshDatabase) agar database dikosongkan secara otomatis pada setiap eksekusi fungsi pengujian.",
+            "Tuliskan eksekusi baris perintah terminal artisan untuk menyalakan mesin pengetesan agar keseluruhan skenario terjalani secara luring.",
           starterCode: "# Tulis perintah artisan di sini\n",
           language: "text",
           tests: [
@@ -1878,27 +1987,43 @@ export const laravelTrack: Track = {
             {
               id: "q1",
               type: "pilihan-ganda",
-              question: "Method pengujian apa yang digunakan untuk mensimulasikan login pengguna sebelum melakukan HTTP request di Laravel Test?",
-              choices: ["$this->login($user)", "$this->actingAs($user)", "$this->setUser($user)", "$this->auth($user)"],
+              question: "Dalam pengujian menggunakan framework Pest di Laravel, apa tujuan utama menggunakan trait 'RefreshDatabase'?",
+              choices: ["Untuk menghapus database secara permanen","Untuk memastikan setiap fungsi test berjalan di atas struktur database bersih yang selalu di-reset","Untuk memperbarui versi MySQL","Untuk mempercepat eksekusi kueri tabel"],
               answerIndex: 1,
-              explanation: "$this->actingAs($user) mengotentikasi pengguna yang diberikan sebagai pengguna saat ini untuk pengujian tersebut.",
+              explanation: "RefreshDatabase secara otomatis me-rollback setiap transaksi atau memigrasi ulang setelah setiap pengujian agar state database terisolasi."
             },
             {
               id: "q2",
               type: "pilihan-ganda",
-              question: "Manakah pernyataan di bawah ini yang paling tepat tentang fitur yang disediakan Laravel?",
-              choices: ["Tidak memerlukan web server untuk production", "Memiliki ORM bawaan bernama Eloquent", "Hanya bisa diakses via API", "Memerlukan konfigurasi XML yang sangat banyak"],
+              question: "Kamu sedang menulis Feature Test untuk rute dashboard yang diproteksi otentikasi. Metode apa yang digunakan untuk mensimulasikan sesi pengguna yang telah berhasil login di dalam test?",
+              choices: ["$this->login($user)","$this->actingAs($user)","$this->auth()","$this->post('/login')"],
               answerIndex: 1,
-              explanation: "Laravel menyertakan Eloquent ORM secara default untuk berinteraksi dengan database secara mudah."
+              explanation: "Metode actingAs($user) mensimulasikan otentikasi bahwa user yang diberikan saat ini adalah user aktif."
             },
             {
               id: "q3",
               type: "pilihan-ganda",
-              question: "Apa fungsi utama dari file .env di aplikasi Laravel?",
-              choices: ["Menyimpan seluruh logika database", "Mengatur styling CSS utama", "Menyimpan konfigurasi rahasia seperti kredensial database yang spesifik per environment", "Menjadi file utama yang dieksekusi oleh server"],
+              question: "Kamu menguji fitur checkout yang berinteraksi dengan API pihak ketiga (Payment Gateway X). Agar tes tidak bergantung pada koneksi internet asli atau mengeluarkan biaya, fitur Laravel apa yang dipakai?",
+              choices: ["Artisan Tinker","Database Seeders","Http::fake()","Mocking Event"],
               answerIndex: 2,
-              explanation: "File .env digunakan khusus untuk variabel lingkungan yang bisa berbeda antara development dan production."
+              explanation: "Http::fake() mensimulasikan respon dari HTTP Client Laravel agar permintaan jaringan ke layanan eksternal palsu tidak benar-benar dilakukan."
             },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Saat mendesain strategi pengujian aplikasi, aspek apa yang sebaiknya diutamakan terlebih dahulu untuk memberikan rasa aman paling signifikan saat deploy?",
+              choices: ["Menguji 100% kode controller secara unit test","Menguji happy path dari fitur utama bisnis secara Feature/Integration test","Menguji file konfigurasi","Menguji tata letak desain CSS frontend"],
+              answerIndex: 1,
+              explanation: "Menguji happy path (alur sukses) pada fitur inti memastikan fungsi bisnis terpenting tidak rusak, memberikan dampak proteksi maksimal dengan cepat."
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Kamu mengirim permintaan HTTP POST dalam file pengujian menggunakan `$this->post('/submit', $data)`. Apa metode (assertion) selanjutnya yang umum dipanggil untuk memastikan request sukses dan dialihkan?",
+              choices: ["->assertRedirect()","->assertTrue()","->assertSessionHasErrors()","->assertDatabaseMissing()"],
+              answerIndex: 0,
+              explanation: "Method assertRedirect() memverifikasi bahwa respons HTTP yang diterima adalah pengalihan ke rute yang benar, perilaku umum setelah operasi POST."
+            }
           ],
         },
       ],

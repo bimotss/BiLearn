@@ -66,7 +66,7 @@ export const nextjsTrack: Track = {
           instruction:
             "Tuliskan komponen halaman `export default function Page() { return <h1>Home</h1>; }`.",
           starterCode: "// Tulis komponen Page di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "export\\s+default\\s+function\\s+Page\\s*\\(\\s*\\)\\s*\\{\\s*return\\s*<h1>\\s*Home\\s*</h1>\\s*;?\\s*\\}",
@@ -119,7 +119,7 @@ export const nextjsTrack: Track = {
           instruction:
             "Tuliskan pembungkus layout `export default function Layout({ children }: { children: React.ReactNode }) { return <div>{children}</div>; }`.",
           starterCode: "// Tulis komponen Layout di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "export\\s+default\\s+function\\s+Layout\\s*\\(\\s*\\{\\s*children\\s*\\}\\s*:\\s*\\{\\s*children\\s*:\\s*React\\.ReactNode\\s*\\}\\s*\\)",
@@ -143,7 +143,7 @@ export const nextjsTrack: Track = {
           instruction:
             "Tulis komponen loading `export default function Loading() { return <p>Loading...</p>; }`.",
           starterCode: "// Tulis komponen Loading di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "export\\s+default\\s+function\\s+Loading\\s*\\(\\s*\\)\\s*\\{\\s*return\\s*<p>\\s*Loading\\.\\.\\.\\s*</p>\\s*;?\\s*\\}",
@@ -248,7 +248,33 @@ export const nextjsTrack: Track = {
               answerIndex: 2,
               explanation: "Tanda kurung biasa () digunakan untuk membuat Route Group. Ini berguna untuk merapikan file dan menerapkan layout, tanpa menambah segmen ke dalam URL akhir.",
             },
-          ],
+              {
+                            id: "q4",
+                            type: "pilihan-ganda",
+                            question: "Tim kamu sedang mengembangkan aplikasi e-commerce. Manakah kasus yang paling tepat untuk menggunakan Server Components secara default di Next.js?",
+                            choices: [
+                              "Halaman yang memiliki banyak interaksi pengguna seperti tombol 'Like' dan animasi form",
+                              "Halaman katalog produk yang datanya diambil dari database dan tidak membutuhkan interaksi client-side yang rumit",
+                              "Komponen keranjang belanja yang harus merespons perubahan state secara real-time",
+                              "Komponen modal pop-up yang menangani input dari pengguna"
+                            ],
+                            answerIndex: 1,
+                            explanation: "Server Components sangat ideal untuk halaman yang bersifat read-only dan berat di pemrosesan data (seperti mengambil dari database), sehingga mengurangi ukuran bundle JavaScript yang dikirim ke client."
+                          },
+              {
+                            id: "q5",
+                            type: "pilihan-ganda",
+                            question: "Saat pertama kali menginisialisasi proyek dengan 'npx create-next-app@latest', struktur folder mana yang saat ini menjadi standar baru yang direkomendasikan untuk routing di Next.js?",
+                            choices: [
+                              "Folder 'pages' dengan pendekatan Pages Router",
+                              "Folder 'src/routes' untuk menangani rute secara manual",
+                              "Folder 'app' yang menggunakan App Router berbasis Server Components",
+                              "Folder 'components/views' yang mirip dengan React tradisional"
+                            ],
+                            answerIndex: 2,
+                            explanation: "App Router (folder 'app') adalah paradigma baru di Next.js yang direkomendasikan karena mendukung fitur mutakhir seperti React Server Components, layout bersarang, dan streaming."
+                          }
+        ],
         },
       ],
     },
@@ -469,7 +495,33 @@ export const nextjsTrack: Track = {
               answerIndex: 2,
               explanation: "Modul 'server-only' memberikan jaminan keamanan agar kode sensitif (seperti kredensial database) tidak pernah terkemas dan bocor ke bundle JavaScript publik di browser.",
             },
-          ],
+              {
+                            id: "q4",
+                            type: "pilihan-ganda",
+                            question: "Sebuah halaman 'Dashboard' dan 'Profile' harus memiliki sidebar navigasi yang sama tanpa merender ulang sidebar tersebut saat berpindah halaman. File apa yang harus kamu buat di dalam folder 'app'?",
+                            choices: [
+                              "page.tsx",
+                              "layout.tsx",
+                              "template.tsx",
+                              "sidebar.tsx"
+                            ],
+                            answerIndex: 1,
+                            explanation: "File layout.tsx digunakan untuk membagikan UI antar rute dan tidak akan di-render ulang saat pengguna melakukan navigasi ke halaman turunan."
+                          },
+              {
+                            id: "q5",
+                            type: "pilihan-ganda",
+                            question: "Kamu ingin membuat rute dinamis untuk blog post seperti '/blog/123'. Bagaimana cara penamaan folder yang benar di dalam App Router?",
+                            choices: [
+                              "app/blog/[id]",
+                              "app/blog/:id",
+                              "app/blog/_id",
+                              "app/blog/(id)"
+                            ],
+                            answerIndex: 0,
+                            explanation: "Next.js menggunakan kurung siku (square brackets) seperti '[id]' untuk menandai segmen rute dinamis."
+                          }
+        ],
         },
       ],
     },
@@ -506,7 +558,7 @@ export const nextjsTrack: Track = {
           instruction:
             "Tulis deklarasi komponen async `export default async function Page() { const res = await fetch(url); }`.",
           starterCode: "// Tulis komponen async Page di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "export\\s+default\\s+async\\s+function\\s+Page\\s*\\(\\s*\\)",
@@ -631,7 +683,7 @@ export const nextjsTrack: Track = {
           instruction:
             "Tulis deklarasi fungsi `export async function generateStaticParams() { return []; }`.",
           starterCode: "// Tulis generateStaticParams di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "export\\s+async\\s+function\\s+generateStaticParams\\s*\\(\\s*\\)",
@@ -684,7 +736,33 @@ export const nextjsTrack: Track = {
               answerIndex: 2,
               explanation: "Fungsi cache membungkus logika async kita sehingga jika dipanggil berkali-kali pada satu kali request render, prosesnya hanya dieksekusi sekali.",
             },
-          ],
+              {
+                            id: "q4",
+                            type: "pilihan-ganda",
+                            question: "Kamu memanggil API eksternal di Server Component menggunakan fungsi 'fetch'. Jika kamu ingin data tersebut selalu diambil baru setiap permintaan (tanpa cache), konfigurasi apa yang harus ditambahkan?",
+                            choices: [
+                              "{ cache: 'force-cache' }",
+                              "{ revalidate: 60 }",
+                              "{ cache: 'no-store' }",
+                              "{ method: 'POST' }"
+                            ],
+                            answerIndex: 2,
+                            explanation: "Opsi { cache: 'no-store' } akan memberitahu Next.js untuk tidak pernah melakukan caching pada respons tersebut (SSR dinamis setiap kali request)."
+                          },
+              {
+                            id: "q5",
+                            type: "pilihan-ganda",
+                            question: "Sebuah halaman berita tidak perlu di-update setiap detik, melainkan cukup setiap 1 jam sekali agar server tidak terbebani. Teknik fetching apa yang paling sesuai?",
+                            choices: [
+                              "Server-Side Rendering (SSR) dengan no-store",
+                              "Client-side fetching menggunakan useEffect",
+                              "Static Site Generation (SSG) murni tanpa update",
+                              "Incremental Static Regeneration (ISR) dengan revalidate"
+                            ],
+                            answerIndex: 3,
+                            explanation: "Opsi 'revalidate' (ISR) memungkinkan regenerasi halaman statis di latar belakang setelah waktu tertentu (misal 3600 detik/1 jam)."
+                          }
+        ],
         },
       ],
     },
@@ -720,7 +798,7 @@ export const nextjsTrack: Track = {
           instruction:
             "Tulis handler GET `export async function GET() { return NextResponse.json({ status: 'ok' }); }`.",
           starterCode: "// Tulis handler GET di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "export\\s+async\\s+function\\s+GET\\s*\\(\\s*\\)\\s*\\{\\s*return\\s+NextResponse\\.json\\(",
@@ -907,7 +985,33 @@ export const nextjsTrack: Track = {
               answerIndex: 1,
               explanation: "Server Actions sangat optimal dan ringkas untuk mutasi internal aplikasi React kita, sementara Route Handlers adalah REST API standar yang cocok ketika berhadapan dengan client eksternal (layanan pihak ketiga, mobile app, dll).",
             },
-          ],
+              {
+                            id: "q4",
+                            type: "pilihan-ganda",
+                            question: "Kamu menggunakan Server Actions untuk menangani submit form. Apa keuntungan utama menggunakan Server Actions dibandingkan membuat Route Handler (API) terpisah?",
+                            choices: [
+                              "Meningkatkan ukuran bundle client",
+                              "Memungkinkan mutasi data dan interaksi form tanpa perlu menulis kode JavaScript sisi klien tambahan untuk fetch data",
+                              "Server Actions hanya berjalan di browser klien",
+                              "Server Actions mempercepat waktu muat gambar secara otomatis"
+                            ],
+                            answerIndex: 1,
+                            explanation: "Server Actions secara langsung mengeksekusi kode mutasi di server tanpa perlu membuat rute API terpisah atau menggunakan event handler onSubmit yang memanggil fetch()."
+                          },
+              {
+                            id: "q5",
+                            type: "pilihan-ganda",
+                            question: "Setelah Server Action berhasil menambahkan data baru ke database, bagaimana cara terbaik untuk memastikan halaman segera menampilkan data terbaru?",
+                            choices: [
+                              "Menggunakan window.location.reload()",
+                              "Memanggil fungsi revalidatePath() atau revalidateTag() dari Next.js",
+                              "Menyimpan data tersebut ke localStorage",
+                              "Membuat fungsi useEffect untuk melakukan poll data"
+                            ],
+                            answerIndex: 1,
+                            explanation: "revalidatePath() akan membersihkan cache untuk path tertentu dan memaksa Next.js untuk mengambil data terbaru dari server pada render berikutnya."
+                          }
+        ],
         },
       ],
     },
@@ -1110,7 +1214,33 @@ export const nextjsTrack: Track = {
               answerIndex: 1,
               explanation: "Pola paling efisien adalah Server Action mengembalikan objek berisi pesan error, lalu client component membaca objek tersebut dari hook useActionState tanpa perlu reload halaman penuh.",
             },
-          ],
+              {
+                            id: "q4",
+                            type: "pilihan-ganda",
+                            question: "Saat menggunakan komponen <Image> dari next/image, mengapa atribut 'width' dan 'height' umumnya diwajibkan untuk gambar dari sumber eksternal?",
+                            choices: [
+                              "Agar Next.js bisa mengunduh gambar lebih cepat",
+                              "Untuk mencegah Cumulative Layout Shift (CLS) dengan mereservasi ruang pada layar sebelum gambar dimuat",
+                              "Karena browser akan error jika tag gambar tidak memiliki ukuran absolut",
+                              "Sebagai syarat untuk menambahkan filter CSS"
+                            ],
+                            answerIndex: 1,
+                            explanation: "Mereservasi ruang sebelum gambar muncul memastikan tata letak tidak bergeser (layout shift) saat gambar akhirnya selesai dimuat, sangat penting untuk skor Core Web Vitals."
+                          },
+              {
+                            id: "q5",
+                            type: "pilihan-ganda",
+                            question: "Jika proyekmu menggunakan Tailwind CSS dan kamu ingin mendefinisikan gaya base/global, file manakah yang paling tepat untuk meletakkan direktif '@tailwind'?",
+                            choices: [
+                              "app/page.tsx",
+                              "next.config.js",
+                              "tailwind.config.js",
+                              "app/globals.css"
+                            ],
+                            answerIndex: 3,
+                            explanation: "Direktif @tailwind base, components, dan utilities biasanya ditempatkan di dalam file CSS global, yang kemudian diimpor di layout root."
+                          }
+        ],
         },
       ],
     },
@@ -1314,7 +1444,33 @@ export const nextjsTrack: Track = {
               answerIndex: 2,
               explanation: "Middleware berjalan di Edge sebelum rute diproses, sangat ideal untuk memblokir akses ke rute terproteksi (seperti /dashboard/*) tanpa perlu menulis kode pengecekan berulang di setiap file halaman.",
             },
-          ],
+              {
+                            id: "q4",
+                            type: "pilihan-ganda",
+                            question: "Kamu ingin membagikan font khusus ('Inter') agar font tersebut dimuat lebih cepat tanpa layout shift. Fitur bawaan apa dari Next.js yang bisa menangani optimasi font otomatis ini?",
+                            choices: [
+                              "next/head",
+                              "next/font/google",
+                              "next/document",
+                              "next/script"
+                            ],
+                            answerIndex: 1,
+                            explanation: "Modul next/font secara otomatis mengoptimalkan font (termasuk font Google) dengan meng-hosting font secara lokal pada waktu build untuk menghindari round-trip jaringan tambahan."
+                          },
+              {
+                            id: "q5",
+                            type: "pilihan-ganda",
+                            question: "Untuk meningkatkan SEO halaman produk, kamu ingin tag meta (seperti title dan description) di-generate sesuai nama produk. Bagaimana kamu mencapai ini di App Router?",
+                            choices: [
+                              "Mengekspor fungsi generateMetadata() dari file page.tsx produk tersebut",
+                              "Menggunakan hook useHead() di dalam komponen produk",
+                              "Memanipulasi document.title di dalam useEffect",
+                              "Menambahkannya di globals.css"
+                            ],
+                            answerIndex: 0,
+                            explanation: "generateMetadata() adalah API standar di App Router untuk menghasilkan meta tags secara dinamis berdasarkan parameter route atau data yang di-fetch."
+                          }
+        ],
         },
       ],
     },
@@ -1536,7 +1692,33 @@ export const nextjsTrack: Track = {
               answerIndex: 2,
               explanation: "Perubahan ukuran font atau penggantian font yang tiba-tiba membuat elemen terdorong/berubah posisi (Layout Shift). Modul `next/font` mengatasi ini dengan memuat font secara optimal di build time.",
             },
-          ],
+              {
+                            id: "q4",
+                            type: "pilihan-ganda",
+                            question: "Kamu ingin melindungi rute '/admin' agar hanya bisa diakses oleh pengguna yang sudah login. Pendekatan apa yang paling efisien agar pemeriksaan login terjadi sebelum halaman dirender sama sekali?",
+                            choices: [
+                              "Mengecek status login dengan useEffect di dalam komponen Admin",
+                              "Menggunakan file middleware.ts di root proyek untuk memvalidasi token dan melakukan redirect jika tidak valid",
+                              "Menyembunyikan link ke /admin menggunakan CSS",
+                              "Memanggil rute API secara manual di setiap tombol klik"
+                            ],
+                            answerIndex: 1,
+                            explanation: "Middleware berjalan di Edge (sebelum request mencapai rute tujuan), menjadikannya tempat paling tepat dan cepat untuk logika redirect berbasis autentikasi."
+                          },
+              {
+                            id: "q5",
+                            type: "pilihan-ganda",
+                            question: "Saat mengimplementasikan NextAuth.js (Auth.js) di App Router, file yang berisi konfigurasi autentikasi biasanya diekspor sebagai handler untuk rute API. Rute apa yang secara konvensional digunakan oleh NextAuth?",
+                            choices: [
+                              "app/api/auth/[...nextauth]/route.ts",
+                              "app/api/login/route.ts",
+                              "app/auth/index.js",
+                              "app/session/route.ts"
+                            ],
+                            answerIndex: 0,
+                            explanation: "NextAuth memerlukan catch-all route ([...nextauth]) agar dapat menangani berbagai endpoint internalnya seperti login, callback, dan session."
+                          }
+        ],
         },
       ],
     },
@@ -1738,7 +1920,33 @@ export const nextjsTrack: Track = {
               answerIndex: 2,
               explanation: "Preview deployments sangat vital untuk tim kolaborasi; memungkinkan penguji coba mengakses URL rahasia hasil dari kode yang masih berada di branch feature.",
             },
-          ],
+              {
+                            id: "q4",
+                            type: "pilihan-ganda",
+                            question: "Kamu telah menyelesaikan pengembangan dan ingin men-deploy aplikasi ke produksi. Perintah standar mana yang membangun versi teroptimasi dari aplikasi Next.js-mu?",
+                            choices: [
+                              "npm run dev",
+                              "npm run start",
+                              "npm run build",
+                              "npm run export"
+                            ],
+                            answerIndex: 2,
+                            explanation: "'npm run build' menjalankan 'next build', yang bertugas mengkompilasi aplikasi, membuat halaman statis yang memungkinkan, dan mempersiapkan server."
+                          },
+              {
+                            id: "q5",
+                            type: "pilihan-ganda",
+                            question: "Platform mana yang dibuat oleh pencipta Next.js dan merupakan tempat yang paling dioptimalkan ('zero-configuration') untuk men-deploy aplikasi Next.js?",
+                            choices: [
+                              "Heroku",
+                              "Vercel",
+                              "DigitalOcean",
+                              "AWS S3"
+                            ],
+                            answerIndex: 1,
+                            explanation: "Vercel adalah pencipta dan pengelola Next.js, sehingga fitur-fitur seperti Server Actions, Middleware Edge, dan ISR bekerja out-of-the-box."
+                          }
+        ],
         },
       ],
     },

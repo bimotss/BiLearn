@@ -33,7 +33,7 @@ export const htmlTrack: Track = {
           id: "html-1-1",
           title: "Elemen pertamamu: heading",
           explanation:
-            "HTML tersusun dari **elemen**. Elemen heading `<h1>` dipakai untuk judul paling penting di halaman. Tag pembuka `<h1>` dan tag penutup `</h1>` mengapit isi teksnya.",
+            "HTML tersusun dari **elemen**. Sebagian besar elemen ditulis berpasangan: tag pembuka `<h1>`, isi teks, lalu tag penutup `</h1>` yang ditandai garis miring. Elemen `<h1>` dipakai untuk judul paling penting di halaman — bukan sekadar membuat teks besar, tapi menyatakan 'inilah topik halaman ini' kepada mesin pencari dan screen reader. Kesalahan paling sering pemula adalah lupa menutup tag: browser tidak menampilkan pesan error, ia hanya menebak sendiri dan tampilanmu jadi berantakan tanpa petunjuk sebabnya.",
           example: {
             code: "<h2>Selamat Datang</h2>",
             output:
@@ -88,7 +88,7 @@ export const htmlTrack: Track = {
           id: "html-1-3",
           title: "Tingkatan heading",
           explanation:
-            "Heading punya 6 tingkat: `<h1>` (paling penting) sampai `<h6>` (paling kecil). Satu halaman sebaiknya hanya punya satu `<h1>` — ini juga penting untuk SEO di dunia kerja.",
+            "Heading punya enam tingkat, dari `<h1>` (paling penting) sampai `<h6>`. Tingkatnya menyatakan struktur, bukan ukuran huruf: anggap saja seperti daftar isi buku, di mana h1 judul buku, h2 nama bab, dan h3 sub-bab. Satu halaman sebaiknya hanya punya satu `<h1>` supaya topik utamanya tidak ambigu bagi mesin pencari. Jebakannya: memilih h4 hanya karena hurufnya terlihat pas — kalau ingin teks lebih kecil, kecilkan lewat CSS dan biarkan tingkat headingnya mengikuti struktur.",
           example: {
             code: "<h1>Buku Resep</h1>\n<h2>Bab 1: Sarapan</h2>\n<h3>Telur Dadar</h3>",
             output:
@@ -142,7 +142,7 @@ export const htmlTrack: Track = {
           id: "html-1-5",
           title: "Gambar",
           explanation:
-            "Elemen `<img>` menampilkan gambar. Ia tidak punya tag penutup (self-closing). Atribut `src` menunjuk file gambar, dan `alt` mendeskripsikan gambar untuk screen reader — wajib di dunia kerja (aksesibilitas).",
+            "Elemen `<img>` menampilkan gambar dan tidak punya tag penutup — cukup satu tag saja. Atribut `src` menunjuk lokasi berkas gambarnya, sedangkan `alt` berisi deskripsi teks yang dibacakan screen reader dan ditampilkan saat gambar gagal dimuat. Menulis `alt` bukan formalitas: di banyak perusahaan ia diperiksa saat code review, dan di beberapa negara aksesibilitas adalah kewajiban hukum. Untuk gambar yang murni hiasan, isi `alt=\"\"` (kosong) supaya screen reader melewatinya, bukan menghapus atributnya.",
           example: {
             code: '<img src="https://picsum.photos/150" alt="Gambar contoh">',
             output:
@@ -167,6 +167,174 @@ export const htmlTrack: Track = {
           solution: '<img src="https://picsum.photos/200" alt="Foto acak">',
         },
         {
+          kind: "step",
+          id: "html-1-6",
+          title: "Daftar: ul, ol, dan li",
+          explanation:
+            "Hampir setiap halaman berisi daftar: menu navigasi, fitur produk, langkah tutorial. HTML punya dua jenis. `<ul>` (unordered list) untuk daftar yang urutannya tidak penting — ditampilkan dengan bullet. `<ol>` (ordered list) untuk daftar yang urutannya bermakna, seperti langkah resep — ditampilkan bernomor otomatis, jadi kamu tidak perlu mengetik angkanya sendiri. Keduanya hanya boleh berisi `<li>` sebagai anak langsung. Memakai daftar yang benar juga penting bagi screen reader: ia mengumumkan 'daftar dengan 5 item' sehingga penggunanya tahu seberapa panjang isinya.",
+          example: {
+            code: "<ol>\n  <li>Panaskan minyak</li>\n  <li>Masukkan bumbu</li>\n  <li>Aduk hingga matang</li>\n</ol>",
+            output: "Tiga langkah bernomor 1, 2, 3 — nomornya dibuat browser, bukan diketik manual.",
+            note: "Perhatikan: nomor pada <ol> muncul sendiri. Jangan pernah mengetik '1.' di dalam <li> — nanti nomornya dobel.",
+          },
+          instruction:
+            "Buat daftar fitur produk yang urutannya tidak penting, berisi tiga item: `Gratis`, `Terbuka`, dan `Bahasa Indonesia`. Pilih jenis daftar yang sesuai.",
+          starterCode: "<h2>Fitur</h2>\n",
+          language: "html",
+          tests: [
+            {
+              pattern: "<ul>[\\s\\S]*</ul>",
+              message:
+                "Karena urutannya tidak penting, pakai <ul> ... </ul>.",
+            },
+            {
+              pattern: "<li>\\s*Gratis\\s*</li>",
+              message:
+                "Tambahkan item <li>Gratis</li>.",
+            },
+            {
+              pattern: "<li>\\s*Terbuka\\s*</li>",
+              message:
+                "Tambahkan item <li>Terbuka</li>.",
+            },
+            {
+              pattern: "<li>\\s*Bahasa Indonesia\\s*</li>",
+              message:
+                "Tambahkan item <li>Bahasa Indonesia</li>.",
+            },
+          ],
+          solution: "<h2>Fitur</h2>\n<ul>\n  <li>Gratis</li>\n  <li>Terbuka</li>\n  <li>Bahasa Indonesia</li>\n</ul>",
+        },
+        {
+          kind: "step",
+          id: "html-1-7",
+          title: "Daftar Bersarang",
+          explanation:
+            "Menu dan daftar isi sering punya sub-item. Cara menulisnya sering salah: `<ul>` anak **harus berada di dalam `<li>` induknya**, bukan sebagai saudara di antara dua `<li>`. Kalau ditaruh langsung di bawah `<ul>` tanpa dibungkus `<li>`, HTML-nya tidak valid dan hubungan induk-anak hilang bagi screen reader — pengguna tidak tahu sub-item itu milik item yang mana. Perhatikan juga indentasi: setiap tingkat menjorok satu langkah supaya struktur bersarangnya terbaca saat kamu membaca ulang kodemu nanti.",
+          example: {
+            code: "<ul>\n  <li>Minuman\n    <ul>\n      <li>Kopi</li>\n      <li>Teh</li>\n    </ul>\n  </li>\n  <li>Makanan</li>\n</ul>",
+            output: "Dua item utama, dan di bawah 'Minuman' muncul dua sub-item yang menjorok ke dalam.",
+          },
+          instruction:
+            "Buat daftar dua tingkat: item `Frontend` yang di dalamnya berisi sub-daftar dengan dua item, `HTML` dan `CSS`. Pastikan sub-daftarnya berada di dalam item induknya.",
+          starterCode: "<ul>\n  <li>Frontend</li>\n</ul>\n",
+          language: "html",
+          tests: [
+            {
+              pattern: "<li>\\s*Frontend[\\s\\S]*<ul>[\\s\\S]*</ul>[\\s\\S]*</li>",
+              message:
+                "Sub-daftar <ul> harus berada DI DALAM <li>Frontend</li>, sebelum tag penutupnya.",
+            },
+            {
+              pattern: "<li>\\s*HTML\\s*</li>",
+              message:
+                "Tambahkan sub-item <li>HTML</li>.",
+            },
+            {
+              pattern: "<li>\\s*CSS\\s*</li>",
+              message:
+                "Tambahkan sub-item <li>CSS</li>.",
+            },
+          ],
+          solution: "<ul>\n  <li>Frontend\n    <ul>\n      <li>HTML</li>\n      <li>CSS</li>\n    </ul>\n  </li>\n</ul>",
+        },
+        {
+          kind: "step",
+          id: "html-1-8",
+          title: "Atribut id dan class",
+          explanation:
+            "Dua atribut ini muncul di hampir setiap baris HTML profesional. `id` adalah nama unik — hanya boleh dipakai satu elemen di seluruh halaman, dan dipakai untuk menandai target link (`#kontak`) atau menghubungkan label ke input. `class` adalah penanda kelompok — boleh dipakai berulang di banyak elemen, dan inilah yang dipakai CSS untuk memberi gaya yang sama ke banyak elemen sekaligus. Satu elemen boleh punya beberapa class, dipisah spasi. Jebakan pemula: memakai `id` untuk styling berulang, lalu bingung ketika elemen keduanya tidak ikut berubah.",
+          example: {
+            code: "<section id=\"kontak\" class=\"kartu penting\">\n  <h2>Hubungi Kami</h2>\n</section>",
+            output: "Satu section yang bisa dituju lewat link #kontak, dan sekaligus membawa dua class untuk diberi gaya CSS.",
+            note: "id unik per halaman, class boleh berulang. Beberapa class ditulis dipisah spasi di dalam satu atribut.",
+          },
+          instruction:
+            "Buat sebuah `<section>` yang punya `id` bernilai `tentang` dan `class` bernilai `kartu`, berisi `<h2>` bertuliskan `Tentang Saya`.",
+          starterCode: "",
+          language: "html",
+          tests: [
+            {
+              pattern: "<section[^>]*id=\"tentang\"",
+              message:
+                "Beri atribut id=\"tentang\" pada section.",
+            },
+            {
+              pattern: "<section[^>]*class=\"[^\"]*kartu",
+              message:
+                "Beri atribut class=\"kartu\" pada section.",
+            },
+            {
+              pattern: "<h2>\\s*Tentang Saya\\s*</h2>",
+              message:
+                "Isi section dengan <h2>Tentang Saya</h2>.",
+            },
+          ],
+          solution: "<section id=\"tentang\" class=\"kartu\">\n  <h2>Tentang Saya</h2>\n</section>",
+        },
+        {
+          kind: "step",
+          id: "html-1-9",
+          title: "Path Relatif vs Absolut",
+          explanation:
+            "Nilai `href` dan `src` bisa ditulis dalam tiga bentuk, dan salah pilih adalah penyebab paling umum gambar tidak muncul. Path **absolut** memuat alamat lengkap (`https://situs.com/logo.png`) dan dipakai untuk sumber di luar situsmu. Path **root-relative** diawali garis miring (`/gambar/logo.png`), artinya dihitung dari akar situs — aman meski halamanmu berpindah folder. Path **relatif** (`gambar/logo.png` atau `../logo.png`) dihitung dari lokasi file HTML saat ini, sehingga bisa rusak begitu file dipindahkan. Tanda `../` berarti naik satu folder.",
+          example: {
+            code: "<a href=\"https://bps.go.id\">Situs luar (absolut)</a>\n<a href=\"/tentang\">Halaman lain di situs ini (root-relative)</a>\n<img src=\"../aset/logo.png\" alt=\"Logo\">",
+            output: "Tiga cara menunjuk berkas: alamat lengkap, dari akar situs, dan naik satu folder dari lokasi file ini.",
+            note: "../ berarti naik satu folder. Kalau gambarmu tidak muncul, path inilah yang pertama harus kamu periksa.",
+          },
+          instruction:
+            "Halamanmu berada di folder `blog/` dan gambarnya di folder `aset/` yang sejajar dengan `blog/`. Tulis elemen `<img>` yang menunjuk `aset/foto.jpg` memakai path relatif yang naik satu folder, dengan alt `Foto artikel`.",
+          starterCode: "",
+          language: "html",
+          tests: [
+            {
+              pattern: "<img[^>]*src=\"\\.\\./aset/foto\\.jpg\"",
+              message:
+                "Pakai path relatif yang naik satu folder: ../aset/foto.jpg",
+            },
+            {
+              pattern: "<img[^>]*alt=\"Foto artikel\"",
+              message:
+                "Sertakan alt=\"Foto artikel\".",
+            },
+          ],
+          solution: "<img src=\"../aset/foto.jpg\" alt=\"Foto artikel\">",
+        },
+        {
+          kind: "step",
+          id: "html-1-10",
+          title: "br, hr, dan Komentar",
+          explanation:
+            "Tiga hal kecil yang sering dipakai keliru. `<br>` memaksa pindah baris di dalam satu blok teks — tepat untuk alamat atau lirik, tapi jangan dipakai untuk memberi jarak antar paragraf (itu tugas CSS). `<hr>` menandai pergantian topik dan tampil sebagai garis horizontal. Keduanya tidak punya tag penutup. Komentar ditulis `<!-- seperti ini -->`: tidak tampil di layar, tapi tetap terbaca siapa pun yang membuka source — jadi jangan pernah menyimpan catatan rahasia atau kredensial di sana.",
+          example: {
+            code: "<p>Senin - Jumat<br>\n09.00 - 17.00 WIB</p>",
+            output: "Jam buka tampil dua baris di dalam satu paragraf, tanpa jarak antar-paragraf tambahan.",
+          },
+          instruction:
+            "Tulis satu paragraf berisi dua baris alamat yang dipisah `<br>`, lalu tambahkan garis pemisah dan sebuah komentar HTML berisi catatan apa pun.",
+          starterCode: "",
+          language: "html",
+          tests: [
+            {
+              pattern: "<p>[\\s\\S]*<br\\s*/?>[\\s\\S]*</p>",
+              message:
+                "Pakai <br> di dalam satu <p> untuk memisahkan dua baris alamat.",
+            },
+            {
+              pattern: "<hr\\s*/?>",
+              message:
+                "Tambahkan garis pemisah <hr>.",
+            },
+            {
+              pattern: "<!--[\\s\\S]{3,}-->",
+              message:
+                "Tambahkan komentar HTML dengan format <!-- catatan -->.",
+            },
+          ],
+          solution: "<p>Jl. Anggrek No. 7<br>\nSurabaya 60111</p>\n<hr>\n<!-- di bawah ini nanti diisi daftar produk -->",
+        },
+        {
           kind: "quiz",
           id: "html-1-kuis",
           title: "Kuis: Dasar Dokumen",
@@ -183,10 +351,11 @@ export const htmlTrack: Track = {
             },
             {
               id: "q2",
-              type: "isian",
+              type: "pilihan-ganda",
               question:
                 "Atribut apa yang dipakai elemen <a> untuk menentukan tujuan link?",
-              acceptedAnswers: ["href"],
+              choices: ["src", "href", "link", "target"],
+              answerIndex: 1,
               explanation:
                 'href (hypertext reference) menentukan URL tujuan link, contoh: <a href="https://google.com">. Tanpa href, link tidak mengarah ke mana-mana.',
             },
@@ -204,6 +373,51 @@ export const htmlTrack: Track = {
               answerIndex: 1,
               explanation:
                 "alt dideskripsikan ke pengguna tunanetra lewat screen reader, ditampilkan jika gambar gagal dimuat, dan dibaca mesin pencari. Di lowongan kerja, aksesibilitas (a11y) makin sering jadi requirement.",
+            },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question:
+                "Mengapa elemen <p> lebih baik daripada teks biasa untuk paragraf?",
+              choices: [
+                "Karena <p> otomatis memberi warna",
+                "Karena browser memberikan jarak antar paragraf yang jelas",
+                "Karena <p> bisa diklik",
+                "Karena <p> adalah satu-satunya cara menulis teks",
+              ],
+              answerIndex: 1,
+              explanation:
+                "Elemen <p> secara otomatis memberikan margin (jarak) dengan teks atas dan bawahnya agar mudah dibaca.",
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question:
+                "Bagaimana cara menulis elemen <img> yang benar?",
+              choices: [
+                "<img>gambar.jpg</img>",
+                '<img href="gambar.jpg" alt="foto">',
+                '<image src="gambar.jpg"></image>',
+                '<img src="gambar.jpg" alt="foto">',
+              ],
+              answerIndex: 3,
+              explanation:
+                "Elemen <img> adalah self-closing dan wajib menggunakan src untuk menunjuk file serta alt untuk deskripsi.",
+            },
+                      {
+              id: "q6",
+              type: "pilihan-ganda",
+              question:
+                "Kamu menulis langkah-langkah pendaftaran yang harus dikerjakan berurutan. Elemen daftar mana yang tepat, dan kenapa?",
+              choices: [
+                "<ul>, karena bullet lebih rapi dipandang",
+                "<ol>, karena urutannya bermakna dan nomornya dibuat browser otomatis",
+                "<div> berisi teks 1., 2., 3. yang diketik manual",
+                "<table> dengan satu kolom",
+              ],
+              answerIndex: 1,
+              explanation:
+                "Urutan yang bermakna adalah tanda dipakainya <ol>: browser membuat nomornya sendiri, jadi menyisipkan langkah baru di tengah tidak membuatmu menomori ulang. Mengetik angka manual di dalam <div> membuat screen reader tidak mengumumkannya sebagai daftar, dan tabel hanya tepat untuk data yang punya hubungan baris-kolom.",
             },
           ],
         },
@@ -229,7 +443,7 @@ export const htmlTrack: Track = {
           id: "html-2-1",
           title: "header dan nav",
           explanation:
-            "`<div>` tidak punya arti apa pun — ia hanya kotak. Elemen **semantic** memberi tahu browser, mesin pencari, dan screen reader *apa peran* bagian itu. `<header>` untuk bagian atas halaman, `<nav>` khusus untuk kumpulan link navigasi.",
+            "`<div>` tidak menyatakan apa pun — ia hanya kotak tanpa makna. Elemen **semantic** memberi tahu browser, mesin pencari, dan screen reader apa peran sebuah bagian: `<header>` untuk kepala halaman, `<nav>` khusus untuk kumpulan link navigasi. Manfaatnya nyata bagi pengguna screen reader, yang bisa melompat langsung antar penanda ini tanpa mendengarkan seluruh isi halaman. Tidak semua kumpulan link perlu `<nav>` — pakai untuk navigasi utama, bukan untuk setiap deretan link di dalam artikel.",
           example: {
             code: '<header>\n  <nav>\n    <a href="/produk">Produk</a>\n    <a href="/harga">Harga</a>\n  </nav>\n</header>',
             output:
@@ -259,7 +473,7 @@ export const htmlTrack: Track = {
           id: "html-2-2",
           title: "main: satu per halaman",
           explanation:
-            "`<main>` menandai konten utama halaman — bukan header, bukan sidebar, bukan footer. Aturannya: **tepat satu `<main>` per halaman**. Screen reader punya shortcut untuk melompat langsung ke sini, sehingga pengguna tidak perlu mendengar ulang seluruh menu.",
+            "`<main>` menandai konten utama halaman — bukan header, bukan sidebar, bukan footer. Aturannya tegas: tepat satu `<main>` per halaman, karena screen reader menyediakan pintasan 'lompat ke konten utama' yang jadi ambigu kalau ada lebih dari satu. Isi yang berulang di setiap halaman, seperti menu dan informasi kontak, harus berada di luarnya. Menempatkan seluruh halaman termasuk menu ke dalam `<main>` adalah kesalahan umum yang membuat pintasan itu kehilangan gunanya.",
           example: {
             code: "<main>\n  <h1>Katalog Produk</h1>\n</main>\n<footer>\n  <p>Hubungi kami di info@toko.com</p>\n</footer>",
             output:
@@ -290,7 +504,7 @@ export const htmlTrack: Track = {
           id: "html-2-3",
           title: "article: konten yang berdiri sendiri",
           explanation:
-            "`<article>` untuk konten yang **tetap bermakna jika dicabut dari halaman** — satu postingan blog, satu berita, satu kartu produk. Tesnya sederhana: kalau bagian ini di-RSS atau dibagikan sendirian, apakah masih utuh? Kalau ya, pakai `<article>`.",
+            "`<article>` dipakai untuk konten yang tetap bermakna jika dicabut dari halamannya — satu postingan blog, satu berita, satu kartu produk. Tes cepatnya: kalau bagian ini muncul sendirian di feed RSS atau dibagikan ke orang lain, apakah masih utuh dan bisa dipahami? Kalau ya, `<article>` tepat; kalau butuh konteks halaman di sekitarnya, `<section>` lebih cocok. Sebuah `<article>` boleh berisi `<article>` lain, misalnya komentar di dalam postingan.",
           example: {
             code: "<article>\n  <h2>Resep Nasi Goreng</h2>\n  <p>Siapkan nasi dingin dan bumbu.</p>\n</article>",
             output:
@@ -317,7 +531,7 @@ export const htmlTrack: Track = {
           id: "html-2-4",
           title: "section vs div",
           explanation:
-            "`<section>` adalah pengelompokan tematik dan **hampir selalu punya judul**. Kalau kamu tidak bisa memberinya judul yang wajar, kemungkinan yang kamu butuh adalah `<div>` biasa (murni untuk styling). Aturan praktis: `section` = ada judulnya, `div` = cuma pembungkus layout.",
+            "`<section>` adalah pengelompokan tematik dan hampir selalu punya judul di dalamnya. Kalau kamu kesulitan memberi judul yang wajar untuk sebuah blok, kemungkinan besar yang kamu butuhkan adalah `<div>` — pembungkus netral untuk kebutuhan tata letak. Aturan praktisnya: ada judulnya berarti `section`, sekadar kotak pengatur layout berarti `div`. Memaksakan elemen semantik untuk kebutuhan visual justru mengaburkan struktur halaman, dan itu terbaca jelas saat audit aksesibilitas.",
           example: {
             code: '<section>\n  <h2>Pertanyaan Umum</h2>\n  <p>Berikut jawaban yang sering ditanyakan.</p>\n</section>\n\n<div class="pembungkus-layout">\n  <p>Ini hanya wadah untuk styling.</p>\n</div>',
             output:
@@ -348,7 +562,7 @@ export const htmlTrack: Track = {
           id: "html-2-5",
           title: "aside, figure, dan figcaption",
           explanation:
-            "`<aside>` untuk konten pendukung yang bukan inti (sidebar, info terkait, iklan). `<figure>` membungkus gambar/diagram beserta keterangannya, dan `<figcaption>` adalah keterangannya — ini mengikat gambar dan caption secara resmi, bukan sekadar teks yang kebetulan di bawahnya.",
+            "`<aside>` menandai konten pendukung yang bukan inti halaman: sidebar, info terkait, atau iklan. `<figure>` membungkus gambar, diagram, atau cuplikan kode beserta keterangannya, dan `<figcaption>` adalah keterangannya. Bedanya dengan paragraf biasa di bawah gambar: `figcaption` terikat resmi ke gambarnya, sehingga screen reader membacakan keduanya sebagai satu kesatuan. Letakkan `figcaption` sebagai anak pertama atau terakhir di dalam `figure` — posisi lain tidak valid.",
           example: {
             code: '<figure>\n  <img src="https://picsum.photos/120" alt="Grafik penjualan">\n  <figcaption>Gambar 1: Tren penjualan 2026</figcaption>\n</figure>',
             output:
@@ -383,7 +597,7 @@ export const htmlTrack: Track = {
           id: "html-2-6",
           title: "Elemen teks semantik",
           explanation:
-            "`<strong>` berarti **penting** (screen reader menekankannya), `<b>` cuma menebalkan tanpa makna. Sama: `<em>` = penekanan, `<i>` = miring saja. `<time datetime=\"2026-07-27\">` membuat tanggal bisa dibaca mesin — dipakai mesin pencari untuk menampilkan tanggal artikel.",
+            "`<strong>` menyatakan bahwa teksnya penting dan screen reader membacakannya dengan penekanan, sedangkan `<b>` hanya menebalkan tanpa makna apa pun. Pola yang sama berlaku untuk `<em>` (penekanan) dibanding `<i>` (miring saja). Elemen `<time datetime=\"2026-07-27\">` membuat tanggal terbaca mesin dalam format standar, sehingga mesin pencari bisa menampilkan tanggal artikelmu di hasil pencarian. Di code review, memilih elemen bermakna dibanding elemen visual adalah salah satu hal yang paling sering dikomentari reviewer.",
           example: {
             code: '<p>\n  <strong>Perhatian</strong>: promo berakhir\n  <time datetime="2026-12-31">31 Desember 2026</time>.\n</p>',
             output:
@@ -455,10 +669,11 @@ export const htmlTrack: Track = {
             },
             {
               id: "q4",
-              type: "isian",
+              type: "pilihan-ganda",
               question:
-                "Elemen apa yang khusus dipakai untuk membungkus kumpulan link navigasi? (tulis nama tagnya saja, tanpa < >)",
-              acceptedAnswers: ["nav"],
+                "Elemen apa yang khusus dipakai untuk membungkus kumpulan link navigasi?",
+              choices: ["menu", "header", "nav", "links"],
+              answerIndex: 2,
               explanation:
                 "<nav> menandai blok navigasi utama. Screen reader bisa melompat antar landmark, dan tidak semua kumpulan link perlu <nav> — cukup untuk navigasi utama/penting saja, bukan setiap grup link.",
             },
@@ -500,7 +715,7 @@ export const htmlTrack: Track = {
           id: "html-3-1",
           title: "Tabel dasar",
           explanation:
-            "Tabel untuk **data tabular** — bukan untuk layout (itu praktik tahun 2005). `<table>` berisi baris `<tr>`; di dalam baris ada sel data `<td>` atau sel header `<th>`. `<th>` bukan sekadar teks tebal: screen reader memakainya untuk mengumumkan 'kolom apa' saat pengguna berpindah sel.",
+            "Tabel dipakai untuk data tabular — data yang hubungan baris dan kolomnya bermakna, bukan untuk mengatur tata letak halaman. `<table>` berisi baris `<tr>`, dan di dalam baris ada sel data `<td>` atau sel header `<th>`. `<th>` bukan sekadar teks tebal: screen reader memakainya untuk mengumumkan konteks kolom saat pengguna berpindah antar sel, sehingga angka tetap bisa dipahami tanpa melihat layar. Memakai tabel untuk layout adalah praktik lama yang merusak tampilan di HP dan menyulitkan pengguna screen reader.",
           example: {
             code: "<table>\n  <tr>\n    <th>Produk</th>\n    <th>Stok</th>\n  </tr>\n  <tr>\n    <td>Kopi</td>\n    <td>12</td>\n  </tr>\n</table>",
             output:
@@ -533,7 +748,7 @@ export const htmlTrack: Track = {
           id: "html-3-2",
           title: "thead, tbody, dan caption",
           explanation:
-            "Untuk tabel nyata, pisahkan bagiannya: `<thead>` (baris header), `<tbody>` (isi data), `<tfoot>` (total). Ini bukan kosmetik — browser bisa membuat header tetap terlihat saat body di-scroll, dan `<caption>` memberi tabel judul resmi yang dibacakan screen reader sebelum isinya.",
+            "Untuk tabel data yang sesungguhnya, pisahkan bagiannya: `<thead>` untuk baris header, `<tbody>` untuk isi, dan `<tfoot>` untuk baris total. Pembagian ini bukan kosmetik — ia memberi browser dan teknologi bantu informasi bagian mana yang merupakan kepala tabel. `<caption>` memberi tabel judul resmi yang dibacakan lebih dulu oleh screen reader, sehingga penggunanya tahu isi tabel sebelum menyusurinya. Ingat urutannya: `caption` wajib menjadi elemen pertama di dalam `table`, sebelum `thead`.",
           example: {
             code: "<table>\n  <caption>Laporan Stok</caption>\n  <thead>\n    <tr><th>Produk</th></tr>\n  </thead>\n  <tbody>\n    <tr><td>Kopi</td></tr>\n  </tbody>\n</table>",
             output:
@@ -567,7 +782,7 @@ export const htmlTrack: Track = {
           id: "html-3-3",
           title: "colspan",
           explanation:
-            "`colspan` membuat satu sel melebar menutupi beberapa kolom — biasanya untuk baris total atau judul grup. Hati-hati: jumlah sel per baris harus tetap konsisten setelah dihitung colspan-nya, kalau tidak tabel jadi rusak dan bingung dibaca screen reader.",
+            "`colspan` membuat satu sel melebar menutupi beberapa kolom, biasanya untuk baris total atau judul kelompok. Nilainya adalah jumlah kolom yang ditutupi, jadi `colspan=\"2\"` berarti sel itu dihitung sebagai dua kolom. Jumlah kolom setiap baris harus tetap sama setelah colspan diperhitungkan; kalau tidak, tabelnya tampil miring dan screen reader kehilangan hubungan antara sel dan headernya. Ada juga `rowspan` yang bekerja sama persis, tapi ke arah vertikal.",
           example: {
             code: '<tr>\n  <td>Kopi</td>\n  <td>12</td>\n</tr>\n<tr>\n  <td colspan="2">Total: 12 item</td>\n</tr>',
             output:
@@ -594,7 +809,7 @@ export const htmlTrack: Track = {
           id: "html-3-4",
           title: "Video dan audio",
           explanation:
-            "`<video>` dan `<audio>` butuh atribut `controls` agar pemutar muncul — tanpa itu elemennya ada tapi tak terlihat. Untuk autoplay, browser modern **hanya mengizinkan jika video di-mute** (aturan yang lahir karena autoplay bersuara sangat mengganggu). Selalu sediakan `controls` agar pengguna tetap punya kendali.",
+            "`<video>` dan `<audio>` membutuhkan atribut `controls` agar pemutarnya muncul — tanpa itu elemennya tetap ada tapi pengguna tidak punya cara memainkannya. Untuk autoplay, browser modern hanya mengizinkannya bila video di-mute, aturan yang lahir karena suara yang menyala sendiri sangat mengganggu. `controls` adalah boolean attribute: cukup ditulis namanya, tanpa nilai. Sediakan juga teks alternatif atau subtitle bila video memuat informasi penting, karena tidak semua orang bisa mendengarnya.",
           example: {
             code: '<audio src="lagu.mp3" controls></audio>',
             output:
@@ -623,7 +838,7 @@ export const htmlTrack: Track = {
           id: "html-3-5",
           title: "iframe yang aman",
           explanation:
-            "`<iframe>` menyematkan halaman lain (YouTube, Maps). Dua atribut penting di dunia kerja: `title` (screen reader butuh tahu isi frame ini apa) dan `loading=\"lazy\"` (frame tidak dimuat sampai user hampir men-scroll ke sana — menghemat bandwidth dan mempercepat halaman).",
+            "`<iframe>` menyematkan halaman lain ke dalam halamanmu, misalnya video YouTube atau peta. Dua atribut yang selalu diperiksa di dunia kerja: `title`, karena screen reader hanya menyebut 'frame' tanpa itu, dan `loading=\"lazy\"`, yang menunda pemuatan sampai pengguna hampir men-scroll ke sana. Menunda pemuatan adalah salah satu perbaikan performa termurah dan sering jadi rekomendasi pertama audit Lighthouse. Untuk konten dari sumber yang tidak kamu kendalikan, tambahkan juga atribut `sandbox` agar isinya dibatasi.",
           example: {
             code: '<iframe\n  src="https://www.openstreetmap.org"\n  title="Peta lokasi kantor"\n  loading="lazy">\n</iframe>',
             output:
@@ -657,7 +872,7 @@ export const htmlTrack: Track = {
           id: "html-3-6",
           title: "picture untuk responsive image",
           explanation:
-            "`<picture>` memungkinkan browser memilih gambar berbeda sesuai kondisi — misal versi kecil untuk mobile, atau format modern (WebP) jika didukung. Browser membaca `<source>` dari atas ke bawah dan memakai yang pertama cocok; `<img>` di dalamnya adalah fallback **wajib**.",
+            "`<picture>` membiarkan browser memilih berkas gambar yang paling sesuai — versi kecil untuk layar HP, atau format modern seperti WebP bila didukung. Browser membaca setiap `<source>` dari atas ke bawah dan memakai yang pertama cocok dengan kondisinya. `<img>` di dalamnya wajib ada karena dialah yang sebenarnya ditampilkan; `source` hanya menawarkan alternatif. Manfaatnya besar di Indonesia, tempat banyak pengguna mengakses lewat jaringan seluler dengan kuota terbatas.",
           example: {
             code: '<picture>\n  <source srcset="foto-lebar.jpg" media="(min-width: 1200px)">\n  <img src="foto-kecil.jpg" alt="Foto produk">\n</picture>',
             output:
@@ -707,10 +922,11 @@ export const htmlTrack: Track = {
             },
             {
               id: "q2",
-              type: "isian",
+              type: "pilihan-ganda",
               question:
                 "Atribut apa yang harus ditambahkan ke <video> agar pemutarnya (play, pause, volume) muncul?",
-              acceptedAnswers: ["controls"],
+              choices: ["autoplay", "controls", "buttons", "player"],
+              answerIndex: 1,
               explanation:
                 "Tanpa controls, elemen video muncul tapi pengguna tidak punya cara memainkannya. Ini juga soal aksesibilitas: pengguna harus selalu bisa menghentikan media.",
             },
@@ -746,10 +962,11 @@ export const htmlTrack: Track = {
             },
             {
               id: "q5",
-              type: "isian",
+              type: "pilihan-ganda",
               question:
-                "Atribut apa pada <iframe> yang menunda pemuatan sampai pengguna hampir men-scroll ke elemen itu? (tulis nama atributnya)",
-              acceptedAnswers: ["loading"],
+                "Atribut apa pada <iframe> yang menunda pemuatan sampai pengguna hampir men-scroll ke elemen itu?",
+              choices: ["defer", 'loading="lazy"', "async", "delay"],
+              answerIndex: 1,
               explanation:
                 'loading="lazy" menunda pemuatan iframe/gambar di luar viewport. Ini salah satu perbaikan performa termurah dan sering jadi rekomendasi pertama audit Lighthouse.',
             },
@@ -779,7 +996,7 @@ export const htmlTrack: Track = {
           id: "html-4-1",
           title: "form, action, dan method",
           explanation:
-            "`<form>` membungkus input dan menentukan ke mana data dikirim (`action`) serta caranya (`method`). Aturan praktis: **`GET` untuk pencarian** (data tampil di URL, bisa di-bookmark), **`POST` untuk mengubah data** (login, pendaftaran, pembelian). Jangan pernah kirim password lewat GET — akan tercatat di riwayat browser dan log server.",
+            "`<form>` membungkus input dan menentukan ke mana data dikirim lewat `action` serta caranya lewat `method`. Aturan praktisnya: `GET` untuk pencarian, karena datanya tampil di URL sehingga hasilnya bisa di-bookmark dan dibagikan; `POST` untuk apa pun yang mengubah data, seperti login, pendaftaran, dan pembelian. Jangan pernah mengirim kata sandi lewat GET — nilainya akan tercatat di riwayat browser, log server, dan header Referer. Kalau `action` dikosongkan, form dikirim kembali ke alamat halaman itu sendiri.",
           example: {
             code: '<form action="/cari" method="get">\n  <input type="search" name="q">\n  <button type="submit">Cari</button>\n</form>',
             output:
@@ -847,7 +1064,7 @@ export const htmlTrack: Track = {
           id: "html-4-3",
           title: "Tipe input yang tepat",
           explanation:
-            "`type` bukan sekadar validasi — di HP ia mengubah keyboard yang muncul. `type=\"email\"` menampilkan tombol @, `type=\"tel\"` menampilkan tombol angka besar, `type=\"date\"` memunculkan date picker native. Memilih tipe yang benar adalah peningkatan UX gratis yang sering diabaikan pemula.",
+            "Atribut `type` bukan sekadar soal validasi — di HP ia menentukan papan ketik yang muncul. `type=\"email\"` memunculkan tombol @, `type=\"tel\"` memunculkan tombol angka besar, dan `type=\"date\"` memanggil pemilih tanggal bawaan sistem. Memilih tipe yang tepat adalah peningkatan pengalaman pengguna yang gratis dan sering terlewat pemula. Satu catatan penting: `type=\"number\"` sebaiknya hanya untuk nilai yang benar-benar dihitung, bukan untuk nomor telepon atau NIK yang boleh diawali angka nol.",
           example: {
             code: '<input type="email" name="email">\n<input type="number" name="jumlah">\n<input type="color" name="warna">',
             output:
@@ -880,7 +1097,7 @@ export const htmlTrack: Track = {
           id: "html-4-4",
           title: "textarea dan select",
           explanation:
-            "`<textarea>` untuk teks panjang — perhatikan: nilainya ditulis **di antara tag**, bukan di atribut `value`. `<select>` berisi `<option>`; atribut `value` pada option adalah yang dikirim ke server, sementara teks di dalamnya yang dilihat user.",
+            "`<textarea>` dipakai untuk teks panjang, dan nilainya ditulis di antara tag pembuka dan penutup — bukan di atribut `value` seperti input biasa. `<select>` berisi elemen `<option>`, di mana atribut `value` adalah yang dikirim ke server sementara teks di dalamnya yang dibaca pengguna. Membedakan keduanya penting supaya nilai di database tetap stabil meski labelnya diubah. Jangan lupa memberi `name` pada keduanya, karena tanpa `name` isinya tidak ikut terkirim sama sekali.",
           example: {
             code: '<textarea name="catatan">Isi awal</textarea>\n\n<select name="ukuran">\n  <option value="s">Small</option>\n  <option value="l">Large</option>\n</select>',
             output:
@@ -917,7 +1134,7 @@ export const htmlTrack: Track = {
           id: "html-4-5",
           title: "Radio: name yang sama itu kuncinya",
           explanation:
-            "Radio button jadi satu kelompok **hanya jika `name`-nya sama** — inilah yang membuat memilih satu otomatis membatalkan yang lain. Kalau name-nya berbeda, semuanya bisa dicentang sekaligus dan terlihat seperti bug. Setiap radio butuh `value` berbeda karena itulah yang dikirim ke server.",
+            "Radio button menjadi satu kelompok hanya jika atribut `name`-nya sama persis — itulah yang membuat memilih satu otomatis membatalkan pilihan lain. Kalau `name`-nya berbeda, semuanya bisa aktif bersamaan dan tampak seperti bug yang sulit dilacak. Setiap radio wajib punya `value` berbeda, karena nilai itulah yang dikirim ke server, bukan teks yang terlihat. Kalau pengguna boleh memilih lebih dari satu, yang kamu butuhkan adalah checkbox, bukan radio.",
           example: {
             code: '<input type="radio" name="bayar" value="transfer"> Transfer\n<input type="radio" name="bayar" value="cod"> COD',
             output:
@@ -1069,27 +1286,13 @@ export const htmlTrack: Track = {
             },
             {
               id: "q5",
-              type: "isian",
-              question:
-                "Method form apa yang harus dipakai untuk login? (tulis: get atau post)",
-              acceptedAnswers: ["post"],
-              explanation:
-                "POST, karena GET menempelkan data ke URL — password akan tersimpan di riwayat browser, log server, dan header Referer. Aturan umum: GET untuk mengambil/mencari data, POST untuk mengirim atau mengubah data.",
-            },
-            {
-              id: "q6",
               type: "pilihan-ganda",
               question:
-                "Kamu menaruh <button>Hapus</button> di dalam form untuk dipakai dengan JavaScript, tapi halaman malah ter-submit setiap kali diklik. Apa penyebabnya?",
-              choices: [
-                "Button tidak boleh berada di dalam form",
-                "Tanpa atribut type, <button> di dalam form default-nya type=\"submit\"",
-                "Harus memakai <input> bukan <button>",
-                "Form kurang atribut action",
-              ],
+                "Method form apa yang harus dipakai untuk login?",
+              choices: ["GET", "POST", "PUT", "DELETE"],
               answerIndex: 1,
               explanation:
-                'Default <button> di dalam form adalah type="submit". Untuk tombol yang hanya dipakai JavaScript, tulis eksplisit type="button". Ini penyebab paling umum bug "halaman refresh sendiri" pada pemula.',
+                "POST, karena GET menempelkan data ke URL — password akan tersimpan di riwayat browser, log server, dan header Referer. Aturan umum: GET untuk mengambil/mencari data, POST untuk mengirim atau mengubah data.",
             },
           ],
         },
@@ -1179,7 +1382,7 @@ export const htmlTrack: Track = {
           id: "html-5-3",
           title: "Tombol ikon butuh nama",
           explanation:
-            "Tombol yang isinya hanya ikon (×, ☰, 🔍) tidak punya teks untuk dibacakan — screen reader hanya menyebut 'tombol', dan pengguna tidak tahu fungsinya. Solusinya `aria-label`: memberi nama yang bisa diakses tanpa mengubah tampilan. Ini salah satu temuan paling umum di audit aksesibilitas.",
+            "Tombol yang isinya hanya ikon tidak punya teks untuk dibacakan, sehingga screen reader hanya menyebut 'tombol' tanpa menjelaskan fungsinya. `aria-label` memberi nama yang bisa diakses tanpa mengubah tampilan sedikit pun. Ini termasuk temuan paling sering muncul di audit aksesibilitas, terutama pada tombol tutup, menu, dan pencarian. Alternatif lain yang sama diterimanya adalah menaruh teks asli lalu menyembunyikannya secara visual dengan CSS, sehingga tetap terbaca teknologi bantu.",
           example: {
             code: '<!-- screen reader hanya menyebut "tombol" -->\n<button>☰</button>\n\n<!-- sekarang jelas fungsinya -->\n<button aria-label="Buka menu navigasi">☰</button>',
             output:
@@ -1204,7 +1407,7 @@ export const htmlTrack: Track = {
           id: "html-5-4",
           title: "Pakai elemen native, bukan div yang dipaksa",
           explanation:
-            "Aturan pertama ARIA: **jangan pakai ARIA kalau ada elemen native**. `<div role=\"button\" tabindex=\"0\">` butuh JavaScript tambahan agar bisa ditekan dengan Enter dan Space, sering lupa dihandle, dan hasilnya tetap lebih buruk dari `<button>` yang sudah membawa semua perilaku itu secara gratis.",
+            "Aturan pertama ARIA justru menyuruhmu tidak memakai ARIA bila sudah ada elemen HTML yang sesuai. `<div role=\"button\" tabindex=\"0\">` menuntut JavaScript tambahan agar bisa ditekan dengan Enter dan Space, dan bagian itu paling sering terlupa. `<button>` membawa semuanya secara gratis: bisa difokuskan dengan Tab, merespons Enter dan Space, diumumkan sebagai tombol, serta mengikuti pengaturan sistem pengguna. Pola yang sama berlaku untuk link: kalau tujuannya berpindah halaman, pakai `<a>`, bukan div yang diberi event klik.",
           example: {
             code: '<!-- div ini butuh JS tambahan untuk Enter & Space -->\n<div role="button" tabindex="0">Hapus</div>\n\n<!-- gratis: fokus, Enter, Space, semantik -->\n<button>Hapus</button>',
             output:
@@ -1315,10 +1518,11 @@ export const htmlTrack: Track = {
             },
             {
               id: "q4",
-              type: "isian",
+              type: "pilihan-ganda",
               question:
-                "Atribut apa yang memberi nama yang bisa diakses pada tombol yang isinya hanya ikon? (tulis nama atributnya)",
-              acceptedAnswers: ["aria-label"],
+                "Atribut apa yang memberi nama yang bisa diakses pada tombol yang isinya hanya ikon?",
+              choices: ["title", "name", "aria-label", "alt"],
+              answerIndex: 2,
               explanation:
                 'aria-label memberi nama untuk screen reader tanpa menampilkan teks di layar, misal <button aria-label="Tutup dialog">×</button>. Alternatifnya: teks visual yang disembunyikan secara visual (sr-only) — keduanya diterima.',
             },
@@ -1363,9 +1567,8 @@ export const htmlTrack: Track = {
           explanation:
             "`<meta charset=\"UTF-8\">` mencegah teks berubah jadi karakter aneh (Ã©, ï¿½) — wajib, dan harus berada di awal `<head>`. `<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">` membuat halaman menyesuaikan lebar layar HP; **tanpa ini, semua CSS responsive-mu tidak berpengaruh** di mobile dan halaman tampil mengecil seperti versi desktop.",
           example: {
-            code: '<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n  <title>Toko Kopi</title>\n</head>',
-            output:
-              "Halaman menampilkan huruf beraksen dengan benar, dan di HP tampil selebar layar (tidak mengecil).",
+            code: "<!-- head yang MASIH KURANG: viewport belum ada -->\n<head>\n  <meta charset=\"UTF-8\">\n  <title>Toko Kopi</title>\n</head>",
+            output: "Huruf beraksen tampil benar, tapi di HP halaman mengecil seperti versi desktop karena viewport belum dideklarasikan.",
             note: "Keduanya wajib ada di setiap halaman. Tanpa viewport, media query CSS-mu tidak akan terasa di HP.",
           },
           instruction:
@@ -1391,7 +1594,7 @@ export const htmlTrack: Track = {
           id: "html-6-2",
           title: "title dan meta description",
           explanation:
-            "`<title>` adalah teks biru besar di hasil Google dan judul tab browser — buat spesifik, jangan 'Home'. `<meta name=\"description\">` adalah cuplikan di bawahnya (~150 karakter); ia bukan faktor ranking langsung, tapi sangat memengaruhi apakah orang mengeklik hasilmu.",
+            "`<title>` adalah judul yang tampil di tab browser dan menjadi teks tautan di hasil pencarian, jadi buatlah spesifik — 'Home' tidak memberi tahu apa pun. `<meta name=\"description\">` mengisi cuplikan di bawahnya, sekitar 150 karakter, dan meski bukan faktor peringkat langsung, ia sangat menentukan apakah orang mengeklik hasilmu. Tulis keduanya berbeda di setiap halaman; judul yang sama di seluruh situs membuat mesin pencari sulit membedakan halamanmu. Anggap keduanya sebagai iklan singkat halamanmu di hasil pencarian.",
           example: {
             code: '<title>Resep Nasi Goreng Mudah - Dapur Kita</title>\n<meta name="description" content="Cara membuat nasi goreng enak dalam 15 menit dengan bahan sederhana.">',
             output:
@@ -1421,7 +1624,7 @@ export const htmlTrack: Track = {
           id: "html-6-3",
           title: "Open Graph: tampilan saat dibagikan",
           explanation:
-            "Saat link-mu dibagikan di WhatsApp, LinkedIn, atau Twitter, platform membaca tag **Open Graph** untuk membuat kartu preview. Tanpa itu, link tampil sebagai teks polos dan jauh lebih sedikit diklik. Perhatikan: OG memakai atribut `property`, bukan `name` — kesalahan yang sering membuatnya diam-diam tidak bekerja.",
+            "Saat tautanmu dibagikan di WhatsApp, LinkedIn, atau X, platform-platform itu membaca tag Open Graph untuk menyusun kartu pratinjau. Tanpa tag itu, tautanmu tampil sebagai URL polos dan jauh lebih sedikit diklik. Perhatikan bedanya: Open Graph memakai atribut `property`, sedangkan meta description memakai `name` — tertukar sedikit saja membuatnya gagal tanpa pesan error apa pun. Gambar `og:image` sebaiknya memakai URL absolut lengkap, karena platform luar tidak tahu alamat dasar situsmu.",
           example: {
             code: '<meta property="og:title" content="Resep Nasi Goreng">\n<meta property="og:description" content="Enak, cepat, 15 menit.">\n<meta property="og:image" content="https://dapurkita.id/nasgor.jpg">',
             output:
@@ -1455,7 +1658,7 @@ export const htmlTrack: Track = {
           id: "html-6-4",
           title: "Favicon dan stylesheet",
           explanation:
-            "Keduanya memakai `<link>` dengan `rel` yang berbeda: `rel=\"icon\"` untuk favicon (ikon di tab), `rel=\"stylesheet\"` untuk CSS. `<link>` tidak punya tag penutup. Urutan penting: stylesheet di `<head>` agar halaman tidak berkedip tanpa gaya sesaat.",
+            "Keduanya memakai elemen `<link>` dan yang membedakan fungsinya adalah nilai `rel`: `rel=\"icon\"` untuk favicon di tab browser, `rel=\"stylesheet\"` untuk berkas CSS. `<link>` tidak punya tag penutup. Letakkan stylesheet di dalam `<head>` supaya halaman tidak sempat tampil tanpa gaya sesaat sebelum CSS-nya termuat. Berkas CSS yang dipanggil terlalu banyak juga memperlambat tampilan pertama, jadi gabungkan bila memungkinkan.",
           example: {
             code: '<link rel="icon" href="/logo.png">\n<link rel="stylesheet" href="/css/utama.css">',
             output:
@@ -1517,11 +1720,10 @@ export const htmlTrack: Track = {
           id: "html-6-6",
           title: "Halaman lengkap: menyatukan semuanya",
           explanation:
-            "Sekarang gabungkan semua yang kamu pelajari menjadi satu dokumen utuh: doctype, lang, meta wajib, dan struktur semantik. `<html lang=\"id\">` memberi tahu screen reader untuk memakai pelafalan bahasa Indonesia — detail kecil dengan dampak besar bagi penggunanya.",
+            "Sekarang satukan semuanya menjadi satu dokumen utuh: `<!DOCTYPE html>`, atribut `lang`, meta wajib di `<head>`, dan struktur semantik di `<body>`. Deklarasi doctype memberi tahu browser agar memakai mode standar; tanpa itu browser masuk ke mode kompatibilitas lama dan tata letakmu bisa bergeser. `<html lang=\"id\">` membuat screen reader memakai pelafalan bahasa Indonesia — tanpa itu teksmu bisa dibacakan dengan pelafalan Inggris dan nyaris tidak dimengerti. Kerangka ini akan kamu tulis ulang di hampir setiap proyek, jadi hafalkan urutannya sampai otomatis.",
           example: {
-            code: '<!DOCTYPE html>\n<html lang="id">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n  <title>Toko Kopi - Beranda</title>\n</head>\n<body>\n  <header>\n    <nav><a href="/">Beranda</a></nav>\n  </header>\n  <main>\n    <h1>Selamat Datang</h1>\n  </main>\n  <footer>\n    <p>© 2026 Toko Kopi</p>\n  </footer>\n</body>\n</html>',
-            output:
-              "Satu halaman web utuh yang valid, aksesibel, dan siap diindeks mesin pencari.",
+            code: "<!-- kerangka lama: doctype, lang, dan viewport belum ada -->\n<html>\n<head>\n  <title>Toko Kopi</title>\n</head>\n<body>\n  <div class=\"atas\">Menu</div>\n  <div class=\"isi\">Selamat datang</div>\n</body>\n</html>",
+            output: "Halaman tetap tampil, tapi browser masuk mode kompatibilitas lama, screen reader tidak tahu bahasa halamannya, dan strukturnya hanya div tanpa makna.",
             note: "Ini kerangka yang akan kamu tulis ulang di hampir setiap proyek — hafalkan urutannya sampai otomatis.",
           },
           instruction:
@@ -1611,10 +1813,11 @@ export const htmlTrack: Track = {
             },
             {
               id: "q4",
-              type: "isian",
+              type: "pilihan-ganda",
               question:
-                "Atribut apa pada tag <html> yang memberi tahu screen reader bahasa halaman? (tulis nama atributnya)",
-              acceptedAnswers: ["lang"],
+                "Atribut apa pada tag <html> yang memberi tahu screen reader bahasa halaman?",
+              choices: ["language", "lang", "locale", "charset"],
+              answerIndex: 1,
               explanation:
                 'lang (misal <html lang="id">) membuat screen reader memakai pelafalan yang benar. Tanpa itu, teks Indonesia bisa dibacakan dengan pelafalan Inggris dan nyaris tidak dimengerti.',
             },

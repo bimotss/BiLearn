@@ -89,7 +89,7 @@ export const typescriptTrack: Track = {
           instruction:
             "Deklarasikan variabel `skor` dengan nilai angka `100` menggunakan `let`. Biarkan TypeScript menentukan tipenya secara otomatis (tanpa anotasi tipe manual).",
           starterCode: "// Tulis variabel skor di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "let\\s+skor\\s*=\\s*100",
@@ -120,7 +120,7 @@ export const typescriptTrack: Track = {
           instruction:
             "Buat variabel `let dataMentah: unknown` lalu lakukan pengecekan `if (typeof dataMentah === 'string')`.",
           starterCode: "// Tulis kode di bawah ini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "let\\s+dataMentah\\s*:\\s*unknown",
@@ -202,7 +202,7 @@ export const typescriptTrack: Track = {
           instruction:
             "Pada konfigurasi compilerOptions di `tsconfig.json`, tulis opsi untuk mengaktifkan seluruh aturan pengamanan tipe ketat.",
           starterCode: "",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "[\"']strict[\"']\\s*:\\s*true",
@@ -244,11 +244,42 @@ export const typescriptTrack: Track = {
             },
             {
               id: "q3",
-              type: "prediksi-output",
-              question: "Apa luaran dari eksekusi fungsi berikut saat dikompilasi?",
-              code: 'function sapa(nama: string = "Dunia"): string {\n  return "Halo " + nama;\n}\nconsole.log(sapa());',
-              acceptedAnswers: ["Halo Dunia"],
+              type: "pilihan-ganda",
+              question: "Dalam sebuah form, developer menggunakan fungsi `function sapa(nama: string = \"Dunia\"): string` dan memanggilnya dengan `sapa()`. Apa hasil luaran dari pemanggilan tersebut?",
+              choices: [
+                "Halo",
+                "Halo undefined",
+                "Halo Dunia",
+                "Error, parameter harus diisi"
+              ],
+              answerIndex: 2,
               explanation: "Parameter default nama bertipe string dengan nilai awal 'Dunia', sehingga saat sapa() dipanggil tanpa argumen mengembalikan 'Halo Dunia'.",
+            },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Saat mendefinisikan array untuk menyimpan daftar tahun kelahiran seperti `[1990, 1995, 2000]`, anotasi tipe apa yang paling tepat di TypeScript?",
+              choices: [
+                "number",
+                "number[]",
+                "Array",
+                "list"
+              ],
+              answerIndex: 1,
+              explanation: "Anotasi `number[]` digunakan untuk menandakan bahwa variabel tersebut adalah array yang berisi kumpulan data berjenis angka (number).",
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Tim backend mengubah API sehingga bisa mengembalikan data objek JSON atau pesan error null. Bagaimana cara mendeklarasikan variabel yang menampung respons ini dengan aman menggunakan strictNullChecks?",
+              choices: [
+                "let response: any",
+                "let response: unknown",
+                "let response: object | null",
+                "let response: object"
+              ],
+              answerIndex: 2,
+              explanation: "Dengan `strictNullChecks`, tipe union `object | null` secara eksplisit menyatakan bahwa variabel tersebut dapat berisi objek atau nilai null, sehingga memaksa developer mengeceknya sebelum menggunakannya.",
             },
           ],
         },
@@ -483,6 +514,27 @@ export const typescriptTrack: Track = {
               answerIndex: 1,
               explanation: "readonly mencegah re-assignment properti setelah objek dibuat.",
             },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Seorang pengembang menggunakan `interface Product` untuk model data di e-commerce. Ia ingin agar setiap varian produk yang dinamis (misal properti warna, ukuran yang berbeda tiap produk) juga dapat dimasukkan tanpa harus didefinisikan satu persatu. Apa fitur interface yang tepat digunakan?",
+              choices: [
+                "Optional property",
+                "Readonly modifier",
+                "Index signature",
+                "Intersection type"
+              ],
+              answerIndex: 2,
+              explanation: "Index signature `[key: string]: any` atau tipe spesifik lainnya digunakan untuk mendeklarasikan objek yang key-nya dinamis dan tidak diketahui jumlah atau namanya sejak awal.",
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Jika kamu ingin menggabungkan dua struktur data `User` dan `Access` menggunakan `type` (misalnya menjadi `UserAccess`), operator apa yang harus kamu gunakan?",
+              choices: ["|", "&", "+", "extends"],
+              answerIndex: 1,
+              explanation: "Pada type alias, operator intersection `&` digunakan untuk menggabungkan dua tipe menjadi satu kesatuan (berbeda dengan interface yang menggunakan extends).",
+            },
           ],
         },
       ],
@@ -547,7 +599,7 @@ export const typescriptTrack: Track = {
           instruction:
             "Tulis pengondisian `if (typeof val === 'number')` di dalam fungsi.",
           starterCode: "// Tulis pengondisian di bawah ini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "if\\s*\\(\\s*typeof\\s+val\\s*===\\s*['\"]number['\"]\\s*\\)",
@@ -603,7 +655,7 @@ export const typescriptTrack: Track = {
           instruction:
             "Buat fungsi type guard `function isNumber(val: unknown): val is number`.",
           starterCode: "// Tulis fungsi isNumber di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "function\\s+isNumber\\s*\\(\\s*val\\s*:\\s*unknown\\s*\\)\\s*:\\s*val\\s+is\\s+number",
@@ -658,7 +710,7 @@ export const typescriptTrack: Track = {
           instruction:
             "Buat variabel `colors` yang berisi objek `{ red: '#ff0000' }` dan tambahkan assertion agar propertinya bersifat readonly literal.",
           starterCode: "// Tulis objek colors di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "const\\s+colors\\s*=\\s*\\{\\s*red\\s*:\\s*['\"]#ff0000['\"]\\s*\\}\\s+as\\s+const",
@@ -706,6 +758,27 @@ export const typescriptTrack: Track = {
               answerIndex: 0,
               explanation: "Sintaks `param is Type` memberi tahu TypeScript bahwa jika fungsi bernilai true, maka param memiliki tipe Type.",
             },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Dalam sebuah status pesanan e-commerce, nilai yang mungkin adalah 'PENDING', 'SHIPPED', atau 'DELIVERED'. Tipe data apa yang paling direkomendasikan dan lebih ringkas agar aman dari salah ketik dibandingkan enum?",
+              choices: [
+                "Object dengan as const",
+                "String Union Literal",
+                "any",
+                "unknown"
+              ],
+              answerIndex: 1,
+              explanation: "Meskipun enum bisa dipakai, String Union Literal (`'PENDING' | 'SHIPPED' | 'DELIVERED'`) sering lebih direkomendasikan dan sering dipakai karena memberikan type safety tanpa menyisakan kode berlebih (overhead) saat dikompilasi ke JavaScript.",
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Kamu sedang mengecek apakah variabel `data` yang bisa bertipe `string` atau `number` merupakan sebuah teks. Operator apa yang tepat untuk mempersempit tipe (type narrowing) dalam blok if?",
+              choices: ["in", "instanceof", "typeof", "as"],
+              answerIndex: 2,
+              explanation: "Operator `typeof` digunakan untuk mempersempit (narrowing) tipe primitif dasar seperti string, number, atau boolean.",
+            },
           ],
         },
       ],
@@ -742,7 +815,7 @@ export const typescriptTrack: Track = {
           instruction:
             "Buat fungsi generic `function identity<T>(arg: T): T` yang mengembalikan `arg`.",
           starterCode: "// Tulis fungsi identity di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "function\\s+identity\\s*<\\s*T\\s*>\\s*\\(\\s*arg\\s*:\\s*T\\s*\\)\\s*:\\s*T",
@@ -828,7 +901,7 @@ export const typescriptTrack: Track = {
           instruction:
             "Buat `interface Wrapper<T = number>` dengan properti `content: T`.",
           starterCode: "// Tulis interface Wrapper di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "interface\\s+Wrapper\\s*<\\s*T\\s*=\\s*number\\s*>\\s*\\{\\s*content\\s*:\\s*T\\s*;?\\s*\\}",
@@ -851,7 +924,7 @@ export const typescriptTrack: Track = {
           instruction:
             "Deklarasikan state `count` dan setter `setCount` menggunakan `useState` React. Tentukan tipe Generics secara eksplisit sebagai `number` dengan nilai awal `0`.",
           starterCode: "// Tulis deklarasi useState di sini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "const\\s*\\[\\s*count\\s*,\\s*setCount\\s*\\]\\s*=\\s*useState\\s*<\\s*number\\s*>\\(\\s*0\\s*\\)",
@@ -926,6 +999,22 @@ export const typescriptTrack: Track = {
               choices: ["<T : string>", "<T = string>", "<T default string>", "<T as string>"],
               answerIndex: 1,
               explanation: "Sintaks `<T = DefaultType>` menetapkan tipe bawaan jika pemanggil tidak menyertakan argumen tipe.",
+            },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Sebuah komponen React menerima props generik `<T>` namun terkadang props tersebut tidak diisi dengan tipe spesifik, sehingga developer ingin agar tipenya otomatis menjadi `string`. Bagaimana cara mendefinisikan generic tersebut?",
+              choices: ["<T: string>", "<T extends string>", "<T = string>", "<T as string>"],
+              answerIndex: 2,
+              explanation: "Sintaks `<T = string>` memberikan default type parameter, sehingga jika Generics tidak ditentukan tipenya secara eksplisit, otomatis akan di-infer sebagai `string`.",
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Kamu membuat fungsi helper untuk HTTP fetch bernama `apiClient<T>(url: string)` yang mereturn tipe dari Promise bawaan. Saat memanggil `apiClient<User>('/user/1')`, apa tipe data akhir yang kamu peroleh dari fungsi tersebut?",
+              choices: ["User", "Promise<User>", "any", "T"],
+              answerIndex: 1,
+              explanation: "Fungsi mereturn `Promise<T>`, sehingga saat pemanggilan dengan `<User>`, hasil akhirnya adalah tipe `Promise<User>` karena operasi fetch berjalan asynchronous.",
             },
           ],
         },
@@ -1140,6 +1229,27 @@ export const typescriptTrack: Track = {
               answerIndex: 1,
               explanation: "ReturnType<typeof fn> mengekstrak tipe nilai kembalian (return) dari fungsi fn.",
             },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Kamu memiliki `interface Product { id: number; name: string; price: number; }` dan hanya butuh tipe yang isinya `id` dan `name` untuk list tampilan awal. Manakah Utility type yang paling tepat dan aman jika nanti `Product` ditambahkan properti lain?",
+              choices: [
+                "Omit<Product, 'price'>",
+                "Pick<Product, 'id' | 'name'>",
+                "Exclude<Product, 'price'>",
+                "Partial<Product>"
+              ],
+              answerIndex: 1,
+              explanation: "Kamu menggunakan `Pick<Product, 'id' | 'name'>` agar secara eksplisit memilih apa yang dibutuhkan, sehingga tipe tetap aman (tidak bocor) sekalipun `Product` ditambahkan properti baru di kemudian hari.",
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Aplikasi butuh menyimpan pemetaan konfigurasi bahasa, misal `'id'` menjadi `'Indonesia'` dan `'en'` menjadi `'English'`. Utility type apa yang diformulasikan khusus untuk membuat objek map/dictionary semacam ini?",
+              choices: ["Record<string, string>", "Pick<string, string>", "Map<string, string>", "Tuple"],
+              answerIndex: 0,
+              explanation: "`Record<K, T>` digunakan untuk membuat objek map/dictionary yang key-nya bertipe K dan valuenya bertipe T.",
+            },
           ],
         },
       ],
@@ -1197,7 +1307,7 @@ export const typescriptTrack: Track = {
           instruction:
             "Di dalam file `tsconfig.json` pada bagian `compilerOptions`, tambahkan properti untuk mengizinkan file JavaScript (`.js`) dikompilasi bersama proyek TypeScript.",
           starterCode: "",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "[\"']allowJs[\"']\\s*:\\s*true",
@@ -1223,7 +1333,7 @@ export const typescriptTrack: Track = {
           instruction:
             "Tulis parameter fungsi `handleChange` bernama `e` yang diberi anotasi tipe event perubahan input HTML di React.",
           starterCode: "// Tulis parameter e di bawah ini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "\\(?e\\s*:\\s*React\\.ChangeEvent<HTMLInputElement>\\)?",
@@ -1269,7 +1379,7 @@ export const typescriptTrack: Track = {
           instruction:
             "Lakukan type assertion pada variabel `elem` agar TypeScript menganggapnya sebagai `HTMLInputElement`.",
           starterCode: "// Tulis tipe assertion di bawah ini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "elem\\s+as\\s+HTMLInputElement",
@@ -1295,7 +1405,7 @@ export const typescriptTrack: Track = {
           instruction:
             "Buat skema Zod `const ProductSchema = z.object({ id: z.number(), title: z.string() });`.",
           starterCode: "// Tulis ProductSchema di bawah ini\n",
-          language: "js",
+          language: "jsx",
           tests: [
             {
               pattern: "const\\s+ProductSchema\\s*=\\s*z\\.object\\(\\s*\\{\\s*id\\s*:\\s*z\\.number\\(\\)\\s*,\\s*title\\s*:\\s*z\\.string\\(\\)(?:\\s*,)?\\s*\\}\\s*\\)",
@@ -1313,36 +1423,62 @@ export const typescriptTrack: Track = {
             {
               id: "q1",
               type: "pilihan-ganda",
-              question: "Mengapa Zod dibutuhkan padahal kita sudah punya tipe TypeScript?",
+              question: "Mengapa library validasi skema (seperti Zod) dibutuhkan padahal kita sudah punya interface tipe TypeScript yang kuat?",
               choices: [
                 "TypeScript hanya memeriksa tipe saat compile-time; Zod mengecek kebenaran data saat runtime",
                 "Zod membuat file JS lebih kecil",
                 "Zod menggantikan peran React",
-                "Zod otomatis membuat database",
+                "Zod otomatis membuat skema database"
               ],
               answerIndex: 0,
-              explanation: "Tipe TypeScript dihapus saat kompilasi ke JS, sehingga Zod diperlukan untuk memvalidasi data API eksternal saat runtime.",
+              explanation: "Tipe TypeScript dihapus saat dikompilasi ke JavaScript murni. Zod diperlukan untuk memvalidasi dan memproses data aktual dari API eksternal saat aplikasi dijalankan (runtime).",
             },
             {
               id: "q2",
               type: "pilihan-ganda",
-              question: "Di folder mana paket tipe pihak ketiga dari DefinitelyTyped dikelola?",
+              question: "Saat menginstal library JavaScript lama yang tidak menyertakan tipe TypeScript bawaan, di bawah scope paket npm manakah tipe pihak ketiganya biasa ditemukan?",
               choices: ["@types/*", "@dts/*", "@definitions/*", "@ts-pkg/*"],
               answerIndex: 0,
-              explanation: "Paket DefinitelyTyped dipublikasikan di bawah scope npm `@types/`.",
+              explanation: "Paket tipe terkomunitas dari repositori DefinitelyTyped selalu dipublikasikan di bawah scope npm `@types/` (misalnya `@types/lodash`).",
             },
             {
               id: "q3",
               type: "pilihan-ganda",
-              question: "Apa risiko utama dari sering menggunakan Type Assertion (`as T`)?",
+              question: "Seorang developer baru sering memaksa variabel dengan menggunakan Type Assertion (`variabel as User`) setiap kali menjumpai error tipe. Apa risiko utama dari kebiasaan ini?",
               choices: [
                 "Membuat kompilasi gagal total",
-                "Menyembunyikan potensi bug runtime karena memaksa TS mempercayai tipe tanpa validasi nyata",
-                "Menghapus variabel dari memori",
-                "Mengganti browser pengguna",
+                "Menyembunyikan potensi bug runtime karena memaksa TS mempercayai tipe tanpa validasi nyata dari kita",
+                "Menghapus referensi variabel dari memori",
+                "Menyebabkan memori browser penuh"
               ],
               answerIndex: 1,
-              explanation: "Type assertion 'as' mematikan pengecekan tipe kompilator pada nilai tersebut, sehingga jika struktur aslinya berbeda bisa terjadi error di runtime.",
+              explanation: "Type assertion 'as' secara praktis mematikan pengecekan peringatan tipe oleh kompilator. Jika struktur data aslinya pada runtime berbeda dengan tipe as-nya, akan terjadi crash yang tidak terdeteksi sejak awal.",
+            },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Saat memigrasikan file `utils.js` ke TypeScript perlahan-lahan dalam satu codebase besar, pengaturan opsi compiler apa yang wajib diaktifkan pada `tsconfig.json`?",
+              choices: [
+                "\"strict\": false",
+                "\"allowJs\": true",
+                "\"checkJs\": false",
+                "\"noImplicitAny\": false"
+              ],
+              answerIndex: 1,
+              explanation: "Opsi `allowJs: true` sangat penting agar kompilator TypeScript dapat mengikutsertakan dan mengompilasi file berakhiran `.js` tanpa memblokir build sebelum semuanya diubah menjadi `.ts`.",
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Kamu mendapatkan pesan error TypeScript yang cukup panjang saat passing props ke sebuah komponen React. Di bagian mana dari stack error tersebut biasanya kamu menemukan akar masalah ketidakcocokan tipe yang sebenarnya?",
+              choices: [
+                "Di baris pertama pesan error",
+                "Di nama file tempat error tersebut dikompilasi",
+                "Di baris paling bawah yang sering memuat kalimat 'is not assignable to type'",
+                "Di berkas dokumentasi library React"
+              ],
+              answerIndex: 2,
+              explanation: "Pesan error TypeScript seringkali bertingkat dan sangat mendetail. Akar masalah umumnya disebutkan secara paling spesifik pada baris paling terakhir dari rentetan error tersebut.",
             },
           ],
         },

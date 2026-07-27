@@ -124,8 +124,8 @@ export const pythonTrack: Track = {
           explanation:
             "Evaluasi kondisi menggunakan `if`, `elif`, dan `else`. Perhatikan penggunaan titik dua (`:`) di akhir baris kondisi.",
           example: {
-            code: 'if nilai >= 80:\n  print("A")\nelif nilai >= 70:\n  print("B")\nelse:\n  print("C")',
-            output: "Mencetak grade nilai sesuai pengondisian.",
+            code: 'nilai = 85\nif nilai >= 80:\n  print("A")\nelif nilai >= 70:\n  print("B")\nelse:\n  print("C")',
+            output: "A",
             note: "Blok kode di dalam kondisi wajib memiliki indentasi 4 spasi.",
           },
           instruction:
@@ -168,23 +168,34 @@ export const pythonTrack: Track = {
           id: "python-1-7",
           title: "Aturan Indentasi Python (4 Spasi)",
           explanation:
-            "Pernahkah kamu melihat barisan kode yang berantakan dan sulit dibaca? Python sangat membenci hal itu. Berbeda dari bahasa lain yang mengelompokkan blok kode dengan kurung kurawal `{}`, Python mengambil pendekatan ekstrem: MEMAKSA indentasi (spasi menjorok ke dalam, standarnya 4 spasi). Indentasi ini bukan sekadar mempercantik — ini aturan mutlak! Kenapa? Agar kodemu selalu seragam, rapi, dan mudah dibaca siapa saja. Jebakan paling fatal pemula: mencampur tombol Tab dan Spasi di satu file. Ini langsung memunculkan `IndentationError`.",
+            "Berbeda dari bahasa lain yang mengelompokkan blok kode dengan kurung kurawal, Python memakai indentasi — spasi menjorok ke dalam, standarnya 4 spasi — sebagai penanda isi sebuah blok. Indentasi di Python bukan soal kerapian, melainkan bagian dari sintaks: baris yang menjorok berarti 'ini isi dari for/if/def di atasnya'. Kalau baris setelah tanda titik dua tidak menjorok, Python langsung berhenti dengan `IndentationError: expected an indented block`. Jebakan yang paling sering menimpa pemula adalah mencampur Tab dan Spasi dalam satu file — tampilannya terlihat lurus, tapi Python tetap menolaknya.",
           example: {
-            code: "def sapa():\n    # Indentasi 4 spasi mewakili isi fungsi\n    print('Halo')",
-            output: "Blok kode terstruktur secara rapi.",
-            note: "Campuran spasi dan tab akan memicu IndentationError.",
+            code: "# ❌ baris di bawah for tidak menjorok\n# for i in range(2):\n# print('halo')      -> IndentationError\n\n# ✅ menjorok 4 spasi\nfor i in range(2):\n    print('halo')",
+            output: "halo\nhalo",
+            note: "Empat spasi adalah standar PEP 8. Editor seperti VS Code bisa diatur agar tombol Tab otomatis menghasilkan spasi.",
           },
           instruction:
-            "Untuk melihat akibat dari tidak menggunakan indentasi yang benar, buatlah sebuah variabel `angka = 1` lalu gunakan perulangan `for` tanpa indentasi untuk mencetak angka tersebut. Hal ini akan memicu error sengaja.",
-          starterCode: "angka = 1\nfor i in range(2):\n# Jangan beri indentasi di bawah ini saat kamu memanggil cetak\n",
+            "Buat variabel `angka` bernilai 1, lalu tulis perulangan `for` yang mencetak isi variabel itu sebanyak dua kali. Perhatikan indentasi baris di dalam perulangannya.",
+          starterCode: "angka = 1\n# Tulis perulangan for di bawah ini\n",
           language: "text",
           tests: [
             {
-              pattern: "print\\(\\s*angka\\s*\\)",
-              message: "Gunakan pencetakan nilai 'angka' tanpa indentasi untuk melihat errornya.",
+              pattern: "angka\\s*=\\s*1",
+              message:
+                "Buat variabel angka bernilai 1.",
+            },
+            {
+              pattern: "for\\s+\\w+\\s+in\\s+range\\(\\s*2\\s*\\)\\s*:",
+              message:
+                "Tulis perulangan for ... in range(2):",
+            },
+            {
+              pattern: "\\n[ \\t]+print\\(\\s*angka\\s*\\)",
+              message:
+                "Baris print(angka) harus menjorok ke dalam sebagai isi perulangan.",
             },
           ],
-          solution: "angka = 1\nfor i in range(2):\nprint(angka)",
+          solution: "angka = 1\nfor i in range(2):\n    print(angka)",
         },
         {
           kind: "quiz",
@@ -230,6 +241,28 @@ export const pythonTrack: Track = {
               answerIndex: 1,
               explanation: "Python memiliki strong typing, ia tidak akan otomatis mengubah integer menjadi string, sehingga akan melemparkan TypeError jika kamu tidak mengonversi angkanya menggunakan str() terlebih dulu.",
             },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Apa fungsi dari keyword `break` dalam sebuah perulangan (looping)?",
+              choices: [
+                "Menghentikan program seutuhnya",
+                "Menghentikan iterasi dan keluar dari perulangan",
+                "Melanjutkan ke iterasi berikutnya",
+                "Menghapus variabel di dalam loop"
+              ],
+              answerIndex: 1,
+              explanation: "Keyword `break` menghentikan eksekusi perulangan saat ini secara langsung, sehingga kode akan berlanjut ke baris setelah blok perulangan tersebut."
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Di antara tipe data berikut, mana yang digunakan untuk merepresentasikan nilai desimal di Python?",
+              choices: ["int", "str", "bool", "float"],
+              answerIndex: 3,
+              explanation: "Tipe data `float` digunakan untuk menyimpan angka desimal/pecahan, sedangkan `int` digunakan untuk bilangan bulat."
+            }
+
           ],
         },
       ],
@@ -254,11 +287,11 @@ export const pythonTrack: Track = {
           id: "python-2-1",
           title: "List & Slicing di Python",
           explanation:
-            "List adalah urutan elemen mutable `[1, 2, 3]`. Tambah elemen dengan `.append()`, potong deret dengan Slicing `list[start:end]`.",
+            "List adalah urutan elemen yang **mutable** — isinya bisa berubah setelah dibuat, misalnya `[1, 2, 3]`. Tambah elemen di ujung dengan `.append()`, dan ambil sebagian isinya dengan slicing `list[start:end]`. Yang sering menjebak pemula: batas akhir slicing bersifat **eksklusif**, jadi `buah[0:2]` memberi elemen indeks 0 dan 1 saja — indeks 2 tidak ikut. Karena itu jumlah elemen hasil slicing selalu `end - start`.",
           example: {
-            code: 'buah = ["Apel", "Jeruk", "Mangga"]\nbuah.append("Pisang")\nprint(buah[0:2])',
-            output: "['Apel', 'Jeruk', 'Mangga']",
-            note: "Indeks Python dimulai dari 0. Indeks negatif [-1] mengambil elemen paling akhir.",
+            code: 'buah = ["Apel", "Jeruk", "Mangga"]\nbuah.append("Pisang")\nprint(buah)\nprint(buah[0:2])',
+            output: "['Apel', 'Jeruk', 'Mangga', 'Pisang']\n['Apel', 'Jeruk']",
+            note: "Indeks Python dimulai dari 0, dan batas akhir slicing tidak ikut terambil. Indeks negatif [-1] mengambil elemen paling akhir.",
           },
           instruction:
             'Kamu memiliki sebuah list daftar barang pada variabel `items`. Tambahkan barang "Baru" ke akhir urutan daftar tersebut menggunakan fungsi yang tepat.',
@@ -398,7 +431,7 @@ export const pythonTrack: Track = {
           explanation:
             "List ➔ Urutan berurut. Dict ➔ Pencarian kunci instan $O(1)$. Set ➔ Nilai unik tanpa duplikat. Tuple ➔ Data tetap tak dapat diubah.",
           example: {
-            code: "// Pilih struktur data berdasarkan karakteristik operasi algoritma",
+            code: "# dict: pencarian instan lewat kunci\nharga = {'kopi': 25000}\nprint(harga['kopi'])",
             output: "Optimasi algoritma dan efisiensi memori program.",
             note: "Memilih struktur data yang tepat mempermudah penulisan kode.",
           },
@@ -443,6 +476,28 @@ export const pythonTrack: Track = {
               answerIndex: 0,
               explanation: "Di Python, kita dapat melakukan negative indexing di mana -1 merepresentasikan urutan terakhir pada List/String.",
             },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Jika kita memiliki `users = {'admin': 1}`, apa yang terjadi bila kita menjalankan `users['guest']` untuk mengakses data yang kuncinya belum ada?",
+              choices: [
+                "Python akan me-return None",
+                "Python akan me-return False",
+                "Python akan melemparkan KeyError",
+                "Python akan otomatis membuat kunci 'guest'"
+              ],
+              answerIndex: 2,
+              explanation: "Mengakses kunci yang tidak ada langsung dengan kurung siku `[]` akan memicu `KeyError`. Untuk menghindarinya, gunakan metode `.get()`."
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Apa sintaks yang benar untuk menggabungkan dua dictionary di Python (versi 3.9+)?",
+              choices: ["dict1 + dict2", "dict1.concat(dict2)", "dict1 | dict2", "dict1.append(dict2)"],
+              answerIndex: 2,
+              explanation: "Python 3.9+ memperkenalkan operator `|` (merge operator) yang sangat bersih dan rapi untuk menggabungkan dua dictionary."
+            }
+
           ],
         },
       ],
@@ -565,7 +620,7 @@ export const pythonTrack: Track = {
             "Pemeriksaan `if __name__ == '__main__':` memastikan kode di dalamnya HANYA dieksekusi saat berkas dijalankan langsung (bukan saat di-import).",
           example: {
             code: 'def main():\n    print("Jalan")\n\nif __name__ == "__main__":\n    main()',
-            output: "Fungsi main() dipanggil saat script dieksekusi langsung.",
+            output: "Jalan",
             note: "Pola standar di seluruh modul dan script Python.",
           },
           instruction:
@@ -676,6 +731,33 @@ export const pythonTrack: Track = {
               answerIndex: 1,
               explanation: "Type Hinting di Python (secara default) tidak mengubah cara kode dieksekusi saat runtime. Fungsinya murni untuk membantu IDE memberi auto-complete dan static analysis.",
             },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Apa kegunaan dari sintaks `**kwargs` pada deklarasi parameter fungsi?",
+              choices: [
+                "Menangkap sisa argumen posisional (tanpa nama) menjadi Tuple",
+                "Menangkap pasangan argumen bernama (keyword arguments) yang berlebih menjadi Dictionary",
+                "Memaksa pengguna mengisi argumen",
+                "Mengalikan variabel dengan dua"
+              ],
+              answerIndex: 1,
+              explanation: "`**kwargs` digunakan untuk menangkap *keyword arguments* ekstra ke dalam bentuk dictionary, membuat fungsi sangat fleksibel menerima opsi konfigurasi."
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Jika ada variabel `x = 5` di luar fungsi, lalu di dalam fungsi kita mendeklarasikan `x = 10`. Apa yang terjadi pada nilai `x` di luar fungsi?",
+              choices: [
+                "Berubah menjadi 10 karena tertimpa",
+                "Tetap 5 karena variabel lokal di fungsi berbeda dari variabel global",
+                "Terjadi error karena nama sama",
+                "Berubah menjadi None"
+              ],
+              answerIndex: 1,
+              explanation: "Di Python, variabel yang didefinisikan di dalam fungsi bersifat LOKAL dan terisolasi, sehingga tidak mengubah variabel di lingkup global kecuali dideklarasikan dengan `global x`."
+            }
+
           ],
         },
       ],
@@ -805,27 +887,38 @@ export const pythonTrack: Track = {
           id: "python-4-5",
           title: "Penanganan Error dengan try/except/finally",
           explanation:
-            "Tangkap exception menggunakan `try ... except SpesifikException as e:`. Blok `finally` selalu berjalan apapun yang terjadi.",
+            "Program yang menerima masukan dari luar pasti suatu saat menemui data yang tidak sesuai harapan. Blok `try` menampung kode yang berisiko gagal, `except` menangkap jenis error tertentu agar program tidak berhenti mendadak, dan `finally` selalu dijalankan baik gagal maupun berhasil — biasanya untuk menutup file atau koneksi. Tangkap exception yang spesifik seperti `ValueError`, jangan `except:` polos, karena menangkap semuanya akan ikut menyembunyikan bug yang sebenarnya perlu kamu perbaiki. Menuliskan `as e` memberimu objek error-nya sehingga pesannya bisa dicatat ke log.",
           example: {
-            code:
-              "try:\n" +
-              "    val = int(input_str)\n" +
-              "except ValueError as e:\n" +
-              '    print("Bukan angka valid!")',
-            output: "Mencegah program crash saat masukan tidak berupa angka.",
-            note: "Hindari menulis 'except:' polos tanpa menyebutkan jenis Exception spesifik.",
+            code: "try:\n    hasil = 10 / 0\nexcept ZeroDivisionError as e:\n    print('Gagal:', e)\nfinally:\n    print('Selesai')",
+            output: "Gagal: division by zero\nSelesai",
           },
           instruction:
-            "Tuliskan penangkapan ValueError `except ValueError as e:`.",
-          starterCode: "# Tulis except ValueError di sini\n",
+            "Variabel `input_str` berisi teks dari pengguna yang belum tentu berupa angka. Tulis blok yang mencoba mengubahnya menjadi `int`, menangkap `ValueError` beserta objek error-nya, lalu mencetak pesan error itu.",
+          starterCode: "input_str = \"dua puluh\"\n# Tulis blok try/except di bawah ini\n",
           language: "text",
           tests: [
             {
-              pattern: "except\\s+ValueError\\s+as\\s+e\\s*:",
-              message: "Tuliskan: except ValueError as e:",
+              pattern: "try\\s*:",
+              message:
+                "Mulai dengan blok try:",
+            },
+            {
+              pattern: "int\\(\\s*input_str\\s*\\)",
+              message:
+                "Coba ubah input_str menjadi int di dalam try.",
+            },
+            {
+              pattern: "except\\s+ValueError\\s+as\\s+\\w+\\s*:",
+              message:
+                "Tangkap ValueError beserta objek error-nya (as e).",
+            },
+            {
+              pattern: "print\\(",
+              message:
+                "Cetak pesan error di dalam blok except.",
             },
           ],
-          solution: "except ValueError as e:\n    print(e)",
+          solution: "input_str = \"dua puluh\"\ntry:\n    angka = int(input_str)\nexcept ValueError as e:\n    print('Bukan angka:', e)",
         },
         {
           kind: "step",
@@ -921,6 +1014,28 @@ export const pythonTrack: Track = {
               answerIndex: 1,
               explanation: "Menangkap semua error dengan except: sangat berbahaya karena bisa membungkam indikasi bug sistematis atau upaya penghentian program dari user (Ctrl+C).",
             },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Bagaimana cara paling tepat menguraikan string teks berformat JSON ke dalam dictionary (objek Python)?",
+              choices: ["json.parse(teks)", "json.load(teks)", "json.loads(teks)", "json.dump(teks)"],
+              answerIndex: 2,
+              explanation: "Metode `json.loads()` singkatan dari 'load string', khusus mengubah string JSON menjadi dictionary, sedangkan `json.load()` membaca dari file handler."
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Di mana tempat yang paling benar meletakkan argumen penentu format karakter (`encoding='utf-8'`) saat membaca file teks di Python?",
+              choices: [
+                "Di dalam method .read()",
+                "Di dalam dekorator fungsi",
+                "Di dalam argumen fungsi open()",
+                "Pada setting sistem operasi"
+              ],
+              answerIndex: 2,
+              explanation: "Parameter `encoding='utf-8'` disematkan saat memanggil `open(file, mode, encoding)` agar Python mengetahui sejak awal bagaimana menterjemahkan bit di file teks tersebut."
+            }
+
           ],
         },
       ],
@@ -1053,28 +1168,38 @@ export const pythonTrack: Track = {
           id: "python-5-5",
           title: "Data Class (@dataclass)",
           explanation:
-            "Modul `@dataclass` otomatis menghasilkan `__init__`, `__repr__`, dan `__eq__` tanpa perlu mengetik kode boilerplate.",
+            "Class yang tugasnya sekadar menampung data biasanya butuh `__init__` panjang berisi penugasan berulang. Dekorator `@dataclass` dari modul `dataclasses` membuat Python menuliskannya untukmu: cukup deklarasikan nama field beserta tipenya, dan `__init__`, `__repr__`, serta perbandingan antar objek dibuat otomatis. Hasilnya kode jadi jauh lebih pendek dan bebas dari salah ketik saat menyalin parameter. Pakai dataclass untuk objek data seperti Produk atau Transaksi; class biasa tetap lebih tepat kalau perilakunya rumit dan bukan sekadar menyimpan nilai.",
           example: {
-            code:
-              "from dataclasses import dataclass\n\n" +
-              "@dataclass\n" +
-              "class Product:\n" +
-              "    name: str\n" +
-              "    price: float",
-            output: "Kelas Product dibuat otomatis lengkap dengan constructor.",
-            note: "Sangat ideal untuk kelas penampung data murni.",
+            code: "from dataclasses import dataclass\n\n@dataclass\nclass Buku:\n    judul: str\n    harga: int\n\nprint(Buku('Atomic Habits', 95000))",
+            output: "Buku(judul='Atomic Habits', harga=95000)",
           },
           instruction:
-            "Kita ingin membuat class data penampung produk secara instan tanpa menulis __init__. Gunakan dekorator bawaan dari modul dataclasses tepat di atas deklarasi `class Product:`.",
-          starterCode: "# Tulis dekorator dataclass di bawah ini sebelum class\n",
+            "Buat class penampung data `Product` dengan dua field: `name` bertipe `str` dan `price` bertipe `float`. Pakai dekorator dari modul `dataclasses` supaya kamu tidak perlu menulis `__init__` sendiri.",
+          starterCode: "from dataclasses import dataclass\n\n# Tulis class Product di bawah ini\n",
           language: "text",
           tests: [
             {
               pattern: "@dataclass",
-              message: "Berikan dekorator @dataclass di atas deklarasi kelas.",
+              message:
+                "Pasang dekorator @dataclass tepat di atas class.",
+            },
+            {
+              pattern: "class\\s+Product\\s*:",
+              message:
+                "Buat class Product.",
+            },
+            {
+              pattern: "name\\s*:\\s*str",
+              message:
+                "Field name bertipe str.",
+            },
+            {
+              pattern: "price\\s*:\\s*float",
+              message:
+                "Field price bertipe float.",
             },
           ],
-          solution: "@dataclass",
+          solution: "from dataclasses import dataclass\n\n@dataclass\nclass Product:\n    name: str\n    price: float",
         },
         {
           kind: "step",
@@ -1083,7 +1208,7 @@ export const pythonTrack: Track = {
           explanation:
             "Di Python, jangan paksakan membuat Class jika sebuah masalah cukup diselesaikan dengan Fungsi sederhana! Kombinasikan paradigma fungsional dan OOP secara seimbang.",
           example: {
-            code: "// Gunakan Fungsi untuk transformasi data sederhana\n// Gunakan Class jika ada state kompleks yang perlu dikelola",
+            code: "# cukup fungsi: transformasi sederhana tanpa state\ndef diskon(harga):\n    return harga * 0.9\n\nprint(diskon(100000))",
             output: "Struktur kode pragmatis khas pengembang Python profesional.",
             note: "Python mendukung multiparadigma (Procedural, Functional, OOP).",
           },
@@ -1138,6 +1263,28 @@ export const pythonTrack: Track = {
               answerIndex: 1,
               explanation: "Sangat disarankan memakai Fungsi biasa (Functional approach) jika kita tidak membutuhkan state berkelanjutan, demi menghindari kompleksitas class berlebihan.",
             },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Mengapa parameter pertama di setiap method dalam class Python biasanya bernama `self`?",
+              choices: [
+                "Karena itu adalah nama resmi dari Python",
+                "Untuk merujuk kepada instance (objek) yang memanggil method tersebut agar bisa mengakses atributnya",
+                "Agar fungsi bisa diakses publik",
+                "Untuk mengubah nilai global"
+              ],
+              answerIndex: 1,
+              explanation: "Parameter `self` berfungsi layaknya pointer `this` di bahasa lain, menghubungkan aksi dengan instance objek spesifik di memori."
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Cara paling sederhana untuk membuat sebuah properti/method milik Class (dapat dipanggil langsung tanpa instansiasi objek) adalah menggunakan:",
+              choices: ["@classmethod atau @staticmethod", "@property", "@dataclass", "super()"],
+              answerIndex: 0,
+              explanation: "`@classmethod` dan `@staticmethod` membuat method menjadi milik kelas itu sendiri dan dapat dipanggil menggunakan `NamaKelas.metode()`, tanpa perlu inisialisasi `NamaKelas()`."
+            }
+
           ],
         },
       ],
@@ -1255,7 +1402,7 @@ export const pythonTrack: Track = {
           explanation:
             "Gunakan **Jupyter Notebook** (`.ipynb`) untuk Eksplorasi Data & Visualisasi Interaktif. Gunakan **Script** (`.py`) untuk Kode Produksi & Otomasi.",
           example: {
-            code: "// Notebook -> Eksplorasi & Plotting\n// .py Script -> Backend & Scheduled Cron Job",
+            code: "# notebook: eksplorasi bertahap, sel per sel\n# script .py: dijalankan sekali lewat terminal\npython src/laporan.py",
             output: "Pemilihan lingkungan eksekusi yang tepat.",
             note: "Ubah notebook menjadi script .py jika ingin di-deploy ke server.",
           },
@@ -1338,6 +1485,28 @@ export const pythonTrack: Track = {
               answerIndex: 2,
               explanation: "Jupyter Notebook didesain untuk komputasi interaktif, sangat cocok untuk eksplorasi data secara visual yang tak butuh otomatisasi jangka panjang.",
             },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Apa yang dimaksud dengan `.whl` (Wheel) di ekosistem PyPI?",
+              choices: [
+                "Sebuah virus",
+                "Format paket distribusi library Python pra-kompilasi agar instalasi lebih cepat",
+                "Logo manajer paket",
+                "Mesin virtual Python"
+              ],
+              answerIndex: 1,
+              explanation: "Wheel adalah standar format distribusi paket modern di Python yang membungkus kode (dan ekstensi C) siap pasang agar tidak perlu dikompilasi ulang oleh mesin penginstal."
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Manakah penamaan variabel (variable case) yang direkomendasikan standar PEP-8 untuk kode Python?",
+              choices: ["camelCase", "PascalCase", "snake_case", "kebab-case"],
+              answerIndex: 2,
+              explanation: "Standar resmi PEP-8 sangat merekomendasikan `snake_case` (huruf kecil dipisah underscore) untuk nama variabel dan fungsi, sedangkan Class menggunakan `PascalCase`."
+            }
+
           ],
         },
       ],
@@ -1368,7 +1537,7 @@ export const pythonTrack: Track = {
               'import glob\n' +
               'files = glob.glob("reports/*.csv")\n' +
               "print(files)",
-            output: "['reports/jan.csv', 'reports/feb.csv']",
+            output: "['reports/jan.csv', 'reports/feb.csv']  (jika folder reports berisi kedua file itu)",
             note: "Memudahkan pemrosesan otomatis puluhan berkas laporan sekaligus.",
           },
           instruction:
@@ -1578,6 +1747,28 @@ export const pythonTrack: Track = {
               answerIndex: 1,
               explanation: "Scraping etis adalah hal krusial; menghargai resource pihak ketiga mencegah IP address kita diblokir dan potensi masalah hukum.",
             },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Manakah struktur cron expression standar yang berarti 'setiap menit' dalam sistem penjadwalan?",
+              choices: ["0 * * * *", "* * * * *", "* * 0 0 0", "1 * * * *"],
+              answerIndex: 1,
+              explanation: "Format 5 bintang `* * * * *` secara berurutan mewakili menit, jam, hari (bulan), bulan, hari (minggu) dan asteris (*) bermakna 'tiap interval'."
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Saat menulis string yang berisi nama path direktori di sistem Windows `C:\\Users\\Data`, kita harus berhati-hati karena backslash (`\\`) akan dianggap sebagai escape character oleh Python. Cara paling rapi untuk menyelesaikannya adalah?",
+              choices: [
+                "Menggunakan Raw String literal `r'C:\\Users\\Data'`",
+                "Menggunakan modul requests",
+                "Mengganti ke Linux",
+                "Menggunakan file JSON"
+              ],
+              answerIndex: 0,
+              explanation: "Memberikan prefiks `r` (raw string) akan mencegah Python menginterpretasi backslash sebagai kode pemformatan (seperti `\\n` atau `\\U`), menjadikannya ideal untuk path Windows."
+            }
+
           ],
         },
       ],
@@ -1653,8 +1844,8 @@ export const pythonTrack: Track = {
           explanation:
             "`df.head(5)` melihat 5 baris pertama, `df.info()` melihat tipe data & missing values, `df.describe()` melihat statistik deskriptif.",
           example: {
-            code: "print(df.head())\nprint(df.info())\nprint(df.describe())",
-            output: "Rincian statistik dan struktur kolom DataFrame.",
+            code: "import pandas as pd\ndf = pd.DataFrame({'nama': ['Ani', 'Budi'], 'skor': [90, 75]})\nprint(df.head(1))\nprint(df['skor'].describe()['mean'])",
+            output: "  nama  skor\n0  Ani    90\n82.5",
             note: "Langkah wajib pertama saat menerima dataset baru.",
           },
           instruction:
@@ -1800,6 +1991,28 @@ export const pythonTrack: Track = {
               answerIndex: 2,
               explanation: "Method `.head(n)` (default 5 baris) memungkinkan kita mengintip kilasan isi dan header kolom tanpa resiko crash console yang sering terjadi akibat merender terlalu banyak baris (meski pandas punya pengaman cetak, tapi head lebih ringkas).",
             },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Untuk mengetahui ada berapa jumlah baris data yang mengandung `NaN` atau data kosong di setiap kolom DataFrame, perintah apa yang dipakai?",
+              choices: ["df.empty()", "df.count_null()", "df.isna().sum()", "df.describe()"],
+              answerIndex: 2,
+              explanation: "Method `.isna()` akan menghasilkan dataframe boolean, kemudian metode `.sum()` menjumlahkan nilai True (yang terhitung sebagai 1) secara vertikal di tiap kolom."
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Apabila ada kolom harga barang yang masih berupa teks kotor seperti `'Rp1.000'`, bagaimana logika pembersihan data (data cleaning) di pandas sebelum mengonversinya jadi integer?",
+              choices: [
+                "Menggunakan regex atau `.str.replace()` untuk menghapus 'Rp' dan titik terlebih dahulu",
+                "Menjumlahkannya langsung",
+                "Membuang baris tersebut seutuhnya",
+                "Menyuruh pandas menebak dan mengonversi"
+              ],
+              answerIndex: 0,
+              explanation: "Method spesifik string di pandas seperti `df['harga'].str.replace(...)` memungkinkan kita membersihkan karakter tak relevan sebelum membuang (cast) tipe string menjadi tipe numerik."
+            }
+
           ],
         },
       ],
