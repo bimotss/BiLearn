@@ -33,7 +33,16 @@ export interface Module {
   items: ModuleItem[];
 }
 
-export type ModuleItem = Step | Quiz;
+export type ModuleItem = Step | Quiz | Materi;
+
+/** Halaman BACA-DULU tanpa editor kode */
+export interface Materi {
+  kind: "materi";
+  id: string;
+  title: string;
+  /** Content dalam Markdown: pengertian, konsep, analogi, use case, contoh kode */
+  body: string;
+}
 
 /** Challenge interaktif kecil: baca penjelasan singkat → langsung ngoding */
 export interface Step {
@@ -51,7 +60,13 @@ export interface Step {
   instruction: string;
   /** Kode awal di editor */
   starterCode: string;
-  language: "html" | "css" | "js";
+  /**
+   * "html" | "css" | "js" → kode DIEKSEKUSI di preview.
+   * "text" → tidak dieksekusi, hanya ditampilkan (untuk perintah shell/git,
+   * SQL, PHP, Python, formula spreadsheet, Markdown). Wajib dipakai untuk
+   * konten non-JS, kalau tidak preview akan melempar SyntaxError.
+   */
+  language: "html" | "css" | "js" | "text";
   /**
    * Untuk step CSS/JS: markup yang di-style/dimanipulasi user, ditampilkan di
    * preview bersama kode user. Diabaikan untuk step HTML.
@@ -81,6 +96,12 @@ export interface StepTest {
   pattern: string;
   /** Flag regex, default "i" */
   flags?: string;
+  /**
+   * true = tes LULUS jika pattern TIDAK ditemukan di kode user.
+   * Dipakai untuk melarang sesuatu, mis. "jangan pakai .push()".
+   * Lebih terbaca daripada negative lookahead `^(?![\s\S]*...)`.
+   */
+  mustNotMatch?: boolean;
   /** Pesan jika gagal, mis. "Kamu belum menambahkan tag <h1>" */
   message: string;
 }

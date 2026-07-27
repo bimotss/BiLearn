@@ -33,7 +33,7 @@ export const cssTrack: Track = {
           id: "css-1-1",
           title: "Selector pertamamu",
           explanation:
-            "Aturan CSS punya dua bagian: **selector** (elemen mana) dan **deklarasi** dalam kurung kurawal (`properti: nilai;`). Selector paling dasar adalah nama tag. Jangan lupa titik koma di akhir setiap deklarasi — lupa satu saja bisa membuat deklarasi berikutnya diabaikan.",
+            "CSS bekerja layaknya memberikan instruksi rias wajah kepada browser. Kamu membutuhkan **selector** (untuk menunjuk siapa yang akan dirias, misalnya elemen `p`) dan **deklarasi** (instruksi riasnya, misalnya `color: blue;` untuk warna biru). Setiap deklarasi harus selalu dibungkus di dalam kurung kurawal `{}` dan wajib diakhiri dengan tanda titik koma `;`. Jika kamu sampai melupakan titik koma tersebut, browser akan kebingungan membaca instruksi selanjutnya sehingga CSS-mu bisa gagal bekerja sepenuhnya.",
           example: {
             code: "h1 {\n  color: red;\n}",
             output: "Semua elemen h1 di halaman berubah menjadi merah.",

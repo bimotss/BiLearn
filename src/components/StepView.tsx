@@ -22,6 +22,22 @@ export default function StepView({ step, onPassed }: Props) {
       : "";
     const base =
       "<style>body{margin:0;padding:12px;font-family:system-ui,sans-serif}<\/style>";
+    // Konten non-JS (perintah shell/git, SQL, Markdown, formula): tampilkan
+    // apa adanya, JANGAN dieksekusi — kalau dieksekusi akan jadi SyntaxError.
+    if (step.language === "text") {
+      const aman = code
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+      return `${base}<style>
+        .term{background:#0f172a;color:#e2e8f0;padding:12px;border-radius:6px;
+              font-family:ui-monospace,monospace;font-size:12px;white-space:pre-wrap}
+        .cap{font-size:11px;color:#64748b;margin:0 0 6px}
+      <\/style>
+      <p class="cap">Yang kamu tulis (tidak dijalankan di preview):<\/p>
+      <div class="term">${aman || "(masih kosong)"}<\/div>${body}`;
+    }
+
     if (step.language === "html") return `${tw}${code}`;
     if (step.language === "css")
       return `${tw}${base}<style>${code}<\/style>${body}`;
@@ -44,6 +60,25 @@ export default function StepView({ step, onPassed }: Props) {
     if (typeof v === 'string') return v;
     try { return JSON.stringify(v); } catch(e) { return String(v); }
   }
+  // Preview berjalan di iframe sandbox (opaque origin), sehingga localStorage
+  // asli melempar SecurityError. Sediakan pengganti in-memory agar step
+  // localStorage tetap bisa dipraktikkan.
+  try { window.localStorage.getItem('__cek'); }
+  catch (e) {
+    var mem = {};
+    var palsu = {
+      getItem: function(k){ return Object.prototype.hasOwnProperty.call(mem, k) ? mem[k] : null; },
+      setItem: function(k, v){ mem[k] = String(v); },
+      removeItem: function(k){ delete mem[k]; },
+      clear: function(){ mem = {}; },
+      key: function(i){ return Object.keys(mem)[i] || null; }
+    };
+    Object.defineProperty(palsu, 'length', { get: function(){ return Object.keys(mem).length; } });
+    try {
+      Object.defineProperty(window, 'localStorage', { value: palsu, configurable: true });
+      Object.defineProperty(window, 'sessionStorage', { value: palsu, configurable: true });
+    } catch (e2) { /* biarkan, error asli akan tampil di panel */ }
+  }
   var orig = console.log;
   console.log = function(){
     var args = Array.prototype.slice.call(arguments);
@@ -60,7 +95,9 @@ export default function StepView({ step, onPassed }: Props) {
     const res = step.tests.map((t) => {
       let pass = false;
       try {
-        pass = new RegExp(t.pattern, t.flags ?? "i").test(code);
+        const cocok = new RegExp(t.pattern, t.flags ?? "i").test(code);
+        // mustNotMatch: lulus justru kalau pattern TIDAK ditemukan
+        pass = t.mustNotMatch ? !cocok : cocok;
       } catch {
         pass = false;
       }

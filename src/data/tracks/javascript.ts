@@ -32,7 +32,7 @@ export const javascriptTrack: Track = {
           id: "js-1-1",
           title: "let dan const",
           explanation:
-            "Aturan praktis di dunia kerja: **pakai `const` secara default**, ganti ke `let` hanya kalau nilainya benar-benar perlu diubah. Ini bukan soal gaya — `const` memberi tahu pembaca kode (dan dirimu tiga bulan nanti) bahwa nilai ini tidak berubah. `var` sudah ditinggalkan karena aturan scope-nya membingungkan.",
+            "Variabel bekerja layaknya kotak berlabel tempat kamu menyimpan data di dalam program. Di JavaScript modern, ada dua jenis 'kotak' utama. Pertama, gunakan `const` (konstanta) untuk data yang isinya tidak akan pernah diganti. Kedua, gunakan `let` khusus untuk data yang nilainya memang direncanakan berubah (seperti skor dalam permainan). Di dunia kerja nyata, selalu jadikan `const` sebagai pilihan utamamu. Hindari pemakaian `var` karena memiliki aturan penyimpanan masa lalu yang sering memunculkan bug tersembunyi bagi pemula.",
           example: {
             code: "const kota = 'Bandung';   // tidak akan diubah\nlet skor = 0;             // akan berubah nanti\nskor = 10;                // ✅ boleh, karena let\n\nconsole.log(kota, skor);",
             output: "Bandung 10",
@@ -338,7 +338,7 @@ export const javascriptTrack: Track = {
           id: "js-2-2",
           title: "Arrow function",
           explanation:
-            "Arrow function lebih ringkas: `const f = (a, b) => a * b`. Kalau isinya hanya satu ekspresi, kurung kurawal dan `return` bisa dihilangkan (**implicit return**). Perbedaan penting yang akan kamu temui nanti: arrow function tidak punya `this` sendiri — sifat yang justru sangat berguna di dalam class dan callback.",
+            "Arrow function adalah cara modern untuk menulis kode fungsi agar jauh lebih singkat dan bersih. Alih-alih mengetikkan kata kunci `function`, kamu cukup menggunakan tanda panah `=>`. Jika fungsimu hanya melakukan satu perhitungan sederhana (satu baris operasi), kamu bahkan diperbolehkan menghapus kurung kurawal `{}` dan kata kunci `return`. Ini sangat membantu ketika kamu perlu menyisipkan fungsi kecil secara cepat. Bayangkan arrow function ini layaknya jalan pintas penulisan untuk instruksi yang tidak membutuhkan banyak langkah.",
           example: {
             code: "// fungsi biasa\nfunction tambah(a, b) {\n  return a + b;\n}\n\n// arrow dengan kurawal (perlu return)\nconst tambah2 = (a, b) => { return a + b; };\n\n// arrow implicit return (paling ringkas)\nconst tambah3 = (a, b) => a + b;\n\nconsole.log(tambah3(2, 3));",
             output: "5",

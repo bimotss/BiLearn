@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound, useParams } from "next/navigation";
 import StepView from "@/components/StepView";
 import QuizView from "@/components/QuizView";
+import MateriView from "@/components/MateriView";
 import { getTrack, getTrackItems } from "@/data/tracks";
 import { useProgress } from "@/lib/progress";
 
@@ -39,11 +40,17 @@ export default function ItemPage() {
       </div>
 
       <h1 className="text-2xl font-bold">
-        {item.kind === "quiz" ? "🧠 " : ""}
+        {item.kind === "quiz" ? "🧠 " : item.kind === "materi" ? "📖 " : ""}
         {item.title}
       </h1>
 
-      {item.kind === "step" ? (
+      {item.kind === "materi" ? (
+        <MateriView
+          key={item.id}
+          materi={item}
+          onPassed={() => markDone(track.slug, item.id)}
+        />
+      ) : item.kind === "step" ? (
         <StepView
           key={item.id}
           step={item}

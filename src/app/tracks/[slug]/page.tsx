@@ -99,11 +99,11 @@ export default function TrackPage() {
                             : "bg-neutral-100 text-neutral-400"
                         }`}
                       >
-                        {finished ? "✓" : item.kind === "quiz" ? "?" : "‹›"}
+                        {finished ? "✓" : item.kind === "quiz" ? "?" : item.kind === "materi" ? "📖" : "‹›"}
                       </span>
                       <span className="flex-1">{item.title}</span>
                       <span className="text-xs uppercase tracking-wide text-neutral-400">
-                        {item.kind === "quiz" ? "Kuis" : "Praktek"}
+                        {item.kind === "quiz" ? "Kuis" : item.kind === "materi" ? "Materi" : "Praktek"}
                       </span>
                     </Link>
                   </li>

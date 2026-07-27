@@ -34,7 +34,15 @@ src/components/QuizView.tsx ← kuis + kunci jawaban
 
 ## Menambah Konten
 
-Tambahkan step/kuis di `src/data/tracks/<track>.ts` mengikuti pola `html.ts`. Track baru: buat file, daftarkan di `src/data/tracks/index.ts`.
+Baca **[panduan_isi.md](panduan_isi.md)** dulu — di situ ada standar penulisan, template, dan checklist.
+
+Ringkasnya: modul & bab (silabus) semua track sudah lengkap, yang perlu diisi hanya array `items` di `src/data/tracks/<track>.ts`. Setelah menulis, jalankan:
+
+```bash
+npx tsx scripts/verify-konten.ts    # cek kualitas konten
+npx tsc --noEmit && npx eslint src  # cek tipe & lint
+npm run build
+```
 
 ## Roadmap (fase 2)
 

@@ -6,25 +6,25 @@ Prinsip: **setiap teknologi = track terpisah, lengkap dari nol sampai mahir**, g
 
 Tidak ada gembok/lock. Semua track dan semua materi bisa diakses siapa pun kapan pun. "Prasyarat" di tiap track hanya **rekomendasi** yang ditampilkan sebagai saran ("Sebaiknya selesaikan JavaScript dulu"), bukan penghalang. Progress tetap dicatat per track.
 
-## Format Standar Setiap Track
+## Format Standar Setiap Track (Ronde 2: Pendalaman)
 
-- **Modul** → kumpulan **step** (challenge interaktif kecil, 1 konsep = 1-5 step, langsung ngoding di browser)
-- **Kuis** di tengah & akhir modul: pertanyaan pilihan ganda / isian singkat / prediksi output kode. Setelah user menjawab, tampilkan **kunci jawaban + penjelasan kenapa** (bukan cuma benar/salah). Salah boleh diulang tanpa penalti — tujuannya belajar, bukan menghukum
-- **Lab** di akhir tiap modul: bikin sesuatu dari nol dengan spesifikasi + test otomatis
-- **Proyek sertifikasi** di akhir track: 3–5 proyek besar, lulus = badge track
-- Rasio target: **80% praktek, 20% baca** (penjelasan singkat sebelum tiap step)
-- Istilah teknis tetap bahasa Inggris, penjelasan bahasa Indonesia
+- **Modul 1: Persiapan & Instalasi** → Modul wajib di setiap awal track yang menjelaskan aplikasi yang dibutuhkan, panduan instalasi per OS, cara verifikasi, dan alternatif online.
+- **Materi (Halaman Baca Pembuka)** → Setiap modul latihan diawali 1–2 halaman materi tanpa editor kode yang membahas pengertian dari nol, use case wajib ("dipakai ketika/agar..."), dan analogi dunia nyata.
+- **Step Interaktif** → Challenge interaktif kecil (langsung ngoding / mencoba sintaks) yang selalu dilengkapi dengan contoh kerja konkret (`example`) dan penjelasan detail (minimal 4 kalimat / 350 karakter).
+- **Kuis (5–7 soal pilihan ganda)** → Berada di akhir modul dengan pertanyaan berbasis skenario/use case. Setelah menjawab, kunci jawaban dan penjelasan KENAPA langsung ditampilkan.
+- **Lab & Proyek sertifikasi** → Proyek besar di akhir track untuk mendapatkan badge sertifikasi.
+- Istilah teknis tetap bahasa Inggris, penjelasan bahasa Indonesia ramah pemula.
 
-### Format Soal Kuis (standar konten)
+### Format Soal Kuis (standar Ronde 2)
 
 ```yaml
-tipe: pilihan-ganda | isian | prediksi-output
-pertanyaan: "Apa output dari kode berikut? ..."
-kode: |            # opsional
+tipe: pilihan-ganda     # WAJIB pilihan-ganda (5–7 soal per kuis)
+pertanyaan: "Skenario kerja / use case..."
+kode: |                 # opsional
   console.log([1,2,3].map(x => x * 2))
-pilihan: [...]     # untuk pilihan ganda
-jawaban: "..."
-penjelasan: "map() membuat array baru dengan ..."  # selalu wajib diisi
+pilihan: [...]          # array string pilihan jawaban
+jawaban: index          # index pilihan jawaban benar (0-indexed)
+penjelasan: "Penjelasan detail KENAPA benar dan kenapa pilihan lain menggoda"
 ```
 
 ## Learning Paths (lapisan di atas track)
@@ -163,22 +163,29 @@ Modul: Node runtime & npm → Express dasar (routing, middleware) → REST API d
 
 **Proyek sertifikasi:** REST API lengkap dengan auth + dokumentasi, backend untuk proyek Next.js, API real-time sederhana (WebSocket).
 
-## Track 9 — Database & SQL (≈60 jam, ~220 step)
+## Track 9 — Database & SQL (≈90 jam, ~320 step)
 
 Prasyarat: tidak ada (bisa mulai kapan saja). **SQL murni dulu, ORM belakangan** — sesuai temuan riset.
 
-| Modul | Isi |
-|---|---|
-| 1. Konsep & SELECT | Tabel, query dasar, filter, sort |
-| 2. Relasi & JOIN | PK/FK, semua jenis join — materi interview paling sering |
-| 3. Agregasi | GROUP BY, HAVING, subquery, CTE |
-| 4. Data manipulation | INSERT/UPDATE/DELETE, transaksi |
-| 5. Desain skema | Normalisasi, ERD, index & performa |
-| 6. PostgreSQL spesifik | Tipe data lanjutan, JSON, full-text search |
-| 7. MySQL spesifik | Perbedaan penting (banyak dipakai bareng Laravel) |
-| 8. SQL di aplikasi | Koneksi dari Node/Laravel, ORM vs raw, N+1 problem |
+**Keputusan struktur:** MySQL dan PostgreSQL berada di dalam track ini, bukan track terpisah. Alasannya: 5 modul pertama (SELECT, JOIN, agregasi, DML, desain skema) berlaku untuk keduanya — memecahnya berarti mengajarkan JOIN dua kali dan memaksa user memilih vendor sebelum ia paham bedanya. Setelah fondasi, masing-masing dapat modul fundamental + modul performa/operasional sendiri.
 
-**Proyek sertifikasi:** desain skema e-commerce dari nol, analisis dataset nyata dengan SQL, optimasi query lambat.
+| Modul | Isi | Bab |
+|---|---|---|
+| 1. Konsep & SELECT | Tabel, query dasar, filter, sort | 7 |
+| 2. Relasi & JOIN | PK/FK, semua jenis join — materi interview paling sering | 7 |
+| 3. Agregasi | GROUP BY, HAVING, subquery, CTE | 7 |
+| 4. Data manipulation | INSERT/UPDATE/DELETE, transaksi | 7 |
+| 5. Desain skema | Normalisasi, ERD, index & performa | 7 |
+| 6. **PostgreSQL: Fundamental** | psql, JSONB + index GIN, IDENTITY vs SERIAL, full-text search, RLS, schema | 9 |
+| 7. **MySQL: Fundamental** | MySQL vs MariaDB, InnoDB, utf8mb4, DATETIME vs TIMESTAMP, tipe JSON + generated column | 9 |
+| 8. **PostgreSQL: Performa & Operasional** | EXPLAIN ANALYZE, jenis index (GIN/GiST/BRIN/partial), window & recursive CTE, VACUUM & bloat, isolation level, pg_dump + latihan restore, PgBouncer | 11 |
+| 9. **MySQL: Performa & Operasional** | EXPLAIN, clustered index InnoDB, covering & prefix index, sql_mode strict, slow query log, locking, mysqldump + restore, replikasi dasar, MySQL 8.4 LTS vs versi hosting lama | 11 |
+| 10. **Memilih & Migrasi antar Database** | Peta perbedaan sintaks, kapan pilih MySQL vs PostgreSQL, strategi & jebakan migrasi, menulis SQL portabel | 9 |
+| 11. SQL di aplikasi | Koneksi dari Node/Laravel, ORM vs raw, N+1 problem | 6 |
+
+**Proyek sertifikasi:** desain skema e-commerce dari nol, analisis dataset nyata dengan SQL, optimasi query lambat (wajib menyertakan output EXPLAIN sebelum dan sesudah), dan migrasi satu skema kecil dari MySQL ke PostgreSQL.
+
+**Catatan data:** PostgreSQL memimpin secara global (58,2% pemakaian, Stack Overflow Survey 2025) dan versi stabilnya kini seri 18; MySQL tetap dominan di lowongan Laravel dan hosting Indonesia dengan 8.4 sebagai rilis LTS. Karena itu keduanya diajarkan setara, bukan salah satu saja.
 
 ## Track 10 — NoSQL & Data Lanjutan (≈30 jam, ~100 step)
 
@@ -238,9 +245,9 @@ Prasyarat: Python, SQL (Track 9 modul 1–4).
 | Jalur | Track | Total jam |
 |---|---|---|
 | Frontend Developer | 1,2,3,4,5,6,7,12 | ~455 jam |
-| Backend Laravel | 1,2,3,4,8a,9,11,12 | ~480 jam |
-| Full-Stack JS | 1–7, 8b, 9, 11, 12 | ~640 jam |
-| Data Analyst | 13, 9, 14, 15, 12 | ~255 jam |
+| Backend Laravel | 1,2,3,4,8a,9,11,12 | ~510 jam |
+| Full-Stack JS | 1–7, 8b, 9, 11, 12 | ~670 jam |
+| Data Analyst | 13, 9, 14, 15, 12 | ~285 jam |
 
 (fCC full-stack ≈1.800 jam; estimasi ini realistis untuk pemula dengan 2–3 jam/hari selama 6–12 bulan per jalur.)
 

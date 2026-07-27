@@ -58,7 +58,7 @@ export const htmlTrack: Track = {
           id: "html-1-2",
           title: "Paragraf",
           explanation:
-            "Elemen `<p>` dipakai untuk paragraf teks. Hampir semua tulisan di web ada di dalam elemen ini.",
+            "HTML membutuhkan tag khusus agar browser tahu cara menampilkan teksmu dengan benar. Elemen `<p>` (singkatan dari paragraph) digunakan untuk membungkus blok teks biasa. Bayangkan elemen ini seperti sebuah paragraf di buku cetak; browser akan otomatis memberikan jarak (spasi) dengan teks di atas dan di bawahnya. Tanpa elemen ini, browser akan menggabungkan semua teks menjadi satu baris panjang yang sangat sulit dibaca. Selalu gunakan tag ini saat kamu menyajikan deskripsi, artikel, atau instruksi panjang.",
           example: {
             code: "<h2>Tentang Kopi</h2>\n<p>Kopi adalah minuman dari biji yang disangrai.</p>",
             output:

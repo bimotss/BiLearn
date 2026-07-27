@@ -1,0 +1,609 @@
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-1-1
+❌ tugas hanya menulis komentar (nol nilai belajar): react-1-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-1-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-1-7
+❌ kuis hanya 1 soal (minimal 3): react-1-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-2-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-2-4
+❌ tugas hanya menulis komentar (nol nilai belajar): react-2-4
+❌ kuis hanya 1 soal (minimal 3): react-2-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-3-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-3-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-3-3
+❌ tugas hanya menulis komentar (nol nilai belajar): react-3-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-3-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-3-5
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-3-6
+❌ kuis hanya 1 soal (minimal 3): react-3-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-4-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-4-2
+❌ example.output menjelaskan MANFAAT, bukan hasil nyata: react-4-2
+   → "Satu handler dapat mengurusi puluhan input form sekaligus."
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-4-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-4-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-4-5
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-4-6
+❌ kuis hanya 1 soal (minimal 3): react-4-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-5-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-5-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-5-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-5-5
+❌ tugas hanya menulis komentar (nol nilai belajar): react-5-5
+❌ example.output menjelaskan MANFAAT, bukan hasil nyata: react-5-5
+   → "Membantu menemukan bug memory leak sejak dini saat pengembangan."
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-5-6
+❌ kuis hanya 1 soal (minimal 3): react-5-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-6-1
+❌ tugas hanya menulis komentar (nol nilai belajar): react-6-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-6-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-6-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-6-5
+❌ kuis hanya 1 soal (minimal 3): react-6-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-7-1
+❌ tugas hanya menulis komentar (nol nilai belajar): react-7-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-7-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-7-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-7-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-7-5
+❌ tugas hanya menulis komentar (nol nilai belajar): react-7-5
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-7-6
+❌ kuis hanya 1 soal (minimal 3): react-7-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-8-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-8-2
+❌ tugas hanya menulis komentar (nol nilai belajar): react-8-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-8-4
+❌ tugas hanya menulis komentar (nol nilai belajar): react-8-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-8-5
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-8-6
+❌ kuis hanya 1 soal (minimal 3): react-8-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-9-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-9-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-9-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-9-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-9-5
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-9-6
+❌ kuis hanya 1 soal (minimal 3): react-9-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-10-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-10-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-10-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-10-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-10-5
+❌ tugas hanya menulis komentar (nol nilai belajar): react-10-5
+❌ example.output menjelaskan MANFAAT, bukan hasil nyata: react-10-5
+   → "Respon API palsu dikembalikan secara cepat dan dapat diprediksi."
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-10-6
+❌ tugas hanya menulis komentar (nol nilai belajar): react-10-6
+❌ example.output menjelaskan MANFAAT, bukan hasil nyata: react-10-6
+   → "Menghemat waktu dan menghasilkan suite test yang tahan lama."
+❌ kuis hanya 1 soal (minimal 3): react-10-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-11-1
+❌ tugas hanya menulis komentar (nol nilai belajar): react-11-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-11-2
+❌ tugas hanya menulis komentar (nol nilai belajar): react-11-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-11-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-11-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-11-5
+❌ tugas hanya menulis komentar (nol nilai belajar): react-11-5
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-11-6
+❌ tugas hanya menulis komentar (nol nilai belajar): react-11-6
+❌ instruksi memuat jawaban utuh (user cuma menyalin): react-11-7
+❌ kuis hanya 1 soal (minimal 3): react-11-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): next-1-1
+❌ tugas hanya menulis komentar (nol nilai belajar): next-1-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): next-1-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): next-1-6
+❌ instruksi memuat jawaban utuh (user cuma menyalin): next-1-7
+❌ tugas hanya menulis komentar (nol nilai belajar): next-1-7
+❌ example.output menjelaskan MANFAAT, bukan hasil nyata: next-1-7
+   → "Membantu merapikan struktur file proyek besar tanpa mengubah URL."
+❌ kuis hanya 1 soal (minimal 3): next-1-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): next-2-1
+❌ tugas hanya menulis komentar (nol nilai belajar): next-2-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): next-2-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): next-2-3
+❌ tugas hanya menulis komentar (nol nilai belajar): next-2-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): next-2-4
+❌ tugas hanya menulis komentar (nol nilai belajar): next-2-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): next-2-5
+❌ tugas hanya menulis komentar (nol nilai belajar): next-2-5
+❌ instruksi memuat jawaban utuh (user cuma menyalin): next-2-6
+❌ kuis hanya 1 soal (minimal 3): next-2-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): next-3-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): next-3-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): next-3-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): next-3-5
+❌ kuis hanya 1 soal (minimal 3): next-3-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): next-4-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): next-4-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): next-4-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): next-4-5
+❌ instruksi memuat jawaban utuh (user cuma menyalin): next-4-6
+❌ tugas hanya menulis komentar (nol nilai belajar): next-4-6
+❌ kuis hanya 1 soal (minimal 3): next-4-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): next-5-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): next-5-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): next-5-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): next-5-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): next-5-5
+❌ instruksi memuat jawaban utuh (user cuma menyalin): next-5-6
+❌ kuis hanya 1 soal (minimal 3): next-5-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): next-6-1
+❌ tugas hanya menulis komentar (nol nilai belajar): next-6-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): next-6-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): next-6-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): next-6-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): next-6-5
+❌ instruksi memuat jawaban utuh (user cuma menyalin): next-6-6
+❌ kuis hanya 1 soal (minimal 3): next-6-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): next-7-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): next-7-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): next-7-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): next-7-5
+❌ tugas hanya menulis komentar (nol nilai belajar): next-7-5
+❌ instruksi memuat jawaban utuh (user cuma menyalin): next-7-6
+❌ kuis hanya 1 soal (minimal 3): next-7-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): next-8-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): next-8-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): next-8-3
+❌ tugas hanya menulis komentar (nol nilai belajar): next-8-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): next-8-4
+❌ tugas hanya menulis komentar (nol nilai belajar): next-8-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): next-8-5
+❌ tugas hanya menulis komentar (nol nilai belajar): next-8-5
+❌ instruksi memuat jawaban utuh (user cuma menyalin): next-8-6
+❌ kuis hanya 1 soal (minimal 3): next-8-kuis
+❌ kuis hanya 1 soal (minimal 3): laravel-1-kuis
+❌ kuis hanya 1 soal (minimal 3): laravel-2-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): laravel-3-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): laravel-3-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): laravel-3-5
+❌ instruksi memuat jawaban utuh (user cuma menyalin): laravel-3-6
+❌ instruksi memuat jawaban utuh (user cuma menyalin): laravel-3-7
+❌ kuis hanya 1 soal (minimal 3): laravel-3-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): laravel-4-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): laravel-4-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): laravel-4-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): laravel-4-6
+❌ instruksi memuat jawaban utuh (user cuma menyalin): laravel-4-7
+❌ kuis hanya 1 soal (minimal 3): laravel-4-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): laravel-5-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): laravel-5-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): laravel-5-5
+❌ tugas hanya menulis komentar (nol nilai belajar): laravel-5-5
+❌ kuis hanya 1 soal (minimal 3): laravel-5-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): laravel-6-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): laravel-6-5
+❌ kuis hanya 1 soal (minimal 3): laravel-6-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): laravel-7-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): laravel-7-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): laravel-7-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): laravel-7-5
+❌ instruksi memuat jawaban utuh (user cuma menyalin): laravel-7-6
+❌ instruksi memuat jawaban utuh (user cuma menyalin): laravel-7-7
+❌ tugas hanya menulis komentar (nol nilai belajar): laravel-7-7
+❌ example.output menjelaskan MANFAAT, bukan hasil nyata: laravel-7-7
+   → "Dokumentasi interaktif yang memudahkan pengembang tim frontend."
+❌ kuis hanya 1 soal (minimal 3): laravel-7-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): laravel-8-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): laravel-8-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): laravel-8-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): laravel-8-5
+❌ instruksi memuat jawaban utuh (user cuma menyalin): laravel-8-6
+❌ kuis hanya 1 soal (minimal 3): laravel-8-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): laravel-9-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): laravel-9-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): laravel-9-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): laravel-9-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): laravel-9-5
+❌ instruksi memuat jawaban utuh (user cuma menyalin): laravel-9-6
+❌ kuis hanya 1 soal (minimal 3): laravel-9-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-1-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-1-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-1-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-1-5
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-1-6
+❌ kuis hanya 1 soal (minimal 3): node-1-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-2-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-2-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-2-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-2-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-2-5
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-2-6
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-2-7
+❌ kuis hanya 1 soal (minimal 3): node-2-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-3-1
+❌ tugas hanya menulis komentar (nol nilai belajar): node-3-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-3-2
+❌ tugas hanya menulis komentar (nol nilai belajar): node-3-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-3-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-3-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-3-5
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-3-6
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-3-7
+❌ tugas hanya menulis komentar (nol nilai belajar): node-3-7
+❌ kuis hanya 1 soal (minimal 3): node-3-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-4-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-4-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-4-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-4-6
+❌ kuis hanya 1 soal (minimal 3): node-4-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-5-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-5-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-5-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-5-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-5-5
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-5-6
+❌ kuis hanya 1 soal (minimal 3): node-5-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-6-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-6-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-6-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-6-5
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-6-6
+❌ kuis hanya 1 soal (minimal 3): node-6-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-7-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-7-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-7-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-7-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-7-5
+❌ example.output menjelaskan MANFAAT, bukan hasil nyata: node-7-5
+   → "File public/logo.png dapat dibuka publik di URL /static/logo.png."
+❌ kuis hanya 1 soal (minimal 3): node-7-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-8-1
+❌ tugas hanya menulis komentar (nol nilai belajar): node-8-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-8-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-8-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-8-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-8-5
+❌ kuis hanya 1 soal (minimal 3): node-8-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-9-1
+❌ tugas hanya menulis komentar (nol nilai belajar): node-9-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-9-2
+❌ tugas hanya menulis komentar (nol nilai belajar): node-9-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-9-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-9-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-9-5
+❌ instruksi memuat jawaban utuh (user cuma menyalin): node-9-7
+❌ tugas hanya menulis komentar (nol nilai belajar): node-9-7
+❌ kuis hanya 1 soal (minimal 3): node-9-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sql-1-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sql-1-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sql-1-5
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sql-1-6
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sql-1-7
+❌ kuis hanya 1 soal (minimal 3): sql-1-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sql-2-1
+❌ tugas hanya menulis komentar (nol nilai belajar): sql-2-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sql-2-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sql-2-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sql-2-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sql-2-5
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sql-2-6
+❌ tugas hanya menulis komentar (nol nilai belajar): sql-2-6
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sql-2-7
+❌ kuis hanya 1 soal (minimal 3): sql-2-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sql-3-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sql-3-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sql-3-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sql-3-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sql-3-5
+❌ example.output menjelaskan MANFAAT, bukan hasil nyata: sql-3-5
+   → "Query lebih bersih dan jauh lebih mudah dibaca tim."
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sql-3-6
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sql-3-7
+❌ kuis hanya 1 soal (minimal 3): sql-3-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sql-4-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sql-4-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sql-4-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sql-4-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sql-4-5
+❌ tugas hanya menulis komentar (nol nilai belajar): sql-4-5
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sql-4-6
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sql-4-7
+❌ kuis hanya 1 soal (minimal 3): sql-4-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sql-5-1
+❌ tugas hanya menulis komentar (nol nilai belajar): sql-5-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sql-5-2
+❌ tugas hanya menulis komentar (nol nilai belajar): sql-5-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sql-5-3
+❌ tugas hanya menulis komentar (nol nilai belajar): sql-5-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sql-5-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sql-5-5
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sql-5-6
+❌ tugas hanya menulis komentar (nol nilai belajar): sql-5-6
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sql-5-7
+❌ kuis hanya 1 soal (minimal 3): sql-5-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sql-6-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sql-6-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sql-6-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sql-6-5
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sql-6-6
+❌ kuis hanya 1 soal (minimal 3): sql-6-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sql-7-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sql-7-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sql-7-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sql-7-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sql-7-5
+❌ kuis hanya 1 soal (minimal 3): sql-7-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sql-8-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sql-8-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sql-8-3
+❌ tugas hanya menulis komentar (nol nilai belajar): sql-8-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sql-8-4
+❌ tugas hanya menulis komentar (nol nilai belajar): sql-8-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sql-8-5
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sql-8-6
+❌ tugas hanya menulis komentar (nol nilai belajar): sql-8-6
+❌ kuis hanya 1 soal (minimal 3): sql-8-kuis
+❌ example.output menjelaskan MANFAAT, bukan hasil nyata: deploy-1-3
+   → "Hak akses folder diatur agar Nginx dapat membacanya."
+❌ kuis hanya 1 soal (minimal 3): deploy-1-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): deploy-2-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): deploy-2-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): deploy-2-5
+❌ instruksi memuat jawaban utuh (user cuma menyalin): deploy-2-7
+❌ instruksi memuat jawaban utuh (user cuma menyalin): deploy-2-8
+❌ kuis hanya 1 soal (minimal 3): deploy-2-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): deploy-3-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): deploy-3-3
+❌ tugas hanya menulis komentar (nol nilai belajar): deploy-3-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): deploy-3-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): deploy-3-5
+❌ instruksi memuat jawaban utuh (user cuma menyalin): deploy-3-6
+❌ kuis hanya 1 soal (minimal 3): deploy-3-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): deploy-4-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): deploy-4-3
+❌ example.output menjelaskan MANFAAT, bukan hasil nyata: deploy-4-3
+   → "Aplikasi Node.js di port 3000 kini dapat diakses via domainku.com."
+❌ instruksi memuat jawaban utuh (user cuma menyalin): deploy-4-4
+❌ tugas hanya menulis komentar (nol nilai belajar): deploy-4-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): deploy-4-6
+❌ kuis hanya 1 soal (minimal 3): deploy-4-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): deploy-5-1
+❌ tugas hanya menulis komentar (nol nilai belajar): deploy-5-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): deploy-5-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): deploy-5-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): deploy-5-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): deploy-5-5
+❌ instruksi memuat jawaban utuh (user cuma menyalin): deploy-5-6
+❌ tugas hanya menulis komentar (nol nilai belajar): deploy-5-6
+❌ example.output menjelaskan MANFAAT, bukan hasil nyata: deploy-5-6
+   → "Tim dapat menguji fitur langsung di browser sebelum menyetujui PR."
+❌ kuis hanya 1 soal (minimal 3): deploy-5-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): deploy-6-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): deploy-6-2
+❌ tugas hanya menulis komentar (nol nilai belajar): deploy-6-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): deploy-6-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): deploy-6-5
+❌ tugas hanya menulis komentar (nol nilai belajar): deploy-6-5
+❌ instruksi memuat jawaban utuh (user cuma menyalin): deploy-6-6
+❌ tugas hanya menulis komentar (nol nilai belajar): deploy-6-6
+❌ kuis hanya 1 soal (minimal 3): deploy-6-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): ai-1-1
+❌ tugas hanya menulis komentar (nol nilai belajar): ai-1-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): ai-1-2
+❌ tugas hanya menulis komentar (nol nilai belajar): ai-1-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): ai-1-3
+❌ tugas hanya menulis komentar (nol nilai belajar): ai-1-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): ai-1-4
+❌ tugas hanya menulis komentar (nol nilai belajar): ai-1-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): ai-1-5
+❌ tugas hanya menulis komentar (nol nilai belajar): ai-1-5
+❌ instruksi memuat jawaban utuh (user cuma menyalin): ai-1-6
+❌ tugas hanya menulis komentar (nol nilai belajar): ai-1-6
+❌ example.output menjelaskan MANFAAT, bukan hasil nyata: ai-1-6
+   → "Kombinasi alat AI yang meningkatkan produktivitas."
+❌ kuis hanya 1 soal (minimal 3): ai-1-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): ai-2-1
+❌ tugas hanya menulis komentar (nol nilai belajar): ai-2-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): ai-2-2
+❌ tugas hanya menulis komentar (nol nilai belajar): ai-2-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): ai-2-3
+❌ tugas hanya menulis komentar (nol nilai belajar): ai-2-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): ai-2-4
+❌ tugas hanya menulis komentar (nol nilai belajar): ai-2-4
+❌ example.output menjelaskan MANFAAT, bukan hasil nyata: ai-2-4
+   → "Membantu pengembang memilih pendekatan terbaik."
+❌ instruksi memuat jawaban utuh (user cuma menyalin): ai-2-5
+❌ tugas hanya menulis komentar (nol nilai belajar): ai-2-5
+❌ instruksi memuat jawaban utuh (user cuma menyalin): ai-2-6
+❌ tugas hanya menulis komentar (nol nilai belajar): ai-2-6
+❌ kuis hanya 1 soal (minimal 3): ai-2-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): ai-3-1
+❌ tugas hanya menulis komentar (nol nilai belajar): ai-3-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): ai-3-2
+❌ tugas hanya menulis komentar (nol nilai belajar): ai-3-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): ai-3-3
+❌ tugas hanya menulis komentar (nol nilai belajar): ai-3-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): ai-3-4
+❌ tugas hanya menulis komentar (nol nilai belajar): ai-3-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): ai-3-5
+❌ tugas hanya menulis komentar (nol nilai belajar): ai-3-5
+❌ instruksi memuat jawaban utuh (user cuma menyalin): ai-3-6
+❌ tugas hanya menulis komentar (nol nilai belajar): ai-3-6
+❌ kuis hanya 1 soal (minimal 3): ai-3-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): ai-4-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): ai-4-2
+❌ tugas hanya menulis komentar (nol nilai belajar): ai-4-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): ai-4-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): ai-4-4
+❌ tugas hanya menulis komentar (nol nilai belajar): ai-4-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): ai-4-5
+❌ instruksi memuat jawaban utuh (user cuma menyalin): ai-4-6
+❌ tugas hanya menulis komentar (nol nilai belajar): ai-4-6
+❌ kuis hanya 1 soal (minimal 3): ai-4-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): ai-5-1
+❌ tugas hanya menulis komentar (nol nilai belajar): ai-5-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): ai-5-2
+❌ tugas hanya menulis komentar (nol nilai belajar): ai-5-2
+❌ example.output menjelaskan MANFAAT, bukan hasil nyata: ai-5-2
+   → "AI membantu mendeteksi asumsi tersembunyi yang keliru."
+❌ instruksi memuat jawaban utuh (user cuma menyalin): ai-5-3
+❌ tugas hanya menulis komentar (nol nilai belajar): ai-5-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): ai-5-4
+❌ tugas hanya menulis komentar (nol nilai belajar): ai-5-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): ai-5-5
+❌ tugas hanya menulis komentar (nol nilai belajar): ai-5-5
+❌ instruksi memuat jawaban utuh (user cuma menyalin): ai-5-6
+❌ kuis hanya 1 soal (minimal 3): ai-5-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): ai-6-1
+❌ tugas hanya menulis komentar (nol nilai belajar): ai-6-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): ai-6-2
+❌ tugas hanya menulis komentar (nol nilai belajar): ai-6-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): ai-6-3
+❌ tugas hanya menulis komentar (nol nilai belajar): ai-6-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): ai-6-4
+❌ tugas hanya menulis komentar (nol nilai belajar): ai-6-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): ai-6-5
+❌ tugas hanya menulis komentar (nol nilai belajar): ai-6-5
+❌ example.output menjelaskan MANFAAT, bukan hasil nyata: ai-6-5
+   → "Perekrut dapat melihat kedalaman pemahaman teknismu."
+❌ kuis hanya 1 soal (minimal 3): ai-6-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sheet-1-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sheet-1-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sheet-1-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sheet-1-4
+❌ tugas hanya menulis komentar (nol nilai belajar): sheet-1-4
+❌ example.output menjelaskan MANFAAT, bukan hasil nyata: sheet-1-4
+   → "Menghemat waktu mengisikan deret secara manual."
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sheet-1-5
+❌ tugas hanya menulis komentar (nol nilai belajar): sheet-1-5
+❌ example.output menjelaskan MANFAAT, bukan hasil nyata: sheet-1-5
+   → "Tampilan tabel lebih profesional dan mudah dibaca."
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sheet-1-6
+❌ tugas hanya menulis komentar (nol nilai belajar): sheet-1-6
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sheet-1-7
+❌ tugas hanya menulis komentar (nol nilai belajar): sheet-1-7
+❌ kuis hanya 1 soal (minimal 3): sheet-1-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sheet-2-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sheet-2-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sheet-2-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sheet-2-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sheet-2-5
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sheet-2-6
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sheet-2-7
+❌ kuis hanya 1 soal (minimal 3): sheet-2-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sheet-3-1
+❌ tugas hanya menulis komentar (nol nilai belajar): sheet-3-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sheet-3-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sheet-3-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sheet-3-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sheet-3-5
+❌ tugas hanya menulis komentar (nol nilai belajar): sheet-3-5
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sheet-3-6
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sheet-3-7
+❌ tugas hanya menulis komentar (nol nilai belajar): sheet-3-7
+❌ kuis hanya 1 soal (minimal 3): sheet-3-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sheet-4-1
+❌ tugas hanya menulis komentar (nol nilai belajar): sheet-4-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sheet-4-2
+❌ tugas hanya menulis komentar (nol nilai belajar): sheet-4-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sheet-4-3
+❌ tugas hanya menulis komentar (nol nilai belajar): sheet-4-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sheet-4-4
+❌ tugas hanya menulis komentar (nol nilai belajar): sheet-4-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sheet-4-5
+❌ tugas hanya menulis komentar (nol nilai belajar): sheet-4-5
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sheet-4-6
+❌ tugas hanya menulis komentar (nol nilai belajar): sheet-4-6
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sheet-4-7
+❌ tugas hanya menulis komentar (nol nilai belajar): sheet-4-7
+❌ kuis hanya 1 soal (minimal 3): sheet-4-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sheet-5-1
+❌ tugas hanya menulis komentar (nol nilai belajar): sheet-5-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sheet-5-2
+❌ tugas hanya menulis komentar (nol nilai belajar): sheet-5-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sheet-5-3
+❌ tugas hanya menulis komentar (nol nilai belajar): sheet-5-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sheet-5-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sheet-5-5
+❌ tugas hanya menulis komentar (nol nilai belajar): sheet-5-5
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sheet-5-6
+❌ tugas hanya menulis komentar (nol nilai belajar): sheet-5-6
+❌ kuis hanya 1 soal (minimal 3): sheet-5-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sheet-6-1
+❌ tugas hanya menulis komentar (nol nilai belajar): sheet-6-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sheet-6-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sheet-6-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sheet-6-4
+❌ tugas hanya menulis komentar (nol nilai belajar): sheet-6-4
+❌ example.output menjelaskan MANFAAT, bukan hasil nyata: sheet-6-4
+   → "Rekomendasi nyata yang dapat langsung dieksekusi direksi."
+❌ instruksi memuat jawaban utuh (user cuma menyalin): sheet-6-5
+❌ tugas hanya menulis komentar (nol nilai belajar): sheet-6-5
+❌ kuis hanya 1 soal (minimal 3): sheet-6-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): python-1-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): python-1-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): python-1-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): python-1-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): python-1-5
+❌ instruksi memuat jawaban utuh (user cuma menyalin): python-1-7
+❌ kuis hanya 1 soal (minimal 3): python-1-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): python-2-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): python-2-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): python-2-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): python-2-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): python-2-5
+❌ instruksi memuat jawaban utuh (user cuma menyalin): python-2-7
+❌ kuis hanya 1 soal (minimal 3): python-2-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): python-3-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): python-3-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): python-3-6
+❌ kuis hanya 1 soal (minimal 3): python-3-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): python-4-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): python-4-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): python-4-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): python-4-6
+❌ instruksi memuat jawaban utuh (user cuma menyalin): python-4-7
+❌ kuis hanya 1 soal (minimal 3): python-4-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): python-5-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): python-5-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): python-5-5
+❌ instruksi memuat jawaban utuh (user cuma menyalin): python-5-6
+❌ kuis hanya 1 soal (minimal 3): python-5-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): python-6-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): python-6-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): python-6-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): python-6-5
+❌ instruksi memuat jawaban utuh (user cuma menyalin): python-6-6
+❌ kuis hanya 1 soal (minimal 3): python-6-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): python-7-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): python-7-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): python-7-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): python-7-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): python-7-5
+❌ instruksi memuat jawaban utuh (user cuma menyalin): python-7-6
+❌ instruksi memuat jawaban utuh (user cuma menyalin): python-7-7
+❌ example.output menjelaskan MANFAAT, bukan hasil nyata: python-7-7
+   → "Menghemat 5 jam kerja manual mingguan menjadi 0 detik."
+❌ kuis hanya 1 soal (minimal 3): python-7-kuis
+❌ instruksi memuat jawaban utuh (user cuma menyalin): python-8-1
+❌ instruksi memuat jawaban utuh (user cuma menyalin): python-8-2
+❌ instruksi memuat jawaban utuh (user cuma menyalin): python-8-3
+❌ instruksi memuat jawaban utuh (user cuma menyalin): python-8-4
+❌ instruksi memuat jawaban utuh (user cuma menyalin): python-8-5
+❌ instruksi memuat jawaban utuh (user cuma menyalin): python-8-6
+❌ instruksi memuat jawaban utuh (user cuma menyalin): python-8-7
+❌ kuis hanya 1 soal (minimal 3): python-8-kuis
+
+── Konten per track ──
+✅ HTML                          35 step, 6 kuis  (6 modul)
+✅ CSS                           49 step, 9 kuis  (9 modul)
+✅ JavaScript                    57 step, 10 kuis  (10 modul)
+✅ Git & GitHub                  36 step, 5 kuis  (5 modul)
+✅ TypeScript                    37 step, 6 kuis  (6 modul)
+✅ React                         67 step, 11 kuis  (11 modul)
+✅ Next.js                       49 step, 8 kuis  (8 modul)
+✅ PHP & Laravel                 59 step, 9 kuis  (9 modul)
+✅ Node.js & Express             56 step, 9 kuis  (9 modul)
+✅ Database & SQL                52 step, 8 kuis  (11 modul)
+✅ NoSQL & Data Lanjutan         25 step, 4 kuis  (4 modul)
+✅ Deployment & Docker           39 step, 6 kuis  (6 modul)
+✅ AI-Assisted Development       35 step, 6 kuis  (6 modul)
+✅ Spreadsheet & Excel           39 step, 6 kuis  (6 modul)
+✅ Python                        54 step, 8 kuis  (8 modul)
+✅ Analisis Data & Visualisasi   47 step, 7 kuis  (7 modul)
+
+Total: 736 step | 118 kuis | 263 soal
+❌ 567 MASALAH — perbaiki dulu sebelum lanjut
+   Ringkasan per aturan bisa dilihat dengan:
+   npx tsx scripts/verify-konten.ts | grep '❌' | sed 's/:.*//' | sort | uniq -c | sort -rn

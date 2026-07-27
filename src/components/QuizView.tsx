@@ -19,11 +19,11 @@ export default function QuizView({ quiz, onPassed }: Props) {
   const allCorrect = correctCount === total;
 
   function handleResult(qid: string, correct: boolean) {
-    setAnswered((prev) => {
-      const next = { ...prev, [qid]: correct };
-      if (Object.values(next).filter(Boolean).length === total) onPassed();
-      return next;
-    });
+    const next = { ...answered, [qid]: correct };
+    setAnswered(next);
+    if (Object.values(next).filter(Boolean).length === total) {
+      onPassed();
+    }
   }
 
   return (
