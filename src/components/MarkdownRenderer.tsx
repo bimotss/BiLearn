@@ -16,7 +16,84 @@ export function MarkdownRenderer({ content }: { content: string }) {
   let codeLang = "";
   let codeBuffer: string[] = [];
 
+  // Tabel markdown ditangani sebelum loop utama karena satu tabel terdiri dari
+  // beberapa baris sekaligus. Tanpa ini, baris "| a | b |" bocor ke layar
+  // sebagai paragraf berisi pipa — masalah nyata di halaman materi.
+  const barisTabel: number[] = [];
+  let dalamKode = false;
+  lines.forEach((line, i) => {
+    if (line.trim().startsWith("```")) dalamKode = !dalamKode;
+    else if (!dalamKode && /^\s*\|.*\|\s*$/.test(line)) barisTabel.push(i);
+  });
+  const awalTabel = new Map<number, number>(); // baris awal → baris akhir
+  for (let i = 0; i < barisTabel.length; ) {
+    let j = i;
+    while (j + 1 < barisTabel.length && barisTabel[j + 1] === barisTabel[j] + 1) j++;
+    if (j > i) awalTabel.set(barisTabel[i], barisTabel[j]);
+    i = j + 1;
+  }
+  const lewati = new Set<number>();
+  for (const [mulai, akhir] of awalTabel) {
+    for (let i = mulai; i <= akhir; i++) lewati.add(i);
+  }
+
+  function sel(line: string): string[] {
+    return line
+      .trim()
+      .replace(/^\|/, "")
+      .replace(/\|$/, "")
+      .split("|")
+      .map((s) => s.trim());
+  }
+
   lines.forEach((line, index) => {
+    // Tabel: render sebagai <table> sungguhan saat baris pembukanya ditemui
+    if (awalTabel.has(index)) {
+      const akhir = awalTabel.get(index)!;
+      const semua = lines.slice(index, akhir + 1);
+      const pemisah = /^\s*\|[\s:|-]+\|\s*$/;
+      const kepala = pemisah.test(semua[1] ?? "") ? sel(semua[0]) : null;
+      const isi = semua
+        .filter((l, i) => !(kepala && i <= 1) && !pemisah.test(l))
+        .map(sel);
+      elements.push(
+        <div key={`tabel-${index}`} className="my-4 overflow-x-auto">
+          <table className="w-full border-collapse text-sm">
+            {kepala && (
+              <thead>
+                <tr>
+                  {kepala.map((h, i) => (
+                    <th
+                      key={i}
+                      className="border border-neutral-200 bg-neutral-100 px-3 py-2 text-left font-semibold text-neutral-900"
+                    >
+                      {formatInline(h)}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+            )}
+            <tbody>
+              {isi.map((baris, i) => (
+                <tr key={i}>
+                  {baris.map((k, j) => (
+                    <td
+                      key={j}
+                      className="border border-neutral-200 px-3 py-2 align-top text-neutral-700"
+                    >
+                      {formatInline(k)}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      );
+      return;
+    }
+    if (lewati.has(index)) return;
+
     // Code block toggle
     if (line.trim().startsWith("```")) {
       if (inCodeBlock) {
@@ -89,6 +166,21 @@ export function MarkdownRenderer({ content }: { content: string }) {
         >
           {formatInline(line.slice(2))}
         </blockquote>
+      );
+      return;
+    }
+
+    // Daftar bernomor: "1. isi" — sebelumnya jatuh ke paragraf biasa
+    const bernomor = line.trim().match(/^(\d+)\.\s+(.*)$/);
+    if (bernomor) {
+      elements.push(
+        <li
+          key={index}
+          value={Number(bernomor[1])}
+          className="my-1 ml-6 list-decimal text-neutral-700"
+        >
+          {formatInline(bernomor[2])}
+        </li>
       );
       return;
     }

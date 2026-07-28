@@ -109,10 +109,10 @@ export default function StepView({ step, onPassed }: Props) {
                 createRoot(document.getElementById('root')).render(React.createElement(Komponen));
                 show('Komponen ' + target + ' berhasil dirender di atas.', 'ok');
               } else {
-                show('Sintaks JSX/TypeScript sudah benar. Preview visual muncul kalau kamu menulis komponen utuh (fungsi berawalan huruf besar yang me-return JSX).', 'ok');
+                show('Sintaks TypeScript/JSX-mu sudah benar. Potongan yang hanya mendeklarasikan tipe (type, interface) memang tidak menampilkan hasil apa pun — tipe hilang saat kompilasi. Preview visual muncul kalau kamu menulis komponen utuh: fungsi berawalan huruf besar yang me-return JSX.', 'ok');
               }
             } catch (e) {
-              show('Sintaks sudah benar, tapi potongan ini belum bisa dijalankan sendiri (' + e.message + '). Itu wajar untuk cuplikan kode di dalam komponen.', 'ok');
+              show('Sintaks sudah benar, tapi potongan ini belum bisa dijalankan sendiri (' + e.message + '). Itu wajar untuk cuplikan yang bergantung pada hal di luar preview — elemen HTML tertentu, library yang belum terpasang, atau panggilan jaringan.', 'ok');
             }
           }
         }

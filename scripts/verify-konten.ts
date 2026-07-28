@@ -20,14 +20,11 @@ const ids = new Set<string>();
 // Daftar ini menyusut setiap kali satu track selesai dikerjakan pada Ronde 2.
 const instalasiAllowlist = new Set<string>([
   "nosql",
-  "html",
   "ai-dev",
   "git",
-  "typescript",
   "spreadsheet",
   "deployment",
   "data-analysis",
-  "css",
   "nextjs",
   "python",
   "node-express",

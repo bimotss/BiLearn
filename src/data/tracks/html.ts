@@ -12,6 +12,381 @@ export const htmlTrack: Track = {
   order: 1,
   modules: [
     {
+      slug: "persiapan-alat-kerja",
+      title: "Persiapan & Alat Kerja",
+      description:
+        "Sebelum menulis satu tag pun: berkas .html pertamamu, editor, dan cara browser membacanya.",
+      topics: [
+        "Apa yang dikerjakan HTML — dan apa yang bukan tugasnya",
+        "Tiga alat yang kamu butuhkan: editor, browser, folder proyek",
+        "Kenapa halaman utama selalu bernama index.html",
+        "Kerangka minimum halaman: doctype, html, head, body",
+        "Head vs body: yang tidak terlihat dan yang terlihat",
+        "Potongan kode vs dokumen utuh (dan apa yang kamu tulis di editor BiLearn)",
+      ],
+      items: [
+        {
+          kind: "materi",
+          id: "html-0-m1",
+          title: "Apa Itu HTML, dan Apa yang Perlu Kamu Siapkan",
+          body:
+            "# Pengertian\n\n" +
+            "HTML adalah **bahasa penanda** (*markup language*). Kamu menulis teks biasa, lalu menempelkan penanda di sekelilingnya untuk memberi tahu browser peran teks itu: \"ini judul\", \"ini paragraf\", \"ini gambar\", \"ini tombol kirim\".\n\n" +
+            "Perlu diluruskan sejak awal: HTML **bukan** bahasa pemrograman. Ia tidak bisa menghitung, mengambil keputusan, menyimpan data, atau mengulang sesuatu. Ia hanya menyusun dan menamai isi halaman. Itu bukan kelemahan — justru pembagian tugas yang membuat web bisa dirawat.\n\n" +
+            "| Lapisan | Tugasnya | Contoh pertanyaan yang dijawabnya |\n" +
+            "|---|---|---|\n" +
+            "| **HTML** | struktur & makna | bagian mana yang judul, mana yang daftar? |\n" +
+            "| **CSS** | tampilan | warnanya apa, ukurannya berapa, letaknya di mana? |\n" +
+            "| **JavaScript** | perilaku | apa yang terjadi saat tombol ini diklik? |\n\n" +
+            "Ketiganya kamu pelajari berurutan di BiLearn, dan urutan itu bukan kebetulan: CSS tidak punya apa pun untuk diwarnai kalau HTML-nya belum ada.\n\n" +
+            "## Cara Browser Membaca Berkasmu\n\n" +
+            "```text\n" +
+            "index.html          ← kamu menulis di sini (teks + penanda)\n" +
+            "    |\n" +
+            "    |  browser membaca dari atas ke bawah\n" +
+            "    v\n" +
+            "pohon elemen        ← browser menyusun daftar bertingkat: siapa di dalam siapa\n" +
+            "    |\n" +
+            "    |  browser menggambar\n" +
+            "    v\n" +
+            "halaman yang kamu lihat\n" +
+            "```\n\n" +
+            "Satu hal penting yang membedakan HTML dari hampir semua bahasa lain: **browser tidak pernah menolak kodemu.** Tag yang lupa ditutup atau penanda yang salah tempat tidak memunculkan pesan error — browser menebak sendiri, lalu menampilkan sesuatu yang mungkin bukan maksudmu. Karena itu ketelitian menutup tag jauh lebih penting di sini daripada terlihatnya.\n\n" +
+            "## Tiga Alat yang Kamu Butuhkan\n\n" +
+            "1. **Editor kode** — Visual Studio Code paling umum dipakai, gratis, tersedia untuk Windows, macOS, dan Linux. Notepad juga bisa, tapi kamu kehilangan pewarnaan sintaks yang membantu melihat tag yang belum tertutup.\n" +
+            "2. **Browser** — Chrome, Firefox, atau Edge. Yang mana saja, karena HTML dasar berperilaku sama di semuanya.\n" +
+            "3. **Satu folder khusus** — misalnya `latihan-html` di Documents. Semua berkas latihanmu tinggal di sana supaya tidak tercampur.\n\n" +
+            "Alurnya sesederhana ini: buat berkas `index.html` di folder itu → tulis kode → simpan dengan Ctrl+S (atau Cmd+S) → klik dua kali berkasnya, ia terbuka di browser. Setelah mengubah kode, **simpan dulu, lalu tekan F5** di browser untuk melihat hasilnya.\n\n" +
+            "## Analogi Dunia Nyata\n\n" +
+            "HTML itu seperti **denah bangunan beserta papan nama ruangannya**. Denah tidak menentukan warna dinding atau jenis lampu (itu CSS), dan tidak mengurus pintu otomatis (itu JavaScript). Tapi tanpa denah, tukang tidak tahu mana ruang tamu dan mana kamar mandi — dan siapa pun yang datang kemudian akan salah menebak.\n\n" +
+            "Papan nama itu bagian pentingnya. Bukan cuma manusia yang membacanya: mesin pencari memakainya untuk memahami halamanmu, dan *screen reader* — perangkat lunak yang membacakan halaman untuk pengguna tunanetra — sepenuhnya bergantung padanya.\n\n" +
+            "## Anatomi Berkas HTML\n\n" +
+            "```html\n" +
+            "<!DOCTYPE html>          <!-- pakai aturan HTML modern -->\n" +
+            "<html lang=\"id\">         <!-- halaman ini berbahasa Indonesia -->\n" +
+            "<head>\n" +
+            "  <title>Halo</title>    <!-- judul di TAB browser, bukan di halaman -->\n" +
+            "</head>\n" +
+            "<body>\n" +
+            "  <h1>Halo</h1>          <!-- semua yang TERLIHAT ada di sini -->\n" +
+            "</body>\n" +
+            "</html>\n" +
+            "```\n\n" +
+            "Aturan pembagiannya cuma satu kalimat: **`head` untuk keterangan tentang halaman, `body` untuk isi yang dilihat pengunjung.**\n\n" +
+            "## Jebakan yang Menjatuhkan Hampir Semua Pemula\n\n" +
+            "1. **Menyimpan tanpa ekstensi `.html`.** Berkas bernama `halaman` atau `halaman.txt` akan dibuka browser sebagai teks polos — kamu melihat tag-nya sendiri di layar, bukan hasilnya.\n" +
+            "2. **Mengetik di aplikasi pengolah kata.** Word menyimpan format tersembunyi dan mengubah tanda kutip lurus `\"` menjadi kutip miring `”` yang tidak dikenali HTML. Pakai editor kode.\n" +
+            "3. **Lupa menyimpan sebelum menyegarkan browser.** Berkas yang belum disimpan tidak berubah, dan orang bisa kehilangan waktu lama mencari kesalahan yang sebenarnya tidak ada.\n" +
+            "4. **Mengharapkan HTML melakukan pekerjaan JavaScript.** Kalau kamu butuh halaman yang menghitung atau mengingat sesuatu, itu bukan tugas HTML.\n\n" +
+            "## Tentang Panel Editor di BiLearn\n\n" +
+            "> **Penting supaya kamu tidak bingung:** di latihan-latihan berikutnya kamu biasanya hanya menulis **potongan isi `body`** — misalnya satu `<h1>` saja. Kerangka `<!DOCTYPE html>`, `<head>`, dan `<body>` dipasang otomatis oleh panel preview supaya latihannya tetap singkat. Di komputermu sendiri, potongan itu harus kamu letakkan di dalam kerangka lengkap seperti contoh di atas. Modul terakhir track ini melatih kerangka lengkapnya sekali lagi.\n\n" +
+            "## Kaitan ke Dunia Kerja\n\n" +
+            "> **Kapan dipakai:** setiap halaman web yang pernah kamu buka adalah berkas HTML. Di pekerjaan nyata kamu memang jarang membuat berkasnya dari nol — biasanya kamu mengedit *template* di dalam React, Laravel, atau WordPress. Tapi yang kamu edit di sana tetap HTML, dan orang yang tidak paham strukturnya akan menghasilkan halaman yang tampak benar di layar namun kacau bagi mesin pencari dan pengguna screen reader. Itu jenis kesalahan yang muncul di code review, bukan di layar.",
+        },
+        {
+          kind: "step",
+          id: "html-0-1",
+          title: "Menamai Berkas Halaman Utama",
+          explanation:
+            "Nama berkas di web bukan sekadar selera, karena ada satu nama yang diperlakukan istimewa oleh hampir semua server: `index.html`. Ketika seseorang membuka alamat situsmu tanpa menyebut nama berkas apa pun, server mencari `index.html` di folder itu dan menyajikannya. Berkas lain tetap boleh bernama apa saja, tapi harus disebut lengkap di alamatnya, misalnya `/kontak.html`. Kebiasaan yang dipakai di lapangan: tulis nama berkas dengan **huruf kecil semua dan tanpa spasi**, pakai tanda hubung bila perlu (`tentang-kami.html`), karena banyak server membedakan huruf besar-kecil sehingga `Index.html` bisa dianggap berkas yang sama sekali lain.",
+          example: {
+            code:
+              "situsku/\n" +
+              "  index.html      -> dibuka lewat alamat /\n" +
+              "  kontak.html     -> dibuka lewat alamat /kontak.html\n" +
+              "  Profil Saya.html -> bermasalah: ada huruf besar dan spasi",
+            output:
+              "Membuka https://situsku.id/ menampilkan isi index.html tanpa perlu menyebut nama berkasnya.\n" +
+              "Membuka https://situsku.id/kontak.html menampilkan isi kontak.html.\n" +
+              "Alamat untuk berkas ketiga menjadi /Profil%20Saya.html — spasi berubah jadi %20 dan mudah salah ketik.",
+            note: "Spasi pada nama berkas selalu berubah menjadi %20 di alamat web. Itu sah, tapi membuat tautan sulit dibaca dan sering salah disalin.",
+          },
+          instruction:
+            "Kamu baru saja membuat folder proyek kosong dan akan membuat berkas pertama untuk halaman depan situsmu. Tulis nama berkas yang tepat untuk halaman utama itu, lengkap dengan ekstensinya, mengikuti kebiasaan penamaan yang dipakai di lapangan.",
+          starterCode: "# Tulis nama berkasnya di bawah ini\n",
+          language: "text",
+          tests: [
+            {
+              pattern: "(^|\\s)index\\.html(\\s|$)",
+              flags: "",
+              message:
+                "Belum tepat. Nama berkas yang dicari server saat alamat dibuka tanpa nama berkas adalah nama yang berarti \"daftar isi\" — tulis semuanya dengan huruf kecil dan jangan lupa ekstensi `.html`.",
+            },
+          ],
+          solution: "index.html",
+        },
+        {
+          kind: "step",
+          id: "html-0-2",
+          title: "Kerangka Minimum Sebuah Halaman",
+          explanation:
+            "Setiap berkas HTML yang utuh punya empat bagian dengan urutan yang selalu sama. `<!DOCTYPE html>` di baris pertama memberi tahu browser agar memakai aturan HTML modern; tanpa itu browser masuk ke mode kompatibilitas lama dan tata letakmu bisa bergeser tanpa sebab yang jelas. `<html>` membungkus seluruh dokumen, dan atribut `lang` di dalamnya menyebutkan bahasa halaman — `lang=\"id\"` membuat screen reader melafalkan teksmu sebagai bahasa Indonesia, bukan Inggris. Lalu ada dua ruangan: `<head>` berisi keterangan tentang halaman yang tidak tampil di layar, dan `<body>` berisi semua yang dilihat pengunjung. Jebakan yang paling sering terjadi: menaruh isi halaman di dalam `<head>` sehingga tidak muncul apa-apa, padahal kodenya \"terlihat benar\".",
+          example: {
+            code:
+              "<!DOCTYPE html>\n" +
+              "<html lang=\"id\">\n" +
+              "<head>\n" +
+              "  <title>Toko Kopi Nusantara</title>\n" +
+              "</head>\n" +
+              "<body>\n" +
+              "  <h1>Selamat datang di Toko Kopi</h1>\n" +
+              "</body>\n" +
+              "</html>",
+            output:
+              "Tab browser bertuliskan 'Toko Kopi Nusantara', sedangkan di halaman tampil satu judul besar 'Selamat datang di Toko Kopi'. Teks di dalam title TIDAK muncul di halaman.",
+            note: "Perhatikan indentasi: head dan body berada satu tingkat di dalam html, dan isinya menjorok satu tingkat lagi. Indentasi tidak memengaruhi tampilan, tapi sangat memengaruhi kemampuanmu membaca ulang kodemu.",
+          },
+          instruction:
+            "Tulis kerangka utuh sebuah halaman profil dari nol: deklarasi doctype, elemen pembungkus dokumen dengan bahasa Indonesia, bagian keterangan yang memuat judul tab `Profil Bimo`, dan bagian isi yang memuat satu judul utama bertuliskan `Bimo Aresdaffa`.",
+          starterCode: "<!-- tulis kerangka lengkapnya di bawah ini -->\n",
+          language: "html",
+          tests: [
+            {
+              pattern: "<!DOCTYPE\\s+html>",
+              message:
+                "Baris pertama harus deklarasi doctype: `<!DOCTYPE html>`. Ini yang memberi tahu browser agar memakai aturan HTML modern.",
+            },
+            {
+              pattern: "<html[^>]*lang=\"id\"[^>]*>",
+              message:
+                "Elemen pembungkusnya adalah `<html>`, dan bahasanya disebut lewat atribut `lang` bernilai `id`.",
+            },
+            {
+              pattern: "<head>[\\s\\S]*<title>\\s*Profil Bimo\\s*</title>[\\s\\S]*</head>",
+              message:
+                "Judul tab ditulis dengan `<title>` dan harus berada di dalam `<head>`, bukan di `<body>`.",
+            },
+            {
+              pattern: "<body>[\\s\\S]*<h1>\\s*Bimo Aresdaffa\\s*</h1>[\\s\\S]*</body>",
+              message:
+                "Judul utama halaman ditulis dengan `<h1>` dan harus berada di dalam `<body>` supaya terlihat pengunjung.",
+            },
+          ],
+          solution:
+            "<!DOCTYPE html>\n" +
+            "<html lang=\"id\">\n" +
+            "<head>\n" +
+            "  <title>Profil Bimo</title>\n" +
+            "</head>\n" +
+            "<body>\n" +
+            "  <h1>Bimo Aresdaffa</h1>\n" +
+            "</body>\n" +
+            "</html>",
+        },
+        {
+          kind: "step",
+          id: "html-0-3",
+          title: "Head vs Body: Menaruh Sesuatu di Tempatnya",
+          explanation:
+            "Pembagiannya bisa diringkas satu kalimat: `<head>` menjawab \"halaman ini tentang apa\", `<body>` menjawab \"apa yang dilihat pengunjung\". Karena itu `<title>`, keterangan bahasa, tautan ke berkas CSS, dan keterangan untuk mesin pencari semuanya tinggal di `<head>` dan tidak satu pun tampil di layar. Sebaliknya judul, paragraf, gambar, daftar, dan tombol harus berada di `<body>`. Gejala khas kalau keduanya tertukar: halaman tampak kosong padahal kodemu penuh, atau teks judul tab malah tercetak di tengah halaman. Browser tidak akan menegurmu — ia hanya menampilkan hasil yang aneh, dan inilah salah satu latihan membaca kesalahan paling berguna di awal belajar HTML.",
+          example: {
+            code:
+              "<!-- SALAH: paragraf diletakkan di head -->\n" +
+              "<head>\n" +
+              "  <p>Selamat datang</p>\n" +
+              "</head>\n\n" +
+              "<!-- BENAR -->\n" +
+              "<head>\n" +
+              "  <title>Beranda</title>\n" +
+              "</head>\n" +
+              "<body>\n" +
+              "  <p>Selamat datang</p>\n" +
+              "</body>",
+            output:
+              "Versi pertama menampilkan halaman kosong — browser mengabaikan paragraf yang berada di head. Versi kedua menampilkan tulisan 'Selamat datang' di halaman, dengan tab bertuliskan 'Beranda'.",
+            note: "Kalau halamanmu tampak kosong padahal kode sudah ditulis, periksa dulu: apakah isinya nyasar ke dalam head?",
+          },
+          instruction:
+            "Dokumen di editor sudah lengkap kerangkanya, tapi dua isinya tertukar ruangan sehingga judul tab tidak muncul di tab dan judul halaman tidak muncul di halaman. Pindahkan masing-masing ke bagian yang benar tanpa mengubah tulisannya.",
+          starterCode:
+            "<!DOCTYPE html>\n" +
+            "<html lang=\"id\">\n" +
+            "<head>\n" +
+            "  <h1>Menu Hari Ini</h1>\n" +
+            "</head>\n" +
+            "<body>\n" +
+            "  <title>Warung Bu Sri</title>\n" +
+            "</body>\n" +
+            "</html>\n",
+          language: "html",
+          tests: [
+            {
+              pattern:
+                "<head>(?:(?!</head>)[\\s\\S])*<title>\\s*Warung Bu Sri\\s*</title>",
+              message:
+                "Pindahkan `<title>Warung Bu Sri</title>` ke dalam `<head>` — judul tab adalah keterangan tentang halaman, bukan isi halaman.",
+            },
+            {
+              pattern:
+                "<body>(?:(?!</body>)[\\s\\S])*<h1>\\s*Menu Hari Ini\\s*</h1>",
+              message:
+                "Pindahkan `<h1>Menu Hari Ini</h1>` ke dalam `<body>` — hanya isi body yang tampil di layar.",
+            },
+            {
+              pattern: "<head>(?:(?!</head>)[\\s\\S])*<h1",
+              mustNotMatch: true,
+              message:
+                "Masih ada `<h1>` yang tertinggal di dalam `<head>`. Browser akan mengabaikannya, jadi pindahkan seluruhnya ke `<body>`.",
+            },
+          ],
+          solution:
+            "<!DOCTYPE html>\n" +
+            "<html lang=\"id\">\n" +
+            "<head>\n" +
+            "  <title>Warung Bu Sri</title>\n" +
+            "</head>\n" +
+            "<body>\n" +
+            "  <h1>Menu Hari Ini</h1>\n" +
+            "</body>\n" +
+            "</html>",
+        },
+        {
+          kind: "step",
+          id: "html-0-4",
+          title: "Potongan Kode vs Dokumen Utuh",
+          explanation:
+            "Mulai modul berikutnya, hampir semua latihan di BiLearn hanya memintamu menulis **potongan isi `body`** — satu heading, satu daftar, satu formulir — supaya latihannya singkat dan fokus pada satu hal. Panel preview memasang kerangka dokumennya untukmu di balik layar. Itu memang mempercepat belajar, tapi menyimpan satu risiko: kalau kamu tidak sadar sedang menulis potongan, kamu akan menyalin latihan itu ke komputermu, membukanya di browser, dan bingung karena hasilnya tidak sebagus di layar latihan. Aturan yang perlu kamu pegang: **di BiLearn tulis potongannya, di komputermu bungkus potongan itu dengan kerangka lengkap** yang baru kamu latih di step sebelumnya.",
+          example: {
+            code:
+              "<!-- dokumen utuh: yang kamu simpan sebagai index.html -->\n" +
+              "<!DOCTYPE html>\n" +
+              "<html lang=\"id\">\n" +
+              "<head>\n" +
+              "  <title>Blog Saya</title>\n" +
+              "</head>\n" +
+              "<body>\n" +
+              "  <h1>Catatan Belajar</h1>\n" +
+              "  <p>Hari ini saya belajar HTML.</p>\n" +
+              "</body>\n" +
+              "</html>\n\n" +
+              "<!-- potongan yang setara: yang kamu tulis di editor latihan -->\n" +
+              "<h1>Catatan Belajar</h1>\n" +
+              "<p>Hari ini saya belajar HTML.</p>",
+            output:
+              "Keduanya menampilkan halaman yang sama persis di preview BiLearn. Bedanya, hanya versi pertama yang bisa langsung disimpan sebagai berkas dan dibuka di browser komputermu.",
+            note: "Potongan bukan versi \"salah\" — ia hanya belum dibungkus. Yang salah adalah menyimpan potongan sebagai berkas lalu mengira kerangkanya tidak perlu.",
+          },
+          instruction:
+            "Editor sudah berisi satu dokumen utuh. Ambil hanya bagian yang benar-benar tampil di layar, lalu tulis ulang sebagai potongan: buang deklarasi doctype, elemen pembungkus dokumen, seluruh bagian keterangan, dan tag `body` itu sendiri. Isi yang terlihat harus tetap sama.",
+          starterCode:
+            "<!DOCTYPE html>\n" +
+            "<html lang=\"id\">\n" +
+            "<head>\n" +
+            "  <title>Warung Bu Sri</title>\n" +
+            "</head>\n" +
+            "<body>\n" +
+            "  <h2>Menu Hari Ini</h2>\n" +
+            "  <p>Nasi rames, soto ayam, dan es teh.</p>\n" +
+            "</body>\n" +
+            "</html>\n",
+          language: "html",
+          tests: [
+            {
+              pattern: "<h2>\\s*Menu Hari Ini\\s*</h2>",
+              message:
+                "Isi yang terlihat harus tetap ada. Pertahankan `<h2>Menu Hari Ini</h2>`.",
+            },
+            {
+              pattern: "<p>\\s*Nasi rames[\\s\\S]*</p>",
+              message:
+                "Paragrafnya juga bagian yang terlihat — pertahankan `<p>` beserta isinya.",
+            },
+            {
+              pattern: "<!DOCTYPE|<html|<head|<title|<body",
+              mustNotMatch: true,
+              message:
+                "Masih ada bagian kerangka yang tertinggal. Sebuah potongan hanya memuat isi yang terlihat: tanpa doctype, tanpa `<html>`, tanpa `<head>`, tanpa `<title>`, dan tanpa tag `<body>`.",
+            },
+          ],
+          solution:
+            "<h2>Menu Hari Ini</h2>\n" +
+            "<p>Nasi rames, soto ayam, dan es teh.</p>",
+        },
+        {
+          kind: "quiz",
+          id: "html-0-kuis",
+          title: "Kuis: Persiapan & Alat Kerja",
+          questions: [
+            {
+              id: "q1",
+              type: "pilihan-ganda",
+              question:
+                "Seseorang membuka `https://tokoku.id/` tanpa menyebut nama berkas apa pun. Berkas mana yang dicari server?",
+              choices: [
+                "home.html",
+                "index.html",
+                "utama.html",
+                "Berkas apa saja yang paling dulu dibuat",
+              ],
+              answerIndex: 1,
+              explanation:
+                "`index.html` adalah nama yang diperlakukan istimewa: server menyajikannya saat alamat dibuka tanpa nama berkas. `home.html` menggoda karena namanya terasa paling masuk akal dalam bahasa Inggris, tapi ia harus disebut lengkap di alamatnya (`/home.html`) dan tidak akan terpanggil sendiri.",
+            },
+            {
+              id: "q2",
+              type: "pilihan-ganda",
+              question:
+                "Apa fungsi baris `<!DOCTYPE html>` di awal berkas?",
+              choices: [
+                "Memberi tahu browser agar memakai aturan HTML modern",
+                "Menyatakan judul halaman",
+                "Memuat berkas CSS secara otomatis",
+                "Menandai bahwa halaman memakai bahasa Indonesia",
+              ],
+              answerIndex: 0,
+              explanation:
+                "Doctype memilih mode penafsiran browser. Tanpanya browser masuk mode kompatibilitas lama, dan tata letak bisa bergeser tanpa pesan error apa pun. Pilihan tentang bahasa menggoda karena keduanya sama-sama ditulis di baris awal — tapi bahasa dinyatakan lewat atribut `lang` pada `<html>`, bukan lewat doctype.",
+            },
+            {
+              id: "q3",
+              type: "pilihan-ganda",
+              question:
+                "Kamu menulis `<p>Selamat datang</p>` tapi halaman tampil kosong. Kode ditulis di dalam `<head>`. Kenapa tidak muncul?",
+              choices: [
+                "Karena paragraf butuh atribut tambahan",
+                "Karena head hanya untuk keterangan tentang halaman, bukan isi yang ditampilkan",
+                "Karena browsernya perlu diperbarui",
+                "Karena `<p>` harus ditulis huruf kapital",
+              ],
+              answerIndex: 1,
+              explanation:
+                "Semua yang terlihat pengunjung harus berada di `<body>`. Isi yang nyasar ke `<head>` diabaikan browser tanpa pesan error — inilah kenapa \"halaman kosong padahal kode ada\" adalah gejala pertama yang harus membuatmu memeriksa pembagian head dan body.",
+            },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question:
+                "Manakah pernyataan yang benar tentang HTML?",
+              choices: [
+                "HTML adalah bahasa pemrograman yang bisa menghitung dan mengambil keputusan",
+                "HTML adalah bahasa penanda yang menyusun dan menamai isi halaman",
+                "HTML mengatur warna dan tata letak halaman",
+                "HTML dibutuhkan hanya kalau halaman punya gambar",
+              ],
+              answerIndex: 1,
+              explanation:
+                "HTML menandai peran tiap bagian isi — judul, paragraf, daftar — dan tidak punya kemampuan menghitung atau mengambil keputusan. Pilihan tentang warna dan tata letak sangat menggoda karena hasil akhirnya memang terlihat, tapi itu pekerjaan CSS; HTML menyediakan isinya untuk diwarnai.",
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question:
+                "Kamu menyimpan kode HTML-mu sebagai `halaman.txt` lalu membukanya di browser. Apa yang terjadi?",
+              choices: [
+                "Halaman tampil normal karena isinya tetap HTML",
+                "Browser menampilkan kodenya sebagai teks polos, lengkap dengan tag-tagnya",
+                "Browser menolak membuka berkasnya",
+                "Tag HTML otomatis dihapus dan hanya teksnya tampil rapi",
+              ],
+              answerIndex: 1,
+              explanation:
+                "Browser memutuskan cara menampilkan berkas dari ekstensinya. Dengan `.txt` ia menganggap isinya teks biasa, jadi tag-tagnya ikut tercetak di layar. Pilihan \"menolak membuka\" menggoda karena terasa seperti error, padahal browser tidak pernah menolak — ia hanya menampilkan hasil yang bukan maksudmu, dan itulah yang membuat kesalahan ini sulit disadari.",
+            },
+          ],
+        },
+      ],
+    },
+    {
       slug: "dasar-dokumen",
       title: "Dasar Dokumen HTML",
       description:
@@ -28,6 +403,76 @@ export const htmlTrack: Track = {
         "Komentar & struktur dokumen lengkap (doctype, html, head, body)",
       ],
       items: [
+        {
+          kind: "materi",
+          id: "html-1-m1",
+          title: "Elemen, Tag, dan Atribut — Tata Bahasa HTML",
+          body:
+            "# Pengertian\n\n" +
+            "Seluruh HTML dibangun dari satu pola yang diulang terus: **elemen**. Satu elemen terdiri dari tag pembuka, isi, dan tag penutup.\n\n" +
+            "```text\n" +
+            "<p class=\"catatan\">Kopi tanpa gula.</p>\n" +
+            " ^  ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^\n" +
+            " |        |                |            |\n" +
+            " |        |                |            tag penutup (ada garis miring)\n" +
+            " |        |                isi yang dilihat pengunjung\n" +
+            " |        atribut: keterangan tambahan, selalu di tag PEMBUKA\n" +
+            " nama elemen\n" +
+            "```\n\n" +
+            "Nama elemen menentukan **maknanya**, bukan tampilannya. `<h1>` berarti \"judul terpenting halaman ini\", bukan \"tulisan besar\". Perbedaan ini terasa akibatnya nanti: mesin pencari dan screen reader membaca maknanya, sedangkan ukuran huruf gampang diubah CSS kapan saja.\n\n" +
+            "## Dua Bentuk Tag\n\n" +
+            "| Bentuk | Contoh | Kenapa begitu |\n" +
+            "|---|---|---|\n" +
+            "| Berpasangan | `<p>...</p>`, `<h1>...</h1>`, `<li>...</li>` | ada isi di antara pembuka dan penutup |\n" +
+            "| Tunggal | `<img>`, `<br>`, `<hr>`, `<input>` | tidak punya isi, semua keterangannya lewat atribut |\n\n" +
+            "Tag tunggal tidak punya versi penutup. Menulis `</img>` bukan sekadar tidak perlu — ia tidak dikenal sama sekali.\n\n" +
+            "## Nesting: Siapa di Dalam Siapa\n\n" +
+            "Elemen boleh berada di dalam elemen lain, dan urutan penutupannya harus **terbalik** dari urutan pembukaannya — seperti tanda kurung dalam matematika:\n\n" +
+            "```text\n" +
+            "BENAR   <li> <strong> Kopi </strong> </li>\n" +
+            "        buka1  buka2        tutup2   tutup1\n\n" +
+            "SALAH   <li> <strong> Kopi </li> </strong>\n" +
+            "                           ^ menutup induk sebelum anaknya selesai\n" +
+            "```\n\n" +
+            "Browser tidak menolak versi salah. Ia menebak maksudmu, dan tebakannya kadang membuat sebagian halaman ikut masuk ke tempat yang tidak kamu inginkan. Karena itu **indentasi** — menjorokkan setiap tingkat satu langkah ke dalam — bukan soal kerapian, melainkan cara tercepat melihat pasangan tag yang belum tertutup.\n\n" +
+            "## Atribut yang Akan Kamu Pakai Terus\n\n" +
+            "| Atribut | Isinya | Dipakai untuk |\n" +
+            "|---|---|---|\n" +
+            "| `href` | alamat tujuan | pada `<a>`: halaman mana yang dibuka |\n" +
+            "| `src` | lokasi berkas | pada `<img>`, `<video>`: berkas mana yang dimuat |\n" +
+            "| `alt` | deskripsi teks | pengganti gambar bagi screen reader & saat gambar gagal |\n" +
+            "| `id` | nama unik | satu elemen saja per halaman; target tautan `#nama` |\n" +
+            "| `class` | nama kelompok | boleh berulang; pegangan utama CSS |\n\n" +
+            "Nilai atribut selalu ditulis di antara tanda kutip: `class=\"kartu\"`. Kutip lurus (`\"`), bukan kutip miring hasil salin-tempel dari Word.\n\n" +
+            "## Heading Bukan Ukuran Huruf, tapi Daftar Isi\n\n" +
+            "```text\n" +
+            "h1  Buku Resep Nusantara        ← satu per halaman: topik utama\n" +
+            "  h2  Bab 1: Sarapan\n" +
+            "    h3  Telur Dadar\n" +
+            "    h3  Bubur Ayam\n" +
+            "  h2  Bab 2: Makan Malam\n" +
+            "```\n\n" +
+            "Pengguna screen reader benar-benar menavigasi dengan melompat antar heading, seperti kamu membaca daftar isi buku. Karena itu memilih `h4` \"karena ukurannya pas\" merusak daftar isi tak terlihat itu. Butuh teks lebih kecil? Itu pekerjaan CSS.\n\n" +
+            "## Memilih Format Gambar\n\n" +
+            "| Format | Paling cocok untuk | Catatan |\n" +
+            "|---|---|---|\n" +
+            "| `.jpg` | foto | ukuran kecil, tapi kualitas menurun tiap kali disimpan ulang |\n" +
+            "| `.png` | gambar dengan latar transparan, tangkapan layar | tajam, ukurannya lebih besar |\n" +
+            "| `.svg` | logo, ikon, diagram | tetap tajam di ukuran apa pun karena berupa gambar vektor |\n" +
+            "| `.webp` | pengganti modern jpg & png | ukuran lebih kecil, didukung semua browser saat ini |\n" +
+            "| `.gif` | animasi pendek sederhana | warna terbatas; untuk video pakai `<video>`, jauh lebih ringan |\n\n" +
+            "> **Kapan dipakai:** ini keputusan sehari-hari yang berdampak langsung ke kecepatan halaman. Mengunggah foto kamera 4 MB apa adanya adalah penyebab paling umum halaman terasa berat di jaringan seluler.\n\n" +
+            "## Analogi Dunia Nyata\n\n" +
+            "Elemen HTML itu seperti **label pada kardus saat pindahan**. Isi kardus tetap sama entah dilabeli atau tidak — tapi label \"PECAH BELAH — DAPUR\" menentukan bagaimana orang lain memperlakukannya. Mesin pencari, screen reader, dan rekan setimmu adalah \"orang lain\" itu. Kardus tanpa label (`<div>` untuk segalanya) tetap bisa diangkut, hanya saja semua orang harus menebak isinya.\n\n" +
+            "## Jebakan yang Sering Menjatuhkan Pemula\n\n" +
+            "1. **Lupa menutup tag.** Tidak ada pesan error; halaman hanya jadi aneh. Kalau tampilan tiba-tiba kacau setelah satu baris ditambah, periksa baris itu dulu.\n" +
+            "2. **Menutup tag tunggal.** `<br></br>` dan `</img>` bukan HTML.\n" +
+            "3. **Memilih heading berdasarkan ukuran.** Struktur dulu, tampilan diatur CSS.\n" +
+            "4. **Mengetik nomor sendiri di dalam daftar bernomor.** `<ol>` sudah membuat nomornya; mengetik \"1.\" membuat nomornya dobel.\n" +
+            "5. **Menaruh `<ul>` anak sebagai saudara `<li>`.** Sub-daftar harus berada di dalam `<li>` induknya, kalau tidak hubungan induk-anak hilang bagi screen reader.\n\n" +
+            "## Kaitan ke Dunia Kerja\n\n" +
+            "> Sembilan bab di modul ini adalah kosakata yang dipakai setiap hari, di framework apa pun. Saat kamu nanti menulis komponen React atau template Laravel, yang kamu susun tetap elemen-elemen ini. Reviewer jarang mengomentari cara kamu menulis fungsi di hari pertama — tapi `alt` yang kosong, heading yang melompat, dan `<div>` yang seharusnya `<button>` hampir selalu ketahuan.",
+        },
         {
           kind: "step",
           id: "html-1-1",
@@ -115,12 +560,18 @@ export const htmlTrack: Track = {
           id: "html-1-4",
           title: "Link: menghubungkan halaman",
           explanation:
-            "Elemen `<a>` (anchor) membuat link. Atribut `href` menentukan tujuannya. **Atribut** adalah informasi tambahan yang ditulis di tag pembuka: `<a href=\"https://example.com\">teks link</a>`.",
+            "Elemen `<a>` (singkatan dari *anchor*) membuat tautan, dan tujuannya ditentukan oleh **atribut** bernama `href`. Atribut adalah keterangan tambahan yang selalu ditulis di **tag pembuka** dengan pola `nama=\"nilai\"`, sementara teks yang dilihat pengunjung berada di antara tag pembuka dan penutup — dua hal yang sering tertukar saat pertama belajar. Ada satu atribut pendamping yang sering kamu temui: `target=\"_blank\"` membuka tautan di tab baru, dan sebaiknya selalu ditemani `rel=\"noopener\"` karena tanpa itu halaman tujuan mendapat akses terbatas ke halamanmu — celah keamanan lama yang masih sering lolos di code review. Jebakan yang paling sering terjadi di sini: membuka **semua** tautan di tab baru. Itu mengambil keputusan yang seharusnya milik pengguna, jadi pakai hanya saat pengguna memang sedang mengerjakan sesuatu yang tidak boleh terputus, misalnya sedang mengisi formulir panjang.",
           example: {
-            code: '<a href="https://google.com">Buka Google</a>',
+            code:
+              '<!-- tautan biasa: dibuka di tab yang sama -->\n' +
+              '<a href="https://google.com">Buka Google</a>\n\n' +
+              '<!-- dibuka di tab baru, dengan pengaman rel -->\n' +
+              '<a href="https://wikipedia.org" target="_blank" rel="noopener">\n' +
+              '  Wikipedia (tab baru)\n' +
+              '</a>',
             output:
-              "Muncul tulisan 'Buka Google' berwarna biru dan bergaris bawah; diklik akan membuka google.com.",
-            note: 'Atribut ditulis di dalam tag pembuka dengan pola nama="nilai". Teks yang terlihat user ada di antara tag.',
+              "Dua tulisan biru bergaris bawah. Yang pertama menggantikan halaman saat diklik; yang kedua membuka tab baru dan halaman ini tetap terbuka.",
+            note: 'Atribut ditulis di dalam tag pembuka dengan pola nama="nilai". Teks yang terlihat pengguna ada di antara tag. Satu elemen boleh punya beberapa atribut, dipisah spasi.',
           },
           instruction:
             'Buat link berisi teks `Kunjungi BiLearn` yang mengarah ke `https://bilearn.id`.',
@@ -281,7 +732,7 @@ export const htmlTrack: Track = {
           example: {
             code: "<a href=\"https://bps.go.id\">Situs luar (absolut)</a>\n<a href=\"/tentang\">Halaman lain di situs ini (root-relative)</a>\n<img src=\"../aset/logo.png\" alt=\"Logo\">",
             output: "Tiga cara menunjuk berkas: alamat lengkap, dari akar situs, dan naik satu folder dari lokasi file ini.",
-            note: "../ berarti naik satu folder. Kalau gambarmu tidak muncul, path inilah yang pertama harus kamu periksa.",
+            note: "../ berarti naik satu folder. Kalau gambarmu tidak muncul, path inilah yang pertama harus kamu periksa. Di panel preview, berkas `aset/foto.jpg` memang tidak ada sehingga yang tampil adalah ikon gambar rusak beserta teks alt-nya — itu justru memperlihatkan gunanya alt, dan bukan tanda jawabanmu salah.",
           },
           instruction:
             "Halamanmu berada di folder `blog/` dan gambarnya di folder `aset/` yang sejajar dengan `blog/`. Tulis elemen `<img>` yang menunjuk `aset/foto.jpg` memakai path relatif yang naik satu folder, dengan alt `Foto artikel`.",
@@ -347,7 +798,7 @@ export const htmlTrack: Track = {
               choices: ["Sebanyak mungkin", "Satu", "Maksimal tiga", "Tidak boleh ada"],
               answerIndex: 1,
               explanation:
-                "Satu halaman sebaiknya punya tepat satu <h1> sebagai judul utama. Ini membantu SEO dan pengguna screen reader memahami struktur halaman. Heading lain pakai <h2>–<h6>.",
+                "Satu halaman sebaiknya punya tepat satu <h1> sebagai judul utama, karena itulah cara menyatakan \"inilah topik halaman ini\" secara tidak ambigu bagi mesin pencari dan pengguna screen reader. Pilihan \"sebanyak mungkin\" menggoda karena secara teknis browser memang tidak melarangnya dan tampilannya tetap normal — tapi halaman dengan lima <h1> sama saja dengan buku yang punya lima judul di kover. Heading berikutnya memakai <h2>–<h6> mengikuti kedalaman strukturnya, bukan mengikuti ukuran huruf yang kamu inginkan.",
             },
             {
               id: "q2",
@@ -357,7 +808,7 @@ export const htmlTrack: Track = {
               choices: ["src", "href", "link", "target"],
               answerIndex: 1,
               explanation:
-                'href (hypertext reference) menentukan URL tujuan link, contoh: <a href="https://google.com">. Tanpa href, link tidak mengarah ke mana-mana.',
+                'href (singkatan dari hypertext reference) menentukan alamat tujuan tautan, misalnya <a href="https://google.com">. Tanpa href, elemen <a> tetap tampil tapi tidak mengarah ke mana-mana dan tidak bisa difokuskan dengan Tab. Dua pengecoh di sini punya sebab yang jelas: src memang atribut alamat, tapi dipakai elemen yang MEMUAT berkas seperti <img> dan <video>; sedangkan target benar-benar ada pada <a> — hanya saja tugasnya menentukan di jendela mana tautan dibuka, bukan tujuannya.',
             },
             {
               id: "q3",
@@ -387,7 +838,7 @@ export const htmlTrack: Track = {
               ],
               answerIndex: 1,
               explanation:
-                "Elemen <p> secara otomatis memberikan margin (jarak) dengan teks atas dan bawahnya agar mudah dibaca.",
+                "Browser meringkas spasi dan baris baru berlebih menjadi satu spasi, jadi teks tanpa pembungkus akan menyambung menjadi satu blok panjang meski di editormu terlihat rapi berbaris. <p> menyatakan \"ini satu paragraf\" sehingga browser memberi jarak atas-bawah, dan screen reader pun berhenti sejenak di antara paragraf. Pilihan \"satu-satunya cara menulis teks\" menggoda karena kelihatan tegas, padahal teks juga sah berada di dalam heading, <li>, atau <td> — <p> khusus untuk teks yang memang berbentuk paragraf.",
             },
             {
               id: "q5",
@@ -402,10 +853,25 @@ export const htmlTrack: Track = {
               ],
               answerIndex: 3,
               explanation:
-                "Elemen <img> adalah self-closing dan wajib menggunakan src untuk menunjuk file serta alt untuk deskripsi.",
+                "<img> adalah tag tunggal: tidak ada isi di antara tag pembuka dan penutup, jadi tidak ada </img>. Alamat berkasnya disebut lewat src, dan alt menyediakan deskripsi teksnya. Pengecoh pertama dan ketiga menggoda karena meniru pola tag berpasangan yang kamu pakai untuk <p> dan <h1>; sedangkan pengecoh kedua salah atribut — href milik <a> untuk berpindah halaman, src untuk memuat berkas ke dalam halaman ini.",
             },
-                      {
+            {
               id: "q6",
+              type: "pilihan-ganda",
+              question:
+                "Kamu ingin satu tautan terbuka di tab baru agar formulir panjang yang sedang diisi pengguna tidak hilang. Atribut apa yang dipakai, dan apa pendampingnya?",
+              choices: [
+                'target="_blank", sebaiknya ditemani rel="noopener"',
+                'newtab="true"',
+                'href="_blank"',
+                'window="new", tanpa atribut tambahan',
+              ],
+              answerIndex: 0,
+              explanation:
+                'target="_blank" membuka tautan di tab baru, dan rel="noopener" menutup celah lama di mana halaman tujuan bisa mendapat akses terbatas ke halaman asalmu. Yang perlu diingat justru pemakaiannya: membuka SEMUA tautan di tab baru mengambil keputusan yang seharusnya milik pengguna — pakai hanya kalau ada alasan seperti pada soal ini. Pengecoh newtab dan window sengaja dibuat masuk akal secara bahasa Inggris, tapi keduanya bukan atribut HTML.',
+            },
+            {
+              id: "q7",
               type: "pilihan-ganda",
               question:
                 "Kamu menulis langkah-langkah pendaftaran yang harus dikerjakan berurutan. Elemen daftar mana yang tepat, dan kenapa?",
@@ -438,6 +904,71 @@ export const htmlTrack: Track = {
         "Anatomi halaman nyata: membedah struktur situs populer",
       ],
       items: [
+        {
+          kind: "materi",
+          id: "html-2-m1",
+          title: "Semantic HTML: Memberi Nama pada Bagian Halaman",
+          body:
+            "# Pengertian\n\n" +
+            "**Semantic HTML** berarti memilih elemen berdasarkan *peran* isinya, bukan berdasarkan tampilan yang kamu inginkan. `<div>` dan `<section>` tampil sama persis di layar — bedanya, `<section>` memberi tahu mesin bahwa bagian ini adalah satu bagian bertema, sedangkan `<div>` tidak menyatakan apa pun.\n\n" +
+            "Kalau seluruh halamanmu tersusun dari `<div>`, halaman itu tetap tampil normal. Yang hilang adalah informasi — dan yang membutuhkan informasi itu bukan kamu, melainkan tiga pihak yang tidak bisa melihat layarmu: mesin pencari, screen reader, dan rekan setim yang membuka kodemu enam bulan kemudian.\n\n" +
+            "## Peta Halaman yang Dipakai di Hampir Semua Situs\n\n" +
+            "```text\n" +
+            "+-------------------------------------------+\n" +
+            "| <header>  logo + <nav> menu utama         |\n" +
+            "+-------------------------------------------+\n" +
+            "| <main>                     | <aside>      |\n" +
+            "|   <article> tulisan 1      |  konten      |\n" +
+            "|   <article> tulisan 2      |  pendukung   |\n" +
+            "|                            |  (sidebar)   |\n" +
+            "+-------------------------------------------+\n" +
+            "| <footer>  kontak, hak cipta               |\n" +
+            "+-------------------------------------------+\n" +
+            "```\n\n" +
+            "Empat elemen di gambar itu disebut **landmark**. Screen reader menyediakan daftar landmark dan pengguna bisa melompat langsung ke salah satunya — persis seperti kamu melirik ke bagian atas halaman untuk mencari menu. Halaman tanpa landmark memaksa mereka mendengarkan isinya berurutan dari awal.\n\n" +
+            "## Elemen dan Pertanyaan Ujinya\n\n" +
+            "| Elemen | Artinya | Pertanyaan cepat sebelum memakainya |\n" +
+            "|---|---|---|\n" +
+            "| `<header>` | kepala halaman atau kepala satu bagian | ini bagian pembuka? |\n" +
+            "| `<nav>` | kumpulan tautan navigasi utama | ini menu yang dipakai untuk berpindah halaman? |\n" +
+            "| `<main>` | konten utama, tepat satu per halaman | kalau ini dihapus, halaman kehilangan intinya? |\n" +
+            "| `<article>` | isi yang utuh sendirian | masih masuk akal kalau dibagikan terpisah? |\n" +
+            "| `<section>` | bagian bertema, hampir selalu berjudul | bisa aku beri judul yang wajar? |\n" +
+            "| `<aside>` | isi pendukung yang bukan inti | halaman tetap utuh tanpa bagian ini? |\n" +
+            "| `<footer>` | penutup halaman atau penutup satu bagian | ini keterangan akhir? |\n" +
+            "| `<div>` | tidak ada artinya, murni pembungkus | aku cuma butuh kotak untuk mengatur tata letak? |\n\n" +
+            "## Cara Memilih: Tiga Pertanyaan Berurutan\n\n" +
+            "```text\n" +
+            "Apakah isi ini utuh kalau dicabut dari halaman?\n" +
+            "   ya  -> <article>\n" +
+            "   tidak\n" +
+            "     |\n" +
+            "     v\n" +
+            "Bisakah aku memberinya judul yang wajar?\n" +
+            "   ya  -> <section> (beserta heading di dalamnya)\n" +
+            "   tidak\n" +
+            "     |\n" +
+            "     v\n" +
+            "Aku cuma butuh kotak untuk styling -> <div>\n" +
+            "```\n\n" +
+            "Urutan ini menyelesaikan hampir semua perdebatan `article` vs `section` vs `div` yang sering bikin pemula ragu berlama-lama.\n\n" +
+            "## Membedah Halaman Nyata\n\n" +
+            "Buka situs berita atau blog mana pun, klik kanan di area artikelnya, pilih **Inspect** (atau tekan F12). Panel *Elements* akan menampilkan struktur HTML halaman itu. Yang perlu kamu cari:\n\n" +
+            "- Di mana `<header>` dan `<nav>`-nya, dan apakah `<nav>`-nya cuma satu.\n" +
+            "- Apakah isi artikel dibungkus `<article>` atau hanya `<div>` berlapis-lapis.\n" +
+            "- Berapa banyak `<h1>` yang ada — situs besar pun sering keliru di sini.\n\n" +
+            "Kebiasaan membaca struktur halaman orang lain adalah cara belajar paling cepat di HTML, dan sekaligus keterampilan yang kamu pakai saat harus meniru tata letak yang sudah ada di pekerjaan nyata.\n\n" +
+            "## Analogi Dunia Nyata\n\n" +
+            "Bayangkan **dua gedung kantor**. Yang pertama semua pintunya identik tanpa papan nama — kamu harus membuka satu per satu untuk menemukan ruang rapat. Yang kedua setiap pintunya berlabel: Resepsionis, Ruang Rapat, Toilet, Gudang. Tata letak ruangannya sama, biaya membuat labelnya nyaris nol, tapi pengalaman orang baru di dalamnya sangat berbeda. `<div>` adalah pintu tanpa papan nama.\n\n" +
+            "## Jebakan yang Sering Terjadi\n\n" +
+            "1. **`<section>` tanpa judul.** Kalau kamu tidak bisa memberinya heading, yang kamu butuhkan `<div>`.\n" +
+            "2. **Semua kumpulan tautan dibungkus `<nav>`.** Pakai untuk navigasi utama saja; deretan tautan di dalam artikel tidak perlu.\n" +
+            "3. **Menaruh menu dan footer ke dalam `<main>`.** Isi yang berulang di setiap halaman harus di luar `<main>`, kalau tidak pintasan \"lompat ke konten utama\" jadi tidak berguna.\n" +
+            "4. **Mengira `<header>` hanya boleh satu.** Boleh ada beberapa: satu untuk halaman, dan satu lagi di dalam setiap `<article>` sebagai kepala tulisan. Yang benar-benar dibatasi satu adalah `<main>`.\n" +
+            "5. **Memakai `<b>` dan `<i>` untuk menegaskan.** Keduanya hanya mengubah tampilan; `<strong>` dan `<em>` yang membawa makna.\n\n" +
+            "## Kaitan ke Dunia Kerja\n\n" +
+            "> **Kapan dipakai:** setiap kali kamu membuat halaman baru. Di lowongan frontend, aksesibilitas (sering ditulis *a11y*) makin sering muncul sebagai syarat, dan pertanyaan \"apa bedanya section dan div\" adalah salah satu pertanyaan interview HTML yang paling sering ditanyakan justru karena jawabannya menunjukkan apakah seseorang berpikir soal makna atau cuma soal tampilan.",
+        },
         {
           kind: "step",
           id: "html-2-1",
@@ -623,6 +1154,52 @@ export const htmlTrack: Track = {
             '<p>\n  <strong>Penting</strong>: acara dimulai <time datetime="2026-07-27">27 Juli 2026</time>.\n</p>',
         },
         {
+          kind: "step",
+          id: "html-2-7",
+          title: "Kutipan dan Cuplikan Kode",
+          explanation:
+            "Empat elemen ini sering diganti `<div>` berhias CSS, padahal masing-masing menyatakan sesuatu yang tidak bisa disampaikan tampilan. `<blockquote>` menandai kutipan panjang dari sumber lain, dan `<cite>` menyebut nama sumbernya — dibacakan screen reader sebagai kutipan, sehingga pendengar tahu kata-kata itu bukan milik penulis halaman. Untuk hal teknis ada dua elemen berpasangan: `<code>` menandai potongan kode di tengah kalimat, sedangkan `<pre>` mempertahankan spasi dan baris baru apa adanya — dan inilah bedanya yang penting, karena HTML biasanya meringkas spasi berlebih menjadi satu. Karena itu kode berbaris banyak selalu ditulis sebagai `<pre><code>...</code></pre>`: `pre` menjaga bentuknya, `code` menyatakan maknanya. Jebakan yang perlu diingat: di dalam `<pre>`, indentasi kodemu **ikut tampil**, jadi jangan menjorokkan isinya mengikuti indentasi HTML di sekitarnya.",
+          example: {
+            code:
+              "<blockquote>\n" +
+              "  <p>Program harus ditulis agar bisa dibaca manusia.</p>\n" +
+              "  <cite>Harold Abelson</cite>\n" +
+              "</blockquote>\n\n" +
+              "<p>Simpan berkasnya sebagai <code>index.html</code>.</p>",
+            output:
+              "Kutipan tampil menjorok ke dalam dengan nama sumber di bawahnya (biasanya miring), dan tulisan index.html di dalam paragraf tampil dengan huruf monospace.",
+            note: "`<cite>` berisi nama karya atau penulisnya, bukan kalimat kutipannya. Kalau sumbernya punya alamat, bungkus isi cite dengan `<a>`.",
+          },
+          instruction:
+            "Tulis satu kutipan bertingkat dari sumber lain: bungkus kalimat `Sederhana lebih baik daripada rumit.` sebagai kutipan blok, sebutkan sumbernya `Tim Peters` dengan elemen yang tepat, lalu di luar kutipan tampilkan potongan kode dua baris apa pun memakai kombinasi elemen yang mempertahankan spasi sekaligus menyatakan bahwa isinya kode.",
+          starterCode: "<!-- tulis kutipan dan cuplikan kodenya di bawah ini -->\n",
+          language: "html",
+          tests: [
+            {
+              pattern:
+                "<blockquote>[\\s\\S]*Sederhana lebih baik daripada rumit\\.[\\s\\S]*</blockquote>",
+              message:
+                "Bungkus kalimatnya dengan `<blockquote>` ... `</blockquote>` — itu penanda kutipan panjang dari sumber lain.",
+            },
+            {
+              pattern: "<cite>\\s*Tim Peters\\s*</cite>",
+              message:
+                "Sebutkan sumbernya dengan `<cite>Tim Peters</cite>`, bukan paragraf biasa.",
+            },
+            {
+              pattern: "<pre>[\\s\\S]*<code>[\\s\\S]*\\n[\\s\\S]*</code>[\\s\\S]*</pre>",
+              message:
+                "Untuk kode berbaris banyak, gabungkan keduanya: `<pre><code>` di awal dan `</code></pre>` di akhir. `pre` menjaga baris dan spasinya, `code` menyatakan bahwa isinya kode.",
+            },
+          ],
+          solution:
+            "<blockquote>\n" +
+            "  <p>Sederhana lebih baik daripada rumit.</p>\n" +
+            "  <cite>Tim Peters</cite>\n" +
+            "</blockquote>\n\n" +
+            "<pre><code>const nama = \"Bimo\";\nconsole.log(nama);</code></pre>",
+        },
+        {
           kind: "quiz",
           id: "html-2-kuis",
           title: "Kuis: Semantic HTML",
@@ -649,7 +1226,7 @@ export const htmlTrack: Track = {
               ],
               answerIndex: 1,
               explanation:
-                "Tepat satu <main> per halaman. Screen reader menyediakan shortcut 'lompat ke main content' — kalau ada lebih dari satu, shortcut itu jadi ambigu dan aksesibilitas rusak.",
+                "Tepat satu <main> per halaman, karena screen reader menyediakan pintasan 'lompat ke konten utama' yang kehilangan artinya kalau ada dua kandidat. Pilihan \"sebanyak bagian utama yang ada\" menggoda justru karena namanya terdengar seperti \"bagian penting\" — padahal <main> berarti \"inti halaman ini\", dan halaman hanya punya satu inti. Kalau kamu butuh membagi isinya, pakai <section> atau <article> di dalam <main>. Perlu dicatat: <header> dan <footer> justru boleh muncul beberapa kali, misalnya di dalam tiap <article>.",
             },
             {
               id: "q3",
@@ -710,6 +1287,51 @@ export const htmlTrack: Track = {
         "picture & source untuk responsive image",
       ],
       items: [
+        {
+          kind: "materi",
+          id: "html-3-m1",
+          title: "Tabel untuk Data, Media untuk Isi Berat",
+          body:
+            "# Pengertian\n\n" +
+            "Modul ini menggabungkan dua hal yang tampaknya tidak berhubungan, tapi punya satu kesamaan: keduanya sering dipakai untuk tujuan yang salah.\n\n" +
+            "**Tabel** dipakai untuk *data tabular* — data yang hubungan baris dan kolomnya bermakna, seperti laporan penjualan atau jadwal. Dulu, sebelum ada CSS layout, orang memakai tabel untuk mengatur tata letak halaman. Praktik itu sudah lama ditinggalkan karena tabel tidak bisa menyesuaikan diri di layar HP dan membuat screen reader membacakan urutan yang membingungkan.\n\n" +
+            "**Media** (gambar, video, audio, peta yang disematkan) adalah bagian terberat dari hampir semua halaman. Cara kamu menuliskannya menentukan apakah halamanmu terasa cepat atau membuat orang menutup tab sebelum isinya muncul.\n\n" +
+            "## Anatomi Tabel\n\n" +
+            "```text\n" +
+            "<table>\n" +
+            "  <caption>       judul resmi tabel, dibacakan lebih dulu\n" +
+            "  <thead>         kepala tabel\n" +
+            "    <tr>          satu baris\n" +
+            "      <th>        sel kepala (mengumumkan konteks kolom)\n" +
+            "  <tbody>         isi tabel\n" +
+            "    <tr>\n" +
+            "      <td>        sel data biasa\n" +
+            "  <tfoot>         baris ringkasan/total\n" +
+            "</table>\n" +
+            "```\n\n" +
+            "Urutan penulisan yang wajib diingat: `<caption>` harus menjadi elemen **pertama** di dalam `<table>`. Sisanya mengikuti urutan wajar dari atas ke bawah.\n\n" +
+            "Kenapa `<th>` penting padahal cuma terlihat tebal? Karena saat pengguna screen reader berpindah antar sel, perangkatnya mengumumkan header terkait: alih-alih mendengar \"20\", ia mendengar \"Umur: 20\". Tanpa `<th>`, tabel berisi angka menjadi hampir tidak bisa dipahami tanpa melihat layar.\n\n" +
+            "## Tiga Elemen Media dan Atribut Wajibnya\n\n" +
+            "| Elemen | Untuk | Yang sering terlupa |\n" +
+            "|---|---|---|\n" +
+            "| `<img>` | gambar statis | `alt` — deskripsi teksnya |\n" +
+            "| `<video>` / `<audio>` | media yang diputar | `controls` — tanpa ini tidak ada tombol play |\n" +
+            "| `<iframe>` | menyematkan halaman lain | `title` dan `loading=\"lazy\"` |\n\n" +
+            "Sebagian atribut HTML tidak punya nilai, hanya ada atau tidak ada — namanya **boolean attribute**. `controls`, `muted`, `autoplay`, dan `required` termasuk di dalamnya. Menuliskan `controls=\"true\"` tidak salah secara teknis, tapi tidak perlu, dan `controls=\"false\"` justru menyesatkan: atributnya tetap dianggap ada, jadi tombolnya tetap muncul.\n\n" +
+            "## Kenapa Autoplay-mu Tidak Jalan\n\n" +
+            "> Browser modern **memblokir** video yang memutar sendiri bila ada suaranya. Autoplay hanya diizinkan kalau videonya di-*mute*, atau kalau pengguna sudah berinteraksi dengan halaman. Aturan ini lahir dari pengalaman buruk bersama: suara yang menyala sendiri di kantor atau di tempat umum. Jadi kalau autoplay-mu \"tidak berfungsi\", periksa `muted` sebelum mencari kesalahan lain.\n\n" +
+            "## Analogi Dunia Nyata\n\n" +
+            "Tabel itu seperti **spreadsheet**: gunanya ketika setiap angka punya arti dari perpotongan baris dan kolomnya. Memakai tabel untuk menata halaman sama seperti menyusun tata letak brosur dengan sel-sel Excel — bisa saja jadi, tapi begitu ukuran kertasnya berubah, semuanya berantakan.\n\n" +
+            "Sedangkan `loading=\"lazy\"` itu seperti **menyiapkan hidangan saat tamu mendekati meja**, bukan memasak seluruh menu sebelum tamu pertama duduk. Halaman jadi siap dilihat lebih cepat, dan yang tidak pernah discroll tidak pernah dimuat.\n\n" +
+            "## Jebakan yang Sering Terjadi\n\n" +
+            "1. **Tabel untuk tata letak.** Rusak di HP, membingungkan screen reader. Untuk tata letak, tunggu materi Flexbox dan Grid di track CSS.\n" +
+            "2. **Jumlah kolom tidak seimbang setelah `colspan`.** Satu sel dengan `colspan=\"2\"` menghitung sebagai dua kolom; kalau totalnya tidak sama dengan baris lain, tabelnya tampil miring.\n" +
+            "3. **`<th>` diganti `<td>` lalu ditebalkan dengan CSS.** Tampilannya sama, maknanya hilang.\n" +
+            "4. **Mengunggah video besar langsung ke halaman.** Untuk video panjang, sematkan dari layanan video; `<video>` cocok untuk klip pendek.\n" +
+            "5. **`<iframe>` tanpa `title`.** Screen reader hanya menyebut \"frame\" tanpa tahu isinya — temuan yang langsung ketangkap alat audit.\n\n" +
+            "## Kaitan ke Dunia Kerja\n\n" +
+            "> **Kapan dipakai:** tabel muncul di hampir semua halaman admin dan laporan — bagian aplikasi yang paling sering dikerjakan developer pemula di perusahaan. Sementara media adalah pos terbesar dalam audit performa: `loading=\"lazy\"` dan ukuran gambar yang wajar hampir selalu jadi dua rekomendasi pertama Lighthouse, alat audit yang dipakai tim frontend untuk mengukur kecepatan halaman.",
+        },
         {
           kind: "step",
           id: "html-3-1",
@@ -814,7 +1436,7 @@ export const htmlTrack: Track = {
             code: '<audio src="lagu.mp3" controls></audio>',
             output:
               "Muncul pemutar audio kecil dengan tombol play, slider posisi, dan volume.",
-            note: "controls adalah atribut tanpa nilai (boolean attribute) — cukup ditulis namanya saja, tidak perlu controls=\"true\".",
+            note: "controls adalah atribut tanpa nilai (boolean attribute) — cukup ditulis namanya saja, tidak perlu controls=\"true\". Catatan preview: berkas `film.mp4` tidak ada di panel preview, jadi pemutarnya tampil kosong atau bertanda gagal memuat. Yang dinilai di step ini adalah penulisan elemennya.",
           },
           instruction:
             "Buat elemen `<video>` dengan atribut `src` berisi `film.mp4` dan atribut `controls`.",
@@ -877,7 +1499,7 @@ export const htmlTrack: Track = {
             code: '<picture>\n  <source srcset="foto-lebar.jpg" media="(min-width: 1200px)">\n  <img src="foto-kecil.jpg" alt="Foto produk">\n</picture>',
             output:
               "Di layar sangat lebar browser memakai foto-lebar.jpg; di layar lain memakai foto-kecil.jpg.",
-            note: "img di dalam picture WAJIB ada — dialah yang benar-benar ditampilkan, source hanya memberi alternatif.",
+            note: "img di dalam picture WAJIB ada — dialah yang benar-benar ditampilkan, source hanya memberi alternatif. Catatan preview: berkas `besar.jpg` dan `kecil.jpg` tidak ada, jadi yang muncul ikon gambar rusak. Itu wajar; yang diperiksa adalah struktur elemennya.",
           },
           instruction:
             "Buat `<picture>` dengan satu `<source>` (`srcset` = `besar.jpg`, `media` = `(min-width: 800px)`) dan `<img>` fallback (`src` = `kecil.jpg`, `alt` = `Banner`).",
@@ -928,7 +1550,7 @@ export const htmlTrack: Track = {
               choices: ["autoplay", "controls", "buttons", "player"],
               answerIndex: 1,
               explanation:
-                "Tanpa controls, elemen video muncul tapi pengguna tidak punya cara memainkannya. Ini juga soal aksesibilitas: pengguna harus selalu bisa menghentikan media.",
+                "Tanpa `controls`, elemen video tetap ada di halaman tapi pengguna tidak punya satu pun cara memainkan atau menghentikannya — gejalanya terlihat seperti kotak kosong. Ini juga soal aksesibilitas: pengguna harus selalu bisa menghentikan media, terutama yang bersuara. Pilihan `autoplay` menggoda karena kelihatannya menyelesaikan masalah \"videonya tidak jalan\", padahal ia justru memainkan video tanpa memberi tombol untuk menghentikannya — dan browser modern pun memblokirnya kecuali videonya di-mute.",
             },
             {
               id: "q3",
@@ -968,7 +1590,7 @@ export const htmlTrack: Track = {
               choices: ["defer", 'loading="lazy"', "async", "delay"],
               answerIndex: 1,
               explanation:
-                'loading="lazy" menunda pemuatan iframe/gambar di luar viewport. Ini salah satu perbaikan performa termurah dan sering jadi rekomendasi pertama audit Lighthouse.',
+                'loading="lazy" menunda pemuatan iframe atau gambar yang berada di luar layar sampai pengguna hampir men-scroll ke sana. Ini salah satu perbaikan performa termurah dan sering jadi rekomendasi pertama audit Lighthouse. Tiga pengecohnya sengaja diambil dari atribut yang benar-benar ada di HTML: `defer` dan `async` mengatur kapan berkas JavaScript dijalankan lewat `<script>`, bukan kapan sesuatu dimuat pada iframe — mudah tertukar karena ketiganya sama-sama soal penundaan. `delay` tidak ada sama sekali.',
             },
           ],
         },
@@ -991,6 +1613,70 @@ export const htmlTrack: Track = {
         "Autocomplete & inputmode untuk UX mobile",
       ],
       items: [
+        {
+          kind: "materi",
+          id: "html-4-m1",
+          title: "Formulir: Tempat Pengguna Mengirim Data",
+          body:
+            "# Pengertian\n\n" +
+            "Formulir adalah satu-satunya bagian HTML yang **mengirim sesuatu keluar**. Semua yang kamu pelajari sebelumnya menampilkan isi; formulir mengumpulkan isian pengguna lalu menyerahkannya ke server. Login, pendaftaran, pencarian, checkout, unggah berkas — semuanya formulir.\n\n" +
+            "Karena itu modul ini terasa berbeda: kesalahan di sini bukan cuma soal tampilan, tapi soal data yang hilang atau bocor.\n\n" +
+            "## Alur Sebuah Formulir\n\n" +
+            "```text\n" +
+            "pengguna mengisi input\n" +
+            "        |\n" +
+            "        |  klik tombol submit\n" +
+            "        v\n" +
+            "browser mengumpulkan pasangan  name=\"...\"  ->  nilai isian\n" +
+            "        |                       ^^^^\n" +
+            "        |            input TANPA name tidak ikut terkirim\n" +
+            "        v\n" +
+            "dikirim ke alamat pada  action  dengan cara pada  method\n" +
+            "        |\n" +
+            "        v\n" +
+            "server memproses, lalu membalas halaman berikutnya\n" +
+            "```\n\n" +
+            "Satu baris di tengah diagram itu adalah sumber bug paling sering di formulir: **`name` adalah kunci pengiriman.** Input tanpa `name` tampil normal, bisa diisi, bisa divalidasi — tapi nilainya tidak pernah sampai ke server. Sedangkan `id` sama sekali bukan penggantinya: `id` dipakai untuk menghubungkan label, CSS, dan JavaScript.\n\n" +
+            "## GET atau POST\n\n" +
+            "| | `method=\"get\"` | `method=\"post\"` |\n" +
+            "|---|---|---|\n" +
+            "| Data dikirim lewat | alamat URL, terlihat semua orang | badan permintaan, tidak tampil di URL |\n" +
+            "| Bisa di-bookmark | ya | tidak |\n" +
+            "| Cocok untuk | pencarian, penyaringan, urutan tampilan | login, pendaftaran, pembelian, apa pun yang mengubah data |\n\n" +
+            "> **Jangan pernah** memakai GET untuk kata sandi. Nilainya akan tercatat di riwayat browser, log server, dan header Referer situs berikutnya — tiga tempat yang tidak pernah kamu bersihkan.\n\n" +
+            "## Label Bukan Hiasan\n\n" +
+            "```text\n" +
+            "<label for=\"kota\">Kota</label>\n" +
+            "           ^^^^\n" +
+            "           harus sama persis\n" +
+            "           vvvv\n" +
+            "<input id=\"kota\" name=\"kota\">\n" +
+            "```\n\n" +
+            "Pasangan `for` dan `id` inilah yang membuat: (1) mengeklik tulisan \"Kota\" langsung memfokuskan kursor ke kotaknya — target sentuh jadi jauh lebih besar di HP, dan (2) screen reader menyebutkan \"Kota, kotak isian\" saat pengguna sampai di sana. Tanpa pasangan itu, pengguna screen reader hanya mendengar \"kotak isian\" tanpa tahu harus mengisi apa.\n\n" +
+            "`placeholder` **bukan** pengganti label. Ia hilang begitu pengguna mulai mengetik, kontrasnya biasanya rendah, dan pada formulir panjang orang lupa kolom yang sedang ia isi.\n\n" +
+            "## Peta Cepat Isian Formulir\n\n" +
+            "| Elemen / atribut | Dipakai untuk |\n" +
+            "|---|---|\n" +
+            "| `<input type=\"text\">` | teks satu baris |\n" +
+            "| `<input type=\"email\">` | alamat email; di HP memunculkan tombol @ |\n" +
+            "| `<input type=\"tel\">` | nomor telepon; papan ketik angka besar |\n" +
+            "| `<input type=\"date\">` | pemilih tanggal bawaan sistem |\n" +
+            "| `<textarea>` | teks panjang; nilainya di antara tag, bukan di `value` |\n" +
+            "| `<select>` + `<option>` | pilihan dari daftar |\n" +
+            "| `<input type=\"radio\">` | pilih satu dari beberapa; `name` harus sama |\n" +
+            "| `<input type=\"checkbox\">` | boleh pilih beberapa sekaligus |\n" +
+            "| `<fieldset>` + `<legend>` | mengelompokkan dan memberi judul kelompok |\n\n" +
+            "## Analogi Dunia Nyata\n\n" +
+            "Formulir HTML itu seperti **formulir kertas di loket bank**. `name` adalah nama kolom yang dibaca petugas — kolom tanpa nama akan diabaikan meski kamu mengisinya. `label` adalah tulisan di sebelah kolom; tanpanya kamu menebak-nebak apa yang diminta. `required` adalah petugas yang mengembalikan formulirmu di loket karena ada kolom kosong. Dan validasi server adalah pemeriksaan di belakang meja — karena petugas loket bisa kamu lewati, tapi bagian verifikasi tidak.\n\n" +
+            "## Jebakan yang Sering Terjadi\n\n" +
+            "1. **Input tanpa `name`.** Datanya tidak terkirim. Ini bug nomor satu di formulir buatan pemula.\n" +
+            "2. **Radio dengan `name` berbeda-beda.** Semuanya bisa aktif bersamaan, dan gejalanya terlihat seperti kerusakan aneh.\n" +
+            "3. **`<button>` tanpa `type` di dalam form.** Default-nya `submit`, jadi halaman ikut terkirim — penyebab klasik \"halaman refresh sendiri saat aku klik tombol\".\n" +
+            "4. **`placeholder` sebagai satu-satunya keterangan.** Hilang saat diisi, dan buruk untuk aksesibilitas.\n" +
+            "5. **Mengandalkan validasi HTML sebagai keamanan.** Siapa pun bisa menghapus `required` lewat DevTools atau mengirim permintaan tanpa browser sama sekali.\n\n" +
+            "## Kaitan ke Dunia Kerja\n\n" +
+            "> **Kapan dipakai:** hampir semua tugas pertama developer baru menyentuh formulir — halaman login, form pendaftaran, halaman pengaturan. Dan satu aturan dari modul ini akan ditanyakan di interview backend maupun frontend: **validasi di sisi klien adalah kenyamanan, bukan keamanan; server wajib memvalidasi ulang.** Yang membedakan pemula dan profesional di sini bukan kemampuan membuat formulirnya tampil, tapi kesadaran bahwa datanya bisa dikirim orang yang tidak memakai halamanmu.",
+        },
         {
           kind: "step",
           id: "html-4-1",
@@ -1099,10 +1785,20 @@ export const htmlTrack: Track = {
           explanation:
             "`<textarea>` dipakai untuk teks panjang, dan nilainya ditulis di antara tag pembuka dan penutup — bukan di atribut `value` seperti input biasa. `<select>` berisi elemen `<option>`, di mana atribut `value` adalah yang dikirim ke server sementara teks di dalamnya yang dibaca pengguna. Membedakan keduanya penting supaya nilai di database tetap stabil meski labelnya diubah. Jangan lupa memberi `name` pada keduanya, karena tanpa `name` isinya tidak ikut terkirim sama sekali.",
           example: {
-            code: '<textarea name="catatan">Isi awal</textarea>\n\n<select name="ukuran">\n  <option value="s">Small</option>\n  <option value="l">Large</option>\n</select>',
+            code:
+              '<textarea name="catatan">Isi awal</textarea>\n\n' +
+              '<select name="ukuran">\n' +
+              '  <optgroup label="Kaos">\n' +
+              '    <option value="s">Small</option>\n' +
+              '    <option value="l">Large</option>\n' +
+              '  </optgroup>\n' +
+              '  <optgroup label="Jaket">\n' +
+              '    <option value="j-m">Medium</option>\n' +
+              '  </optgroup>\n' +
+              "</select>",
             output:
-              "Kotak teks besar berisi 'Isi awal', dan dropdown berisi pilihan Small/Large.",
-            note: "Yang dikirim ke server adalah value option (s atau l), bukan teks yang dilihat user (Small/Large).",
+              "Kotak teks besar berisi 'Isi awal', lalu dropdown yang isinya terbagi dua kelompok berjudul 'Kaos' dan 'Jaket'. Judul kelompoknya tampil abu-abu dan tidak bisa dipilih.",
+            note: "Yang dikirim ke server adalah value option (s, l, atau j-m), bukan teks yang dilihat user. `<optgroup label=\"...\">` hanya mengelompokkan tampilan daftar — ia tidak ikut terkirim dan tidak bisa dipilih.",
           },
           instruction:
             "Buat `<textarea>` dengan `name=\"pesan\"`, dan `<select>` dengan `name=\"kota\"` yang punya dua `<option>`: value `jkt` (teks `Jakarta`) dan value `bdg` (teks `Bandung`).",
@@ -1136,10 +1832,16 @@ export const htmlTrack: Track = {
           explanation:
             "Radio button menjadi satu kelompok hanya jika atribut `name`-nya sama persis — itulah yang membuat memilih satu otomatis membatalkan pilihan lain. Kalau `name`-nya berbeda, semuanya bisa aktif bersamaan dan tampak seperti bug yang sulit dilacak. Setiap radio wajib punya `value` berbeda, karena nilai itulah yang dikirim ke server, bukan teks yang terlihat. Kalau pengguna boleh memilih lebih dari satu, yang kamu butuhkan adalah checkbox, bukan radio.",
           example: {
-            code: '<input type="radio" name="bayar" value="transfer"> Transfer\n<input type="radio" name="bayar" value="cod"> COD',
+            code:
+              '<!-- radio: name sama, hanya satu boleh aktif -->\n' +
+              '<input type="radio" name="bayar" value="transfer"> Transfer\n' +
+              '<input type="radio" name="bayar" value="cod"> COD\n\n' +
+              '<!-- checkbox: name sama juga, tapi boleh dipilih beberapa -->\n' +
+              '<input type="checkbox" name="hobi" value="baca"> Membaca\n' +
+              '<input type="checkbox" name="hobi" value="koding"> Koding',
             output:
-              "Dua bulatan pilihan. Memilih 'COD' otomatis membatalkan 'Transfer' — hanya satu yang bisa aktif.",
-            note: "Yang membuatnya satu grup adalah name=\"bayar\" yang IDENTIK. Kalau name-nya beda, keduanya bisa aktif bersamaan.",
+              "Dua bulatan dan dua kotak centang. Memilih 'COD' otomatis membatalkan 'Transfer', sedangkan kedua kotak centang bisa aktif bersamaan dan server menerima dua nilai untuk name hobi.",
+            note: "Yang membuatnya satu grup adalah name yang IDENTIK — untuk radio artinya \"pilih satu\", untuk checkbox artinya \"nilai-nilai ini satu kelompok\". Kalau name-nya beda, radio bisa aktif bersamaan dan itu terlihat seperti kerusakan.",
           },
           instruction:
             "Buat dua radio dengan `name=\"gender\"`: satu `value=\"L\"`, satu `value=\"P\"`.",
@@ -1164,12 +1866,20 @@ export const htmlTrack: Track = {
           id: "html-4-6",
           title: "Validasi bawaan browser",
           explanation:
-            "Browser bisa memvalidasi sebelum form terkirim: `required` (wajib diisi), `minlength`, `pattern` (regex). Ini gratis dan instan. **Tapi ingat:** validasi HTML hanya untuk kenyamanan user — bisa dilewati lewat DevTools, jadi server **wajib** memvalidasi ulang. Ini prinsip keamanan yang selalu ditanya di interview backend.",
+            "Browser sudah bisa memeriksa isian sebelum formulir dikirim, tanpa satu baris JavaScript pun. Alatnya berupa atribut: `required` mewajibkan isian, `minlength` dan `maxlength` membatasi panjang teks, `min` dan `max` membatasi nilai angka atau tanggal, sedangkan `pattern` memeriksa bentuk isian dengan pola *regex* — misalnya `pattern=\"[0-9]{5}\"` untuk kode pos lima angka. Pesan kesalahannya dibuat browser sendiri dan otomatis mengikuti bahasa perangkat pengguna. **Tapi ini yang wajib kamu ingat seumur hidup:** validasi seperti ini adalah kenyamanan, bukan keamanan. Siapa pun bisa menghapus atribut `required` lewat DevTools dalam dua detik, atau mengirim permintaan langsung ke servermu tanpa memakai browser sama sekali — karena itu server **wajib** memvalidasi ulang semuanya. Prinsip ini punya nama yang sering muncul di interview: *never trust the client*.",
           example: {
-            code: '<input type="text" name="kode" required maxlength="5">\n<input type="number" name="umur" min="17" max="100">',
+            code:
+              '<!-- wajib diisi, maksimal 5 karakter -->\n' +
+              '<input type="text" name="kode" required maxlength="5">\n\n' +
+              '<!-- hanya menerima angka, rentang 17 sampai 100 -->\n' +
+              '<input type="number" name="umur" min="17" max="100">\n\n' +
+              '<!-- pattern: harus tepat 5 angka, mis. kode pos -->\n' +
+              '<input type="text" name="kodepos" pattern="[0-9]{5}" title="Isi 5 angka">',
             output:
-              "Submit dengan kode kosong memunculkan pesan browser 'Please fill out this field'. Umur di bawah 17 juga ditolak.",
-            note: "Pesan validasinya otomatis dan mengikuti bahasa browser user — kamu tidak perlu menulisnya sendiri.",
+              "Menekan submit dengan kode kosong memunculkan pesan bawaan browser 'Please fill out this field'.\n" +
+              "Umur 15 ditolak dengan pesan 'Value must be greater than or equal to 17'.\n" +
+              "Kode pos '123' ditolak, dan isi atribut title ditampilkan sebagai petunjuk.",
+            note: "Isi `title` pada input ber-`pattern` dipakai browser sebagai penjelasan tambahan saat isiannya salah — tanpa itu pesannya terasa membingungkan bagi pengguna.",
           },
           instruction:
             "Buat input `type=\"text\"` dengan `name=\"username\"`, atribut `required`, dan `minlength=\"3\"`.",
@@ -1221,6 +1931,56 @@ export const htmlTrack: Track = {
           ],
           solution:
             '<form action="/daftar" method="post">\n  <fieldset>\n    <legend>Data Diri</legend>\n    <label for="nama">Nama</label>\n    <input type="text" id="nama" name="nama" required>\n  </fieldset>\n  <button type="submit">Kirim</button>\n</form>',
+        },
+        {
+          kind: "step",
+          id: "html-4-8",
+          title: "autocomplete dan inputmode untuk Pengisian di HP",
+          explanation:
+            "Dua atribut ini tidak mengubah tampilan sama sekali, tapi berdampak besar pada seberapa cepat orang selesai mengisi formulirmu di ponsel. `autocomplete` memberi tahu browser jenis data yang diminta — `autocomplete=\"email\"`, `\"name\"`, `\"tel\"`, `\"street-address\"`, atau `\"one-time-code\"` untuk kode OTP — sehingga browser dan pengelola kata sandi bisa menawarkan isian yang sudah pernah disimpan pengguna. `inputmode` mengatur **papan ketik** yang muncul tanpa mengubah tipe inputnya: `inputmode=\"numeric\"` memunculkan tombol angka besar untuk hal seperti NIK atau kode pos, sementara inputnya tetap `type=\"text\"` sehingga angka nol di depan tidak hilang dan tidak ada tombol naik-turun yang mengganggu. Jebakan yang perlu dihindari: mematikan autocomplete di seluruh formulir dengan alasan keamanan. Kebiasaan itu justru mendorong orang memakai kata sandi yang mudah diingat, dan pedoman aksesibilitas menganggapnya penghalang bagi pengguna dengan keterbatasan motorik.",
+          example: {
+            code:
+              '<label for="nm">Nama lengkap</label>\n' +
+              '<input type="text" id="nm" name="nama" autocomplete="name">\n\n' +
+              '<label for="kp">Kode pos</label>\n' +
+              '<input type="text" id="kp" name="kodepos"\n' +
+              '       inputmode="numeric" autocomplete="postal-code">',
+            output:
+              "Di ponsel, isian nama menawarkan saran nama yang tersimpan di browser. Isian kode pos memunculkan papan ketik angka, tapi tetap menerima '01234' tanpa membuang angka nol di depannya.",
+            note: "Pakai `type=\"text\"` + `inputmode=\"numeric\"` untuk nomor yang bukan untuk dihitung (NIK, kode pos, nomor rekening). `type=\"number\"` cocok hanya untuk nilai yang benar-benar dihitung.",
+          },
+          instruction:
+            "Formulir checkout di editor punya satu isian nomor telepon. Lengkapi input itu dengan dua atribut: satu yang memberi tahu browser jenis data ini agar isian tersimpan bisa ditawarkan, dan satu lagi yang memunculkan papan ketik angka di ponsel tanpa mengubah tipe inputnya.",
+          starterCode:
+            '<form action="/checkout" method="post">\n' +
+            '  <label for="hp">Nomor HP</label>\n' +
+            '  <input type="text" id="hp" name="telepon">\n' +
+            "</form>\n",
+          language: "html",
+          tests: [
+            {
+              pattern: '<input[^>]*autocomplete="tel"[^>]*>',
+              message:
+                'Tambahkan `autocomplete="tel"` — nilainya adalah nama jenis data, dan untuk nomor telepon namanya `tel`.',
+            },
+            {
+              pattern: '<input[^>]*inputmode="numeric"[^>]*>',
+              message:
+                'Tambahkan `inputmode="numeric"` agar papan ketik angka muncul di ponsel, sementara `type` tetap `text`.',
+            },
+            {
+              pattern: '<input[^>]*type="number"[^>]*>',
+              mustNotMatch: true,
+              message:
+                'Jangan mengganti tipenya menjadi `number`. Nomor telepon bukan nilai yang dihitung, dan `type="number"` akan membuang angka nol di depan serta menampilkan tombol naik-turun.',
+            },
+          ],
+          solution:
+            '<form action="/checkout" method="post">\n' +
+            '  <label for="hp">Nomor HP</label>\n' +
+            '  <input type="text" id="hp" name="telepon"\n' +
+            '         autocomplete="tel" inputmode="numeric">\n' +
+            "</form>",
         },
         {
           kind: "quiz",
@@ -1314,6 +2074,53 @@ export const htmlTrack: Track = {
       ],
       items: [
         {
+          kind: "materi",
+          id: "html-5-m1",
+          title: "Aksesibilitas: Halaman yang Bisa Dipakai Tanpa Melihat Layar",
+          body:
+            "# Pengertian\n\n" +
+            "**Aksesibilitas** (sering disingkat *a11y* — huruf a, sebelas huruf, huruf y) berarti halamanmu tetap bisa dipakai oleh orang yang tidak memakainya dengan cara yang kamu bayangkan: tanpa melihat layar, tanpa memakai tetikus, dengan tangan yang gemetar, atau di bawah sinar matahari yang membuat kontras rendah tidak terbaca.\n\n" +
+            "Ini bukan topik amal. Sebagian besar pekerjaannya sudah selesai kalau kamu memakai elemen HTML yang benar — yang justru butuh usaha adalah *merusaknya*, misalnya dengan membuat tombol dari `<div>`.\n\n" +
+            "## Bagaimana Screen Reader Membaca Halamanmu\n\n" +
+            "*Screen reader* adalah perangkat lunak yang membacakan isi layar dengan suara. Yang perlu kamu tahu: ia tidak membaca halaman sebagai gambar, melainkan sebagai **daftar berurutan** yang bisa dilompati.\n\n" +
+            "```text\n" +
+            "pengguna menekan:      screen reader menyebutkan:\n" +
+            "-------------------    ---------------------------------------\n" +
+            "Tab                    elemen interaktif berikutnya (tautan, tombol, input)\n" +
+            "daftar heading         \"Panduan Belajar, tingkat 1\" ... \"Bagian Pertama, tingkat 2\"\n" +
+            "daftar landmark        \"navigasi\", \"konten utama\", \"footer\"\n" +
+            "sampai di gambar       isi atribut alt — atau nama berkasnya kalau alt tidak ada\n" +
+            "sampai di tombol ikon  \"tombol\" saja, kalau tidak ada nama yang bisa diakses\n" +
+            "```\n\n" +
+            "Dari tabel itu terbaca dua hal sekaligus: kenapa hierarki heading dan landmark penting, dan kenapa `alt` serta nama tombol bukan sekadar formalitas.\n\n" +
+            "## Empat Hal yang Menutup Sebagian Besar Masalah\n\n" +
+            "| Hal | Aturan praktisnya |\n" +
+            "|---|---|\n" +
+            "| Teks alternatif | `alt` menjawab \"informasi apa yang hilang kalau gambar tidak muncul\"; gambar hiasan pakai `alt=\"\"` |\n" +
+            "| Struktur heading | turun satu tingkat setiap kali, jangan melompat, satu `h1` per halaman |\n" +
+            "| Elemen native | tautan pakai `<a>`, tombol pakai `<button>` — jangan `<div>` yang dipaksa |\n" +
+            "| Nama yang bisa diakses | tombol ikon butuh `aria-label`; input butuh `<label>` |\n\n" +
+            "## Navigasi Keyboard\n\n" +
+            "Cobalah sekarang: buka halaman apa pun, lalu tekan Tab beberapa kali tanpa menyentuh tetikus. Kotak fokus akan berpindah antar tautan dan tombol. Dua hal yang perlu kamu perhatikan seumur hidup sebagai developer:\n\n" +
+            "- **Fokusnya harus kelihatan.** Menghilangkan garis fokus dengan CSS (`outline: none`) tanpa menggantinya membuat pengguna keyboard tidak tahu sedang berada di mana.\n" +
+            "- **Urutannya harus wajar.** Urutan Tab mengikuti urutan elemen di HTML, bukan urutan posisi di layar. Kalau kamu memindahkan sesuatu secara visual dengan CSS, urutan Tab-nya tidak ikut berpindah.\n\n" +
+            "## Kontras dan Ukuran Target Sentuh\n\n" +
+            "Dua ukuran yang dipakai sebagai patokan di industri, keduanya berasal dari pedoman WCAG:\n\n" +
+            "- **Kontras teks minimal 4,5:1** dibanding latarnya untuk teks berukuran biasa. Teks abu-abu muda di atas putih adalah pelanggaran paling umum — dan yang pertama mengeluh biasanya bukan penyandang disabilitas, tapi pengguna biasa di bawah sinar matahari.\n" +
+            "- **Target sentuh minimal sekitar 44x44 piksel.** Tautan yang berdempetan di HP membuat orang salah tekan. Ini juga alasan praktis kenapa `<label>` yang terhubung ke input begitu berharga: seluruh tulisan labelnya ikut jadi area yang bisa disentuh.\n\n" +
+            "## Aturan Pertama ARIA\n\n" +
+            "ARIA adalah sekumpulan atribut tambahan (`role`, `aria-label`, `aria-hidden`) untuk menjelaskan hal-hal yang tidak bisa dinyatakan HTML biasa. Aturan pertamanya, ditulis di spesifikasinya sendiri, terdengar mengejutkan:\n\n" +
+            "> **Jangan pakai ARIA kalau ada elemen HTML yang sudah sesuai.**\n\n" +
+            "`<div role=\"button\" tabindex=\"0\">` butuh JavaScript tambahan supaya bisa ditekan dengan Enter dan Space, dan bagian itulah yang paling sering terlupa. `<button>` memberikan semuanya gratis. ARIA yang dipakai setengah jalan lebih buruk daripada tidak memakai ARIA sama sekali, karena ia menjanjikan perilaku yang tidak ada.\n\n" +
+            "## Analogi Dunia Nyata\n\n" +
+            "Aksesibilitas itu seperti **ramp dan lift di gedung**. Dibangun sejak awal, biayanya kecil dan hampir tidak terlihat. Ditambahkan setelah gedung berdiri, ia mahal, jelek, dan sering diletakkan di pintu belakang. Yang menariknya: yang paling sering memakai ramp bukan pengguna kursi roda, melainkan orang yang mendorong troli atau koper — persis seperti `alt` yang membantu mesin pencari, dan `<label>` yang membantu semua orang di layar HP.\n\n" +
+            "## Cara Memeriksa Pekerjaanmu\n\n" +
+            "1. **Lighthouse** — sudah ada di Chrome DevTools, tab *Lighthouse*. Jalankan, lihat bagian Accessibility. Ia menangkap masalah mekanis: kontras rendah, gambar tanpa alt, tombol tanpa nama.\n" +
+            "2. **axe DevTools** — ekstensi gratis, temuannya lebih rinci beserta cara memperbaikinya.\n" +
+            "3. **Tab tanpa tetikus** — pemeriksaan paling murah dan paling sering menemukan masalah nyata yang tidak tertangkap alat.\n\n" +
+            "> **Kapan dipakai di dunia kerja:** untuk situs pemerintah dan perusahaan besar, aksesibilitas sering menjadi kewajiban kontrak atau hukum. Di lowongan frontend, *a11y* makin sering muncul di daftar syarat, dan pertanyaan interview yang khas bukan \"apa itu ARIA\" melainkan \"kenapa `<div onclick>` bermasalah\" — pertanyaan yang langsung memisahkan orang yang menyalin pola dari orang yang paham akibatnya.",
+        },
+        {
           kind: "step",
           id: "html-5-1",
           title: "Alt text yang bermanfaat",
@@ -1349,7 +2156,7 @@ export const htmlTrack: Track = {
           id: "html-5-2",
           title: "Hierarki heading tanpa lompat",
           explanation:
-            "Pengguna screen reader sering menavigasi dengan **melompat antar heading** — seperti membaca daftar isi. Karena itu heading tidak boleh melompat tingkat (h1 → h3 tanpa h2), dan **jangan pilih heading berdasarkan ukuran font**. Butuh teks kecil? Atur dengan CSS, bukan dengan menurunkan tingkat heading.",
+            "Pengguna screen reader jarang mendengarkan halaman dari awal sampai akhir; mereka membuka daftar heading lalu **melompat** ke bagian yang dicari, persis seperti kamu melirik daftar isi buku. Daftar itu hanya berguna kalau tingkatannya konsisten, karena tingkat heading menyatakan hubungan induk-anak: `h3` berarti \"sub-bagian dari h2 di atasnya\". Begitu kamu melompat dari `h1` langsung ke `h5`, perangkatnya mengumumkan tingkat 5 dan penggunanya menyimpulkan ada tiga tingkat bagian yang terlewat — struktur dokumenmu jadi menyesatkan meski tampilannya rapi. Sumber kesalahan ini hampir selalu sama: memilih heading karena **ukuran hurufnya terlihat pas**. Kalau `h2` terasa terlalu besar, kecilkan lewat CSS; tingkat heading ditentukan oleh struktur, bukan oleh selera visual.",
           example: {
             code: "<!-- SALAH: melompat dari h1 ke h5 -->\n<h1>Panduan</h1>\n<h5>Langkah Pertama</h5>\n\n<!-- BENAR: turun satu tingkat -->\n<h1>Panduan</h1>\n<h2>Langkah Pertama</h2>",
             output:
@@ -1368,8 +2175,8 @@ export const htmlTrack: Track = {
                 "Urutannya harus h1, lalu h2, lalu h3 — ganti h4 menjadi h2 dan h6 menjadi h3.",
             },
             {
-              pattern: "^(?![\\s\\S]*<h[456])",
-              flags: "i",
+              pattern: "<h[456]\\b",
+              mustNotMatch: true,
               message:
                 "Masih ada heading h4/h5/h6 yang membuat urutan melompat. Hapus atau ganti jadi tingkat yang benar.",
             },
@@ -1424,7 +2231,8 @@ export const htmlTrack: Track = {
               message: "Gunakan <button>Simpan</button>.",
             },
             {
-              pattern: '^(?![\\s\\S]*role="button")',
+              pattern: 'role="button"',
+              mustNotMatch: true,
               message:
                 'Hapus div dengan role="button" — elemen native <button> sudah membawa peran itu sendiri.',
             },
@@ -1436,7 +2244,7 @@ export const htmlTrack: Track = {
           id: "html-5-5",
           title: "Skip link untuk pengguna keyboard",
           explanation:
-            "Pengguna keyboard harus menekan Tab melewati seluruh menu sebelum mencapai isi halaman — di navigasi besar itu puluhan kali. **Skip link** adalah link pertama di halaman yang melompat langsung ke konten utama. Ia biasanya disembunyikan sampai difokuskan. Targetnya butuh `id` yang cocok.",
+            "Pengguna keyboard berpindah antar elemen dengan menekan Tab, dan urutannya mengikuti urutan elemen di HTML. Akibatnya, sebelum sampai ke isi halaman ia harus melewati seluruh menu lebih dulu — pada navigasi besar itu bisa dua puluh kali tekan, di setiap halaman yang ia buka. **Skip link** menyelesaikan ini: sebuah tautan yang diletakkan paling awal di halaman dan menunjuk ke `id` elemen konten utama, sehingga satu kali Tab lalu Enter sudah memindahkan fokus ke sana. Tautan ini biasanya disembunyikan dengan CSS sampai ia mendapat fokus, jadi pengguna tetikus tidak pernah melihatnya sementara pengguna keyboard menemukannya sebagai perhentian pertama. Yang wajib diperhatikan: nilai `href=\"#konten\"` harus sama persis dengan `id=\"konten\"` pada targetnya — kalau tidak cocok, tautannya tidak melompat ke mana-mana dan tidak ada pesan error apa pun yang memberitahumu.",
           example: {
             code: '<a href="#isi">Langsung ke isi</a>\n<nav>... 20 link menu ...</nav>\n<main id="isi">\n  <h1>Artikel</h1>\n</main>',
             output:
@@ -1464,6 +2272,47 @@ export const htmlTrack: Track = {
           ],
           solution:
             '<a href="#konten">Lewati ke konten</a>\n<nav><a href="/">Beranda</a></nav>\n<main id="konten">\n  <h1>Isi Halaman</h1>\n</main>',
+        },
+        {
+          kind: "step",
+          id: "html-5-6",
+          title: "aria-hidden untuk Ikon yang Tidak Perlu Dibacakan",
+          explanation:
+            "Ikon yang ditulis sebagai karakter atau emoji tetap dibacakan screen reader, dan hasilnya sering aneh: tombol \"Simpan\" berikon disket bisa terdengar sebagai \"disket Simpan\", atau ikon bintang dibacakan namanya satu per satu. `aria-hidden=\"true\"` menyembunyikan sebuah elemen **dari teknologi bantu saja**, tanpa mengubah tampilannya sedikit pun — berbeda dari `hidden` atau `display: none` yang menyembunyikannya dari semua orang. Aturan pemakaiannya cuma satu: pakai hanya saat isinya benar-benar hiasan yang informasinya sudah disampaikan teks di sebelahnya. Jebakan yang berbahaya: memasangnya pada elemen yang bisa difokuskan Tab, misalnya tombol atau tautan. Elemen itu tetap bisa dijangkau keyboard tapi tidak punya nama untuk dibacakan, sehingga penggunanya mendapat perhentian kosong yang membingungkan — inilah alasan `aria-hidden` sebaiknya hanya dipasang pada bagian ikonnya, bukan pada tombolnya.",
+          example: {
+            code:
+              '<!-- ikon ikut dibacakan: "bintang Favorit" -->\n' +
+              "<button>★ Favorit</button>\n\n" +
+              '<!-- ikon disembunyikan dari screen reader saja -->\n' +
+              '<button><span aria-hidden="true">★</span> Favorit</button>',
+            output:
+              "Tampilan kedua tombol identik. Yang pertama dibacakan sebagai 'bintang hitam Favorit, tombol', yang kedua sebagai 'Favorit, tombol'.",
+            note: "aria-hidden menyembunyikan dari screen reader tapi TETAP terlihat di layar. Kalau kamu ingin menyembunyikan dari semua orang, itu tugas `hidden` atau CSS.",
+          },
+          instruction:
+            "Tombol di editor menampilkan ikon panah diikuti teks yang sudah menjelaskan fungsinya, sehingga ikonnya tidak perlu ikut dibacakan. Bungkus karakter ikonnya dengan sebuah `<span>`, lalu sembunyikan span itu dari screen reader tanpa mengubah tampilannya. Jangan menyentuh teks tombolnya.",
+          starterCode: "<button>→ Lanjut ke pembayaran</button>\n",
+          language: "html",
+          tests: [
+            {
+              pattern: '<span[^>]*aria-hidden="true"[^>]*>\\s*→\\s*</span>',
+              message:
+                'Bungkus ikonnya saja: `<span aria-hidden="true">→</span>`. Nilainya harus `true` — `aria-hidden="false"` tidak menyembunyikan apa pun.',
+            },
+            {
+              pattern: "<button[^>]*>[\\s\\S]*Lanjut ke pembayaran[\\s\\S]*</button>",
+              message:
+                "Teks `Lanjut ke pembayaran` harus tetap ada di dalam tombol — itulah nama yang dibacakan screen reader.",
+            },
+            {
+              pattern: '<button[^>]*aria-hidden',
+              mustNotMatch: true,
+              message:
+                "Jangan memasang aria-hidden pada tombolnya. Tombol yang bisa difokuskan Tab tapi tersembunyi dari screen reader menjadi perhentian kosong yang membingungkan — sembunyikan hanya bagian ikonnya.",
+            },
+          ],
+          solution:
+            '<button><span aria-hidden="true">→</span> Lanjut ke pembayaran</button>',
         },
         {
           kind: "quiz",
@@ -1539,7 +2388,7 @@ export const htmlTrack: Track = {
               ],
               answerIndex: 1,
               explanation:
-                "Skip link menghemat puluhan tekanan Tab bagi pengguna keyboard dan screen reader. Ia biasanya disembunyikan sampai mendapat fokus, dan menunjuk ke id elemen main.",
+                "Skip link menghemat puluhan tekanan Tab bagi pengguna keyboard dan screen reader, di setiap halaman yang mereka buka. Ia biasanya disembunyikan sampai mendapat fokus, dan `href`-nya harus cocok persis dengan `id` elemen tujuan. Pilihan tentang kecepatan memuat menggoda karena kata \"skip\" terdengar seperti melewatkan pemuatan sesuatu — padahal tidak ada berkas yang dilewati; yang dipersingkat adalah perjalanan fokus keyboard.",
             },
           ],
         },
@@ -1560,6 +2409,72 @@ export const htmlTrack: Track = {
         "Studi kasus: membedah HTML halaman produksi",
       ],
       items: [
+        {
+          kind: "materi",
+          id: "html-6-m1",
+          title: "Bagian Halaman yang Tidak Terlihat — tapi Paling Menentukan",
+          body:
+            "# Pengertian\n\n" +
+            "Modul ini tentang isi `<head>`: bagian halaman yang tidak pernah dilihat pengunjung, tapi menentukan bagaimana halamanmu tampil di hasil pencarian, bagaimana tautanmu terlihat saat dibagikan di WhatsApp, dan apakah halamanmu terbaca benar di HP.\n\n" +
+            "Inilah bagian yang paling membedakan halaman buatan pemula dan halaman produksi. Bukan karena sulit — justru karena isinya hampir tidak pernah terlihat, jadi mudah dilewatkan.\n\n" +
+            "## Isi Head yang Wajib Ada\n\n" +
+            "```html\n" +
+            "<head>\n" +
+            "  <meta charset=\"UTF-8\">                                  <!-- 1. paling atas -->\n" +
+            "  <meta name=\"viewport\"\n" +
+            "        content=\"width=device-width, initial-scale=1\">     <!-- 2. wajib untuk HP -->\n" +
+            "  <title>Resep Nasi Goreng - Dapur Kita</title>            <!-- 3. judul di tab & Google -->\n" +
+            "  <meta name=\"description\" content=\"Cara membuat...\">      <!-- 4. cuplikan di Google -->\n" +
+            "  <link rel=\"icon\" href=\"/favicon.ico\">                    <!-- 5. ikon di tab -->\n" +
+            "  <link rel=\"stylesheet\" href=\"/style.css\">                <!-- 6. berkas CSS -->\n" +
+            "</head>\n" +
+            "```\n\n" +
+            "| Baris | Kalau dilupakan |\n" +
+            "|---|---|\n" +
+            "| `charset` | huruf beraksen dan emoji berubah jadi karakter aneh seperti `Ã©` |\n" +
+            "| `viewport` | di HP halaman tampil mengecil, dan seluruh CSS responsive-mu tidak terasa |\n" +
+            "| `title` | tab dan hasil pencarian menampilkan nama berkas atau alamat |\n" +
+            "| `description` | Google mengarang cuplikan sendiri dari isi halaman |\n" +
+            "| `link rel=stylesheet` | halaman tampil tanpa gaya sama sekali |\n\n" +
+            "Baris `viewport` adalah yang paling sering ditanyakan pemula tanpa sadar: \"CSS responsive-ku sudah benar, kok di HP tetap mengecil?\" Hampir selalu jawabannya baris itu.\n\n" +
+            "> **Catatan tentang panel preview di modul ini:** karena isi `<head>` memang tidak pernah tampil di layar, panel preview di sebagian besar latihan modul ini akan tampak **kosong** — itu normal, bukan tanda kodemu salah. Yang menilai jawabanmu di sini adalah tombol Jalankan Tes. Beberapa latihan juga menyebut berkas seperti `/style.css` dan `/favicon.ico` yang tidak ada di preview, jadi tidak ada perubahan yang bisa kamu lihat.\n\n" +
+            "## Kenapa charset Harus Paling Atas\n\n" +
+            "Browser membaca berkasmu dari atas ke bawah dan langsung mulai menafsirkan huruf. Kalau kamu baru menyebutkan pengkodean karakter di tengah `<head>`, teks yang sudah dibaca sebelumnya bisa salah ditafsirkan. Karena itu `charset` selalu ditulis sebagai elemen pertama.\n\n" +
+            "## Open Graph: Wajah Tautanmu di Luar\n\n" +
+            "Saat tautanmu dibagikan, WhatsApp, LinkedIn, dan X tidak membuka halamanmu seperti manusia. Mereka membaca beberapa tag khusus untuk menyusun kartu pratinjau:\n\n" +
+            "```html\n" +
+            "<meta property=\"og:title\" content=\"Resep Nasi Goreng\">\n" +
+            "<meta property=\"og:description\" content=\"Enak, cepat, 15 menit.\">\n" +
+            "<meta property=\"og:image\" content=\"https://dapurkita.id/nasgor.jpg\">\n" +
+            "```\n\n" +
+            "> **Perhatikan bedanya:** Open Graph memakai `property=`, sedangkan meta biasa seperti `description` memakai `name=`. Tertukar sedikit saja membuatnya gagal **tanpa pesan error apa pun** — pratinjaunya hanya tidak muncul. Dan `og:image` harus memakai alamat lengkap berawalan `https://`, karena platform luar tidak tahu alamat dasar situsmu.\n\n" +
+            "## Struktur Folder Proyek Statis\n\n" +
+            "```text\n" +
+            "situsku/\n" +
+            "  index.html        <- halaman utama, di akar folder\n" +
+            "  tentang.html\n" +
+            "  css/\n" +
+            "    style.css\n" +
+            "  img/\n" +
+            "    logo.svg\n" +
+            "  js/\n" +
+            "    app.js\n" +
+            "```\n\n" +
+            "Kesepakatan yang dipakai hampir semua proyek: `index.html` di akar, berkas pendukung dikelompokkan per jenis di dalam folder. Penataan ini yang membuat jalur seperti `css/style.css` dan `img/logo.svg` bisa ditulis pendek dan tidak berubah saat proyek bertambah besar.\n\n" +
+            "## Memeriksa Pekerjaanmu\n\n" +
+            "- **W3C Validator** (`validator.w3.org`) memeriksa apakah HTML-mu sah. Kesalahan paling sering yang ia laporkan: tag belum ditutup, `id` yang sama dipakai dua kali, `alt` yang hilang pada gambar, dan elemen yang ditaruh di tempat yang tidak diperbolehkan.\n" +
+            "- **Klik kanan lalu View Page Source** pada situs mana pun untuk membandingkan `<head>` mereka dengan milikmu. Situs berita dan e-commerce adalah contoh terbaik, karena `<head>` mereka digarap serius demi hasil pencarian.\n\n" +
+            "## Analogi Dunia Nyata\n\n" +
+            "`<head>` itu seperti **sampul dan katalog sebuah buku di perpustakaan**. Pembaca yang sudah memegang bukumu tidak peduli pada nomor katalognya. Tapi tanpa sampul yang jelas dan kartu katalog yang benar, bukumu tidak pernah ditemukan orang yang mencarinya — dan berapa pun bagusnya isinya, tidak ada yang membacanya.\n\n" +
+            "## Jebakan yang Sering Terjadi\n\n" +
+            "1. **Judul yang sama di seluruh halaman.** \"Beranda\" di setiap halaman membuat mesin pencari tidak bisa membedakan isinya.\n" +
+            "2. **`name=\"og:title\"`.** Open Graph memakai `property`, dan kesalahan ini gagal secara sunyi.\n" +
+            "3. **`og:image` dengan jalur relatif.** Platform luar butuh alamat lengkap.\n" +
+            "4. **Menyimpan data untuk JavaScript di `class` atau `id`.** Untuk itu ada `data-*`, yang sah dan dibaca lewat `element.dataset`.\n" +
+            "5. **Menaruh `<link rel=\"stylesheet\">` di akhir `<body>`.** Halaman akan tampil sesaat tanpa gaya sebelum CSS-nya termuat.\n\n" +
+            "## Kaitan ke Dunia Kerja\n\n" +
+            "> **Kapan dipakai:** setiap halaman baru yang masuk produksi diperiksa bagian ini — biasanya oleh orang SEO atau lewat audit otomatis di pipeline. Menyiapkan `<head>` yang benar adalah salah satu tugas paling awal yang dipercayakan ke developer baru, karena dampaknya besar sementara risikonya kecil. Dan `data-*` adalah jembatan yang akan kamu pakai terus di track JavaScript nanti.",
+        },
         {
           kind: "step",
           id: "html-6-1",
@@ -1687,7 +2602,7 @@ export const htmlTrack: Track = {
           id: "html-6-5",
           title: "data-* : jembatan ke JavaScript",
           explanation:
-            "Butuh menyimpan data di elemen HTML untuk dipakai JavaScript? Jangan menumpangkannya ke `class` atau `id`. Pakai atribut `data-*` — nama bebas setelah `data-`, valid secara resmi, dan diakses lewat `element.dataset`. Contoh: `data-product-id=\"42\"` menjadi `el.dataset.productId`.",
+            "Sering kali kamu perlu menempelkan sepotong data pada sebuah elemen supaya JavaScript bisa membacanya nanti — misalnya ID produk pada tombol \"Beli\". Godaannya adalah menumpangkannya ke `class` (`class=\"produk-42\"`) atau ke `id`, dan keduanya bermasalah: `class` seharusnya milik CSS, sedangkan `id` wajib unik dan bukan tempat menyimpan nilai bisnis. Untuk kebutuhan ini HTML menyediakan atribut `data-*`: namanya bebas setelah awalan `data-`, sah secara resmi, dan tidak berpengaruh apa pun ke tampilan. JavaScript membacanya lewat `element.dataset`, dengan satu konversi yang perlu diingat — tanda hubung berubah menjadi camelCase, jadi `data-product-id` diakses sebagai `dataset.productId`. Satu peringatan penting: isinya terbaca siapa pun yang membuka DevTools, jadi jangan pernah menyimpan harga yang menentukan tagihan atau data rahasia di sana; server tetap harus memastikan sendiri nilainya.",
           example: {
             code: '<button data-user-id="7" data-role="admin">Edit</button>\n\n<!-- di JavaScript nanti: -->\n<!-- el.dataset.userId  → "7"     -->\n<!-- el.dataset.role    → "admin" -->',
             output:
@@ -1761,6 +2676,67 @@ export const htmlTrack: Track = {
             '<!DOCTYPE html>\n<html lang="id">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n  <title>Profil Saya - BiLearn</title>\n</head>\n<body>\n  <header>\n    <nav><a href="/">Beranda</a></nav>\n  </header>\n  <main>\n    <h1>Halo, saya belajar HTML</h1>\n  </main>\n  <footer>\n    <p>© 2026</p>\n  </footer>\n</body>\n</html>',
         },
         {
+          kind: "step",
+          id: "html-6-7",
+          title: "Validasi HTML: Tiga Kesalahan yang Paling Sering Ditemukan",
+          explanation:
+            "Karena browser tidak pernah menolak HTML yang salah, satu-satunya cara memastikan kodemu sah adalah memeriksanya dengan alat: **W3C Validator** di `validator.w3.org`, tempat kamu bisa menempelkan kode atau memasukkan alamat halaman. Tiga temuan yang mendominasi laporannya selalu sama. Pertama, **tag yang belum ditutup** — akibatnya elemen berikutnya ikut tersedot ke dalamnya dan tampilan berubah jauh dari satu baris yang keliru. Kedua, **`id` yang dipakai lebih dari sekali**; `id` wajib unik per halaman karena tautan `#nama`, `<label for>`, dan JavaScript semuanya berhenti di kecocokan pertama, sehingga elemen kedua diam-diam tidak pernah tersentuh. Ketiga, **gambar tanpa `alt`**, yang membuat screen reader membacakan nama berkasnya. Kebiasaan yang layak dibangun sekarang: jalankan validator sebelum menyerahkan pekerjaan, karena semua temuan itu murah diperbaiki hari ini dan mahal dicari nanti.",
+          example: {
+            code:
+              "<!-- kode dengan dua temuan validator -->\n" +
+              '<section id="menu">\n' +
+              "  <h2>Menu<h2>                          <!-- h2 tidak ditutup, ditulis ulang -->\n" +
+              '  <img src="kopi.jpg">                  <!-- alt tidak ada -->\n' +
+              "</section>",
+            output:
+              "Laporan validator:\n" +
+              "  Error: Stray start tag h2.\n" +
+              "  Error: An img element must have an alt attribute, except under certain conditions.\n" +
+              "Di layar, seluruh isi setelah judul ikut tampil sebagai judul besar karena h2 tidak pernah ditutup.",
+            note: "Pesan \"Stray start tag\" hampir selalu berarti tag penutupnya salah tulis — perhatikan garis miringnya.",
+          },
+          instruction:
+            "Kode di editor punya tiga pelanggaran yang akan dilaporkan validator: satu tag yang tidak pernah ditutup, satu nilai `id` yang dipakai dua kali, dan satu gambar tanpa teks alternatif. Perbaiki ketiganya tanpa mengubah tulisan yang sudah ada — untuk `id` yang bentrok, ganti yang kedua menjadi `harga-teh`, dan beri gambar deskripsi `Segelas kopi tubruk`.",
+          starterCode:
+            '<section id="daftar">\n' +
+            "  <p>Kopi tubruk\n" +
+            '  <span id="harga">18.000</span>\n' +
+            '  <span id="harga">12.000</span>\n' +
+            '  <img src="kopi.jpg">\n' +
+            "</section>\n",
+          language: "html",
+          tests: [
+            {
+              pattern: "Kopi tubruk\\s*</p>",
+              message:
+                "Paragrafnya belum ditutup. Tambahkan `</p>` tepat setelah teks `Kopi tubruk`.",
+            },
+            {
+              pattern: 'id="harga-teh"',
+              message:
+                'Ganti nilai `id` yang kedua menjadi `harga-teh` supaya tidak ada dua elemen dengan id yang sama.',
+            },
+            {
+              pattern: 'id="harga"[\\s\\S]*id="harga"',
+              mustNotMatch: true,
+              message:
+                'Masih ada dua elemen dengan `id="harga"`. Nilai id wajib unik dalam satu halaman.',
+            },
+            {
+              pattern: '<img[^>]*alt="Segelas kopi tubruk"[^>]*>',
+              message:
+                'Tambahkan `alt="Segelas kopi tubruk"` pada gambar — gambar informatif tanpa alt selalu dilaporkan validator.',
+            },
+          ],
+          solution:
+            '<section id="daftar">\n' +
+            "  <p>Kopi tubruk</p>\n" +
+            '  <span id="harga">18.000</span>\n' +
+            '  <span id="harga-teh">12.000</span>\n' +
+            '  <img src="kopi.jpg" alt="Segelas kopi tubruk">\n' +
+            "</section>",
+        },
+        {
           kind: "quiz",
           id: "html-6-kuis",
           title: "Kuis: HTML untuk Dunia Kerja",
@@ -1819,7 +2795,22 @@ export const htmlTrack: Track = {
               choices: ["language", "lang", "locale", "charset"],
               answerIndex: 1,
               explanation:
-                'lang (misal <html lang="id">) membuat screen reader memakai pelafalan yang benar. Tanpa itu, teks Indonesia bisa dibacakan dengan pelafalan Inggris dan nyaris tidak dimengerti.',
+                'lang (misalnya <html lang="id">) membuat screen reader memakai pelafalan yang benar. Tanpa itu, teks Indonesia bisa dibacakan dengan pelafalan Inggris dan nyaris tidak dimengerti pendengarnya. Atribut ini juga dipakai browser untuk menawarkan terjemahan dan aturan pemisahan suku kata. Pengecoh `language` dan `locale` menggoda karena keduanya kata yang tepat secara makna — tapi nama atributnya memang hanya `lang`; sedangkan `charset` mengurus pengkodean karakter, bukan bahasa.',
+            },
+            {
+              id: "q6",
+              type: "pilihan-ganda",
+              question:
+                "Kamu menata folder sebuah situs statis. Susunan mana yang mengikuti kesepakatan umum?",
+              choices: [
+                "Semua berkas HTML, CSS, dan gambar dicampur di satu folder",
+                "index.html di akar folder, lalu berkas pendukung dikelompokkan di css/, img/, dan js/",
+                "Setiap halaman dibuatkan satu folder sendiri berisi salinan CSS-nya",
+                "index.html diletakkan di dalam folder html/ agar rapi",
+              ],
+              answerIndex: 1,
+              explanation:
+                "`index.html` harus berada di akar folder supaya bisa dibuka lewat alamat situs tanpa nama berkas, sementara berkas pendukung dikelompokkan per jenis agar jalur seperti `css/style.css` tetap pendek dan tidak berubah saat proyek bertambah besar. Pilihan terakhir menggoda karena terasa lebih teratur — tapi memindahkan `index.html` ke dalam folder membuat halaman utamamu hanya bisa dibuka lewat `/html/index.html`. Menyalin CSS ke setiap folder halaman membuat satu perubahan gaya harus dikerjakan berulang kali.",
             },
             {
               id: "q5",
