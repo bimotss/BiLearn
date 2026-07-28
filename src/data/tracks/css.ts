@@ -648,7 +648,7 @@ export const cssTrack: Track = {
                 "Pakai child combinator: .daftar > li { ... }",
             },
             {
-              pattern: "color:\\s*#b91c1c",
+              pattern: "color\\s*:\\s*#b91c1c",
               message:
                 "Beri color: #b91c1c.",
             },
@@ -672,12 +672,12 @@ export const cssTrack: Track = {
           previewHtml: "<div style=\"background:#fde68a;padding:20px\"><div class=\"kotak\">Teks di atas latar transparan</div></div>",
           tests: [
             {
-              pattern: "background(-color)?:\\s*rgba?\\(\\s*0\\s*[ ,]\\s*0\\s*[ ,]\\s*0\\s*(/|,)\\s*0?\\.5\\s*\\)",
+              pattern: "background(-color)?\\s*:\\s*rgba?\\(\\s*0\\s*[ ,]\\s*0\\s*[ ,]\\s*0\\s*(/|,)\\s*0?\\.5\\s*\\)",
               message:
                 "Pakai `rgb(0 0 0 / 0.5)` sebagai background — bentuk lama `rgba(0, 0, 0, 0.5)` juga diterima.",
             },
             {
-              pattern: "color:\\s*(white|#fff|#ffffff)",
+              pattern: "color\\s*:\\s*(white|#fff|#ffffff)",
               message:
                 "Beri teksnya warna putih.",
             },
@@ -1027,7 +1027,7 @@ export const cssTrack: Track = {
           previewHtml: "<div class=\"log\">Baris 1<br>Baris 2<br>Baris 3<br>Baris 4<br>Baris 5<br>Baris 6<br>Baris 7<br>Baris 8</div>",
           tests: [
             {
-              pattern: "overflow(-y)?:\\s*auto",
+              pattern: "overflow(-y)?\\s*:\\s*auto",
               message:
                 "Pakai overflow: auto agar scrollbar hanya muncul saat dibutuhkan.",
             },
@@ -3003,15 +3003,17 @@ export const cssTrack: Track = {
           language: "css",
           previewHtml: "<h1>H1</h1>\n<h2>H2</h2>\n<h3>H3</h3>\n<p>Paragraf tetap hitam.</p>",
           tests: [
-                      {
-                        "pattern": ":is\\(\\s*h1\\s*,\\s*h2\\s*,\\s*h3\\s*\\)",
-                        "message": "Beberapa selector yang berbagi aturan yang sama bisa dipadatkan dengan pseudo-class `:is(...)`, berisi daftar selector dipisah koma. Catatan penting soal specificity: `:is()` mengambil nilai specificity dari selector TERKUAT di dalamnya — beda dari `:where()` yang selalu bernilai nol."
-                      },
-                      {
-                        "pattern": "color\\s*:\\s*#1d4ed8",
-                        "message": "Isi aturannya dengan properti warna teks beserta nilai heksadesimal yang diminta, diakhiri titik koma."
-                      }
-                    ],
+            {
+              pattern: ":is\\(\\s*h1\\s*,\\s*h2\\s*,\\s*h3\\s*\\)",
+              message:
+                "Beberapa selector yang berbagi aturan yang sama bisa dipadatkan dengan pseudo-class `:is(...)`, berisi daftar selector dipisah koma. Catatan penting soal specificity: `:is()` mengambil nilai specificity dari selector TERKUAT di dalamnya — beda dari `:where()` yang selalu bernilai nol.",
+            },
+            {
+              pattern: "color\\s*:\\s*#1d4ed8",
+              message:
+                "Isi aturannya dengan properti warna teks beserta nilai heksadesimal yang diminta, diakhiri titik koma.",
+            },
+          ],
           solution: ":is(h1, h2, h3) {\n  color: #1d4ed8;\n}",
         },
         {
@@ -3866,6 +3868,12 @@ export const cssTrack: Track = {
             {
               pattern: "\\.judul\\s*\\{[^}]*overflow\\s*:\\s*hidden",
               message: "Tambahkan overflow: hidden;",
+            },
+            {
+              pattern:
+                "\\.judul\\s*\\{[^}]*-webkit-box-orient\\s*:\\s*vertical",
+              message:
+                "Tambahkan `-webkit-box-orient: vertical;` juga. Tanpa baris ini, line-clamp TIDAK bekerja sama sekali — teksnya tetap tampil penuh, dan itu jenis kegagalan yang lolos dari mata karena tidak ada pesan error apa pun.",
             },
           ],
           solution:
