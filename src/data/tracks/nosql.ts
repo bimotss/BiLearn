@@ -1127,11 +1127,19 @@ export const nosqlTrack: Track = {
           starterCode: "# Tulis perintah Redis SET di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "SET\\s+user:1\\s+['\"]Budi['\"]",
-              message: "Tuliskan: SET user:1 'Budi'",
-            },
-          ],
+                      {
+                        "pattern": "^\\s*SET\\s",
+                        "message": "Penyimpanan nilai sederhana di Redis memakai perintah `SET <kunci> <nilai>` — semua perintah Redis ditulis HURUF BESAR sesuai konvensi dokumentasinya."
+                      },
+                      {
+                        "pattern": "user:1",
+                        "message": "Konvensi penamaan kunci Redis memakai titik dua sebagai pemisah namespace (`entitas:id`). Redis tidak punya tabel, jadi struktur itu satu-satunya cara menjaga kunci tetap teratur — dan `KEYS user:*` bisa menemukannya."
+                      },
+                      {
+                        "pattern": "['\"]Budi['\"]",
+                        "message": "Nilainya dibungkus tanda kutip bila mengandung spasi atau ingin dipastikan terbaca sebagai satu argumen."
+                      }
+                    ],
           solution: "SET user:1 'Budi'",
         },
         {
@@ -1153,11 +1161,15 @@ export const nosqlTrack: Track = {
           starterCode: "# Tulis HSET di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "HSET\\s+user:1\\s+name\\s+['\"]Budi['\"]",
-              message: "Tuliskan: HSET user:1 name 'Budi'",
-            },
-          ],
+                      {
+                        "pattern": "^\\s*HSET\\s",
+                        "message": "Untuk menyimpan beberapa field dalam satu kunci (mirip satu baris tabel), tipe datanya Hash dan perintahnya berawalan huruf H. Keunggulannya: kamu bisa membaca atau mengubah satu field saja tanpa menulis ulang seluruh objek — beda dari menyimpan JSON sebagai string biasa."
+                      },
+                      {
+                        "pattern": "user:1\\s+name\\s+['\"]Budi['\"]",
+                        "message": "Urutan argumennya: kunci, nama field, lalu nilainya. Beberapa pasangan field-nilai boleh ditulis sekaligus dalam satu perintah."
+                      }
+                    ],
           solution: "HSET user:1 name 'Budi'",
         },
         {
@@ -1179,11 +1191,15 @@ export const nosqlTrack: Track = {
           starterCode: "# Tulis perintah SETEX di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "SETEX\\s+otp:123\\s+60\\s+['\"]998877['\"]",
-              message: "Gunakan: SETEX otp:123 60 '998877'",
-            },
-          ],
+                      {
+                        "pattern": "^\\s*SETEX\\s",
+                        "message": "Untuk data yang harus hangus sendiri (OTP, sesi, cache), pakai varian `SET` yang sekaligus menetapkan kedaluwarsa — namanya `SET` ditambah tiga huruf. Alternatif dua langkah: `SET` lalu `EXPIRE`, tapi itu tidak atomik dan bisa meninggalkan kunci abadi kalau prosesnya mati di antaranya."
+                      },
+                      {
+                        "pattern": "otp:123\\s+60\\s+['\"]?998877['\"]?",
+                        "message": "Urutan argumennya: kunci, DETIK masa berlaku, lalu nilainya. Satuannya detik — menuliskan 60 berarti satu menit, bukan 60 menit. Periksa sisa waktunya dengan `TTL <kunci>`."
+                      }
+                    ],
           solution: "SETEX otp:123 60 '998877'",
         },
         {
@@ -1267,11 +1283,15 @@ export const nosqlTrack: Track = {
           starterCode: "# Tulis PUBLISH di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "PUBLISH\\s+news\\s+['\"]Headline['\"]",
-              message: "Tuliskan: PUBLISH news 'Headline'",
-            },
-          ],
+                      {
+                        "pattern": "^\\s*PUBLISH\\s",
+                        "message": "Pengiriman pesan ke seluruh pelanggan sebuah channel memakai perintah `PUBLISH`."
+                      },
+                      {
+                        "pattern": "news\\s+['\"]Headline['\"]",
+                        "message": "Argumennya nama channel lalu isi pesannya. Yang wajib diingat: Pub/Sub Redis bersifat *fire-and-forget* — pesan yang dikirim saat tidak ada subscriber HILANG, tidak ada antrean. Untuk pekerjaan yang tidak boleh hilang, pakai Redis Streams atau BullMQ."
+                      }
+                    ],
           solution: "PUBLISH news 'Headline'",
         },
         {

@@ -277,12 +277,15 @@ for (const track of tracks) {
 
         // 3b. pesan tes harus nyambung dengan tugasnya, bukan sisa copy-paste
         for (const t of s.tests) {
-          if (
-            /tuliskan komentar yang diminta|tuliskan yang diminta|tes gagal|salah/i.test(
-              t.message
-            ) &&
-            !/^\s*(\/\/|#)/.test(sol)
-          ) {
+          // Pesan malas: "Salah", "Tes gagal", atau sisa copy-paste. Sengaja
+          // memakai batas kata dan pemeriksaan awal kalimat — Ronde 4: pesan
+          // yang MENGAJAR sering memuat kata "kesalahan umum" atau
+          // "bermasalah", dan itu bukan pelanggaran.
+          const pesanMalas =
+            /tuliskan komentar yang diminta|tuliskan yang diminta/i.test(t.message) ||
+            /^\s*(salah|tes gagal)\b/i.test(t.message.trim()) ||
+            (t.message.trim().length <= 30 && /\b(salah|gagal)\b/i.test(t.message));
+          if (pesanMalas && !/^\s*(\/\/|#)/.test(sol)) {
             lapor(
               `pesan tes copy-paste / tidak nyambung dengan tugas: ${s.id}\n   → "${t.message}"`
             );

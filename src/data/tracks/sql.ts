@@ -45,8 +45,16 @@ export const sqlTrack: Track = {
           "language": "text",
           "tests": [
             {
-              "pattern": "SELECT\\s+\\*\\s+FROM\\s+products\\s*;?",
-              "message": "Gunakan: SELECT * FROM products;"
+              "pattern": "SELECT\\s+\\*",
+              "message": "Untuk mengambil SEMUA kolom, daftar kolomnya diganti tanda bintang. Di produksi kebiasaan ini dihindari (kolom baru ikut terbawa), tapi untuk melihat isi tabel ia paling cepat."
+            },
+            {
+              "pattern": "FROM\\s+products",
+              "message": "Sebutkan tabel sumbernya setelah kata kunci `FROM`. Perhatikan namanya jamak dan huruf kecil — nama tabel harus persis seperti di skema."
+            },
+            {
+              "pattern": ";",
+              "message": "Akhiri pernyataannya dengan titik koma. Di psql, perintah tanpa titik koma dianggap belum selesai: prompt berubah jadi `db-#` dan seolah tidak terjadi apa-apa."
             }
           ],
           "solution": "SELECT * FROM products;"
@@ -66,8 +74,12 @@ export const sqlTrack: Track = {
           "language": "text",
           "tests": [
             {
-              "pattern": "SELECT\\s+name\\s*,\\s*email\\s+FROM\\s+users\\s*;?",
-              "message": "Gunakan: SELECT name, email FROM users;"
+              "pattern": "SELECT\\s+name\\s*,\\s*email|SELECT\\s+email\\s*,\\s*name",
+              "message": "Sebutkan kedua kolom yang diminta, dipisah koma, langsung setelah `SELECT`. Urutan kolom menentukan urutan tampilan hasil, jadi keduanya diterima."
+            },
+            {
+              "pattern": "FROM\\s+users",
+              "message": "Tabel sumbernya belum disebut. Tambahkan `FROM` diikuti nama tabel penggunanya."
             }
           ],
           "solution": "SELECT name, email FROM users;"
@@ -87,8 +99,12 @@ export const sqlTrack: Track = {
           "language": "text",
           "tests": [
             {
-              "pattern": "SELECT\\s+\\*\\s+FROM\\s+products\\s+WHERE\\s+price\\s*=\\s*10000\\s*;?",
-              "message": "Gunakan: SELECT * FROM products WHERE price = 10000;"
+              "pattern": "SELECT\\s+\\*\\s+FROM\\s+products",
+              "message": "Mulai dari pengambilan seluruh kolom tabel produk, baru tambahkan penyaringnya."
+            },
+            {
+              "pattern": "WHERE\\s+price\\s*=\\s*10000",
+              "message": "Penyaring baris ditulis dengan `WHERE`, lalu kolom, operator, dan nilainya. Angka TIDAK dibungkus tanda kutip — mengutip angka membuat sebagian database melakukan konversi diam-diam dan mengabaikan index."
             }
           ],
           "solution": "SELECT * FROM products WHERE price = 10000;"
@@ -108,8 +124,16 @@ export const sqlTrack: Track = {
           "language": "text",
           "tests": [
             {
-              "pattern": "SELECT\\s+\\*\\s+FROM\\s+users\\s+WHERE\\s+status\\s*=\\s*['\"]active['\"]\\s+AND\\s+role\\s*=\\s*['\"]admin['\"]\\s*;?",
-              "message": "Gunakan: SELECT * FROM users WHERE status = 'active' AND role = 'admin';"
+              "pattern": "WHERE\\s+.*status\\s*=\\s*['\"]active['\"]",
+              "message": "Syarat pertama: kolom status bernilai teks `active`. Di SQL, teks dibungkus **petik tunggal** — petik ganda berarti nama kolom dan akan memicu error kolom tidak ditemukan."
+            },
+            {
+              "pattern": "AND\\s+|\\s+AND",
+              "message": "Dua syarat yang harus terpenuhi BERSAMAAN disambung dengan `AND`. Kalau kamu memakai `OR`, hasilnya justru melebar: siapa pun yang aktif ATAU admin akan ikut terambil."
+            },
+            {
+              "pattern": "role\\s*=\\s*['\"]admin['\"]",
+              "message": "Syarat kedua belum ada: kolom peran bernilai `admin`, juga dengan petik tunggal."
             }
           ],
           "solution": "SELECT * FROM users WHERE status = 'active' AND role = 'admin';"
@@ -129,8 +153,16 @@ export const sqlTrack: Track = {
           "language": "text",
           "tests": [
             {
-              "pattern": "SELECT\\s+\\*\\s+FROM\\s+users\\s+ORDER\\s+BY\\s+created_at\\s+DESC\\s+LIMIT\\s+10\\s*;?",
-              "message": "Gunakan: SELECT * FROM users ORDER BY created_at DESC LIMIT 10;"
+              "pattern": "ORDER\\s+BY\\s+created_at",
+              "message": "Pengurutan memakai `ORDER BY` diikuti kolom waktu pembuatannya."
+            },
+            {
+              "pattern": "ORDER\\s+BY\\s+created_at\\s+DESC",
+              "message": "\"Terbaru\" berarti urutan menurun, jadi tambahkan penanda urutan turun setelah nama kolom. Tanpa itu, default SQL adalah menaik (`ASC`) dan yang muncul justru data paling lama."
+            },
+            {
+              "pattern": "LIMIT\\s+10",
+              "message": "Batasi jumlah barisnya dengan `LIMIT` diikuti angka. Perhatikan urutan klausa: `ORDER BY` selalu ditulis SEBELUM `LIMIT`, karena pembatasan diambil dari hasil yang sudah terurut."
             }
           ],
           "solution": "SELECT * FROM users ORDER BY created_at DESC LIMIT 10;"
@@ -150,8 +182,12 @@ export const sqlTrack: Track = {
           "language": "text",
           "tests": [
             {
-              "pattern": "SELECT\\s+DISTINCT\\s+role\\s+FROM\\s+users\\s*;?",
-              "message": "Gunakan: SELECT DISTINCT role FROM users;"
+              "pattern": "SELECT\\s+DISTINCT\\s+role",
+              "message": "Untuk membuang nilai kembar, sisipkan kata kunci penghilang duplikat tepat setelah `SELECT`, sebelum nama kolom. Ia berlaku untuk KOMBINASI seluruh kolom yang kamu pilih, bukan per kolom."
+            },
+            {
+              "pattern": "FROM\\s+users",
+              "message": "Tambahkan tabel sumbernya dengan `FROM`."
             }
           ],
           "solution": "SELECT DISTINCT role FROM users;"
@@ -171,8 +207,12 @@ export const sqlTrack: Track = {
           "language": "text",
           "tests": [
             {
-              "pattern": "SELECT\\s+\\*\\s+FROM\\s+orders\\s+WHERE\\s+paid_at\\s+IS\\s+NOT\\s+NULL\\s*;?",
-              "message": "Gunakan: SELECT * FROM orders WHERE paid_at IS NOT NULL;"
+              "pattern": "FROM\\s+orders",
+              "message": "Ambil dari tabel pesanan dengan `FROM`."
+            },
+            {
+              "pattern": "paid_at\\s+IS\\s+NOT\\s+NULL",
+              "message": "Pemeriksaan kosong/tidak kosong TIDAK memakai `=`. `paid_at != NULL` selalu menghasilkan nol baris, karena perbandingan dengan NULL bernilai \"tidak diketahui\" — bentuk yang benar memakai kata `IS`."
             }
           ],
           "solution": "SELECT * FROM orders WHERE paid_at IS NOT NULL;"
@@ -308,8 +348,16 @@ export const sqlTrack: Track = {
           "language": "text",
           "tests": [
             {
-              "pattern": "SELECT\\s+orders\\.id\\s*,\\s*users\\.name\\s+FROM\\s+orders\\s+INNER\\s+JOIN\\s+users\\s+ON\\s+orders\\.user_id\\s*=\\s*users\\.id\\s*;?",
-              "message": "Gunakan: SELECT orders.id, users.name FROM orders INNER JOIN users ON orders.user_id = users.id;"
+              "pattern": "SELECT\\s+orders\\.id\\s*,\\s*users\\.name|SELECT\\s+users\\.name\\s*,\\s*orders\\.id",
+              "message": "Sebutkan kolom beserta tabel asalnya (`tabel.kolom`). Tanpa penyebutan itu, kolom bernama sama di dua tabel (`id`) membuat database menolak dengan error \"column reference is ambiguous\"."
+            },
+            {
+              "pattern": "FROM\\s+orders\\s+(INNER\\s+)?JOIN\\s+users",
+              "message": "Sambungkan tabel pesanan dengan tabel pengguna memakai `JOIN`. Kata `INNER` boleh ditulis atau tidak — keduanya berarti sama."
+            },
+            {
+              "pattern": "ON\\s+orders\\.user_id\\s*=\\s*users\\.id|ON\\s+users\\.id\\s*=\\s*orders\\.user_id",
+              "message": "Setiap JOIN butuh aturan pasangannya lewat `ON`: foreign key di tabel pesanan dibandingkan dengan primary key di tabel pengguna. Tanpa `ON`, database menghasilkan perkalian kartesian — setiap baris digabung dengan semua baris tabel lain."
             }
           ],
           "solution": "SELECT orders.id, users.name FROM orders INNER JOIN users ON orders.user_id = users.id;"
@@ -528,8 +576,16 @@ export const sqlTrack: Track = {
           "language": "text",
           "tests": [
             {
-              "pattern": "SELECT\\s+SUM\\(\\s*amount\\s*\\)\\s+AS\\s+total\\s+FROM\\s+payments\\s*;?",
-              "message": "Gunakan: SELECT SUM(amount) AS total FROM payments;"
+              "pattern": "SUM\\(\\s*amount\\s*\\)",
+              "message": "Penjumlahan seluruh baris memakai fungsi agregasi penjumlah, dengan nama kolom di dalam tanda kurung."
+            },
+            {
+              "pattern": "AS\\s+total",
+              "message": "Beri nama hasilnya dengan `AS` supaya kolomnya tidak bernama `sum` di respons API. Alias inilah yang dibaca kode aplikasimu."
+            },
+            {
+              "pattern": "FROM\\s+payments",
+              "message": "Tambahkan tabel sumbernya dengan `FROM`."
             }
           ],
           "solution": "SELECT SUM(amount) AS total FROM payments;"
@@ -549,8 +605,16 @@ export const sqlTrack: Track = {
           "language": "text",
           "tests": [
             {
-              "pattern": "SELECT\\s+status\\s*,\\s*COUNT\\(\\*\\)\\s+FROM\\s+orders\\s+GROUP\\s+BY\\s+status\\s*;?",
-              "message": "Gunakan: SELECT status, COUNT(*) FROM orders GROUP BY status;"
+              "pattern": "SELECT\\s+status\\s*,",
+              "message": "Sebutkan kolom pengelompokannya lebih dulu di `SELECT`, diikuti koma."
+            },
+            {
+              "pattern": "COUNT\\(\\s*\\*\\s*\\)",
+              "message": "Untuk menghitung jumlah baris per kelompok, pakai fungsi pencacah dengan tanda bintang di dalamnya. Memakai nama kolom di dalamnya (`COUNT(kolom)`) akan MENGABAIKAN baris yang kolomnya NULL — angkanya jadi lebih kecil tanpa peringatan."
+            },
+            {
+              "pattern": "GROUP\\s+BY\\s+status",
+              "message": "Setiap kolom di `SELECT` yang tidak dibungkus fungsi agregasi WAJIB ikut di `GROUP BY`. PostgreSQL menolak kalau dilanggar; MySQL lama malah menerimanya dan mengembalikan nilai acak."
             }
           ],
           "solution": "SELECT status, COUNT(*) FROM orders GROUP BY status;"
@@ -769,8 +833,16 @@ export const sqlTrack: Track = {
           "language": "text",
           "tests": [
             {
-              "pattern": "INSERT\\s+INTO\\s+categories\\s*\\(\\s*name\\s*\\)\\s+VALUES\\s*\\(\\s*['\"]Elektronik['\"]\\s*\\)\\s*;?",
-              "message": "Gunakan: INSERT INTO categories (name) VALUES ('Elektronik');"
+              "pattern": "INSERT\\s+INTO\\s+categories",
+              "message": "Penyisipan baris dimulai dengan `INSERT INTO` diikuti nama tabelnya."
+            },
+            {
+              "pattern": "\\(\\s*name\\s*\\)",
+              "message": "Sebutkan daftar kolomnya di dalam tanda kurung. Ini bukan formalitas: tanpa daftar kolom, urutan nilai harus persis sama dengan urutan kolom di tabel, dan query-mu rusak begitu ada kolom baru ditambahkan."
+            },
+            {
+              "pattern": "VALUES\\s*\\(\\s*['\"]Elektronik['\"]\\s*\\)",
+              "message": "Nilainya ditulis setelah kata `VALUES` di dalam tanda kurung, dan karena berupa teks ia dibungkus petik tunggal."
             }
           ],
           "solution": "INSERT INTO categories (name) VALUES ('Elektronik');"
@@ -790,8 +862,12 @@ export const sqlTrack: Track = {
           "language": "text",
           "tests": [
             {
-              "pattern": "UPDATE\\s+products\\s+SET\\s+price\\s*=\\s*20000\\s+WHERE\\s+id\\s*=\\s*1\\s*;?",
-              "message": "Gunakan: UPDATE products SET price = 20000 WHERE id = 1;"
+              "pattern": "UPDATE\\s+products\\s+SET\\s+price\\s*=\\s*20000",
+              "message": "Pengubahan data memakai `UPDATE <tabel> SET <kolom> = <nilai baru>`."
+            },
+            {
+              "pattern": "WHERE\\s+id\\s*=\\s*1",
+              "message": "Wajib ada penyaring `WHERE`. Tanpa itu, SELURUH baris tabel berubah tanpa konfirmasi dan tanpa cara membatalkan — kebiasaan yang aman: jalankan dulu sebagai `SELECT` dengan syarat yang sama untuk melihat baris mana yang akan kena."
             }
           ],
           "solution": "UPDATE products SET price = 20000 WHERE id = 1;"
@@ -832,8 +908,12 @@ export const sqlTrack: Track = {
           "language": "text",
           "tests": [
             {
-              "pattern": "ROLLBACK\\s*;?",
-              "message": "Tuliskan: ROLLBACK;"
+              "pattern": "\\bROLLBACK\\b\\s*;?",
+              "message": "Perintah yang kamu cari adalah kebalikan dari `COMMIT`: satu kata yang membuang semua perubahan sejak `BEGIN`. Ia hanya berguna selama transaksi belum di-commit — setelah commit, tidak ada yang bisa dibatalkan lagi."
+            },
+            {
+              "pattern": ";",
+              "message": "Akhiri pernyataannya dengan titik koma. Di psql, perintah tanpa titik koma dianggap belum selesai: prompt berubah jadi `db-#` dan seolah tidak terjadi apa-apa."
             }
           ],
           "solution": "ROLLBACK;"
@@ -1094,8 +1174,12 @@ export const sqlTrack: Track = {
           "language": "text",
           "tests": [
             {
-              "pattern": "CREATE\\s+INDEX\\s+idx_orders_user_id\\s+ON\\s+orders\\(\\s*user_id\\s*\\)\\s*;?",
-              "message": "Gunakan: CREATE INDEX idx_orders_user_id ON orders(user_id);"
+              "pattern": "CREATE\\s+INDEX\\s+idx_orders_user_id",
+              "message": "Pembuatan index diawali `CREATE INDEX` diikuti NAMA index-nya. Nama itu bukan hiasan: ia yang muncul di `EXPLAIN` dan yang kamu pakai saat menghapusnya nanti."
+            },
+            {
+              "pattern": "ON\\s+orders\\s*\\(\\s*user_id\\s*\\)",
+              "message": "Sebutkan tabel dan kolomnya dengan pola `ON <tabel>(<kolom>)`. Untuk kolom foreign key seperti ini, index hampir selalu berbayar karena ia yang dipakai setiap JOIN."
             }
           ],
           "solution": "CREATE INDEX idx_orders_user_id ON orders(user_id);"
@@ -1115,8 +1199,12 @@ export const sqlTrack: Track = {
           "language": "text",
           "tests": [
             {
-              "pattern": "CREATE\\s+INDEX\\s+idx_order_status\\s+ON\\s+orders\\s*\\(\\s*status\\s*\\)\\s*;",
-              "message": "Gunakan perintah CREATE INDEX idx_order_status ON orders(status);"
+              "pattern": "CREATE\\s+INDEX\\s+idx_order_status",
+              "message": "Awali dengan `CREATE INDEX` lalu nama index sesuai konvensi tim (`idx_<tabel>_<kolom>`)."
+            },
+            {
+              "pattern": "ON\\s+orders\\s*\\(\\s*status\\s*\\)",
+              "message": "Sebutkan tabel dan kolomnya: `ON <tabel>(<kolom>)`. Catatan penting untuk kolom seperti `status` yang isinya cuma beberapa nilai berbeda — index di sini sering TIDAK dipakai optimizer, dan itu justru pelajaran modul ini."
             }
           ],
           "solution": "CREATE INDEX idx_order_status ON orders(status);"
@@ -1136,8 +1224,12 @@ export const sqlTrack: Track = {
           "language": "text",
           "tests": [
             {
-              "pattern": "EXPLAIN\\s+ANALYZE\\s+SELECT\\s+\\*\\s+FROM\\s+products\\s*;?",
-              "message": "Gunakan: EXPLAIN ANALYZE SELECT * FROM products;"
+              "pattern": "EXPLAIN\\s+ANALYZE",
+              "message": "Untuk melihat rencana eksekusi SEKALIGUS waktu nyatanya, tambahkan dua kata kunci di depan query. Tanpa kata kedua, query tidak benar-benar dijalankan dan kamu hanya melihat perkiraan."
+            },
+            {
+              "pattern": "SELECT\\s+\\*\\s+FROM\\s+products",
+              "message": "Query yang dianalisis ditulis apa adanya setelah kedua kata kunci itu — tidak perlu tanda kurung."
             }
           ],
           "solution": "EXPLAIN ANALYZE SELECT * FROM products;"
@@ -1253,8 +1345,16 @@ export const sqlTrack: Track = {
           "language": "text",
           "tests": [
             {
-              "pattern": "psql\\s+-U\\s+admin_user\\s+-d\\s+aplikasi_db",
-              "message": "Gunakan: psql -U admin_user -d aplikasi_db"
+              "pattern": "psql\\s",
+              "message": "Program CLI resmi PostgreSQL adalah `psql`. Ini dijalankan di terminal, bukan di dalam database."
+            },
+            {
+              "pattern": "-U\\s+admin_user",
+              "message": "Nama pengguna diberikan lewat flag `-U` (huruf besar). Tanpa itu, psql memakai nama pengguna sistem operasimu dan biasanya gagal autentikasi."
+            },
+            {
+              "pattern": "-d\\s+aplikasi_db",
+              "message": "Nama database diberikan lewat flag `-d`. Kalau dilewatkan, psql mencoba menyambung ke database yang bernama sama dengan usernya."
             }
           ],
           "solution": "psql -U admin_user -d aplikasi_db"
@@ -1295,8 +1395,16 @@ export const sqlTrack: Track = {
           "language": "text",
           "tests": [
             {
-              "pattern": "SELECT\\s+payload->>'name'\\s+FROM\\s+logs\\s+WHERE\\s+payload->>'role'\\s*=\\s*['\"]admin['\"]\\s*;?",
-              "message": "Gunakan: SELECT payload->>'name' FROM logs WHERE payload->>'role' = 'admin';"
+              "pattern": "payload->>'name'",
+              "message": "Untuk mengambil nilai JSONB sebagai TEKS biasa, pakai operator dua tanda lebih besar (`->>`). Operator satu tanda (`->`) mengembalikan JSON, sehingga hasilnya masih berkutip dan perbandingan teks jadi gagal."
+            },
+            {
+              "pattern": "FROM\\s+logs",
+              "message": "Tambahkan tabel sumbernya dengan `FROM`."
+            },
+            {
+              "pattern": "WHERE\\s+payload->>'role'\\s*=\\s*'admin'",
+              "message": "Penyaringnya juga membandingkan hasil `->>` dengan teks berpetik tunggal. Di SQL, petik ganda berarti nama kolom — memakainya di sini membuat query gagal."
             }
           ],
           "solution": "SELECT payload->>'name' FROM logs WHERE payload->>'role' = 'admin';"
@@ -1358,8 +1466,16 @@ export const sqlTrack: Track = {
           "language": "text",
           "tests": [
             {
-              "pattern": "GRANT\\s+SELECT\\s*,\\s*INSERT\\s+ON\\s+orders\\s+TO\\s+app_reporter\\s*;?",
-              "message": "Gunakan: GRANT SELECT, INSERT ON orders TO app_reporter;"
+              "pattern": "GRANT\\s+SELECT\\s*,\\s*INSERT|GRANT\\s+INSERT\\s*,\\s*SELECT",
+              "message": "Pemberian hak akses memakai `GRANT` diikuti daftar hak yang dipisah koma. Berikan hanya yang dibutuhkan — prinsip *least privilege* inilah yang ditanyakan saat audit keamanan."
+            },
+            {
+              "pattern": "ON\\s+orders",
+              "message": "Sebutkan objek yang diberi hak dengan `ON` diikuti nama tabel."
+            },
+            {
+              "pattern": "TO\\s+app_reporter",
+              "message": "Penerima haknya disebut dengan `TO` diikuti nama role. Untuk mencabutnya nanti, perintahnya `REVOKE ... FROM ...`."
             }
           ],
           "solution": "GRANT SELECT, INSERT ON orders TO app_reporter;"
@@ -1476,7 +1592,7 @@ export const sqlTrack: Track = {
           "tests": [
             {
               "pattern": "ENGINE\\s*=\\s*InnoDB",
-              "message": "Tuliskan: ENGINE=InnoDB"
+              "message": "Storage engine ditentukan dengan `ENGINE=` diikuti namanya. Pilih engine yang mendukung transaksi dan foreign key — MyISAM menerima sintaks FK tapi mengabaikannya diam-diam, dan itu sumber data rusak yang sulit dilacak."
             }
           ],
           "solution": "ENGINE=InnoDB"
@@ -1496,8 +1612,12 @@ export const sqlTrack: Track = {
           "language": "text",
           "tests": [
             {
-              "pattern": "ALTER\\s+TABLE\\s+comments\\s+CHARACTER\\s+SET\\s*=?\\s*utf8mb4\\s*;?",
-              "message": "Gunakan: ALTER TABLE comments CHARACTER SET utf8mb4;"
+              "pattern": "ALTER\\s+TABLE\\s+comments",
+              "message": "Perubahan struktur tabel memakai `ALTER TABLE` diikuti nama tabelnya."
+            },
+            {
+              "pattern": "CHARACTER\\s+SET\\s*=?\\s*utf8mb4",
+              "message": "Sebutkan charset barunya dengan `CHARACTER SET`. Pakai varian 4-byte, bukan `utf8` biasa — di MySQL, `utf8` hanya menampung 3 byte sehingga emoji tersimpan sebagai `???` dan datanya tidak bisa dipulihkan."
             }
           ],
           "solution": "ALTER TABLE comments CHARACTER SET utf8mb4;"
@@ -1517,8 +1637,8 @@ export const sqlTrack: Track = {
           "language": "text",
           "tests": [
             {
-              "pattern": "SELECT\\s+LAST_INSERT_ID\\(\\)\\s*;?",
-              "message": "Gunakan: SELECT LAST_INSERT_ID();"
+              "pattern": "SELECT\\s+LAST_INSERT_ID\\(\\s*\\)",
+              "message": "Fungsi MySQL yang mengembalikan ID auto-increment terakhir dipanggil lewat `SELECT` dengan tanda kurung kosong. Nilainya bersifat **per koneksi**, jadi aman dipakai bersamaan oleh banyak pengguna — tapi berhenti akurat kalau kamu menyisipkan banyak baris sekaligus."
             }
           ],
           "solution": "SELECT LAST_INSERT_ID();"
@@ -1538,8 +1658,12 @@ export const sqlTrack: Track = {
           "language": "text",
           "tests": [
             {
-              "pattern": "created_at\\s+TIMESTAMP\\s+DEFAULT\\s+CURRENT_TIMESTAMP",
-              "message": "Gunakan: created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
+              "pattern": "created_at\\s+TIMESTAMP",
+              "message": "Definisi kolom dimulai dari namanya, lalu tipe datanya. Untuk waktu yang ikut zona waktu server, pakai `TIMESTAMP` (rentangnya sampai 2038) — `DATETIME` menyimpan waktu apa adanya tanpa konversi zona."
+            },
+            {
+              "pattern": "DEFAULT\\s+CURRENT_TIMESTAMP",
+              "message": "Nilai otomatis diberikan lewat `DEFAULT` diikuti fungsi waktu sekarang, tanpa tanda kurung di MySQL. Dengan ini kolomnya terisi sendiri dan aplikasimu tidak perlu mengirim waktu."
             }
           ],
           "solution": "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
@@ -1678,8 +1802,12 @@ export const sqlTrack: Track = {
           "language": "text",
           "tests": [
             {
-              "pattern": "EXPLAIN\\s+ANALYZE\\s+SELECT\\s+\\*\\s+FROM\\s+orders\\s+WHERE\\s+status\\s*=\\s*['\"]pending['\"]\\s*;?",
-              "message": "Gunakan: EXPLAIN ANALYZE SELECT * FROM orders WHERE status = 'pending';"
+              "pattern": "EXPLAIN\\s+ANALYZE",
+              "message": "Awali dengan dua kata kunci: yang pertama menampilkan rencana, yang kedua benar-benar menjalankan query dan mencatat waktu nyatanya."
+            },
+            {
+              "pattern": "FROM\\s+orders\\s+WHERE\\s+status\\s*=\\s*['\"]pending['\"]",
+              "message": "Tulis query yang dianalisis apa adanya: dari tabel pesanan, disaring pada kolom status bernilai teks `pending`."
             }
           ],
           "solution": "EXPLAIN ANALYZE SELECT * FROM orders WHERE status = 'pending';"
@@ -1699,8 +1827,16 @@ export const sqlTrack: Track = {
           "language": "text",
           "tests": [
             {
-              "pattern": "CREATE\\s+INDEX\\s+idx_pending_orders\\s+ON\\s+orders\\s*\\(\\s*user_id\\s*\\)\\s+WHERE\\s+status\\s*=\\s*['\"]pending['\"]\\s*;?",
-              "message": "Gunakan: CREATE INDEX idx_pending_orders ON orders (user_id) WHERE status = 'pending';"
+              "pattern": "CREATE\\s+INDEX\\s+idx_pending_orders",
+              "message": "Awali `CREATE INDEX` diikuti nama index-nya."
+            },
+            {
+              "pattern": "ON\\s+orders\\s*\\(\\s*user_id\\s*\\)",
+              "message": "Sebutkan tabel dan kolom yang diindeks dengan pola `ON <tabel>(<kolom>)`."
+            },
+            {
+              "pattern": "WHERE\\s+status\\s*=\\s*['\"]pending['\"]",
+              "message": "Yang membuatnya *partial* adalah klausa `WHERE` di AKHIR definisi index — hanya baris yang memenuhi syarat itu yang diindeks, sehingga index-nya kecil dan cepat. Syarat ini harus cocok dengan query aplikasimu, kalau tidak optimizer tidak akan memakainya."
             }
           ],
           "solution": "CREATE INDEX idx_pending_orders ON orders (user_id) WHERE status = 'pending';"
@@ -1762,8 +1898,8 @@ export const sqlTrack: Track = {
           "language": "text",
           "tests": [
             {
-              "pattern": "VACUUM\\s+FULL\\s+logs\\s*;?",
-              "message": "Tuliskan: VACUUM FULL logs;"
+              "pattern": "VACUUM\\s+FULL\\s+logs",
+              "message": "Pembersihan baris mati memakai `VACUUM`, dan varian `FULL` yang benar-benar mengembalikan ruang ke sistem operasi. Perhatikan: `VACUUM FULL` **mengunci tabel** sepanjang prosesnya, jadi di produksi ia dijalankan pada jam sepi, bukan siang hari."
             }
           ],
           "solution": "VACUUM FULL logs;"
@@ -1783,8 +1919,20 @@ export const sqlTrack: Track = {
           "language": "text",
           "tests": [
             {
-              "pattern": "pg_restore\\s+-U\\s+postgres\\s+-d\\s+production_db\\s+backup\\.dump",
-              "message": "Gunakan: pg_restore -U postgres -d production_db backup.dump"
+              "pattern": "pg_restore\\s",
+              "message": "Pemulihan dari berkas dump biner memakai program `pg_restore` (bukan `psql`, yang hanya untuk dump berformat teks SQL)."
+            },
+            {
+              "pattern": "-U\\s+postgres",
+              "message": "Sebutkan pengguna database dengan flag `-U`."
+            },
+            {
+              "pattern": "-d\\s+production_db",
+              "message": "Sebutkan database tujuan dengan flag `-d`. Database-nya harus SUDAH ada — `pg_restore` tidak membuatkannya kecuali kamu menambahkan flag `-C`."
+            },
+            {
+              "pattern": "backup\\.dump",
+              "message": "Nama berkas dump-nya ditulis terakhir, tanpa flag apa pun."
             }
           ],
           "solution": "pg_restore -U postgres -d production_db backup.dump"
@@ -1804,8 +1952,16 @@ export const sqlTrack: Track = {
           "language": "text",
           "tests": [
             {
-              "pattern": "CREATE\\s+EXTENSION\\s+IF\\s+NOT\\s+EXISTS\\s+[\"']?pg_stat_statements[\"']?\\s*;?",
-              "message": "Gunakan: CREATE EXTENSION IF NOT EXISTS \"pg_stat_statements\";"
+              "pattern": "CREATE\\s+EXTENSION",
+              "message": "Pengaktifan modul tambahan memakai `CREATE EXTENSION`."
+            },
+            {
+              "pattern": "IF\\s+NOT\\s+EXISTS",
+              "message": "Tambahkan penjaga tiga kata agar perintah tidak error saat extension-nya sudah aktif. Ini yang membuat skrip migrasi bisa dijalankan berulang kali dengan aman (*idempotent*)."
+            },
+            {
+              "pattern": "pg_stat_statements",
+              "message": "Sebutkan nama extension-nya. Yang ini mencatat statistik semua query yang pernah jalan — sumber utama saat mencari query paling lambat di produksi."
             }
           ],
           "solution": "CREATE EXTENSION IF NOT EXISTS \"pg_stat_statements\";"
@@ -1923,8 +2079,12 @@ export const sqlTrack: Track = {
           "language": "text",
           "tests": [
             {
-              "pattern": "EXPLAIN\\s+SELECT\\s+\\*\\s+FROM\\s+users\\s+WHERE\\s+status\\s*=\\s*['\"]active['\"]\\s*;?",
-              "message": "Gunakan: EXPLAIN SELECT * FROM users WHERE status = 'active';"
+              "pattern": "^\\s*EXPLAIN\\s+SELECT",
+              "message": "Di MySQL, cukup satu kata kunci di depan query untuk melihat rencana eksekusinya. (`EXPLAIN ANALYZE` juga ada di MySQL 8.0+, tapi yang diminta di sini bentuk dasarnya.)"
+            },
+            {
+              "pattern": "FROM\\s+users\\s+WHERE\\s+status\\s*=\\s*['\"]active['\"]",
+              "message": "Query yang dianalisis: dari tabel pengguna, disaring pada kolom status bernilai `active`."
             }
           ],
           "solution": "EXPLAIN SELECT * FROM users WHERE status = 'active';"
@@ -1944,8 +2104,12 @@ export const sqlTrack: Track = {
           "language": "text",
           "tests": [
             {
-              "pattern": "CREATE\\s+INDEX\\s+idx_email_created\\s+ON\\s+users\\s*\\(\\s*email\\s*,\\s*created_at\\s*\\)\\s*;?",
-              "message": "Gunakan: CREATE INDEX idx_email_created ON users (email, created_at);"
+              "pattern": "CREATE\\s+INDEX\\s+idx_email_created",
+              "message": "Awali `CREATE INDEX` diikuti nama index-nya."
+            },
+            {
+              "pattern": "ON\\s+users\\s*\\(\\s*email\\s*,\\s*created_at\\s*\\)",
+              "message": "Index komposit menyebut BEBERAPA kolom di dalam satu tanda kurung, dipisah koma. Urutannya menentukan segalanya: index ini bisa dipakai untuk pencarian berdasarkan `email` saja, tapi TIDAK untuk pencarian berdasarkan `created_at` saja."
             }
           ],
           "solution": "CREATE INDEX idx_email_created ON users (email, created_at);"
@@ -1986,8 +2150,12 @@ export const sqlTrack: Track = {
           "language": "text",
           "tests": [
             {
-              "pattern": "SET\\s+GLOBAL\\s+slow_query_log\\s*=\\s*['\"]?ON['\"]?\\s*;?",
-              "message": "Gunakan: SET GLOBAL slow_query_log = 'ON';"
+              "pattern": "SET\\s+GLOBAL\\s+slow_query_log",
+              "message": "Pengaturan tingkat server diubah dengan `SET GLOBAL` diikuti nama variabelnya. Pakai `GLOBAL`, bukan `SESSION` — kalau tidak, pencatatan hanya berlaku untuk koneksimu sendiri dan query lambat dari aplikasi tidak tercatat."
+            },
+            {
+              "pattern": "=\\s*['\"]?ON['\"]?",
+              "message": "Beri nilai penyala pada variabel itu. Nilai `1` juga diterima MySQL, tapi bentuk `'ON'` lebih jelas dibaca orang berikutnya."
             }
           ],
           "solution": "SET GLOBAL slow_query_log = 'ON';"
@@ -2007,8 +2175,12 @@ export const sqlTrack: Track = {
           "language": "text",
           "tests": [
             {
-              "pattern": "SET\\s+SESSION\\s+sql_mode\\s*=\\s*['\"]STRICT_TRANS_TABLES['\"]\\s*;?",
-              "message": "Gunakan: SET SESSION sql_mode = 'STRICT_TRANS_TABLES';"
+              "pattern": "SET\\s+SESSION\\s+sql_mode",
+              "message": "Ubah mode SQL untuk koneksi ini dengan `SET SESSION` diikuti nama variabelnya."
+            },
+            {
+              "pattern": "['\"]STRICT_TRANS_TABLES['\"]",
+              "message": "Isi dengan nama mode ketat untuk tabel transaksional, dibungkus tanda kutip. Tanpa mode ini, MySQL menerima data yang tidak valid dengan cara paling berbahaya: memotongnya diam-diam dan hanya memberi *warning* — teks kepanjangan terpotong, tanggal tidak valid berubah jadi `0000-00-00`."
             }
           ],
           "solution": "SET SESSION sql_mode = 'STRICT_TRANS_TABLES';"
@@ -2028,8 +2200,8 @@ export const sqlTrack: Track = {
           "language": "text",
           "tests": [
             {
-              "pattern": "SHOW\\s+(REPLICA|SLAVE)\\s+STATUS\\s*;?",
-              "message": "Gunakan: SHOW REPLICA STATUS;"
+              "pattern": "SHOW\\s+(REPLICA|SLAVE)\\s+STATUS",
+              "message": "Perintah pemeriksa status replikasi diawali `SHOW`. Istilah modernnya `REPLICA` (MySQL 8.0.22+), sedangkan `SLAVE` masih diterima untuk kompatibilitas — keduanya lolos di sini. Yang dibaca dari hasilnya adalah `Seconds_Behind_Source`: kalau angkanya terus naik, replika ketinggalan dan data yang dibaca aplikasi sudah basi."
             }
           ],
           "solution": "SHOW REPLICA STATUS;"
@@ -2049,8 +2221,12 @@ export const sqlTrack: Track = {
           "language": "text",
           "tests": [
             {
-              "pattern": "SELECT\\s+\\*\\s+FROM\\s+inventory\\s+WHERE\\s+product_id\\s*=\\s*10\\s+FOR\\s+UPDATE\\s*;?",
-              "message": "Gunakan: SELECT * FROM inventory WHERE product_id = 10 FOR UPDATE;"
+              "pattern": "SELECT\\s+\\*\\s+FROM\\s+inventory\\s+WHERE\\s+product_id\\s*=\\s*10",
+              "message": "Mulai dari pengambilan baris stok untuk produk yang dimaksud."
+            },
+            {
+              "pattern": "FOR\\s+UPDATE",
+              "message": "Kuncian baris ditambahkan dengan dua kata di AKHIR query. Ini yang mencegah dua transaksi membaca stok yang sama lalu sama-sama menguranginya (*race condition*). Catatan penting: kuncian hanya berlaku di dalam transaksi — tanpa `BEGIN`, perintah ini praktis tidak melindungi apa pun."
             }
           ],
           "solution": "SELECT * FROM inventory WHERE product_id = 10 FOR UPDATE;"
@@ -2166,8 +2342,16 @@ export const sqlTrack: Track = {
           "language": "text",
           "tests": [
             {
-              "pattern": "SELECT\\s+CONCAT\\(\\s*first_name\\s*,\\s*['\"]\\s+['\"]\\s*,\\s*last_name\\s*\\)\\s+AS\\s+full_name\\s+FROM\\s+users\\s*;?",
-              "message": "Gunakan: SELECT CONCAT(first_name, ' ', last_name) AS full_name FROM users;"
+              "pattern": "CONCAT\\(",
+              "message": "Penggabungan teks yang berjalan di MySQL MAUPUN PostgreSQL memakai fungsi `CONCAT(...)`. Operator `||` lebih pendek tapi tidak jalan di MySQL dengan setelan default — dan itulah inti pelajaran modul migrasi ini."
+            },
+            {
+              "pattern": "first_name\\s*,\\s*['\"]\\s+['\"]\\s*,\\s*last_name",
+              "message": "Argumennya tiga: nama depan, sebuah spasi di dalam tanda kutip, lalu nama belakang. Tanpa argumen spasi itu, hasilnya menempel jadi satu kata."
+            },
+            {
+              "pattern": "AS\\s+full_name",
+              "message": "Beri nama hasilnya dengan `AS` supaya kolomnya punya nama yang bisa dibaca kode aplikasi."
             }
           ],
           "solution": "SELECT CONCAT(first_name, ' ', last_name) AS full_name FROM users;"
@@ -2208,8 +2392,12 @@ export const sqlTrack: Track = {
           "language": "text",
           "tests": [
             {
-              "pattern": "is_active\\s+BOOLEAN\\s+DEFAULT\\s+TRUE",
-              "message": "Gunakan: is_active BOOLEAN DEFAULT TRUE"
+              "pattern": "is_active\\s+BOOLEAN",
+              "message": "Definisikan kolomnya dengan tipe boolean. Di PostgreSQL ini tipe sungguhan; di MySQL ia sebenarnya alias untuk `TINYINT(1)` yang menyimpan 0/1 — perbedaan yang wajib diingat saat memindahkan data antar keduanya."
+            },
+            {
+              "pattern": "DEFAULT\\s+TRUE",
+              "message": "Beri nilai bawaan dengan `DEFAULT`. Tanpa nilai bawaan, kolom ini berisi NULL untuk baris lama, dan NULL pada kondisi boolean bukan berarti \"false\" — ia berarti \"tidak diketahui\", sehingga `WHERE is_active = FALSE` tidak akan menemukannya."
             }
           ],
           "solution": "is_active BOOLEAN DEFAULT TRUE"
@@ -2229,8 +2417,12 @@ export const sqlTrack: Track = {
           "language": "text",
           "tests": [
             {
-              "pattern": "SELECT\\s+\\*\\s+FROM\\s+users\\s+WHERE\\s+payload->>'tier'\\s*=\\s*['\"]gold['\"]\\s*;?",
-              "message": "Gunakan: SELECT * FROM users WHERE payload->>'tier' = 'gold';"
+              "pattern": "FROM\\s+users",
+              "message": "Ambil dari tabel pengguna dengan `FROM`."
+            },
+            {
+              "pattern": "payload->>['\"]tier['\"]\\s*=\\s*['\"]gold['\"]",
+              "message": "Baca field di dalam kolom JSONB memakai operator dua tanda lebih besar agar hasilnya berupa teks, lalu bandingkan dengan nilai berpetik tunggal. Ini bukti PostgreSQL bisa menangani data semi-terstruktur — argumen yang sering dipakai untuk TIDAK pindah ke MongoDB."
             }
           ],
           "solution": "SELECT * FROM users WHERE payload->>'tier' = 'gold';"
@@ -2250,8 +2442,16 @@ export const sqlTrack: Track = {
           "language": "text",
           "tests": [
             {
-              "pattern": "pgloader\\s+mysql://root@localhost/source_db\\s+postgresql://postgres@localhost/target_db",
-              "message": "Gunakan: pgloader mysql://root@localhost/source_db postgresql://postgres@localhost/target_db"
+              "pattern": "pgloader\\s",
+              "message": "Alat migrasi otomatis MySQL ke PostgreSQL bernama `pgloader`. Ia memetakan tipe data dan memindahkan datanya sekaligus, jauh lebih aman daripada menyalin dump mentah."
+            },
+            {
+              "pattern": "mysql://root@localhost/source_db",
+              "message": "Argumen pertama adalah URI sumbernya, berskema `mysql://`."
+            },
+            {
+              "pattern": "postgresql://postgres@localhost/target_db",
+              "message": "Argumen kedua adalah URI tujuannya, berskema `postgresql://`. Urutan sumber lalu tujuan tidak boleh tertukar — kalau tertukar, kamu menimpa data yang seharusnya jadi hasil."
             }
           ],
           "solution": "pgloader mysql://root@localhost/source_db postgresql://postgres@localhost/target_db"
@@ -2271,8 +2471,12 @@ export const sqlTrack: Track = {
           "language": "text",
           "tests": [
             {
-              "pattern": "SELECT\\s+COUNT\\(\\*\\)\\s+FROM\\s+orders\\s*;?",
-              "message": "Gunakan: SELECT COUNT(*) FROM orders;"
+              "pattern": "COUNT\\(\\s*\\*\\s*\\)",
+              "message": "Pemeriksaan pertama setelah migrasi selalu jumlah baris, dan itu memakai fungsi pencacah dengan tanda bintang. Pakai `COUNT(*)`, bukan `COUNT(kolom)` — yang kedua mengabaikan baris ber-NULL sehingga selisihnya keliru dibaca sebagai data hilang."
+            },
+            {
+              "pattern": "FROM\\s+orders",
+              "message": "Sebutkan tabel yang diperiksa dengan `FROM`. Jalankan query yang sama di database sumber dan tujuan, lalu bandingkan angkanya."
             }
           ],
           "solution": "SELECT COUNT(*) FROM orders;"
@@ -2385,8 +2589,16 @@ export const sqlTrack: Track = {
           "language": "text",
           "tests": [
             {
-              "pattern": "const\\s+pool\\s*=\\s*new\\s+Pool\\(\\s*\\{\\s*max\\s*:\\s*10\\s*\\}\\s*\\)\\s*;?",
-              "message": "Gunakan: const pool = new Pool({ max: 10 });"
+              "pattern": "new\\s+Pool\\(",
+              "message": "Pool koneksi dibuat sekali dengan `new Pool({...})` lalu dipakai bersama seluruh aplikasi. Membuat koneksi baru per request adalah penyebab klasik server tumbang saat trafik naik — setiap koneksi memakan memori di sisi database."
+            },
+            {
+              "pattern": "max\\s*:\\s*10",
+              "message": "Batas jumlah koneksi diberikan lewat opsi `max`. Angka ini bukan \"makin besar makin bagus\": patokannya jumlah koneksi maksimum yang diizinkan databasemu dibagi jumlah instance aplikasi."
+            },
+            {
+              "pattern": "const\\s+pool\\s*=",
+              "message": "Simpan hasilnya ke sebuah konstanta bernama `pool` supaya modul lain bisa mengimpor pool yang SAMA."
             }
           ],
           "solution": "const pool = new Pool({ max: 10 });"
@@ -2427,8 +2639,16 @@ export const sqlTrack: Track = {
           "language": "text",
           "tests": [
             {
-              "pattern": "await\\s+prisma\\.user\\.findMany\\(\\s*\\{\\s*where\\s*:\\s*\\{\\s*role\\s*:\\s*['\"]admin['\"]\\s*\\}\\s*\\}\\s*\\)\\s*;?",
-              "message": "Gunakan: await prisma.user.findMany({ where: { role: \"admin\" } });"
+              "pattern": "prisma\\.user\\.findMany\\(",
+              "message": "Pengambilan banyak baris di Prisma memakai `findMany()` pada model yang dituju."
+            },
+            {
+              "pattern": "where\\s*:\\s*\\{[^}]*role\\s*:\\s*['\"]admin['\"]",
+              "message": "Penyaring ditulis sebagai objek pada opsi `where`. Nilai yang kamu masukkan otomatis dijadikan parameter oleh Prisma — inilah alasan ORM lebih tahan SQL injection daripada string query yang ditempel manual."
+            },
+            {
+              "pattern": "await\\s",
+              "message": "Query database selalu asinkron, jadi tunggu hasilnya dengan `await`. Tanpa itu yang kamu terima objek Promise, dan gejalanya khas: `[object Promise]` atau `undefined` saat datanya dipakai."
             }
           ],
           "solution": "await prisma.user.findMany({ where: { role: \"admin\" } });"
@@ -2448,8 +2668,16 @@ export const sqlTrack: Track = {
           "language": "text",
           "tests": [
             {
-              "pattern": "await\\s+prisma\\.user\\.findMany\\(\\s*\\{\\s*include\\s*:\\s*\\{\\s*posts\\s*:\\s*true\\s*\\}\\s*\\}\\s*\\)\\s*;?",
-              "message": "Gunakan: await prisma.user.findMany({ include: { posts: true } });"
+              "pattern": "prisma\\.user\\.findMany\\(",
+              "message": "Tetap pakai `findMany()` pada model pengguna — yang berubah hanya opsinya."
+            },
+            {
+              "pattern": "include\\s*:\\s*\\{[^}]*posts\\s*:\\s*true",
+              "message": "Eager loading diminta lewat opsi `include`, berisi nama relasi yang ikut diambil. Inilah yang mengubah 1+N query menjadi dua query saja."
+            },
+            {
+              "pattern": "await\\s",
+              "message": "Jangan lupa `await` — hasilnya Promise."
             }
           ],
           "solution": "await prisma.user.findMany({ include: { posts: true } });"
@@ -2469,8 +2697,12 @@ export const sqlTrack: Track = {
           "language": "text",
           "tests": [
             {
-              "pattern": "npx\\s+prisma\\s+migrate\\s+deploy",
-              "message": "Gunakan: npx prisma migrate deploy"
+              "pattern": "prisma\\s+migrate\\s+deploy",
+              "message": "Untuk MENERAPKAN migrasi yang sudah ada di server, subperintahnya `migrate deploy`. Jangan pakai `migrate dev` di produksi: ia bisa membuat berkas migrasi baru dan, pada kondisi tertentu, me-reset database."
+            },
+            {
+              "pattern": "npx\\s+prisma",
+              "message": "Jalankan CLI Prisma lewat `npx` supaya versinya mengikuti yang tercatat di proyek, bukan versi global di komputer server."
             }
           ],
           "solution": "npx prisma migrate deploy"
@@ -2490,8 +2722,12 @@ export const sqlTrack: Track = {
           "language": "text",
           "tests": [
             {
-              "pattern": "EXPLAIN\\s+ANALYZE\\s+SELECT\\s+\\*\\s+FROM\\s+orders\\s+WHERE\\s+user_id\\s*=\\s*42\\s*;?",
-              "message": "Gunakan: EXPLAIN ANALYZE SELECT * FROM orders WHERE user_id = 42;"
+              "pattern": "EXPLAIN\\s+ANALYZE",
+              "message": "Awali dengan dua kata kunci agar kamu melihat rencana eksekusi sekaligus waktu nyatanya."
+            },
+            {
+              "pattern": "FROM\\s+orders\\s+WHERE\\s+user_id\\s*=\\s*42",
+              "message": "Tulis query lambat yang sedang kamu selidiki apa adanya. Yang dicari di hasilnya satu kata: `Seq Scan` berarti seluruh tabel dibaca, dan itu tanda kolom penyaringnya belum punya index."
             }
           ],
           "solution": "EXPLAIN ANALYZE SELECT * FROM orders WHERE user_id = 42;"

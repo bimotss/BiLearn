@@ -147,6 +147,8 @@ Catatan lingkungan: `npx tsx` tidak jalan di sandbox Linux (binary esbuild-nya d
 
 ---
 
+> **PEMBARUAN 29 Juli 2026:** seluruh antrean di bagian E **sudah dikerjakan** pada lanjutan ronde ini. Angka terkini: `verify:konten` bersih dan `audit:lanjutan` **0 temuan**. Rinciannya di bagian **H** di bawah. Bagian E dibiarkan apa adanya sebagai catatan bagaimana keputusannya diambil saat itu.
+
 ## E. Antrean yang sengaja TIDAK ditambal buru-buru
 
 `scripts/audit-lanjutan.ts` ditambahkan sebagai pemeriksa kualitas **non-blocking** (selalu exit 0) supaya sisa pekerjaan ini punya angka, bukan kesan. Kondisi sekarang:
@@ -189,8 +191,89 @@ Rekomendasi untuk ronde berikutnya, per prioritas: React → SQL → Node → De
 
 ---
 
-## G. Kesimpulan mandor
+## G. Kesimpulan mandor (bagian pertama)
 
 Enam belas track sekarang bersih terhadap aturan keras, dan yang lebih penting: cacat-cacat yang **tidak** ditangkap skrip sudah dicari dengan cara yang bisa diulang — skrip variasi jawaban, eksekusi contoh di Node, pemeriksa keseimbangan tag, dan detektor drift judul–penjelasan. Ketiga temuan terbesar ronde ini (laporan yang mengklaim pekerjaan kosong, penjelasan SQL yang bergeser satu step, dan 70 preview mati yang tidak dijujurkan) semuanya lolos dari `verify:konten` — jadi penambahan `audit:lanjutan.ts` sengaja diarahkan ke wilayah itu.
 
 Dua hal yang belum tuntas dan tidak boleh dianggap tuntas: **`npm run build` belum pernah lulus di lingkungan ini** (SWC arm64 tidak ada — jalankan di Mac), dan **240 pesan tes masih membocorkan jawaban** karena akarnya desain step, bukan kalimat pesannya. Keduanya tercatat dengan angka, bukan diselipkan.
+
+---
+
+## H. Lanjutan 29 Juli 2026 — antrean bagian E dituntaskan
+
+Setelah laporan di atas diserahkan, tiga pekerjaan yang tadinya dicatat sebagai antrean dikerjakan sampai habis.
+
+### H1. `instalasiAllowlist` dikosongkan, bukan diakali
+
+Aturan keras #1 (modul pertama wajib Persiapan & Instalasi) dilewati **7 track** lewat daftar pengecualian di `scripts/verify-konten.ts`. Dua entri sudah basi (`sql` dan `spreadsheet` sebenarnya sudah punya modul persiapan), lima sisanya memang belum pernah dikerjakan. Daftar itu sekarang kosong dan diberi komentar peringatan.
+
+| Track | Sebelum | Sesudah | Yang ditulis |
+|---|---|---|---|
+| JavaScript | modul 1 = `dasar`, tanpa persiapan sama sekali | modul baru `persiapan-alat-kerja` | 1 materi + 4 step + kuis 6 soal: di mana JavaScript ditulis, tiga tempat ia bisa dijalankan, diagram kenapa `<script>` di `head` tanpa `defer` selalu menghasilkan `null`, tab DevTools yang dipakai harian, tiga jenis error dan cara membaca `berkas:baris` |
+| Python | `dasar-python` | `persiapan-dasar-python` | materi instalasi per OS, `python` vs `python3`, PATH di Windows, REPL vs berkas `.py`, jebakan menyalin `>>>`, jebakan menamai berkas `random.py` + step verifikasi versi |
+| Node.js | `node-runtime` | `persiapan-node-runtime` | materi nvm & LTS, anatomi proyek, mana yang di-commit (dan mana yang tidak), tabel apa yang hilang/didapat dibanding browser + step `npm init -y` |
+| Next.js | `app-router` | `persiapan-app-router` | materi `create-next-app`, App Router vs Pages Router, isi folder `app/`, empat perintah npm yang dipakai terus + step scaffolding |
+| NoSQL | `konsep-nosql` | `persiapan-konsep-nosql` | materi Atlas gratis vs Docker lokal, connection string, padanan istilah SQL→MongoDB, jebakan salah ketik nama collection yang **tidak** error tapi mengembalikan kosong + step `mongosh` |
+
+Kelima materi baru memenuhi aturan Ronde 3 (>1.200 karakter, diagram teks, tabel, bagian jebakan, kaitan dunia kerja) dan menyatakan terus terang bahwa panel latihan tidak menjalankan Python/Node/Next/MongoDB. `docs/kurikulum.md` ikut disinkronkan untuk enam track yang berubah.
+
+### H2. 240 pesan tes yang membocorkan jawaban: dari 240 → 0
+
+Bagian E semula merekomendasikan menunda ini karena akar masalahnya desain step. Yang akhirnya dikerjakan bukan penggantian kalimat secara massal, melainkan **memecah tesnya**: satu tes untuk satu hal yang diperiksa (panduan bagian 5), sehingga pesan gagalnya bisa menerangkan bagian yang kurang tanpa menempelkan seluruh jawaban.
+
+| Track | Pesan bocor sebelum | Sesudah | Tes sesudah dipecah |
+|---|---|---|---|
+| Git | 24 | 0 | (dikerjakan di bagian pertama) |
+| SQL | 44 | 0 | 44 step → 104 tes |
+| React | 44 | 0 | 44 step → 102 tes |
+| Node.js & Express | 41 | 0 | 41 step → 97 tes |
+| Deployment & Docker | 37 | 0 | 37 step → 52 tes |
+| Spreadsheet | 25 | 0 | 25 step → 47 tes |
+| PHP & Laravel | 18 | 0 | 18 step → 42 tes |
+| Analisis Data | 17 | 0 | 17 step → 43 tes |
+| NoSQL, Next.js, Python, AI-dev, HTML, CSS | 14 | 0 | 14 step → 31 tes |
+
+Contoh perubahannya (deployment):
+
+> sebelum: satu tes, pesan `"Gunakan: chmod 755 script.sh"`
+> sesudah: dua tes — yang pertama menjelaskan arti tiga angka 755 (pemilik 7, grup dan publik 5), yang kedua mengingatkan bahaya 777 di server publik.
+
+Contoh lain (Node.js), yang justru memperbaiki satu celah keamanan sebagai bahan ajar:
+
+> `node-5-1`: tes ketiga sekarang memeriksa keberadaan `await` pada `bcrypt.compare`, dengan pesan yang menjelaskan bahwa tanpa `await` yang diperiksa adalah objek Promise — dan objek selalu truthy, sehingga **siapa pun bisa login**.
+
+### H3. Empat `example.output` terakhir yang masih berupa prosa
+
+`css-2-2`, `js-10-2`, `react-2-2`, dan `laravel-9-1` diganti keluaran konkret: diagram posisi label untuk CSS, keluaran runner Vitest beserta `AssertionError` untuk JavaScript, HTML hasil render untuk React, dan laporan `PASS` Pest untuk Laravel.
+
+### H4. Tiga celah di skrip verifikasi yang ikut diperbaiki
+
+Ditemukan saat mengerjakan H2 — semuanya soal pemeriksa, bukan konten:
+
+1. Aturan "pesan tes malas" mencocokkan kata `salah` **di tengah kata**, sehingga pesan yang mengajar seperti "input yang bermasalah" atau "kesalahan umum" ikut ditolak. Sekarang memakai batas kata dan hanya menandai pesan yang benar-benar malas (`"Salah"`, `"Tes gagal"`, atau pesan sangat pendek).
+2. Aturan "tes terlalu longgar" berhasil menangkap 11 pattern baru yang saya tulis sendiri (`"DESC"`, `"logout"`, `"Category"`, …) — semuanya diperketat. Ini bukti aturannya bekerja, termasuk terhadap yang menulisnya.
+3. Satu step baru (`node-4-5`) sempat lolos karena komentar di `starterCode` memuat jawabannya; komentarnya ditulis ulang.
+
+### H5. Bukti verifikasi terkini
+
+| Pemeriksaan | Hasil |
+|---|---|
+| `npm run verify:konten` | **✅ SEMUA VERIFIKASI LOLOS** — 0 pelanggaran, `instalasiAllowlist` kosong |
+| Cakupan | 132 materi, 817 step, 128 kuis, 669 soal, 16 track |
+| `npm run audit:lanjutan` | **0 temuan** (dari 271 saat skrip ini dibuat) |
+| `npx tsc --noEmit` | bersih |
+| `npx eslint src scripts` | bersih |
+| Solution lolos tesnya sendiri | 817/817 |
+| `starterCode` tidak lolos semua tes | 817/817 |
+| Jawaban ngawur tidak lolos | 4.085 kombinasi, 0 lolos |
+| Variasi kutip & urutan atribut diterima | 0 penolakan |
+| Contoh JavaScript dieksekusi di Node | 61 dijalankan, 8 selisih — **semuanya sudah diperiksa manual dan disengaja** (3 contoh yang memang mendemonstrasikan error, 1 keluaran bercatatan, 3 contoh async/jaringan, 1 HTML sengaja rusak untuk pelajaran validator) |
+| Total assertion skrip uji | **6.108 lolos / 8 gagal** (kedelapan itu di atas) |
+| `npm run build` | **masih tidak bisa diuji di sandbox** — `Failed to load SWC binary for linux/arm64`. Belum terbukti lulus; wajib dijalankan di Mac. |
+
+### H6. Yang tersisa setelah ini
+
+Hanya dua, dan keduanya di luar jangkauan sandbox atau di luar jangkauan skrip:
+
+1. **`npm run build` belum pernah lulus di lingkungan ini.** Jalankan di Mac sebelum deploy.
+2. **Belum ada satu pun pemula sungguhan yang mencoba konten ini,** dan belum ada praktisi lain yang mereviewnya. Itu gap yang sudah dicatat `panduan_isi.md` bagian 12, dan tidak ada skrip yang bisa menutupnya.

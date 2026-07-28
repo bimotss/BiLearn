@@ -880,7 +880,7 @@ export const cssTrack: Track = {
           example: {
             code: ".kartu {\n  position: relative;   /* ← acuan bagi anak */\n  height: 80px;\n}\n\n.label {\n  position: absolute;   /* ← menempel ke .kartu */\n  bottom: 4px;\n  left: 4px;\n}",
             output:
-              "Label menempel di sudut kiri-bawah kartu. Kalau .kartu tidak diberi relative, label akan melompat ke sudut kiri-bawah HALAMAN.",
+              "Yang terlihat di preview:\n\n+--------------------------+\n|  .kartu (80px)           |\n|                          |\n| [label]                  |  <- menempel 4px dari kiri-bawah KARTU\n+--------------------------+\n\nTanpa position: relative pada .kartu, label pindah ke sini:\n(4px dari kiri-bawah JENDELA browser, menimpa isi lain)",
             note: "Selalu berpasangan: parent relative, anak absolute. Ini pola yang akan kamu pakai terus untuk badge, tooltip, dan ikon.",
           },
           instruction:
@@ -3003,13 +3003,15 @@ export const cssTrack: Track = {
           language: "css",
           previewHtml: "<h1>H1</h1>\n<h2>H2</h2>\n<h3>H3</h3>\n<p>Paragraf tetap hitam.</p>",
           tests: [
-            {
-              pattern:
-                ":is\\(\\s*h1\\s*,\\s*h2\\s*,\\s*h3\\s*\\)\\s*\\{[^}]*color\\s*:\\s*#1d4ed8",
-              message:
-                "Buat aturan :is(h1, h2, h3) { color: #1d4ed8; }",
-            },
-          ],
+                      {
+                        "pattern": ":is\\(\\s*h1\\s*,\\s*h2\\s*,\\s*h3\\s*\\)",
+                        "message": "Beberapa selector yang berbagi aturan yang sama bisa dipadatkan dengan pseudo-class `:is(...)`, berisi daftar selector dipisah koma. Catatan penting soal specificity: `:is()` mengambil nilai specificity dari selector TERKUAT di dalamnya — beda dari `:where()` yang selalu bernilai nol."
+                      },
+                      {
+                        "pattern": "color\\s*:\\s*#1d4ed8",
+                        "message": "Isi aturannya dengan properti warna teks beserta nilai heksadesimal yang diminta, diakhiri titik koma."
+                      }
+                    ],
           solution: ":is(h1, h2, h3) {\n  color: #1d4ed8;\n}",
         },
         {

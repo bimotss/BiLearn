@@ -82,12 +82,19 @@ export const aiDevTrack: Track = {
           starterCode: "# Tulis perintah di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "code\\s+--list-extensions\\s*\\|\\s*grep\\s+-i\\s+copilot",
-              message:
-                "Gunakan perintah code --list-extensions | grep -i copilot.",
-            },
-          ],
+                      {
+                        "pattern": "code\\s+--list-extensions",
+                        "message": "VS Code punya CLI sendiri bernama `code`, dan daftar ekstensi terpasang ditampilkan dengan flag `--list-extensions`."
+                      },
+                      {
+                        "pattern": "\\|\\s*grep\\s+-i",
+                        "message": "Saring keluarannya dengan pipe ke `grep`. Flag `-i` membuat pencarian mengabaikan huruf besar-kecil — penting di sini, karena id ekstensi biasanya ditulis `GitHub.copilot` dengan kapitalisasi campur."
+                      },
+                      {
+                        "pattern": "grep\\s+-i\\s+copilot",
+                        "message": "Sebutkan kata kunci yang dicari. Kalau tidak ada hasil, berarti ekstensinya belum terpasang — bukan berarti perintahnya salah."
+                      }
+                    ],
           solution: "code --list-extensions | grep -i copilot",
         },
         {
@@ -177,11 +184,15 @@ export const aiDevTrack: Track = {
           starterCode: "# Tulis perintah Ollama di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "ollama\\s+run\\s+qwen2\\.5-coder(:1\\.5b)?",
-              message: "Gunakan perintah ollama run qwen2.5-coder:1.5b.",
-            },
-          ],
+                      {
+                        "pattern": "ollama\\s+run",
+                        "message": "Ollama menjalankan model lokal dengan subperintah `run`; ia otomatis mengunduh model bila belum ada."
+                      },
+                      {
+                        "pattern": "qwen2\\.5-coder(:1\\.5b)?",
+                        "message": "Sebutkan nama model beserta tag ukurannya setelah titik dua. Ukuran menentukan kebutuhan RAM: varian 1.5b bisa jalan di laptop 8 GB, sementara varian 7b ke atas butuh jauh lebih besar dan akan sangat lambat kalau dipaksakan."
+                      }
+                    ],
           solution: "ollama run qwen2.5-coder:1.5b",
         },
         {

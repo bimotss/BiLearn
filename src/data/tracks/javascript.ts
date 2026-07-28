@@ -4370,7 +4370,11 @@ export const javascriptTrack: Track = {
           example: {
             code: "// nilai sederhana → toBe\nexpect(5 * 2).toBe(10);\nexpect('ab').toBe('ab');\nexpect(true).toBe(true);\n\n// object & array → toEqual\nexpect({ a: 1 }).toEqual({ a: 1 });   // ✅ lolos\n// expect({ a: 1 }).toBe({ a: 1 });   // ❌ gagal: dua object berbeda",
             output:
-              "Semua assertion dengan matcher yang tepat lolos; baris toBe pada object akan gagal.",
+              "✓ src/matcher.test.js (4 tests) 6ms\n\n" +
+              "Test Files  1 passed (1)\n" +
+              "     Tests  4 passed (4)\n\n" +
+              "// jika baris toBe pada object diaktifkan:\n" +
+              "AssertionError: expected { a: 1 } to be { a: 1 } // Object.is equality",
             note: "Aturan cepat: kalau nilainya bisa 'dipegang langsung' (angka/string/boolean) pakai toBe, kalau berisi struktur pakai toEqual.",
           },
           instruction:

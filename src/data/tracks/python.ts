@@ -1481,12 +1481,11 @@ export const pythonTrack: Track = {
           starterCode: "# Deklarasikan atribut kelas di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "species\\s*=\\s*['\"]Human['\"]",
-              message:
-                "Gunakan species = 'Human' sebagai atribut kelas (tanpa self).",
-            },
-          ],
+                      {
+                        "pattern": "species\\s*=\\s*['\"]Human['\"]",
+                        "message": "Atribut KELAS ditulis langsung di dalam badan class, sejajar dengan definisi method dan TANPA `self`. Nilainya dibagikan semua instance — beda dari atribut instance (`self.nama`) yang dibuat di dalam `__init__` dan berbeda untuk setiap objek. Jebakan besarnya: atribut kelas bertipe list atau dict akan dibagi bersama, sehingga `append` dari satu objek ikut terlihat di semua objek lain."
+                      }
+                    ],
           solution: "species = 'Human'",
         },
         {
@@ -1509,11 +1508,15 @@ export const pythonTrack: Track = {
           starterCode: "# Panggil constructor parent class di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "super\\(\\)\\.__init__\\(\\s*name\\s*\\)",
-              message: "Gunakan super().__init__(name) untuk memanggil induk.",
-            },
-          ],
+                      {
+                        "pattern": "super\\(\\s*\\)\\.__init__\\(",
+                        "message": "Constructor kelas induk dipanggil lewat `super().__init__(...)`. Tanpa pemanggilan ini, atribut yang seharusnya disiapkan induk tidak pernah ada, dan pemakaiannya nanti memicu `AttributeError` yang jauh dari sumber masalahnya."
+                      },
+                      {
+                        "pattern": "__init__\\(\\s*name\\s*\\)",
+                        "message": "Teruskan argumen yang dibutuhkan induk. Letakkan pemanggilan ini di BARIS PERTAMA `__init__` anak, sebelum atribut tambahan milik anak diisi."
+                      }
+                    ],
           solution: "super().__init__(name)",
         },
         {
@@ -1773,11 +1776,11 @@ export const pythonTrack: Track = {
           starterCode: "# Tulis perintah pip di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "pip\\s+install\\s+requests",
-              message: "Gunakan: pip install requests",
-            },
-          ],
+                      {
+                        "pattern": "pip\\s+install\\s+requests",
+                        "message": "Pemasangan paket dari PyPI memakai `pip install <nama-paket>`. Nama paket HTTP paling populer di Python ditulis huruf kecil dan berbentuk jamak. Praktik yang wajib menyertainya: aktifkan virtual environment lebih dulu, lalu catat hasilnya ke `requirements.txt` (`pip freeze > requirements.txt`) — tanpa itu, proyekmu tidak bisa dijalankan orang lain."
+                      }
+                    ],
           solution: "pip install requests",
         },
         {

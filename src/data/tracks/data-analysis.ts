@@ -125,11 +125,15 @@ Di industri, 80% tugas harian seorang **Data Analyst** dan **Data Engineer** mel
           starterCode: "# Tulis astype di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "df\\[\\s*['\"]price['\"]\\s*\\]\\s*=\\s*df\\[\\s*['\"]price['\"]\\s*\\]\\.astype\\(\\s*int\\s*\\)",
-              message: "Gunakan: df['price'] = df['price'].astype(int)",
-            },
-          ],
+                      {
+                        "pattern": "\\.astype\\(\\s*int\\s*\\)",
+                        "message": "Konversi tipe kolom memakai method `.astype(<tipe>)`. Jebakannya: `.astype(int)` langsung gagal kalau kolomnya memuat NaN atau teks — untuk data kotor, `pd.to_numeric(..., errors='coerce')` lebih aman."
+                      },
+                      {
+                        "pattern": "df\\[\\s*['\"]price['\"]\\s*\\]\\s*=",
+                        "message": "Hasil konversi TIDAK mengubah DataFrame dengan sendirinya; ia harus ditugaskan kembali ke kolomnya. Ini sumber \"kode saya jalan tapi tipenya tidak berubah\" yang paling sering."
+                      }
+                    ],
           solution: "df['price'] = df['price'].astype(int)",
         },
         {
@@ -148,11 +152,15 @@ Di industri, 80% tugas harian seorang **Data Analyst** dan **Data Engineer** mel
           starterCode: "# Tulis df.loc di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "subset\\s*=\\s*df\\.loc\\[\\s*:\\s*,\\s*\\[\\s*['\"]name['\"]\\s*,\\s*['\"]price['\"]\\s*\\]\\s*\\]",
-              message: "Gunakan: subset = df.loc[:, ['name', 'price']]",
-            },
-          ],
+                      {
+                        "pattern": "df\\.loc\\[",
+                        "message": "Seleksi berbasis LABEL memakai `.loc[...]`. Pasangannya `.iloc[...]` yang berbasis posisi angka — tertukar keduanya adalah kekeliruan nomor satu pemula pandas."
+                      },
+                      {
+                        "pattern": ":\\s*,\\s*\\[\\s*['\"]name['\"]\\s*,\\s*['\"]price['\"]\\s*\\]",
+                        "message": "Formatnya `[baris, kolom]`. Titik dua berarti \"semua baris\", lalu daftar nama kolom di dalam kurung siku. Perhatikan kurung siku ganda: satu untuk `.loc`, satu untuk daftar kolomnya."
+                      }
+                    ],
           solution: "subset = df.loc[:, ['name', 'price']]",
         },
         {
@@ -194,11 +202,19 @@ Di industri, 80% tugas harian seorang **Data Analyst** dan **Data Engineer** mel
           starterCode: "# Tulis groupby.agg di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "df\\.groupby\\(\\s*['\"]dept['\"]\\s*\\)\\.agg\\(\\s*\\{\\s*['\"]salary['\"]\\s*:\\s*['\"]mean['\"]\\s*\\}\\s*\\)",
-              message: "Gunakan: df.groupby('dept').agg({'salary': 'mean'})",
-            },
-          ],
+                      {
+                        "pattern": "df\\.groupby\\(\\s*['\"]dept['\"]\\s*\\)",
+                        "message": "Pengelompokan memakai `.groupby('<kolom>')`."
+                      },
+                      {
+                        "pattern": "\\.agg\\(\\s*\\{",
+                        "message": "Untuk agregasi berbeda per kolom, pakai `.agg()` dengan sebuah dictionary."
+                      },
+                      {
+                        "pattern": "['\"]salary['\"]\\s*:\\s*['\"]mean['\"]",
+                        "message": "Isi dictionary-nya berpola `'<kolom>': '<fungsi>'`. Nama fungsinya ditulis sebagai teks (`'mean'`, `'sum'`, `'count'`), atau bisa juga berupa daftar bila satu kolom butuh beberapa agregasi."
+                      }
+                    ],
           solution: "df.groupby('dept').agg({'salary': 'mean'})",
         },
         {
@@ -217,11 +233,19 @@ Di industri, 80% tugas harian seorang **Data Analyst** dan **Data Engineer** mel
           starterCode: "# Tulis pd.merge di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "merged\\s*=\\s*pd\\.merge\\(\\s*df1\\s*,\\s*df2\\s*,\\s*on\\s*=\\s*['\"]user_id['\"]\\s*,\\s*how\\s*=\\s*['\"]left['\"]\\s*\\)",
-              message: "Gunakan: merged = pd.merge(df1, df2, on='user_id', how='left')",
-            },
-          ],
+                      {
+                        "pattern": "pd\\.merge\\(",
+                        "message": "Penggabungan dua DataFrame memakai `pd.merge(kiri, kanan, ...)` — padanan JOIN di SQL."
+                      },
+                      {
+                        "pattern": "on\\s*=\\s*['\"]user_id['\"]",
+                        "message": "Kolom kuncinya disebut lewat parameter `on`. Kalau nama kolomnya berbeda di kedua sisi, pakai `left_on` dan `right_on`."
+                      },
+                      {
+                        "pattern": "how\\s*=\\s*['\"]left['\"]",
+                        "message": "Jenis penggabungan diberikan lewat `how`. Nilai bawaannya `'inner'` — itu membuang baris tanpa pasangan secara diam-diam, jadi selalu sebutkan `how` secara eksplisit dan periksa jumlah baris sebelum-sesudah merge."
+                      }
+                    ],
           solution: "merged = pd.merge(df1, df2, on='user_id', how='left')",
         },
         {
@@ -263,11 +287,19 @@ Di industri, 80% tugas harian seorang **Data Analyst** dan **Data Engineer** mel
           starterCode: "# Tulis apply di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "df\\[\\s*['\"]formatted['\"]\\s*\\]\\s*=\\s*df\\[\\s*['\"]text['\"]\\s*\\]\\.apply\\(\\s*lambda\\s+x\\s*:\\s*x\\.strip\\(\\)\\s*\\)",
-              message: "Gunakan: df['formatted'] = df['text'].apply(lambda x: x.strip())",
-            },
-          ],
+                      {
+                        "pattern": "\\.apply\\(\\s*lambda\\s+x\\s*:",
+                        "message": "`.apply()` menjalankan fungsi untuk setiap nilai; fungsi sederhana ditulis inline dengan `lambda x: ...`."
+                      },
+                      {
+                        "pattern": "x\\.strip\\(\\)",
+                        "message": "Isi lambda-nya dengan operasi per nilai. Catatan performa: untuk operasi teks sederhana, `.str.strip()` yang tervektorisasi jauh lebih cepat daripada `.apply()` — `.apply()` dipakai saat logikanya memang tidak bisa divektorisasi."
+                      },
+                      {
+                        "pattern": "df\\[\\s*['\"]formatted['\"]\\s*\\]\\s*=",
+                        "message": "Tugaskan hasilnya ke kolom baru, kalau tidak perhitungannya terbuang."
+                      }
+                    ],
           solution: "df['formatted'] = df['text'].apply(lambda x: x.strip())",
         },
         {
@@ -286,11 +318,19 @@ Di industri, 80% tugas harian seorang **Data Analyst** dan **Data Engineer** mel
           starterCode: "# Tulis rolling mean di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "df\\[\\s*['\"]moving_avg['\"]\\s*\\]\\s*=\\s*df\\[\\s*['\"]sales['\"]\\s*\\]\\.rolling\\(\\s*7\\s*\\)\\.mean\\(\\)",
-              message: "Gunakan: df['moving_avg'] = df['sales'].rolling(7).mean()",
-            },
-          ],
+                      {
+                        "pattern": "\\.rolling\\(\\s*7\\s*\\)",
+                        "message": "Jendela bergerak dibuat dengan `.rolling(<jumlah periode>)`."
+                      },
+                      {
+                        "pattern": "\\.mean\\(\\)",
+                        "message": "Rangkaikan fungsi agregasinya setelah jendelanya — `.rolling(7)` sendiri belum menghasilkan angka apa pun. Ingat: tujuh baris pertama bernilai NaN karena jendelanya belum penuh, dan itu perilaku yang benar."
+                      },
+                      {
+                        "pattern": "df\\[\\s*['\"]moving_avg['\"]\\s*\\]\\s*=",
+                        "message": "Simpan hasilnya sebagai kolom baru."
+                      }
+                    ],
           solution: "df['moving_avg'] = df['sales'].rolling(7).mean()",
         },
         {
@@ -468,11 +508,19 @@ Tim manajerial perusahaan mengambil keputusan bernilai miliaran rupiah berdasark
           starterCode: "# Tulis df.isna().sum() di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "print\\(\\s*df\\.isna\\(\\)\\.sum\\(\\)\\s*\\)",
-              message: "Tuliskan: print(df.isna().sum())",
-            },
-          ],
+                      {
+                        "pattern": "df\\.isna\\(\\)",
+                        "message": "Pemeriksaan nilai hilang memakai `.isna()` (alias `.isnull()`), yang mengembalikan DataFrame berisi True/False."
+                      },
+                      {
+                        "pattern": "\\.sum\\(\\)",
+                        "message": "Rangkaikan `.sum()` agar True dihitung sebagai 1 dan kamu mendapat JUMLAH nilai hilang per kolom. Tanpa itu, yang tercetak tabel True/False sepanjang datamu."
+                      },
+                      {
+                        "pattern": "print\\(",
+                        "message": "Bungkus dengan `print()` supaya hasilnya tampil saat skrip dijalankan dari terminal — di notebook, baris terakhir tampil sendiri, tapi di skrip tidak."
+                      }
+                    ],
           solution: "print(df.isna().sum())",
         },
         {
@@ -491,11 +539,19 @@ Tim manajerial perusahaan mengambil keputusan bernilai miliaran rupiah berdasark
           starterCode: "# Tulis fillna median di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "df\\[\\s*['\"]score['\"]\\s*\\]\\s*=\\s*df\\[\\s*['\"]score['\"]\\s*\\]\\.fillna\\(\\s*df\\[\\s*['\"]score['\"]\\s*\\]\\.median\\(\\)\\s*\\)",
-              message: "Gunakan: df['score'] = df['score'].fillna(df['score'].median())",
-            },
-          ],
+                      {
+                        "pattern": "\\.fillna\\(",
+                        "message": "Pengisian nilai hilang memakai `.fillna(<pengganti>)`."
+                      },
+                      {
+                        "pattern": "\\.median\\(\\)",
+                        "message": "Untuk data numerik yang punya pencilan (gaji, harga), median lebih tahan daripada rata-rata: satu nilai ekstrem menggeser `mean` tapi hampir tidak menggeser median."
+                      },
+                      {
+                        "pattern": "df\\[\\s*['\"]score['\"]\\s*\\]\\s*=",
+                        "message": "Tugaskan kembali hasilnya. Hindari `inplace=True` — ia sedang dalam proses dihapus dari pandas dan sering memicu `SettingWithCopyWarning`."
+                      }
+                    ],
           solution: "df['score'] = df['score'].fillna(df['score'].median())",
         },
         {
@@ -514,11 +570,15 @@ Tim manajerial perusahaan mengambil keputusan bernilai miliaran rupiah berdasark
           starterCode: "# Tulis str.lower di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "df\\[\\s*['\"]email['\"]\\s*\\]\\s*=\\s*df\\[\\s*['\"]email['\"]\\s*\\]\\.str\\.strip\\(\\)\\.str\\.lower\\(\\)",
-              message: "Gunakan: df['email'] = df['email'].str.strip().str.lower()",
-            },
-          ],
+                      {
+                        "pattern": "\\.str\\.strip\\(\\)",
+                        "message": "Operasi teks pada seluruh kolom dilakukan lewat accessor `.str`, lalu nama methodnya. Yang ini membuang spasi di awal dan akhir — penyebab utama nilai yang \"terlihat sama\" tapi tidak cocok saat merge."
+                      },
+                      {
+                        "pattern": "\\.str\\.lower\\(\\)",
+                        "message": "Rangkaikan penyeragaman huruf kecil setelahnya. Untuk email, dua langkah ini wajib sebelum dedup: `Budi@Mail.com ` dan `budi@mail.com` seharusnya satu orang."
+                      }
+                    ],
           solution: "df['email'] = df['email'].str.strip().str.lower()",
         },
         {
@@ -537,11 +597,15 @@ Tim manajerial perusahaan mengambil keputusan bernilai miliaran rupiah berdasark
           starterCode: "# Tulis pd.to_datetime di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "df\\[\\s*['\"]date['\"]\\s*\\]\\s*=\\s*pd\\.to_datetime\\(\\s*df\\[\\s*['\"]date['\"]\\s*\\]\\s*,\\s*errors\\s*=\\s*['\"]coerce['\"]\\s*\\)",
-              message: "Gunakan: df['date'] = pd.to_datetime(df['date'], errors='coerce')",
-            },
-          ],
+                      {
+                        "pattern": "pd\\.to_datetime\\(",
+                        "message": "Konversi teks menjadi tanggal memakai `pd.to_datetime(...)`. Selama kolomnya masih bertipe object, operasi tanggal (`.dt.month`, perbandingan periode) tidak tersedia."
+                      },
+                      {
+                        "pattern": "errors\\s*=\\s*['\"]coerce['\"]",
+                        "message": "Tambahkan `errors='coerce'` agar nilai yang tidak bisa diparse menjadi `NaT` alih-alih menghentikan seluruh skrip. Setelah itu, hitung `NaT`-nya — jumlah itu adalah laporan kualitas data yang berguna."
+                      }
+                    ],
           solution: "df['date'] = pd.to_datetime(df['date'], errors='coerce')",
         },
         {
@@ -583,11 +647,15 @@ Tim manajerial perusahaan mengambil keputusan bernilai miliaran rupiah berdasark
           starterCode: "# Tulis perhitungan IQR di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "IQR\\s*=\\s*Q3\\s*-\\s*Q1",
-              message: "Tuliskan: IQR = Q3 - Q1",
-            },
-          ],
+                      {
+                        "pattern": "IQR\\s*=",
+                        "message": "Simpan jarak antar-kuartil ke sebuah variabel bernama `IQR`."
+                      },
+                      {
+                        "pattern": "Q3\\s*-\\s*Q1",
+                        "message": "Nilainya adalah kuartil ketiga dikurangi kuartil pertama. Batas pencilan lalu dihitung `Q1 - 1.5*IQR` dan `Q3 + 1.5*IQR`. Metode ini dipilih daripada standar deviasi karena tidak ikut terdistorsi oleh pencilan yang sedang kamu cari."
+                      }
+                    ],
           solution: "IQR = Q3 - Q1",
         },
         {
@@ -810,11 +878,15 @@ Manajemen perusahaan bergantung pada analis untuk mengambil keputusan ber-risiko
           starterCode: "# Tulis quantile 0.95 di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "p95\\s*=\\s*df\\[\\s*['\"]latency['\"]\\s*\\]\\.quantile\\(\\s*0\\.95\\s*\\)",
-              message: "Gunakan: p95 = df['latency'].quantile(0.95)",
-            },
-          ],
+                      {
+                        "pattern": "\\.quantile\\(\\s*0\\.95\\s*\\)",
+                        "message": "Persentil dihitung dengan `.quantile(<proporsi>)` — nilainya 0 sampai 1, jadi persentil ke-95 ditulis sebagai 0.95 (bukan 95)."
+                      },
+                      {
+                        "pattern": "p95\\s*=",
+                        "message": "Simpan hasilnya ke variabel. Untuk latensi, angka inilah yang dipakai di dunia kerja, bukan rata-rata: rata-rata menyembunyikan 5% pengguna yang paling lama menunggu."
+                      }
+                    ],
           solution: "p95 = df['latency'].quantile(0.95)",
         },
         {
@@ -1146,11 +1218,15 @@ Grafik beresolusi tinggi yang disimpan dengan \`plt.savefig('chart.png', dpi=300
           starterCode: "# Tulis plt.subplots di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "fig\\s*,\\s*ax\\s*=\\s*plt\\.subplots\\(\\)",
-              message: "Gunakan: fig, ax = plt.subplots()",
-            },
-          ],
+                      {
+                        "pattern": "plt\\.subplots\\(\\)",
+                        "message": "Cara yang dianjurkan membuat grafik adalah `plt.subplots()`, yang mengembalikan dua objek sekaligus."
+                      },
+                      {
+                        "pattern": "fig\\s*,\\s*ax\\s*=",
+                        "message": "Ambil keduanya dengan tuple unpacking: `fig` untuk keseluruhan kanvas (ukuran, penyimpanan), `ax` untuk area gambarnya (judul, sumbu, data). Gaya `plt.plot()` langsung terlihat lebih pendek tapi bergantung pada \"grafik aktif\" yang membingungkan begitu ada lebih dari satu grafik."
+                      }
+                    ],
           solution: "fig, ax = plt.subplots()",
         },
         {
@@ -1169,11 +1245,15 @@ Grafik beresolusi tinggi yang disimpan dengan \`plt.savefig('chart.png', dpi=300
           starterCode: "# Tulis ax.scatter di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "ax\\.scatter\\(\\s*df\\[\\s*['\"]x['\"]\\s*\\]\\s*,\\s*df\\[\\s*['\"]y['\"]\\s*\\]\\s*\\)",
-              message: "Gunakan: ax.scatter(df['x'], df['y'])",
-            },
-          ],
+                      {
+                        "pattern": "ax\\.scatter\\(",
+                        "message": "Diagram sebar digambar dengan method `.scatter()` pada objek axes-nya — bukan pada `plt`, supaya jelas grafik mana yang dituju."
+                      },
+                      {
+                        "pattern": "df\\[\\s*['\"]x['\"]\\s*\\]\\s*,\\s*df\\[\\s*['\"]y['\"]\\s*\\]",
+                        "message": "Argumennya dua deret: nilai sumbu horizontal, lalu vertikal. Panjang keduanya harus sama."
+                      }
+                    ],
           solution: "ax.scatter(df['x'], df['y'])",
         },
         {
@@ -1192,11 +1272,19 @@ Grafik beresolusi tinggi yang disimpan dengan \`plt.savefig('chart.png', dpi=300
           starterCode: "# Tulis sns.heatmap di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "sns\\.heatmap\\(\\s*df\\.corr\\(\\)\\s*,\\s*annot\\s*=\\s*True\\s*\\)",
-              message: "Gunakan: sns.heatmap(df.corr(), annot=True)",
-            },
-          ],
+                      {
+                        "pattern": "sns\\.heatmap\\(",
+                        "message": "Seaborn menggambar peta panas dengan `sns.heatmap(<matriks>)`."
+                      },
+                      {
+                        "pattern": "df\\.corr\\(\\)",
+                        "message": "Matriksnya diperoleh dari `.corr()`, yang menghitung korelasi antar kolom numerik. Ingat: korelasi bukan sebab-akibat, dan kolom teks diabaikan begitu saja."
+                      },
+                      {
+                        "pattern": "annot\\s*=\\s*True",
+                        "message": "Tambahkan `annot=True` agar angkanya tercetak di setiap kotak — tanpa itu pembaca hanya menebak dari warna."
+                      }
+                    ],
           solution: "sns.heatmap(df.corr(), annot=True)",
         },
         {
@@ -1215,11 +1303,15 @@ Grafik beresolusi tinggi yang disimpan dengan \`plt.savefig('chart.png', dpi=300
           starterCode: "# Tulis set_ylim di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "ax\\.set_ylim\\(\\s*bottom\\s*=\\s*0\\s*\\)",
-              message: "Tuliskan: ax.set_ylim(bottom=0)",
-            },
-          ],
+                      {
+                        "pattern": "ax\\.set_ylim\\(",
+                        "message": "Batas sumbu diatur dengan `ax.set_ylim(...)`."
+                      },
+                      {
+                        "pattern": "bottom\\s*=\\s*0",
+                        "message": "Mulai sumbu vertikal dari nol untuk grafik batang. Memulainya dari angka lain melebih-lebihkan selisih secara visual — itu manipulasi paling umum di grafik berita, dan hal pertama yang dicari reviewer pada dashboard-mu."
+                      }
+                    ],
           solution: "ax.set_ylim(bottom=0)",
         },
         {
@@ -1271,11 +1363,19 @@ Grafik beresolusi tinggi yang disimpan dengan \`plt.savefig('chart.png', dpi=300
           starterCode: "# Tulis plt.savefig di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "plt\\.savefig\\(\\s*['\"]chart\\.png['\"]\\s*,\\s*dpi\\s*=\\s*300\\s*\\)",
-              message: "Gunakan: plt.savefig('chart.png', dpi=300)",
-            },
-          ],
+                      {
+                        "pattern": "plt\\.savefig\\(",
+                        "message": "Penyimpanan gambar memakai `plt.savefig(<nama berkas>)`. Wajib dipanggil SEBELUM `plt.show()` — setelah ditampilkan, kanvasnya dibersihkan dan yang tersimpan jadi gambar kosong."
+                      },
+                      {
+                        "pattern": "['\"]chart\\.png['\"]",
+                        "message": "Sebutkan nama berkasnya beserta ekstensi; ekstensi itulah yang menentukan formatnya."
+                      },
+                      {
+                        "pattern": "dpi\\s*=\\s*300",
+                        "message": "Tambahkan `dpi=300` untuk gambar yang akan masuk laporan atau dicetak. Nilai bawaan (100) terlihat buram saat diperbesar di slide presentasi."
+                      }
+                    ],
           solution: "plt.savefig('chart.png', dpi=300)",
         },
         {

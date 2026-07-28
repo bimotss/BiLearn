@@ -100,11 +100,11 @@ export const deploymentTrack: Track = {
           starterCode: "# Tulis perintah cd di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "cd\\s+/var/www/html/?$",
-              message: "Gunakan perintah: cd /var/www/html",
-            },
-          ],
+                      {
+                        "pattern": "cd\\s+/var/www/html/?$",
+                        "message": "Perpindahan folder memakai `cd` diikuti jalurnya. Karena jalur diawali garis miring, ia bersifat ABSOLUT — berlaku dari mana pun kamu berada. Tanpa garis miring di depan, jalurnya dianggap relatif terhadap posisi sekarang dan biasanya gagal dengan `No such file or directory`."
+                      }
+                    ],
           solution: "cd /var/www/html",
         },
         {
@@ -127,11 +127,11 @@ export const deploymentTrack: Track = {
           starterCode: "# Tulis perintah mkdir di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "mkdir\\s+(-p\\s+)?project/?$",
-              message: "Gunakan perintah: mkdir project",
-            },
-          ],
+                      {
+                        "pattern": "mkdir\\s+(-p\\s+)?project/?$",
+                        "message": "Pembuatan folder memakai `mkdir` diikuti namanya. Untuk folder bertingkat sekaligus, tambahkan flag `-p` — flag itu juga membuat perintahnya tidak error kalau foldernya sudah ada, dan itulah sebabnya skrip deploy selalu memakainya."
+                      }
+                    ],
           solution: "mkdir project",
         },
         {
@@ -151,11 +151,15 @@ export const deploymentTrack: Track = {
           starterCode: "# Tulis perintah chmod di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "chmod\\s+755\\s+(\\./)?script\\.sh$",
-              message: "Gunakan: chmod 755 script.sh",
-            },
-          ],
+                      {
+                        "pattern": "chmod\\s+755",
+                        "message": "Hak akses diubah dengan `chmod` diikuti tiga angka: pemilik, grup, lainnya. Nilai 755 berarti pemilik boleh baca-tulis-eksekusi (7), sedangkan grup dan publik hanya baca-eksekusi (5) — pola standar untuk skrip yang boleh dijalankan siapa saja tapi hanya diubah pemiliknya."
+                      },
+                      {
+                        "pattern": "(\\./)?script\\.sh$",
+                        "message": "Sebutkan berkas targetnya di akhir perintah. Hindari 777: itu berarti siapa pun di server boleh MENGUBAH berkasmu, dan pada server publik itu celah keamanan nyata."
+                      }
+                    ],
           solution: "chmod 755 script.sh",
         },
         {
@@ -175,11 +179,15 @@ export const deploymentTrack: Track = {
           starterCode: "# Tulis perintah grep di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "grep\\s+['\"]?ERROR['\"]?\\s+app\\.log$",
-              message: "Gunakan: grep 'ERROR' app.log",
-            },
-          ],
+                      {
+                        "pattern": "grep\\s+['\"]?ERROR['\"]?",
+                        "message": "Penyaringan baris memakai `grep` diikuti kata yang dicari. Bungkus dengan tanda kutip bila kata itu mengandung spasi atau karakter khusus."
+                      },
+                      {
+                        "pattern": "app\\.log$",
+                        "message": "Berkas yang dibaca ditulis setelah pola pencariannya. Ingat `grep` peka huruf besar-kecil — tambahkan `-i` bila ingin `error` dan `ERROR` sama-sama tertangkap."
+                      }
+                    ],
           solution: "grep 'ERROR' app.log",
         },
         {
@@ -199,11 +207,15 @@ export const deploymentTrack: Track = {
           starterCode: "# Tulis perintah kill di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "kill\\s+-9\\s+5678$",
-              message: "Gunakan: kill -9 5678",
-            },
-          ],
+                      {
+                        "pattern": "kill\\s+-9",
+                        "message": "Penghentian proses memakai `kill`. Flag `-9` mengirim SIGKILL yang tidak bisa ditolak — pakai ini sebagai jalan terakhir, karena proses tidak diberi kesempatan menutup koneksi database atau menyimpan pekerjaan. Coba `kill <pid>` (SIGTERM) lebih dulu."
+                      },
+                      {
+                        "pattern": "5678$",
+                        "message": "Sebutkan PID prosesnya, yaitu angka yang kamu dapat dari `ps aux` atau `htop`."
+                      }
+                    ],
           solution: "kill -9 5678",
         },
         {
@@ -225,11 +237,11 @@ export const deploymentTrack: Track = {
           starterCode: "# Tulis perintah ssh di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "ssh\\s+root@192\\.168\\.1\\.1$",
-              message: "Gunakan: ssh root@192.168.1.1",
-            },
-          ],
+                      {
+                        "pattern": "ssh\\s+root@192\\.168\\.1\\.1$",
+                        "message": "Koneksi remote memakai `ssh` diikuti `pengguna@host`. Untuk port tidak standar, tambahkan `-p <port>`. Catatan keamanan: login langsung sebagai `root` biasanya dimatikan di server produksi — yang dianjurkan membuat pengguna biasa lalu memakai `sudo`."
+                      }
+                    ],
           solution: "ssh root@192.168.1.1",
         },
         {
@@ -251,11 +263,15 @@ export const deploymentTrack: Track = {
           starterCode: "# Tulis perintah systemctl di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "(sudo\\s+)?systemctl\\s+status\\s+nginx$",
-              message: "Gunakan: sudo systemctl status nginx",
-            },
-          ],
+                      {
+                        "pattern": "systemctl\\s+status",
+                        "message": "Pengelola layanan pada Linux modern adalah `systemctl`, dan subperintah pemeriksa keadaannya `status`. Ia menampilkan aktif/mati sekaligus sepuluh baris log terakhir — tempat pertama yang dilihat saat layanan tidak jalan."
+                      },
+                      {
+                        "pattern": "nginx$",
+                        "message": "Sebutkan nama layanannya di akhir. Perintah ini boleh tanpa `sudo`; yang butuh `sudo` adalah `start`, `stop`, dan `restart`."
+                      }
+                    ],
           solution: "sudo systemctl status nginx",
         },
         {
@@ -427,11 +443,15 @@ export const deploymentTrack: Track = {
           starterCode: "# Tulis perintah docker pull di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "docker\\s+pull\\s+nginx:alpine$",
-              message: "Gunakan: docker pull nginx:alpine",
-            },
-          ],
+                      {
+                        "pattern": "docker\\s+pull",
+                        "message": "Pengunduhan image dari registry memakai subperintah `pull`."
+                      },
+                      {
+                        "pattern": "nginx:alpine$",
+                        "message": "Sebutkan nama image beserta tag-nya, dipisah titik dua. Selalu sebut tag secara eksplisit — tanpa itu Docker memakai `latest`, yang berarti isi image bisa berubah tanpa kamu ubah apa pun. Varian `alpine` dipilih karena ukurannya jauh lebih kecil."
+                      }
+                    ],
           solution: "docker pull nginx:alpine",
         },
         {
@@ -454,11 +474,11 @@ export const deploymentTrack: Track = {
           starterCode: "# Tulis perintah melihat container di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "docker\\s+(container\\s+)?ps(\\s+-a)?$",
-              message: "Gunakan perintah: docker ps",
-            },
-          ],
+                      {
+                        "pattern": "docker\\s+(container\\s+)?ps(\\s+-a)?$",
+                        "message": "Daftar container yang SEDANG berjalan ditampilkan `docker ps`. Untuk melihat yang sudah mati juga (biasanya inilah yang kamu butuhkan saat container gagal menyala), tambahkan flag `-a`."
+                      }
+                    ],
           solution: "docker ps",
         },
         {
@@ -486,11 +506,11 @@ export const deploymentTrack: Track = {
           starterCode: "# Tulis baris FROM di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "FROM\\s+node:20-alpine$",
-              message: "Tuliskan: FROM node:20-alpine",
-            },
-          ],
+                      {
+                        "pattern": "FROM\\s+node:20-alpine$",
+                        "message": "Baris pertama Dockerfile selalu instruksi `FROM` yang menyebut base image beserta tag versinya. Sebut versi Node secara eksplisit — memakai `node:latest` berarti build hari ini dan bulan depan bisa memakai versi Node yang berbeda, dan itu sumber \"kok tiba-tiba error di server\"."
+                      }
+                    ],
           solution: "FROM node:20-alpine",
         },
         {
@@ -519,11 +539,11 @@ export const deploymentTrack: Track = {
           starterCode: "# Tulis perintah COPY package di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "COPY\\s+package.*\\.json\\s+\\./?$",
-              message: "Gunakan: COPY package*.json ./",
-            },
-          ],
+                      {
+                        "pattern": "COPY\\s+package.*\\.json\\s+\\./?$",
+                        "message": "Kunci layer caching: salin dulu HANYA berkas manifest (`package.json` dan `package-lock.json`, bisa diwakili pola dengan tanda bintang) ke direktori kerja, jalankan `npm ci`, baru salin sisa kodenya. Kalau seluruh folder disalin lebih dulu, setiap perubahan satu baris kode membatalkan cache dan membuat dependency diunduh ulang."
+                      }
+                    ],
           solution: "COPY package*.json ./",
         },
         {
@@ -552,11 +572,15 @@ export const deploymentTrack: Track = {
           starterCode: "# Tulis perintah COPY --from di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "COPY\\s+--from=builder\\s+/app/dist\\s+(\\./dist|/app/dist|\\.)$",
-              message: "Gunakan: COPY --from=builder /app/dist ./dist",
-            },
-          ],
+                      {
+                        "pattern": "COPY\\s+--from=builder",
+                        "message": "Pada multi-stage build, penyalinan dari tahap sebelumnya memakai flag `--from=` diikuti nama tahapnya (yang diberi lewat `AS builder`)."
+                      },
+                      {
+                        "pattern": "/app/dist\\s+(\\./dist|/app/dist|\\.)$",
+                        "message": "Sebutkan jalur sumber di tahap builder, lalu tujuannya di image akhir. Inilah yang membuat image produksi hanya berisi hasil build — tanpa devDependencies dan tanpa kode sumber, sehingga ukurannya bisa turun dari 1,2 GB ke puluhan MB."
+                      }
+                    ],
           solution: "COPY --from=builder /app/dist ./dist",
         },
         {
@@ -577,11 +601,15 @@ export const deploymentTrack: Track = {
           starterCode: "# Tulis perintah docker run di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "docker\\s+run\\s+.*-v\\s+db_data:/var/lib/mysql.*",
-              message: "Gunakan sintaks: docker run -d -v db_data:/var/lib/mysql mysql",
-            },
-          ],
+                      {
+                        "pattern": "docker\\s+run\\s.*-v\\s",
+                        "message": "Data yang harus bertahan dipasang lewat flag `-v` (volume) pada `docker run`."
+                      },
+                      {
+                        "pattern": "db_data:/var/lib/mysql",
+                        "message": "Formatnya `<nama-volume>:<jalur-di-dalam-container>`. Jalur di sisi kanan harus tepat folder tempat database menyimpan datanya. Tanpa volume, `docker rm` menghapus seluruh isi database — dan itu kehilangan yang tidak bisa dibatalkan."
+                      }
+                    ],
           solution: "docker run -d -v db_data:/var/lib/mysql mysql",
         },
         {
@@ -601,11 +629,11 @@ export const deploymentTrack: Track = {
           starterCode: "# Tulis baris abaikan folder di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "^node_modules/?$",
-              message: "Tuliskan: node_modules",
-            },
-          ],
+                      {
+                        "pattern": "^node_modules/?$",
+                        "message": "Isi `.dockerignore` dengan nama folder dependency yang tidak boleh ikut masuk image. Alasannya dua: ukurannya besar, dan isinya hasil kompilasi di sistem operasimu yang bisa tidak cocok dengan Linux di dalam container. Formatnya satu pola per baris, tanpa tanda kutip."
+                      }
+                    ],
           solution: "node_modules",
         },
         {
@@ -630,11 +658,11 @@ export const deploymentTrack: Track = {
           starterCode: "# Tulis instruksi USER di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "USER\\s+node$",
-              message: "Tuliskan: USER node",
-            },
-          ],
+                      {
+                        "pattern": "USER\\s+node$",
+                        "message": "Instruksi `USER` mengganti pengguna yang menjalankan proses di dalam container. Tanpa itu, aplikasimu berjalan sebagai root — dan kalau ada celah, penyerang mendapat hak penuh di dalam container. Image resmi Node sudah menyediakan pengguna tak-berhak bernama sama dengan nama runtime-nya. Letakkan instruksi ini SETELAH semua operasi yang butuh hak tulis."
+                      }
+                    ],
           solution: "USER node",
         },
         {
@@ -834,11 +862,11 @@ export const deploymentTrack: Track = {
           starterCode: "# Tulis perintah docker compose di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "docker[- ]compose\\s+up\\s+-d$",
-              message: "Gunakan: docker compose up -d",
-            },
-          ],
+                      {
+                        "pattern": "docker[- ]compose\\s+up\\s+-d$",
+                        "message": "Seluruh stack dinyalakan dengan `docker compose up`. Flag `-d` (detached) melepasnya ke latar belakang sehingga terminalmu bebas — tanpa flag itu, menutup terminal ikut mematikan stack. Perhatikan: bentuk modern memakai spasi (`docker compose`), bentuk lama memakai tanda hubung."
+                      }
+                    ],
           solution: "docker compose up -d",
         },
         {
@@ -865,11 +893,11 @@ export const deploymentTrack: Track = {
           starterCode: "# Tulis interpolasi variabel di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "\\$\\{DATABASE_URL\\}$",
-              message: "Tuliskan: ${DATABASE_URL}",
-            },
-          ],
+                      {
+                        "pattern": "\\$\\{DATABASE_URL\\}$",
+                        "message": "Nilai dari `.env` dirujuk di compose dengan bentuk `${NAMA_VARIABEL}`. Kurung kurawal wajib. Dengan cara ini berkas compose bisa ikut ke repo, sementara nilai rahasianya tinggal di `.env` yang tidak di-commit."
+                      }
+                    ],
           solution: "${DATABASE_URL}",
         },
         {
@@ -928,11 +956,11 @@ export const deploymentTrack: Track = {
           starterCode: "# Tulis restart policy di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "restart:\\s*['\"]?unless-stopped['\"]?$",
-              message: "Tuliskan: restart: unless-stopped",
-            },
-          ],
+                      {
+                        "pattern": "restart:\\s*['\"]?unless-stopped['\"]?$",
+                        "message": "Kebijakan restart diatur lewat kunci `restart`. Nilai yang dipakai di produksi adalah yang membuat container selalu naik lagi setelah crash ATAU setelah server reboot, kecuali kamu sendiri yang menghentikannya. Nilai `always` mirip tapi ia juga menyalakan ulang container yang sengaja kamu stop."
+                      }
+                    ],
           solution: "restart: unless-stopped",
         },
         {
@@ -962,11 +990,11 @@ export const deploymentTrack: Track = {
           starterCode: "# Tulis image redis di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "image:\\s*['\"]?redis:alpine['\"]?$",
-              message: "Tuliskan: image: redis:alpine",
-            },
-          ],
+                      {
+                        "pattern": "image:\\s*['\"]?redis:alpine['\"]?$",
+                        "message": "Sebuah service yang memakai image siap pakai cukup menyebut kunci `image` beserta nama dan tag-nya. Untuk cache/session, varian ringan `alpine` sudah cukup. Bandingkan dengan service aplikasimu sendiri yang memakai `build:` karena image-nya dibangun dari Dockerfile."
+                      }
+                    ],
           solution: "image: redis:alpine",
         },
         {
@@ -991,11 +1019,11 @@ export const deploymentTrack: Track = {
           starterCode: "# Tulis penghentian stack di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "docker[- ]compose\\s+down$",
-              message: "Gunakan perintah: docker compose down",
-            },
-          ],
+                      {
+                        "pattern": "docker[- ]compose\\s+down$",
+                        "message": "Stack dihentikan sekaligus dibersihkan (container dan network-nya) dengan subperintah `down`. Bedanya dengan `stop`: `stop` hanya mematikan, `down` juga menghapus container-nya. Volume TIDAK ikut terhapus kecuali kamu menambahkan `-v` — dan flag itu yang harus kamu hindari di server produksi."
+                      }
+                    ],
           solution: "docker compose down",
         },
         {
@@ -1181,11 +1209,15 @@ export const deploymentTrack: Track = {
           starterCode: "# Tulis perintah ufw allow di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "(sudo\\s+)?ufw\\s+allow\\s+80(/tcp)?$",
-              message: "Gunakan: sudo ufw allow 80/tcp",
-            },
-          ],
+                      {
+                        "pattern": "ufw\\s+allow",
+                        "message": "Firewall bawaan Ubuntu diatur dengan `ufw`, dan subperintah pengizinnya `allow`."
+                      },
+                      {
+                        "pattern": "80(/tcp)?$",
+                        "message": "Sebutkan port yang dibuka; boleh ditambah protokolnya setelah garis miring. Urutan aman saat menyalakan firewall: izinkan dulu SSH (22), baru `ufw enable` — kalau terbalik, kamu terkunci di luar servermu sendiri."
+                      }
+                    ],
           solution: "sudo ufw allow 80/tcp",
         },
         {
@@ -1212,11 +1244,15 @@ export const deploymentTrack: Track = {
           starterCode: "# Tulis perintah git clone di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "git\\s+clone\\s+https://github\\.com/user/app\\.git$",
-              message: "Gunakan perintah git clone https://github.com/user/app.git",
-            },
-          ],
+                      {
+                        "pattern": "git\\s+clone",
+                        "message": "Kode diambil ke server dengan `git clone` diikuti URL repositorinya."
+                      },
+                      {
+                        "pattern": "https://github\\.com/user/app\\.git$",
+                        "message": "Untuk server, URL HTTPS lebih praktis pada repo publik. Untuk repo privat, siapkan deploy key lalu pakai URL SSH — jangan menyimpan token di riwayat perintah server."
+                      }
+                    ],
           solution: "git clone https://github.com/user/app.git",
         },
         {
@@ -1245,11 +1281,11 @@ export const deploymentTrack: Track = {
           starterCode: "# Tulis baris proxy_pass di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "proxy_pass\\s+http://(127\\.0\\.0\\.1|localhost):3000;?$",
-              message: "Tuliskan: proxy_pass http://127.0.0.1:3000;",
-            },
-          ],
+                      {
+                        "pattern": "proxy_pass\\s+http://(127\\.0\\.0\\.1|localhost):3000;?$",
+                        "message": "Penerusan permintaan di Nginx memakai direktif `proxy_pass` diikuti alamat aplikasimu, dan diakhiri titik koma seperti semua direktif Nginx. Arahkan ke localhost, bukan ke IP publik server — aplikasi Node sebaiknya hanya mendengarkan dari dalam, dan hanya Nginx yang menghadap internet."
+                      }
+                    ],
           solution: "proxy_pass http://127.0.0.1:3000;",
         },
         {
@@ -1274,11 +1310,11 @@ export const deploymentTrack: Track = {
           starterCode: "# Tulis DNS A record di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "(example\\.com\\.?|@)\\s+(IN\\s+)?A\\s+203\\.0\\.113\\.195$",
-              message: "Gunakan format: example.com. IN A 203.0.113.195",
-            },
-          ],
+                      {
+                        "pattern": "(example\\.com\\.?|@)\\s+(IN\\s+)?A\\s+203\\.0\\.113\\.195$",
+                        "message": "Satu baris DNS berisi nama, jenis record, dan nilainya. Untuk mengarahkan domain ke sebuah alamat IPv4, jenis record-nya `A` (untuk IPv6 namanya `AAAA`). Perubahan DNS tidak instan — ia menyebar mengikuti nilai TTL, jadi jangan menyimpulkan setelan salah dalam lima menit pertama."
+                      }
+                    ],
           solution: "example.com. IN A 203.0.113.195",
         },
         {
@@ -1301,11 +1337,15 @@ export const deploymentTrack: Track = {
           starterCode: "# Tulis perintah certbot di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "(sudo\\s+)?certbot\\s+--nginx\\s+-d\\s+myapp\\.com$",
-              message: "Gunakan: sudo certbot --nginx -d myapp.com",
-            },
-          ],
+                      {
+                        "pattern": "certbot\\s+--nginx",
+                        "message": "Sertifikat gratis Let's Encrypt diminta dengan `certbot`. Flag `--nginx` membuatnya sekaligus menyunting konfigurasi Nginx dan memasang pengalihan ke HTTPS."
+                      },
+                      {
+                        "pattern": "-d\\s+myapp\\.com$",
+                        "message": "Domain yang disertifikasi disebut lewat flag `-d` (boleh diulang untuk beberapa domain). Prasyaratnya: DNS domain itu sudah menunjuk ke server ini, karena Let's Encrypt memverifikasi lewat HTTP. Pembaruan otomatis sudah dipasang certbot lewat timer systemd."
+                      }
+                    ],
           solution: "sudo certbot --nginx -d myapp.com",
         },
         {
@@ -1329,11 +1369,11 @@ export const deploymentTrack: Track = {
           starterCode: "# Tulis reload Nginx di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "(sudo\\s+)?systemctl\\s+reload\\s+nginx$",
-              message: "Gunakan: sudo systemctl reload nginx",
-            },
-          ],
+                      {
+                        "pattern": "systemctl\\s+reload\\s+nginx$",
+                        "message": "Setelah mengubah konfigurasi, pakai `reload` — ia memuat ulang konfigurasi tanpa memutus koneksi yang sedang berjalan. `restart` mematikan lalu menyalakan, dan itu berarti beberapa detik pengunjung mendapat error. Biasakan menjalankan `nginx -t` lebih dulu untuk memeriksa sintaksnya."
+                      }
+                    ],
           solution: "sudo systemctl reload nginx",
         },
         {
@@ -1514,11 +1554,11 @@ export const deploymentTrack: Track = {
           starterCode: "# Tulis perintah vercel di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "vercel\\s+--prod$",
-              message: "Gunakan: vercel --prod",
-            },
-          ],
+                      {
+                        "pattern": "vercel\\s+--prod$",
+                        "message": "CLI Vercel men-deploy ke lingkungan produksi bila diberi flag `--prod`. Tanpa flag itu, yang dibuat deployment preview dengan URL sendiri. Inilah inti PaaS: kamu tidak mengurus server, hanya menyerahkan kode."
+                      }
+                    ],
           solution: "vercel --prod",
         },
         {
@@ -1550,11 +1590,11 @@ export const deploymentTrack: Track = {
           starterCode: "# Tulis baris on di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "on:\\s*\\[\\s*push\\s*,\\s*pull_request\\s*\\]$",
-              message: "Tuliskan: on: [push, pull_request]",
-            },
-          ],
+                      {
+                        "pattern": "on:\\s*\\[\\s*push\\s*,\\s*pull_request\\s*\\]$",
+                        "message": "Bagian `on:` menentukan kejadian pemicu workflow, dan beberapa pemicu ditulis sebagai array YAML di dalam kurung siku dipisah koma. Dua pemicu paling umum: setiap dorongan commit, dan setiap Pull Request — yang kedua itulah yang membuat test berjalan sebelum kode di-merge."
+                      }
+                    ],
           solution: "on: [push, pull_request]",
         },
         {
@@ -1583,11 +1623,15 @@ export const deploymentTrack: Track = {
           starterCode: "# Tulis step npm test di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "-\\s+run:\\s+npm\\s+test$",
-              message: "Tuliskan: - run: npm test",
-            },
-          ],
+                      {
+                        "pattern": "-\\s+run:",
+                        "message": "Satu langkah yang menjalankan perintah shell ditulis sebagai item daftar YAML dengan kunci `run:`. Perhatikan tanda hubung dan spasi sesudahnya — indentasi YAML tidak boleh memakai tab."
+                      },
+                      {
+                        "pattern": "npm\\s+test$",
+                        "message": "Isi dengan perintah pengujian proyeknya. Di CI, biasanya didahului langkah `npm ci` (bukan `npm install`) supaya versi paket persis mengikuti lockfile."
+                      }
+                    ],
           solution: "- run: npm test",
         },
         {
@@ -1614,11 +1658,15 @@ export const deploymentTrack: Track = {
           starterCode: "# Tulis klausa if di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "if:\\s*github\\.ref\\s*==\\s*['\"]refs/heads/main['\"]$",
-              message: "Gunakan: if: github.ref == 'refs/heads/main'",
-            },
-          ],
+                      {
+                        "pattern": "if:\\s*github\\.ref",
+                        "message": "Sebuah langkah dijalankan bersyarat lewat kunci `if:`, dan konteks yang berisi referensi git saat ini adalah `github.ref`."
+                      },
+                      {
+                        "pattern": "['\"]refs/heads/main['\"]$",
+                        "message": "Bandingkan dengan referensi branch utama dalam bentuk lengkapnya (`refs/heads/<branch>`), bukan hanya nama branch-nya. Tanpa syarat ini, setiap Pull Request akan ikut men-deploy ke produksi."
+                      }
+                    ],
           solution: "if: github.ref == 'refs/heads/main'",
         },
         {
@@ -1644,11 +1692,11 @@ export const deploymentTrack: Track = {
           starterCode: "# Tulis interpolasi secrets di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "\\$\\{\\{\\s*secrets\\.DEPLOY_KEY\\s*\\}\\}$",
-              message: "Tuliskan: ${{ secrets.DEPLOY_KEY }}",
-            },
-          ],
+                      {
+                        "pattern": "\\$\\{\\{\\s*secrets\\.DEPLOY_KEY\\s*\\}\\}$",
+                        "message": "Nilai rahasia di GitHub Actions dibaca lewat konteks `secrets` di dalam kurung kurawal ganda. Nilainya disimpan di Settings → Secrets, tidak pernah muncul di log (GitHub menyensornya otomatis), dan tidak tersedia untuk Pull Request dari fork — itu sengaja, supaya orang luar tidak bisa mencuri kredensialmu lewat PR."
+                      }
+                    ],
           solution: "${{ secrets.DEPLOY_KEY }}",
         },
         {
@@ -1670,11 +1718,11 @@ export const deploymentTrack: Track = {
           starterCode: "# Tulis perintah vercel preview di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "vercel\\s+--preview$",
-              message: "Gunakan: vercel --preview",
-            },
-          ],
+                      {
+                        "pattern": "vercel\\s+--preview$",
+                        "message": "Setiap Pull Request idealnya punya URL sendiri agar reviewer bisa mencoba hasilnya, bukan hanya membaca diff. CLI Vercel membuatnya dengan flag `--preview` (dan itu perilaku default-nya tanpa `--prod`)."
+                      }
+                    ],
           solution: "vercel --preview",
         },
         {
@@ -1866,11 +1914,15 @@ export const deploymentTrack: Track = {
           starterCode: "# Tulis perintah docker logs di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "docker\\s+logs\\s+--tail\\s+100\\s+app$",
-              message: "Gunakan: docker logs --tail 100 app",
-            },
-          ],
+                      {
+                        "pattern": "docker\\s+logs",
+                        "message": "Log container dibaca dengan `docker logs` diikuti nama atau id container."
+                      },
+                      {
+                        "pattern": "--tail\\s+100\\s+app$",
+                        "message": "Batasi jumlah baris terakhir dengan flag `--tail` agar tidak menunggu ribuan baris tercetak. Untuk memantau log yang terus masuk, tambahkan `-f`. Berhentilah memakai `docker logs` sebagai satu-satunya sumber saat produksi: container yang dihapus membawa log-nya pergi."
+                      }
+                    ],
           solution: "docker logs --tail 100 app",
         },
         {
@@ -1896,11 +1948,15 @@ export const deploymentTrack: Track = {
           starterCode: "# Tulis perintah curl di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "curl\\s+-f\\s+http://(localhost|127\\.0\\.0\\.1):3000/health$",
-              message: "Gunakan: curl -f http://localhost:3000/health",
-            },
-          ],
+                      {
+                        "pattern": "curl\\s+-f",
+                        "message": "Pemeriksaan endpoint dari terminal memakai `curl`. Flag `-f` membuatnya mengembalikan status keluar tidak-nol saat HTTP-nya error — itu yang membuat perintah ini bisa dipakai di skrip monitoring dan healthcheck Docker."
+                      },
+                      {
+                        "pattern": "http://(localhost|127\\.0\\.0\\.1):3000/health$",
+                        "message": "Arahkan ke endpoint kesehatan aplikasimu. Endpoint itu sebaiknya juga memeriksa koneksi database, bukan sekadar membalas 200 — kalau tidak, monitoring bilang \"sehat\" sementara aplikasi tidak bisa melayani apa pun."
+                      }
+                    ],
           solution: "curl -f http://localhost:3000/health",
         },
         {
@@ -1925,11 +1981,15 @@ export const deploymentTrack: Track = {
           starterCode: "// Tulis Sentry.init di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "Sentry\\.init\\(\\s*\\{\\s*dsn\\s*:\\s*['\"]my-dsn['\"]\\s*\\}\\s*\\);?$",
-              message: "Gunakan: Sentry.init({ dsn: 'my-dsn' });",
-            },
-          ],
+                      {
+                        "pattern": "Sentry\\.init\\(",
+                        "message": "Inisialisasi SDK error tracking dipanggil sekali di titik paling awal aplikasi, sebelum kode lain berjalan — kalau tidak, error yang terjadi lebih dulu tidak terlaporkan."
+                      },
+                      {
+                        "pattern": "dsn\\s*:\\s*['\"]my-dsn['\"]",
+                        "message": "Opsi wajibnya `dsn`, yaitu alamat proyekmu di Sentry. Nilainya diambil dari variabel lingkungan di proyek nyata; DSN memang bukan rahasia besar, tapi menuliskannya langsung di kode berarti tidak bisa dibedakan antar lingkungan."
+                      }
+                    ],
           solution: "Sentry.init({ dsn: 'my-dsn' });",
         },
         {
@@ -1977,11 +2037,15 @@ export const deploymentTrack: Track = {
           starterCode: "# Tulis perintah pg_dump di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "pg_dump\\s+-U\\s+postgres\\s+(-d\\s+)?mydb\\s*>\\s*backup\\.sql$",
-              message: "Gunakan: pg_dump -U postgres mydb > backup.sql",
-            },
-          ],
+                      {
+                        "pattern": "pg_dump\\s+-U\\s+postgres",
+                        "message": "Backup PostgreSQL memakai `pg_dump` dengan pengguna disebut lewat flag `-U`."
+                      },
+                      {
+                        "pattern": "mydb\\s*>\\s*backup\\.sql$",
+                        "message": "Sebutkan nama database, lalu alihkan keluarannya ke berkas dengan tanda `>`. Yang paling sering dilupakan: backup tanpa pernah diuji restore itu belum tentu backup — jadwalkan latihan restore secara berkala."
+                      }
+                    ],
           solution: "pg_dump -U postgres mydb > backup.sql",
         },
         {
@@ -2005,11 +2069,11 @@ export const deploymentTrack: Track = {
           starterCode: "# Tulis perintah cat postmortem di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "cat\\s+postmortem\\.md$",
-              message: "Gunakan: cat postmortem.md",
-            },
-          ],
+                      {
+                        "pattern": "cat\\s+postmortem\\.md$",
+                        "message": "Isi berkas dibaca ke layar dengan `cat` diikuti nama berkasnya. Dokumen post-mortem ditulis tanpa menyalahkan orang (*blameless*) dan berisi empat hal: apa yang terjadi, dampaknya ke pengguna, akar masalahnya, dan tindakan pencegahan yang sudah dijadwalkan."
+                      }
+                    ],
           solution: "cat postmortem.md",
         },
         {

@@ -104,12 +104,15 @@ export const spreadsheetTrack: Track = {
           starterCode: "",
           language: "text",
           tests: [
-            {
-              pattern: "=\\s*AVERAGE\\(\\s*B1:B10\\s*\\)",
-              flags: "i",
-              message: "Gunakan: =AVERAGE(B1:B10)",
-            },
-          ],
+                      {
+                        "pattern": "=\\s*AVERAGE\\(",
+                        "message": "Setiap formula dimulai tanda sama dengan, lalu nama fungsi agregasi rata-ratanya. Perbedaan penting dengan menjumlah lalu membagi manual: fungsi ini MENGABAIKAN sel kosong dan sel berisi teks, jadi hasilnya tidak melompat saat ada baris kosong."
+                      },
+                      {
+                        "pattern": "B1:B10",
+                        "message": "Sebutkan rentang selnya di dalam tanda kurung, dengan format `sel_awal:sel_akhir`."
+                      }
+                    ],
           solution: "=AVERAGE(B1:B10)",
         },
         {
@@ -128,12 +131,15 @@ export const spreadsheetTrack: Track = {
           starterCode: "",
           language: "text",
           tests: [
-            {
-              pattern: "=\\s*A2\\s*\\*\\s*\\$C\\$1",
-              flags: "i",
-              message: "Gunakan: =A2 * $C$1",
-            },
-          ],
+                      {
+                        "pattern": "=\\s*A2\\s*\\*",
+                        "message": "Ambil nilai baris ini dari kolom A dengan referensi biasa (relatif) supaya ikut berubah saat formula ditarik ke bawah."
+                      },
+                      {
+                        "pattern": "\\$C\\$1",
+                        "message": "Sel yang isinya SAMA untuk semua baris (misalnya persentase pajak) harus dibekukan dengan tanda dolar sebelum huruf kolom DAN sebelum nomor baris. Tanpa itu, menarik formula ke bawah membuat rujukannya bergeser ke C2, C3 yang kosong — dan hasilnya nol tanpa pesan error apa pun."
+                      }
+                    ],
           solution: "=A2 * $C$1",
         },
         {
@@ -152,12 +158,15 @@ export const spreadsheetTrack: Track = {
           starterCode: "",
           language: "text",
           tests: [
-            {
-              pattern: "=\\s*TEXT\\(\\s*A1\\s*,\\s*[\"']dddd[\"']\\s*\\)",
-              flags: "i",
-              message: "Gunakan: =TEXT(A1, \"dddd\")",
-            },
-          ],
+                      {
+                        "pattern": "=\\s*TEXT\\(",
+                        "message": "Pengubahan angka/tanggal menjadi teks berformat memakai fungsi `TEXT`."
+                      },
+                      {
+                        "pattern": "A1\\s*,\\s*[\"']dddd[\"']",
+                        "message": "Argumennya dua: sel sumbernya, lalu kode format dalam tanda kutip. Empat huruf d berarti nama hari lengkap (`Senin`); tiga huruf memberi singkatannya. Hasilnya berupa TEKS, jadi tidak bisa dipakai lagi untuk perhitungan tanggal."
+                      }
+                    ],
           solution: '=TEXT(A1, "dddd")',
         },
         {
@@ -200,12 +209,15 @@ export const spreadsheetTrack: Track = {
           starterCode: "",
           language: "text",
           tests: [
-            {
-              pattern: "=\\s*FILTER\\(\\s*A2:B20\\s*,\\s*B2:B20\\s*>\\s*100\\s*\\)",
-              flags: "i",
-              message: "Gunakan: =FILTER(A2:B20, B2:B20 > 100)",
-            },
-          ],
+                      {
+                        "pattern": "=\\s*FILTER\\(",
+                        "message": "Penyaringan dinamis memakai fungsi `FILTER`, yang mengembalikan hasilnya sebagai rentang yang meluber sendiri (*spill*) — bukan satu sel."
+                      },
+                      {
+                        "pattern": "A2:B20\\s*,\\s*B2:B20\\s*>\\s*100",
+                        "message": "Argumen pertama rentang yang ditampilkan, argumen kedua kondisinya. Tinggi kedua rentang harus SAMA, kalau tidak muncul error `#VALUE!`. Pastikan juga area di bawah sel formula kosong, karena kalau tersenggol isi lain hasilnya jadi `#SPILL!`."
+                      }
+                    ],
           solution: "=FILTER(A2:B20, B2:B20 > 100)",
         },
         {
@@ -224,12 +236,15 @@ export const spreadsheetTrack: Track = {
           starterCode: "",
           language: "text",
           tests: [
-            {
-              pattern: "=\\s*COUNTA\\(\\s*A2:A100\\s*\\)",
-              flags: "i",
-              message: "Gunakan: =COUNTA(A2:A100)",
-            },
-          ],
+                      {
+                        "pattern": "=\\s*COUNTA\\(",
+                        "message": "Untuk menghitung jumlah sel TERISI (angka maupun teks), fungsinya `COUNTA`. Fungsi `COUNT` biasa hanya menghitung angka, jadi kolom nama akan terhitung nol — dan itu jebakan yang paling sering menyesatkan laporan."
+                      },
+                      {
+                        "pattern": "A2:A100",
+                        "message": "Sebutkan rentangnya. Mulai dari baris data pertama (bukan baris judul), kalau tidak judul kolomnya ikut terhitung sebagai satu data."
+                      }
+                    ],
           solution: "=COUNTA(A2:A100)",
         },
         {
@@ -366,12 +381,19 @@ export const spreadsheetTrack: Track = {
           starterCode: "",
           language: "text",
           tests: [
-            {
-              pattern: "=\\s*IF\\(\\s*B2\\s*>\\s*1000\\s*,\\s*[\"']Bonus['\"]\\s*,\\s*[\"']Standar['\"]\\s*\\)",
-              flags: "i",
-              message: "Gunakan: =IF(B2>1000, \"Bonus\", \"Standar\")",
-            },
-          ],
+                      {
+                        "pattern": "=\\s*IF\\(",
+                        "message": "Percabangan memakai fungsi `IF` dengan tiga argumen: kondisinya, hasil bila benar, hasil bila salah."
+                      },
+                      {
+                        "pattern": "B2\\s*>\\s*1000",
+                        "message": "Argumen pertama kondisinya — bandingkan sel penjualan dengan angka ambangnya."
+                      },
+                      {
+                        "pattern": "[\"']Bonus[\"']\\s*,\\s*[\"']Standar[\"']",
+                        "message": "Dua argumen terakhir berupa teks, dan teks di dalam formula WAJIB dibungkus tanda kutip. Tanpa kutip, spreadsheet menganggapnya nama range dan memunculkan `#NAME?`."
+                      }
+                    ],
           solution: '=IF(B2>1000, "Bonus", "Standar")',
         },
         {
@@ -390,12 +412,15 @@ export const spreadsheetTrack: Track = {
           starterCode: "",
           language: "text",
           tests: [
-            {
-              pattern: "=\\s*SUMIFS\\(\\s*C:C\\s*,\\s*A:A\\s*,\\s*[\"']Lunas['\"]\\s*\\)",
-              flags: "i",
-              message: "Gunakan: =SUMIFS(C:C, A:A, \"Lunas\")",
-            },
-          ],
+                      {
+                        "pattern": "=\\s*SUMIFS\\(",
+                        "message": "Penjumlahan bersyarat memakai `SUMIFS` (dengan huruf S). Bentuk lamanya `SUMIF` punya urutan argumen yang BERBEDA dan hanya menerima satu kondisi — memakai versi S sejak awal menghindarkan kebingungan saat syaratnya bertambah."
+                      },
+                      {
+                        "pattern": "C:C\\s*,\\s*A:A\\s*,\\s*[\"']Lunas[\"']",
+                        "message": "Urutannya: rentang yang dijumlahkan lebih dulu, lalu pasangan (rentang kriteria, kriteria). Tinggi semua rentang harus sama."
+                      }
+                    ],
           solution: '=SUMIFS(C:C, A:A, "Lunas")',
         },
         {
@@ -414,12 +439,19 @@ export const spreadsheetTrack: Track = {
           starterCode: "",
           language: "text",
           tests: [
-            {
-              pattern: "=\\s*VLOOKUP\\(\\s*A2\\s*,\\s*C1:D50\\s*,\\s*2\\s*,\\s*FALSE\\s*\\)",
-              flags: "i",
-              message: "Gunakan: =VLOOKUP(A2, C1:D50, 2, FALSE)",
-            },
-          ],
+                      {
+                        "pattern": "=\\s*VLOOKUP\\(",
+                        "message": "Pencarian klasik memakai `VLOOKUP` dengan empat argumen."
+                      },
+                      {
+                        "pattern": "A2\\s*,\\s*C1:D50\\s*,\\s*2",
+                        "message": "Argumennya: nilai yang dicari, rentang tabelnya, lalu NOMOR kolom hasil dihitung dari kolom pertama rentang itu — bukan huruf kolomnya. Di sinilah kelemahan `VLOOKUP`: menyisipkan satu kolom di tengah tabel membuat nomor ini salah tanpa pesan error apa pun."
+                      },
+                      {
+                        "pattern": "FALSE|0\\s*\\)",
+                        "message": "Argumen keempat wajib diisi `FALSE` (pencocokan persis). Dibiarkan kosong berarti `TRUE`, yang mengasumsikan data terurut dan bisa mengembalikan baris yang salah — sumber kesalahan laporan yang paling sulit dilacak."
+                      }
+                    ],
           solution: "=VLOOKUP(A2, C1:D50, 2, FALSE)",
         },
         {
@@ -438,12 +470,15 @@ export const spreadsheetTrack: Track = {
           starterCode: "",
           language: "text",
           tests: [
-            {
-              pattern: "=\\s*XLOOKUP\\(\\s*A2\\s*,\\s*B:B\\s*,\\s*C:C\\s*\\)",
-              flags: "i",
-              message: "Gunakan: =XLOOKUP(A2, B:B, C:C)",
-            },
-          ],
+                      {
+                        "pattern": "=\\s*XLOOKUP\\(",
+                        "message": "Pengganti modernnya `XLOOKUP`, dan keunggulannya di sini terasa: ia menerima rentang hasil secara langsung, jadi tidak ada nomor kolom yang bisa bergeser, dan ia bisa mencari ke kiri."
+                      },
+                      {
+                        "pattern": "A2\\s*,\\s*B:B\\s*,\\s*C:C",
+                        "message": "Tiga argumen utamanya berurutan: nilai yang dicari, rentang tempat mencari, rentang yang dikembalikan. Argumen keempat (opsional) mengisi hasil bila tidak ditemukan — pengganti `IFERROR`."
+                      }
+                    ],
           solution: "=XLOOKUP(A2, B:B, C:C)",
         },
         {
@@ -462,12 +497,15 @@ export const spreadsheetTrack: Track = {
           starterCode: "",
           language: "text",
           tests: [
-            {
-              pattern: "=\\s*TRIM\\(\\s*A2\\s*\\)",
-              flags: "i",
-              message: "Tuliskan: =TRIM(A2)",
-            },
-          ],
+                      {
+                        "pattern": "=\\s*TRIM\\(",
+                        "message": "Pembersih spasi berlebih di awal, akhir, dan spasi ganda di tengah adalah fungsi `TRIM`."
+                      },
+                      {
+                        "pattern": "A2",
+                        "message": "Sebutkan sel sumbernya. Kenapa ini penting: `\"Budi \"` dan `\"Budi\"` dianggap dua nilai BERBEDA oleh VLOOKUP dan pivot table, jadi spasi tak terlihat inilah penyebab data yang \"seharusnya cocok\" tapi tidak ketemu."
+                      }
+                    ],
           solution: "=TRIM(A2)",
         },
         {
@@ -510,12 +548,19 @@ export const spreadsheetTrack: Track = {
           starterCode: "",
           language: "text",
           tests: [
-            {
-              pattern: "=\\s*IFERROR\\(\\s*VLOOKUP\\(\\s*A2\\s*,\\s*B:C\\s*,\\s*2\\s*,\\s*FALSE\\s*\\)\\s*,\\s*0\\s*\\)",
-              flags: "i",
-              message: "Gunakan: =IFERROR(VLOOKUP(A2, B:C, 2, FALSE), 0)",
-            },
-          ],
+                      {
+                        "pattern": "=\\s*IFERROR\\(",
+                        "message": "Pembungkus penanganan error adalah `IFERROR`, dengan formula aslinya sebagai argumen pertama."
+                      },
+                      {
+                        "pattern": "VLOOKUP\\(",
+                        "message": "Taruh formula pencarianmu di dalamnya apa adanya."
+                      },
+                      {
+                        "pattern": ",\\s*0\\s*\\)\\s*$",
+                        "message": "Argumen kedua adalah nilai pengganti saat terjadi error, di sini angka nol. Peringatan: `IFERROR` menyembunyikan SEMUA error, termasuk salah tulis nama fungsi — jadi jangan memakainya sebelum formulanya terbukti benar."
+                      }
+                    ],
           solution: "=IFERROR(VLOOKUP(A2, B:C, 2, FALSE), 0)",
         },
         {
@@ -650,12 +695,15 @@ export const spreadsheetTrack: Track = {
           starterCode: "",
           language: "text",
           tests: [
-            {
-              pattern: "=\\s*TRIM\\(\\s*A2\\s*\\)",
-              flags: "i",
-              message: "Gunakan: =TRIM(A2)",
-            },
-          ],
+                      {
+                        "pattern": "=\\s*TRIM\\(",
+                        "message": "Fungsi pembersih spasi liar (depan, belakang, dan ganda di tengah) adalah `TRIM`."
+                      },
+                      {
+                        "pattern": "A2",
+                        "message": "Arahkan ke sel data pertamanya, lalu tarik ke bawah. Setelah selesai, biasakan menempel hasilnya sebagai nilai (*paste values*) dan menghapus kolom aslinya — kalau tidak, laporanmu bergantung pada kolom bantu selamanya."
+                      }
+                    ],
           solution: "=TRIM(A2)",
         },
         {
@@ -674,12 +722,15 @@ export const spreadsheetTrack: Track = {
           starterCode: "",
           language: "text",
           tests: [
-            {
-              pattern: "=\\s*UNIQUE\\(\\s*A1:A50\\s*\\)",
-              flags: "i",
-              message: "Tuliskan: =UNIQUE(A1:A50)",
-            },
-          ],
+                      {
+                        "pattern": "=\\s*UNIQUE\\(",
+                        "message": "Pengambilan nilai unik sebagai formula dinamis memakai `UNIQUE`. Bedanya dengan menu Remove Duplicates: menu itu MENGHAPUS data aslinya secara permanen, sedangkan formula ini menghasilkan daftar baru dan data mentahmu tetap utuh."
+                      },
+                      {
+                        "pattern": "A1:A50",
+                        "message": "Sebutkan rentang sumbernya."
+                      }
+                    ],
           solution: "=UNIQUE(A1:A50)",
         },
         {
@@ -698,12 +749,15 @@ export const spreadsheetTrack: Track = {
           starterCode: "",
           language: "text",
           tests: [
-            {
-              pattern: "=\\s*SPLIT\\(\\s*A2\\s*,\\s*[\"'],[\"']\\s*\\)",
-              flags: "i",
-              message: 'Gunakan: =SPLIT(A2, ",")',
-            },
-          ],
+                      {
+                        "pattern": "=\\s*SPLIT\\(",
+                        "message": "Pemecah teks menjadi beberapa kolom (Google Sheets) adalah `SPLIT`. Padanan di Excel modern bernama `TEXTSPLIT`, sedangkan menu Text to Columns melakukan hal serupa tapi menimpa kolom sebelahnya."
+                      },
+                      {
+                        "pattern": "A2\\s*,\\s*[\"'],[\"']",
+                        "message": "Argumennya sel sumber dan pemisahnya sebagai teks dalam tanda kutip. Perhatikan hasilnya meluber ke kanan — pastikan kolom sebelahnya kosong."
+                      }
+                    ],
           solution: '=SPLIT(A2, ",")',
         },
         {
@@ -722,12 +776,15 @@ export const spreadsheetTrack: Track = {
           starterCode: "",
           language: "text",
           tests: [
-            {
-              pattern: "=\\s*SUBSTITUTE\\(\\s*A2\\s*,\\s*[\"']-[\"']\\s*,\\s*[\"'][\"']\\s*\\)",
-              flags: "i",
-              message: 'Gunakan: =SUBSTITUTE(A2, "-", "")',
-            },
-          ],
+                      {
+                        "pattern": "=\\s*SUBSTITUTE\\(",
+                        "message": "Penggantian teks di dalam formula memakai `SUBSTITUTE`. Bedanya dengan menu Find & Replace: fungsi ini tidak mengubah data asli, jadi bisa diaudit dan diulang."
+                      },
+                      {
+                        "pattern": "A2\\s*,\\s*[\"']-[\"']\\s*,\\s*[\"'][\"']",
+                        "message": "Tiga argumennya: sel sumber, teks yang dicari, teks penggantinya. Untuk MENGHAPUS karakter, penggantinya dua tanda kutip berdampingan (teks kosong) — bukan spasi, karena spasi tetap terhitung sebagai karakter."
+                      }
+                    ],
           solution: '=SUBSTITUTE(A2, "-", "")',
         },
         {
@@ -746,12 +803,19 @@ export const spreadsheetTrack: Track = {
           starterCode: "",
           language: "text",
           tests: [
-            {
-              pattern: "=\\s*IF\\(\\s*OR\\(\\s*A2\\s*=\\s*[\"']Lunas[\"']\\s*,\\s*A2\\s*=\\s*[\"']Pending[\"']\\s*\\)\\s*,\\s*A2\\s*,\\s*[\"']Invalid[\"']\\s*\\)",
-              flags: "i",
-              message: 'Gunakan: =IF(OR(A2="Lunas", A2="Pending"), A2, "Invalid")',
-            },
-          ],
+                      {
+                        "pattern": "=\\s*IF\\(\\s*OR\\(",
+                        "message": "Untuk \"salah satu dari beberapa kondisi\", bungkus kondisi-kondisi itu dengan fungsi `OR` di dalam argumen pertama `IF`. Kalau semua syarat harus terpenuhi sekaligus, penggantinya `AND`."
+                      },
+                      {
+                        "pattern": "A2\\s*=\\s*[\"']Lunas[\"']\\s*,\\s*A2\\s*=\\s*[\"']Pending[\"']",
+                        "message": "Tulis kedua perbandingannya sebagai argumen `OR`, dipisah koma. Setiap perbandingan harus lengkap: `A2=\"Lunas\", A2=\"Pending\"` — menulis `A2=\"Lunas\" OR \"Pending\"` bukan sintaks spreadsheet."
+                      },
+                      {
+                        "pattern": "[\"']Invalid[\"']",
+                        "message": "Argumen ketiga `IF` adalah nilai untuk data yang tidak lolos validasi."
+                      }
+                    ],
           solution: '=IF(OR(A2="Lunas", A2="Pending"), A2, "Invalid")',
         },
         {
@@ -770,12 +834,15 @@ export const spreadsheetTrack: Track = {
           starterCode: "",
           language: "text",
           tests: [
-            {
-              pattern: "=\\s*PROPER\\(\\s*A2\\s*\\)",
-              flags: "i",
-              message: "Tuliskan: =PROPER(A2)",
-            },
-          ],
+                      {
+                        "pattern": "=\\s*PROPER\\(",
+                        "message": "Penyeragaman kapital menjadi Huruf Depan Kapital memakai `PROPER`. Pasangannya `UPPER` dan `LOWER`."
+                      },
+                      {
+                        "pattern": "A2",
+                        "message": "Sebutkan sel sumbernya. Catatan: `PROPER` juga mengapitalkan setelah setiap tanda baca, jadi nama seperti \"PT. Maju\" atau \"O'Brien\" perlu diperiksa manual — fungsi ini alat bantu, bukan pengganti pemeriksaan."
+                      }
+                    ],
           solution: "=PROPER(A2)",
         },
         {
@@ -794,12 +861,15 @@ export const spreadsheetTrack: Track = {
           starterCode: "",
           language: "text",
           tests: [
-            {
-              pattern: "=\\s*COUNTA\\(\\s*A1:A50\\s*\\)\\s*-\\s*COUNTA\\(\\s*UNIQUE\\(\\s*A1:A50\\s*\\)\\s*\\)",
-              flags: "i",
-              message: "Gunakan: =COUNTA(A1:A50) - COUNTA(UNIQUE(A1:A50))",
-            },
-          ],
+                      {
+                        "pattern": "=\\s*COUNTA\\(\\s*A1:A50\\s*\\)\\s*-",
+                        "message": "Jumlah duplikat dihitung sebagai selisih: total sel terisi, dikurangi jumlah nilai unik. Mulai dengan `COUNTA` pada rentangnya, lalu tanda kurang."
+                      },
+                      {
+                        "pattern": "COUNTA\\(\\s*UNIQUE\\(",
+                        "message": "Bagian keduanya menghitung banyaknya nilai unik — yaitu `COUNTA` yang membungkus hasil `UNIQUE` pada rentang yang sama. Fungsi bisa dibungkus fungsi lain, dan yang di dalam dihitung lebih dulu."
+                      }
+                    ],
           solution: "=COUNTA(A1:A50) - COUNTA(UNIQUE(A1:A50))",
         },
         {
@@ -1127,13 +1197,11 @@ export const spreadsheetTrack: Track = {
           starterCode: "",
           language: "text",
           tests: [
-            {
-              pattern: "(pivottable\\s*analyze|analyze|data)\\s*>\\s*refresh",
-              flags: "i",
-              message:
-                "Tulis jalur menu refresh-nya, misalnya PivotTable Analyze > Refresh.",
-            },
-          ],
+                      {
+                        "pattern": "(pivottable\\s*analyze|analyze|data)\\s*>\\s*refresh",
+                        "message": "Pivot table bekerja dari salinan data (*cache*), jadi menambah baris di tabel sumber TIDAK langsung mengubah angkanya. Jalur menunya: tab kontekstual PivotTable Analyze, lalu perintah penyegaran. Tulis jalurnya dengan tanda `>` sebagai pemisah. Solusi jangka panjangnya menjadikan sumbernya Tabel (Ctrl+T) agar rentangnya ikut melebar sendiri."
+                      }
+                    ],
           solution: "PivotTable Analyze > Refresh",
         },
         {
@@ -1409,12 +1477,15 @@ export const spreadsheetTrack: Track = {
           starterCode: "",
           language: "text",
           tests: [
-            {
-              pattern: "=\\s*SUM\\(\\s*E2:E5000\\s*\\)",
-              flags: "i",
-              message: "Pakai =SUM(E2:E5000) untuk menjumlahkan seluruh rentang.",
-            },
-          ],
+                      {
+                        "pattern": "=\\s*SUM\\(",
+                        "message": "Kartu KPI berisi satu angka utama hasil agregasi — untuk total, fungsinya `SUM`."
+                      },
+                      {
+                        "pattern": "E2:E5000",
+                        "message": "Sebutkan rentangnya melebihi jumlah baris saat ini supaya data baru ikut terhitung tanpa mengubah formula. Mulai dari baris data pertama, bukan baris judul."
+                      }
+                    ],
           solution: "=SUM(E2:E5000)",
         },
         {
@@ -1559,12 +1630,15 @@ export const spreadsheetTrack: Track = {
           starterCode: "",
           language: "text",
           tests: [
-            {
-              pattern: "=\\s*TRIM\\(\\s*PROPER\\(\\s*A2\\s*\\)\\s*\\)",
-              flags: "i",
-              message: "Gunakan: =TRIM(PROPER(A2))",
-            },
-          ],
+                      {
+                        "pattern": "=\\s*TRIM\\(\\s*PROPER\\(",
+                        "message": "Dua pembersihan bisa digabung dalam satu formula dengan membungkus fungsi. Yang di dalam dihitung lebih dulu: seragamkan kapitalnya, lalu buang spasi liarnya di luar."
+                      },
+                      {
+                        "pattern": "A2\\s*\\)\\s*\\)",
+                        "message": "Sel sumbernya di bagian paling dalam, dan jumlah tanda kurung penutup harus sama dengan pembukanya — spreadsheet menolak formula dengan kurung tidak seimbang."
+                      }
+                    ],
           solution: "=TRIM(PROPER(A2))",
         },
         {
@@ -1583,12 +1657,15 @@ export const spreadsheetTrack: Track = {
           starterCode: "",
           language: "text",
           tests: [
-            {
-              pattern: "=\\s*\\(\\s*C2\\s*-\\s*D2\\s*\\)\\s*/\\s*C2",
-              flags: "i",
-              message: "Gunakan: =(C2 - D2) / C2",
-            },
-          ],
+                      {
+                        "pattern": "=\\s*\\(\\s*C2\\s*-\\s*D2\\s*\\)",
+                        "message": "Margin dihitung dari laba dibagi pendapatan. Bungkus pengurangannya dengan tanda kurung supaya ia dihitung LEBIH DULU — tanpa kurung, urutan operasi membuat pembagian dikerjakan lebih dulu dan hasilnya salah."
+                      },
+                      {
+                        "pattern": "/\\s*C2",
+                        "message": "Lalu bagi dengan pendapatannya. Format sel hasilnya sebagai persen, dan waspadai `#DIV/0!` untuk baris yang pendapatannya nol — bungkus dengan `IFERROR` bila datanya bisa kosong."
+                      }
+                    ],
           solution: "=(C2 - D2) / C2",
         },
         {
@@ -1607,12 +1684,15 @@ export const spreadsheetTrack: Track = {
           starterCode: "",
           language: "text",
           tests: [
-            {
-              pattern: "=\\s*COUNTIF\\(\\s*A1:A100\\s*,\\s*[\"']Resign['\"]\\s*\\)",
-              flags: "i",
-              message: "Gunakan: =COUNTIF(A1:A100, \"Resign\")",
-            },
-          ],
+                      {
+                        "pattern": "=\\s*COUNTIF\\(",
+                        "message": "Penghitungan bersyarat memakai `COUNTIF` dengan dua argumen: rentang dan kriterianya."
+                      },
+                      {
+                        "pattern": "A1:A100\\s*,\\s*[\"']Resign[\"']",
+                        "message": "Sebutkan rentang status karyawan, lalu kriterianya sebagai teks dalam tanda kutip. Kriteria di `COUNTIF` tidak peka huruf besar-kecil, tapi peka spasi — `\"Resign \"` dengan spasi tidak akan cocok, dan itu alasan pembersihan data dilakukan lebih dulu."
+                      }
+                    ],
           solution: '=COUNTIF(A1:A100, "Resign")',
         },
         {
@@ -1631,12 +1711,11 @@ export const spreadsheetTrack: Track = {
           starterCode: "",
           language: "text",
           tests: [
-            {
-              pattern: "(Executive Summary|executive summary)",
-              flags: "i",
-              message: "Tulis Executive Summary",
-            },
-          ],
+                      {
+                        "pattern": "(Executive Summary|executive summary)",
+                        "message": "Laporan yang dibaca pimpinan dibuka dengan satu bagian ringkasan berisi temuan dan rekomendasi — namanya istilah baku dua kata dalam bahasa Inggris, dan letaknya di ATAS, bukan di akhir. Isinya angka beserta artinya (\"penjualan turun 12% karena kategori minuman\"), bukan daftar grafik."
+                      }
+                    ],
           solution: "Executive Summary",
         },
         {
@@ -1655,12 +1734,11 @@ export const spreadsheetTrack: Track = {
           starterCode: "",
           language: "text",
           tests: [
-            {
-              pattern: "(Protect Sheet|protect sheet)",
-              flags: "i",
-              message: "Tulis Protect Sheet",
-            },
-          ],
+                      {
+                        "pattern": "(Protect Sheet|protect sheet)",
+                        "message": "Sebelum berkas dibagikan, area formula dilindungi lewat fitur proteksi sheet (dua kata dalam bahasa Inggris) sehingga hanya sel input yang bisa diubah. Ini melindungi dari kecelakaan, bukan dari niat jahat — kata sandi proteksi spreadsheet lemah, jadi data yang benar-benar rahasia jangan diandalkan padanya."
+                      }
+                    ],
           solution: "Protect Sheet",
         },
         {

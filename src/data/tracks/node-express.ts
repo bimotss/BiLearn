@@ -185,11 +185,11 @@ export const nodeExpressTrack: Track = {
           starterCode: "// Tulis kode console.log di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "console\\.log\\(\\s*process\\.version\\s*\\)\\s*;?",
-              message: "Tuliskan: console.log(process.version);",
-            },
-          ],
+                      {
+                        "pattern": "console\\.log\\(\\s*process\\.version\\s*\\)",
+                        "message": "Node menyediakan objek global `process` berisi informasi runtime; versinya ada di properti `version` (tanpa tanda kurung — ia properti, bukan fungsi). Cetak nilainya dengan `console.log`."
+                      }
+                    ],
           solution: "console.log(process.version);",
         },
         {
@@ -208,11 +208,19 @@ export const nodeExpressTrack: Track = {
           starterCode: "// Tulis ekspor fungsi di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "export\\s+const\\s+multiply\\s*=\\s*\\(\\s*a\\s*,\\s*b\\s*\\)\\s*=>\\s*a\\s*\\*\\s*b\\s*;?",
-              message: "Definisikan: export const multiply = (a, b) => a * b;",
-            },
-          ],
+                      {
+                        "pattern": "export\\s+const\\s+multiply",
+                        "message": "Agar fungsi bisa dipakai berkas lain, tambahkan `export` di depan deklarasinya (named export). Tanpa itu, `import` di berkas lain menghasilkan `undefined`."
+                      },
+                      {
+                        "pattern": "\\(\\s*a\\s*,\\s*b\\s*\\)\\s*=>",
+                        "message": "Buat arrow function dengan dua parameter `(a, b)`."
+                      },
+                      {
+                        "pattern": "a\\s*\\*\\s*b",
+                        "message": "Kembalikan hasil perkalian keduanya. Arrow function satu ekspresi mengembalikan nilainya otomatis, jadi `return` tidak wajib ditulis."
+                      }
+                    ],
           solution: "export const multiply = (a, b) => a * b;",
         },
         {
@@ -231,11 +239,11 @@ export const nodeExpressTrack: Track = {
           starterCode: "# Tulis perintah npm di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "npm\\s+i(nstall)?\\s+zod",
-              message: "Gunakan perintah: npm install zod",
-            },
-          ],
+                      {
+                        "pattern": "npm\\s+i(nstall)?\\s+zod",
+                        "message": "Pemasangan paket memakai `npm install <nama-paket>` (bentuk singkat `npm i` juga diterima). Nama paket validasi skema yang dipakai di track ini ditulis huruf kecil semua. Tanpa flag tambahan, paket masuk ke `dependencies` — itu yang benar untuk library yang dipakai saat aplikasi berjalan."
+                      }
+                    ],
           solution: "npm install zod",
         },
         {
@@ -254,11 +262,19 @@ export const nodeExpressTrack: Track = {
           starterCode: "// Tulis fs.writeFile di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "await\\s+fs\\.writeFile\\(\\s*['\"]file\\.txt['\"]\\s*,\\s*['\"]Halo['\"]\\s*\\)",
-              message: 'Gunakan: await fs.writeFile("file.txt", "Halo");',
-            },
-          ],
+                      {
+                        "pattern": "fs\\.writeFile\\(",
+                        "message": "Penulisan berkas versi Promise memakai `fs.writeFile(...)` dari modul `node:fs/promises`. Versi callback punya nama sama tapi butuh argumen ketiga berupa fungsi — pastikan kamu mengimpor yang versi promises."
+                      },
+                      {
+                        "pattern": "['\"]file\\.txt['\"]\\s*,\\s*['\"]Halo['\"]",
+                        "message": "Argumennya dua: nama berkas tujuan, lalu isinya. Perlu diingat, `writeFile` MENIMPA isi berkas; untuk menambahkan di akhir pakai `appendFile`."
+                      },
+                      {
+                        "pattern": "await\\s+fs\\.writeFile",
+                        "message": "Operasi berkas asinkron, jadi tunggu dengan `await`. Tanpa itu program bisa lanjut sebelum berkasnya selesai ditulis."
+                      }
+                    ],
           solution: 'await fs.writeFile("file.txt", "Halo");',
         },
         {
@@ -277,11 +293,15 @@ export const nodeExpressTrack: Track = {
           starterCode: "// Tulis pembacaan process.env di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "const\\s+dbUrl\\s*=\\s*process\\.env\\.DATABASE_URL\\s*;?",
-              message: "Gunakan: const dbUrl = process.env.DATABASE_URL;",
-            },
-          ],
+                      {
+                        "pattern": "process\\.env\\.DATABASE_URL",
+                        "message": "Variabel lingkungan dibaca dari objek `process.env` diikuti nama variabelnya. Konvensinya HURUF BESAR dengan garis bawah, dan namanya harus sama persis dengan yang ada di `.env`."
+                      },
+                      {
+                        "pattern": "const\\s+dbUrl\\s*=",
+                        "message": "Simpan hasilnya ke variabel. Ingat: nilai dari `process.env` selalu berupa string atau `undefined` — angka dari sana perlu dikonversi dulu."
+                      }
+                    ],
           solution: "const dbUrl = process.env.DATABASE_URL;",
         },
         {
@@ -300,11 +320,15 @@ export const nodeExpressTrack: Track = {
           starterCode: "// Tulis emitter.emit di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "emitter\\.emit\\(\\s*['\"]login['\"]\\s*,\\s*data\\s*\\)\\s*;?",
-              message: 'Gunakan: emitter.emit("login", data);',
-            },
-          ],
+                      {
+                        "pattern": "emitter\\.emit\\(",
+                        "message": "Pengiriman event memakai metode `emit` pada objek emitter-nya."
+                      },
+                      {
+                        "pattern": "['\"]login['\"]\\s*,\\s*data",
+                        "message": "Argumen pertama nama event (teks, harus SAMA dengan yang dipakai di `emitter.on`), argumen kedua data yang dibawa. Salah huruf pada nama event tidak error — listener-nya cuma tidak pernah terpanggil."
+                      }
+                    ],
           solution: 'emitter.emit("login", data);',
         },
         {
@@ -323,11 +347,15 @@ export const nodeExpressTrack: Track = {
           starterCode: "# Tulis perintah npx tsx di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "npx\\s+tsx\\s+--watch\\s+src/server\\.ts",
-              message: "Gunakan: npx tsx --watch src/server.ts",
-            },
-          ],
+                      {
+                        "pattern": "npx\\s+tsx",
+                        "message": "Jalankan runner TypeScript lewat `npx` supaya versinya mengikuti yang ada di proyek."
+                      },
+                      {
+                        "pattern": "--watch\\s+src/server\\.ts",
+                        "message": "Tambahkan flag pemantau perubahan berkas, lalu jalur berkas masuknya. Dengan flag ini kamu tidak perlu menghentikan dan menyalakan server setiap kali menyimpan."
+                      }
+                    ],
           solution: "npx tsx --watch src/server.ts",
         },
         {
@@ -463,11 +491,15 @@ export const nodeExpressTrack: Track = {
           starterCode: "// Tulis inisialisasi Express di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "const\\s+app\\s*=\\s*express\\(\\)\\s*;?",
-              message: "Tuliskan: const app = express();",
-            },
-          ],
+                      {
+                        "pattern": "express\\(\\s*\\)",
+                        "message": "Aplikasi Express dibuat dengan MEMANGGIL `express()` — bukan `new express()`. Ia sebuah factory function, bukan class."
+                      },
+                      {
+                        "pattern": "const\\s+app\\s*=",
+                        "message": "Simpan hasilnya ke variabel `app`; itu nama yang dipakai konvensi Express dan seluruh dokumentasinya."
+                      }
+                    ],
           solution: "const app = express();",
         },
         {
@@ -509,11 +541,15 @@ export const nodeExpressTrack: Track = {
           starterCode: "// Tulis ekstraksi req.params di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "const\\s+\\{\\s*id\\s*\\}\\s*=\\s*req\\.params\\s*;?",
-              message: "Gunakan: const { id } = req.params;",
-            },
-          ],
+                      {
+                        "pattern": "req\\.params",
+                        "message": "Segmen dinamis URL (`/users/:id`) dibaca dari `req.params`. Jangan tertukar: `req.query` untuk `?limit=10`, `req.body` untuk isi POST."
+                      },
+                      {
+                        "pattern": "const\\s*\\{\\s*id\\s*\\}\\s*=",
+                        "message": "Ambil isinya dengan destructuring object. Nama propertinya harus sama dengan nama parameter di definisi route, dan nilainya SELALU string — bandingkan dengan hati-hati terhadap id angka."
+                      }
+                    ],
           solution: "const { id } = req.params;",
         },
         {
@@ -532,11 +568,19 @@ export const nodeExpressTrack: Track = {
           starterCode: "// Tulis res.status(404) di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "res\\.status\\(\\s*404\\s*\\)\\.json\\(\\s*\\{\\s*error\\s*:\\s*['\"]Not Found['\"]\\s*\\}\\s*\\)\\s*;?",
-              message: 'Gunakan: res.status(404).json({ error: "Not Found" });',
-            },
-          ],
+                      {
+                        "pattern": "res\\.status\\(\\s*404\\s*\\)",
+                        "message": "Status code diatur dengan `res.status(<kode>)`. Untuk resource yang tidak ditemukan, kodenya 404 — mengembalikan 200 dengan pesan error di body membuat klien menganggap request-nya berhasil."
+                      },
+                      {
+                        "pattern": "\\.json\\(\\s*\\{",
+                        "message": "Rantaikan `.json({...})` setelahnya untuk mengirim body JSON sekaligus mengatur header Content-Type."
+                      },
+                      {
+                        "pattern": "error\\s*:\\s*['\"]Not Found['\"]",
+                        "message": "Isi body-nya dengan properti `error` berisi pesannya."
+                      }
+                    ],
           solution: 'res.status(404).json({ error: "Not Found" });',
         },
         {
@@ -578,11 +622,15 @@ export const nodeExpressTrack: Track = {
           starterCode: "// Tulis Router() di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "const\\s+router\\s*=\\s*Router\\(\\)\\s*;?",
-              message: "Gunakan: const router = Router();",
-            },
-          ],
+                      {
+                        "pattern": "Router\\(\\s*\\)",
+                        "message": "Router dibuat dengan memanggil `Router()` dari Express — sama seperti `express()`, tanpa `new`."
+                      },
+                      {
+                        "pattern": "const\\s+router\\s*=",
+                        "message": "Simpan ke variabel `router`, lalu di akhir berkas ia diekspor dan dipasang di app utama dengan `app.use('/prefix', router)`."
+                      }
+                    ],
           solution: "const router = Router();",
         },
         {
@@ -796,11 +844,15 @@ export const nodeExpressTrack: Track = {
           starterCode: "// Tulis res.status(204) di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "res\\.status\\(\\s*204\\s*\\)\\.send\\(\\)\\s*;?",
-              message: "Gunakan: res.status(204).send();",
-            },
-          ],
+                      {
+                        "pattern": "res\\.status\\(\\s*204\\s*\\)",
+                        "message": "Untuk operasi yang berhasil tapi tidak punya isi untuk dikembalikan (misalnya DELETE), status semantiknya 204 No Content."
+                      },
+                      {
+                        "pattern": "\\.send\\(\\s*\\)",
+                        "message": "Akhiri dengan `.send()` tanpa argumen. Mengirim body bersama 204 melanggar spesifikasi HTTP, dan sebagian klien akan error saat mencoba membacanya."
+                      }
+                    ],
           solution: "res.status(204).send();",
         },
         {
@@ -819,11 +871,19 @@ export const nodeExpressTrack: Track = {
           starterCode: "// Tulis res.json di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "res\\.json\\(\\s*\\{\\s*success\\s*:\\s*true\\s*,\\s*data\\s*:\\s*users\\s*\\}\\s*\\)\\s*;?",
-              message: "Gunakan: res.json({ success: true, data: users });",
-            },
-          ],
+                      {
+                        "pattern": "res\\.json\\(\\s*\\{",
+                        "message": "Kirim JSON dengan `res.json({...})`."
+                      },
+                      {
+                        "pattern": "success\\s*:\\s*true",
+                        "message": "Bungkus respons dalam bentuk yang konsisten: satu penanda keberhasilan bertipe boolean."
+                      },
+                      {
+                        "pattern": "data\\s*:\\s*users",
+                        "message": "Lalu satu properti `data` berisi muatannya. Bentuk seragam seperti ini membuat kode frontend tidak perlu menebak-nebak struktur respons tiap endpoint."
+                      }
+                    ],
           solution: "res.json({ success: true, data: users });",
         },
         {
@@ -842,11 +902,19 @@ export const nodeExpressTrack: Track = {
           starterCode: "// Tulis app.use v1 di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "app\\.use\\(\\s*['\"]/api/v1/posts['\"]\\s*,\\s*postRouter\\s*\\)\\s*;?",
-              message: "Gunakan: app.use('/api/v1/posts', postRouter);",
-            },
-          ],
+                      {
+                        "pattern": "app\\.use\\(",
+                        "message": "Pemasangan router ke aplikasi memakai `app.use(<prefix>, <router>)`."
+                      },
+                      {
+                        "pattern": "['\"]/api/v1/posts['\"]",
+                        "message": "Sertakan versi di dalam prefix-nya. Versioning memungkinkan kamu mengubah bentuk respons di v2 tanpa merusak aplikasi mobile lama yang masih memanggil v1."
+                      },
+                      {
+                        "pattern": ",\\s*postRouter",
+                        "message": "Argumen keduanya router yang menangani jalur itu."
+                      }
+                    ],
           solution: "app.use('/api/v1/posts', postRouter);",
         },
         {
@@ -865,11 +933,19 @@ export const nodeExpressTrack: Track = {
           starterCode: "// Tulis pembacaan limit di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "const\\s+limit\\s*=\\s*Number\\(\\s*req\\.query\\.limit\\s*\\)\\s*\\|\\|\\s*10\\s*;?",
-              message: "Gunakan: const limit = Number(req.query.limit) || 10;",
-            },
-          ],
+                      {
+                        "pattern": "req\\.query\\.limit",
+                        "message": "Parameter dari query string (`?limit=20`) dibaca lewat `req.query`."
+                      },
+                      {
+                        "pattern": "Number\\(",
+                        "message": "Nilai dari query string SELALU string, jadi konversi dulu ke angka. Tanpa konversi, `limit` dipakai sebagai teks dan Prisma/SQL akan menolaknya."
+                      },
+                      {
+                        "pattern": "\\|\\|\\s*10",
+                        "message": "Beri nilai cadangan dengan `||` untuk kasus parameternya tidak dikirim (atau tidak valid, karena `Number('abc')` menghasilkan NaN yang bersifat falsy)."
+                      }
+                    ],
           solution: "const limit = Number(req.query.limit) || 10;",
         },
         {
@@ -1021,11 +1097,15 @@ export const nodeExpressTrack: Track = {
           starterCode: "# Tulis perintah prisma migrate di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "npx\\s+prisma\\s+migrate\\s+dev",
-              message: "Gunakan: npx prisma migrate dev",
-            },
-          ],
+                      {
+                        "pattern": "prisma\\s+migrate\\s+dev",
+                        "message": "Di lingkungan pengembangan, subperintahnya `migrate dev`: ia membuat berkas migrasi baru dari perubahan schema, menerapkannya, lalu meregenerasi Prisma Client. Untuk server produksi yang dipakai `migrate deploy` — `dev` bisa me-reset database."
+                      },
+                      {
+                        "pattern": "npx\\s+prisma",
+                        "message": "Jalankan CLI-nya lewat `npx` agar memakai versi yang tercatat di proyek."
+                      }
+                    ],
           solution: "npx prisma migrate dev",
         },
         {
@@ -1044,11 +1124,19 @@ export const nodeExpressTrack: Track = {
           starterCode: "// Tulis findUnique di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "await\\s+prisma\\.user\\.findUnique\\(\\s*\\{\\s*where\\s*:\\s*\\{\\s*id\\s*\\}\\s*\\}\\s*\\)",
-              message: "Gunakan: await prisma.user.findUnique({ where: { id } });",
-            },
-          ],
+                      {
+                        "pattern": "prisma\\.user\\.findUnique\\(",
+                        "message": "Pengambilan satu baris berdasarkan kolom unik memakai `findUnique`. Bedanya dengan `findFirst`: `findUnique` hanya menerima kolom unik/primary key, dan itu memberi jaminan hasilnya maksimal satu."
+                      },
+                      {
+                        "pattern": "where\\s*:\\s*\\{\\s*id\\s*\\}",
+                        "message": "Syaratnya ditulis di opsi `where`. Bentuk `{ id }` adalah singkatan dari `{ id: id }` — sah dan umum dipakai."
+                      },
+                      {
+                        "pattern": "await\\s",
+                        "message": "Semua query Prisma asinkron, jadi `await`. Jangan lupa hasilnya bisa `null` kalau tidak ditemukan — periksa sebelum dipakai, atau kamu dapat error properti dari null."
+                      }
+                    ],
           solution: "await prisma.user.findUnique({ where: { id } });",
         },
         {
@@ -1090,11 +1178,19 @@ export const nodeExpressTrack: Track = {
           starterCode: "// Tulis $transaction di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "await\\s+prisma\\.\\$transaction\\(\\s*\\[\\s*\\]\\s*\\)",
-              message: "Gunakan: await prisma.$transaction([]);",
-            },
-          ],
+                      {
+                        "pattern": "prisma\\.\\$transaction\\(",
+                        "message": "Beberapa operasi yang harus berhasil bersama dibungkus `prisma.$transaction(...)`. Kalau satu gagal, semuanya dibatalkan."
+                      },
+                      {
+                        "pattern": "\\[\\s*\\]",
+                        "message": "Bentuk array menerima daftar operasi yang dijalankan berurutan. (Ada juga bentuk callback `$transaction(async (tx) => ...)` untuk logika yang butuh hasil operasi sebelumnya.)"
+                      },
+                      {
+                        "pattern": "await\\s",
+                        "message": "Tunggu dengan `await` — tanpa itu transaksinya belum tentu selesai saat kamu mengirim respons."
+                      }
+                    ],
           solution: "await prisma.$transaction([]);",
         },
         {
@@ -1110,14 +1206,14 @@ export const nodeExpressTrack: Track = {
           },
           instruction:
             "Tuliskan perintah CLI npx prisma untuk meluncurkan antarmuka visual GUI Prisma Studio di lingkungan lokal.",
-          starterCode: "# Tulis perintah prisma studio di sini\n",
+          starterCode: "# Tulis perintah untuk membuka penjelajah data bawaan Prisma\n",
           language: "text",
           tests: [
-            {
-              pattern: "npx\\s+prisma\\s+studio",
-              message: "Gunakan: npx prisma studio",
-            },
-          ],
+                      {
+                        "pattern": "npx\\s+prisma\\s+studio",
+                        "message": "Prisma menyediakan penjelajah data berbasis browser lewat subperintah `studio`. Ia dijalankan dengan `npx prisma <subperintah>` dan membuka http://localhost:5555 — praktis untuk memeriksa data, tapi jangan pernah dijalankan menghadap internet di server produksi."
+                      }
+                    ],
           solution: "npx prisma studio",
         },
         {
@@ -1270,11 +1366,19 @@ export const nodeExpressTrack: Track = {
           starterCode: "// Tulis bcrypt.compare di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "const\\s+isValid\\s*=\\s*await\\s+bcrypt\\.compare\\(\\s*input\\s*,\\s*hash\\s*\\)\\s*;?",
-              message: "Gunakan: const isValid = await bcrypt.compare(input, hash);",
-            },
-          ],
+                      {
+                        "pattern": "bcrypt\\.compare\\(",
+                        "message": "Verifikasi password TIDAK dilakukan dengan membandingkan hash secara langsung — pakai `bcrypt.compare()`, yang menghitung ulang hash memakai salt yang tertanam di dalamnya."
+                      },
+                      {
+                        "pattern": "\\(\\s*input\\s*,\\s*hash\\s*\\)",
+                        "message": "Argumennya dua dan urutannya penting: password mentah dari pengguna lebih dulu, lalu hash dari database."
+                      },
+                      {
+                        "pattern": "await\\s+bcrypt\\.compare",
+                        "message": "Fungsinya asinkron. Tanpa `await`, yang kamu periksa adalah objek Promise — dan objek selalu truthy, sehingga SIAPA PUN bisa login. Ini celah keamanan nyata, bukan sekadar bug."
+                      }
+                    ],
           solution: "const isValid = await bcrypt.compare(input, hash);",
         },
         {
@@ -1293,11 +1397,19 @@ export const nodeExpressTrack: Track = {
           starterCode: "// Tulis jwt.sign di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "const\\s+token\\s*=\\s*jwt\\.sign\\(\\s*\\{\\s*id\\s*:\\s*user\\.id\\s*\\}\\s*,\\s*secret\\s*,\\s*\\{\\s*expiresIn\\s*:\\s*['\"]1h['\"]\\s*\\}\\s*\\)\\s*;?",
-              message: "Gunakan: const token = jwt.sign({ id: user.id }, secret, { expiresIn: '1h' });",
-            },
-          ],
+                      {
+                        "pattern": "jwt\\.sign\\(",
+                        "message": "Pembuatan token memakai `jwt.sign(payload, secret, options)`."
+                      },
+                      {
+                        "pattern": "\\{\\s*id\\s*:\\s*user\\.id\\s*\\}",
+                        "message": "Payload berisi data seperlunya saja — id sudah cukup. Ingat: isi JWT hanya di-encode base64, BUKAN dienkripsi, jadi siapa pun bisa membacanya. Jangan menaruh password atau data pribadi."
+                      },
+                      {
+                        "pattern": "expiresIn\\s*:\\s*['\"]1h['\"]",
+                        "message": "Beri masa berlaku lewat opsi `expiresIn`. Token tanpa kedaluwarsa berlaku selamanya meskipun pengguna sudah logout — itu temuan yang selalu disorot saat audit keamanan."
+                      }
+                    ],
           solution: "const token = jwt.sign({ id: user.id }, secret, { expiresIn: '1h' });",
         },
         {
@@ -1316,11 +1428,15 @@ export const nodeExpressTrack: Track = {
           starterCode: "// Tulis req.session di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "req\\.session\\.userId\\s*=\\s*user\\.id\\s*;?",
-              message: "Tuliskan: req.session.userId = user.id;",
-            },
-          ],
+                      {
+                        "pattern": "req\\.session\\.userId\\s*=",
+                        "message": "Dengan express-session, data sesi ditulis sebagai properti pada `req.session`. Yang disimpan cukup penanda pengguna."
+                      },
+                      {
+                        "pattern": "user\\.id",
+                        "message": "Isi dengan id pengguna yang baru terverifikasi — bukan seluruh objek user, karena isi sesi ikut tersimpan di store dan dikirim setiap request."
+                      }
+                    ],
           solution: "req.session.userId = user.id;",
         },
         {
@@ -1339,11 +1455,19 @@ export const nodeExpressTrack: Track = {
           starterCode: "// Tulis pengecekan token di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "if\\s*\\(\\s*!token\\s*\\)\\s*return\\s+res\\.sendStatus\\(\\s*401\\s*\\)\\s*;?",
-              message: "Gunakan: if (!token) return res.sendStatus(401);",
-            },
-          ],
+                      {
+                        "pattern": "if\\s*\\(\\s*!\\s*token\\s*\\)",
+                        "message": "Middleware harus menolak lebih dulu kalau tokennya tidak ada — dengan pemeriksaan negasi di awal (early return)."
+                      },
+                      {
+                        "pattern": "res\\.sendStatus\\(\\s*401\\s*\\)",
+                        "message": "Kode untuk \"belum terautentikasi\" adalah 401 (bukan 403, yang berarti sudah dikenali tapi tidak berhak). `sendStatus` mengirim kode beserta teks standarnya."
+                      },
+                      {
+                        "pattern": "return\\s+res\\.",
+                        "message": "Wajib pakai `return` sebelum mengirim respons. Tanpa itu, eksekusi lanjut ke `next()` dan permintaan yang seharusnya ditolak tetap diteruskan ke handler."
+                      }
+                    ],
           solution: "if (!token) return res.sendStatus(401);",
         },
         {
@@ -1362,11 +1486,19 @@ export const nodeExpressTrack: Track = {
           starterCode: "// Tulis res.cookie di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "res\\.cookie\\(\\s*['\"]token['\"]\\s*,\\s*token\\s*,\\s*\\{\\s*httpOnly\\s*:\\s*true\\s*\\}\\s*\\)\\s*;?",
-              message: "Gunakan: res.cookie('token', token, { httpOnly: true });",
-            },
-          ],
+                      {
+                        "pattern": "res\\.cookie\\(",
+                        "message": "Cookie dikirim dengan `res.cookie(nama, nilai, opsi)`."
+                      },
+                      {
+                        "pattern": "httpOnly\\s*:\\s*true",
+                        "message": "Aktifkan `httpOnly` agar cookie TIDAK bisa dibaca JavaScript di browser — ini pertahanan utama terhadap pencurian token lewat XSS. Untuk produksi, tambahkan juga `secure: true` dan `sameSite: 'lax'`."
+                      },
+                      {
+                        "pattern": "['\"]token['\"]\\s*,\\s*token",
+                        "message": "Argumen pertama nama cookie-nya, argumen kedua nilainya."
+                      }
+                    ],
           solution: "res.cookie('token', token, { httpOnly: true });",
         },
         {
@@ -1385,11 +1517,15 @@ export const nodeExpressTrack: Track = {
           starterCode: "// Tulis clearCookie di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "res\\.clearCookie\\(\\s*['\"]token['\"]\\s*\\)\\s*;?",
-              message: "Tuliskan: res.clearCookie('token');",
-            },
-          ],
+                      {
+                        "pattern": "res\\.clearCookie\\(",
+                        "message": "Logout pada pola cookie berarti menghapus cookie-nya dengan `res.clearCookie(<nama>)`."
+                      },
+                      {
+                        "pattern": "['\"]token['\"]",
+                        "message": "Sebutkan nama cookie yang sama seperti saat dibuat. Catatan penting: menghapus cookie tidak membatalkan JWT-nya — token yang sudah dicuri tetap berlaku sampai kedaluwarsa, dan itu sebabnya ada denylist/refresh token."
+                      }
+                    ],
           solution: "res.clearCookie('token');",
         },
         {
@@ -1518,11 +1654,19 @@ export const nodeExpressTrack: Track = {
           starterCode: "// Tulis Zod parse di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "const\\s+data\\s*=\\s*UserSchema\\.parse\\(\\s*req\\.body\\s*\\)\\s*;?",
-              message: "Gunakan: const data = UserSchema.parse(req.body);",
-            },
-          ],
+                      {
+                        "pattern": "UserSchema\\.parse\\(",
+                        "message": "Validasi Zod dijalankan dengan `.parse(...)` pada skemanya. Ia melempar error kalau data tidak sesuai — pasangkan dengan error handler global. (`.safeParse()` dipakai kalau kamu ingin hasil berupa objek sukses/gagal tanpa exception.)"
+                      },
+                      {
+                        "pattern": "req\\.body",
+                        "message": "Yang divalidasi adalah isi permintaan dari `req.body`. Ingat memasang `express.json()` lebih dulu, kalau tidak `req.body` bernilai undefined."
+                      },
+                      {
+                        "pattern": "const\\s+data\\s*=",
+                        "message": "Simpan hasilnya, karena keluaran `parse` adalah data yang sudah bertipe dan bersih — itu yang dipakai selanjutnya, bukan `req.body` mentah."
+                      }
+                    ],
           solution: "const data = UserSchema.parse(req.body);",
         },
         {
@@ -1564,11 +1708,15 @@ export const nodeExpressTrack: Track = {
           starterCode: "// Tulis throw AppError di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "throw\\s+new\\s+AppError\\(\\s*['\"]Unauthorized['\"]\\s*,\\s*401\\s*\\)\\s*;?",
-              message: "Gunakan: throw new AppError('Unauthorized', 401);",
-            },
-          ],
+                      {
+                        "pattern": "throw\\s+new\\s+AppError\\(",
+                        "message": "Error yang disengaja dilempar sebagai instance class error kustom, supaya error handler bisa membedakannya dari bug tak terduga."
+                      },
+                      {
+                        "pattern": "['\"]Unauthorized['\"]\\s*,\\s*401",
+                        "message": "Argumennya pesan untuk klien, lalu status code-nya. Dengan pola ini status HTTP ikut melekat pada error, jadi handler tidak perlu menebak."
+                      }
+                    ],
           solution: "throw new AppError('Unauthorized', 401);",
         },
         {
@@ -1610,11 +1758,15 @@ export const nodeExpressTrack: Track = {
           starterCode: "// Tulis logger.info di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "logger\\.info\\(\\s*['\"]Server started['\"]\\s*\\)\\s*;?",
-              message: 'Gunakan: logger.info("Server started");',
-            },
-          ],
+                      {
+                        "pattern": "logger\\.info\\(",
+                        "message": "Logging terstruktur memakai instance logger (Pino), bukan `console.log`. Alasannya praktis: keluarannya JSON yang bisa dicari dan difilter di layanan log."
+                      },
+                      {
+                        "pattern": "['\"]Server started['\"]",
+                        "message": "Berikan pesannya sebagai argumen. Untuk konteks tambahan, Pino menerima objek di argumen pertama: `logger.info({ port }, 'Server started')`."
+                      }
+                    ],
           solution: 'logger.info("Server started");',
         },
         {
@@ -1633,11 +1785,19 @@ export const nodeExpressTrack: Track = {
           starterCode: "// Tulis pengecekan isProd di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "const\\s+isProd\\s*=\\s*process\\.env\\.NODE_ENV\\s*===\\s*['\"]production['\"]\\s*;?",
-              message: "Gunakan: const isProd = process.env.NODE_ENV === 'production';",
-            },
-          ],
+                      {
+                        "pattern": "process\\.env\\.NODE_ENV",
+                        "message": "Lingkungan aktif dibaca dari `process.env.NODE_ENV`."
+                      },
+                      {
+                        "pattern": "===\\s*['\"]production['\"]",
+                        "message": "Bandingkan dengan teks `production` memakai `===`. Nilai inilah yang dipakai untuk memutuskan apakah detail error (stack trace) boleh dikirim ke klien — di produksi tidak boleh, karena ia membocorkan struktur folder dan versi library."
+                      },
+                      {
+                        "pattern": "const\\s+isProd\\s*=",
+                        "message": "Simpan hasilnya sebagai boolean supaya pemeriksaannya bisa dipakai berulang tanpa mengulang string."
+                      }
+                    ],
           solution: "const isProd = process.env.NODE_ENV === 'production';",
         },
         {
@@ -1758,11 +1918,15 @@ export const nodeExpressTrack: Track = {
           starterCode: "// Tulis upload.single di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "upload\\.single\\(\\s*['\"]avatar['\"]\\s*\\)",
-              message: "Gunakan: upload.single('avatar')",
-            },
-          ],
+                      {
+                        "pattern": "upload\\.single\\(",
+                        "message": "Untuk satu berkas, middleware Multer yang dipakai `upload.single(...)`. Untuk beberapa berkas ada `upload.array()`."
+                      },
+                      {
+                        "pattern": "['\"]avatar['\"]",
+                        "message": "Argumennya nama FIELD di form, bukan nama berkasnya. Nama ini harus sama dengan atribut `name` pada input file — kalau berbeda, Multer tidak menemukan apa pun dan `req.file` bernilai undefined tanpa pesan error."
+                      }
+                    ],
           solution: "upload.single('avatar')",
         },
         {
@@ -1781,11 +1945,15 @@ export const nodeExpressTrack: Track = {
           starterCode: "// Tulis PutObjectCommand di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "new\\s+PutObjectCommand\\(\\s*\\{\\s*Bucket\\s*,\\s*Key\\s*,\\s*Body\\s*\\}\\s*\\)",
-              message: "Gunakan: new PutObjectCommand({ Bucket, Key, Body });",
-            },
-          ],
+                      {
+                        "pattern": "new\\s+PutObjectCommand\\(",
+                        "message": "AWS SDK v3 memakai pola command: buat objek perintah dengan `new PutObjectCommand({...})` lalu kirim lewat `client.send(...)`."
+                      },
+                      {
+                        "pattern": "Bucket\\s*,\\s*Key\\s*,\\s*Body|Bucket\\s*:",
+                        "message": "Isi tiga hal wajibnya: `Bucket` (nama bucket), `Key` (jalur berkas di dalam bucket), dan `Body` (isinya). Perhatikan huruf besar di awal — nama properti AWS memang begitu, dan salah huruf kecil membuat perintahnya ditolak."
+                      }
+                    ],
           solution: "new PutObjectCommand({ Bucket, Key, Body });",
         },
         {
@@ -1804,11 +1972,19 @@ export const nodeExpressTrack: Track = {
           starterCode: "// Tulis transporter.sendMail di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "await\\s+transporter\\.sendMail\\(\\s*\\{\\s*from\\s*,\\s*to\\s*,\\s*subject\\s*,\\s*html\\s*\\}\\s*\\)",
-              message: "Gunakan: await transporter.sendMail({ from, to, subject, html });",
-            },
-          ],
+                      {
+                        "pattern": "transporter\\.sendMail\\(",
+                        "message": "Pengiriman email memakai `transporter.sendMail({...})`, dengan transporter yang sudah dikonfigurasi kredensial SMTP-nya."
+                      },
+                      {
+                        "pattern": "from\\s*,\\s*to|from\\s*:",
+                        "message": "Sertakan minimal `from`, `to`, `subject`, dan isi (`html` atau `text`). Tanpa `from` yang cocok dengan domain terverifikasi, email besar kemungkinan masuk folder spam."
+                      },
+                      {
+                        "pattern": "await\\s",
+                        "message": "Tunggu dengan `await` supaya kamu bisa menangkap kegagalan pengiriman — pengiriman email adalah operasi jaringan yang sering gagal."
+                      }
+                    ],
           solution: "await transporter.sendMail({ from, to, subject, html });",
         },
         {
@@ -1827,11 +2003,19 @@ export const nodeExpressTrack: Track = {
           starterCode: "// Tulis emailQueue.add di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "await\\s+emailQueue\\.add\\(\\s*['\"]sendEmail['\"]\\s*,\\s*data\\s*\\)",
-              message: "Gunakan: await emailQueue.add('sendEmail', data);",
-            },
-          ],
+                      {
+                        "pattern": "emailQueue\\.add\\(",
+                        "message": "Pekerjaan latar belakang dimasukkan ke antrean dengan `queue.add(...)`. Ini yang membuat request pengguna tidak menunggu pengiriman email selesai."
+                      },
+                      {
+                        "pattern": "['\"]sendEmail['\"]\\s*,\\s*data",
+                        "message": "Argumennya nama job (dipakai worker untuk memilih penangannya) lalu datanya. Data ini diserialisasi ke Redis, jadi isinya harus bisa di-JSON — jangan memasukkan objek Prisma atau fungsi."
+                      },
+                      {
+                        "pattern": "await\\s",
+                        "message": "Tambahkan `await` agar kamu tahu job-nya benar-benar tercatat di Redis."
+                      }
+                    ],
           solution: "await emailQueue.add('sendEmail', data);",
         },
         {
@@ -1850,11 +2034,19 @@ export const nodeExpressTrack: Track = {
           starterCode: "// Tulis express.static di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "app\\.use\\(\\s*['\"]/static['\"]\\s*,\\s*express\\.static\\(\\s*['\"]public['\"]\\s*\\)\\s*\\)\\s*;?",
-              message: "Gunakan: app.use('/static', express.static('public'));",
-            },
-          ],
+                      {
+                        "pattern": "express\\.static\\(",
+                        "message": "Penyajian berkas statis memakai middleware bawaan `express.static(<folder>)`."
+                      },
+                      {
+                        "pattern": "['\"]public['\"]",
+                        "message": "Sebutkan folder sumbernya. Arahkan ke folder khusus berkas publik — mengarahkannya ke root proyek berarti membuka `.env` dan seluruh kode sumbermu ke internet."
+                      },
+                      {
+                        "pattern": "app\\.use\\(\\s*['\"]/static['\"]",
+                        "message": "Pasang di prefix URL yang diminta lewat `app.use(<prefix>, ...)`, supaya jalur berkas tidak bercampur dengan jalur API."
+                      }
+                    ],
           solution: "app.use('/static', express.static('public'));",
         },
         {
@@ -2005,11 +2197,19 @@ export const nodeExpressTrack: Track = {
           starterCode: "// Tulis request supertest di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "const\\s+res\\s*=\\s*await\\s+request\\(\\s*app\\s*\\)\\.get\\(\\s*['\"]/ping['\"]\\s*\\)\\s*;?",
-              message: 'Gunakan: const res = await request(app).get("/ping");',
-            },
-          ],
+                      {
+                        "pattern": "request\\(\\s*app\\s*\\)",
+                        "message": "Supertest membungkus aplikasi Express-mu dengan `request(app)` — tanpa perlu menyalakan server di port sungguhan."
+                      },
+                      {
+                        "pattern": "\\.get\\(\\s*['\"]/ping['\"]\\s*\\)",
+                        "message": "Rantaikan metode HTTP-nya beserta jalur yang diuji."
+                      },
+                      {
+                        "pattern": "await\\s+request",
+                        "message": "Tunggu hasilnya dengan `await`, lalu periksa `res.status` dan `res.body` pada assertion berikutnya."
+                      }
+                    ],
           solution: 'const res = await request(app).get("/ping");',
         },
         {
@@ -2028,11 +2228,15 @@ export const nodeExpressTrack: Track = {
           starterCode: "// Tulis deleteMany di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "await\\s+prisma\\.user\\.deleteMany\\(\\)\\s*;?",
-              message: "Tuliskan: await prisma.user.deleteMany();",
-            },
-          ],
+                      {
+                        "pattern": "prisma\\.user\\.deleteMany\\(",
+                        "message": "Pembersihan tabel sebelum/sesudah tiap test memakai `deleteMany()` tanpa argumen — tanpa `where`, ia menghapus SEMUA baris. Sengaja: test butuh keadaan awal yang selalu sama."
+                      },
+                      {
+                        "pattern": "await\\s",
+                        "message": "Tambahkan `await`, kalau tidak test berikutnya bisa mulai sebelum pembersihan selesai dan hasilnya jadi tidak konsisten. Pastikan juga ini dijalankan pada database TEST, bukan database utama."
+                      }
+                    ],
           solution: "await prisma.user.deleteMany();",
         },
         {
@@ -2051,11 +2255,19 @@ export const nodeExpressTrack: Track = {
           starterCode: "// Tulis set Authorization di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "\\.set\\(\\s*['\"]Authorization['\"]\\s*,\\s*`Bearer\\s+\\$\\{token\\}`\\s*\\)",
-              message: "Gunakan: .set('Authorization', `Bearer ${token}`);",
-            },
-          ],
+                      {
+                        "pattern": "\\.set\\(",
+                        "message": "Header pada permintaan uji ditambahkan dengan `.set(nama, nilai)`."
+                      },
+                      {
+                        "pattern": "['\"]Authorization['\"]",
+                        "message": "Nama header standarnya `Authorization`."
+                      },
+                      {
+                        "pattern": "Bearer\\s+\\$\\{token\\}|Bearer\\s+['\"]?\\s*\\+\\s*token",
+                        "message": "Nilainya berpola `Bearer <token>`: kata Bearer, satu spasi, lalu tokennya disisipkan. Lupa spasinya menghasilkan 401 yang paling sering luput terlihat."
+                      }
+                    ],
           solution: ".set('Authorization', `Bearer ${token}`);",
         },
         {
@@ -2074,11 +2286,15 @@ export const nodeExpressTrack: Track = {
           starterCode: "# Tulis perintah vitest coverage di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "npx\\s+vitest\\s+run\\s+--coverage",
-              message: "Gunakan: npx vitest run --coverage",
-            },
-          ],
+                      {
+                        "pattern": "vitest\\s+run",
+                        "message": "Untuk sekali jalan (bukan mode pantau), subperintahnya `vitest run` — penting di CI, karena mode pantau tidak pernah berhenti dan pipeline-mu akan menggantung."
+                      },
+                      {
+                        "pattern": "--coverage",
+                        "message": "Tambahkan flag laporan cakupan. Ingat cakupan 100% bukan tujuan: yang penting jalur kritis (auth, pembayaran) terlingkupi, bukan angka totalnya."
+                      }
+                    ],
           solution: "npx vitest run --coverage",
         },
         {
@@ -2269,11 +2485,19 @@ export const nodeExpressTrack: Track = {
           starterCode: "// Tulis cors di bawah ini\n",
           language: "text",
           tests: [
-            {
-              pattern: "app\\.use\\(\\s*cors\\(\\s*\\{\\s*origin\\s*:\\s*['\"]https://myapp\\.com['\"]\\s*\\}\\s*\\)\\s*\\)\\s*;?",
-              message: "Gunakan: app.use(cors({ origin: 'https://myapp.com' }));",
-            },
-          ],
+                      {
+                        "pattern": "cors\\(\\s*\\{",
+                        "message": "Middleware CORS dikonfigurasi dengan objek opsi — bukan dipanggil tanpa argumen. `cors()` polos mengizinkan SEMUA domain, dan itu tidak layak untuk produksi."
+                      },
+                      {
+                        "pattern": "origin\\s*:\\s*['\"]https://myapp\\.com['\"]",
+                        "message": "Sebutkan domain yang diizinkan lewat opsi `origin`, lengkap dengan skema `https://` dan tanpa garis miring di akhir — kesalahan kecil di sini membuat browser tetap memblokir permintaannya."
+                      },
+                      {
+                        "pattern": "app\\.use\\(",
+                        "message": "Pasang sebagai middleware global dengan `app.use(...)`, sebelum definisi route."
+                      }
+                    ],
           solution: "app.use(cors({ origin: 'https://myapp.com' }));",
         },
         {
@@ -2292,11 +2516,19 @@ export const nodeExpressTrack: Track = {
           starterCode: "// Tulis app.use limiter di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "app\\.use\\(\\s*['\"]/api/v1/login['\"]\\s*,\\s*limiter\\s*\\)\\s*;?",
-              message: "Gunakan: app.use('/api/v1/login', limiter);",
-            },
-          ],
+                      {
+                        "pattern": "app\\.use\\(",
+                        "message": "Pasang limiter sebagai middleware dengan `app.use(<jalur>, <limiter>)`."
+                      },
+                      {
+                        "pattern": "['\"]/api/v1/login['\"]",
+                        "message": "Terapkan pada jalur yang rawan disalahgunakan (login), bukan ke seluruh aplikasi — pembatasan menyeluruh bisa mengganggu pemakaian normal."
+                      },
+                      {
+                        "pattern": ",\\s*limiter",
+                        "message": "Argumen keduanya instance limiter yang sudah dikonfigurasi `windowMs` dan `max`."
+                      }
+                    ],
           solution: "app.use('/api/v1/login', limiter);",
         },
         {
@@ -2315,11 +2547,15 @@ export const nodeExpressTrack: Track = {
           starterCode: "// Tulis helmet di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "app\\.use\\(\\s*helmet\\(\\)\\s*\\)\\s*;?",
-              message: "Tuliskan: app.use(helmet());",
-            },
-          ],
+                      {
+                        "pattern": "helmet\\(\\s*\\)",
+                        "message": "Helmet dipasang dengan MEMANGGIL fungsinya (`helmet()`), bukan menyebut namanya saja. Ia menyetel belasan header keamanan sekaligus."
+                      },
+                      {
+                        "pattern": "app\\.use\\(",
+                        "message": "Pasang paling awal lewat `app.use(...)`, sebelum route mana pun, supaya header-nya ikut pada semua respons — termasuk respons error."
+                      }
+                    ],
           solution: "app.use(helmet());",
         },
         {

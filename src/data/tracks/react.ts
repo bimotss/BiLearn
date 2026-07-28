@@ -68,8 +68,16 @@ export const reactTrack: Track = {
           "language": "text",
           "tests": [
             {
-              "pattern": "npm\\s+create\\s+vite(@latest)?\\s+bipack-app\\s+--\\s+--template\\s+react-ts",
-              "message": "Tuliskan: npm create vite@latest bipack-app -- --template react-ts"
+              "pattern": "npm\\s+create\\s+vite(@latest)?",
+              "message": "Scaffolding Vite dipanggil dengan `npm create vite`. Tambahkan penanda `@latest` agar kamu tidak mendapat versi lama dari cache npm."
+            },
+            {
+              "pattern": "vite(@latest)?\\s+bipack-app",
+              "message": "Nama proyek ditulis tepat setelah nama paketnya, dan akan menjadi nama folder. Pakai huruf kecil dan tanda hubung — npm menolak nama berhuruf besar."
+            },
+            {
+              "pattern": "--\\s+--template\\s+react-ts",
+              "message": "Opsi untuk create-vite (bukan untuk npm) harus dipisahkan dengan `--` kosong lebih dulu, baru `--template` diikuti nama template React+TypeScript. Tanpa pemisah itu, npm menganggap opsinya miliknya sendiri dan template diabaikan."
             }
           ],
           "solution": "npm create vite@latest bipack-app -- --template react-ts"
@@ -84,13 +92,21 @@ export const reactTrack: Track = {
             "output": "Elemen App dirender ke div#root di index.html.",
             "note": "React.StrictMode membantu mendeteksi potensi bug dan efek samping tak terduga selama masa pengembangan."
           },
-          "instruction": "Lengkapi pemanggilan `createRoot` dengan mencari elemen `document.getElementById('root')` lalu panggil `.render(<App />)`.",
+          "instruction": "Berkas `src/main.tsx` adalah titik masuk aplikasi: ia mencari satu elemen kosong di `index.html` yang ber-id `root`, lalu menempelkan komponen `App` ke dalamnya. Lengkapi baris di editor sehingga React membuat root di elemen itu dan merender `<App />` ke dalamnya.",
           "starterCode": "// Lengkapi pemanggilan ReactDOM.createRoot di bawah\nReactDOM.createRoot(",
           "language": "jsx",
           "tests": [
             {
-              "pattern": "ReactDOM\\.createRoot\\(\\s*document\\.getElementById\\(['\"]root['\"]\\)!?\\s*\\)\\.render\\(\\s*<App\\s*\\/?>\\s*\\)",
-              "message": "Gunakan: ReactDOM.createRoot(document.getElementById('root')!).render(<App />);"
+              "pattern": "ReactDOM\\.createRoot\\(|createRoot\\(",
+              "message": "Sejak React 18, root dibuat dengan `createRoot(...)` — bukan `ReactDOM.render()` yang sudah tidak dipakai lagi."
+            },
+            {
+              "pattern": "document\\.getElementById\\(['\"]root['\"]\\)",
+              "message": "Beri tahu React elemen mana yang jadi wadahnya, dengan mencari elemen ber-id `root` dari `index.html`. Kalau id-nya salah tulis, hasilnya `null` dan React melempar error \"Target container is not a DOM element\"."
+            },
+            {
+              "pattern": "\\.render\\(\\s*<App\\s*/?>",
+              "message": "Setelah root dibuat, panggil `.render()` dengan elemen `<App />` di dalamnya. Perhatikan huruf A besar: nama berhuruf kecil dianggap tag HTML biasa oleh JSX."
             }
           ],
           "solution": "ReactDOM.createRoot(document.getElementById('root')!).render(<App />);"
@@ -136,7 +152,7 @@ export const reactTrack: Track = {
           "tests": [
             {
               "pattern": "npm\\s+run\\s+build",
-              "message": "Gunakan perintah: npm run build"
+              "message": "Perintah npm menjalankan skrip yang terdaftar di `package.json` dengan pola `npm run <nama-skrip>`. Nama skrip untuk membangun versi produksi adalah yang sama dengan istilahnya dalam bahasa Inggris — hasilnya masuk ke folder `dist/`, bukan langsung ditayangkan."
             }
           ],
           "solution": "npm run build"
@@ -346,13 +362,17 @@ export const reactTrack: Track = {
             "output": "Menampilkan 'Online' jika isOnline true, sebaliknya 'Offline'.",
             "note": "Untuk kondisi tunggal gunakan: isLogin && <UserMenu />."
           },
-          "instruction": "Terapkan render kondisional menggunakan operator `&&`. Jika `isLoggedIn` bernilai true, kembalikan elemen `<button>Logout</button>`.",
+          "instruction": "Tombol Logout hanya boleh muncul untuk pengguna yang sudah masuk. Di dalam JSX, tampilkan elemen `<button>Logout</button>` hanya ketika variabel `isLoggedIn` bernilai true — pakai bentuk paling ringkas untuk kondisi tanpa cabang else.",
           "starterCode": "// Tulis return kondisional di sini\n",
           "language": "jsx",
           "tests": [
             {
-              "pattern": "\\{\\s*isLoggedIn\\s*&&\\s*<button>\\s*Logout\\s*</button>\\s*\\}",
-              "message": "Gunakan: {isLoggedIn && <button>Logout</button>}"
+              "pattern": "\\{\\s*isLoggedIn\\s*&&",
+              "message": "Bentuk paling ringkas untuk \"tampilkan kalau benar\" adalah operator DAN logika di dalam kurung kurawal JSX. Jebakan yang wajib kamu tahu: kalau kondisinya berupa angka, `0 && ...` justru mencetak angka 0 ke layar — untuk itu pakai `count > 0 &&`."
+            },
+            {
+              "pattern": "<button>\\s*Logout\\s*</button>",
+              "message": "Elemen yang muncul secara kondisional ditulis setelah operatornya. Pastikan tombolnya ditutup dengan `</button>`."
             }
           ],
           "solution": "{isLoggedIn && <button>Logout</button>}"
@@ -385,23 +405,27 @@ export const reactTrack: Track = {
         {
           "kind": "step",
           "id": "react-1-6",
-          "title": "Setup Proyek dengan Vite",
-          "explanation": "Vite adalah alat pembangun proyek modern yang menjadi standar de-facto industri untuk membuat aplikasi React baru secara kilat (`npm create vite@latest`). Vite menggantikan Create React App (CRA) yang telah usang karena Vite memanfaatkan fitur Native ES Modules bawaan browser untuk memberikan performa server lokal yang sangat cepat. Menguasai pembuatan proyek dengan Vite sangat penting agar lingkungan pengembanganmu sesuai dengan standar pekerjaan industri saat ini. Jebakan pemula adalah lupa berpindah folder setelah scaffolding sebelum menjalankan perintah instalasi.",
+          "title": "Menambahkan Berkas Komponen ke Proyek Vite",
+          "explanation": "Proyek Vite hasil scaffolding hanya berisi `App.tsx`; komponen berikutnya kamu buat sebagai berkas sendiri lalu diimpor. Jalur impor bersifat **relatif** terhadap berkas yang mengimpor: `./components/Header` berarti folder `components` yang sejajar dengan `App.tsx`. Vite melengkapi ekstensi `.tsx` sendiri, jadi ekstensi boleh tidak ditulis — tapi nama berkasnya harus persis, termasuk huruf besar-kecilnya. Ini jebakan yang paling sering menghantui pemula justru saat deploy: macOS dan Windows memperlakukan `header.tsx` dan `Header.tsx` sebagai berkas yang sama, sedangkan server Linux tempat aplikasimu di-deploy tidak — jadi proyek yang jalan mulus di laptop bisa gagal build di Vercel dengan pesan `Could not resolve`. Jebakan kedua: lupa `export default` di berkas komponennya, sehingga yang terimpor `undefined` dan React melempar error tentang tipe elemen yang tidak valid.",
           "example": {
-            "code": "npm create vite@latest my-app -- --template react-ts",
-            "output": "added 312 packages in 18s\n\n  VITE v6.0.5  ready in 421 ms\n  ➜  Local:   http://localhost:5173/",
-            "note": "Vite menggantikan Create React App (CRA) yang sudah usang."
+            "code": "// src/components/Footer.tsx\nexport default function Footer() {\n  return <footer>© 2026 BiLearn</footer>;\n}\n\n// src/App.tsx\nimport Footer from './components/Footer';\n\nexport default function App() {\n  return (\n    <div>\n      <h1>Beranda</h1>\n      <Footer />\n    </div>\n  );\n}",
+            "output": "Halaman menampilkan:\nBeranda\n© 2026 BiLearn\n\nStruktur berkasnya:\nsrc/\n├── App.tsx\n└── components/\n    └── Footer.tsx",
+            "note": "Nama pada `import Footer from ...` bebas kamu tentukan karena berkasnya memakai `export default` — tapi menyamakannya dengan nama komponen adalah konvensi yang dipatuhi semua tim. Catatan jujur: panel preview tidak mengompilasi banyak berkas, jadi hasil impor lintas berkas tidak akan terlihat di sini; tesnya tetap bisa lulus."
           },
-          "instruction": "Tulis perintah npx/npm untuk menginisialisasi proyek Vite baru dengan nama `my-app`.",
-          "starterCode": "# Tulis perintah di bawah ini\n",
-          "language": "text",
+          "instruction": "Komponen `Header` sudah ditulis di berkas `src/components/Header.tsx` dengan `export default`. Di `src/App.tsx`, impor komponen itu lalu tampilkan sekali di dalam elemen `<main>`. Jangan mengubah nama komponennya.",
+          "starterCode": "// src/App.tsx\n// impor komponen Header di bawah ini\n\nexport default function App() {\n  return (\n    <main>\n    </main>\n  );\n}\n",
+          "language": "jsx",
           "tests": [
             {
-              "pattern": "npm\\s+create\\s+vite(@latest)?\\s+my-app",
-              "message": "Gunakan: npm create vite@latest my-app"
+              "pattern": "import\\s+Header\\s+from\\s*['\"]\\.\\/components\\/Header(\\.tsx)?['\"]",
+              "message": "Impor default ditulis `import Header from '<jalur>'`. Jalurnya relatif dari `App.tsx`, jadi diawali `./` lalu `components/Header` — ekstensi `.tsx` boleh ditulis atau tidak."
+            },
+            {
+              "pattern": "<main>[\\s\\S]*<Header\\s*/>[\\s\\S]*</main>",
+              "message": "Tampilkan `<Header />` DI DALAM `<main>`. Komponen tanpa anak ditulis sebagai tag menutup-sendiri (`<Header />`) — lupa garis miringnya membuat JSX menganggap sisa berkasmu sebagai isi Header."
             }
           ],
-          "solution": "npm create vite@latest my-app"
+          "solution": "// src/App.tsx\nimport Header from './components/Header';\n\nexport default function App() {\n  return (\n    <main>\n      <Header />\n    </main>\n  );\n}"
         },
         {
           "kind": "step",
@@ -418,8 +442,16 @@ export const reactTrack: Track = {
           "language": "jsx",
           "tests": [
             {
-              "pattern": "export\\s+default\\s+function\\s+Card\\s*\\(\\s*\\)\\s*\\{\\s*return\\s*<div>\\s*Card\\s*</div>\\s*;?\\s*\\}",
-              "message": "Tuliskan: export default function Card() { return <div>Card</div>; }"
+              "pattern": "export\\s+default\\s+function\\s+Card|function\\s+Card[\\s\\S]*export\\s+default\\s+Card",
+              "message": "Satu berkas komponen mengekspor satu komponen utama sebagai default export. Dua bentuk diterima: `export default function Card()`, atau deklarasi biasa lalu `export default Card;` di bawahnya."
+            },
+            {
+              "pattern": "<div>\\s*Card\\s*</div>",
+              "message": "Komponen wajib mengembalikan JSX. Kembalikan sebuah `<div>` berisi teks yang diminta — komponen yang tidak mengembalikan apa pun akan merender kosong tanpa pesan error."
+            },
+            {
+              "pattern": "Card\\s*\\(",
+              "message": "Nama komponen diawali huruf BESAR. JSX memperlakukan nama berhuruf kecil sebagai tag HTML bawaan, jadi `card` tidak akan pernah merender komponenmu."
             }
           ],
           "solution": "export default function Card() { return <div>Card</div>; }"
@@ -549,7 +581,7 @@ export const reactTrack: Track = {
           "explanation": "Prop spesial `children` adalah fitur bawaan React yang secara otomatis menangkap elemen JSX apapun yang disematkan di antara tag pembuka dan tag penutup komponen (`<Card><p>Konten</p></Card>`). Fitur ini memungkinkan pembuatan komponen kontainer pembungkus yang fleksibel tanpa perlu tahu elemen apa yang akan dimasukkan ke dalamnya. Dalam TypeScript, tipe data untuk prop `children` umumnya diketik sebagai `React.ReactNode`. Jebakan bagi pemula adalah lupa mengekspor atau lupa mengetikkan `children` pada interface props.",
           "example": {
             "code": "interface ModalProps { children: React.ReactNode; }\nfunction Modal({ children }: ModalProps) {\n  return <div className=\"modal\">{children}</div>;\n}",
-            "output": "Elemen di dalam <Modal><p>Isi Modal</p></Modal> akan dirender pada prop children.",
+            "output": "Pemakaian:\n<Modal><p>Isi Modal</p></Modal>\n\nHTML yang dihasilkan:\n<div class=\"modal\">\n  <p>Isi Modal</p>\n</div>",
             "note": "Tipe React.ReactNode digunakan untuk mengetik prop children di TypeScript. Catatan jujur: panel preview di bawah tidak mengompilasi berkas ini, jadi kamu tidak akan melihat hasil visualnya di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
           "instruction": "Buat `interface CardProps { children: React.ReactNode }` dan komponen `function Card({ children }: CardProps)` yang mengembalikan `<div>{children}</div>`.",
@@ -578,8 +610,12 @@ export const reactTrack: Track = {
           "language": "jsx",
           "tests": [
             {
+              "pattern": "<Card>[\\s\\S]*</Card>",
+              "message": "Komponen yang membungkus komponen lain ditulis dengan tag pembuka dan penutup, bukan tag menutup-sendiri. Isinya diterima `Card` lewat props `children`."
+            },
+            {
               "pattern": "<Card>\\s*<Header\\s*/>\\s*</Card>",
-              "message": "Tuliskan: <Card><Header /></Card>"
+              "message": "Letakkan `<Header />` di ANTARA tag pembuka dan penutup `Card`. Kalau ditulis sebagai props (`<Card header={...} />`), itu pola konfigurasi — bukan komposisi, dan tidak fleksibel saat isinya bertambah."
             }
           ],
           "solution": "<Card><Header /></Card>"
@@ -641,8 +677,16 @@ export const reactTrack: Track = {
           "language": "jsx",
           "tests": [
             {
-              "pattern": "function\\s+App\\s*\\(\\s*\\)\\s*\\{\\s*return\\s*<main>\\s*<Navbar\\s*/>\\s*</main>\\s*;?\\s*\\}",
-              "message": "Definisikan: function App() { return <main><Navbar /></main>; }"
+              "pattern": "function\\s+App\\s*\\(",
+              "message": "Buat komponen bernama `App` — huruf awal besar, karena JSX membedakan komponen dari tag HTML lewat itu."
+            },
+            {
+              "pattern": "return\\s*[\\s\\S]*<main>",
+              "message": "Komponen harus MENGEMBALIKAN JSX-nya dengan `return`. Menuliskan JSX tanpa `return` membuat komponen merender kosong tanpa error apa pun."
+            },
+            {
+              "pattern": "<main>\\s*<Navbar\\s*/>\\s*</main>",
+              "message": "Susun pohonnya: `<Navbar />` berada di dalam `<main>`. Ini bentuk paling dasar \"memecah UI jadi pohon komponen\" — induk menentukan tata letak, anak mengurus isinya."
             }
           ],
           "solution": "function App() {\n  return <main><Navbar /></main>;\n}"
@@ -755,8 +799,12 @@ export const reactTrack: Track = {
           "language": "jsx",
           "tests": [
             {
-              "pattern": "const\\s*\\[\\s*count\\s*,\\s*setCount\\s*\\]\\s*=\\s*useState\\(\\s*0\\s*\\)",
-              "message": "Gunakan: const [count, setCount] = useState(0);"
+              "pattern": "useState\\(\\s*0\\s*\\)",
+              "message": "State dibuat dengan memanggil `useState(<nilai awal>)`. Nilai awal wajib diberikan — tanpa argumen, isinya `undefined` dan tampilan pertamamu kosong."
+            },
+            {
+              "pattern": "const\\s*\\[\\s*count\\s*,\\s*setCount\\s*\\]",
+              "message": "Hasil `useState` adalah array berisi dua hal, jadi ambil keduanya dengan destructuring array (kurung siku): nilainya, lalu fungsi pengubahnya. Konvensi penamaan setter: `set` + nama state."
             }
           ],
           "solution": "const [count, setCount] = useState(0);"
@@ -776,8 +824,8 @@ export const reactTrack: Track = {
           "language": "jsx",
           "tests": [
             {
-              "pattern": "e\\.preventDefault\\(\\)",
-              "message": "Tuliskan: e.preventDefault();"
+              "pattern": "e\\.preventDefault\\(\\s*\\)",
+              "message": "Perilaku bawaan form adalah mengirim data lalu MEMUAT ULANG halaman, dan itu menghapus seluruh state React-mu. Metode pada objek event yang mencegahnya dipanggil di baris pertama handler — jangan lupa tanda kurung, karena tanpa memanggilnya tidak terjadi apa-apa."
             }
           ],
           "solution": "e.preventDefault();"
@@ -813,13 +861,17 @@ export const reactTrack: Track = {
             "output": "State diupdate secara reliabel berdasarkan nilai paling akhir.",
             "note": "Gunakan pola ini jika state baru dihitung dari state lama."
           },
-          "instruction": "Panggil `setScore` dengan menggunakan updater function untuk menambah state sebelumnya (`prev`) dengan `10`.",
+          "instruction": "Tombol bonus menambah skor 10 poin, tapi menekannya dua kali cepat hanya menambah 10 karena `score` yang dibaca masih nilai lama (state adalah snapshot). Panggil `setScore` dengan bentuk yang menerima nilai sebelumnya sebagai argumen, lalu tambahkan 10 padanya. Beri nama parameternya `prev`.",
           "starterCode": "// Tulis setScore di sini\n",
           "language": "jsx",
           "tests": [
             {
-              "pattern": "setScore\\(\\s*\\(?\\s*prev\\)?\\s*=>\\s*prev\\s*\\+\\s*10\\s*\\)?\\s*\\)",
-              "message": "Gunakan updater function: setScore(prev => prev + 10);"
+              "pattern": "setScore\\(\\s*\\(?\\s*prev",
+              "message": "Bentuk aman memberi FUNGSI ke setter, bukan nilai jadi. Parameter pertamanya adalah nilai state terbaru yang dijamin React — beri nama `prev`."
+            },
+            {
+              "pattern": "prev\\s*\\+\\s*10",
+              "message": "Kembalikan nilai sebelumnya ditambah 10. Menulis `score + 10` di dalamnya mengalahkan tujuan updater function, karena `score` masih snapshot render ini."
             }
           ],
           "solution": "setScore(prev => prev + 10);"
@@ -839,8 +891,16 @@ export const reactTrack: Track = {
           "language": "jsx",
           "tests": [
             {
-              "pattern": "setItems\\(\\s*\\[\\s*\\.\\.\\.items\\s*,\\s*['\"]Baru['\"]\\s*\\]\\s*\\)",
-              "message": "Gunakan: setItems([...items, 'Baru']);"
+              "pattern": "setItems\\(",
+              "message": "Perubahan state selalu lewat setter-nya, bukan dengan menyentuh variabelnya langsung."
+            },
+            {
+              "pattern": "\\[\\s*\\.\\.\\.items\\s*,",
+              "message": "Buat array BARU dengan menyebar isi array lama memakai tiga titik (spread), lalu tambahkan elemen baru di belakangnya. `items.push(...)` mengubah array yang sama, dan React tidak melihat perubahan itu sebagai state baru sehingga tampilan tidak diperbarui."
+            },
+            {
+              "pattern": "['\"]Baru['\"]\\s*\\]",
+              "message": "Elemen barunya ditulis setelah spread, sebelum kurung siku penutup — posisinya menentukan ia masuk ke akhir array."
             }
           ],
           "solution": "setItems([...items, 'Baru']);"
@@ -860,8 +920,12 @@ export const reactTrack: Track = {
           "language": "jsx",
           "tests": [
             {
-              "pattern": "const\\s+fullName\\s*=\\s*firstName\\s*\\+\\s*['\"]\\s*['\"]\\s*\\+\\s*lastName",
-              "message": "Gunakan: const fullName = firstName + ' ' + lastName;"
+              "pattern": "const\\s+fullName\\s*=",
+              "message": "Nilai yang bisa DIHITUNG dari state lain tidak perlu jadi state sendiri — cukup variabel biasa yang dihitung saat render. Menyimpannya di `useState` berarti kamu harus mengingat memperbaruinya setiap kali `firstName` berubah, dan itu sumber data yang tidak sinkron."
+            },
+            {
+              "pattern": "firstName\\s*\\+\\s*['\"]\\s*['\"]\\s*\\+\\s*lastName",
+              "message": "Gabungkan kedua nama dengan sebuah spasi di antaranya. Tanpa spasi itu, hasilnya menempel jadi satu kata."
             }
           ],
           "solution": "const fullName = firstName + ' ' + lastName;"
@@ -999,8 +1063,16 @@ export const reactTrack: Track = {
           "language": "jsx",
           "tests": [
             {
-              "pattern": "setForm\\(\\s*\\{\\s*\\.\\.\\.form\\s*,\\s*\\[\\s*e\\.target\\.name\\s*\\]\\s*:\\s*e\\.target\\.value\\s*\\}\\s*\\)",
-              "message": "Gunakan: setForm({ ...form, [e.target.name]: e.target.value });"
+              "pattern": "setForm\\(\\s*\\{\\s*\\.\\.\\.form",
+              "message": "Untuk state berbentuk object, sebar dulu isi lama dengan spread. Tanpa itu, seluruh field lain HILANG begitu satu field diubah — gejalanya khas: mengisi email menghapus nama yang sudah diketik."
+            },
+            {
+              "pattern": "\\[\\s*e\\.target\\.name\\s*\\]\\s*:",
+              "message": "Nama field diambil dari atribut `name` input, dan karena namanya baru diketahui saat runtime, kuncinya ditulis di dalam kurung siku (*computed property*). Menulisnya tanpa kurung siku membuat kunci literalnya benar-benar bernama \"e.target.name\"."
+            },
+            {
+              "pattern": "e\\.target\\.value",
+              "message": "Nilai barunya diambil dari `e.target.value`. Untuk checkbox, yang dipakai `e.target.checked` — bukan value."
             }
           ],
           "solution": "setForm({ ...form, [e.target.name]: e.target.value });"
@@ -1020,8 +1092,12 @@ export const reactTrack: Track = {
           "language": "jsx",
           "tests": [
             {
-              "pattern": "if\\s*\\(\\s*!text\\s*\\)\\s*setError\\(\\s*['\"]Wajib diisi!['\"]\\s*\\)",
-              "message": "Gunakan: if (!text) setError('Wajib diisi!');"
+              "pattern": "if\\s*\\(\\s*!\\s*text\\s*\\)",
+              "message": "Periksa kondisi kosong dengan tanda seru (negasi) pada nilainya. Bentuk ini sekaligus menangkap string kosong, `undefined`, dan `null` — tiga keadaan yang sama-sama berarti \"belum diisi\"."
+            },
+            {
+              "pattern": "setError\\(\\s*['\"]Wajib diisi!['\"]\\s*\\)",
+              "message": "Simpan pesannya ke state error lewat setter-nya, sebagai teks di dalam tanda kutip. Pesan validasi disimpan di state (bukan `alert`) supaya bisa ditampilkan di dekat input yang bermasalah."
             }
           ],
           "solution": "if (!text) setError('Wajib diisi!');"
@@ -1041,8 +1117,16 @@ export const reactTrack: Track = {
           "language": "jsx",
           "tests": [
             {
-              "pattern": "setItems\\(\\s*items\\.filter\\(\\s*item\\s*=>\\s*item\\.id\\s*!==\\s*id\\s*\\)\\s*\\)",
-              "message": "Gunakan: setItems(items.filter(item => item.id !== id));"
+              "pattern": "setItems\\(",
+              "message": "Perubahan daftar tetap lewat setter state."
+            },
+            {
+              "pattern": "items\\.filter\\(",
+              "message": "Penghapusan immutable dilakukan dengan `.filter()`, yang MENGEMBALIKAN array baru tanpa menyentuh yang lama. `.splice()` memotong array aslinya dan React tidak akan melihatnya sebagai state baru."
+            },
+            {
+              "pattern": "item\\.id\\s*!==\\s*id",
+              "message": "Syarat filter menyisakan item yang id-nya BERBEDA dari yang dihapus. Pakai pembanding tiga karakter (`!==`) supaya `\"3\"` dan `3` tidak dianggap sama — id dari URL selalu berupa string."
             }
           ],
           "solution": "setItems(items.filter(item => item.id !== id));"
@@ -1062,8 +1146,16 @@ export const reactTrack: Track = {
           "language": "jsx",
           "tests": [
             {
-              "pattern": "const\\s+filtered\\s*=\\s*items\\.filter\\(\\s*i\\s*=>\\s*i\\.name\\.includes\\(\\s*query\\s*\\)\\s*\\)",
-              "message": "Gunakan: const filtered = items.filter(i => i.name.includes(query));"
+              "pattern": "const\\s+filtered\\s*=",
+              "message": "Hasil pencarian dihitung saat render sebagai variabel biasa. Menyimpannya sebagai state kedua membuat kamu harus menyinkronkannya manual setiap kali `query` atau `items` berubah."
+            },
+            {
+              "pattern": "items\\.filter\\(",
+              "message": "Penyaringan daftar memakai `.filter()` pada array sumbernya."
+            },
+            {
+              "pattern": "\\.name\\.includes\\(\\s*query\\s*\\)",
+              "message": "Pemeriksaan \"mengandung teks\" memakai `.includes()` pada properti namanya. Untuk pencarian sungguhan, biasanya kedua sisi di-`toLowerCase()` dulu — kalau tidak, mencari \"kopi\" tidak menemukan \"Kopi\"."
             }
           ],
           "solution": "const filtered = items.filter(i => i.name.includes(query));"
@@ -1205,8 +1297,12 @@ export const reactTrack: Track = {
           "language": "jsx",
           "tests": [
             {
-              "pattern": "document\\.title\\s*=\\s*['\"]BiLearn['\"]",
-              "message": "Tuliskan: document.title = 'BiLearn';"
+              "pattern": "document\\.title\\s*=",
+              "message": "Mengubah judul tab adalah contoh *sinkronisasi dengan sistem di luar React* — di situlah effect memang dibutuhkan. Properti yang diubah adalah judul dokumen milik browser."
+            },
+            {
+              "pattern": "['\"]BiLearn['\"]",
+              "message": "Isi dengan teks yang diminta, dibungkus tanda kutip."
             }
           ],
           "solution": "document.title = 'BiLearn';"
@@ -1247,8 +1343,12 @@ export const reactTrack: Track = {
           "language": "jsx",
           "tests": [
             {
-              "pattern": "return\\s*\\(\\s*\\)\\s*=>\\s*clearInterval\\(\\s*timer\\s*\\)",
-              "message": "Gunakan: return () => clearInterval(timer);"
+              "pattern": "return\\s*\\(\\s*\\)\\s*=>",
+              "message": "Cleanup diberikan dengan MENGEMBALIKAN sebuah fungsi dari dalam effect. React memanggilnya sebelum effect berikutnya dan saat komponen dilepas."
+            },
+            {
+              "pattern": "clearInterval\\(\\s*timer\\s*\\)",
+              "message": "Hentikan timer-nya dengan `clearInterval()` beserta penanda yang dikembalikan `setInterval`. Tanpa ini, setiap kali komponen dipasang ulang timer baru menumpuk — dan angka di layar melompat dua kali lebih cepat tanpa penyebab yang kelihatan."
             }
           ],
           "solution": "return () => clearInterval(timer);"
@@ -1268,8 +1368,8 @@ export const reactTrack: Track = {
           "language": "jsx",
           "tests": [
             {
-              "pattern": "controller\\.abort\\(\\)",
-              "message": "Tuliskan: controller.abort();"
+              "pattern": "controller\\.abort\\(\\s*\\)",
+              "message": "Permintaan yang belum selesai dibatalkan lewat metode `abort()` pada controller-nya. Ini yang mencegah *race condition*: tanpa pembatalan, respons dari pencarian lama bisa tiba setelah yang baru dan menimpa hasil yang benar."
             }
           ],
           "solution": "controller.abort();"
@@ -1314,8 +1414,12 @@ export const reactTrack: Track = {
           "language": "jsx",
           "tests": [
             {
-              "pattern": "const\\s+isAdult\\s*=\\s*age\\s*>=\\s*18",
-              "message": "Gunakan: const isAdult = age >= 18;"
+              "pattern": "const\\s+isAdult\\s*=",
+              "message": "Nilai turunan seperti ini dihitung langsung saat render sebagai variabel biasa — bukan disimpan di state lalu diperbarui lewat effect. Effect untuk hal seperti ini menambah satu render ekstra dan satu sumber bug baru."
+            },
+            {
+              "pattern": "age\\s*>=\\s*18",
+              "message": "Bandingkan umur dengan 18 memakai operator lebih-besar-atau-sama-dengan, supaya yang tepat 18 tahun ikut terhitung."
             }
           ],
           "solution": "const isAdult = age >= 18;"
@@ -1469,8 +1573,12 @@ export const reactTrack: Track = {
           "language": "jsx",
           "tests": [
             {
-              "pattern": "const\\s+inputRef\\s*=\\s*useRef\\(\\s*null\\s*\\)",
-              "message": "Gunakan: const inputRef = useRef(null);"
+              "pattern": "useRef\\(\\s*null\\s*\\)",
+              "message": "Ref dibuat dengan `useRef(<nilai awal>)`, dan untuk ref DOM nilai awalnya `null` karena elemennya belum ada saat render pertama."
+            },
+            {
+              "pattern": "const\\s+inputRef\\s*=",
+              "message": "Simpan hasilnya ke variabel — konvensinya berakhiran `Ref`. Ingat: mengubah `ref.current` TIDAK memicu render, dan justru itulah gunanya."
             }
           ],
           "solution": "const inputRef = useRef(null);"
@@ -1490,8 +1598,16 @@ export const reactTrack: Track = {
           "language": "jsx",
           "tests": [
             {
-              "pattern": "useMemo\\(\\s*\\(\\s*\\)\\s*=>\\s*hitung\\(\\s*data\\s*\\)\\s*,\\s*\\[\\s*data\\s*\\]\\s*\\)",
-              "message": "Gunakan: useMemo(() => hitung(data), [data]);"
+              "pattern": "useMemo\\(\\s*\\(\\s*\\)\\s*=>",
+              "message": "`useMemo` menerima FUNGSI sebagai argumen pertama, bukan hasil perhitungannya. Menulis `useMemo(hitung(data), ...)` menjalankan perhitungannya di setiap render — persis yang ingin dihindari."
+            },
+            {
+              "pattern": "hitung\\(\\s*data\\s*\\)",
+              "message": "Panggil fungsi perhitungannya di dalam fungsi itu."
+            },
+            {
+              "pattern": "\\[\\s*data\\s*\\]",
+              "message": "Argumen kedua adalah dependency array. Isi dengan nilai yang mempengaruhi hasilnya; array kosong berarti hasilnya dibekukan selamanya, dan tanpa array sama sekali `useMemo` tidak ada gunanya."
             }
           ],
           "solution": "useMemo(() => hitung(data), [data]);"
@@ -1511,8 +1627,16 @@ export const reactTrack: Track = {
           "language": "jsx",
           "tests": [
             {
-              "pattern": "const\\s+\\{\\s*data\\s*,\\s*isLoading\\s*\\}\\s*=\\s*useQuery\\(\\)",
-              "message": "Gunakan: const { data, isLoading } = useQuery();"
+              "pattern": "const\\s*\\{[^}]*data[^}]*\\}\\s*=",
+              "message": "Hook library pihak ketiga biasanya mengembalikan satu OBJECT, jadi diambil dengan destructuring object (kurung kurawal) — beda dari `useState` yang mengembalikan array (kurung siku). Nama propertinya harus persis seperti di dokumentasi."
+            },
+            {
+              "pattern": "isLoading\\s*[,}]",
+              "message": "Ambil juga penanda status memuatnya. Nama inilah yang berbeda antar library (`isLoading`, `loading`, `isPending`) — jadi kebiasaan membaca dokumentasi lebih penting daripada menghafal."
+            },
+            {
+              "pattern": "useQuery\\(\\s*\\)",
+              "message": "Panggil hook-nya dengan tanda kurung. Hook hanya boleh dipanggil di tingkat teratas komponen — bukan di dalam `if` atau loop."
             }
           ],
           "solution": "const { data, isLoading } = useQuery();"
@@ -1646,8 +1770,16 @@ export const reactTrack: Track = {
           "language": "jsx",
           "tests": [
             {
-              "pattern": "<ThemeContext\\.Provider\\s+value=[\"']dark[\"']>\\s*<Card\\s*/>\\s*</ThemeContext\\.Provider>",
-              "message": "Gunakan: <ThemeContext.Provider value=\"dark\"><Card /></ThemeContext.Provider>"
+              "pattern": "<ThemeContext\\.Provider",
+              "message": "Nilai context dibagikan lewat komponen `Provider` milik context itu (`<NamaContext.Provider>`). Tanpa Provider, `useContext` mengembalikan nilai default yang diberikan saat `createContext`."
+            },
+            {
+              "pattern": "value=[\"']dark[\"']",
+              "message": "Isi yang dibagikan diberikan lewat props `value`. Ini nama props yang tetap — bukan `theme` atau nama lain."
+            },
+            {
+              "pattern": "<Card\\s*/>[\\s\\S]*</ThemeContext\\.Provider>",
+              "message": "Komponen yang ingin membaca context harus berada DI DALAM Provider. Komponen di luarnya tidak akan melihat nilai itu — penyebab paling sering `undefined` saat memakai context."
             }
           ],
           "solution": "<ThemeContext.Provider value=\"dark\"><Card /></ThemeContext.Provider>"
@@ -1667,8 +1799,16 @@ export const reactTrack: Track = {
           "language": "jsx",
           "tests": [
             {
-              "pattern": "const\\s*\\[\\s*state\\s*,\\s*dispatch\\s*\\]\\s*=\\s*useReducer\\(\\s*reducer\\s*,\\s*initial\\s*\\)",
-              "message": "Gunakan: const [state, dispatch] = useReducer(reducer, initial);"
+              "pattern": "useReducer\\(\\s*reducer\\s*,",
+              "message": "`useReducer` menerima fungsi reducer sebagai argumen pertama dan state awal sebagai argumen kedua."
+            },
+            {
+              "pattern": "const\\s*\\[\\s*state\\s*,\\s*dispatch\\s*\\]",
+              "message": "Hasilnya array dua elemen, diambil dengan destructuring array: state saat ini, lalu fungsi pengirim aksi. Konvensi namanya `dispatch` — dan ia dikirimi OBJECT aksi (`{ type: 'tambah' }`), bukan nilai baru."
+            },
+            {
+              "pattern": "useReducer\\([^)]*initial",
+              "message": "Berikan state awalnya sebagai argumen kedua."
             }
           ],
           "solution": "const [state, dispatch] = useReducer(reducer, initial);"
@@ -1688,8 +1828,12 @@ export const reactTrack: Track = {
           "language": "jsx",
           "tests": [
             {
-              "pattern": "const\\s+\\{\\s*user\\s*,\\s*logout\\s*\\}\\s*=\\s*useAuth\\(\\)",
-              "message": "Gunakan: const { user, logout } = useAuth();"
+              "pattern": "const\\s*\\{[^}]*user[^}]*\\}\\s*=\\s*useAuth\\(",
+              "message": "Custom hook yang membungkus context biasanya mengembalikan object, jadi ambil isinya dengan destructuring object. Pola `useAuth()` inilah yang dipakai di proyek nyata supaya komponen tidak perlu tahu context mana yang dibaca."
+            },
+            {
+              "pattern": "logout\\s*[,}]",
+              "message": "Ambil juga fungsi keluarnya. Menaruh fungsi di dalam nilai context adalah cara membagikan aksi, bukan cuma data."
             }
           ],
           "solution": "const { user, logout } = useAuth();"
@@ -1730,8 +1874,20 @@ export const reactTrack: Track = {
           "language": "jsx",
           "tests": [
             {
-              "pattern": "const\\s+useStore\\s*=\\s*create\\(\\s*\\(?set\\)?\\s*=>\\s*\\(\\s*\\{\\s*count\\s*:\\s*0\\s*\\}\\s*\\)\\s*\\)",
-              "message": "Gunakan: const useStore = create((set) => ({ count: 0 }));"
+              "pattern": "create\\(",
+              "message": "Store Zustand dibuat dengan memanggil `create(...)`."
+            },
+            {
+              "pattern": "\\(?set\\)?\\s*=>",
+              "message": "Argumennya sebuah fungsi yang menerima `set` — fungsi itulah yang nanti kamu pakai untuk mengubah state di dalam action."
+            },
+            {
+              "pattern": "\\{\\s*count\\s*:\\s*0\\s*\\}",
+              "message": "Fungsi itu mengembalikan OBJECT berisi state awal. Perhatikan tanda kurung pembungkus di sekitar kurawal: tanpa itu, JavaScript menganggap kurawal sebagai badan fungsi dan store-mu kosong."
+            },
+            {
+              "pattern": "const\\s+useStore\\s*=",
+              "message": "Simpan hasilnya sebagai hook — konvensinya berawalan `use` supaya aturan lint hook tetap berlaku."
             }
           ],
           "solution": "const useStore = create((set) => ({ count: 0 }));"
@@ -1844,8 +2000,12 @@ export const reactTrack: Track = {
           "language": "jsx",
           "tests": [
             {
-              "pattern": "if\\s*\\(\\s*isLoading\\s*\\)\\s*return\\s*<p>\\s*Loading\\.\\.\\.\\s*</p>\\s*;?",
-              "message": "Gunakan: if (isLoading) return <p>Loading...</p>;"
+              "pattern": "if\\s*\\(\\s*isLoading\\s*\\)",
+              "message": "Tangani keadaan memuat dengan *early return* di awal komponen, sebelum kode yang memakai datanya. Melewati ini membuat komponen mencoba membaca data yang masih `undefined` — penyebab paling sering \"Cannot read properties of undefined\" pada halaman yang mengambil data."
+            },
+            {
+              "pattern": "return\\s*<p>\\s*Loading\\.\\.\\.\\s*</p>",
+              "message": "Kembalikan penanda sementara berupa elemen `<p>` bertuliskan teks yang diminta. Di produksi bagian ini biasanya diganti skeleton, tapi polanya sama."
             }
           ],
           "solution": "if (isLoading) return <p>Loading...</p>;"
@@ -1865,8 +2025,12 @@ export const reactTrack: Track = {
           "language": "jsx",
           "tests": [
             {
-              "pattern": "Promise\\.all\\(\\s*\\[\\s*usersPromise\\s*,\\s*postsPromise\\s*\\]\\s*\\)",
-              "message": "Tuliskan: Promise.all([usersPromise, postsPromise])"
+              "pattern": "Promise\\.all\\(",
+              "message": "Dua permintaan yang tidak saling bergantung sebaiknya berjalan BERSAMAAN. `Promise.all()` menunggu semuanya selesai sekaligus, jadi total waktunya sepanjang yang paling lambat — bukan jumlah keduanya seperti kalau di-`await` berurutan."
+            },
+            {
+              "pattern": "\\[\\s*usersPromise\\s*,\\s*postsPromise\\s*\\]",
+              "message": "Masukkan kedua promise ke dalam satu array sebagai argumennya. Catatan penting: kalau SATU gagal, seluruh `Promise.all` gagal — untuk menoleransi kegagalan sebagian, pakai `Promise.allSettled`."
             }
           ],
           "solution": "Promise.all([usersPromise, postsPromise])"
@@ -1907,8 +2071,12 @@ export const reactTrack: Track = {
           "language": "jsx",
           "tests": [
             {
-              "pattern": "setTodos\\(\\s*\\[\\s*\\.\\.\\.todos\\s*,\\s*newTodo\\s*\\]\\s*\\)",
-              "message": "Gunakan: setTodos([...todos, newTodo])"
+              "pattern": "setTodos\\(",
+              "message": "Perubahan daftar lewat setter state-nya."
+            },
+            {
+              "pattern": "\\[\\s*\\.\\.\\.todos\\s*,\\s*newTodo\\s*\\]",
+              "message": "Optimistic update berarti kamu menampilkan hasilnya lebih dulu, sebelum server menjawab: buat array baru dengan spread isi lama lalu tambahkan item barunya. Yang wajib menyusul: kembalikan state ini kalau request-nya ternyata gagal."
             }
           ],
           "solution": "setTodos([...todos, newTodo])"
@@ -1928,8 +2096,12 @@ export const reactTrack: Track = {
           "language": "jsx",
           "tests": [
             {
-              "pattern": "queryKey\\s*:\\s*\\[\\s*['\"]items['\"]\\s*,\\s*page\\s*\\]",
-              "message": "Gunakan: queryKey: ['items', page]"
+              "pattern": "queryKey\\s*:",
+              "message": "Setiap query di React Query diidentifikasi oleh `queryKey`. Kunci inilah yang dipakai sebagai penanda cache."
+            },
+            {
+              "pattern": "\\[\\s*['\"]items['\"]\\s*,\\s*page\\s*\\]",
+              "message": "Sertakan `page` sebagai bagian dari kunci. Kalau nomor halaman tidak ikut, semua halaman berbagi satu cache — pindah halaman menampilkan data lama, dan itu bug yang sangat membingungkan saat ditemui."
             }
           ],
           "solution": "queryKey: ['items', page]"
@@ -1949,8 +2121,16 @@ export const reactTrack: Track = {
           "language": "jsx",
           "tests": [
             {
-              "pattern": "headers\\s*:\\s*\\{\\s*Authorization\\s*:\\s*`Bearer\\s+\\$\\{token\\}`\\s*\\}",
-              "message": "Gunakan: headers: { Authorization: `Bearer ${token}` }"
+              "pattern": "headers\\s*:",
+              "message": "Token dikirim lewat HTTP header, jadi tambahkan opsi `headers` pada permintaanmu."
+            },
+            {
+              "pattern": "Authorization\\s*:",
+              "message": "Nama header standarnya `Authorization` — ejaan Inggris tanpa huruf s, dan salah tulis di sini menghasilkan 401 tanpa penjelasan lebih lanjut."
+            },
+            {
+              "pattern": "Bearer\\s+\\$\\{token\\}|Bearer\\s+['\"]?\\s*\\+\\s*token",
+              "message": "Nilainya berpola `Bearer <token>` — kata Bearer, satu spasi, lalu tokennya disisipkan (template literal atau penggabungan string). Lupa spasi setelah Bearer adalah penyebab 401 yang paling sering luput terlihat."
             }
           ],
           "solution": "headers: { Authorization: `Bearer ${token}` }"
@@ -2063,8 +2243,16 @@ export const reactTrack: Track = {
           "language": "jsx",
           "tests": [
             {
-              "pattern": "<Link\\s+to=[\"']/profil[\"']>\\s*Profil\\s*</Link>",
-              "message": "Tuliskan: <Link to=\"/profil\">Profil</Link>"
+              "pattern": "<Link",
+              "message": "Navigasi di dalam SPA memakai komponen `<Link>`, bukan `<a href>`. Tag `<a>` memuat ulang seluruh halaman sehingga state React-mu hilang dan keunggulan SPA-nya hilang juga."
+            },
+            {
+              "pattern": "to=[\"']/profil[\"']",
+              "message": "Tujuan ditulis lewat props `to` (bukan `href`), diawali garis miring karena jalurnya absolut dari root."
+            },
+            {
+              "pattern": ">\\s*Profil\\s*</Link>",
+              "message": "Teks yang diklik pengguna ditulis di antara tag pembuka dan penutup."
             }
           ],
           "solution": "<Link to=\"/profil\">Profil</Link>"
@@ -2084,8 +2272,12 @@ export const reactTrack: Track = {
           "language": "jsx",
           "tests": [
             {
-              "pattern": "const\\s+\\{\\s*id\\s*\\}\\s*=\\s*useParams\\(\\)",
-              "message": "Gunakan: const { id } = useParams();"
+              "pattern": "useParams\\(\\s*\\)",
+              "message": "Nilai segmen dinamis URL dibaca dengan hook `useParams()`."
+            },
+            {
+              "pattern": "const\\s*\\{\\s*id\\s*\\}\\s*=",
+              "message": "Hasilnya object, jadi ambil dengan destructuring object. Nama propertinya harus SAMA dengan nama parameter di definisi route (`/produk/:id`) — salah satu huruf saja membuat isinya `undefined`. Ingat juga nilainya selalu berupa string, jadi bandingkan dengan hati-hati terhadap id angka."
             }
           ],
           "solution": "const { id } = useParams();"
@@ -2106,7 +2298,7 @@ export const reactTrack: Track = {
           "tests": [
             {
               "pattern": "<Outlet\\s*/?>",
-              "message": "Tuliskan: <Outlet />"
+              "message": "Di layout route, tempat anak-anak route dirender ditandai dengan komponen `<Outlet />`. Tanpa itu, layout-nya tampil tapi halaman anaknya tidak pernah muncul — dan tidak ada pesan error yang menjelaskannya."
             }
           ],
           "solution": "<Outlet />"
@@ -2126,8 +2318,12 @@ export const reactTrack: Track = {
           "language": "jsx",
           "tests": [
             {
-              "pattern": "navigate\\(\\s*['\"]/login['\"]\\s*\\)",
-              "message": "Gunakan: navigate(\"/login\");"
+              "pattern": "navigate\\(",
+              "message": "Perpindahan halaman dari dalam kode (setelah login berhasil, misalnya) memakai fungsi hasil `useNavigate()`. Hook-nya dipanggil di tingkat atas komponen, fungsinya dipakai di dalam handler."
+            },
+            {
+              "pattern": "['\"]/login['\"]",
+              "message": "Berikan tujuannya sebagai teks jalur, diawali garis miring. Tambahkan opsi `{ replace: true }` bila kamu tidak ingin halaman ini tersimpan di riwayat back browser."
             }
           ],
           "solution": "navigate(\"/login\");"
@@ -2172,8 +2368,16 @@ export const reactTrack: Track = {
           "language": "jsx",
           "tests": [
             {
-              "pattern": "<Suspense\\s+fallback=\\{<p>Memuat\\.\\.\\.</p>\\}>\\s*<Home\\s*/>\\s*</Suspense>",
-              "message": "Gunakan: <Suspense fallback={<p>Memuat...</p>}><Home /></Suspense>"
+              "pattern": "<Suspense",
+              "message": "Komponen yang dimuat malas (`React.lazy`) wajib dibungkus `<Suspense>`, karena selama berkasnya diunduh React butuh sesuatu untuk ditampilkan."
+            },
+            {
+              "pattern": "fallback=\\{",
+              "message": "Isi props `fallback` dengan elemen sementara. Nilainya berupa JSX di dalam kurung kurawal — bukan teks biasa."
+            },
+            {
+              "pattern": "<Home\\s*/>[\\s\\S]*</Suspense>",
+              "message": "Komponen malasnya diletakkan DI DALAM Suspense. Kalau di luar, React melempar error bahwa komponen ditangguhkan tanpa batas Suspense."
             }
           ],
           "solution": "<Suspense fallback={<p>Memuat...</p>}><Home /></Suspense>"
@@ -2286,8 +2490,16 @@ export const reactTrack: Track = {
           "language": "jsx",
           "tests": [
             {
-              "pattern": "const\\s+btn\\s*=\\s*screen\\.getByRole\\(\\s*['\"]button['\"]\\s*\\)",
-              "message": "Gunakan: const btn = screen.getByRole('button');"
+              "pattern": "screen\\.getByRole\\(",
+              "message": "Testing Library menganjurkan mencari elemen seperti cara pengguna melihatnya: berdasarkan PERAN, memakai `screen.getByRole(...)`. Query berbasis class atau id membuat test rusak setiap kali struktur HTML dirapikan, padahal perilakunya tidak berubah."
+            },
+            {
+              "pattern": "['\"]button['\"]",
+              "message": "Sebutkan perannya sebagai teks. Untuk tombol, perannya sama dengan nama elemennya — dan `getByRole` juga menemukan `<a>` dengan `role=\"button\"`, itulah gunanya mencari berdasarkan peran."
+            },
+            {
+              "pattern": "const\\s+btn\\s*=",
+              "message": "Simpan hasilnya ke variabel supaya bisa dipakai di assertion berikutnya."
             }
           ],
           "solution": "const btn = screen.getByRole('button');"
@@ -2307,8 +2519,12 @@ export const reactTrack: Track = {
           "language": "jsx",
           "tests": [
             {
-              "pattern": "expect\\(\\s*element\\s*\\)\\.toBeInTheDocument\\(\\)",
-              "message": "Gunakan: expect(element).toBeInTheDocument();"
+              "pattern": "expect\\(\\s*element\\s*\\)",
+              "message": "Assertion dimulai dengan `expect(<yang diuji>)`."
+            },
+            {
+              "pattern": "toBeInTheDocument\\(\\s*\\)",
+              "message": "Matcher dari jest-dom untuk memastikan elemen benar-benar ada di halaman. Jangan lupa memanggilnya dengan tanda kurung: `expect(x).toBeInTheDocument` tanpa kurung SELALU lolos, dan test seperti itu tidak menguji apa pun."
             }
           ],
           "solution": "expect(element).toBeInTheDocument();"
@@ -2328,8 +2544,12 @@ export const reactTrack: Track = {
           "language": "jsx",
           "tests": [
             {
-              "pattern": "await\\s+userEvent\\.click\\(\\s*button\\s*\\)",
-              "message": "Gunakan: await userEvent.click(button);"
+              "pattern": "userEvent\\.click\\(\\s*button\\s*\\)",
+              "message": "Simulasi interaksi memakai `userEvent`, bukan `fireEvent` — `userEvent` meniru urutan kejadian nyata (hover, pointer down, focus, click) sehingga bug yang bergantung pada fokus ikut tertangkap."
+            },
+            {
+              "pattern": "await\\s+userEvent",
+              "message": "Sejak versi 14, semua metode `userEvent` mengembalikan Promise dan wajib di-`await`. Melupakannya membuat assertion berjalan sebelum React selesai merender — test lolos padahal seharusnya gagal, atau sebaliknya."
             }
           ],
           "solution": "await userEvent.click(button);"
@@ -2349,8 +2569,16 @@ export const reactTrack: Track = {
           "language": "jsx",
           "tests": [
             {
-              "pattern": "await\\s+userEvent\\.type\\(\\s*input\\s*,\\s*['\"]Halo['\"]\\s*\\)",
-              "message": "Gunakan: await userEvent.type(input, 'Halo');"
+              "pattern": "userEvent\\.type\\(",
+              "message": "Mengisi input disimulasikan dengan `userEvent.type()`, yang mengetik karakter satu per satu — jadi handler `onChange`-mu benar-benar terpanggil seperti saat dipakai manusia."
+            },
+            {
+              "pattern": "\\(\\s*input\\s*,\\s*['\"]Halo['\"]\\s*\\)",
+              "message": "Argumennya dua: elemen tujuannya, lalu teks yang diketik dalam tanda kutip."
+            },
+            {
+              "pattern": "await\\s+userEvent",
+              "message": "Tambahkan `await` — tanpa itu, pengetikan belum selesai saat assertion dijalankan."
             }
           ],
           "solution": "await userEvent.type(input, 'Halo');"
@@ -2569,8 +2797,16 @@ export const reactTrack: Track = {
           "language": "jsx",
           "tests": [
             {
-              "pattern": "const\\s+url\\s*=\\s*import\\.meta\\.env\\.VITE_API_URL",
-              "message": "Gunakan: const url = import.meta.env.VITE_API_URL;"
+              "pattern": "import\\.meta\\.env",
+              "message": "Di proyek Vite, variabel lingkungan dibaca lewat `import.meta.env` — bukan `process.env` yang hanya ada di Node."
+            },
+            {
+              "pattern": "VITE_API_URL",
+              "message": "Sebut nama variabelnya. Awalan `VITE_` itu wajib: Vite HANYA mengekspos variabel berawalan itu ke kode browser, justru supaya kredensial tanpa awalan tidak ikut terkirim ke pengguna."
+            },
+            {
+              "pattern": "const\\s+url\\s*=",
+              "message": "Simpan hasilnya ke variabel agar bisa dipakai. Ingat: apa pun yang masuk sini bisa dibaca siapa saja di DevTools, jadi jangan menaruh kunci rahasia."
             }
           ],
           "solution": "const url = import.meta.env.VITE_API_URL;"
@@ -2632,8 +2868,16 @@ export const reactTrack: Track = {
           "language": "jsx",
           "tests": [
             {
-              "pattern": "<label\\s+htmlFor=[\"']username[\"']>\\s*Username\\s*</label>",
-              "message": "Gunakan: <label htmlFor=\"username\">Username</label>"
+              "pattern": "<label",
+              "message": "Setiap input butuh label yang terhubung — inilah yang dibacakan screen reader dan yang membuat area klik ikut membesar."
+            },
+            {
+              "pattern": "htmlFor=[\"']username[\"']",
+              "message": "Di JSX, atribut penghubung label ditulis `htmlFor`, bukan `for` (kata itu milik JavaScript). Nilainya harus SAMA dengan `id` input yang dituju — kalau tidak sama, hubungannya tidak terbentuk meskipun tampilannya terlihat normal."
+            },
+            {
+              "pattern": ">\\s*Username\\s*</label>",
+              "message": "Teks labelnya ditulis di antara tag pembuka dan penutup."
             }
           ],
           "solution": "<label htmlFor=\"username\">Username</label>"

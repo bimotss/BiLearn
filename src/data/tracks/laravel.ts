@@ -677,11 +677,15 @@ export const laravelTrack: Track = {
           starterCode: "# Tulis perintah composer require di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "composer\\s+require\\s+guzzlehttp/guzzle",
-              message: "Gunakan perintah: composer require guzzlehttp/guzzle",
-            },
-          ],
+                      {
+                        "pattern": "composer\\s+require",
+                        "message": "Paket PHP dipasang dengan `composer require` (bukan `composer install`, yang hanya memasang ulang apa yang sudah tercatat di `composer.json`)."
+                      },
+                      {
+                        "pattern": "guzzlehttp/guzzle",
+                        "message": "Nama paket Composer selalu berbentuk `vendor/nama`. Untuk HTTP client, vendornya sama dengan nama paketnya. Paket masuk ke `require` — tambahkan `--dev` hanya untuk alat bantu pengembangan."
+                      }
+                    ],
           solution: "composer require guzzlehttp/guzzle",
         },
         {
@@ -895,11 +899,15 @@ export const laravelTrack: Track = {
           starterCode: "# Tulis perintah artisan make:controller di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "php\\s+artisan\\s+make:controller\\s+UserController",
-              message: "Gunakan perintah: php artisan make:controller UserController",
-            },
-          ],
+                      {
+                        "pattern": "php\\s+artisan\\s+make:controller",
+                        "message": "Semua generator Laravel dijalankan lewat `php artisan make:<jenis>`. Jenisnya ditulis setelah tanda titik dua, tanpa spasi. Untuk pengendali HTTP, jenisnya sama dengan nama lapisannya di pola MVC."
+                      },
+                      {
+                        "pattern": "UserController",
+                        "message": "Nama kelas ditulis dengan PascalCase dan berakhiran `Controller` — konvensi ini yang membuat Laravel dan rekan setimmu langsung tahu isi berkasnya. Tambahkan `--resource` bila kamu ingin tujuh method CRUD sekaligus."
+                      }
+                    ],
           solution: "php artisan make:controller UserController",
         },
         {
@@ -941,11 +949,15 @@ export const laravelTrack: Track = {
           starterCode: "<!-- Cetak $title di dalam h2 -->\n",
           language: "text",
           tests: [
-            {
-              pattern: "<h2>\\s*\\{\\{\\s*\\$title\\s*\\}\\}\\s*</h2>",
-              message: "Tuliskan: <h2>{{ $title }}</h2>",
-            },
-          ],
+                      {
+                        "pattern": "\\{\\{\\s*\\$title\\s*\\}\\}",
+                        "message": "Blade mencetak nilai dengan kurung kurawal ganda. Bentuk ini otomatis meng-escape HTML sehingga aman dari XSS — `{!! !!}` mencetak mentah dan hanya dipakai kalau kamu benar-benar mempercayai isinya."
+                      },
+                      {
+                        "pattern": "<h2>[\\s\\S]*</h2>",
+                        "message": "Bungkus dengan elemen judul tingkat dua seperti yang diminta, lengkap dengan tag penutupnya."
+                      }
+                    ],
           solution: "<h2>{{ $title }}</h2>",
         },
         {
@@ -1140,11 +1152,15 @@ export const laravelTrack: Track = {
           starterCode: "# Tulis perintah make:migration di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "php\\s+artisan\\s+make:migration\\s+create_categories_table",
-              message: "Gunakan perintah: php artisan make:migration create_categories_table",
-            },
-          ],
+                      {
+                        "pattern": "php\\s+artisan\\s+make:migration",
+                        "message": "Semua generator Laravel dijalankan lewat `php artisan make:<jenis>`. Jenisnya ditulis setelah tanda titik dua, tanpa spasi. Untuk berkas perubahan skema database, jenisnya `migration`."
+                      },
+                      {
+                        "pattern": "create_categories_table",
+                        "message": "Nama migrasi memakai snake_case dan mengikuti pola `create_<nama_tabel>_table`. Bukan sekadar gaya: dari pola itu Laravel menebak nama tabel dan mengisi kerangka `Schema::create` untukmu."
+                      }
+                    ],
           solution: "php artisan make:migration create_categories_table",
         },
         {
@@ -1163,11 +1179,19 @@ export const laravelTrack: Track = {
           starterCode: "# Tulis perintah make:model dengan flag -m\n",
           language: "text",
           tests: [
-            {
-              pattern: "php\\s+artisan\\s+make:model\\s+Category\\s+-m",
-              message: "Gunakan perintah: php artisan make:model Category -m",
-            },
-          ],
+                      {
+                        "pattern": "php\\s+artisan\\s+make:model",
+                        "message": "Semua generator Laravel dijalankan lewat `php artisan make:<jenis>`. Jenisnya ditulis setelah tanda titik dua, tanpa spasi."
+                      },
+                      {
+                        "pattern": "make:model\\s+Category\\b",
+                        "message": "Nama model ditulis TUNGGAL dan PascalCase, sementara tabelnya jamak — Eloquent menghubungkan keduanya otomatis. Menamainya `Categories` membuat Eloquent mencari tabel `categories_s`."
+                      },
+                      {
+                        "pattern": "-m$|--migration",
+                        "message": "Tambahkan flag pembuat migrasi sekaligus (`-m`), supaya model dan berkas skemanya lahir bersamaan dan tidak ada yang tertinggal."
+                      }
+                    ],
           solution: "php artisan make:model Category -m",
         },
         {
@@ -1479,11 +1503,15 @@ export const laravelTrack: Track = {
           starterCode: "# Tulis perintah make:request di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "php\\s+artisan\\s+make:request\\s+StoreUserRequest",
-              message: "Gunakan perintah: php artisan make:request StoreUserRequest",
-            },
-          ],
+                      {
+                        "pattern": "php\\s+artisan\\s+make:request",
+                        "message": "Semua generator Laravel dijalankan lewat `php artisan make:<jenis>`. Jenisnya ditulis setelah tanda titik dua, tanpa spasi. Untuk kelas validasi terpisah, jenisnya `request`."
+                      },
+                      {
+                        "pattern": "StoreUserRequest",
+                        "message": "Konvensi namanya `<Aksi><Model>Request` — `Store` untuk membuat, `Update` untuk mengubah. Jangan lupa method `authorize()` di dalamnya: nilai bawaannya `false` pada sebagian versi, dan itu membuat semua permintaan ditolak 403 tanpa penjelasan."
+                      }
+                    ],
           solution: "php artisan make:request StoreUserRequest",
         },
         {
@@ -1525,11 +1553,15 @@ export const laravelTrack: Track = {
           starterCode: "<!-- Buat tampilan custom error 403 -->\n",
           language: "text",
           tests: [
-            {
-              pattern: "<h1>\\s*403 Forbidden\\s*</h1>",
-              message: "Tuliskan: <h1>403 Forbidden</h1>",
-            },
-          ],
+                      {
+                        "pattern": "<h1>",
+                        "message": "Halaman error kustom tetap berupa Blade biasa. Beri judul utama dengan elemen heading tingkat satu."
+                      },
+                      {
+                        "pattern": "403 Forbidden",
+                        "message": "Isi dengan kode dan arti statusnya. Nama berkasnya harus persis `resources/views/errors/403.blade.php` — Laravel memilih berkas berdasarkan kode HTTP-nya, jadi salah nama berarti halaman bawaan yang muncul."
+                      }
+                    ],
           solution: "<h1>403 Forbidden</h1>",
         },
         {
@@ -1702,11 +1734,15 @@ export const laravelTrack: Track = {
           starterCode: "# Tulis perintah composer require breeze di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "composer\\s+require\\s+laravel/breeze\\s+--dev",
-              message: "Gunakan perintah: composer require laravel/breeze --dev",
-            },
-          ],
+                      {
+                        "pattern": "composer\\s+require\\s+laravel/breeze",
+                        "message": "Starter kit resmi dipasang lewat `composer require` dengan nama paket `laravel/breeze`."
+                      },
+                      {
+                        "pattern": "--dev",
+                        "message": "Tambahkan flag pengembangan, karena scaffolding hanya dibutuhkan saat menyiapkan proyek — bukan saat aplikasi berjalan di produksi. Setelah ini, jalankan `php artisan breeze:install` untuk memasang berkasnya."
+                      }
+                    ],
           solution: "composer require laravel/breeze --dev",
         },
         {
@@ -1771,11 +1807,19 @@ export const laravelTrack: Track = {
           starterCode: "# Tulis perintah make:policy di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "php\\s+artisan\\s+make:policy\\s+ProductPolicy\\s+--model=Product",
-              message: "Gunakan perintah: php artisan make:policy ProductPolicy --model=Product",
-            },
-          ],
+                      {
+                        "pattern": "php\\s+artisan\\s+make:policy",
+                        "message": "Semua generator Laravel dijalankan lewat `php artisan make:<jenis>`. Jenisnya ditulis setelah tanda titik dua, tanpa spasi. Untuk aturan otorisasi per model, jenisnya `policy`."
+                      },
+                      {
+                        "pattern": "ProductPolicy",
+                        "message": "Konvensinya `<Model>Policy`."
+                      },
+                      {
+                        "pattern": "--model=Product",
+                        "message": "Sertakan flag penunjuk modelnya supaya Laravel mengisi kerangka method (`view`, `update`, `delete`) beserta tipe parameternya. Tanpa itu kamu mendapat kelas kosong."
+                      }
+                    ],
           solution: "php artisan make:policy ProductPolicy --model=Product",
         },
         {
@@ -2010,11 +2054,15 @@ export const laravelTrack: Track = {
           starterCode: "# Tulis perintah make:resource di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "php\\s+artisan\\s+make:resource\\s+UserResource",
-              message: "Gunakan perintah: php artisan make:resource UserResource",
-            },
-          ],
+                      {
+                        "pattern": "php\\s+artisan\\s+make:resource",
+                        "message": "Semua generator Laravel dijalankan lewat `php artisan make:<jenis>`. Jenisnya ditulis setelah tanda titik dua, tanpa spasi. Untuk pembentuk respons JSON, jenisnya `resource`."
+                      },
+                      {
+                        "pattern": "make:resource\\s+UserResource\\b",
+                        "message": "Konvensinya `<Model>Resource`. Gunanya menentukan field mana yang keluar ke API — tanpa lapisan ini, `return $user` ikut mengirim seluruh kolom, termasuk yang tidak seharusnya dilihat klien."
+                      }
+                    ],
           solution: "php artisan make:resource UserResource",
         },
         {
@@ -2125,11 +2173,15 @@ export const laravelTrack: Track = {
           starterCode: "# Tulis perintah composer require scramble di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "composer\\s+require\\s+dedoc/scramble",
-              message: "Gunakan perintah: composer require dedoc/scramble",
-            },
-          ],
+                      {
+                        "pattern": "composer\\s+require",
+                        "message": "Paket dipasang lewat `composer require`."
+                      },
+                      {
+                        "pattern": "dedoc/scramble",
+                        "message": "Nama paketnya berbentuk `vendor/nama`. Scramble membaca type hint dan Form Request-mu lalu menghasilkan dokumentasi OpenAPI otomatis — jadi dokumentasi tidak lagi basi tiap kali kode berubah."
+                      }
+                    ],
           solution: "composer require dedoc/scramble",
         },
         {
@@ -2282,11 +2334,15 @@ export const laravelTrack: Track = {
           starterCode: "# Tulis perintah make:job di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "php\\s+artisan\\s+make:job\\s+ProcessPodcast",
-              message: "Gunakan perintah: php artisan make:job ProcessPodcast",
-            },
-          ],
+                      {
+                        "pattern": "php\\s+artisan\\s+make:job",
+                        "message": "Semua generator Laravel dijalankan lewat `php artisan make:<jenis>`. Jenisnya ditulis setelah tanda titik dua, tanpa spasi. Untuk pekerjaan yang dijalankan di latar belakang, jenisnya `job`."
+                      },
+                      {
+                        "pattern": "ProcessPodcast",
+                        "message": "Nama kelas job memakai kata kerja + objeknya, PascalCase. Ingat: job hanya benar-benar berjalan kalau ada worker (`php artisan queue:work`) yang hidup — di lokal, lupa menyalakannya membuat job seolah hilang."
+                      }
+                    ],
           solution: "php artisan make:job ProcessPodcast",
         },
         {
@@ -2328,11 +2384,15 @@ export const laravelTrack: Track = {
           starterCode: "# Tulis perintah config:cache di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "php\\s+artisan\\s+config:cache",
-              message: "Gunakan perintah: php artisan config:cache",
-            },
-          ],
+                      {
+                        "pattern": "php\\s+artisan\\s+config:cache",
+                        "message": "Optimasi produksi dijalankan lewat artisan dengan perintah bergaya `<bagian>:cache`. Untuk konfigurasi, bagiannya `config`."
+                      },
+                      {
+                        "pattern": "config:cache",
+                        "message": "Peringatan yang wajib diingat: setelah konfigurasi di-cache, pemanggilan `env()` di luar berkas config mengembalikan `null`. Itu penyebab paling sering \"jalan di lokal, error di produksi\". Bersihkan dengan `config:clear` saat berkembang."
+                      }
+                    ],
           solution: "php artisan config:cache",
         },
         {
@@ -2351,11 +2411,15 @@ export const laravelTrack: Track = {
           starterCode: "# Tulis perintah make:mail di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "php\\s+artisan\\s+make:mail\\s+InvoiceMail",
-              message: "Gunakan perintah: php artisan make:mail InvoiceMail",
-            },
-          ],
+                      {
+                        "pattern": "php\\s+artisan\\s+make:mail",
+                        "message": "Semua generator Laravel dijalankan lewat `php artisan make:<jenis>`. Jenisnya ditulis setelah tanda titik dua, tanpa spasi. Untuk kelas email, jenisnya `mail`."
+                      },
+                      {
+                        "pattern": "make:mail\\s+InvoiceMail\\b",
+                        "message": "Konvensinya `<Konteks>Mail`. Untuk pengiriman yang tidak boleh menahan respons pengguna, kirim lewat queue (`Mail::queue(...)`) — mengirim langsung membuat request menunggu server SMTP."
+                      }
+                    ],
           solution: "php artisan make:mail InvoiceMail",
         },
         {
@@ -2374,11 +2438,15 @@ export const laravelTrack: Track = {
           starterCode: "# Tulis perintah make:event di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "php\\s+artisan\\s+make:event\\s+OrderProcessed",
-              message: "Gunakan perintah: php artisan make:event OrderProcessed",
-            },
-          ],
+                      {
+                        "pattern": "php\\s+artisan\\s+make:event",
+                        "message": "Semua generator Laravel dijalankan lewat `php artisan make:<jenis>`. Jenisnya ditulis setelah tanda titik dua, tanpa spasi. Untuk kejadian sistem, jenisnya `event`."
+                      },
+                      {
+                        "pattern": "OrderProcessed",
+                        "message": "Nama event memakai bentuk lampau (`OrderProcessed`, `UserRegistered`), karena ia melaporkan sesuatu yang SUDAH terjadi. Pasangannya listener, yang dibuat dengan `make:listener`."
+                      }
+                    ],
           solution: "php artisan make:event OrderProcessed",
         },
         {
@@ -2397,11 +2465,15 @@ export const laravelTrack: Track = {
           starterCode: "# Tulis perintah composer require telescope di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "composer\\s+require\\s+laravel/telescope\\s+--dev",
-              message: "Gunakan perintah: composer require laravel/telescope --dev",
-            },
-          ],
+                      {
+                        "pattern": "composer\\s+require\\s+laravel/telescope",
+                        "message": "Paket debugging resmi dipasang dengan `composer require laravel/telescope`."
+                      },
+                      {
+                        "pattern": "--dev",
+                        "message": "Wajib pakai flag pengembangan. Telescope mencatat setiap request, query, dan job — memasangnya di produksi tanpa proteksi berarti membocorkan isi database dan payload pengguna ke siapa pun yang membuka `/telescope`."
+                      }
+                    ],
           solution: "composer require laravel/telescope --dev",
         },
         {
@@ -2549,7 +2621,11 @@ export const laravelTrack: Track = {
             "Pest PHP adalah testing framework elegan ber-sintaks expressive yang menjadi standar baru pengujian di ekosistem Laravel modern. Berkas pengujian diletakkan di dalam folder terdedikasi sesuai jenis pengujiannya. Sintaksnya yang alami mempermudah penulisan skenario uji bagi pengembang pemula. Menuliskan test otomatis memberikan jaminan bahwa fitur baru tidak merusak kode lama yang sudah berjalan.",
           example: {
             code: "test('halaman utama dapat diakses', function () {\n    $this->get('/')->assertStatus(200);\n});",
-            output: "PASS Tests\\Feature\\ExampleTest > halaman utama dapat diakses status 200 OK",
+            output:
+              "   PASS  Tests\\Feature\\HomeTest\n" +
+              "  ✓ halaman utama dapat diakses                        0.42s\n\n" +
+              "  Tests:    1 passed (1 assertions)\n" +
+              "  Duration: 0.51s",
             note: "Jalankan perintah vendor/bin/pest atau php artisan test di terminal untuk mengeksekusi test. Catatan jujur: panel preview tidak menjalankan PHP, jadi kamu tidak akan melihat hasilnya di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus. Jalankan di proyek Laravel sungguhan untuk melihat keluarannya.",
           },
           instruction:
@@ -2580,11 +2656,19 @@ export const laravelTrack: Track = {
           starterCode: "# Tulis perintah make:test --pest di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "php\\s+artisan\\s+make:test\\s+UserTest\\s+--pest",
-              message: "Gunakan perintah: php artisan make:test UserTest --pest",
-            },
-          ],
+                      {
+                        "pattern": "php\\s+artisan\\s+make:test",
+                        "message": "Semua generator Laravel dijalankan lewat `php artisan make:<jenis>`. Jenisnya ditulis setelah tanda titik dua, tanpa spasi. Untuk berkas pengujian, jenisnya `test`."
+                      },
+                      {
+                        "pattern": "make:test\\s+UserTest\\b",
+                        "message": "Nama kelas test berakhiran `Test` — itu yang dicari test runner."
+                      },
+                      {
+                        "pattern": "--pest",
+                        "message": "Tambahkan flag untuk gaya Pest bila proyekmu memakainya; tanpa flag itu yang dibuat berkas gaya PHPUnit. Secara bawaan berkasnya masuk ke `tests/Feature`, dan `--unit` memindahkannya ke `tests/Unit`."
+                      }
+                    ],
           solution: "php artisan make:test UserTest --pest",
         },
         {
@@ -2672,11 +2756,15 @@ export const laravelTrack: Track = {
           starterCode: "# Tulis perintah test dengan flag --coverage di sini\n",
           language: "text",
           tests: [
-            {
-              pattern: "php\\s+artisan\\s+test\\s+--coverage",
-              message: "Gunakan perintah: php artisan test --coverage",
-            },
-          ],
+                      {
+                        "pattern": "php\\s+artisan\\s+test",
+                        "message": "Seluruh test dijalankan lewat `php artisan test`."
+                      },
+                      {
+                        "pattern": "--coverage",
+                        "message": "Tambahkan flag laporan cakupan (butuh Xdebug atau PCOV terpasang). Angka cakupan bukan tujuan: yang penting alur uang dan autentikasi terlingkupi, bukan totalnya mendekati 100%."
+                      }
+                    ],
           solution: "php artisan test --coverage",
         },
         {

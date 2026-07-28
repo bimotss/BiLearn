@@ -100,8 +100,12 @@ export const nextjsTrack: Track = {
           "language": "jsx",
           "tests": [
             {
-              "pattern": "export\\s+default\\s+function\\s+Page\\s*\\(\\s*\\)\\s*\\{\\s*return\\s*<h1>\\s*Home\\s*</h1>\\s*;?\\s*\\}",
-              "message": "Tuliskan: export default function Page() { return <h1>Home</h1>; }"
+              "pattern": "export\\s+default\\s+function\\s+Page",
+              "message": "Berkas `page.tsx` wajib mengekspor komponennya sebagai DEFAULT export — itu satu-satunya cara Next.js mengenalinya sebagai halaman. Named export tidak akan terpakai, dan yang muncul halaman 404."
+            },
+            {
+              "pattern": "<h1>\\s*Home\\s*</h1>",
+              "message": "Kembalikan JSX yang diminta. Nama fungsinya sendiri bebas karena yang dibaca Next.js adalah default export-nya, tapi menamainya `Page` adalah konvensi dokumentasi resmi."
             }
           ],
           "solution": "export default function Page() {\n  return <h1>Home</h1>;\n}"
@@ -783,8 +787,16 @@ export const nextjsTrack: Track = {
           "language": "text",
           "tests": [
             {
-              "pattern": "export\\s+async\\s+function\\s+GET\\s*\\(\\s*\\)\\s*\\{\\s*return\\s+NextResponse\\.json\\(\\s*\\{\\s*status\\s*:\\s*['\"]ok['\"]\\s*\\}\\s*\\)\\s*;?\\s*\\}",
-              "message": "Definisikan: export async function GET() { return NextResponse.json({ status: 'ok' }); }"
+              "pattern": "export\\s+async\\s+function\\s+GET",
+              "message": "Di `route.ts`, tiap metode HTTP diekspor sebagai fungsi bernama metodenya dalam HURUF BESAR — `GET`, `POST`, `DELETE`. Nama itulah yang menentukan permintaan mana yang ditangani; menamainya `handler` seperti Pages Router lama tidak akan berjalan."
+            },
+            {
+              "pattern": "NextResponse\\.json\\(",
+              "message": "Balas dengan `NextResponse.json(...)`, yang sekaligus menyetel header `Content-Type`. Mengembalikan objek biasa tanpa pembungkus ini akan error."
+            },
+            {
+              "pattern": "status\\s*:\\s*['\"]ok['\"]",
+              "message": "Isi body-nya sesuai yang diminta. Untuk mengubah status code, tambahkan argumen kedua: `NextResponse.json(data, { status: 201 })`."
             }
           ],
           "solution": "export async function GET() {\n  return NextResponse.json({ status: 'ok' });\n}"
@@ -1700,8 +1712,12 @@ export const nextjsTrack: Track = {
           "language": "text",
           "tests": [
             {
-              "pattern": "NEXT_PUBLIC_API_URL\\s*=\\s*[\"']https://api\\.com[\"']",
-              "message": "Tuliskan: NEXT_PUBLIC_API_URL=\"https://api.com\""
+              "pattern": "NEXT_PUBLIC_",
+              "message": "Agar variabel bisa dibaca Client Component, namanya WAJIB berawalan `NEXT_PUBLIC_`. Awalan itu bukan kosmetik: Next.js hanya menyisipkan variabel berawalan itu ke bundel browser, justru supaya kredensial tanpa awalan tidak ikut terkirim ke pengguna."
+            },
+            {
+              "pattern": "API_URL\\s*=\\s*[\"']https://api\\.com[\"']",
+              "message": "Setelah awalannya, lanjutkan dengan nama variabel yang diminta, tanda sama dengan, lalu nilainya. Ingat: apa pun yang berawalan `NEXT_PUBLIC_` bisa dibaca siapa saja di DevTools — jangan menaruh kunci rahasia di sana."
             }
           ],
           "solution": "NEXT_PUBLIC_API_URL=\"https://api.com\""

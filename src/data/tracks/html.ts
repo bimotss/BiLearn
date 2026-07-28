@@ -2233,17 +2233,16 @@ export const htmlTrack: Track = {
           starterCode: '<div role="button" tabindex="0">Simpan</div>',
           language: "html",
           tests: [
-            {
-              pattern: "<button[^>]*>\\s*Simpan\\s*</button>",
-              message: "Gunakan <button>Simpan</button>.",
-            },
-            {
-              pattern: 'role=[\'"]button[\'"]',
-              mustNotMatch: true,
-              message:
-                'Hapus div dengan role="button" — elemen native <button> sudah membawa peran itu sendiri.',
-            },
-          ],
+                      {
+                        "pattern": "<button[^>]*>\\s*Simpan\\s*</button>",
+                        "message": "Pakai elemen native `<button>`, bukan `<div>` yang dipaksa jadi tombol. Yang kamu dapat gratis: bisa difokus dengan Tab, bisa ditekan dengan Enter dan Spasi, dan langsung dikenali screen reader sebagai tombol."
+                      },
+                      {
+                        "pattern": "role=['\"]button['\"]",
+                        "mustNotMatch": true,
+                        "message": "Kalau elemennya sudah `<button>`, atribut `role=\"button\"` justru berlebihan dan tidak perlu ada. Atribut itu hanya jadi tambalan saat seseorang memaksa `<div>` berperan sebagai tombol — dan tambalan itu tetap tidak memberi dukungan keyboard."
+                      }
+                    ],
           solution: "<button>Simpan</button>",
         },
         {
