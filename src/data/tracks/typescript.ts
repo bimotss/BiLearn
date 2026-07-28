@@ -1207,6 +1207,12 @@ export const typescriptTrack: Track = {
             "| `in` | membedakan bentuk objek | `\"radius\" in bentuk` |\n" +
             "| `instanceof` | objek hasil `new` / class bawaan | `x instanceof Date` |\n" +
             "| properti pembeda | discriminated union | `bentuk.kind === \"circle\"` |\n\n" +
+            "## Jebakan yang Sering Terjadi\n\n" +
+            "1. **Memakai `string` padahal nilainya terbatas.** `status: string` menerima typo `\"sucess\"`; union literal menolaknya sebelum kode dijalankan.\n" +
+            "2. **`let` menghapus literal type.** `let peran = \"admin\"` disimpulkan sebagai `string` biasa karena masih bisa berubah — pakai `const`, atau tulis tipenya secara eksplisit.\n" +
+            "3. **Memakai `instanceof` pada interface.** Interface hilang saat kompilasi, jadi tidak ada wujudnya saat aplikasi berjalan; untuk bentuk objek gunakan `in` atau properti pembeda.\n" +
+            "4. **Lupa properti pembeda pada union objek.** Tanpa `kind`/`status`, compiler tidak bisa memilih anggota mana yang sedang ditangani.\n" +
+            "5. **Mengira penanda `is` diperiksa compiler.** Ia janji dari kamu; kalau isi fungsinya salah, TypeScript tetap percaya dan bug-nya lolos.\n\n" +
             "## Analogi Dunia Nyata\n\n" +
             "Bayangkan sebuah **paket yang datang tanpa keterangan isi**. Kamu tidak boleh langsung menyeduhnya — bisa saja isinya bukan kopi. Narrowing adalah proses memeriksa isinya dulu: begitu kamu yakin itu kopi, barulah semua tindakan khusus kopi masuk akal. Compiler bersikap persis seperti itu, dan ia mengingat hasil pemeriksaanmu di dalam blok `if`.\n\n" +
             "## Kenapa Ini Penting di Dunia Kerja\n\n" +
@@ -2099,6 +2105,12 @@ export const typescriptTrack: Track = {
             "User yang semua opsional ← untuk form edit sebagian\n" +
             "User hanya nama & email ← untuk daftar di halaman depan\n```\n\n" +
             "Menulis keempatnya secara terpisah berarti setiap penambahan properti harus dikerjakan empat kali — dan cepat atau lambat ada yang terlewat. **Utility type** adalah fungsi bawaan TypeScript yang menghasilkan bentuk-bentuk turunan itu secara otomatis.\n\n" +
+            "## Jebakan yang Sering Terjadi\n\n" +
+            "1. **Mengira utility type bekerja mendalam.** `Partial<T>` dan `Readonly<T>` hanya menyentuh lapisan pertama; properti di dalam objek bersarang tidak ikut berubah.\n" +
+            "2. **Lupa `typeof`.** `ReturnType<getData>` salah — yang kamu punya adalah nilai fungsi, sedangkan utility bekerja di level tipe, jadi tulis `ReturnType<typeof getData>`.\n" +
+            "3. **Memilih `Omit` untuk data sensitif.** Ia daftar hitam: kolom baru yang ditambahkan ke tipe induk ikut terbawa. Untuk itu `Pick` lebih aman.\n" +
+            "4. **`Record<string, T>` dianggap menjamin key-nya ada.** Mengakses key yang tidak ada tetap dianggap bertipe `T` padahal nilainya `undefined` saat dijalankan, kecuali `noUncheckedIndexedAccess` dinyalakan.\n" +
+            "5. **Menuliskan tipe turunan secara manual.** Begitu tipe induknya berubah, salinan manual itu diam-diam jadi tidak sinkron — dan itu temuan code review yang sering.\n\n" +
             "## Analogi Dunia Nyata\n\n" +
             "Anggap `User` adalah **dokumen induk**. Utility type adalah mesin fotokopi dengan pengaturan: fotokopi tapi sensor kolom gaji (`Omit`), fotokopi tapi semua kolom boleh kosong (`Partial`), fotokopi hanya halaman 1 dan 2 (`Pick`). Kalau dokumen induknya direvisi, semua salinan ikut berubah — karena mereka bukan salinan mati, melainkan turunan.\n\n" +
             "## Peta Cepat\n\n" +
@@ -2529,6 +2541,12 @@ export const typescriptTrack: Track = {
             "| `as` | `data as User` | memaksa compiler percaya tanpa bukti |\n" +
             "| `@ts-ignore` | komentar di atas baris error | menyembunyikan error, bukan menyelesaikannya |\n\n" +
             "Ketiganya punya pemakaian yang sah — tapi masing-masing sebaiknya disertai komentar yang menjelaskan **kenapa** aman di tempat itu. Di code review, `as` tanpa penjelasan hampir selalu ditanyakan.\n\n" +
+            "## Jebakan yang Sering Terjadi\n\n" +
+            "1. **Memakai `as` sebagai obat penghilang error.** Compiler menurut tanpa memeriksa apa pun, dan crash-nya terjadi jauh dari tempat assertion ditulis.\n" +
+            "2. **Menganggap interface memvalidasi respons API.** Ia hilang saat kompilasi; tanpa validasi runtime, bentuk data yang berbeda lolos begitu saja.\n" +
+            "3. **`@ts-ignore` tanpa penjelasan.** Error-nya disembunyikan, bukan diselesaikan — dan orang berikutnya tidak tahu kenapa.\n" +
+            "4. **Menyalakan `checkJs` di awal migrasi.** Ribuan error dari kode lama muncul serentak dan tim biasanya menyerah lalu membatalkan seluruh migrasi.\n" +
+            "5. **Melonggarkan tipe di deklarasi agar pesan error hilang.** Yang keliru biasanya justru data yang dikirim; membaca baris terakhir pesan error lebih cepat daripada menebak.\n\n" +
             "## Analogi Dunia Nyata\n\n" +
             "Bayangkan **satpam di lobi kantor**. Ia memeriksa setiap orang yang masuk lewat pintu depan, dan itu efektif. Tapi ia tidak bisa menjamin apa pun tentang paket yang dilempar lewat jendela lantai dua. `as` adalah kamu berkata pada satpam \"yang ini teman saya, lewatkan saja\" — tanpa satpam sempat memeriksanya. Zod adalah memasang pos pemeriksaan kedua tepat di bawah jendela itu.\n\n" +
             "## Cara Membaca Error TypeScript yang Panjang\n\n" +

@@ -2114,6 +2114,13 @@ export const htmlTrack: Track = {
             "`<div role=\"button\" tabindex=\"0\">` butuh JavaScript tambahan supaya bisa ditekan dengan Enter dan Space, dan bagian itulah yang paling sering terlupa. `<button>` memberikan semuanya gratis. ARIA yang dipakai setengah jalan lebih buruk daripada tidak memakai ARIA sama sekali, karena ia menjanjikan perilaku yang tidak ada.\n\n" +
             "## Analogi Dunia Nyata\n\n" +
             "Aksesibilitas itu seperti **ramp dan lift di gedung**. Dibangun sejak awal, biayanya kecil dan hampir tidak terlihat. Ditambahkan setelah gedung berdiri, ia mahal, jelek, dan sering diletakkan di pintu belakang. Yang menariknya: yang paling sering memakai ramp bukan pengguna kursi roda, melainkan orang yang mendorong troli atau koper — persis seperti `alt` yang membantu mesin pencari, dan `<label>` yang membantu semua orang di layar HP.\n\n" +
+            "## Jebakan yang Sering Terjadi\n\n" +
+            "1. **Menghapus atribut `alt`** pada gambar hiasan. Sebagian screen reader lalu membacakan nama berkasnya; yang benar `alt=\"\"`.\n" +
+            "2. **Memilih tingkat heading berdasarkan ukuran huruf.** Daftar isi tak terlihat itu jadi menyesatkan; ukuran diatur CSS.\n" +
+            "3. **Membuat tombol dari `<div>`.** Tanpa JavaScript tambahan ia tidak bisa ditekan Enter maupun Space.\n" +
+            "4. **Menghapus garis fokus dengan `outline: none`** tanpa menggantinya. Pengguna keyboard kehilangan penanda posisi.\n" +
+            "5. **Memasang `aria-label` pada elemen yang sudah punya teks bermakna.** Ia menimpa teks aslinya, dan yang dibacakan bisa berbeda dari yang terlihat.\n" +
+            "6. **Menganggap alat audit sudah cukup.** Lighthouse tidak bisa menilai apakah `alt`-mu masuk akal — hanya manusia yang bisa.\n\n" +
             "## Cara Memeriksa Pekerjaanmu\n\n" +
             "1. **Lighthouse** — sudah ada di Chrome DevTools, tab *Lighthouse*. Jalankan, lihat bagian Accessibility. Ia menangkap masalah mekanis: kontras rendah, gambar tanpa alt, tombol tanpa nama.\n" +
             "2. **axe DevTools** — ekstensi gratis, temuannya lebih rinci beserta cara memperbaikinya.\n" +

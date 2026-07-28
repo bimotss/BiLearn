@@ -2108,7 +2108,7 @@ export const cssTrack: Track = {
           id: "css-5-3",
           title: "clamp(): tipografi yang mengalir",
           explanation:
-            "`clamp(minimum, ideal, maksimum)` memberi nilai yang menyesuaikan diri tapi tidak pernah keluar batas. Contoh `clamp(1.5rem, 5vw, 3rem)`: font tumbuh mengikuti lebar viewport (5vw), tapi tidak akan lebih kecil dari 1.5rem atau lebih besar dari 3rem. Satu baris ini menggantikan tiga media query.",
+            "`clamp(minimum, ideal, maksimum)` memberi nilai yang menyesuaikan diri tapi tidak pernah keluar batas. Contoh `clamp(1.5rem, 5vw, 3rem)`: font tumbuh mengikuti lebar viewport (5vw), tapi tidak akan lebih kecil dari 1.5rem atau lebih besar dari 3rem. Satu baris ini menggantikan tiga media query, dan hasilnya lebih halus karena ukurannya berubah bertahap alih-alih melompat di titik breakpoint. Satuan `vw` berarti persen dari lebar jendela, jadi `5vw` di layar 1000px sama dengan 50px. Dua hal yang perlu diperhatikan: pakailah `rem` untuk batas minimum dan maksimumnya agar pengaturan ukuran font pengguna tetap dihormati, dan jangan memakai `vw` sebagai satu-satunya satuan ukuran font — tanpa batas bawah, teks bisa menjadi terlalu kecil untuk dibaca di ponsel.",
           example: {
             code: "/* clamp(minimum, ideal, maksimum) */\n.judul   { font-size: clamp(1rem, 3vw, 2rem); }\n.wadah   { padding: clamp(1rem, 5vw, 4rem);   }",
             output:
@@ -2116,7 +2116,7 @@ export const cssTrack: Track = {
             note: "vw = 1% lebar viewport. Jadi 3vw di layar 1000px = 30px. clamp mencegahnya jadi terlalu kecil atau raksasa.",
           },
           instruction:
-            "Beri `h1` ukuran `font-size: clamp(1.5rem, 5vw, 3rem)`.",
+            "Judul halaman harus mengecil di ponsel tapi tidak pernah lebih kecil dari `1.5rem`, dan boleh membesar mengikuti lebar layar sampai berhenti di `3rem`. Terapkan ke `h1` dengan satu fungsi CSS yang menampung ketiga nilai itu sekaligus — pakai `5vw` sebagai nilai idealnya.",
           starterCode: "h1 {\n  color: #1e293b;\n}\n",
           language: "css",
           previewHtml: "<h1>Judul yang Mengalir</h1>",
@@ -3695,6 +3695,13 @@ export const cssTrack: Track = {
             "4. **Tab dari atas ke bawah tanpa tetikus** untuk memastikan seluruh elemen interaktif punya penanda fokus.\n" +
             "5. Baru kirim untuk review, sertakan tangkapan layar hasilmu di beberapa ukuran.\n\n" +
             "> **Apa arti \"pixel-perfect\" secara realistis?** Bukan identik di setiap perangkat — itu mustahil, karena rendering font dan ukuran layar berbeda-beda. Yang diharapkan adalah kesetiaan pada sistem desain: token yang konsisten, hierarki yang terjaga, dan hasil yang terlihat benar di semua ukuran.\n\n" +
+            "## Jebakan yang Sering Terjadi\n\n" +
+            "1. **Menyalin CSS ekspor Figma apa adanya.** Ia memakai posisi absolut dan lebar tetap; tampil benar hanya pada satu ukuran layar.\n" +
+            "2. **Menyebar nilai mentah ke setiap komponen.** Saat warna brand berganti, kamu menyisir puluhan berkas.\n" +
+            "3. **Menamai token berdasarkan wujudnya** (`--biru`) alih-alih perannya (`--warna-primer`).\n" +
+            "4. **`height` tetap pada kartu.** Konten nyata lebih panjang dari teks contoh, dan kartunya rusak.\n" +
+            "5. **Hanya membuat keadaan normal.** Hover, focus, disabled, loading, error, dan empty state semuanya pasti terjadi di produksi.\n" +
+            "6. **Menghapus indikator fokus** agar terlihat lebih rapi. Pengguna keyboard kehilangan seluruh penanda posisi.\n\n" +
             "## Analogi Dunia Nyata\n\n" +
             "Desain itu seperti **gambar rumah dari arsitek**; kamu tukangnya. Gambar tidak menyebutkan apa yang terjadi saat hujan miring atau saat tiga orang lewat pintu bersamaan — tapi bangunannya harus tetap berdiri. Menanyakan hal-hal itu di awal jauh lebih murah daripada membongkar dinding setelah selesai.\n\n" +
             "## Kaitan ke Dunia Kerja\n\n" +

@@ -69,6 +69,39 @@ for (const track of tracks) {
       lapor(`modul tanpa topics: ${track.slug}/${modul.slug}`);
     }
 
+    // 1b. Setiap bab di `topics` wajib benar-benar tersentuh isi modulnya
+    //     (step, kuis, ATAU materi). Skrip lama tidak memeriksa ini, dan
+    //     akibatnya nyata: 20 bab di JavaScript, 14 di CSS, dan 10 di HTML
+    //     tercantum di silabus tanpa pernah muncul di konten mana pun.
+    //     Pemeriksaannya longgar — cukup SATU kata khas dari bab itu muncul —
+    //     supaya yang tertangkap benar-benar bab yang menganggur.
+    const isiModul = JSON.stringify(modul.items).toLowerCase();
+    const kataUmum = new Set([
+      "yang", "dan", "atau", "untuk", "dari", "pada", "kenapa", "kapan",
+      "dipakai", "memakai", "pakai", "tanpa", "dengan", "bukan", "juga",
+      "dasar", "nyata", "modern", "benar", "salah", "tidak", "bisa", "harus",
+      "lebih", "paling", "sering", "semua", "setiap", "sebuah", "satu", "dua",
+      "ringkas", "lengkap", "plus", "kalau", "agar", "jadi", "saat", "mereka",
+      "ada", "apa", "itu", "ini", "hasil", "cara", "pola", "jenis", "bagian",
+      "aturan", "sebenarnya", "kerja", "dunia", "studi", "kasus", "contoh",
+      "pengenalan", "sampai", "punya", "besar", "kecil", "baru", "lama",
+      "interview", "jawaban", "pertanyaan", "membaca", "menulis", "membuat",
+      "sumber", "bug", "klasik", "pemula", "kelas", "berdasarkan", "sendiri",
+      "kenal", "saja", "jangan", "layout", "data", "nilai", "level", "level",
+    ]);
+    for (const bab of modul.topics ?? []) {
+      const kata = (bab.toLowerCase().match(/[a-z][a-z0-9_.:()@*-]{2,}/g) ?? [])
+        .map((k) => k.replace(/[.,:()]+$/, ""))
+        .filter((k) => k.length >= 3 && !kataUmum.has(k));
+      if (kata.length === 0) continue; // tidak ada kata khas yang bisa diperiksa
+      const tersentuh = kata.some((k) => isiModul.includes(k));
+      if (!tersentuh) {
+        lapor(
+          `bab di topics tidak tersentuh step/kuis/materi mana pun: ${track.slug}/${modul.slug}\n   → "${bab}"`
+        );
+      }
+    }
+
     // 2. Setiap modul latihan (yang punya step) wajib diawali minimal 1 item "materi" sebelum step pertama
     const hasStep = modul.items.some((it) => it.kind === "step");
     if (hasStep) {
@@ -91,9 +124,36 @@ for (const track of tracks) {
 
       if (item.kind === "materi") {
         materis++;
-        const m = item as Materi;
-        if (!m.title?.trim()) lapor(`materi judul kosong: ${m.id}`);
-        if (!m.body?.trim()) lapor(`materi body kosong: ${m.id}`);
+        const mt = item as Materi;
+        if (!mt.title?.trim()) lapor(`materi judul kosong: ${mt.id}`);
+        if (!mt.body?.trim()) lapor(`materi body kosong: ${mt.id}`);
+        else {
+          // Materi bukan formalitas untuk melewati aturan #1. Rujukan kedalaman:
+          // halaman materi track HTML, CSS, JavaScript, dan TypeScript.
+          const body = mt.body;
+          if (body.length < 1200) {
+            lapor(
+              `materi terlalu tipis (${body.length} karakter, minimal 1200): ${mt.id}`
+            );
+          }
+          if (!body.includes("```") && !/\|\s*-{3,}/.test(body)) {
+            lapor(
+              `materi tanpa diagram/tabel — pemula butuh peta, bukan hanya paragraf: ${mt.id}`
+            );
+          }
+          if (
+            !/jebakan|sering (salah|keliru|terjadi|disalahpahami|membingungkan|dilupakan)/i.test(
+              body
+            )
+          ) {
+            lapor(
+              `materi tanpa bagian jebakan/kesalahan umum: ${mt.id}`
+            );
+          }
+          if (!/kapan dipakai|dunia kerja|code review|interview/i.test(body)) {
+            lapor(`materi tanpa kaitan ke dunia kerja: ${mt.id}`);
+          }
+        }
       } else if (item.kind === "step") {
         steps++;
         const s = item as Step;
@@ -108,8 +168,18 @@ for (const track of tracks) {
         }
 
         // explanation step minimal 4 kalimat ATAU 350 karakter
+        //
+        // PENTING: titik di dalam `kode` dan di dalam URL BUKAN akhir kalimat.
+        // Sebelum pembersihan ini, `index.html`, `arr.at(-1)`, dan
+        // https://contoh.com masing-masing terhitung sebagai beberapa kalimat —
+        // sehingga penjelasan yang isinya cuma 1–2 kalimat tetap lolos. Celah itu
+        // nyata: 14 step JavaScript, 5 step HTML, dan 4 step CSS lolos karenanya.
         const exp = s.explanation?.trim() ?? "";
-        const sentenceCount = (exp.match(/[^.!?]+[.!?]+/g) || []).length;
+        const expBersih = exp
+          .replace(/`[^`]*`/g, "KODE")
+          .replace(/https?:\/\/\S+/g, "URL")
+          .replace(/\b\w+\.\w{2,4}\b/g, "BERKAS");
+        const sentenceCount = (expBersih.match(/[^.!?]+[.!?]+/g) || []).length;
         if (sentenceCount < 4 && exp.length < 350) {
           lapor(
             `explanation terlalu pendek (${sentenceCount} kalimat / ${exp.length} karakter, minimal 4 kalimat atau 350 karakter): ${s.id}`

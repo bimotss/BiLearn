@@ -29,6 +29,19 @@ Rujukan kualitas: `src/data/tracks/html.ts`, `css.ts`, `javascript.ts`, dan **mo
 
 Tambahan: tes regex harus menerima variasi penulisan yang sama-sama benar (mis. `git switch -c` dan `git checkout -b`).
 
+### Aturan keras Ronde 3 (ditambahkan 28 Juli 2026, juga ditolak skrip)
+
+8. **Halaman `materi` punya batas kedalaman**, karena materi 3 paragraf hanya menyiasati aturan #1. Wajib: minimal **1200 karakter**, minimal satu **diagram teks atau tabel**, satu bagian **jebakan/kesalahan umum**, dan satu bagian **kaitan ke dunia kerja**. Rujukan: materi track HTML, CSS, JavaScript, TypeScript.
+9. **Setiap bab di `topics` wajib benar-benar tersentuh** step, kuis, atau materi di modul yang sama. Silabus yang mencantumkan bab tanpa isi adalah janji yang tidak ditepati — dan ini pernah terjadi pada 20 bab di JavaScript, 14 di CSS, serta 10 di HTML.
+10. **Penghitung kalimat pada aturan #3 sekarang mengabaikan `kode`, URL, dan nama berkas.** Sebelumnya `index.html` dan `arr.at(-1)` terhitung sebagai beberapa kalimat, sehingga penjelasan 1–2 kalimat tetap lolos. Jangan mengakali panjang penjelasan dengan menaburkan kode.
+
+### Yang skrip TIDAK bisa periksa — tetap tanggung jawabmu
+
+- **Tes yang menolak jawaban benar.** Uji sendiri dengan `new RegExp(...)`: variasi kutip (`'` vs `"`), urutan properti/atribut, nama variabel yang bebas, `background` vs `background-color`, `rgba()` vs `rgb( / )`.
+- **`example.output` yang mustahil muncul dari kodenya.** Untuk track yang bisa dieksekusi, jalankan contohnya (Node untuk JavaScript, `tsc` untuk pesan error TypeScript, postcss untuk CSS) lalu bandingkan keluarannya.
+- **Konsep yang dipakai sebelum diajarkan.** Periksa apakah step modul 3 memakai sintaks yang baru dijelaskan di modul 5.
+- **Preview yang tidak mungkin menampilkan hasil** (isi `<head>`, berkas yang tidak ada, library yang tidak tersedia, dark mode, test runner). Katakan terus terang di `note` bahwa tesnya tetap lulus.
+
 ### Wajib dijalankan sebelum menyatakan selesai
 
 ```bash

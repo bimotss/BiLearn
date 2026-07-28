@@ -1966,7 +1966,7 @@ export const javascriptTrack: Track = {
             "| `\\|\\|` | **falsy apa pun** — termasuk `0`, `''`, `false` |\n" +
             "| `??` | **hanya** `null` atau `undefined` |\n\n" +
             "> **Perbedaan itu bukan detail.** `stok \\|\\| 10` mengubah stok 0 menjadi 10 — bug yang tampak masuk akal di kode dan salah di kenyataan. Untuk angka, harga, dan nilai yang boleh nol, `??` adalah pilihan yang benar.\n\n" +
-            "Pasangannya `&&` juga sering dipakai sebagai penjaga singkat: `daftar.length > 0 && tampilkan()` — dan pola inilah yang nanti kamu lihat di JSX React untuk menampilkan sesuatu secara kondisional.\n\n" +
+            "Pasangannya `&&` dan `||` juga dipakai sebagai **short-circuit**: keduanya berhenti mengevaluasi begitu hasilnya sudah pasti. `daftar.length > 0 && tampilkan()` hanya memanggil `tampilkan()` bila syaratnya benar, dan `nama || 'Tamu'` berhenti di `nama` bila isinya sudah bernilai. Pola conditional itulah yang nanti kamu lihat di JSX React untuk menampilkan sesuatu hanya bila datanya ada — dan jebakannya sama seperti sebelumnya: pada angka, `0 && ...` ikut berhenti karena 0 falsy.\n\n" +
             "## Spread dan Rest: Sintaks Sama, Arah Berlawanan\n\n" +
             "```text\n" +
             "SPREAD  menyebar isi        [...a, ...b]        { ...user, aktif: true }\n" +
