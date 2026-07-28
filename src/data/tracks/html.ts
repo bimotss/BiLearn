@@ -292,7 +292,10 @@ export const htmlTrack: Track = {
                 "Paragrafnya juga bagian yang terlihat — pertahankan `<p>` beserta isinya.",
             },
             {
-              pattern: "<!DOCTYPE|<html|<head|<title|<body",
+              // Sengaja memakai [\s>] setelah nama tag: pola `<head` tanpa itu
+              // juga cocok dengan `<header>`, sehingga potongan yang memakai
+              // elemen semantik akan ditolak padahal jawabannya benar.
+              pattern: "<!DOCTYPE|<html[\\s>]|<head[\\s>]|<title[\\s>]|<body[\\s>]",
               mustNotMatch: true,
               message:
                 "Masih ada bagian kerangka yang tertinggal. Sebuah potongan hanya memuat isi yang terlihat: tanpa doctype, tanpa `<html>`, tanpa `<head>`, tanpa `<title>`, dan tanpa tag `<body>`.",
@@ -2233,16 +2236,18 @@ export const htmlTrack: Track = {
           starterCode: '<div role="button" tabindex="0">Simpan</div>',
           language: "html",
           tests: [
-                      {
-                        "pattern": "<button[^>]*>\\s*Simpan\\s*</button>",
-                        "message": "Pakai elemen native `<button>`, bukan `<div>` yang dipaksa jadi tombol. Yang kamu dapat gratis: bisa difokus dengan Tab, bisa ditekan dengan Enter dan Spasi, dan langsung dikenali screen reader sebagai tombol."
-                      },
-                      {
-                        "pattern": "role=['\"]button['\"]",
-                        "mustNotMatch": true,
-                        "message": "Kalau elemennya sudah `<button>`, atribut `role=\"button\"` justru berlebihan dan tidak perlu ada. Atribut itu hanya jadi tambalan saat seseorang memaksa `<div>` berperan sebagai tombol — dan tambalan itu tetap tidak memberi dukungan keyboard."
-                      }
-                    ],
+            {
+              pattern: "<button[^>]*>\\s*Simpan\\s*</button>",
+              message:
+                "Pakai elemen native `<button>`, bukan `<div>` yang dipaksa jadi tombol. Yang kamu dapat gratis: bisa difokus dengan Tab, bisa ditekan dengan Enter dan Spasi, dan langsung dikenali screen reader sebagai tombol.",
+            },
+            {
+              pattern: "role=['\"]button['\"]",
+              mustNotMatch: true,
+              message:
+                "Kalau elemennya sudah `<button>`, atribut `role=\"button\"` justru berlebihan dan tidak perlu ada. Atribut itu hanya jadi tambalan saat seseorang memaksa `<div>` berperan sebagai tombol — dan tambalan itu tetap tidak memberi dukungan keyboard.",
+            },
+          ],
           solution: "<button>Simpan</button>",
         },
         {
@@ -2804,7 +2809,7 @@ export const htmlTrack: Track = {
                 'lang (misalnya <html lang="id">) membuat screen reader memakai pelafalan yang benar. Tanpa itu, teks Indonesia bisa dibacakan dengan pelafalan Inggris dan nyaris tidak dimengerti pendengarnya. Atribut ini juga dipakai browser untuk menawarkan terjemahan dan aturan pemisahan suku kata. Pengecoh `language` dan `locale` menggoda karena keduanya kata yang tepat secara makna — tapi nama atributnya memang hanya `lang`; sedangkan `charset` mengurus pengkodean karakter, bukan bahasa.',
             },
             {
-              id: "q6",
+              id: "q5",
               type: "pilihan-ganda",
               question:
                 "Kamu menata folder sebuah situs statis. Susunan mana yang mengikuti kesepakatan umum?",
@@ -2819,7 +2824,7 @@ export const htmlTrack: Track = {
                 "`index.html` harus berada di akar folder supaya bisa dibuka lewat alamat situs tanpa nama berkas, sementara berkas pendukung dikelompokkan per jenis agar jalur seperti `css/style.css` tetap pendek dan tidak berubah saat proyek bertambah besar. Pilihan terakhir menggoda karena terasa lebih teratur — tapi memindahkan `index.html` ke dalam folder membuat halaman utamamu hanya bisa dibuka lewat `/html/index.html`. Menyalin CSS ke setiap folder halaman membuat satu perubahan gaya harus dikerjakan berulang kali.",
             },
             {
-              id: "q5",
+              id: "q6",
               type: "pilihan-ganda",
               question:
                 "Kenapa <meta charset=\"UTF-8\"> harus diletakkan di paling awal <head>?",
