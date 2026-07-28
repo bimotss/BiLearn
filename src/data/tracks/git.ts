@@ -12,12 +12,13 @@ export const gitTrack: Track = {
   order: 4,
   modules: [
     {
-      slug: "dasar-git",
-      title: "Dasar Git",
+      slug: "persiapan-dasar-git",
+      title: "Persiapan & Dasar Git",
       description:
-        "Mental model yang benar dulu: snapshot, staging, dan riwayat — bukan hafalan perintah.",
+        "Pasang Git, kenali terminal, lalu bangun mental model yang benar: snapshot, staging, dan riwayat — bukan hafalan perintah.",
       topics: [
         "Kenapa version control ada (dan horor folder 'final_v2_beneran')",
+        "Memasang Git di Windows, macOS, Linux — dan di mana perintahnya ditulis",
         "Instalasi & konfigurasi awal (user.name, user.email)",
         "git init, status, add — memahami staging area",
         "git commit & menulis pesan commit yang baik",
@@ -26,6 +27,88 @@ export const gitTrack: Track = {
         "Membatalkan perubahan: restore & unstage",
       ],
       items: [
+        {
+          kind: "materi",
+          id: "git-1-m1",
+          title: "Persiapan: Memasang Git, Membuka Terminal, dan Cara Git Berpikir",
+          body:
+            "# Pengertian\n\n" +
+            "**Version control** adalah sistem yang mencatat setiap perubahan pada berkas proyekmu: apa yang berubah, siapa yang mengubahnya, kapan, dan alasannya. **Git** adalah program version control yang dipakai hampir semua tim software. **GitHub** adalah layanan di internet tempat repositori Git disimpan dan dibagikan.\n\n" +
+            "Dua nama itu sering dianggap satu hal, padahal berbeda — dan perbedaannya penting: Git jalan di komputermu dan tetap berfungsi tanpa internet; GitHub hanyalah salah satu tempat menitipkan salinannya (ada juga GitLab dan Bitbucket).\n\n" +
+            "| Cara lama (folder manual) | Cara Git |\n" +
+            "|---|---|\n" +
+            "| `tugas.zip`, `tugas_final.zip`, `tugas_final_v2_beneran.zip` | satu folder, riwayat lengkap di dalamnya |\n" +
+            "| Tidak tahu apa bedanya antar berkas | `git diff` menunjukkan baris yang berubah |\n" +
+            "| Alasan perubahan hilang dari ingatan | tercatat di pesan commit |\n" +
+            "| Dua orang mengedit berkas sama → satu tertimpa | Git menggabungkan, dan memberi tahu kalau bentrok |\n" +
+            "| Salah hapus = hilang selamanya | bisa dikembalikan ke commit mana pun |\n\n" +
+            "## Memasang Git\n\n" +
+            "| Sistem operasi | Cara memasang | Terminal yang dipakai |\n" +
+            "|---|---|---|\n" +
+            "| Windows | unduh installer dari git-scm.com, klik Next sampai selesai | **Git Bash** (ikut terpasang bersama Git) |\n" +
+            "| macOS | `brew install git`, atau jalankan `git --version` lalu izinkan macOS memasang Command Line Tools | Terminal (Applications → Utilities) |\n" +
+            "| Linux (Ubuntu/Debian) | `sudo apt update && sudo apt install git` | Terminal bawaan |\n\n" +
+            "Cara memastikan pemasangan berhasil hanya satu: jalankan `git --version`. Kalau muncul nomor versi seperti `git version 2.45.2`, Git siap dipakai. Kalau muncul `command not found`, Git belum terpasang atau terminal perlu ditutup dan dibuka ulang.\n\n" +
+            "## Di Mana Perintah Git Ditulis\n\n" +
+            "Ini bagian yang paling sering dilewatkan tutorial, padahal justru di sini pemula macet. Perintah Git **tidak** ditulis di dalam berkas kode, dan tidak dijalankan dengan menekan tombol Run di editor. Ia ditulis di **terminal**: jendela hitam (atau putih) tempat kamu mengetik satu baris perintah lalu menekan Enter.\n\n" +
+            "```text\n" +
+            "editor kode (VS Code)          terminal (Git Bash / Terminal)\n" +
+            "-----------------------        ------------------------------\n" +
+            "index.html                     $ cd ~/Documents/proyek-toko\n" +
+            "style.css        <-- kamu      $ git add index.html\n" +
+            "app.js               mengedit  $ git commit -m \"feat: tambah harga\"\n" +
+            "                     berkas    ^\n" +
+            "                               tanda $ TIDAK ikut diketik\n" +
+            "```\n\n" +
+            "Sebelum menjalankan perintah Git, terminal harus berada **di dalam folder proyekmu**. Pindah folder memakai `cd nama-folder`, dan `pwd` (di Windows: `pwd` juga jalan di Git Bash) memberi tahu kamu sedang di mana.\n\n" +
+            "> **Catatan jujur soal latihan di BiLearn:** panel latihan di bawah hanya memeriksa apakah perintah yang kamu tulis benar. Ia **tidak** benar-benar menjalankan Git, karena preview berjalan di dalam browser dan browser tidak punya Git. Jadi jangan menunggu keluaran muncul — keluaran nyata sengaja ditampilkan di bagian **Contoh** setiap latihan supaya kamu tahu bentuk aslinya.\n\n" +
+            "## Tiga Wilayah yang Wajib Kamu Bayangkan\n\n" +
+            "Hampir semua kebingungan Git di bulan pertama berasal dari tidak membedakan tiga wilayah ini:\n\n" +
+            "```text\n" +
+            "  WORKING DIRECTORY        STAGING AREA            REPOSITORY (.git)\n" +
+            "  berkas yang kamu edit    daftar yang siap        riwayat permanen\n" +
+            "                           'difoto'                (commit)\n" +
+            "         |                       |                        |\n" +
+            "         |   git add berkas.js   |   git commit -m \"..\"   |\n" +
+            "         |---------------------->|----------------------->|\n" +
+            "         |                       |                        |\n" +
+            "         |<----------------------|                        |\n" +
+            "         |  git restore --staged berkas.js (turunkan)     |\n" +
+            "         |                                                |\n" +
+            "         |<-----------------------------------------------|\n" +
+            "            git restore berkas.js (buang perubahanmu)\n" +
+            "```\n\n" +
+            "Staging area itu seperti **keranjang belanja di kasir**: kamu memilih dulu barang mana yang mau dibayar, baru menekan bayar. `git add` memasukkan ke keranjang, `git commit` membayarnya. Karena itu kamu bisa mengedit sepuluh berkas tapi hanya meng-commit dua yang berkaitan.\n\n" +
+            "## Snapshot, Bukan Selisih\n\n" +
+            "| Anggapan umum | Kenyataannya |\n" +
+            "|---|---|\n" +
+            "| Commit menyimpan \"baris yang berubah\" | Commit menyimpan **snapshot** seluruh isi proyek pada saat itu |\n" +
+            "| Berpindah versi berarti memutar ulang perubahan | Git tinggal memasang kembali snapshot yang diminta |\n" +
+            "| Commit itu berat, jadi lakukan sekali sehari | Commit itu murah; commit kecil dan sering justru dianjurkan |\n\n" +
+            "Setiap commit punya **hash** — sidik jari seperti `a1b2c3d`. Hash itulah alamat yang kamu pakai saat ingin melihat (`git show a1b2c3d`) atau kembali ke suatu titik.\n\n" +
+            "## Identitas: Kenapa `git config` Wajib Lebih Dulu\n\n" +
+            "Setiap commit menempelkan nama dan email pembuatnya, dan itu tidak bisa diambil dari mana-mana kecuali kamu memberitahunya sekali:\n\n" +
+            "```text\n" +
+            "git config --global user.name \"Bimo Daffa\"\n" +
+            "git config --global user.email \"bimo@contoh.com\"\n" +
+            "git config --global --list      # membaca kembali setelan yang tersimpan\n" +
+            "```\n\n" +
+            "`--global` berarti berlaku untuk semua repo di komputer ini, tersimpan di berkas `~/.gitconfig`. Tanpa `--global`, setelan hanya berlaku untuk repo yang sedang kamu buka — berguna kalau proyek kantor memakai email kantor.\n\n" +
+            "## Jebakan yang Menjatuhkan Hampir Semua Pemula\n\n" +
+            "1. **Menjalankan `git add` di folder yang salah.** Kalau terminal belum `cd` ke folder proyek, Git akan bilang `not a git repository`. Periksa lokasi dengan `pwd` sebelum menyalahkan perintahnya.\n" +
+            "2. **Mengira `git config` gagal karena tidak ada keluaran.** Perintah yang berhasil di dunia terminal biasanya **diam**. Tidak ada pesan = berhasil. Kalau ingin bukti, baca ulang dengan `git config user.name`.\n" +
+            "3. **`git commit` tanpa `-m` lalu terjebak di layar penuh.** Git membuka editor bawaan (sering `vim`). Jalan keluarnya: tekan `Esc`, ketik `:wq`, Enter. Hal ini sering membuat panik di hari pertama.\n" +
+            "4. **`git log` menampilkan layar yang tidak bisa ditutup.** Itu pager. Tekan `q` untuk keluar.\n" +
+            "5. **Meng-commit berkas yang seharusnya rahasia** (`.env`, kunci API) atau berat (`node_modules`). Setelah ter-commit, jejaknya tetap ada di riwayat meskipun berkasnya dihapus. Itulah gunanya `.gitignore`, dan itu ditulis **sebelum** commit pertama.\n" +
+            "6. **Pesan commit \"update\", \"fix\", \"asdf\".** Riwayat semacam itu tidak bisa dibaca siapa pun, termasuk dirimu tiga bulan kemudian.\n\n" +
+            "## Kaitan ke Dunia Kerja\n\n" +
+            "Git bukan materi tambahan — ia alat kerja harian. Beberapa hal konkret:\n\n" +
+            "- Hampir semua lowongan junior mencantumkan Git sebagai syarat, dan **tes praktik seringkali dikirim sebagai repositori** yang harus kamu clone lalu kembalikan sebagai Pull Request.\n" +
+            "- Di **code review**, yang pertama dilihat reviewer adalah apakah commit-mu terpisah rapi per perubahan. Satu commit raksasa berisi 40 berkas hampir selalu diminta dipecah.\n" +
+            "- Saat produksi bermasalah, pertanyaan pertama tim adalah \"commit mana yang menyebabkannya?\". Riwayat yang rapi menjawab itu dalam hitungan menit; riwayat yang kacau tidak menjawab apa pun.\n" +
+            "- Profil GitHub-mu dibaca perekrut sebagai portofolio hidup. Yang dinilai bukan jumlah kotak hijau, tapi apakah ada repo yang bisa dibaca dan dijelaskan.\n\n" +
+            "Modul ini fokus ke satu tujuan: kamu bisa membuat repo, memilih apa yang masuk commit, membaca riwayat, dan membatalkan kesalahan **tanpa takut merusak apa pun**.",
+        },
         {
           kind: "step",
           id: "git-1-1",
@@ -44,7 +127,8 @@ export const gitTrack: Track = {
           tests: [
             {
               pattern: "git\\s+--version",
-              message: "Gunakan perintah: git --version",
+              message:
+                "Polanya sama seperti contoh: nama programnya, lalu flag versi. Perhatikan `--version` memakai DUA tanda minus.",
             },
           ],
           solution: "git --version",
@@ -54,13 +138,15 @@ export const gitTrack: Track = {
           id: "git-1-2",
           title: "Instalasi & Konfigurasi Identitas",
           explanation:
-            "Sebelum membuat commit pertama, Git wajib tahu siapa penanggung jawabnya. Identitas `user.name` dan `user.email` dicantumkan di setiap riwayat commit.",
+            "Sebelum commit pertama, Git wajib tahu siapa penanggung jawab perubahan, karena nama dan email itu ditempelkan permanen ke setiap commit yang kamu buat. Kamu mengaturnya sekali per komputer dengan `git config --global`, dan nilainya tersimpan di berkas `~/.gitconfig`. Pakai `--global` untuk identitas default, dan jalankan perintah yang sama **tanpa** `--global` di dalam repo tertentu bila proyek itu butuh email berbeda (misalnya email kantor). Jebakan terbesarnya: perintah set ini **tidak mencetak apa pun** saat berhasil — banyak pemula mengulanginya berkali-kali karena mengira gagal. Jebakan kedua: kalau email di sini berbeda dengan email akun GitHub-mu, commit-mu tampil sebagai orang asing di halaman GitHub dan tidak dihitung sebagai kontribusimu.",
           example: {
             code:
               'git config --global user.name "Budi Sudarsono"\n' +
-              'git config --global user.email "budi@perusahaan.com"',
-            output: "user.name=Budi Sudarsono\nuser.email=budi@perusahaan.com",
-            note: "Perintah ini cukup dijalankan sekali per komputer. Tanpa --global, setelan hanya berlaku untuk repo yang sedang kamu buka.",
+              'git config --global user.email "budi@perusahaan.com"\n' +
+              "git config --global --list",
+            output:
+              "user.name=Budi Sudarsono\nuser.email=budi@perusahaan.com",
+            note: "Dua perintah pertama tidak mencetak apa pun — itu tandanya berhasil. Keluaran di atas datang dari baris ketiga (--list), satu-satunya perintah di contoh ini yang memang menampilkan sesuatu.",
           },
           instruction:
             'Tulis perintah untuk mengkonfigurasi `user.name` menjadi `Bimo Daffa` secara global.',
@@ -69,7 +155,8 @@ export const gitTrack: Track = {
           tests: [
             {
               pattern: "git\\s+config\\s+--global\\s+user\\.name\\s+[\"']Bimo Daffa[\"']",
-              message: 'Gunakan perintah: git config --global user.name "Bimo Daffa"',
+              message:
+                "Setelan identitas dipasang dengan `git config`. Sertakan cakupan `--global`, sebut kuncinya `user.name`, dan bungkus nilainya dengan tanda kutip karena mengandung spasi.",
             },
           ],
           solution: 'git config --global user.name "Bimo Daffa"',
@@ -93,7 +180,8 @@ export const gitTrack: Track = {
           tests: [
             {
               pattern: "git\\s+add\\s+app\\.js",
-              message: "Gunakan perintah: git add app.js",
+              message:
+                "Berkas dimasukkan ke staging area dengan `git add`, diikuti nama berkas yang diminta — perhatikan ekstensinya.",
             },
           ],
           solution: "git add app.js",
@@ -116,7 +204,8 @@ export const gitTrack: Track = {
           tests: [
             {
               pattern: "git\\s+commit\\s+-m\\s+[\"']feat:\\s*tambah\\s+navigasi\\s+utama[\"']",
-              message: 'Gunakan perintah: git commit -m "feat: tambah navigasi utama"',
+              message:
+                "Commit butuh dua bagian: perintah `git commit` dan pesan lewat flag `-m` di dalam tanda kutip. Pastikan awalan `feat:` dan isi pesannya sesuai skenario.",
             },
           ],
           solution: 'git commit -m "feat: tambah navigasi utama"',
@@ -140,7 +229,8 @@ export const gitTrack: Track = {
           tests: [
             {
               pattern: "git\\s+log\\s+--oneline",
-              message: "Gunakan perintah: git log --oneline",
+              message:
+                "Riwayat dibaca dengan `git log`. Untuk bentuk padat satu baris per commit, tambahkan flag `--oneline`.",
             },
           ],
           solution: "git log --oneline",
@@ -186,7 +276,8 @@ export const gitTrack: Track = {
           tests: [
             {
               pattern: "git\\s+restore\\s+script\\.js",
-              message: "Gunakan perintah: git restore script.js",
+              message:
+                "Perubahan yang belum di-stage dibuang dengan `git restore`, diikuti nama berkas yang ingin dipulihkan. Tanpa nama berkas, Git tidak tahu apa yang harus dikembalikan.",
             },
           ],
           solution: "git restore script.js",
@@ -233,7 +324,7 @@ export const gitTrack: Track = {
             {
               pattern: "git\\s+(restore\\s+--staged|reset\\s+HEAD)\\s+rahasia\\.txt",
               message:
-                "Pakai git restore --staged rahasia.txt (atau git reset HEAD rahasia.txt).",
+                "Untuk menurunkan berkas dari staging tanpa membuang isinya, pakai `git restore` dengan flag `--staged` lalu nama berkasnya. Bentuk lama `git reset HEAD <berkas>` juga diterima. Tanpa `--staged`, isi berkasnya justru terhapus.",
             },
             {
               pattern: "git\\s+restore\\s+rahasia\\.txt\\s*$",
@@ -339,6 +430,85 @@ export const gitTrack: Track = {
       ],
       items: [
         {
+          kind: "materi",
+          id: "git-2-m1",
+          title: "Branch, Merge, dan Cara Bekerja Paralel Tanpa Saling Merusak",
+          body:
+            "# Pengertian\n\n" +
+            "**Branch** adalah jalur pengerjaan terpisah di dalam repo yang sama. Kamu memakainya supaya bisa mengerjakan fitur baru atau mencoba ide berisiko **tanpa menyentuh** versi yang sudah berjalan.\n\n" +
+            "Yang perlu diluruskan sejak awal: branch **bukan** salinan folder. Membuat branch tidak menyalin satu berkas pun. Branch hanyalah **penunjuk (pointer) ke satu commit** — sebuah berkas kecil berisi hash. Itulah sebabnya membuat branch di Git terasa instan, bahkan pada proyek berisi puluhan ribu berkas.\n\n" +
+            "```text\n" +
+            "                        C3 <- feature/keranjang   (HEAD)\n" +
+            "                       /\n" +
+            "  C1 --- C2 ----------\n" +
+            "                       \\\n" +
+            "                        C4 <- main\n" +
+            "\n" +
+            "  HEAD = 'kamu sedang berada di branch mana'\n" +
+            "  C1..C4 = commit; anak panah = pointer, bukan folder\n" +
+            "```\n\n" +
+            "## Perintah Intinya\n\n" +
+            "| Perintah | Artinya | Catatan |\n" +
+            "|---|---|---|\n" +
+            "| `git branch` | daftar branch, tanda `*` menandai posisimu | tidak mengubah apa pun |\n" +
+            "| `git switch -c fix/harga` | buat branch baru **dan** pindah ke sana | bentuk lama: `git checkout -b fix/harga` |\n" +
+            "| `git switch main` | pindah ke branch yang sudah ada | bentuk lama: `git checkout main` |\n" +
+            "| `git merge fix/harga` | bawa perubahan `fix/harga` ke branch yang **sedang kamu tempati** | arahnya sering tertukar |\n" +
+            "| `git branch -d fix/harga` | hapus branch yang sudah di-merge | `-D` memaksa, hati-hati |\n\n" +
+            "Arah merge adalah sumber kekeliruan nomor satu: `git merge X` berarti \"masukkan X ke SINI\". Jadi untuk memasukkan fitur ke `main`, kamu harus `git switch main` dulu, baru `git merge fitur`.\n\n" +
+            "## Dua Bentuk Merge\n\n" +
+            "```text\n" +
+            "FAST-FORWARD (main tidak bergerak sejak branch dibuat)\n" +
+            "  sebelum:  C1 - C2 <- main\n" +
+            "                    \\ C3 - C4 <- fitur\n" +
+            "  sesudah:  C1 - C2 - C3 - C4 <- main, fitur\n" +
+            "            (Git cukup memindahkan pointer main — tanpa commit baru)\n" +
+            "\n" +
+            "MERGE COMMIT (main sudah maju sendiri)\n" +
+            "  C1 - C2 - C5 --------- M <- main\n" +
+            "             \\          /\n" +
+            "              C3 - C4 -'   <- fitur\n" +
+            "            (M adalah commit gabungan dengan DUA induk)\n" +
+            "```\n\n" +
+            "## Merge Conflict: Kenapa Terjadi dan Bentuknya\n\n" +
+            "Conflict muncul hanya pada satu kondisi: **dua branch mengubah baris yang sama pada berkas yang sama**. Git tidak berani menebak mana yang benar, jadi ia berhenti dan menyerahkan keputusan padamu. Conflict bukan error dan bukan tanda kamu salah — ia bagian normal dari bekerja bersama.\n\n" +
+            "```text\n" +
+            "<<<<<<< HEAD                 <- versi di branch yang kamu tempati\n" +
+            "  const diskon = 0.1;\n" +
+            "=======                      <- garis pemisah\n" +
+            "  const diskon = 0.25;\n" +
+            ">>>>>>> promo-lebaran        <- versi dari branch yang di-merge\n" +
+            "```\n\n" +
+            "Cara menyelesaikannya: buka berkasnya, **hapus ketiga baris penanda** (`<<<<<<<`, `=======`, `>>>>>>>`), tinggalkan kode yang benar (boleh gabungan keduanya), lalu `git add berkas` dan `git commit`. Kalau kepalamu sudah panas, `git merge --abort` membatalkan seluruh proses merge dan mengembalikan keadaan seperti sebelum kamu mulai.\n\n" +
+            "## Merge vs Rebase\n\n" +
+            "| | `git merge` | `git rebase` |\n" +
+            "|---|---|---|\n" +
+            "| Yang dilakukan | menggabungkan dua jalur, membuat commit gabungan | memindahkan commit-mu ke ujung branch lain |\n" +
+            "| Riwayat | bercabang, jujur apa adanya | lurus, enak dibaca |\n" +
+            "| Hash commit | tetap | **berubah** (commit ditulis ulang) |\n" +
+            "| Aman untuk branch yang sudah di-push & dipakai orang lain | ya | **tidak** |\n\n" +
+            "Aturan praktisnya satu kalimat: **jangan pernah rebase branch yang sudah dipakai orang lain.** Karena rebase mengganti hash, riwayat rekanmu dan riwayatmu jadi berbeda cerita, dan yang menyusul harus memperbaiki kekacauan itu.\n\n" +
+            "## `git stash` untuk Pekerjaan Setengah Jadi\n\n" +
+            "Kalau atasan minta kamu segera memperbaiki bug di `main` sementara pekerjaanmu belum layak di-commit, `git stash` menyimpan perubahan itu ke tumpukan sementara dan mengembalikan folder ke kondisi bersih. Setelah selesai, `git stash pop` mengembalikannya.\n\n" +
+            "## Konvensi Nama Branch di Tim\n\n" +
+            "| Prefix | Untuk apa | Contoh |\n" +
+            "|---|---|---|\n" +
+            "| `feature/` | fitur baru | `feature/checkout-midtrans` |\n" +
+            "| `fix/` | perbaikan bug | `fix/BIL-42-total-keranjang` |\n" +
+            "| `chore/` | pekerjaan rumah tangga (dependency, konfigurasi) | `chore/upgrade-eslint` |\n" +
+            "| `hotfix/` | perbaikan darurat langsung ke produksi | `hotfix/login-gagal` |\n\n" +
+            "Menyertakan nomor tiket (`BIL-42`) di nama branch adalah kebiasaan yang sangat dihargai tim, karena menghubungkan kode dengan alasan bisnis di belakangnya.\n\n" +
+            "## Jebakan yang Sering Terjadi\n\n" +
+            "1. **Merge dari branch yang salah.** Cek posisimu dengan `git status` (baris pertamanya menyebut branch) sebelum menjalankan merge.\n" +
+            "2. **Berpindah branch dengan perubahan belum tersimpan.** Git akan menolak atau membawa perubahanmu ikut pindah. Commit dulu, atau `git stash`.\n" +
+            "3. **Meninggalkan penanda `=======` di dalam kode.** Ini penyebab error aneh setelah conflict, dan penyebab review ditolak. Cari sisa penanda sebelum commit.\n" +
+            "4. **`git branch -D` pada branch yang belum di-merge.** Commit-nya tidak langsung hilang (masih bisa dicari lewat `git reflog`), tapi tidak lagi punya nama — dan mencarinya membuat panik.\n" +
+            "5. **Branch yang hidup berminggu-minggu.** Makin lama branch terpisah dari `main`, makin besar conflict-nya. Ambil pembaruan dari `main` secara berkala.\n" +
+            "6. **Mengira `git switch fitur` menyimpan pekerjaan otomatis.** Ia tidak menyimpan apa pun; ia hanya memindahkan HEAD.\n\n" +
+            "## Kaitan ke Dunia Kerja\n\n" +
+            "Di hampir semua tim, **`main` dilindungi**: kamu tidak diizinkan commit langsung ke sana. Satu tiket = satu branch = satu Pull Request. Kemampuan menyelesaikan conflict dengan tenang adalah salah satu hal yang paling sering ditanyakan pada **interview** junior (\"pernah kena conflict? bagaimana kamu menyelesaikannya?\"), dan jawaban yang bagus menyebut `git status`, membaca penanda, dan `--abort` sebagai jaring pengaman. Di **code review**, branch yang namanya jelas dan berisi satu perubahan fokus jauh lebih cepat disetujui daripada branch bernama `update` berisi lima fitur sekaligus.",
+        },
+        {
           kind: "step",
           id: "git-2-1",
           title: "Konsep Branch di Git",
@@ -356,7 +526,8 @@ export const gitTrack: Track = {
           tests: [
             {
               pattern: "git\\s+branch",
-              message: "Gunakan perintah: git branch",
+              message:
+                "Daftar branch ditampilkan `git branch` TANPA argumen tambahan — menambahkan nama justru membuat branch baru.",
             },
           ],
           solution: "git branch",
@@ -379,7 +550,8 @@ export const gitTrack: Track = {
           tests: [
             {
               pattern: "git\\s+(switch\\s+-c|checkout\\s+-b)\\s+feature/checkout",
-              message: "Gunakan: git switch -c feature/checkout",
+              message:
+                "Membuat sekaligus pindah ke branch baru butuh `git switch` dengan flag `-c` (bentuk lama: `git checkout -b`), lalu nama branch sesuai skenario.",
             },
           ],
           solution: "git switch -c feature/checkout",
@@ -402,7 +574,8 @@ export const gitTrack: Track = {
           tests: [
             {
               pattern: "git\\s+merge\\s+fix/header",
-              message: "Gunakan perintah: git merge fix/header",
+              message:
+                "Penggabungan memakai `git merge` diikuti nama branch SUMBER. Branch tujuan adalah tempatmu berdiri sekarang, jadi tidak ikut dituliskan.",
             },
           ],
           solution: "git merge fix/header",
@@ -425,7 +598,8 @@ export const gitTrack: Track = {
           tests: [
             {
               pattern: "git\\s+commit\\s+-m\\s+[\"']fix:\\s*selesaikan\\s+konflik\\s+merge[\"']",
-              message: 'Gunakan: git commit -m "fix: selesaikan konflik merge"',
+              message:
+                "Setelah penanda konflik dibersihkan dan berkasnya di-`git add`, konflik ditutup dengan commit biasa. Pakai flag `-m` dan awalan `fix:` pada pesannya.",
             },
           ],
           solution: 'git commit -m "fix: selesaikan konflik merge"',
@@ -448,7 +622,8 @@ export const gitTrack: Track = {
           tests: [
             {
               pattern: "git\\s+stash\\s+pop",
-              message: "Gunakan perintah: git stash pop",
+              message:
+                "Simpanan terakhir diambil dengan `git stash` diikuti subperintah yang mengambil SEKALIGUS menghapusnya dari tumpukan — bukan `apply`, yang menyisakan salinan.",
             },
           ],
           solution: "git stash pop",
@@ -471,7 +646,8 @@ export const gitTrack: Track = {
           tests: [
             {
               pattern: "git\\s+rebase\\s+main",
-              message: "Gunakan perintah: git rebase main",
+              message:
+                "Rebase memakai `git rebase` diikuti nama branch yang menjadi dasar baru, bukan nama branch yang sedang kamu kerjakan.",
             },
           ],
           solution: "git rebase main",
@@ -494,7 +670,8 @@ export const gitTrack: Track = {
           tests: [
             {
               pattern: "git\\s+(switch\\s+-c|checkout\\s+-b)\\s+fix/login-error",
-              message: "Gunakan: git switch -c fix/login-error",
+              message:
+                "Ikuti konvensi tim: awalan jenis pekerjaan, garis miring, lalu ringkasan singkat berhuruf kecil. Buat dan pindah sekaligus dengan `git switch -c` (atau `git checkout -b`).",
             },
           ],
           solution: "git switch -c fix/login-error",
@@ -584,6 +761,88 @@ export const gitTrack: Track = {
       ],
       items: [
         {
+          kind: "materi",
+          id: "git-3-m1",
+          title: "Remote, GitHub, dan Portofolio yang Dibaca Perekrut",
+          body:
+            "# Pengertian\n\n" +
+            "**Remote** adalah salinan repositori yang berada di komputer lain — biasanya di server GitHub. Sampai titik ini seluruh riwayatmu hanya ada di laptopmu; kalau laptop itu hilang, pekerjaanmu hilang bersamanya. Remote menyelesaikan dua hal sekaligus: cadangan, dan kemampuan bekerja bersama orang lain.\n\n" +
+            "Nama remote default adalah **`origin`**. Itu bukan kata kunci ajaib, hanya nama panggilan untuk sebuah URL supaya kamu tidak perlu mengetik alamat panjang setiap kali.\n\n" +
+            "```text\n" +
+            "        KOMPUTERMU                              GITHUB (origin)\n" +
+            "  +-------------------+                    +-------------------+\n" +
+            "  | working directory |                    |                   |\n" +
+            "  |        |          |                    |   riwayat commit  |\n" +
+            "  |  staging area     |   git push  --->   |   milik bersama   |\n" +
+            "  |        |          |                    |                   |\n" +
+            "  |  repo lokal .git  |   <--- git fetch   |                   |\n" +
+            "  +-------------------+                    +-------------------+\n" +
+            "                          <--- git pull = fetch + merge\n" +
+            "```\n\n" +
+            "## Perintah dan Artinya\n\n" +
+            "| Perintah | Artinya | Kapan dipakai |\n" +
+            "|---|---|---|\n" +
+            "| `git clone <url>` | unduh repo beserta seluruh riwayatnya | sekali, saat mulai bekerja di repo yang sudah ada |\n" +
+            "| `git remote add origin <url>` | daftarkan alamat remote pada repo lokal | sekali, untuk repo yang kamu buat sendiri |\n" +
+            "| `git remote -v` | lihat alamat remote yang terdaftar | saat push gagal dan kamu curiga URL-nya salah |\n" +
+            "| `git push -u origin main` | kirim commit, sekaligus **tetapkan** tracking branch | push pertama sebuah branch |\n" +
+            "| `git fetch` | ambil pembaruan **tanpa** mengubah berkasmu | ingin tahu perkembangan tanpa mengganggu pekerjaan |\n" +
+            "| `git pull` | `fetch` + `merge` sekaligus | mulai hari kerja, sebelum membuat branch baru |\n\n" +
+            "Setelah `-u` dipakai sekali, selanjutnya cukup `git push` dan `git pull` tanpa menyebut nama remote maupun branch. Itulah arti \"tracking branch\": branch lokalmu tahu pasangannya di remote.\n\n" +
+            "## HTTPS vs SSH\n\n" +
+            "| | HTTPS | SSH |\n" +
+            "|---|---|---|\n" +
+            "| Bentuk URL | `https://github.com/user/repo.git` | `git@github.com:user/repo.git` |\n" +
+            "| Cara login | username + **Personal Access Token** | pasangan kunci di komputermu |\n" +
+            "| Perlu setup awal | tidak | ya (`ssh-keygen`, lalu tempel kunci publik ke GitHub) |\n" +
+            "| Cocok untuk | komputer pinjaman, jaringan yang memblokir SSH | komputer sendiri yang dipakai harian |\n\n" +
+            "Satu hal yang wajib diketahui: **password akun GitHub tidak lagi bisa dipakai untuk push lewat HTTPS**. Yang diminta adalah Personal Access Token. Kalau kamu terus ditolak padahal password benar, itu penyebabnya — bukan salah ketik.\n\n" +
+            "## Fork vs Clone\n\n" +
+            "```text\n" +
+            "CLONE  : repo GitHub  ------------->  komputermu\n" +
+            "         (butuh izin tulis untuk bisa push)\n" +
+            "\n" +
+            "FORK   : repo orang lain --> salinan di AKUN GITHUB-mu --> komputermu\n" +
+            "         (kamu bebas push ke salinanmu, lalu mengirim Pull Request\n" +
+            "          ke repo aslinya)\n" +
+            "```\n\n" +
+            "Fork adalah pintu masuk kontribusi open source, dan juga cara banyak perusahaan memberi tes teknis: kamu fork, kerjakan, kirim PR.\n\n" +
+            "## README yang Membuat Repo Layak Dilihat\n\n" +
+            "README adalah halaman depan proyekmu. Perekrut membukanya lebih dulu daripada kodenya, dan sering berhenti di situ. Susunan yang bekerja:\n\n" +
+            "```text\n" +
+            "# Nama Proyek\n" +
+            "satu kalimat: proyek ini untuk siapa dan menyelesaikan apa\n" +
+            "\n" +
+            "## Demo\n" +
+            "tautan aplikasi yang jalan + 1 tangkapan layar\n" +
+            "\n" +
+            "## Fitur\n" +
+            "- 3-5 poin, hasil yang terlihat, bukan daftar teknologi\n" +
+            "\n" +
+            "## Teknologi\n" +
+            "Next.js, PostgreSQL, Tailwind\n" +
+            "\n" +
+            "## Cara menjalankan\n" +
+            "1. git clone ...\n" +
+            "2. npm install\n" +
+            "3. salin .env.example jadi .env\n" +
+            "4. npm run dev\n" +
+            "```\n\n" +
+            "Bagian **Cara menjalankan** yang benar-benar bisa diikuti adalah pembeda paling nyata antara repo latihan dan repo yang terlihat profesional.\n\n" +
+            "## Issues, Label, dan Profil\n\n" +
+            "**Issues** adalah daftar pekerjaan dan laporan bug milik repo. Judul yang baik menyebut gejala, bukan dugaan penyebab (\"Total keranjang salah saat kuantitas diubah\", bukan \"perbaiki bug\"). **Label** (`bug`, `enhancement`, `good first issue`) memudahkan penyaringan. Menutup issue otomatis lewat pesan commit atau deskripsi PR bisa dilakukan dengan menulis `Closes #12`.\n\n" +
+            "Untuk profil, yang dinilai bukan banyaknya kotak hijau, melainkan: apakah ada 2–3 repo dengan README jelas, apakah commit-nya bisa dibaca, dan apakah kamu bisa menjelaskan keputusan teknis di dalamnya saat ditanya.\n\n" +
+            "## Jebakan yang Sering Terjadi\n\n" +
+            "1. **`push rejected` / `fetch first`.** Artinya ada commit di remote yang belum kamu miliki. Solusinya `git pull` dulu, jangan langsung `push --force` — force menimpa pekerjaan orang lain.\n" +
+            "2. **Meng-commit `.env` atau kunci API.** Menghapus berkasnya di commit berikutnya **tidak** menghilangkan jejaknya; token itu harus dianggap bocor dan segera diganti. Cegah dengan `.gitignore` sejak awal.\n" +
+            "3. **Mengira `git fetch` sudah memperbarui berkas.** Fetch hanya mengunduh; berkasmu baru berubah setelah merge (atau `git pull`).\n" +
+            "4. **Bingung antara `git@github.com:` dan `https://`.** Salah pilih bentuk URL membuat autentikasi gagal terus-menerus meskipun kredensialmu benar.\n" +
+            "5. **Repo publik berisi data pelanggan atau tangkapan layar berisi data nyata.** Ini masalah serius, bukan sekadar kurang rapi.\n" +
+            "6. **README kosong.** Repo tanpa penjelasan sama dengan repo yang tidak pernah dibuka orang.\n\n" +
+            "## Kaitan ke Dunia Kerja\n\n" +
+            "Hari pertama masuk kerja hampir selalu diisi dengan: diberi akses repo, `git clone`, membaca README, menjalankan proyek di komputer sendiri. Kualitas README langsung terasa di momen itu. Selanjutnya, **kebiasaan `git pull` sebelum mulai bekerja** adalah hal kecil yang mencegah conflict besar di sore hari. Dan saat melamar, tautan GitHub di CV-mu biasanya dibuka sebelum panggilan **interview** — apa yang terbaca di sana menentukan pertanyaan yang akan diajukan padamu.",
+        },
+        {
           kind: "step",
           id: "git-3-1",
           title: "Menghubungkan Repo ke GitHub (git remote & push)",
@@ -601,7 +860,8 @@ export const gitTrack: Track = {
           tests: [
             {
               pattern: "git\\s+push\\s+(-u\\s+)?origin\\s+main",
-              message: "Gunakan: git push -u origin main",
+              message:
+                "Push pertama butuh `git push`, flag `-u` agar tracking branch tersimpan, lalu nama remote dan nama branch — dalam urutan itu.",
             },
           ],
           solution: "git push -u origin main",
@@ -624,7 +884,8 @@ export const gitTrack: Track = {
           tests: [
             {
               pattern: "ssh\\s+-T\\s+git@github\\.com",
-              message: "Gunakan perintah: ssh -T git@github.com",
+              message:
+                "Uji koneksi SSH memakai program `ssh` dengan flag `-T`, lalu alamat berbentuk pengguna@host milik GitHub — bukan URL HTTPS.",
             },
           ],
           solution: "ssh -T git@github.com",
@@ -647,7 +908,8 @@ export const gitTrack: Track = {
           tests: [
             {
               pattern: "git\\s+fetch\\s+origin",
-              message: "Gunakan perintah: git fetch origin",
+              message:
+                "Ambil pembaruan tanpa mengubah berkas dengan `git fetch`, lalu sebutkan nama remote-nya. `git pull` bukan jawabannya karena ia sekaligus melakukan merge.",
             },
           ],
           solution: "git fetch origin",
@@ -705,7 +967,8 @@ export const gitTrack: Track = {
           tests: [
             {
               pattern: "git\\s+commit\\s+-m\\s+[\"']fix\\s+#5:\\s*perbaiki\\s+galeri\\s+gambar[\"']",
-              message: 'Gunakan: git commit -m "fix #5: perbaiki galeri gambar"',
+              message:
+                "Pesan commit yang menutup issue menyebut nomornya dengan tanda `#`. Tulis commit biasa dengan flag `-m`, dan pastikan nomor issue-nya sesuai instruksi.",
             },
           ],
           solution: 'git commit -m "fix #5: perbaiki galeri gambar"',
@@ -728,7 +991,8 @@ export const gitTrack: Track = {
           tests: [
             {
               pattern: "git\\s+clone\\s+https://github\\.com/bimo/app\\.git",
-              message: "Gunakan: git clone https://github.com/bimo/app.git",
+              message:
+                "Menyalin repo ke komputer memakai `git clone` diikuti URL repositorinya — perhatikan URL diakhiri `.git`.",
             },
           ],
           solution: "git clone https://github.com/bimo/app.git",
@@ -884,6 +1148,93 @@ export const gitTrack: Track = {
         "Simulasi: satu siklus PR lengkap dari tiket sampai merge",
       ],
       items: [
+        {
+          kind: "materi",
+          id: "git-4-m1",
+          title: "Pull Request: Satu Siklus Kerja Tim dari Tiket sampai Merge",
+          body:
+            "# Pengertian\n\n" +
+            "**Pull Request (PR)** adalah permintaan resmi agar perubahan di branch-mu digabungkan ke branch utama, disertai ruang diskusi dan pemeriksaan sebelum itu terjadi. Di GitLab namanya *Merge Request* — konsepnya sama.\n\n" +
+            "PR ada bukan karena tim tidak percaya padamu, tapi karena **satu pasang mata tambahan jauh lebih murah daripada bug di produksi**. Ini juga alasan kenapa branch `main` di tempat kerja biasanya dilindungi: tidak ada yang boleh mendorong perubahan langsung ke sana, sekalipun ia orang paling senior.\n\n" +
+            "## Siklus Lengkap yang Akan Kamu Ulangi Setiap Hari\n\n" +
+            "```text\n" +
+            "  1. AMBIL TIKET        BIL-42 \"Total keranjang salah saat kuantitas diubah\"\n" +
+            "         |\n" +
+            "  2. SINKRON           git switch main && git pull\n" +
+            "         |\n" +
+            "  3. BRANCH            git switch -c fix/BIL-42-total-keranjang\n" +
+            "         |\n" +
+            "  4. KERJA + COMMIT    commit kecil, pesan berkonvensi\n" +
+            "         |\n" +
+            "  5. PUSH              git push -u origin fix/BIL-42-total-keranjang\n" +
+            "         |\n" +
+            "  6. BUKA PR           judul jelas + deskripsi + tautan tiket\n" +
+            "         |\n" +
+            "  7. REVIEW  <---------> revisi (commit lagi, push lagi, PR ikut terbarui)\n" +
+            "         |\n" +
+            "  8. CI HIJAU          test & lint lolos\n" +
+            "         |\n" +
+            "  9. MERGE             squash / merge commit / rebase\n" +
+            "         |\n" +
+            " 10. BERSIHKAN         hapus branch, tutup tiket\n" +
+            "```\n\n" +
+            "Langkah 2 sering dilewatkan pemula, dan akibatnya muncul di langkah 7 sebagai conflict yang sebenarnya bisa dihindari.\n\n" +
+            "## Conventional Commits\n\n" +
+            "| Prefix | Untuk | Contoh |\n" +
+            "|---|---|---|\n" +
+            "| `feat:` | fitur baru | `feat: tambah filter harga di katalog` |\n" +
+            "| `fix:` | perbaikan bug | `fix: total keranjang salah saat kuantitas diubah` |\n" +
+            "| `docs:` | dokumentasi | `docs: lengkapi cara menjalankan proyek` |\n" +
+            "| `refactor:` | rapikan kode tanpa mengubah perilaku | `refactor: pisahkan logika hitung diskon` |\n" +
+            "| `test:` | menambah/memperbaiki test | `test: tambah kasus keranjang kosong` |\n" +
+            "| `chore:` | dependency, konfigurasi, hal rumah tangga | `chore: naikkan versi eslint` |\n\n" +
+            "Manfaat nyatanya bukan kerapian belaka: alat pembuat **changelog** otomatis membaca prefix ini, dan penentuan versi (`1.2.3`) sering ikut dihitung darinya. Selain itu riwayat jadi bisa disaring — `git log --oneline | grep \"^.\\{8\\} fix:\"` memberi daftar perbaikan bug rilis ini.\n\n" +
+            "## Deskripsi PR yang Membuat Reviewer Cepat Paham\n\n" +
+            "```text\n" +
+            "## Apa\n" +
+            "Memperbaiki perhitungan total keranjang saat kuantitas diubah.\n" +
+            "\n" +
+            "## Kenapa\n" +
+            "Closes #42. Total tidak ikut berubah karena state lama dipakai\n" +
+            "sebelum render berikutnya.\n" +
+            "\n" +
+            "## Bagaimana\n" +
+            "- Hitung total dari daftar item, bukan dari state terpisah\n" +
+            "- Tambah test untuk kuantitas 0\n" +
+            "\n" +
+            "## Cara mengujinya\n" +
+            "1. Buka /keranjang, tambah 2 item\n" +
+            "2. Ubah kuantitas jadi 3 -> total harus ikut berubah\n" +
+            "\n" +
+            "## Catatan\n" +
+            "Belum menangani diskon bertingkat (menyusul di BIL-45).\n" +
+            "```\n" +
+            "\n" +
+            "Bagian **Cara mengujinya** adalah yang paling dihargai reviewer, karena tanpa itu ia harus menebak sendiri apa yang harus dilihat. Menulis `Closes #42` membuat GitHub menutup tiketnya otomatis saat PR di-merge.\n\n" +
+            "## Yang Dilihat Reviewer Senior\n\n" +
+            "Urutannya biasanya begini, dan hampir tidak pernah dimulai dari gaya penulisan kode:\n\n" +
+            "1. **Kebenaran** — apakah ini benar-benar menyelesaikan masalah di tiket?\n" +
+            "2. **Kasus tepi** — data kosong, angka nol, gagal jaringan, pengguna belum login.\n" +
+            "3. **Keamanan** — kredensial di dalam kode, input yang tidak divalidasi, data pribadi yang ikut tercetak di log.\n" +
+            "4. **Cakupan** — apakah ada perubahan yang tidak berhubungan dengan tiket? (PR bengkak = review lambat)\n" +
+            "5. **Keterbacaan** — nama variabel, fungsi yang terlalu panjang.\n\n" +
+            "Menanggapi review adalah keterampilan tersendiri. Komentar reviewer ditujukan ke **kode**, bukan ke dirimu. Balas dengan satu dari tiga bentuk: kerjakan lalu tandai selesai, jelaskan alasanmu kalau memang ada pertimbangan yang belum ia tahu, atau minta klarifikasi. Diam berhari-hari adalah satu-satunya jawaban yang buruk.\n\n" +
+            "## Tiga Strategi Merge\n\n" +
+            "| Strategi | Hasil di `main` | Kapan dipakai |\n" +
+            "|---|---|---|\n" +
+            "| **Squash and merge** | seluruh PR jadi **satu** commit | paling umum; commit \"wip\", \"fix typo\" tidak ikut masuk |\n" +
+            "| **Create a merge commit** | semua commit + satu commit gabungan | saat riwayat tiap langkah memang penting |\n" +
+            "| **Rebase and merge** | semua commit ditempel lurus, tanpa commit gabungan | tim yang ingin riwayat benar-benar linear |\n\n" +
+            "## Jebakan yang Sering Terjadi\n\n" +
+            "1. **PR raksasa berisi 40 berkas.** Review-nya tertunda berhari-hari, dan bug lebih mudah lolos. Pecah per tiket.\n" +
+            "2. **Mengira harus membuat PR baru setelah diminta revisi.** Tidak. Commit lagi di branch yang sama lalu `git push` — PR-nya ikut terbarui dengan sendirinya.\n" +
+            "3. **`git push --force` di branch yang sedang direview.** Komentar review bisa kehilangan konteks barisnya. Kalau memang perlu (setelah rebase), pakai `--force-with-lease`.\n" +
+            "4. **Menyelesaikan conflict lewat tombol web untuk kasus rumit.** Untuk conflict yang tidak sepele, kerjakan di lokal: `git switch fitur`, `git merge main`, selesaikan, `git push`.\n" +
+            "5. **Menganggap CI merah sebagai gangguan.** Kalau test gagal, PR memang belum layak di-merge; membujuk reviewer tidak mengubah itu.\n" +
+            "6. **Lupa menghapus branch dan menutup tiket.** Repo penuh branch mati membuat orang berikutnya tidak tahu mana yang masih hidup.\n\n" +
+            "## Kaitan ke Dunia Kerja\n\n" +
+            "Inilah bagian yang paling sering ditanyakan pada **interview** junior: bukan \"apa itu `git rebase`\", tapi \"ceritakan alur kerjamu dari menerima tiket sampai kode masuk produksi\". Kandidat yang bisa menjelaskan sepuluh langkah di atas dengan urutan benar terdengar seperti orang yang pernah bekerja dalam tim, dan itu sering lebih menentukan daripada hafalan sintaks. Di minggu-minggu pertama bekerja, kualitas deskripsi PR-mu juga membentuk reputasi lebih cepat daripada kualitas kodenya — karena itulah yang dibaca semua orang.",
+        },
         {
           kind: "step",
           id: "git-4-1",
@@ -1402,6 +1753,87 @@ export const gitTrack: Track = {
       ],
       items: [
         {
+          kind: "materi",
+          id: "git-5-m1",
+          title: "Saat 'Kodeku Hilang!' — Peta Penyelamatan Git",
+          body:
+            "# Pengertian\n\n" +
+            "Modul ini isinya satu keterampilan: **tetap tenang saat merasa sudah merusak segalanya.** Kabar baiknya, Git hampir tidak pernah benar-benar membuang commit. Yang biasanya terjadi adalah commit-nya kehilangan *nama*, sehingga tidak terlihat — bukan terhapus.\n\n" +
+            "Sebelum menyentuh perintah apa pun dalam keadaan panik, kerjakan urutan ini: `git status` (di mana aku sekarang?), `git log --oneline -5` (riwayat terakhir apa?), `git reflog` (apa yang sudah aku lakukan?). Tiga perintah itu tidak mengubah apa pun dan hampir selalu langsung menunjukkan jalan keluar.\n\n" +
+            "## Peta Keputusan\n\n" +
+            "```text\n" +
+            "  Perubahan belum di-commit?\n" +
+            "      belum ditambahkan ke staging  -> git restore berkas.js\n" +
+            "      sudah di staging              -> git restore --staged berkas.js\n" +
+            "\n" +
+            "  Sudah di-commit, TAPI belum di-push?\n" +
+            "      pesan commit-nya saja yang salah -> git commit --amend\n" +
+            "      ingin membatalkan commit,\n" +
+            "        perubahan tetap ada           -> git reset --soft HEAD~1\n" +
+            "      ingin membuang commit + isinya  -> git reset --hard HEAD~1  (BAHAYA)\n" +
+            "\n" +
+            "  Sudah di-push dan dipakai orang lain?\n" +
+            "      -> git revert <hash>   (satu-satunya cara yang sopan)\n" +
+            "\n" +
+            "  Sudah reset --hard dan menyesal?\n" +
+            "      -> git reflog, temukan hash lama, git reset --hard <hash>\n" +
+            "```\n\n" +
+            "## `revert` vs `reset` — Perbedaan yang Paling Sering Ditanyakan\n\n" +
+            "| | `git revert <hash>` | `git reset <hash>` |\n" +
+            "|---|---|---|\n" +
+            "| Cara kerja | membuat commit **baru** yang membalik perubahan | memindahkan pointer branch ke belakang |\n" +
+            "| Riwayat | tetap utuh, tercatat bahwa ada pembatalan | commit setelahnya lepas dari riwayat |\n" +
+            "| Aman untuk branch yang sudah di-push | **ya** | tidak |\n" +
+            "| Dipakai di | `main`, produksi | branch lokal yang belum dibagikan |\n\n" +
+            "Tiga rasa `reset` yang wajib dibedakan:\n\n" +
+            "| Mode | Commit dibatalkan | Isi perubahan | Staging area |\n" +
+            "|---|---|---|---|\n" +
+            "| `--soft` | ya | tetap ada | tetap ter-stage (siap commit ulang) |\n" +
+            "| `--mixed` (default) | ya | tetap ada | dikosongkan (perlu `git add` lagi) |\n" +
+            "| `--hard` | ya | **DIBUANG** | dikosongkan |\n\n" +
+            "`--hard` adalah satu-satunya perintah di modul ini yang benar-benar bisa menghapus pekerjaan yang belum pernah di-commit, dan pekerjaan itu **tidak** tercatat di reflog. Reflog menyelamatkan commit, bukan perubahan yang belum jadi commit.\n\n" +
+            "## `reflog`: Mesin Waktu yang Tidak Diketahui Banyak Orang\n\n" +
+            "Reflog adalah catatan setiap perpindahan HEAD di komputermu — termasuk commit yang branch-nya sudah kamu hapus atau reset.\n\n" +
+            "```text\n" +
+            "$ git reflog\n" +
+            "a1b2c3d HEAD@{0}: reset: moving to HEAD~1\n" +
+            "9f8e7d6 HEAD@{1}: commit: feat: tambah filter harga   <- yang 'hilang'\n" +
+            "5c4b3a2 HEAD@{2}: checkout: moving from main to fitur\n" +
+            "\n" +
+            "$ git reset --hard 9f8e7d6      # kembali ke titik itu\n" +
+            "```\n\n" +
+            "Reflog bersifat lokal dan tidak ikut di-push, serta punya masa simpan (biasanya 90 hari). Jadi ia jaring pengaman, bukan cadangan.\n\n" +
+            "## Mengambil Satu Berkas atau Satu Commit\n\n" +
+            "| Kebutuhan | Perintah |\n" +
+            "|---|---|\n" +
+            "| Kembalikan **satu berkas** ke keadaan pada commit lama | `git restore --source=<hash> -- src/harga.js` |\n" +
+            "| Lihat isi berkas di commit lama tanpa mengubah apa pun | `git show <hash>:src/harga.js` |\n" +
+            "| Ambil **satu commit** dari branch lain ke branch ini | `git cherry-pick <hash>` |\n" +
+            "| Cari commit penyebab bug secara sistematis | `git bisect start` → `git bisect bad` → `git bisect good <hash>` |\n\n" +
+            "`cherry-pick` khas dipakai untuk *hotfix*: perbaikan sudah ada di branch pengembangan, tapi produksi butuh perbaikan itu saja tanpa fitur lain yang belum siap. `bisect` membagi riwayat dua terus-menerus, sehingga 1000 commit cukup diuji sekitar sepuluh kali.\n\n" +
+            "## Berkas Rahasia yang Terlanjur Ter-commit\n\n" +
+            "Urutan yang benar, dan langkah pertamanya bukan Git:\n\n" +
+            "```text\n" +
+            "1. CABUT dulu kredensialnya (rotate token/password di dasbor layanan)\n" +
+            "   -> anggap sudah bocor, karena memang sudah\n" +
+            "2. Tambahkan .env ke .gitignore\n" +
+            "3. git rm --cached .env      (berhenti melacak, berkasnya tetap di laptop)\n" +
+            "4. commit + push perubahan itu\n" +
+            "5. Kalau repo publik & riwayatnya harus dibersihkan:\n" +
+            "   git filter-repo (atau BFG) -- lalu KABARI tim, karena hash berubah\n" +
+            "```\n\n" +
+            "Menghapus berkasnya lalu commit lagi **tidak** menghilangkan isinya dari riwayat: siapa pun masih bisa membuka commit lama dan membacanya. Karena itu langkah 1 tidak bisa dilewati.\n\n" +
+            "## Jebakan yang Sering Terjadi\n\n" +
+            "1. **Memakai `reset --hard` sebagai reaksi refleks.** Ia membuang perubahan yang belum di-commit tanpa bertanya, dan itu bagian yang tidak bisa dipulihkan.\n" +
+            "2. **`revert` dianggap menghapus commit.** Ia menambah commit baru. Riwayatnya jadi lebih panjang, dan itu memang yang diinginkan di `main`.\n" +
+            "3. **`git commit --amend` pada commit yang sudah di-push.** Hash-nya berubah, dan rekan yang sudah menarik commit lama akan mendapat riwayat yang berbeda.\n" +
+            "4. **`revert` pada merge commit tanpa `-m 1`.** Git tidak tahu induk mana yang kamu maksud dan akan berhenti dengan pesan yang membingungkan.\n" +
+            "5. **Mengandalkan reflog sebagai cadangan.** Ia lokal dan kedaluwarsa. Cadangan sungguhan tetap `git push`.\n" +
+            "6. **Menyelesaikan kepanikan dengan menghapus folder lalu clone ulang.** Semua pekerjaan yang belum di-push ikut hilang — padahal biasanya masih bisa diselamatkan.\n\n" +
+            "## Kaitan ke Dunia Kerja\n\n" +
+            "Kemampuan ini terasa nilainya di hari terburuk, bukan di hari biasa. Saat produksi rusak, tim butuh dua hal berurutan: **pulihkan dulu** (biasanya `git revert` pada commit penyebab, karena aman untuk `main`), **baru cari akar masalahnya** (`git bisect`, `git log -S \"namaFungsi\"`). Di **interview**, perbedaan `revert` dan `reset` termasuk pertanyaan Git paling sering muncul, dan jawaban yang membedakan \"sudah di-push atau belum\" langsung menandai kamu sebagai orang yang pernah bekerja dengan repo bersama. Dan di **code review**, orang yang tenang saat conflict atau salah reset adalah orang yang paling cepat dipercaya memegang repo produksi.",
+        },
+        {
           kind: "step",
           id: "git-5-1",
           title: "git revert vs git reset",
@@ -1419,7 +1851,8 @@ export const gitTrack: Track = {
           tests: [
             {
               pattern: "git\\s+revert\\s+abc1234",
-              message: "Gunakan: git revert abc1234",
+              message:
+                "Pembatalan yang aman untuk commit yang sudah di-push adalah `git revert`, diikuti hash commit yang ingin dibalik. `reset` tidak dipakai di sini karena riwayatnya sudah dibagikan.",
             },
           ],
           solution: "git revert abc1234",
@@ -1442,7 +1875,8 @@ export const gitTrack: Track = {
           tests: [
             {
               pattern: "git\\s+reflog",
-              message: "Gunakan perintah: git reflog",
+              message:
+                "Riwayat perpindahan HEAD dibaca dengan `git reflog` — satu kata, tanpa argumen tambahan.",
             },
           ],
           solution: "git reflog",
@@ -1465,7 +1899,8 @@ export const gitTrack: Track = {
           tests: [
             {
               pattern: "git\\s+(checkout|restore\\s+--source=)\\s*a1b2c3d\\s+(--\\s+)?index\\.html",
-              message: "Gunakan: git checkout a1b2c3d -- index.html",
+              message:
+                "Mengambil satu berkas dari commit lama: `git checkout <hash>`, lalu tanda `--` sebagai pemisah, baru nama berkasnya. Tanpa `--`, Git menyangka kamu ingin berpindah branch.",
             },
           ],
           solution: "git checkout a1b2c3d -- index.html",
@@ -1488,7 +1923,8 @@ export const gitTrack: Track = {
           tests: [
             {
               pattern: "git\\s+cherry-pick\\s+f9e8d7c",
-              message: "Gunakan perintah: git cherry-pick f9e8d7c",
+              message:
+                "Memindahkan satu commit ke branch ini memakai `git cherry-pick` diikuti hash commit-nya, bukan nama branch.",
             },
           ],
           solution: "git cherry-pick f9e8d7c",
@@ -1546,7 +1982,8 @@ export const gitTrack: Track = {
           tests: [
             {
               pattern: "git\\s+bisect\\s+reset",
-              message: "Gunakan perintah: git bisect reset",
+              message:
+                "Sesi pencarian ditutup dengan `git bisect` diikuti subperintah yang mengembalikanmu ke HEAD semula.",
             },
           ],
           solution: "git bisect reset",

@@ -266,7 +266,7 @@ export const laravelTrack: Track = {
           example: {
             code: "$user = ['nama' => 'Bimo', 'umur' => 25];\necho $user['nama'];",
             output: "Bimo",
-            note: "Array asosiatif di PHP sangat mirip dengan JSON / Objek.",
+            note: "Array asosiatif di PHP sangat mirip dengan JSON / Objek. Catatan jujur: panel preview tidak menjalankan PHP, jadi kamu tidak akan melihat hasilnya di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus. Jalankan di proyek Laravel sungguhan untuk melihat keluarannya.",
           },
           instruction:
             "Tuliskan deklarasi array `$user = ['name' => 'Bimo'];`.",
@@ -358,7 +358,7 @@ export const laravelTrack: Track = {
           example: {
             code: "$role = 'admin';\n$akses = match($role) {\n  'admin' => 'Full',\n  default => 'Read Only'\n};",
             output: "Full",
-            note: "Match melempar UnhandledMatchError jika tidak ada cabang yang cocok dan default tidak disediakan.",
+            note: "Match melempar UnhandledMatchError jika tidak ada cabang yang cocok dan default tidak disediakan. Catatan jujur: panel preview tidak menjalankan PHP, jadi kamu tidak akan melihat hasilnya di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus. Jalankan di proyek Laravel sungguhan untuk melihat keluarannya.",
           },
           instruction:
             "Gunakan match untuk variabel `$status` dengan opsi `'active' => 'Aktif'` dan `default => 'Nonaktif'`, simpan ke `$label`.",
@@ -532,7 +532,7 @@ export const laravelTrack: Track = {
           example: {
             code: "class User {\n  public function __construct(public string $nama) {}\n}\n$u = new User('Bimo');\necho $u->nama;",
             output: "Bimo",
-            note: "Menambahkan kata kunci visibility (public/private/protected) di parameter konstruktor otomatis mendaftarkannya sebagai properti.",
+            note: "Menambahkan kata kunci visibility (public/private/protected) di parameter konstruktor otomatis mendaftarkannya sebagai properti. Catatan jujur: panel preview tidak menjalankan PHP, jadi kamu tidak akan melihat hasilnya di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus. Jalankan di proyek Laravel sungguhan untuk melihat keluarannya.",
           },
           instruction:
             "Buat class `Product` dengan constructor property promotion `public string $title`.",
@@ -555,7 +555,7 @@ export const laravelTrack: Track = {
           example: {
             code: "class BankAccount {\n  private int $balance = 1000;\n  public function getBalance(): int {\n    return $this->balance;\n  }\n}",
             output: "1000",
-            note: "Membaca properti private langsung dari luar ($account->balance) melempar Error.",
+            note: "Membaca properti private langsung dari luar ($account->balance) melempar Error. Catatan jujur: panel preview tidak menjalankan PHP, jadi kamu tidak akan melihat hasilnya di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus. Jalankan di proyek Laravel sungguhan untuk melihat keluarannya.",
           },
           instruction:
             "Buat properti `protected string $apiKey` dan metode getter public `getApiKey()` yang mengembalikan `$this->apiKey`.",
@@ -578,7 +578,7 @@ export const laravelTrack: Track = {
           example: {
             code: "class Animal {\n  public function speak() { return 'Sound'; }\n}\nclass Dog extends Animal {}\n$d = new Dog(); echo $d->speak();",
             output: "Sound",
-            note: "Gunakan parent::__construct() jika kelas anak ingin memanggil konstruktor induk.",
+            note: "Gunakan parent::__construct() jika kelas anak ingin memanggil konstruktor induk. Catatan jujur: panel preview tidak menjalankan PHP, jadi kamu tidak akan melihat hasilnya di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus. Jalankan di proyek Laravel sungguhan untuk melihat keluarannya.",
           },
           instruction:
             "Buat class `Admin` yang mewarisi class `User` menggunakan kata kunci `extends`.",
@@ -601,7 +601,7 @@ export const laravelTrack: Track = {
           example: {
             code: "interface PaymentInterface {\n  public function pay(int $amount): bool;\n}\nclass Midtrans implements PaymentInterface {\n  public function pay(int $amount): bool { return true; }\n}",
             output: "true",
-            note: "Interface sangat penting untuk arsitektur Dependency Injection di Laravel.",
+            note: "Interface sangat penting untuk arsitektur Dependency Injection di Laravel. Catatan jujur: panel preview tidak menjalankan PHP, jadi kamu tidak akan melihat hasilnya di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus. Jalankan di proyek Laravel sungguhan untuk melihat keluarannya.",
           },
           instruction:
             "Buat `interface RepositoryInterface` yang memiliki definisi metode `public function find(int $id);`.",
@@ -624,7 +624,7 @@ export const laravelTrack: Track = {
           example: {
             code: "trait Loggable {\n  public function log(string $msg) { echo $msg; }\n}\nclass Order {\n  use Loggable;\n}",
             output: "Order created",
-            note: "Satu kelas bisa menggunakan banyak Trait sekaligus dipisahkan dengan koma.",
+            note: "Satu kelas bisa menggunakan banyak Trait sekaligus dipisahkan dengan koma. Catatan jujur: panel preview tidak menjalankan PHP, jadi kamu tidak akan melihat hasilnya di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus. Jalankan di proyek Laravel sungguhan untuk melihat keluarannya.",
           },
           instruction:
             "Terapkan `trait Timestampable` ke dalam `class Invoice` menggunakan kata kunci `use`.",
@@ -647,7 +647,7 @@ export const laravelTrack: Track = {
           example: {
             code: "namespace App\\Services;\nclass Mailer {\n  public function send() { return 'ok'; }\n}",
             output: "ok",
-            note: "Pernyataan namespace wajib ditulis pada baris paling atas setelah tag <?php.",
+            note: "Pernyataan namespace wajib ditulis pada baris paling atas setelah tag <?php. Catatan jujur: panel preview tidak menjalankan PHP, jadi kamu tidak akan melihat hasilnya di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus. Jalankan di proyek Laravel sungguhan untuk melihat keluarannya.",
           },
           instruction:
             "Tambahkan deklarasi `namespace App\\Controllers;` di baris pertama kelas.",
@@ -1225,7 +1225,7 @@ export const laravelTrack: Track = {
           example: {
             code: "class User extends Model {\n    public function posts() {\n        return $this->hasMany(Post::class);\n    }\n}",
             output: "$user->posts mengembalikan koleksi Post milik user tersebut",
-            note: "Eloquent otomatis mendeteksi foreign key user_id pada tabel posts.",
+            note: "Eloquent otomatis mendeteksi foreign key user_id pada tabel posts. Catatan jujur: panel preview tidak menjalankan PHP, jadi kamu tidak akan melihat hasilnya di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus. Jalankan di proyek Laravel sungguhan untuk melihat keluarannya.",
           },
           instruction:
             "Definisikan relasi `belongsTo(User::class)` pada method `user()` di dalam Model `Post`.",
@@ -1449,7 +1449,7 @@ export const laravelTrack: Track = {
           example: {
             code: "$validated = $request->validate([\n    'title' => 'required|max:255',\n    'email' => 'required|email'\n]);",
             output: "Data tervalidasi atau redirect otomatis jika gagal",
-            note: "Fungsi helper old('email') di view akan memulihkan isian form sebelum terjadi error.",
+            note: "Fungsi helper old('email') di view akan memulihkan isian form sebelum terjadi error. Catatan jujur: panel preview tidak menjalankan PHP, jadi kamu tidak akan melihat hasilnya di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus. Jalankan di proyek Laravel sungguhan untuk melihat keluarannya.",
           },
           instruction:
             "Validasi request dengan aturan `'name' => 'required'` dan `'age' => 'required|numeric'`.",
@@ -1541,7 +1541,7 @@ export const laravelTrack: Track = {
           example: {
             code: "class Product extends Model {\n    protected $fillable = ['name', 'price', 'stock'];\n}",
             output: "Hanya 3 kolom tersebut yang diizinkan diisi via Product::create()",
-            note: "Alternatifnya, gunakan protected $guarded = ['id']; untuk melindungi kolom spesifik.",
+            note: "Alternatifnya, gunakan protected $guarded = ['id']; untuk melindungi kolom spesifik. Catatan jujur: panel preview tidak menjalankan PHP, jadi kamu tidak akan melihat hasilnya di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus. Jalankan di proyek Laravel sungguhan untuk melihat keluarannya.",
           },
           instruction:
             "Definisikan properti `protected $fillable = ['title', 'content'];` di dalam kelas Model.",
@@ -1810,7 +1810,7 @@ export const laravelTrack: Track = {
           example: {
             code: "use Illuminate\\Contracts\\Auth\\MustVerifyEmail;\n\nclass User extends Authenticatable implements MustVerifyEmail {\n    // ...\n}",
             output: "User wajib verifikasi email via link konfirmasi",
-            note: "Tambahkan middleware 'verified' bersama 'auth': Route::middleware(['auth', 'verified']).",
+            note: "Tambahkan middleware 'verified' bersama 'auth': Route::middleware(['auth', 'verified']). Catatan jujur: panel preview tidak menjalankan PHP, jadi kamu tidak akan melihat hasilnya di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus. Jalankan di proyek Laravel sungguhan untuk melihat keluarannya.",
           },
           instruction:
             "Tambahkan `implements MustVerifyEmail` pada deklarasi `class User extends Authenticatable`.",
@@ -1980,7 +1980,7 @@ export const laravelTrack: Track = {
           example: {
             code: "// Di routes/api.php:\nRoute::get('/products', function () {\n    return response()->json(['data' => []]);\n});",
             output: "JSON response diakses via http://127.0.0.1:8000/api/products",
-            note: "Mulai Laravel 11, file routes/api.php dapat diaktifkan via php artisan install:api.",
+            note: "Mulai Laravel 11, file routes/api.php dapat diaktifkan via php artisan install:api. Catatan jujur: panel preview tidak menjalankan PHP, jadi kamu tidak akan melihat hasilnya di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus. Jalankan di proyek Laravel sungguhan untuk melihat keluarannya.",
           },
           instruction:
             "Buat route GET API `/users` yang mengembalikan `response()->json(['status' => 'ok'])`.",
@@ -2049,7 +2049,7 @@ export const laravelTrack: Track = {
           example: {
             code: "return response()->json([\n    'message' => 'Produk berhasil dibuat'\n], 201);",
             output: "HTTP status code 201 Created dikirim ke client",
-            note: "Jangan pernah mengembalikan status 200 OK jika transaksi sebenarnya mengalami error.",
+            note: "Jangan pernah mengembalikan status 200 OK jika transaksi sebenarnya mengalami error. Catatan jujur: panel preview tidak menjalankan PHP, jadi kamu tidak akan melihat hasilnya di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus. Jalankan di proyek Laravel sungguhan untuk melihat keluarannya.",
           },
           instruction:
             "Kembalikan respon JSON `['message' => 'Created']` dengan HTTP status code `201`.",
@@ -2550,7 +2550,7 @@ export const laravelTrack: Track = {
           example: {
             code: "test('halaman utama dapat diakses', function () {\n    $this->get('/')->assertStatus(200);\n});",
             output: "PASS Tests\\Feature\\ExampleTest > halaman utama dapat diakses status 200 OK",
-            note: "Jalankan perintah vendor/bin/pest atau php artisan test di terminal untuk mengeksekusi test.",
+            note: "Jalankan perintah vendor/bin/pest atau php artisan test di terminal untuk mengeksekusi test. Catatan jujur: panel preview tidak menjalankan PHP, jadi kamu tidak akan melihat hasilnya di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus. Jalankan di proyek Laravel sungguhan untuk melihat keluarannya.",
           },
           instruction:
             "Tuliskan test Pest `test('halaman about ok', function () { $this->get('/about')->assertOk(); });`.",
@@ -2596,7 +2596,7 @@ export const laravelTrack: Track = {
           example: {
             code: "uses(Illuminate\\Foundation\\Testing\\RefreshDatabase::class);\n\ntest('dapat membuat produk', function () {\n    Product::factory()->create(['name' => 'Kopi']);\n    $this->assertDatabaseHas('products', ['name' => 'Kopi']);\n});",
             output: "Database di-reset bersih dan data terverifikasi",
-            note: "Metode assertDatabaseHas($table, $data) memastikan data benar-benar tersimpan di DB.",
+            note: "Metode assertDatabaseHas($table, $data) memastikan data benar-benar tersimpan di DB. Catatan jujur: panel preview tidak menjalankan PHP, jadi kamu tidak akan melihat hasilnya di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus. Jalankan di proyek Laravel sungguhan untuk melihat keluarannya.",
           },
           instruction:
             "Gunakan assertion `$this->assertDatabaseHas('users', ['email' => 'bimo@test.com']);`.",
@@ -2619,7 +2619,7 @@ export const laravelTrack: Track = {
           example: {
             code: "test('user terautentikasi dapat melihat dashboard', function () {\n    $user = User::factory()->create();\n    $this->actingAs($user)->get('/dashboard')->assertOk();\n});",
             output: "Request disimulasikan atas nama $user",
-            note: "Menguji tanpa actingAs pada route terproteksi harus menguji pengalihan 302 ke halaman login.",
+            note: "Menguji tanpa actingAs pada route terproteksi harus menguji pengalihan 302 ke halaman login. Catatan jujur: panel preview tidak menjalankan PHP, jadi kamu tidak akan melihat hasilnya di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus. Jalankan di proyek Laravel sungguhan untuk melihat keluarannya.",
           },
           instruction:
             "Simulasikan login `$this->actingAs($user)` sebelum melakukan HTTP GET ke `/settings`.",
@@ -2642,7 +2642,7 @@ export const laravelTrack: Track = {
           example: {
             code: "use Illuminate\\Support\\Facades\\Http;\n\nHttp::fake([\n    'api.payment.com/*' => Http::response(['status' => 'success'], 200),\n]);",
             output: "Request HTTP luar dipalsukan secara instan",
-            note: "Mocking memastikan pengujian berjalan cepat offline tanpa memicu pembayaran sungguhan.",
+            note: "Mocking memastikan pengujian berjalan cepat offline tanpa memicu pembayaran sungguhan. Catatan jujur: panel preview tidak menjalankan PHP, jadi kamu tidak akan melihat hasilnya di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus. Jalankan di proyek Laravel sungguhan untuk melihat keluarannya.",
           },
           instruction:
             "Palsukan request ke `api.github.com/*` menggunakan `Http::fake()`.",

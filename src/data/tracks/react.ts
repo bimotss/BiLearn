@@ -98,23 +98,27 @@ export const reactTrack: Track = {
         {
           "kind": "step",
           "id": "react-0-4",
-          "title": "Debugging Komponen dengan React DevTools",
-          "explanation": "React Developer Tools adalah ekstensi browser (Chrome/Firefox) wajib bagi pengembang React. Ekstensi ini menambahkan tab Components dan Profiler pada DevTools browser untuk menginspeksi state, props, dan hierarki komponen secara real-time. Dengan tool ini, kamu tidak perlu menabur console.log di mana-mana saat menginvestigasi bug. Jebakan umum pemula adalah membingungkan inspect element bawaan HTML biasa dengan tab Components khusus React.",
+          "title": "Komponen Pertama yang Terlihat di React DevTools",
+          "explanation": "React Developer Tools adalah ekstensi browser (Chrome/Firefox) yang menambahkan tab **Components** dan **Profiler** ke DevTools, sehingga kamu bisa melihat hierarki komponen beserta props dan state-nya tanpa menabur `console.log`. Supaya ada yang bisa diinspeksi, proyek barumu butuh komponen sendiri: berkas `src/App.tsx` hasil scaffolding Vite masih berisi contoh bawaan (logo, counter) dan biasanya langsung diganti. Aturannya di React: nama komponen wajib diawali huruf besar — `app` (huruf kecil) akan dianggap tag HTML biasa dan tidak muncul sebagai komponen di DevTools. Jebakan yang paling sering: pemula membuka tab **Elements** bawaan browser (yang hanya menampilkan hasil akhir berupa HTML) lalu menyimpulkan DevTools React tidak bekerja — padahal tab Components memang tab terpisah, dan ia hanya muncul di halaman yang benar-benar memakai React.",
           "example": {
-            "code": "// Di dalam React DevTools tab Components:\n// <App>\n//   <Header title=\"BiLearn\">\n//     state: { user: \"Bimo\" }",
-            "output": "Hierarki komponen dan nilai props/state terlihat langsung tanpa console.log.",
-            "note": "React DevTools mempermudah melacak komponen mana yang mengalami re-render berlebihan."
+            "code": "// src/Footer.tsx\nexport default function Footer() {\n  return <p>© 2026 BiLearn</p>;\n}",
+            "output": "Halaman menampilkan: © 2026 BiLearn\n\nTab Components di React DevTools:\n<Footer>\n  <p>",
+            "note": "Yang terlihat di tab Elements hanya <p>© 2026 BiLearn</p> — nama komponennya hilang, karena browser tidak tahu apa itu komponen. Nama <Footer> hanya terbaca di tab Components."
           },
-          "instruction": "Tuliskan nama tab DevTools browser bawaan React yang digunakan khusus untuk menginspeksi struktur tree dan state komponen.",
-          "starterCode": "// Tulis nama tab React DevTools di sini dalam bentuk string\nconst tabName = ",
+          "instruction": "Isi `src/App.tsx` masih berupa contoh bawaan Vite. Tulis ulang berkas itu: satu komponen bernama `App` yang diekspor sebagai default export dan menampilkan tulisan `BiLearn` di dalam elemen `h1`. Setelah ini, `<App>` adalah simpul teratas yang akan kamu lihat di tab Components.",
+          "starterCode": "// src/App.tsx — tulis ulang isinya di bawah\n",
           "language": "jsx",
           "tests": [
             {
-              "pattern": "const\\s+tabName\\s*=\\s*['\"]Components['\"]",
-              "message": "Tuliskan: const tabName = \"Components\";"
+              "pattern": "export\\s+default\\s+function\\s+App\\s*\\(|function\\s+App\\s*\\([\\s\\S]*export\\s+default\\s+App",
+              "message": "Belum ada komponen `App` yang diekspor sebagai default. Tulis `export default function App() { ... }` — huruf A harus besar, kalau tidak React menganggapnya tag HTML."
+            },
+            {
+              "pattern": "<h1[^>]*>\\s*BiLearn\\s*</h1>",
+              "message": "Kembalikan `<h1>BiLearn</h1>` dari komponen App. Pastikan tag penutup `</h1>` ada — JSX menolak tag yang tidak ditutup."
             }
           ],
-          "solution": "const tabName = \"Components\";"
+          "solution": "export default function App() {\n  return <h1>BiLearn</h1>;\n}"
         },
         {
           "kind": "step",
@@ -140,23 +144,31 @@ export const reactTrack: Track = {
         {
           "kind": "step",
           "id": "react-0-6",
-          "title": "CRA vs Vite: Kenapa Industri Beralih",
-          "explanation": "Create React App (CRA) dahulunya adalah bundler standar namun telah resmi dihentikan pemeliharaannya (deprecated) oleh tim React. Vite menggantikannya karena memanfaatkan keunggulan Native ES Modules browser sehingga server lokal menyala dalam hitungan milidetik. Memahami alasan pergeseran teknologi ini penting agar kamu tidak menggunakan perkakas usang dalam proyek baru. Jebakan bagi pemula adalah mengikuti tutorial lama di internet yang masih menyuruh menggunakan `npx create-react-app`.",
+          "title": "CRA vs Vite: Konfigurasi yang Terlihat",
+          "explanation": "Create React App (CRA) sudah tidak dipelihara lagi oleh tim React, dan penggantinya untuk aplikasi satu halaman adalah **Vite**. Perbedaan yang paling terasa sehari-hari bukan cuma kecepatan: CRA menyembunyikan konfigurasi di dalam `react-scripts` (mengubahnya berarti `eject` yang sulit dibatalkan), sedangkan Vite meletakkannya di satu berkas kecil `vite.config.ts` yang boleh kamu baca dan ubah. Di berkas itulah plugin React dipasang, dan **plugin itulah yang membuat sintaks JSX bisa dipahami** — tanpanya, `npm run dev` gagal dengan pesan seperti `Failed to parse source ... expected \">\" but found \"className\"`. Kamu memerlukannya sekali per proyek, biasanya sudah dibuatkan oleh scaffolding, dan perlu kamu sentuh lagi saat menambahkan alias path atau proxy API. Jebakan terbesarnya adalah mengikuti tutorial lama yang menyuruh `npx create-react-app`: proyeknya masih jalan, tapi kamu mulai dari perkakas yang sudah pensiun.",
           "example": {
-            "code": "// Perbandingan Startup Time:\n// CRA (Webpack): Bundling seluruh aplikasi sebelum server nyala (15s)\n// Vite (ESM): Langsung menyalakan server, mengompilasi file hanya saat diminta (0.2s)",
-            "output": "Vite 50x lebih cepat daripada CRA pada proyek skala besar.",
-            "note": "Tim React sekarang merekomendasikan Vite untuk SPA dan Next.js untuk SSR."
+            "code": "// vite.config.ts — versi yang sedikit lebih panjang\nimport { defineConfig } from 'vite';\nimport react from '@vitejs/plugin-react';\n\nexport default defineConfig({\n  plugins: [react()],\n  server: { port: 3000 },   // ganti port default 5173\n});",
+            "output": "$ npm run dev\n\n  VITE v6.0.5  ready in 312 ms\n\n  ➜  Local:   http://localhost:3000/\n  ➜  Network: use --host to expose\n  ➜  press h + enter to show help",
+            "note": "Angka \"ready in 312 ms\" itu keluaran nyata Vite, dan sengaja ditampilkan supaya kamu tahu bentuk aslinya. Kalau port 5173 atau 3000 sudah dipakai program lain, Vite otomatis naik ke port berikutnya dan menyebutkannya di baris Local."
           },
-          "instruction": "Tuliskan string nama bundler modern pengganti CRA yang direkomendasikan oleh dokumentasi resmi React saat ini.",
-          "starterCode": "const modernBundler = ",
-          "language": "jsx",
+          "instruction": "Proyek `bipack-app` kehilangan berkas konfigurasinya, sehingga `npm run dev` menolak sintaks JSX. Tulis isi minimum `vite.config.ts`: impor helper konfigurasi dari `vite` dan plugin React dari `@vitejs/plugin-react`, lalu ekspor konfigurasi yang mendaftarkan plugin itu. Cukup plugin-nya saja, tanpa opsi lain.",
+          "starterCode": "// vite.config.ts\n// Tulis konfigurasi minimum di bawah ini\n",
+          "language": "text",
           "tests": [
             {
-              "pattern": "const\\s+modernBundler\\s*=\\s*['\"]Vite['\"]",
-              "message": "Tuliskan: const modernBundler = \"Vite\";"
+              "pattern": "import\\s*\\{\\s*defineConfig\\s*\\}\\s*from\\s*['\"]vite['\"]",
+              "message": "Impor `defineConfig` dari paket `vite` — fungsi ini yang memberi autocomplete dan pemeriksaan tipe pada konfigurasimu."
+            },
+            {
+              "pattern": "import\\s+\\w+\\s+from\\s*['\"]@vitejs/plugin-react['\"]",
+              "message": "Impor plugin React sebagai default import dari `@vitejs/plugin-react`. Tanpa plugin ini Vite tidak mengerti JSX."
+            },
+            {
+              "pattern": "export\\s+default\\s+defineConfig\\s*\\(\\s*\\{[\\s\\S]*plugins\\s*:\\s*\\[\\s*\\w+\\s*\\(\\s*\\)",
+              "message": "Ekspor default hasil `defineConfig({ plugins: [react()] })`. Perhatikan `react()` dipanggil (pakai tanda kurung), bukan hanya disebut namanya."
             }
           ],
-          "solution": "const modernBundler = \"Vite\";"
+          "solution": "import { defineConfig } from 'vite';\nimport react from '@vitejs/plugin-react';\n\nexport default defineConfig({\n  plugins: [react()],\n});"
         },
         {
           "kind": "quiz",
@@ -513,7 +525,7 @@ export const reactTrack: Track = {
           "example": {
             "code": "interface UserProps { name: string; }\nfunction UserCard({ name }: UserProps) {\n  return <h3>{name}</h3>;\n}",
             "output": "<h3>Budi</h3>",
-            "note": "Props bersifat Read-Only! Jangan pernah mengubah nilai props secara langsung."
+            "note": "Props bersifat Read-Only! Jangan pernah mengubah nilai props secara langsung. Catatan jujur: panel preview di bawah tidak mengompilasi berkas ini, jadi kamu tidak akan melihat hasil visualnya di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
           "instruction": "Buat interface `BadgeProps { text: string }` dan komponen `function Badge({ text }: BadgeProps)` yang mengembalikan `<span>{text}</span>`.",
           "starterCode": "// Tulis BadgeProps dan komponen Badge di sini\n",
@@ -538,7 +550,7 @@ export const reactTrack: Track = {
           "example": {
             "code": "interface ModalProps { children: React.ReactNode; }\nfunction Modal({ children }: ModalProps) {\n  return <div className=\"modal\">{children}</div>;\n}",
             "output": "Elemen di dalam <Modal><p>Isi Modal</p></Modal> akan dirender pada prop children.",
-            "note": "Tipe React.ReactNode digunakan untuk mengetik prop children di TypeScript."
+            "note": "Tipe React.ReactNode digunakan untuk mengetik prop children di TypeScript. Catatan jujur: panel preview di bawah tidak mengompilasi berkas ini, jadi kamu tidak akan melihat hasil visualnya di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
           "instruction": "Buat `interface CardProps { children: React.ReactNode }` dan komponen `function Card({ children }: CardProps)` yang mengembalikan `<div>{children}</div>`.",
           "starterCode": "// Tulis CardProps dan komponen Card di sini\n",
@@ -962,8 +974,12 @@ export const reactTrack: Track = {
           "language": "jsx",
           "tests": [
             {
-              "pattern": "<input\\s+value=\\{\\s*text\\s*\\}\\s+onChange=\\{\\s*\\(?e\\)?\\s*=>\\s*setText\\(\\s*e\\.target\\.value\\s*\\)\\s*\\}\\s*/?>",
-              "message": "Gunakan: <input value={text} onChange={(e) => setText(e.target.value)} />"
+              "pattern": "<input\\b[\\s\\S]*value=\\{\\s*text\\s*\\}",
+              "message": "Elemen `<input>` belum diikat ke state: tambahkan `value={text}`. Tanpa itu input tidak terkontrol, dan mengubah state tidak akan mengubah isi kotaknya."
+            },
+            {
+              "pattern": "onChange=\\{\\s*\\(?\\s*e\\s*\\)?\\s*=>\\s*setText\\(\\s*e\\.target\\.value\\s*\\)\\s*\\}",
+              "message": "Belum ada `onChange` yang memanggil `setText` dengan `e.target.value`. Tanpa handler ini, input jadi read-only — jebakan paling sering pada controlled input. Urutan atribut bebas."
             }
           ],
           "solution": "<input value={text} onChange={(e) => setText(e.target.value)} />"
@@ -1067,8 +1083,16 @@ export const reactTrack: Track = {
           "language": "jsx",
           "tests": [
             {
-              "pattern": "<input\\s+type=[\"']checkbox[\"']\\s+checked=\\{\\s*agree\\s*\\}\\s+onChange=\\{\\s*\\(?e\\)?\\s*=>\\s*setAgree\\(\\s*e\\.target\\.checked\\s*\\)\\s*\\}\\s*/?>",
-              "message": "Gunakan: <input type=\"checkbox\" checked={agree} onChange={(e) => setAgree(e.target.checked)} />"
+              "pattern": "<input\\b[\\s\\S]*type=[\"']checkbox[\"']",
+              "message": "Tentukan dulu jenis input-nya: `type=\"checkbox\"`."
+            },
+            {
+              "pattern": "checked=\\{\\s*agree\\s*\\}",
+              "message": "Checkbox diikat lewat `checked={agree}`, bukan `value={agree}` — itu perbedaan pertama yang harus kamu ingat."
+            },
+            {
+              "pattern": "onChange=\\{[\\s\\S]*setAgree\\(\\s*e\\.target\\.checked\\s*\\)",
+              "message": "Handler-nya harus membaca `e.target.checked` (boolean), bukan `e.target.value` (string \"on\"). Urutan atribut bebas."
             }
           ],
           "solution": "<input type=\"checkbox\" checked={agree} onChange={(e) => setAgree(e.target.checked)} />"
@@ -1256,20 +1280,24 @@ export const reactTrack: Track = {
           "title": "StrictMode Double-Render",
           "explanation": "Dalam mode pengembangan (*development mode*), pembungkus `React.StrictMode` secara sengaja menjalankan fungsi `useEffect` sebanyak dua kali (mount -> unmount -> mount) untuk setiap komponen yang baru muncul. Fitur ini dirancang khusus oleh tim React untuk membantu pengembang menemukan bug tersembunyi akibat fungsi cleanup yang tidak ditulis dengan benar. Memahami perilaku double-render ini penting agar kamu tidak panik saat melihat `console.log` di dalam effect tercetak dua kali selama masa dev. Jebakan pemula adalah mencoba mematikan StrictMode alih-alih memperbaiki cleanup function yang bermasalah.",
           "example": {
-            "code": "// Console log di useEffect muncul 2x di dev mode — ini normal!",
-            "output": "Konsol menampilkan log yang sama 2 kali saat komponen dimuat (hanya pada StrictMode dev mode).",
-            "note": "Double render ini tidak akan terjadi pada build production."
+            "code": "// src/main.tsx — StrictMode dipasang di titik paling luar\nimport { StrictMode } from 'react';\nimport { createRoot } from 'react-dom/client';\nimport App from './App';\n\ncreateRoot(document.getElementById('root')!).render(\n  <StrictMode>\n    <App />\n  </StrictMode>\n);",
+            "output": "Konsol saat halaman dibuka (dev):\nmount Jam\nunmount Jam\nmount Jam\n\nKonsol pada build production:\nmount Jam",
+            "note": "Urutan mount → unmount → mount itulah cara StrictMode menguji cleanup-mu. Kalau setelah dipasang StrictMode muncul dua timer berjalan atau dua koneksi terbuka, yang salah bukan StrictMode — cleanup effect-mu memang belum ada. Catatan jujur: panel preview di bawah tidak mengompilasi berkas ini, jadi kamu tidak akan melihat hasil visualnya di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
-          "instruction": "Buat sebuah variabel bernama `devMode` dan isi dengan string 'strict', ini mensimulasikan mode development di React.",
-          "starterCode": "// Tulis variabel devMode di sini\n",
-          "language": "jsx",
+          "instruction": "Berkas `src/main.tsx` sekarang merender `<App />` langsung tanpa pembungkus apa pun, jadi bug cleanup tidak pernah terdeteksi selama dev. Bungkus `<App />` dengan komponen React yang menyalakan pemeriksaan ekstra di mode development, lalu impor komponen itu dari `react`.",
+          "starterCode": "import { createRoot } from 'react-dom/client';\nimport App from './App';\n\n// Bungkus <App /> dengan pemeriksa mode development\ncreateRoot(document.getElementById('root')).render(\n  <App />\n);\n",
+          "language": "text",
           "tests": [
             {
-              "pattern": "const\\s+devMode\\s*=\\s*['\"]strict['\"]",
-              "message": "Buat variabel const devMode = 'strict';"
+              "pattern": "import\\s*\\{[^}]*\\bStrictMode\\b[^}]*\\}\\s*from\\s*['\"]react['\"]|React\\.StrictMode",
+              "message": "Impor `StrictMode` dari `react` (atau pakai `React.StrictMode`). Tanpa impor, JSX `<StrictMode>` dianggap tag HTML tak dikenal."
+            },
+            {
+              "pattern": "<(React\\.)?StrictMode>[\\s\\S]*<App\\s*/>[\\s\\S]*</(React\\.)?StrictMode>",
+              "message": "`<App />` harus berada DI DALAM `<StrictMode>…</StrictMode>`. Menaruh StrictMode sebagai saudara (bukan pembungkus) tidak memeriksa apa pun."
             }
           ],
-          "solution": "const devMode = 'strict';"
+          "solution": "import { StrictMode } from 'react';\nimport { createRoot } from 'react-dom/client';\nimport App from './App';\n\ncreateRoot(document.getElementById('root')).render(\n  <StrictMode>\n    <App />\n  </StrictMode>\n);"
         },
         {
           "kind": "step",
@@ -2119,8 +2147,12 @@ export const reactTrack: Track = {
           "language": "jsx",
           "tests": [
             {
-              "pattern": "<Route\\s+path=[\"']\\*[\"']\\s+element=\\{<NotFound\\s*/>\\}\\s*/?>",
-              "message": "Gunakan: <Route path=\"*\" element={<NotFound />} />"
+              "pattern": "<Route\\b[\\s\\S]*path=[\"']\\*[\"']",
+              "message": "Rute penangkap memakai `path=\"*\"`. Tanpa tanda bintang, rute ini hanya cocok untuk satu URL tertentu."
+            },
+            {
+              "pattern": "element=\\{\\s*<NotFound\\s*/>\\s*\\}",
+              "message": "Isi `element` dengan elemen `<NotFound />` di dalam kurung kurawal — bukan nama komponennya saja. Urutan atribut bebas."
             }
           ],
           "solution": "<Route path=\"*\" element={<NotFound />} />"

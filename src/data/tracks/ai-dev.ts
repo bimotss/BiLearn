@@ -98,7 +98,13 @@ export const aiDevTrack: Track = {
             "File `.cursorrules` atau `AGENTS.md` ditempatkan di folder utama proyek untuk memberikan konteks khusus kepada asisten AI. Tanpa file aturan ini, AI akan membuat tebakan berdasarkan pola umum yang belum tentu sesuai dengan standar tim atau proyekmu. Menulis instruksi spesifik seperti versi bahasa, pustaka yang dilarang, dan gaya kode memastikan saran AI konsisten dan siap pakai. Ini adalah praktik terbaik utama di tim modern.",
           example: {
             code: "# Contoh aturan proyek di AGENTS.md\n- Bahasa: TypeScript\n- Framework: Next.js App Router\n- Dilarang: library moment.js (gunakan date-fns)",
-            output: "AI akan mematuhi aturan ini saat memberikan saran kode atau refactoring di repositori ini.",
+            output:
+              "Permintaan yang sama, dua hasil berbeda:\n\n" +
+              "// TANPA berkas aturan\n" +
+              'var tanggal = moment().format("DD/MM/YYYY");\n\n' +
+              "// DENGAN berkas aturan di atas\n" +
+              "// tanggal hari ini dalam format Indonesia\n" +
+              'const tanggal: string = format(new Date(), "dd/MM/yyyy");',
             note: "File aturan membaca direktori root proyek setiap kali sesi obrolan atau agent dimulai.",
           },
           instruction:
@@ -1333,7 +1339,8 @@ export const aiDevTrack: Track = {
           example: {
             code: "// daripada menyalin 40 baris implementasi debounce dari AI:\nimport { debounce } from 'lodash';\n\nconst cari = debounce((kata) => kirimPencarian(kata), 300);",
             output: "Fungsi cari hanya dijalankan 300 ms setelah pengguna berhenti mengetik.",
-          },
+              note: "Catatan jujur: potongan ini tidak dijalankan di panel preview — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
+        },
           instruction:
             "AI menempelkan 40 baris implementasi `debounce` yang mencurigakan miripnya dengan sebuah library. Ganti dengan pemakaian library `lodash` yang sudah ada di proyek: impor `debounce` dari `lodash`, lalu buat `const cariProduk` yang men-debounce `kirimPencarian` selama 300 ms.",
           starterCode: "// Ganti salinan panjang dari AI dengan pemakaian library\n",
@@ -1536,7 +1543,8 @@ export const aiDevTrack: Track = {
           example: {
             code: "Node 20, tanpa framework. Potongan terkecil yang masih error:\n\nconst data = JSON.parse('{ nama: \"Bimo\" }');\n\nError: SyntaxError: Expected property name or '}' in JSON at position 2\nYang saya harapkan: objek dengan properti nama.",
             output: "AI langsung menunjuk penyebabnya: kunci JSON wajib memakai tanda kutip ganda.",
-          },
+              note: "Catatan jujur: potongan ini tidak dijalankan di panel preview — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
+        },
           instruction:
             "Kamu menemukan bug pada perhitungan total keranjang. Tulis laporan minimal reproducible example yang memuat: **potongan kode kecil** penyebabnya, **pesan error atau hasil yang salah**, dan **hasil yang kamu harapkan**.",
           starterCode: "# Tulis laporan minimal reproducible example di bawah ini\n",
@@ -1605,8 +1613,18 @@ export const aiDevTrack: Track = {
           explanation:
             "Meminta AI 'rapikan kode ini' menghasilkan perubahan serabutan: nama variabel berubah, struktur bergeser, dan kamu tidak lagi bisa membedakan mana perbaikan mana kerusakan. Refactoring yang bisa direview selalu punya satu tujuan yang jelas — misalnya mengubah callback bertingkat menjadi async/await, tanpa menyentuh hal lain. Dengan satu tujuan, diff-nya kecil, mudah diuji, dan mudah dibatalkan kalau ternyata salah. Prinsip ini berlaku juga saat kamu refactor tanpa AI.",
           example: {
-            code: "// sebelum: callback bertingkat\nambilUser(id, (user) => {\n  ambilPesanan(user.id, (pesanan) => {\n    console.log(pesanan);\n  });\n});",
-            output: "Kode berjalan, tapi penanganan error harus ditulis di setiap tingkat callback.",
+            code:
+              "// sebelum: callback bertingkat\n" +
+              "ambilUser(7, (user) => {\n" +
+              "  ambilPesanan(user.id, (pesanan) => {\n" +
+              "    console.log(pesanan.length + ' pesanan untuk ' + user.nama);\n" +
+              "  });\n" +
+              "});",
+            output:
+              "3 pesanan untuk Ana\n\n" +
+              "// dan kalau ambilPesanan gagal, tanpa penanganan error:\n" +
+              "TypeError: Cannot read properties of undefined (reading 'length')",
+            note: "Dua tingkat callback masih terbaca. Masalahnya muncul saat error harus ditangani: setiap tingkat butuh cabangnya sendiri, dan itulah yang membuat versi async/await lebih pendek — satu blok try/catch untuk seluruh alur.",
           },
           instruction:
             "Ubah fungsi callback di editor menjadi versi `async/await`: buat `async function tampilkanPesanan(id)` yang meng-`await` `ambilUser(id)` lalu `ambilPesanan(user.id)`, dan cetak hasilnya. Jangan mengubah nama fungsi yang dipanggil.",

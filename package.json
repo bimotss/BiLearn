@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "verify:konten": "npx tsx scripts/verify-konten.ts",
-    "cek": "npm run verify:konten && tsc --noEmit && eslint src"
+    "audit:lanjutan": "npx tsx scripts/audit-lanjutan.ts",
+    "cek": "npm run verify:konten && tsc --noEmit && eslint src scripts"
   },
   "dependencies": {
     "next": "16.2.12",

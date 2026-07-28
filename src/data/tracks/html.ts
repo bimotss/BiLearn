@@ -147,7 +147,7 @@ export const htmlTrack: Track = {
                 "Baris pertama harus deklarasi doctype: `<!DOCTYPE html>`. Ini yang memberi tahu browser agar memakai aturan HTML modern.",
             },
             {
-              pattern: "<html[^>]*lang=\"id\"[^>]*>",
+              pattern: "<html[^>]*lang=['\"]id['\"][^>]*>",
               message:
                 "Elemen pembungkusnya adalah `<html>`, dan bahasanya disebut lewat atribut `lang` bernilai `id`.",
             },
@@ -580,7 +580,7 @@ export const htmlTrack: Track = {
           tests: [
             {
               pattern:
-                '<a\\s+href="https://bilearn\\.id"\\s*>\\s*Kunjungi BiLearn\\s*</a>',
+                '<a\\s+href=[\'"]https://bilearn\\.id[\'"]\\s*>\\s*Kunjungi BiLearn\\s*</a>',
               message:
                 'Buat elemen <a> dengan atribut href="https://bilearn.id" dan teks "Kunjungi BiLearn".',
             },
@@ -606,11 +606,11 @@ export const htmlTrack: Track = {
           language: "html",
           tests: [
             {
-              pattern: '<img[^>]*src="https://picsum\\.photos/200"[^>]*>',
+              pattern: '<img[^>]*src=[\'"]https://picsum\\.photos/200[\'"][^>]*>',
               message: 'Elemen <img> harus punya src="https://picsum.photos/200".',
             },
             {
-              pattern: '<img[^>]*alt="Foto acak"[^>]*>',
+              pattern: '<img[^>]*alt=[\'"]Foto acak[\'"][^>]*>',
               message:
                 'Tambahkan atribut alt="Foto acak" — gambar tanpa alt menyulitkan pengguna screen reader.',
             },
@@ -706,12 +706,12 @@ export const htmlTrack: Track = {
           language: "html",
           tests: [
             {
-              pattern: "<section[^>]*id=\"tentang\"",
+              pattern: "<section[^>]*id=['\"]tentang['\"]",
               message:
                 "Beri atribut id=\"tentang\" pada section.",
             },
             {
-              pattern: "<section[^>]*class=\"[^\"]*kartu",
+              pattern: "<section[^>]*class=['\"][^\"']*kartu",
               message:
                 "Beri atribut class=\"kartu\" pada section.",
             },
@@ -740,12 +740,12 @@ export const htmlTrack: Track = {
           language: "html",
           tests: [
             {
-              pattern: "<img[^>]*src=\"\\.\\./aset/foto\\.jpg\"",
+              pattern: "<img[^>]*src=['\"]\\.\\./aset/foto\\.jpg['\"]",
               message:
                 "Pakai path relatif yang naik satu folder: ../aset/foto.jpg",
             },
             {
-              pattern: "<img[^>]*alt=\"Foto artikel\"",
+              pattern: "<img[^>]*alt=['\"]Foto artikel['\"]",
               message:
                 "Sertakan alt=\"Foto artikel\".",
             },
@@ -992,7 +992,7 @@ export const htmlTrack: Track = {
                 "Pastikan ada <nav> di DALAM <header> (nav harus bersarang di dalam header, bukan di sebelahnya).",
             },
             {
-              pattern: '<a\\s+href="/"\\s*>\\s*Beranda\\s*</a>',
+              pattern: '<a\\s+href=[\'"]/[\'"]\\s*>\\s*Beranda\\s*</a>',
               message: 'Tambahkan link <a href="/">Beranda</a> di dalam nav.',
             },
           ],
@@ -1110,7 +1110,7 @@ export const htmlTrack: Track = {
               message: "Butuh elemen <img> di dalam <figure>.",
             },
             {
-              pattern: 'alt="Pemandangan"',
+              pattern: 'alt=[\'"]Pemandangan[\'"]',
               message: 'Gambar harus punya alt="Pemandangan".',
             },
             {
@@ -1145,7 +1145,7 @@ export const htmlTrack: Track = {
               message: "Tambahkan <strong>Penting</strong>.",
             },
             {
-              pattern: '<time[^>]*datetime="2026-07-27"[^>]*>',
+              pattern: '<time[^>]*datetime=[\'"]2026-07-27[\'"][^>]*>',
               message:
                 'Tambahkan <time datetime="2026-07-27"> — atribut datetime wajib agar mesin bisa membacanya.',
             },
@@ -1418,7 +1418,7 @@ export const htmlTrack: Track = {
           language: "html",
           tests: [
             {
-              pattern: '<td[^>]*colspan="2"[^>]*>\\s*Total: 1 peserta\\s*</td>',
+              pattern: '<td[^>]*colspan=[\'"]2[\'"][^>]*>\\s*Total: 1 peserta\\s*</td>',
               message:
                 'Buat <td colspan="2">Total: 1 peserta</td> di dalam baris <tr> baru.',
             },
@@ -1444,7 +1444,7 @@ export const htmlTrack: Track = {
           language: "html",
           tests: [
             {
-              pattern: '<video[^>]*src="film\\.mp4"[^>]*>',
+              pattern: '<video[^>]*src=[\'"]film\\.mp4[\'"][^>]*>',
               message: 'Buat <video> dengan src="film.mp4".',
             },
             {
@@ -1473,16 +1473,16 @@ export const htmlTrack: Track = {
           language: "html",
           tests: [
             {
-              pattern: '<iframe[^>]*src="https://example\\.com"[^>]*>',
+              pattern: '<iframe[^>]*src=[\'"]https://example\\.com[\'"][^>]*>',
               message: 'Buat <iframe> dengan src="https://example.com".',
             },
             {
-              pattern: '<iframe[^>]*title="Contoh situs"[^>]*>',
+              pattern: '<iframe[^>]*title=[\'"]Contoh situs[\'"][^>]*>',
               message:
                 'Tambahkan title="Contoh situs" — iframe tanpa title adalah pelanggaran aksesibilitas yang sering ketangkap audit.',
             },
             {
-              pattern: '<iframe[^>]*loading="lazy"[^>]*>',
+              pattern: '<iframe[^>]*loading=[\'"]lazy[\'"][^>]*>',
               message: 'Tambahkan loading="lazy".',
             },
           ],
@@ -1507,15 +1507,15 @@ export const htmlTrack: Track = {
           language: "html",
           tests: [
             {
-              pattern: '<source[^>]*srcset="besar\\.jpg"[^>]*>',
+              pattern: '<source[^>]*srcset=[\'"]besar\\.jpg[\'"][^>]*>',
               message: 'Tambahkan <source srcset="besar.jpg" ...>.',
             },
             {
-              pattern: '<source[^>]*media="\\(min-width: 800px\\)"[^>]*>',
+              pattern: '<source[^>]*media=[\'"]\\(min-width: 800px\\)[\'"][^>]*>',
               message: 'Tambahkan atribut media="(min-width: 800px)" pada source.',
             },
             {
-              pattern: '<img[^>]*src="kecil\\.jpg"[^>]*alt="Banner"|<img[^>]*alt="Banner"[^>]*src="kecil\\.jpg"',
+              pattern: '<img[^>]*src=[\'"]kecil\\.jpg[\'"][^>]*alt=[\'"]Banner[\'"]|<img[^>]*alt=[\'"]Banner[\'"][^>]*src=[\'"]kecil\\.jpg[\'"]',
               message:
                 'Tambahkan <img src="kecil.jpg" alt="Banner"> sebagai fallback di dalam picture.',
             },
@@ -1695,11 +1695,11 @@ export const htmlTrack: Track = {
           language: "html",
           tests: [
             {
-              pattern: '<form[^>]*action="/daftar"[^>]*>',
+              pattern: '<form[^>]*action=[\'"]/daftar[\'"][^>]*>',
               message: 'Buat <form> dengan action="/daftar".',
             },
             {
-              pattern: '<form[^>]*method="post"[^>]*>',
+              pattern: '<form[^>]*method=[\'"]post[\'"][^>]*>',
               message:
                 'Tambahkan method="post" karena pendaftaran mengubah data di server.',
             },
@@ -1724,20 +1724,20 @@ export const htmlTrack: Track = {
           language: "html",
           tests: [
             {
-              pattern: '<label[^>]*for="email"[^>]*>\\s*Email\\s*</label>',
+              pattern: '<label[^>]*for=[\'"]email[\'"][^>]*>\\s*Email\\s*</label>',
               message: 'Buat <label for="email">Email</label>.',
             },
             {
-              pattern: '<input[^>]*id="email"[^>]*>',
+              pattern: '<input[^>]*id=[\'"]email[\'"][^>]*>',
               message:
                 'Input harus punya id="email" agar cocok dengan for pada label.',
             },
             {
-              pattern: '<input[^>]*type="email"[^>]*>',
+              pattern: '<input[^>]*type=[\'"]email[\'"][^>]*>',
               message: 'Gunakan type="email".',
             },
             {
-              pattern: '<input[^>]*name="email"[^>]*>',
+              pattern: '<input[^>]*name=[\'"]email[\'"][^>]*>',
               message:
                 'Tambahkan name="email" — tanpa name, data tidak terkirim ke server.',
             },
@@ -1763,15 +1763,15 @@ export const htmlTrack: Track = {
           language: "html",
           tests: [
             {
-              pattern: '<input[^>]*type="password"[^>]*name="sandi"|<input[^>]*name="sandi"[^>]*type="password"',
+              pattern: '<input[^>]*type=[\'"]password[\'"][^>]*name=[\'"]sandi[\'"]|<input[^>]*name=[\'"]sandi[\'"][^>]*type=[\'"]password[\'"]',
               message: 'Buat input type="password" dengan name="sandi".',
             },
             {
-              pattern: '<input[^>]*type="tel"[^>]*name="telepon"|<input[^>]*name="telepon"[^>]*type="tel"',
+              pattern: '<input[^>]*type=[\'"]tel[\'"][^>]*name=[\'"]telepon[\'"]|<input[^>]*name=[\'"]telepon[\'"][^>]*type=[\'"]tel[\'"]',
               message: 'Buat input type="tel" dengan name="telepon".',
             },
             {
-              pattern: '<input[^>]*type="date"[^>]*name="lahir"|<input[^>]*name="lahir"[^>]*type="date"',
+              pattern: '<input[^>]*type=[\'"]date[\'"][^>]*name=[\'"]lahir[\'"]|<input[^>]*name=[\'"]lahir[\'"][^>]*type=[\'"]date[\'"]',
               message: 'Buat input type="date" dengan name="lahir".',
             },
           ],
@@ -1806,19 +1806,19 @@ export const htmlTrack: Track = {
           language: "html",
           tests: [
             {
-              pattern: '<textarea[^>]*name="pesan"[^>]*>',
+              pattern: '<textarea[^>]*name=[\'"]pesan[\'"][^>]*>',
               message: 'Buat <textarea name="pesan"></textarea>.',
             },
             {
-              pattern: '<select[^>]*name="kota"[^>]*>',
+              pattern: '<select[^>]*name=[\'"]kota[\'"][^>]*>',
               message: 'Buat <select name="kota">.',
             },
             {
-              pattern: '<option[^>]*value="jkt"[^>]*>\\s*Jakarta\\s*</option>',
+              pattern: '<option[^>]*value=[\'"]jkt[\'"][^>]*>\\s*Jakarta\\s*</option>',
               message: 'Tambahkan <option value="jkt">Jakarta</option>.',
             },
             {
-              pattern: '<option[^>]*value="bdg"[^>]*>\\s*Bandung\\s*</option>',
+              pattern: '<option[^>]*value=[\'"]bdg[\'"][^>]*>\\s*Bandung\\s*</option>',
               message: 'Tambahkan <option value="bdg">Bandung</option>.',
             },
           ],
@@ -1849,11 +1849,11 @@ export const htmlTrack: Track = {
           language: "html",
           tests: [
             {
-              pattern: '<input[^>]*type="radio"[^>]*name="gender"[^>]*value="L"|<input[^>]*type="radio"[^>]*value="L"[^>]*name="gender"',
+              pattern: '<input(?=[^>]*\\btype=[\'"]radio[\'"])(?=[^>]*\\bname=[\'"]gender[\'"])(?=[^>]*\\bvalue=[\'"]L[\'"])[^>]*>',
               message: 'Buat radio dengan name="gender" dan value="L".',
             },
             {
-              pattern: '<input[^>]*type="radio"[^>]*name="gender"[^>]*value="P"|<input[^>]*type="radio"[^>]*value="P"[^>]*name="gender"',
+              pattern: '<input(?=[^>]*\\btype=[\'"]radio[\'"])(?=[^>]*\\bname=[\'"]gender[\'"])(?=[^>]*\\bvalue=[\'"]P[\'"])[^>]*>',
               message:
                 'Buat radio kedua dengan name="gender" (SAMA dengan yang pertama) dan value="P".',
             },
@@ -1887,7 +1887,7 @@ export const htmlTrack: Track = {
           language: "html",
           tests: [
             {
-              pattern: '<input[^>]*name="username"[^>]*>',
+              pattern: '<input[^>]*name=[\'"]username[\'"][^>]*>',
               message: 'Buat input dengan name="username".',
             },
             {
@@ -1895,7 +1895,7 @@ export const htmlTrack: Track = {
               message: "Tambahkan atribut required.",
             },
             {
-              pattern: '<input[^>]*minlength="3"[^>]*>',
+              pattern: '<input[^>]*minlength=[\'"]3[\'"][^>]*>',
               message: 'Tambahkan minlength="3".',
             },
           ],
@@ -1925,7 +1925,7 @@ export const htmlTrack: Track = {
                 "Buat <fieldset> dengan <legend>Data Diri</legend> di dalamnya.",
             },
             {
-              pattern: '<button[^>]*type="submit"[^>]*>\\s*Kirim\\s*</button>',
+              pattern: '<button[^>]*type=[\'"]submit[\'"][^>]*>\\s*Kirim\\s*</button>',
               message: 'Tambahkan <button type="submit">Kirim</button>.',
             },
           ],
@@ -1959,17 +1959,17 @@ export const htmlTrack: Track = {
           language: "html",
           tests: [
             {
-              pattern: '<input[^>]*autocomplete="tel"[^>]*>',
+              pattern: '<input[^>]*autocomplete=[\'"]tel[\'"][^>]*>',
               message:
                 'Tambahkan `autocomplete="tel"` — nilainya adalah nama jenis data, dan untuk nomor telepon namanya `tel`.',
             },
             {
-              pattern: '<input[^>]*inputmode="numeric"[^>]*>',
+              pattern: '<input[^>]*inputmode=[\'"]numeric[\'"][^>]*>',
               message:
                 'Tambahkan `inputmode="numeric"` agar papan ketik angka muncul di ponsel, sementara `type` tetap `text`.',
             },
             {
-              pattern: '<input[^>]*type="number"[^>]*>',
+              pattern: '<input[^>]*type=[\'"]number[\'"][^>]*>',
               mustNotMatch: true,
               message:
                 'Jangan mengganti tipenya menjadi `number`. Nomor telepon bukan nilai yang dihitung, dan `type="number"` akan membuang angka nol di depan serta menampilkan tombol naik-turun.',
@@ -2145,12 +2145,12 @@ export const htmlTrack: Track = {
           language: "html",
           tests: [
             {
-              pattern: '<img[^>]*src="grafik\\.png"[^>]*alt="[^"]*penjualan[^"]*"|<img[^>]*alt="[^"]*penjualan[^"]*"[^>]*src="grafik\\.png"',
+              pattern: '<img[^>]*src=[\'"]grafik\\.png[\'"][^>]*alt=[\'"][^"\']*penjualan[^"\']*[\'"]|<img[^>]*alt=[\'"][^"\']*penjualan[^"\']*[\'"][^>]*src=[\'"]grafik\\.png[\'"]',
               message:
                 'Gambar grafik.png harus punya alt deskriptif yang memuat kata "penjualan", misal alt="Grafik penjualan naik tiap bulan".',
             },
             {
-              pattern: '<img[^>]*src="hiasan\\.svg"[^>]*alt=""|<img[^>]*alt=""[^>]*src="hiasan\\.svg"',
+              pattern: '<img[^>]*src=[\'"]hiasan\\.svg[\'"][^>]*alt=[\'"][\'"]|<img[^>]*alt=[\'"][\'"][^>]*src=[\'"]hiasan\\.svg[\'"]',
               message:
                 'Gambar dekoratif hiasan.svg harus punya alt="" (kosong) agar dilewati screen reader.',
             },
@@ -2209,7 +2209,7 @@ export const htmlTrack: Track = {
           language: "html",
           tests: [
             {
-              pattern: '<button[^>]*aria-label="Tutup dialog"[^>]*>',
+              pattern: '<button[^>]*aria-label=[\'"]Tutup dialog[\'"][^>]*>',
               message:
                 'Tambahkan aria-label="Tutup dialog" pada tombol agar screen reader tahu fungsinya.',
             },
@@ -2238,7 +2238,7 @@ export const htmlTrack: Track = {
               message: "Gunakan <button>Simpan</button>.",
             },
             {
-              pattern: 'role="button"',
+              pattern: 'role=[\'"]button[\'"]',
               mustNotMatch: true,
               message:
                 'Hapus div dengan role="button" — elemen native <button> sudah membawa peran itu sendiri.',
@@ -2264,11 +2264,11 @@ export const htmlTrack: Track = {
           language: "html",
           tests: [
             {
-              pattern: '<a[^>]*href="#konten"[^>]*>\\s*Lewati ke konten\\s*</a>',
+              pattern: '<a[^>]*href=[\'"]#konten[\'"][^>]*>\\s*Lewati ke konten\\s*</a>',
               message: 'Buat <a href="#konten">Lewati ke konten</a>.',
             },
             {
-              pattern: '<main[^>]*id="konten"[^>]*>',
+              pattern: '<main[^>]*id=[\'"]konten[\'"][^>]*>',
               message:
                 'Buat <main id="konten"> — id-nya harus cocok dengan href skip link.',
             },
@@ -2302,7 +2302,7 @@ export const htmlTrack: Track = {
           language: "html",
           tests: [
             {
-              pattern: '<span[^>]*aria-hidden="true"[^>]*>\\s*→\\s*</span>',
+              pattern: '<span[^>]*aria-hidden=[\'"]true[\'"][^>]*>\\s*→\\s*</span>',
               message:
                 'Bungkus ikonnya saja: `<span aria-hidden="true">→</span>`. Nilainya harus `true` — `aria-hidden="false"` tidak menyembunyikan apa pun.',
             },
@@ -2499,11 +2499,11 @@ export const htmlTrack: Track = {
           language: "html",
           tests: [
             {
-              pattern: '<meta[^>]*charset="?UTF-8"?[^>]*>',
+              pattern: '<meta[^>]*charset=[\'"]?UTF-8[\'"]?[^>]*>',
               message: 'Tambahkan <meta charset="UTF-8">.',
             },
             {
-              pattern: '<meta[^>]*name="viewport"[^>]*content="width=device-width,\\s*initial-scale=1[^"]*"',
+              pattern: '<meta(?=[^>]*\\bname=[\'"]viewport[\'"])(?=[^>]*\\bcontent=[\'"]width=device-width,\\s*initial-scale=1[^"\']*[\'"])[^>]*>',
               message:
                 'Tambahkan <meta name="viewport" content="width=device-width, initial-scale=1">.',
             },
@@ -2533,7 +2533,7 @@ export const htmlTrack: Track = {
               message: "Buat <title>Belajar HTML - BiLearn</title>.",
             },
             {
-              pattern: '<meta[^>]*name="description"[^>]*content="[^"]{30,}"',
+              pattern: '<meta(?=[^>]*\\bname=[\'"]description[\'"])(?=[^>]*\\bcontent=[\'"][^"\']{30,}[\'"])[^>]*>',
               message:
                 'Tambahkan <meta name="description" content="..."> dengan isi minimal 30 karakter.',
             },
@@ -2559,15 +2559,15 @@ export const htmlTrack: Track = {
           language: "html",
           tests: [
             {
-              pattern: '<meta[^>]*property="og:title"[^>]*content="[^"]{3,}"',
+              pattern: '<meta(?=[^>]*\\bproperty=[\'"]og:title[\'"])(?=[^>]*\\bcontent=[\'"][^"\']{3,}[\'"])[^>]*>',
               message: 'Tambahkan <meta property="og:title" content="...">.',
             },
             {
-              pattern: '<meta[^>]*property="og:description"[^>]*content="[^"]{3,}"',
+              pattern: '<meta(?=[^>]*\\bproperty=[\'"]og:description[\'"])(?=[^>]*\\bcontent=[\'"][^"\']{3,}[\'"])[^>]*>',
               message: 'Tambahkan <meta property="og:description" content="...">.',
             },
             {
-              pattern: '<meta[^>]*property="og:image"[^>]*content="https://bilearn\\.id/preview\\.png"',
+              pattern: '<meta(?=[^>]*\\bproperty=[\'"]og:image[\'"])(?=[^>]*\\bcontent=[\'"]https://bilearn\\.id/preview\\.png[\'"])[^>]*>',
               message:
                 'Tambahkan <meta property="og:image" content="https://bilearn.id/preview.png"> — perhatikan pakai property, bukan name.',
             },
@@ -2593,11 +2593,11 @@ export const htmlTrack: Track = {
           language: "html",
           tests: [
             {
-              pattern: '<link[^>]*rel="icon"[^>]*href="/favicon\\.ico"|<link[^>]*href="/favicon\\.ico"[^>]*rel="icon"',
+              pattern: '<link[^>]*rel=[\'"]icon[\'"][^>]*href=[\'"]/favicon\\.ico[\'"]|<link[^>]*href=[\'"]/favicon\\.ico[\'"][^>]*rel=[\'"]icon[\'"]',
               message: 'Tambahkan <link rel="icon" href="/favicon.ico">.',
             },
             {
-              pattern: '<link[^>]*rel="stylesheet"[^>]*href="/style\\.css"|<link[^>]*href="/style\\.css"[^>]*rel="stylesheet"',
+              pattern: '<link[^>]*rel=[\'"]stylesheet[\'"][^>]*href=[\'"]/style\\.css[\'"]|<link[^>]*href=[\'"]/style\\.css[\'"][^>]*rel=[\'"]stylesheet[\'"]',
               message: 'Tambahkan <link rel="stylesheet" href="/style.css">.',
             },
           ],
@@ -2622,11 +2622,11 @@ export const htmlTrack: Track = {
           language: "html",
           tests: [
             {
-              pattern: '<button[^>]*data-product-id="42"[^>]*>',
+              pattern: '<button[^>]*data-product-id=[\'"]42[\'"][^>]*>',
               message: 'Tambahkan data-product-id="42" pada button.',
             },
             {
-              pattern: '<button[^>]*data-price="50000"[^>]*>',
+              pattern: '<button[^>]*data-price=[\'"]50000[\'"][^>]*>',
               message: 'Tambahkan data-price="50000".',
             },
             {
@@ -2658,15 +2658,15 @@ export const htmlTrack: Track = {
               message: "Mulai dengan <!DOCTYPE html>.",
             },
             {
-              pattern: '<html[^>]*lang="id"[^>]*>',
+              pattern: '<html[^>]*lang=[\'"]id[\'"][^>]*>',
               message: 'Gunakan <html lang="id">.',
             },
             {
-              pattern: '<meta[^>]*charset="?UTF-8"?[^>]*>',
+              pattern: '<meta[^>]*charset=[\'"]?UTF-8[\'"]?[^>]*>',
               message: 'Tambahkan <meta charset="UTF-8"> di head.',
             },
             {
-              pattern: '<meta[^>]*name="viewport"[^>]*>',
+              pattern: '<meta[^>]*name=[\'"]viewport[\'"][^>]*>',
               message: "Tambahkan meta viewport di head.",
             },
             {
@@ -2719,18 +2719,18 @@ export const htmlTrack: Track = {
                 "Paragrafnya belum ditutup. Tambahkan `</p>` tepat setelah teks `Kopi tubruk`.",
             },
             {
-              pattern: 'id="harga-teh"',
+              pattern: 'id=[\'"]harga-teh[\'"]',
               message:
                 'Ganti nilai `id` yang kedua menjadi `harga-teh` supaya tidak ada dua elemen dengan id yang sama.',
             },
             {
-              pattern: 'id="harga"[\\s\\S]*id="harga"',
+              pattern: 'id=[\'"]harga[\'"][\\s\\S]*id=[\'"]harga[\'"]',
               mustNotMatch: true,
               message:
                 'Masih ada dua elemen dengan `id="harga"`. Nilai id wajib unik dalam satu halaman.',
             },
             {
-              pattern: '<img[^>]*alt="Segelas kopi tubruk"[^>]*>',
+              pattern: '<img[^>]*alt=[\'"]Segelas kopi tubruk[\'"][^>]*>',
               message:
                 'Tambahkan `alt="Segelas kopi tubruk"` pada gambar — gambar informatif tanpa alt selalu dilaporkan validator.',
             },

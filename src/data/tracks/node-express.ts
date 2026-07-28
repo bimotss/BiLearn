@@ -102,7 +102,7 @@ export const nodeExpressTrack: Track = {
           example: {
             code: "export const add = (a, b) => a + b;\nconsole.log(add(2, 3));",
             output: "5",
-            note: "Impor file lokal wajib mencantumkan ekstensi .js.",
+            note: "Impor file lokal wajib mencantumkan ekstensi .js. Catatan jujur: panel preview tidak menjalankan Node.js (kode ini butuh server dan modul bawaan Node), jadi tidak ada keluaran yang muncul di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus.",
           },
           instruction:
             "Buat dan ekspor fungsi bernama `multiply` yang menerima dua parameter `(a, b)` dan mengembalikan hasil perkalian keduanya (`a * b`).",
@@ -380,7 +380,7 @@ export const nodeExpressTrack: Track = {
           example: {
             code: "import express from 'express';\nconst app = express();\napp.get('/health', (req, res) => res.send('OK'));",
             output: "OK",
-            note: "res.json() otomatis mengatur Content-Type ke application/json.",
+            note: "res.json() otomatis mengatur Content-Type ke application/json. Catatan jujur: panel preview tidak menjalankan Node.js (kode ini butuh server dan modul bawaan Node), jadi tidak ada keluaran yang muncul di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus.",
           },
           instruction:
             "Buat rute GET pada path `\"/ping\"` yang merespon dengan mengirimkan string `'pong'` menggunakan `res.send`.",
@@ -495,7 +495,7 @@ export const nodeExpressTrack: Track = {
           example: {
             code: "const app = { use(fn) { fn({}, { status(c) { return this; }, json(d) { console.log(d); } }); } };\napp.use((req, res) => res.status(404).json({ error: '404' }));",
             output: "{ error: '404' }",
-            note: "Middleware ini harus berada di paling bawah setelah daftar route terdefinisi.",
+            note: "Middleware ini harus berada di paling bawah setelah daftar route terdefinisi. Catatan jujur: panel preview tidak menjalankan Node.js (kode ini butuh server dan modul bawaan Node), jadi tidak ada keluaran yang muncul di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus.",
           },
           instruction:
             "Pasang middleware penangkap rute tak dikenal di akhir rantai `app.use` yang mengembalikan status code 404 beserta JSON `{ error: \"404\" }`.",
@@ -642,7 +642,7 @@ export const nodeExpressTrack: Track = {
           example: {
             code: "function getEndpoint(resource) {\n  return `/api/v1/${resource}`;\n}\nconsole.log(getEndpoint('users'));",
             output: "/api/v1/users",
-            note: "Aksi (action) ditentukan oleh HTTP Method, bukan nama URL path.",
+            note: "Aksi (action) ditentukan oleh HTTP Method, bukan nama URL path. Catatan jujur: panel preview tidak menjalankan Node.js (kode ini butuh server dan modul bawaan Node), jadi tidak ada keluaran yang muncul di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus.",
           },
           instruction:
             "Buat fungsi `getEndpoint(resourceName)` yang mengembalikan string URL RESTful terformat `\"/api/v1/\${resourceName}\"`.",
@@ -666,7 +666,7 @@ export const nodeExpressTrack: Track = {
           example: {
             code: "function getUpdateMethod(isPartial) {\n  return isPartial ? 'PATCH' : 'PUT';\n}\nconsole.log(getUpdateMethod(true));",
             output: "PATCH",
-            note: "Gunakan PATCH untuk update sebagian bidang data.",
+            note: "Gunakan PATCH untuk update sebagian bidang data. Catatan jujur: panel preview tidak menjalankan Node.js (kode ini butuh server dan modul bawaan Node), jadi tidak ada keluaran yang muncul di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus.",
           },
           instruction:
             "Buat fungsi `getUpdateMethod(isPartial)` yang mengembalikan string `'PATCH'` jika `isPartial` bernilai `true` dan `'PUT'` jika `false`.",
@@ -782,7 +782,7 @@ export const nodeExpressTrack: Track = {
           example: {
             code: "function isIdempotentMethod(method) {\n  return ['GET', 'PUT', 'DELETE'].includes(method.toUpperCase());\n}\nconsole.log(isIdempotentMethod('DELETE'));",
             output: "true",
-            note: "POST tidak idempotent karena 10x POST akan membuat 10 data baru.",
+            note: "POST tidak idempotent karena 10x POST akan membuat 10 data baru. Catatan jujur: panel preview tidak menjalankan Node.js (kode ini butuh server dan modul bawaan Node), jadi tidak ada keluaran yang muncul di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus.",
           },
           instruction:
             "Buat fungsi `isIdempotentMethod(httpMethod)` yang mengembalikan `true` jika metode HTTP adalah `'GET'`, `'PUT'`, atau `'DELETE'`. Gunakan `['GET', 'PUT', 'DELETE'].includes(httpMethod)`.",
@@ -1030,7 +1030,7 @@ export const nodeExpressTrack: Track = {
           example: {
             code: "const UserRepository = { findById: (id) => `User ${id}` };\nconsole.log(UserRepository.findById(10));",
             output: "User 10",
-            note: "Menerapkan prinsip SoC (Separation of Concerns).",
+            note: "Menerapkan prinsip SoC (Separation of Concerns). Catatan jujur: panel preview tidak menjalankan Node.js (kode ini butuh server dan modul bawaan Node), jadi tidak ada keluaran yang muncul di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus.",
           },
           instruction:
             "Lengkapi properti `findById` pada objek `UserRepository` agar mengembalikan kueri `prisma.user.findUnique({ where: { id } })`.",
@@ -1435,7 +1435,7 @@ export const nodeExpressTrack: Track = {
           example: {
             code: "const app = { use(fn) { console.log(fn.length); } };\napp.use((err, req, res, next) => {});",
             output: "4",
-            note: "Urutan 4 parameter (err, req, res, next) wajib ditulis lengkap agar Express mengenali sebagai error handler.",
+            note: "Urutan 4 parameter (err, req, res, next) wajib ditulis lengkap agar Express mengenali sebagai error handler. Catatan jujur: panel preview tidak menjalankan Node.js (kode ini butuh server dan modul bawaan Node), jadi tidak ada keluaran yang muncul di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus.",
           },
           instruction:
             "Daftarkan fungsi penanganan error terpusat pada Express yang memiliki empat parameter lengkap `(err, req, res, next)`.",
@@ -1875,7 +1875,7 @@ export const nodeExpressTrack: Track = {
           example: {
             code: "function getTestType(isFullFlow) {\n  return isFullFlow ? 'integration' : 'unit';\n}\nconsole.log(getTestType(true));",
             output: "integration",
-            note: "Integration test memberi rasa aman paling tinggi saat refactoring.",
+            note: "Integration test memberi rasa aman paling tinggi saat refactoring. Catatan jujur: panel preview tidak menjalankan Node.js (kode ini butuh server dan modul bawaan Node), jadi tidak ada keluaran yang muncul di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus.",
           },
           instruction:
             "Buat fungsi `getTestType(isFullFlow)` yang mengembalikan `'integration'` jika `isFullFlow` bernilai `true` dan `'unit'` jika `false`.",
@@ -2115,7 +2115,7 @@ export const nodeExpressTrack: Track = {
           example: {
             code: "function isSafeQuery(usesORM) {\n  return Boolean(usesORM);\n}\nconsole.log(isSafeQuery(true));",
             output: "true",
-            note: "Jangan pernah menggabungkan variabel string ke query SQL mentah!",
+            note: "Jangan pernah menggabungkan variabel string ke query SQL mentah! Catatan jujur: panel preview tidak menjalankan Node.js (kode ini butuh server dan modul bawaan Node), jadi tidak ada keluaran yang muncul di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus.",
           },
           instruction:
             "Buat fungsi `isSafeQuery(usesORM)` yang mengembalikan nilai boolean dari parameter `usesORM`.",
@@ -2139,7 +2139,7 @@ export const nodeExpressTrack: Track = {
           example: {
             code: "function sanitizeHtmlInput(str) {\n  return str.replace(/<script.*?>.*?<\\/script>/gi, '');\n}\nconsole.log(sanitizeHtmlInput('<script>bad()</script>Hi'));",
             output: "Hi",
-            note: "React dan template engine modern otomatis melakukan escaping pada output string.",
+            note: "React dan template engine modern otomatis melakukan escaping pada output string. Catatan jujur: panel preview tidak menjalankan Node.js (kode ini butuh server dan modul bawaan Node), jadi tidak ada keluaran yang muncul di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus.",
           },
           instruction:
             "Buat fungsi `sanitizeHtmlInput(inputString)` yang menghapus tag `<script>` dari string menggunakan `inputString.replace(/<script.*?>.*?<\\/script>/gi, '')`.",
@@ -2255,7 +2255,7 @@ export const nodeExpressTrack: Track = {
           example: {
             code: "function checkSecurityReadiness(checks) {\n  return checks.every(c => c === true);\n}\nconsole.log(checkSecurityReadiness([true, true, true]));",
             output: "true",
-            note: "Jalankan pengujian keamanan secara berkala.",
+            note: "Jalankan pengujian keamanan secara berkala. Catatan jujur: panel preview tidak menjalankan Node.js (kode ini butuh server dan modul bawaan Node), jadi tidak ada keluaran yang muncul di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus.",
           },
           instruction:
             "Buat fungsi `checkSecurityReadiness(checksArray)` yang mengembalikan `true` jika seluruh elemen boolean dalam `checksArray` bernilai `true` menggunakan `checksArray.every(c => c === true)`.",

@@ -102,12 +102,12 @@ export const cssTrack: Track = {
           language: "html",
           tests: [
             {
-              pattern: "<link[^>]*rel=\"stylesheet\"",
+              pattern: "<link[^>]*rel=['\"]stylesheet['\"]",
               message:
                 "Pakai elemen `<link>` dengan `rel=\"stylesheet\"` — itu yang menyatakan bahwa berkas ini adalah lembar gaya.",
             },
             {
-              pattern: "<link[^>]*href=\"\\.?/?style\\.css\"",
+              pattern: "<link[^>]*href=['\"]\\.?/?style\\.css['\"]",
               message:
                 "Tunjuk berkasnya lewat `href=\"style.css\"`. Karena berkasnya satu folder dengan HTML, jalurnya cukup nama berkasnya saja.",
             },
@@ -2379,7 +2379,7 @@ export const cssTrack: Track = {
           tests: [
             {
               pattern:
-                'font-family\\s*:\\s*"Helvetica Neue"\\s*,\\s*Arial\\s*,\\s*sans-serif',
+                'font-family\\s*:\\s*[\'"]Helvetica Neue[\'"]\\s*,\\s*Arial\\s*,\\s*sans-serif',
               message:
                 'Atur font-family: "Helvetica Neue", Arial, sans-serif; — jangan lupa kutip untuk nama berspasi dan generic family di akhir.',
             },
@@ -3296,15 +3296,15 @@ export const cssTrack: Track = {
           loadTailwind: true,
           tests: [
             {
-              pattern: 'class="[^"]*\\bbg-blue-500\\b[^"]*"',
+              pattern: 'class=[\'"][^"\']*\\bbg-blue-500\\b[^"\']*[\'"]',
               message: "Tambahkan kelas bg-blue-500",
             },
             {
-              pattern: 'class="[^"]*\\btext-white\\b[^"]*"',
+              pattern: 'class=[\'"][^"\']*\\btext-white\\b[^"\']*[\'"]',
               message: "Tambahkan kelas text-white",
             },
             {
-              pattern: 'class="[^"]*\\bp-4\\b[^"]*"',
+              pattern: 'class=[\'"][^"\']*\\bp-4\\b[^"\']*[\'"]',
               message: "Tambahkan kelas p-4 (padding: 1rem)",
             },
           ],
@@ -3330,19 +3330,19 @@ export const cssTrack: Track = {
           loadTailwind: true,
           tests: [
             {
-              pattern: 'class="[^"]*\\bp-6\\b[^"]*"',
+              pattern: 'class=[\'"][^"\']*\\bp-6\\b[^"\']*[\'"]',
               message: "Tambahkan p-6",
             },
             {
-              pattern: 'class="[^"]*\\bmb-4\\b[^"]*"',
+              pattern: 'class=[\'"][^"\']*\\bmb-4\\b[^"\']*[\'"]',
               message: "Tambahkan mb-4",
             },
             {
-              pattern: 'class="[^"]*\\brounded-lg\\b[^"]*"',
+              pattern: 'class=[\'"][^"\']*\\brounded-lg\\b[^"\']*[\'"]',
               message: "Tambahkan rounded-lg",
             },
             {
-              pattern: 'class="[^"]*\\bshadow-md\\b[^"]*"',
+              pattern: 'class=[\'"][^"\']*\\bshadow-md\\b[^"\']*[\'"]',
               message: "Tambahkan shadow-md",
             },
           ],
@@ -3369,19 +3369,19 @@ export const cssTrack: Track = {
           loadTailwind: true,
           tests: [
             {
-              pattern: '<nav[^>]*class="[^"]*\\bflex\\b[^"]*"',
+              pattern: '<nav[^>]*class=[\'"][^"\']*\\bflex\\b[^"\']*[\'"]',
               message: "Tambahkan kelas flex pada <nav>",
             },
             {
-              pattern: '<nav[^>]*class="[^"]*\\bjustify-between\\b[^"]*"',
+              pattern: '<nav[^>]*class=[\'"][^"\']*\\bjustify-between\\b[^"\']*[\'"]',
               message: "Tambahkan justify-between",
             },
             {
-              pattern: '<nav[^>]*class="[^"]*\\bitems-center\\b[^"]*"',
+              pattern: '<nav[^>]*class=[\'"][^"\']*\\bitems-center\\b[^"\']*[\'"]',
               message: "Tambahkan items-center",
             },
             {
-              pattern: '<nav[^>]*class="[^"]*\\bp-4\\b[^"]*"',
+              pattern: '<nav[^>]*class=[\'"][^"\']*\\bp-4\\b[^"\']*[\'"]',
               message: "Tambahkan p-4",
             },
           ],
@@ -3408,20 +3408,20 @@ export const cssTrack: Track = {
           loadTailwind: true,
           tests: [
             {
-              pattern: 'class="[^"]*\\bgrid\\b[^"]*"',
+              pattern: 'class=[\'"][^"\']*\\bgrid\\b[^"\']*[\'"]',
               message: "Tambahkan kelas grid",
             },
             {
-              pattern: 'class="[^"]*\\bgrid-cols-1\\b[^"]*"',
+              pattern: 'class=[\'"][^"\']*\\bgrid-cols-1\\b[^"\']*[\'"]',
               message: "Tambahkan grid-cols-1 sebagai dasar (mobile)",
             },
             {
-              pattern: 'class="[^"]*\\bmd:grid-cols-3\\b[^"]*"',
+              pattern: 'class=[\'"][^"\']*\\bmd:grid-cols-3\\b[^"\']*[\'"]',
               message:
                 "Tambahkan md:grid-cols-3 — prefix md: berarti berlaku mulai layar medium ke atas.",
             },
             {
-              pattern: 'class="[^"]*\\bgap-4\\b[^"]*"',
+              pattern: 'class=[\'"][^"\']*\\bgap-4\\b[^"\']*[\'"]',
               message: "Tambahkan gap-4",
             },
           ],
@@ -3448,16 +3448,16 @@ export const cssTrack: Track = {
           loadTailwind: true,
           tests: [
             {
-              pattern: 'class="[^"]*\\bhover:bg-blue-700\\b[^"]*"',
+              pattern: 'class=[\'"][^"\']*\\bhover:bg-blue-700\\b[^"\']*[\'"]',
               message: "Tambahkan hover:bg-blue-700",
             },
             {
-              pattern: 'class="[^"]*\\bfocus:ring-2\\b[^"]*"',
+              pattern: 'class=[\'"][^"\']*\\bfocus:ring-2\\b[^"\']*[\'"]',
               message:
                 "Tambahkan focus:ring-2 — indikator fokus penting untuk pengguna keyboard.",
             },
             {
-              pattern: 'class="[^"]*\\btransition\\b[^"]*"',
+              pattern: 'class=[\'"][^"\']*\\btransition\\b[^"\']*[\'"]',
               message: "Tambahkan transition",
             },
           ],
@@ -3484,35 +3484,35 @@ export const cssTrack: Track = {
           loadTailwind: true,
           tests: [
             {
-              pattern: '<div[^>]*class="[^"]*\\bmax-w-sm\\b[^"]*"',
+              pattern: '<div[^>]*class=[\'"][^"\']*\\bmax-w-sm\\b[^"\']*[\'"]',
               message: "Tambahkan max-w-sm pada div luar",
             },
             {
-              pattern: '<div[^>]*class="[^"]*\\brounded-xl\\b[^"]*"',
+              pattern: '<div[^>]*class=[\'"][^"\']*\\brounded-xl\\b[^"\']*[\'"]',
               message: "Tambahkan rounded-xl",
             },
             {
-              pattern: '<div[^>]*class="[^"]*\\bshadow-lg\\b[^"]*"',
+              pattern: '<div[^>]*class=[\'"][^"\']*\\bshadow-lg\\b[^"\']*[\'"]',
               message: "Tambahkan shadow-lg",
             },
             {
-              pattern: '<div[^>]*class="[^"]*\\bp-6\\b[^"]*"',
+              pattern: '<div[^>]*class=[\'"][^"\']*\\bp-6\\b[^"\']*[\'"]',
               message: "Tambahkan p-6",
             },
             {
-              pattern: '<div[^>]*class="[^"]*\\bbg-white\\b[^"]*"',
+              pattern: '<div[^>]*class=[\'"][^"\']*\\bbg-white\\b[^"\']*[\'"]',
               message: "Tambahkan bg-white",
             },
             {
-              pattern: '<h3[^>]*class="[^"]*\\btext-xl\\b[^"]*"',
+              pattern: '<h3[^>]*class=[\'"][^"\']*\\btext-xl\\b[^"\']*[\'"]',
               message: "Tambahkan text-xl pada h3",
             },
             {
-              pattern: '<h3[^>]*class="[^"]*\\bfont-bold\\b[^"]*"',
+              pattern: '<h3[^>]*class=[\'"][^"\']*\\bfont-bold\\b[^"\']*[\'"]',
               message: "Tambahkan font-bold pada h3",
             },
             {
-              pattern: '<h3[^>]*class="[^"]*\\bmb-2\\b[^"]*"',
+              pattern: '<h3[^>]*class=[\'"][^"\']*\\bmb-2\\b[^"\']*[\'"]',
               message: "Tambahkan mb-2 pada h3",
             },
           ],

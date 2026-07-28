@@ -679,19 +679,24 @@ export const pythonTrack: Track = {
           explanation:
             "Fungsi di Python didefinisikan menggunakan kata kunci `def nama_fungsi(param=default):`. Kamu dapat menetapkan nilai default pada parameter agar argumen tersebut menjadi opsional saat dipanggil. Hasil akhir pemrosesan dikembalikan ke pemanggil fungsi menggunakan kata kunci `return`. Jebakan utama pemula adalah lupa bahwa fungsi tanpa kata kunci `return` akan mengembalikan nilai `None` secara implisit, yang sering memicu error ketika hasilnya diolah lebih lanjut.",
           example: {
-            code: 'def sapa(nama="User"):\n    return f"Halo {nama}"',
-            output: "Mengembalikan 'Halo User' jika parameter nama tidak diisi.",
-            note: "Jika fungsi tidak memiliki return, secara default mengembalikan None.",
+            code:
+              'def sapa(nama="User"):\n' +
+              '    return f"Halo {nama}"\n\n' +
+              "print(sapa())\n" +
+              'print(sapa("Bimo"))',
+            output: "Halo User\nHalo Bimo",
+            note: "Parameter ber-default harus diletakkan SETELAH parameter biasa. `def sapa(nama=\"User\", umur)` langsung ditolak dengan SyntaxError: non-default argument follows default argument.",
           },
           instruction:
-            'Definisikan fungsi `def hitung(a, b=10): return a + b`.',
+            "Buat fungsi bernama `hitung` yang menerima dua angka lalu mengembalikan hasil penjumlahannya. Angka kedua bersifat opsional: kalau pemanggil tidak mengisinya, nilainya dianggap 10. Beri nama parameternya `a` dan `b`.",
           starterCode: "# Definisikan fungsi hitung di bawah ini\n",
           language: "text",
           tests: [
             {
               pattern:
                 "def\\s+hitung\\(\\s*a\\s*,\\s*b\\s*=\\s*10\\s*\\)\\s*:\\s*\\n?\\s*return\\s+a\\s*\\+\\s*b",
-              message: "Definisikan fungsi hitung sesuai instruksi",
+              message:
+                "Belum cocok. Pastikan tiga hal: nama parameternya `a` dan `b`, parameter kedua punya nilai default (`b=10`), dan baris `return` menjumlahkan keduanya. Ingat titik dua di akhir baris `def` serta indentasi 4 spasi pada baris berikutnya.",
             },
           ],
           solution: "def hitung(a, b=10):\n    return a + b",
@@ -1344,19 +1349,22 @@ export const pythonTrack: Track = {
               "class User:\n" +
               "    def __init__(self, name):\n" +
               "        self.name = name\n" +
-              "user = User('Budi')",
-            output: "Objek user dibuat dengan atribut name 'Budi'.",
-            note: "Parameter self merujuk pada instansi objek itu sendiri.",
+              "user = User('Budi')\n" +
+              "print(user.name)\n" +
+              "print(type(user))",
+            output: "Budi\n<class '__main__.User'>",
+            note: "Perhatikan `self.name = name`: sisi kiri adalah atribut yang menempel pada objek, sisi kanan adalah parameter yang cuma hidup selama __init__ berjalan. Menulis `name = name` saja membuat atributnya tidak pernah tersimpan.",
           },
           instruction:
-            "Tuliskan method __init__ `def __init__(self, title): self.title = title`.",
+            "Kamu sedang menulis class `Book`. Tambahkan constructor-nya: method khusus yang otomatis dijalankan saat objek dibuat, menerima satu data judul bernama `title`, lalu menyimpannya sebagai atribut objek dengan nama yang sama. Jangan lupa parameter pertama yang mewakili objek itu sendiri.",
           starterCode: "# Tulis __init__ di bawah ini\n",
           language: "text",
           tests: [
             {
               pattern:
                 "def\\s+__init__\\(\\s*self\\s*,\\s*title\\s*\\)\\s*:\\s*\\n?\\s*self\\.title\\s*=\\s*title",
-              message: "Definisikan method __init__ sesuai instruksi",
+              message:
+                "Belum cocok. Constructor di Python bernama `__init__` (dua garis bawah di depan dan belakang), parameter pertamanya `self`, parameter keduanya `title`, dan isinya menyimpan nilai itu ke `self.title`.",
             },
           ],
           solution: "def __init__(self, title):\n    self.title = title",
@@ -1429,18 +1437,24 @@ export const pythonTrack: Track = {
               "        self.title = title\n" +
               "    def __str__(self):\n" +
               '        return f"Buku: {self.title}"',
-            output: "print(book) mencetak 'Buku: Python 101'.",
-            note: "Dunder method diawali dan diakhiri dua garis bawah (double underscore).",
+            output:
+              "book = Book('Python 101')\n" +
+              "print(book)\n" +
+              "→ Buku: Python 101\n\n" +
+              "book        # di REPL, tanpa __repr__\n" +
+              "→ <__main__.Book object at 0x7f3c1a2b40>",
+            note: "Baris terakhir itu penyebab kebingungan yang sering terjadi: `print(obj)` sudah rapi, tapi menampilkan objek di dalam list (`print([book])`) tetap memunculkan alamat memori — karena list memakai __repr__, bukan __str__.",
           },
           instruction:
-            "Tuliskan method __str__ `def __str__(self): return self.name`.",
+            "Class `Pengguna` menyimpan nama pemakai di atribut `self.name`, dan saat ini `print(user)` mencetak alamat memori. Tambahkan method dunder yang dipakai `print()` untuk mewakili objek sebagai teks, dan kembalikan nilai atribut `name` apa adanya.",
           starterCode: "# Tulis __str__ di sini\n",
           language: "text",
           tests: [
             {
               pattern:
                 "def\\s+__str__\\(\\s*self\\s*\\)\\s*:\\s*\\n?\\s*return\\s+self\\.name",
-              message: "Definisikan method __str__ sesuai instruksi",
+              message:
+                "Belum cocok. Method yang dipakai `print()` bernama `__str__` (dua garis bawah di kedua sisi), parameternya hanya `self`, dan isinya `return self.name`. Mengembalikan `name` saja (tanpa `self.`) memicu NameError.",
             },
           ],
           solution: "def __str__(self):\n    return self.name",

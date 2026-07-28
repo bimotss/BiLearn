@@ -794,7 +794,7 @@ export const javascriptTrack: Track = {
               "console.log(umur);",
             output:
               "Halo Bimo\nundefined\n20\n\n" +
-              "Kalau baris console.log(umur) yang dikomentari itu diaktifkan, program berhenti di situ dengan:\n" +
+              "// jika baris console.log(umur) yang dikomentari diaktifkan:\n" +
               "ReferenceError: Cannot access 'umur' before initialization",
             note: "Perhatikan bedanya: `var` memberi `undefined` diam-diam, `let` berteriak. Yang berteriak justru lebih menolong.",
           },

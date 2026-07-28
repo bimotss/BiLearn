@@ -82,7 +82,7 @@ export const nextjsTrack: Track = {
           "example": {
             "code": "export default async function BlogPost({ params }: { params: Promise<{ slug: string }> }) {\n  const { slug } = await params;\n  return <h1>Post: {slug}</h1>;\n}",
             "output": "<h1>Post: react-tutorial</h1> saat mengakses /blog/react-tutorial",
-            "note": "Di Next.js terbaru, params bertipe Promise yang harus di-await."
+            "note": "Di Next.js terbaru, params bertipe Promise yang harus di-await. Catatan jujur: kode ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas ini hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
           "instruction": "Lengkapi komponen async `UserPage` di bawah dengan mengekstrak nilai `id` dari argumen `params` menggunakan sintaks `await`.",
           "starterCode": "export default async function UserPage({ params }) {\n  // Ekstrak 'id' dari params di bawah ini\n  \n  return <h1>User: {id}</h1>;\n}",
@@ -102,10 +102,10 @@ export const nextjsTrack: Track = {
           "explanation": "Next.js mendukung penataan layout bersarang (Nested Layout) di mana sebuah sub-folder dapat memiliki `layout.tsx` sendiri yang membungkus sub-halaman di dalamnya tanpa menggantikan layout root. Ketika pengguna berpindah antar rute di dalam layout yang sama, komponen `layout.tsx` tidak akan di-remount sehingga state lokal (seperti input form atau posisi scroll sidebar) akan tetap terjaga. Sebaliknya, jika kamu menginginkan komponen wrapper yang selalu membuat ulang instansinya setiap kali terjadi navigasi rute (misalnya untuk memicu ulang animasi transisi), kamu dapat menggunakan berkas konvensi `template.tsx`. Gunakan `layout.tsx` untuk elemen navigasi persisten dan gunakan `template.tsx` khusus saat membutuhkan reset state atau animasi per rute.",
           "example": {
             "code": "export default function DashboardLayout({ children }: { children: React.ReactNode }) {\n  return <section><nav></nav>{children}</section>;\n}",
-            "output": "Sidebar nav bertahan tanpa re-render saat navigasi antar tab dashboard.",
+            "output": "Pindah dari /dashboard/statistik ke /dashboard/pesanan:\n\n<section>\n  <nav>...</nav>        ← TIDAK dirender ulang, scroll-nya tetap\n  <StatistikPage />  →  <PesananPage />   ← hanya bagian ini berganti\n</section>",
             "note": "layout.tsx sangat hemat performa untuk tempat navigasi."
           },
-          "instruction": "Tuliskan pembungkus layout `export default function Layout({ children }: { children: React.ReactNode }) { return <div>{children}</div>; }`.",
+          "instruction": "Folder `app/dashboard/` butuh kerangka yang bertahan saat pengguna berpindah antar sub-halaman. Buat komponen layout di berkas `app/dashboard/layout.tsx`: satu default export bernama `Layout`, menerima `children` bertipe `React.ReactNode`, dan membungkusnya di dalam satu `<div>`.",
           "starterCode": "// Tulis komponen Layout di sini\n",
           "language": "jsx",
           "tests": [
@@ -126,7 +126,7 @@ export const nextjsTrack: Track = {
             "output": "Otomatis tampil saat halaman async sedang mengunduh data di server.",
             "note": "not-found.tsx dapat dipanggil manual dengan fungsi notFound()."
           },
-          "instruction": "Tulis komponen loading `export default function Loading() { return <p>Loading...</p>; }`.",
+          "instruction": "Halaman daftar produk mengambil data di server dan pengguna melihat layar kosong selama menunggu. Buat berkas dengan nama khusus yang otomatis dipakai Next.js sebagai penampil sementara, isinya satu default export bernama `Loading` yang menampilkan teks `Loading...` di dalam elemen `p`.",
           "starterCode": "// Tulis komponen Loading di sini\n",
           "language": "jsx",
           "tests": [
@@ -145,7 +145,7 @@ export const nextjsTrack: Track = {
           "example": {
             "code": "import Link from \"next/link\";\n<Link href=\"/dashboard\">Dashboard</Link>",
             "output": "Navigasi instan dengan prefetching otomatis di viewport.",
-            "note": "Import Link selalu dari 'next/link' (bukan react-router)."
+            "note": "Import Link selalu dari 'next/link' (bukan react-router). Catatan jujur: kode ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas ini hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
           "instruction": "Gunakan komponen `<Link>` dari Next.js untuk membuat navigasi client-side menuju rute `/about` dengan teks 'Tentang Kami'.",
           "starterCode": "import Link from \"next/link\";\n\nexport default function Navigation() {\n  return (\n    <nav>\n      {/* Tambahkan link ke /about di sini */}\n      \n    </nav>\n  );\n}",
@@ -166,7 +166,7 @@ export const nextjsTrack: Track = {
           "example": {
             "code": "app/(shop)/shoes/page.tsx\napp/(shop)/shirts/page.tsx",
             "output": "Halaman diakses lewat URL /shoes dan /shirts, bukan /shop/shoes.",
-            "note": "Route Group juga berguna untuk menerapkan layout berbeda antar kelompok halaman."
+            "note": "Route Group juga berguna untuk menerapkan layout berbeda antar kelompok halaman. Catatan jujur: kode ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas ini hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
           "instruction": "Di dalam folder grup `(auth)`, kamu ingin semua halaman autentikasi tidak menampilkan navbar utama. Buatlah komponen fungsi `AuthLayout` yang membungkus properti `children` dengan tag `<main>`. Pastikan fungsi diekspor secara default.",
           "starterCode": "// Buat komponen AuthLayout di sini\n",
@@ -284,7 +284,7 @@ export const nextjsTrack: Track = {
           "example": {
             "code": "// Server Component default: Bisa akses DB/filesystem langsung, tanpa bundle JS client!\nimport fs from 'fs';",
             "output": "Performa render super cepat di browser.",
-            "note": "Server component tidak bisa menggunakan useState, useEffect, atau event listener onClick."
+            "note": "Server component tidak bisa menggunakan useState, useEffect, atau event listener onClick. Catatan jujur: kode ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas ini hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
           "instruction": "Bukti bahwa komponen ini berjalan di server adalah kamu bisa menggunakan modul bawaan Node.js. Import modul `fs` (file system) dari `'fs'` di bagian paling atas berkas.",
           "starterCode": "// Tulis import di bawah ini\n\nexport default function Page() {\n  return <h1>Server Component</h1>;\n}",
@@ -305,7 +305,7 @@ export const nextjsTrack: Track = {
           "example": {
             "code": "'use client';\n\nimport { useState } from 'react';\nexport default function Counter() { const [c, setC] = useState(0); return <button onClick={() => setC(c+1)}>{c}</button>; }",
             "output": "Komponen dijadikan Client Component yang interaktif.",
-            "note": "'use client' menandai titik awal boundary antara server dan client."
+            "note": "'use client' menandai titik awal boundary antara server dan client. Catatan jujur: kode ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas ini hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
           "instruction": "Komponen di bawah menggunakan `useState`, yang artinya butuh interaktivitas dari browser. Tambahkan direktif `'use client';` pada baris PERTAMA berkas ini.",
           "starterCode": "import { useState } from 'react';\n\nexport default function Counter() {\n  const [count, setCount] = useState(0);\n  return <button onClick={() => setCount(count + 1)}>{count}</button>;\n}",
@@ -326,7 +326,7 @@ export const nextjsTrack: Track = {
           "example": {
             "code": "// ✅ ServerComponent -> mengimport -> ClientComponent\nimport Carousel from './carousel';",
             "output": "Batas arsitektur server-client terawat dengan baik.",
-            "note": "Jika butuh Server Component di dalam Client, oper via prop children."
+            "note": "Jika butuh Server Component di dalam Client, oper via prop children. Catatan jujur: kode ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas ini hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
           "instruction": "Server Components dapat mengimpor dan merender Client Components. Impor komponen `Carousel` dari `'./carousel'` dan render di dalam elemen `<main>`.",
           "starterCode": "export default function HomePage() {\n  return (\n    <main>\n      {/* Render Carousel di sini */}\n    </main>\n  );\n}",
@@ -351,7 +351,7 @@ export const nextjsTrack: Track = {
           "example": {
             "code": "// ✅ Oper plain object: <ClientWidget data={{ id: 1 }} />\n// ❌ Jangan oper fungsi: <ClientWidget onClick={() => {}} /> dari server",
             "output": "Data ter-serialize aman dari server ke client bundle.",
-            "note": "Fungsi JS tidak bisa di-serialize dari server ke client via props biasa."
+            "note": "Fungsi JS tidak bisa di-serialize dari server ke client via props biasa. Catatan jujur: kode ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas ini hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
           "instruction": "Hapus properti `sayHello` dari objek `userData` karena fungsi JavaScript tidak bisa di-serialize (dikirim sebagai teks JSON) dari Server Component ke Client Component.",
           "starterCode": "const userData = {\n  name: 'Budi',\n  age: 25,\n  sayHello: () => console.log('Halo'),\n};\n\nexport default function ServerPage() {\n  return <Profile data={userData} />;\n}",
@@ -377,7 +377,7 @@ export const nextjsTrack: Track = {
           "example": {
             "code": "// Halaman utama (Server) -> Layout (Server) -> TombolSuka ('use client')",
             "output": "Ukuran bundle JavaScript di browser tetap minimal.",
-            "note": "Jangan letakkan 'use client' di root layout atau page utama jika tidak terpaksa."
+            "note": "Jangan letakkan 'use client' di root layout atau page utama jika tidak terpaksa. Catatan jujur: kode ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas ini hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
           "instruction": "Biarkan `RootLayout` tetap menjadi Server Component. Impor komponen `<ThemeToggle />` dari `'./ThemeToggle'` dan render di dalam elemen `<body>` tanpa menambahkan direktif `'use client'` di berkas ini.",
           "starterCode": "export default function RootLayout({ children }) {\n  return (\n    <body>\n      {/* Panggil ThemeToggle di bawah ini */}\n      \n      {children}\n    </body>\n  );\n}",
@@ -407,7 +407,7 @@ export const nextjsTrack: Track = {
           "example": {
             "code": "import 'server-only'; // Memastikan file ini tidak bocor ke client bundle",
             "output": "Error otomatis saat build jika file di-import oleh client component.",
-            "note": "Sangat krusial untuk file pengakses database atau API key rahasia."
+            "note": "Sangat krusial untuk file pengakses database atau API key rahasia. Catatan jujur: kode ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas ini hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
           "instruction": "Cegah berkas ini agar tidak bocor ke client bundle dengan mengimpor modul `server-only` di baris pertama.",
           "starterCode": "// Tambahkan import penjaga di sini\n\nexport async function getSecretData() {\n  return db.query('SELECT * FROM passwords');\n}",
@@ -542,7 +542,7 @@ export const nextjsTrack: Track = {
           "example": {
             "code": "export const dynamic = 'force-dynamic'; // Memaksa render dinamis di setiap request",
             "output": "Halaman di-render ulang pada setiap akses HTTP request.",
-            "note": "Gunakan force-dynamic untuk halaman dashboard real-time."
+            "note": "Gunakan force-dynamic untuk halaman dashboard real-time. Catatan jujur: kode ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas ini hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
           "instruction": "Pastikan Next.js selalu merender ulang halaman dashboard ini di setiap request dengan mengekspor konstanta `dynamic` bernilai string `'force-dynamic'`.",
           "starterCode": "// Ekspor konfigurasi dynamic di sini\n\nexport default function Dashboard() {\n  return <h1>Live Dashboard</h1>;\n}",
@@ -563,7 +563,7 @@ export const nextjsTrack: Track = {
           "example": {
             "code": "fetch('https://api.com/posts', { next: { revalidate: 60 } });",
             "output": "Data di-refresh di background setiap 60 detik.",
-            "note": "Kombinasi terbaik antara performa static dan kebaruan data."
+            "note": "Kombinasi terbaik antara performa static dan kebaruan data. Catatan jujur: kode ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas ini hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
           "instruction": "Ubah pemanggilan fetch agar Next.js melakukan revalidasi otomatis di background setiap 30 detik menggunakan opsi `next: { revalidate: 30 }`.",
           "starterCode": "export default async function Blog() {\n  const res = await fetch('https://api.example.com/posts');\n  return <div>Blog</div>;\n}",
@@ -584,7 +584,7 @@ export const nextjsTrack: Track = {
           "example": {
             "code": "import { cache } from \"react\";\nconst getUser = cache(async (id) => db.user.findUnique({ id }));",
             "output": "Panggilan getUser(id) berulang hanya dieksekusi 1x per render.",
-            "note": "Mencegah query database ganda dalam satu request halaman."
+            "note": "Mencegah query database ganda dalam satu request halaman. Catatan jujur: kode ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas ini hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
           "instruction": "Bungkus fungsi async `getUser` di bawah ini menggunakan fungsi `cache()` dari React agar panggilannya di-deduplikasi dalam satu render.",
           "starterCode": "import { cache } from 'react';\n\n// Bungkus fungsi ini dengan cache()\nconst getUser = async (id) => {\n  return { id, name: 'Budi' };\n};",
@@ -605,7 +605,7 @@ export const nextjsTrack: Track = {
           "example": {
             "code": "<Suspense fallback={<Skeleton />}><KomponenLambat /></Suspense>",
             "output": "User langsung melihat UI awal tanpa menunggu komponen lambat selesai.",
-            "note": "Meningkatkan skor First Contentful Paint (FCP) secara signifikan."
+            "note": "Meningkatkan skor First Contentful Paint (FCP) secara signifikan. Catatan jujur: kode ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas ini hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
           "instruction": "Bungkus komponen `<HeavyChart />` dengan `<Suspense>` yang memiliki properti `fallback` berupa tag `<p>Memuat grafik...</p>`.",
           "starterCode": "import { Suspense } from 'react';\nimport HeavyChart from './HeavyChart';\n\nexport default function Dashboard() {\n  return (\n    <section>\n      {/* Bungkus dengan Suspense di bawah ini */}\n      <HeavyChart />\n    </section>\n  );\n}",
@@ -744,7 +744,7 @@ export const nextjsTrack: Track = {
           "example": {
             "code": "import { NextResponse } from 'next/server';\nexport async function GET() {\n  return NextResponse.json({ message: 'Halo' });\n}",
             "output": "Mengakses /api mengembalikan JSON { message: 'Halo' }.",
-            "note": "Jangan tempatkan route.ts di folder yang sama dengan page.tsx!"
+            "note": "Jangan tempatkan route.ts di folder yang sama dengan page.tsx! Catatan jujur: kode ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas ini hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
           "instruction": "Tuliskan handler `GET` pada `route.ts` yang mengekspor fungsi async `GET` dan mengembalikan `NextResponse.json({ status: 'ok' })`.",
           "starterCode": "// Tulis handler GET di sini\n",
@@ -765,7 +765,7 @@ export const nextjsTrack: Track = {
           "example": {
             "code": "export async function POST(request: NextRequest) {\n  const body = await request.json();\n  return NextResponse.json(body, { status: 201 });\n}",
             "output": "Membaca data JSON dari body request dan mengembalikan status 201.",
-            "note": "Selalu gunakan await saat membaca request.json()."
+            "note": "Selalu gunakan await saat membaca request.json(). Catatan jujur: kode ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas ini hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
           "instruction": "Lengkapi handler `POST` di bawah untuk mengekstrak objek JSON dari argumen `request` menggunakan `await request.json()`, lalu simpan hasilnya ke dalam konstanta `data`.",
           "starterCode": "import { NextResponse } from 'next/server';\n\nexport async function POST(request) {\n  // Ekstrak body JSON di bawah ini\n  \n  return NextResponse.json(data);\n}",
@@ -786,7 +786,7 @@ export const nextjsTrack: Track = {
           "example": {
             "code": "export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {\n  const { id } = await params;\n  const query = request.nextUrl.searchParams.get('q');\n  return NextResponse.json({ id, query });\n}",
             "output": "Membaca parameter id dari path URL dan query q dari searchParams.",
-            "note": "searchParams berguna untuk filter, sort, dan paginasi data API."
+            "note": "searchParams berguna untuk filter, sort, dan paginasi data API. Catatan jujur: kode ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas ini hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
           "instruction": "Lengkapi handler `GET` untuk mengambil nilai query parameter bernama `'search'` dari `request.nextUrl.searchParams` dan simpan ke konstanta `searchQuery`.",
           "starterCode": "import { NextResponse } from 'next/server';\n\nexport async function GET(request) {\n  // Ambil query parameter 'search' di bawah ini\n  \n  return NextResponse.json({ searchQuery });\n}",
@@ -828,7 +828,7 @@ export const nextjsTrack: Track = {
           "example": {
             "code": "return NextResponse.json({ error: 'Data tidak ditemukan' }, { status: 404 });",
             "output": "Pengembang client mendapat struktur JSON error yang konsisten.",
-            "note": "Gunakan HTTP status code yang relevan sesuai standar REST API."
+            "note": "Gunakan HTTP status code yang relevan sesuai standar REST API. Catatan jujur: kode ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas ini hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
           "instruction": "Tuliskan kode untuk mengembalikan respon error JSON berpesan `'Unauthorized'` dengan status HTTP code `401`.",
           "starterCode": "export async function GET() {\n  // Kembalikan error 401 Unauthorized di bawah ini\n  \n}",
@@ -849,7 +849,7 @@ export const nextjsTrack: Track = {
           "example": {
             "code": "return NextResponse.json(data, {\n  status: 200,\n  headers: { 'Cache-Control': 'no-store' },\n});",
             "output": "Respon dikirim dengan header Cache-Control no-store.",
-            "note": "Headers berguna untuk mengatur keamanan dan instruksi cache browser."
+            "note": "Headers berguna untuk mengatur keamanan dan instruksi cache browser. Catatan jujur: kode ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas ini hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
           "instruction": "Kembalikan respon `NextResponse.json({ success: true })` dengan opsi parameter kedua menetapkan `status: 200` dan `headers: { 'Cache-Control': 'no-store' }`.",
           "starterCode": "export async function GET() {\n  // Return NextResponse dengan custom header di sini\n  \n}",
@@ -963,7 +963,7 @@ export const nextjsTrack: Track = {
           "example": {
             "code": "'use server';\n\nexport async function updateProfile(formData: FormData) {\n  const name = formData.get('name');\n  // Mutasi ke database...\n}",
             "output": "Fungsi dikompilasi sebagai Server Action yang aman di server.",
-            "note": "'use server' menandai bahwa fungsi hanya dieksekusi di server."
+            "note": "'use server' menandai bahwa fungsi hanya dieksekusi di server. Catatan jujur: kode ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas ini hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
           "instruction": "Tambahkan direktif `'use server';` di baris pertama berkas ini agar fungsi `addComment` dikompilasi sebagai Server Action.",
           "starterCode": "export async function addComment(formData) {\n  const text = formData.get('text');\n  return { success: true };\n}",
@@ -984,7 +984,7 @@ export const nextjsTrack: Track = {
           "example": {
             "code": "const [state, formAction, isPending] = useActionState(updateName, null);\n<form action={formAction}><button disabled={isPending}>Simpan</button></form>",
             "output": "Form terhubung ke Server Action dengan indikator status isPending.",
-            "note": "useActionState adalah pengganti useFormState di React 19."
+            "note": "useActionState adalah pengganti useFormState di React 19. Catatan jujur: kode ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas ini hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
           "instruction": "Lengkapi deklarasi hook `useActionState` di bawah untuk membungkus Server Action `createItem` dengan nilai awal state `null`.",
           "starterCode": "import { useActionState } from 'react';\nimport { createItem } from './actions';\n\nexport default function Form() {\n  // Panggil useActionState di bawah ini\n  const [state, formAction, isPending] = \n}",
@@ -1005,7 +1005,7 @@ export const nextjsTrack: Track = {
           "example": {
             "code": "import { useFormStatus } from \"react-dom\";\nfunction SubmitButton() { const { pending } = useFormStatus(); return <button disabled={pending}>Submit</button>; }",
             "output": "Tombol otomatis disabled saat form sedang diproses di server.",
-            "note": "useFormStatus harus dipanggil di dalam komponen anak elemen <form>."
+            "note": "useFormStatus harus dipanggil di dalam komponen anak elemen <form>. Catatan jujur: kode ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas ini hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
           "instruction": "Lengkapi komponen `SubmitButton` dengan memanggil hook `useFormStatus()` dan mengestrak properti boolean `pending` untuk menonaktifkan tombol.",
           "starterCode": "import { useFormStatus } from 'react-dom';\n\nexport function SubmitButton() {\n  // Panggil useFormStatus di sini\n  \n  return <button disabled={pending}>{pending ? 'Loading...' : 'Simpan'}</button>;\n}",
@@ -1026,7 +1026,7 @@ export const nextjsTrack: Track = {
           "example": {
             "code": "import { revalidatePath } from 'next/cache';\nexport async function addPost() { await db.insert(); revalidatePath('/posts'); }",
             "output": "Cache halaman /posts dibuang dan data baru otomatis tampil di UI.",
-            "note": "revalidatePath juga menerima argumen tipe 'page' atau 'layout'."
+            "note": "revalidatePath juga menerima argumen tipe 'page' atau 'layout'. Catatan jujur: kode ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas ini hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
           "instruction": "Panggil fungsi `revalidatePath('/dashboard')` di akhir fungsi Server Action `updateData` agar cache halaman dashboard dibuang.",
           "starterCode": "import { revalidatePath } from 'next/cache';\n\nexport async function updateData() {\n  // Lakukan mutasi DB...\n  // Panggil revalidatePath untuk '/dashboard' di bawah ini\n  \n}",
@@ -1047,7 +1047,7 @@ export const nextjsTrack: Track = {
           "example": {
             "code": "const [optimisticLikes, addOptimisticLike] = useOptimistic(likes, (state, newLike) => state + 1);\naddOptimisticLike(1);",
             "output": "Jumlah likes bertambah seketika di UI sebelum respon server selesai.",
-            "note": "Memberikan pengalaman aplikasi yang terasa super instan."
+            "note": "Memberikan pengalaman aplikasi yang terasa super instan. Catatan jujur: kode ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas ini hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
           "instruction": "Lengkapi deklarasi hook `useOptimistic` di bawah ini untuk mengelola state `likes` dengan callback perubah yang menambahkan nilai state dengan `1`.",
           "starterCode": "import { useOptimistic } from 'react';\n\nexport function LikeButton({ likes }) {\n  // Deklarasikan useOptimistic di bawah ini\n  const [optimisticLikes, addOptimisticLike] = \n}",
@@ -1068,7 +1068,7 @@ export const nextjsTrack: Track = {
           "example": {
             "code": "export async function submitForm(prevState, formData) {\n  if (!isValid) return { error: 'Email tidak valid' };\n  return { success: true };\n}",
             "output": "Pesan error dikembalikan dalam bentuk objek ke Client Component.",
-            "note": "Mencegah terjadinya crash Error Boundary pada aplikasi."
+            "note": "Mencegah terjadinya crash Error Boundary pada aplikasi. Catatan jujur: kode ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas ini hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
           "instruction": "Jika variabel `isValid` bernilai `false`, kembalikan objek `{ error: 'Email tidak valid' }` dari fungsi Server Action.",
           "starterCode": "export async function submitForm(prevState, formData) {\n  const isValid = false;\n  // Kembalikan objek error di bawah ini jika !isValid\n  if (!isValid) \n}",
@@ -1224,7 +1224,7 @@ export const nextjsTrack: Track = {
           "example": {
             "code": "const session = await auth();\nif (!session) redirect('/login');",
             "output": "Pengguna yang belum login otomatis ditolak sebelum halaman sempat dirender.",
-            "note": "redirect() diimpor dari 'next/navigation'."
+            "note": "redirect() diimpor dari 'next/navigation'. Catatan jujur: kode ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas ini hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
           "instruction": "Tambahkan pengondisian jika `session` bernilai falsy (pengguna belum login), panggil `redirect('/login')`.",
           "starterCode": "import { redirect } from 'next/navigation';\n\nexport default async function Dashboard() {\n  const session = await auth();\n  // Tambahkan proteksi di bawah ini\n  \n  return <h1>Rahasia</h1>;\n}",
@@ -1245,7 +1245,7 @@ export const nextjsTrack: Track = {
           "example": {
             "code": "export function middleware(request: NextRequest) {\n  // Proteksi route secara terpusat\n}\nexport const config = { matcher: ['/dashboard/:path*'] };",
             "output": "Seluruh sub-route /dashboard otomatis terproteksi secara terpusat.",
-            "note": "Matcher mengatur URL mana saja yang dilewati oleh middleware."
+            "note": "Matcher mengatur URL mana saja yang dilewati oleh middleware. Catatan jujur: kode ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas ini hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
           "instruction": "Ekspor konstanta `config` berupa objek yang memiliki properti `matcher` bernilai array berisi string pola `'/dashboard/:path*'`.",
           "starterCode": "export function middleware(request) {\n  return NextResponse.next();\n}\n\n// Ekspor objek config di bawah ini\n",
@@ -1266,7 +1266,7 @@ export const nextjsTrack: Track = {
           "example": {
             "code": "if (session?.user?.role !== 'admin') return <p>Forbidden</p>;",
             "output": "Menolak pengguna biasa mengakses area administrasi.",
-            "note": "Pastikan properti role disimpan di dalam session JWT/Database."
+            "note": "Pastikan properti role disimpan di dalam session JWT/Database. Catatan jujur: kode ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas ini hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
           "instruction": "Jika properti `role` dari opsional berantai `session?.user` bukan bernilai string `'admin'`, kembalikan tag `<p>Forbidden</p>`.",
           "starterCode": "export default async function AdminPanel() {\n  const session = await auth();\n  // Tulis proteksi role di bawah ini\n  \n  return <h1>Data Rahasia Admin</h1>;\n}",
@@ -1401,15 +1401,27 @@ export const nextjsTrack: Track = {
           "example": {
             "code": "import Image from \"next/image\";\n<Image src=\"/logo.png\" alt=\"Logo\" width={100} height={50} />",
             "output": "Gambar dimuat sangat cepat dan mencegah Cumulative Layout Shift (CLS).",
-            "note": "Atribut width dan height wajib diisi untuk mendefinisikan rasio aspek."
+            "note": "Atribut width dan height wajib diisi untuk mendefinisikan rasio aspek. Catatan jujur: kode ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas ini hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
           "instruction": "Gunakan komponen `<Image>` dengan atribut `src=\"/banner.png\"`, `alt=\"Banner\"`, `width={800}`, dan `height={400}`.",
           "starterCode": "import Image from 'next/image';\n\nexport default function Header() {\n  return (\n    <header>\n      {/* Tulis elemen Image di bawah ini */}\n      \n    </header>\n  );\n}",
           "language": "text",
           "tests": [
             {
-              "pattern": "<Image\\s+src=[\"']/banner\\.png[\"']\\s+alt=[\"']Banner[\"']\\s+width=\\{800\\}\\s+height=\\{400\\}\\s*/?>",
-              "message": "Pastikan properti src, alt, width, dan height tertulis dengan benar"
+              "pattern": "import\\s+Image\\s+from\\s*[\"']next/image[\"']",
+              "message": "Impor dulu `Image` dari `next/image`. Tanpa impor, `<Image>` dianggap tag HTML tak dikenal."
+            },
+            {
+              "pattern": "<Image\\b[\\s\\S]*src=[\"']/banner\\.png[\"']",
+              "message": "Pakai komponen `<Image>` dengan `src=\"/banner.png\"` (garis miring di depan berarti folder public)."
+            },
+            {
+              "pattern": "alt=[\"']Banner[\"']",
+              "message": "`alt` wajib diisi — `next/image` menolak render tanpa `alt`, dan itu juga syarat aksesibilitas."
+            },
+            {
+              "pattern": "width=\\{\\s*800\\s*\\}[\\s\\S]*height=\\{\\s*400\\s*\\}|height=\\{\\s*400\\s*\\}[\\s\\S]*width=\\{\\s*800\\s*\\}",
+              "message": "Sertakan `width={800}` dan `height={400}` (angka di dalam kurawal, bukan string). Tanpa keduanya Next.js melempar error karena rasio aspek tidak diketahui. Urutan atribut bebas."
             }
           ],
           "solution": "import Image from 'next/image';\n\nexport default function Header() {\n  return (\n    <header>\n      <Image src=\"/banner.png\" alt=\"Banner\" width={800} height={400} />\n    </header>\n  );\n}"
@@ -1422,7 +1434,7 @@ export const nextjsTrack: Track = {
           "example": {
             "code": "import { Inter } from \"next/font/google\";\nconst inter = Inter({ subsets: ['latin'] });\n<body className={inter.className}>",
             "output": "Font terpasang tanpa ada kedipan FOUT (Flash of Unstyled Text).",
-            "note": "Meningkatkan skor performa Core Web Vitals."
+            "note": "Meningkatkan skor performa Core Web Vitals. Catatan jujur: kode ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas ini hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
           "instruction": "Deklarasikan konstanta bernama `inter` dan panggil fungsi `Inter()` dengan memberikan objek argumen `{ subsets: ['latin'] }`.",
           "starterCode": "import { Inter } from 'next/font/google';\n\n// Konfigurasikan font inter di bawah ini\n\n\nexport default function RootLayout({ children }) {\n  return <html lang=\"en\"><body className={inter.className}>{children}</body></html>;\n}",
@@ -1443,7 +1455,7 @@ export const nextjsTrack: Track = {
           "example": {
             "code": "export const metadata: Metadata = {\n  title: 'Belajar Next.js',\n  description: 'Platform kursus gratis',\n};",
             "output": "Tag title dan meta description terinjeksi di HTML server response.",
-            "note": "Gunakan generateMetadata() untuk halaman dengan title dinamis berbasis database."
+            "note": "Gunakan generateMetadata() untuk halaman dengan title dinamis berbasis database. Catatan jujur: kode ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas ini hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
           "instruction": "Ekspor konstanta bernama `metadata` (bertipe `Metadata`) bernilai objek dengan properti `title: 'BiLearn'`.",
           "starterCode": "import { Metadata } from 'next';\n\n// Ekspor metadata di bawah ini\n\n\nexport default function HomePage() {\n  return <h1>Selamat Datang di BiLearn</h1>;\n}",
@@ -1464,7 +1476,7 @@ export const nextjsTrack: Track = {
           "example": {
             "code": "export default function sitemap() {\n  return [{ url: 'https://site.com', lastModified: new Date() }];\n}",
             "output": "Generasi sitemap.xml otomatis pada endpoint /sitemap.xml.",
-            "note": "Memastikan seluruh daftar halaman web terindeks cepat oleh Google."
+            "note": "Memastikan seluruh daftar halaman web terindeks cepat oleh Google. Catatan jujur: kode ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas ini hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
           "instruction": "Deklarasikan fungsi yang diekspor secara bawaan bernama `sitemap` yang mengembalikan array kosong `[]`.",
           "starterCode": "import { MetadataRoute } from 'next';\n\n// Definisikan export default function sitemap di bawah ini\n",
@@ -1489,7 +1501,7 @@ export const nextjsTrack: Track = {
           "example": {
             "code": "// Targetkan skor Lighthouse Web Vitals > 90 untuk SEO teratas\nexport function reportWebVitals(metric) { console.log(metric); }",
             "output": "Rangking pencarian Google mengutamakan web dengan Vitals baik.",
-            "note": "Optimasi gambar & hilangkan unused JS untuk menaikkan skor."
+            "note": "Optimasi gambar & hilangkan unused JS untuk menaikkan skor. Catatan jujur: kode ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas ini hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
           "instruction": "Ekspor fungsi `reportWebVitals(metric)` dan lakukan `console.log(metric)` di dalamnya untuk mencetak nilai metrik performa.",
           "starterCode": "// Ekspor fungsi reportWebVitals di bawah ini\n",
@@ -1514,7 +1526,7 @@ export const nextjsTrack: Track = {
           "example": {
             "code": "import dynamic from \"next/dynamic\";\nconst HeavyChart = dynamic(() => import('./HeavyChart'), { ssr: false });",
             "output": "Komponen HeavyChart dipisah dari bundle JavaScript utama.",
-            "note": "ssr: false berguna jika komponen tersebut mengakses window/DOM khusus client."
+            "note": "ssr: false berguna jika komponen tersebut mengakses window/DOM khusus client. Catatan jujur: kode ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas ini hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
           "instruction": "Deklarasikan konstanta `HeavyComponent` yang memanggil `dynamic()` dan memberikannya callback impor dinamis `() => import('./Heavy')`.",
           "starterCode": "import dynamic from 'next/dynamic';\n\n// Lakukan dynamic import komponen Heavy di bawah ini\n\n\nexport default function Page() {\n  return <HeavyComponent />;\n}",
@@ -1648,7 +1660,7 @@ export const nextjsTrack: Track = {
           "explanation": "Variabel lingkungan di Next.js dikelola melalui berkas `.env.local`. Secara default, seluruh variabel lingkungan hanya dapat diakses oleh kode server (Server Components & Route Handlers) untuk menjaga kerahasiaan kuis atau kunci rahasia database. Namun, jika kamu memiliki variabel yang wajib dibaca oleh Client Component di browser (seperti URL API publik atau Analytics ID), kamu harus memberikan awalan khusus `NEXT_PUBLIC_` pada nama variabel tersebut. Ingatlah untuk tidak pernah menambahkan awalan `NEXT_PUBLIC_` pada kunci rahasia backend.",
           "example": {
             "code": "DATABASE_URL=\"postgresql://...\"\nNEXT_PUBLIC_SITE_URL=\"http://localhost:3000\"",
-            "output": "DATABASE_URL aman di server; NEXT_PUBLIC_SITE_URL dapat dibaca di client.",
+            "output": "// di Server Component\nconsole.log(process.env.DATABASE_URL);\n→ postgresql://...\n\n// di Client Component ('use client')\nconsole.log(process.env.DATABASE_URL);\n→ undefined\nconsole.log(process.env.NEXT_PUBLIC_SITE_URL);\n→ http://localhost:3000",
             "note": "Jangan sertakan atribut NEXT_PUBLIC_ pada password atau API key rahasia!"
           },
           "instruction": "Tambahkan variabel `API_URL` dengan nilai `\"https://api.com\"` yang diberi awalan khusus agar diekspos ke Client Component.",
@@ -1691,7 +1703,7 @@ export const nextjsTrack: Track = {
           "example": {
             "code": "A Record -> 76.76.21.21\nCNAME -> cname.vercel-dns.com",
             "output": "Domain milikmu terhubung dengan SSL/HTTPS gratis dari Let's Encrypt.",
-            "note": "Sertifikat SSL dikelola dan diperbarui otomatis oleh Vercel."
+            "note": "Sertifikat SSL dikelola dan diperbarui otomatis oleh Vercel. Catatan jujur: kode ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas ini hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
           "instruction": "Deklarasikan konstanta `cname` yang bernilai string `'cname.vercel-dns.com'`.",
           "starterCode": "async function configureDomain() {\n  const domain = 'proyekku.com';\n  // Deklarasi target CNAME Vercel di bawah ini\n  \n  await dns.setRecord(domain, 'CNAME', cname);\n}",
