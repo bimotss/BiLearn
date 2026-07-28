@@ -21,7 +21,6 @@ const ids = new Set<string>();
 const instalasiAllowlist = new Set<string>([
   "nosql",
   "spreadsheet",
-  "data-analysis",
   "nextjs",
   "python",
   "node-express",
