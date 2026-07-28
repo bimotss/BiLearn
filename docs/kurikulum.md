@@ -92,6 +92,7 @@ Prasyarat: HTML, CSS dasar. Track terpanjang — inti segalanya.
 
 | Modul | Isi | Step |
 |---|---|---|
+| 0. Persiapan & Alat Kerja | Di mana JavaScript ditulis & dijalankan, tag script + defer, DevTools Console, membaca pesan error | 4 |
 | 1. Dasar | Variabel, tipe data, operator, kondisi, loop | 50 |
 | 2. Fungsi | Deklarasi, arrow, scope, closure | 40 |
 | 3. Struktur data | Array + method (map/filter/reduce), object, destructuring | 55 |
@@ -109,7 +110,7 @@ Prasyarat: HTML, CSS dasar. Track terpanjang — inti segalanya.
 
 Prasyarat: tidak ada. Bisa diambil paralel sejak awal. **Diferensiasi BiLearn: simulasi PR-based workflow seperti requirement lowongan.**
 
-Modul: dasar (init/add/commit/log) → branching & merge → remote & GitHub → **alur kerja tim: fork, PR, code review, resolve conflict (disimulasikan di platform)** → git untuk keadaan darurat (revert, reset, reflog, stash).
+Modul: **persiapan & dasar** (memasang Git per OS, di mana perintahnya ditulis, init/add/commit/log) → branching & merge → remote & GitHub → **alur kerja tim: fork, PR, code review, resolve conflict (disimulasikan di platform)** → git untuk keadaan darurat (revert, reset, reflog, stash).
 
 **Proyek sertifikasi:** kontribusi ke repo simulasi — ambil "tiket", bikin branch, buka PR, respons review, merge.
 
@@ -133,7 +134,7 @@ Modul: komponen & JSX → props & komposisi → state & event → list, form (co
 
 Prasyarat: React.
 
-Modul: App Router, halaman & layout → server vs client components → data fetching & caching → route handlers (API) → form & server actions → auth → optimasi (image, font, metadata/SEO) → deploy ke Vercel.
+Modul: **persiapan** (create-next-app, dev server, isi folder app/) & App Router, halaman & layout → server vs client components → data fetching & caching → route handlers (API) → form & server actions → auth → optimasi (image, font, metadata/SEO) → deploy ke Vercel.
 
 **Proyek sertifikasi:** blog dengan CMS, e-commerce mini (katalog + cart + checkout mock), aplikasi full-stack dengan database.
 
@@ -159,7 +160,7 @@ Prasyarat: HTML, CSS, JS dasar, Git, SQL dasar (Track 9 modul 1–3). **Jalur te
 
 Prasyarat: JS, TS, Git. Jalur startup & remote.
 
-Modul: Node runtime & npm → Express dasar (routing, middleware) → REST API design → koneksi database (Prisma) → auth (JWT, session) → validasi & error handling → file upload & email → testing API → keamanan dasar (CORS, rate limit, sanitasi).
+Modul: **persiapan & Node runtime** (memasang Node LTS lewat nvm, `npm init`, package.json vs node_modules) & npm → Express dasar (routing, middleware) → REST API design → koneksi database (Prisma) → auth (JWT, session) → validasi & error handling → file upload & email → testing API → keamanan dasar (CORS, rate limit, sanitasi).
 
 **Proyek sertifikasi:** REST API lengkap dengan auth + dokumentasi, backend untuk proyek Next.js, API real-time sederhana (WebSocket).
 
@@ -189,7 +190,7 @@ Prasyarat: tidak ada (bisa mulai kapan saja). **SQL murni dulu, ORM belakangan**
 
 ## Track 10 — NoSQL & Data Lanjutan (≈30 jam, ~100 step)
 
-Prasyarat: Track 9. MongoDB (dokumen, CRUD, agregasi, kapan pakai vs SQL) + Redis (caching, session, use case nyata). Sesuai permintaan lowongan full-stack Indonesia + tren Redis global.
+Prasyarat: Track 9. Dibuka dengan **persiapan** (MongoDB Atlas gratis atau Docker lokal, menyambung dengan mongosh), lalu MongoDB (dokumen, CRUD, agregasi, kapan pakai vs SQL) + Redis (caching, session, use case nyata). Sesuai permintaan lowongan full-stack Indonesia + tren Redis global.
 
 ## Track 11 — Deployment & Docker (≈35 jam, ~120 step)
 
@@ -219,7 +220,7 @@ Modul: dasar spreadsheet (formula, referensi sel) → fungsi analisis (IF, VLOOK
 
 Prasyarat: tidak ada (bisa jadi bahasa pertama untuk jalur data). Hampir semua lowongan data mensyaratkan Python.
 
-Modul: dasar (variabel, kondisi, loop) → struktur data (list, dict, set) → fungsi & module → file & error handling → OOP dasar → virtual env & pip → Python untuk otomasi (baca file Excel/CSV, scraping dasar) → pengantar pandas.
+Modul: **persiapan & dasar** (memasang Python, `python` vs `python3`, REPL vs berkas .py, variabel, kondisi, loop) → struktur data (list, dict, set) → fungsi & module → file & error handling → OOP dasar → virtual env & pip → Python untuk otomasi (baca file Excel/CSV, scraping dasar) → pengantar pandas.
 
 **Proyek sertifikasi:** otomasi laporan dari banyak file CSV, scraper data publik sederhana, CLI tool.
 

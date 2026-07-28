@@ -11,11 +11,12 @@ export const nosqlTrack: Track = {
   order: 11,
   modules: [
     {
-      slug: "konsep-nosql",
-      title: "Konsep NoSQL",
+      slug: "persiapan-konsep-nosql",
+      title: "Persiapan & Konsep NoSQL",
       description:
-        "Bukan pengganti SQL — alat berbeda untuk masalah berbeda.",
+        "Siapkan MongoDB (Atlas gratis atau Docker lokal) lalu pahami peta NoSQL — bukan pengganti SQL, alat berbeda untuk masalah berbeda.",
       topics: [
+        "Menyiapkan MongoDB: Atlas gratis atau Docker lokal, lalu menyambung dengan mongosh",
         "Empat keluarga: document, key-value, column, graph",
         "Trade-off vs relasional: skema, konsistensi, skala",
         "CAP theorem dijelaskan praktis",
@@ -23,6 +24,103 @@ export const nosqlTrack: Track = {
         "Studi kasus: aplikasi yang tepat untuk masing-masing",
       ],
       items: [
+        {
+          kind: "materi",
+          id: "nosql-1-m0",
+          title: "Persiapan: Menyiapkan MongoDB dan Menyambung dengan mongosh",
+          body:
+            "# Pengertian\n\n" +
+            "Sebelum membahas teori NoSQL, satu hal praktis harus beres: **kamu butuh database yang bisa disambungi.** Untuk track ini, MongoDB adalah pilihannya, dan ada dua cara menyiapkannya — keduanya gratis.\n\n" +
+            "**mongosh** adalah shell resmi MongoDB: sebuah program terminal tempat kamu mengetik perintah database dan langsung melihat jawabannya. Ia berbeda dari **MongoDB Compass** yang berupa aplikasi dengan tampilan grafis. Keduanya boleh dipakai; latihan di track ini menulis perintah gaya `mongosh` karena itulah yang muncul di dokumentasi, di soal interview, dan di kode aplikasi.\n\n" +
+            "## Dua Cara Menyiapkan MongoDB\n\n" +
+            "| | **Atlas** (di cloud) | **Docker** (di komputermu) |\n" +
+            "|---|---|---|\n" +
+            "| Cara mulai | daftar di mongodb.com/atlas, buat cluster gratis M0 | `docker run -d -p 27017:27017 --name mongo mongo:7` |\n" +
+            "| Butuh internet | ya, selalu | tidak, setelah image terunduh |\n" +
+            "| Bentuk connection string | `mongodb+srv://user:sandi@cluster0.xxxxx.mongodb.net` | `mongodb://localhost:27017` |\n" +
+            "| Cocok untuk | mencoba cepat, proyek portofolio yang perlu diakses orang lain | belajar tanpa kuota, mengulang dari nol kapan saja |\n" +
+            "| Jebakan khasnya | lupa menambahkan IP-mu ke **Network Access** → koneksi menggantung lalu timeout | lupa `-p 27017:27017` → port tidak terbuka, koneksi ditolak |\n\n" +
+            "## Alur Menyambung\n\n" +
+            "```text\n" +
+            "  1. database menyala             2. mongosh menyambung         3. kamu mengetik perintah\n" +
+            "  +---------------------+         +-------------------+         +---------------------+\n" +
+            "  | Atlas M0  ATAU      |  <----  | mongosh \"<uri>\"   |  ---->  | test> db.produk     |\n" +
+            "  | container mongo:7   |         +-------------------+         |        .find()      |\n" +
+            "  +---------------------+                                       +---------------------+\n" +
+            "\n" +
+            "  Prompt berubah jadi nama database:  test>  atau  toko>\n" +
+            "  Ganti database aktif dengan:        use toko\n" +
+            "```\n\n" +
+            "```text\n" +
+            "$ mongosh \"mongodb://localhost:27017\"\n" +
+            "Current Mongosh Log ID: 66a5f1c2e4b0a1d3f2c8b7a9\n" +
+            "Connecting to:          mongodb://localhost:27017\n" +
+            "Using MongoDB:          7.0.12\n" +
+            "test> use toko\n" +
+            "switched to db toko\n" +
+            "toko> db.produk.insertOne({ nama: \"Kopi Gayo\", stok: 12 })\n" +
+            "{ acknowledged: true, insertedId: ObjectId('66a5f2...') }\n" +
+            "```\n\n" +
+            "Satu hal yang mengejutkan pendatang dari SQL: **kamu tidak perlu membuat database dan collection lebih dulu.** MongoDB membuatnya otomatis saat dokumen pertama masuk. Enak, tapi ada sisi gelapnya — lihat bagian jebakan.\n\n" +
+            "## Kosakata: Padanan Istilah dari SQL\n\n" +
+            "| SQL | MongoDB | Catatan |\n" +
+            "|---|---|---|\n" +
+            "| database | database | sama |\n" +
+            "| tabel | **collection** | tidak punya skema tetap |\n" +
+            "| baris | **document** | bentuknya seperti object JSON |\n" +
+            "| kolom | **field** | tiap dokumen boleh punya field berbeda |\n" +
+            "| `id SERIAL PRIMARY KEY` | `_id: ObjectId(...)` | dibuat otomatis kalau tidak kamu isi |\n" +
+            "| `JOIN` | `$lookup` (agregasi) | ada, tapi lebih mahal dan lebih jarang dipakai |\n\n" +
+            "## Analogi Dunia Nyata\n\n" +
+            "Database relasional itu seperti **formulir kertas yang sudah dicetak**: kolomnya sudah ditentukan, dan semua orang wajib mengisi kolom yang sama. MongoDB seperti **tumpukan catatan bebas dalam satu kotak**: setiap catatan boleh memuat hal berbeda.\n\n" +
+            "Kebebasan itu berguna saat bentuk data memang belum pasti (katalog produk yang tiap kategorinya beda atribut). Tapi kebebasan yang tidak dijaga berubah jadi kekacauan: satu dokumen memakai field `harga`, dokumen lain `price`, dan laporan pun salah tanpa satu pun pesan error.\n\n" +
+            "## Jebakan yang Sering Terjadi\n\n" +
+            "1. **Salah ketik nama collection.** `db.produks.find()` untuk collection `produk` tidak error — ia mengembalikan hasil kosong, karena MongoDB menganggap kamu sedang menyebut collection baru yang belum berisi apa pun. Ini jebakan paling mahal bagi pendatang dari SQL, yang biasa mendapat pesan `relation does not exist`.\n" +
+            "2. **Lupa membuka Network Access di Atlas.** Gejalanya bukan penolakan cepat, tapi koneksi yang menggantung lama lalu `ServerSelectionTimeoutError`.\n" +
+            "3. **Menaruh sandi Atlas langsung di kode.** Connection string mengandung username dan sandi — ia wajib masuk `.env`, dan `.env` wajib masuk `.gitignore`.\n" +
+            "4. **Sandi mengandung karakter khusus** (`@`, `:`, `/`) tanpa di-*encode* → connection string gagal diparse dengan pesan yang tidak menyebut sandi sama sekali.\n" +
+            "5. **Mengira container Docker menyimpan data selamanya.** `docker rm mongo` tanpa volume berarti seluruh datanya hilang. Untuk latihan itu tidak masalah; untuk hal serius, pasang volume.\n" +
+            "6. **Menganggap tanpa skema berarti tanpa desain.** Justru sebaliknya: karena database tidak lagi menjaga bentuk data, disiplin itu pindah ke kode aplikasimu.\n\n" +
+            "## Kaitan ke Dunia Kerja\n\n" +
+            "- Di lowongan, MongoDB hampir selalu muncul berpasangan dengan Node.js (`MERN stack`), dan yang diuji bukan hafalan perintah tapi **kapan kamu memilihnya dan kapan tidak**.\n" +
+            "- Pertanyaan **interview** yang paling sering: \"kapan kamu pakai MongoDB, kapan PostgreSQL?\" Jawaban yang bagus menyebut bentuk data dan pola akses, bukan \"MongoDB lebih cepat\".\n" +
+            "- Di **code review**, kredensial database yang tertulis di kode adalah temuan yang langsung memblokir PR — bukan catatan kecil.\n\n" +
+            "> **Kapan dipakai:** setiap awal proyek — nyalakan database (Atlas atau Docker), simpan connection string di `.env`, sambungkan dengan `mongosh` sekali untuk membuktikan koneksinya hidup, baru tulis kode aplikasi. Membalik urutan ini membuatmu men-debug dua hal sekaligus.\n\n" +
+            "> **Catatan tentang latihan di BiLearn:** panel latihan track ini **tidak menjalankan MongoDB** (tidak ada database di dalam browser), jadi tidak ada hasil query yang muncul di sana. Yang diperiksa adalah perintah yang kamu tulis, dan tesnya tetap bisa lulus. Hasil nyata selalu ditampilkan di bagian **Contoh**.",
+        },
+        {
+          kind: "step",
+          id: "nosql-1-0",
+          title: "Menyambung ke MongoDB dengan mongosh",
+          explanation:
+            "`mongosh` adalah shell resmi MongoDB, dan cara memakainya adalah menyebutkan **connection string** sebagai argumen. Bentuknya `mongodb://host:port` untuk database lokal, atau `mongodb+srv://...` untuk Atlas di cloud. Port bawaan MongoDB adalah **27017**, dan angka itu layak kamu hafal karena muncul di hampir semua konfigurasi. Kamu menjalankan perintah ini di awal sesi kerja untuk membuktikan databasenya benar-benar bisa dihubungi — jauh lebih cepat daripada menebak-nebak dari dalam kode aplikasi. Jebakan yang sering: connection string tidak dibungkus tanda kutip, sehingga karakter seperti `?` dan `&` pada URI Atlas ditafsirkan oleh shell dan perintahnya gagal dengan pesan yang membingungkan. Jebakan kedua: `ECONNREFUSED` disimpulkan sebagai \"mongosh rusak\", padahal artinya tidak ada database yang mendengarkan di alamat itu — containernya belum menyala.",
+          example: {
+            code: 'mongosh "mongodb+srv://bimo:rahasia@cluster0.ab12c.mongodb.net"',
+            output:
+              "Current Mongosh Log ID: 66a5f1c2e4b0a1d3f2c8b7a9\n" +
+              "Connecting to:          mongodb+srv://<credentials>@cluster0.ab12c.mongodb.net\n" +
+              "Using MongoDB:          7.0.12\n" +
+              "Atlas atlas-abc123-shard-0 [primary] test>",
+            note: "Perhatikan sandi disamarkan menjadi `<credentials>` di keluaran, tapi tetap terbaca utuh di riwayat terminal (`history`). Itu sebabnya di proyek nyata connection string dibaca dari `.env`, bukan diketik langsung.",
+          },
+          instruction:
+            "Kamu menjalankan MongoDB lokal lewat Docker di port bawaannya. Tulis perintah `mongosh` untuk menyambung ke database di komputermu sendiri, lengkap dengan connection string yang sesuai (bungkus dengan tanda kutip).",
+          starterCode: "# tulis perintahnya di bawah ini\n",
+          language: "text",
+          tests: [
+            {
+              pattern: "mongosh\\s+['\"]?mongodb://",
+              message:
+                "Mulai dengan `mongosh`, lalu connection string berskema `mongodb://` (bukan `mongodb+srv://` — bentuk itu khusus Atlas di cloud).",
+            },
+            {
+              pattern: "mongodb://(localhost|127\\.0\\.0\\.1):27017",
+              message:
+                "Untuk database di komputer sendiri, host-nya `localhost` (atau `127.0.0.1`) dan port bawaan MongoDB adalah 27017. Tulis dengan format host:port.",
+            },
+          ],
+          solution: 'mongosh "mongodb://localhost:27017"',
+        },
         {
           kind: "materi",
           id: "nosql-1-m1",

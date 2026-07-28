@@ -13,10 +13,11 @@ export const nextjsTrack: Track = {
   "order": 7,
   "modules": [
     {
-      "slug": "app-router",
-      "title": "App Router: Halaman & Layout",
-      "description": "Routing berbasis file — fondasi semua aplikasi Next.js modern.",
+      "slug": "persiapan-app-router",
+      "title": "Persiapan & App Router",
+      "description": "Buat proyek Next.js pertamamu, lalu kuasai routing berbasis file — fondasi semua aplikasi Next.js modern.",
       "topics": [
+        "Membuat proyek dengan create-next-app & menjalankan dev server",
         "Kenapa Next.js: masalah yang diselesaikan di atas React",
         "Struktur app/: page, layout, folder = route",
         "Dynamic route [slug] & catch-all",
@@ -26,6 +27,37 @@ export const nextjsTrack: Track = {
         "Route group & private folder"
       ],
       "items": [
+        {
+          "kind": "materi",
+          "id": "next-1-m0",
+          "title": "Persiapan: Membuat Proyek Next.js dan Menjalankan Dev Server",
+          "body": "# Pengertian\n\n**Next.js** adalah framework yang dibangun di atas React. Kalau di track React kamu membuat proyek dengan Vite dan mengurus routing sendiri lewat library, di Next.js keduanya sudah menjadi bagian framework — beserta rendering di server, optimasi gambar, dan API route.\n\nSebelum menyentuh konsep App Router, satu hal harus jalan lebih dulu: **proyeknya ada di komputermu dan dev server-nya menyala.**\n\n## Prasyarat dan Cara Membuat Proyek\n\n| Kebutuhan | Perintah pemeriksa | Catatan |\n|---|---|---|\n| Node.js versi LTS | `node -v` | Next.js modern menolak Node yang terlalu tua; pakai LTS |\n| npm | `npm -v` | ikut terpasang bersama Node |\n| Proyek baru | `npx create-next-app@latest nama-proyek` | scaffolding resmi, bukan salin folder orang |\n\n```text\n$ npx create-next-app@latest toko-online\n\n√ Would you like to use TypeScript?          » Yes\n√ Would you like to use ESLint?              » Yes\n√ Would you like to use Tailwind CSS?        » Yes\n√ Would you like your code inside a `src/` directory?  » Yes\n√ Would you like to use App Router? (recommended)     » Yes\n\n$ cd toko-online\n$ npm run dev\n  ▲ Next.js 16.2.12\n  - Local:   http://localhost:3000\n  ✓ Ready in 1.4s\n```\n\nJawaban yang dipakai di seluruh track ini: **TypeScript ya, App Router ya**. Kalau kamu memilih *Pages Router*, sebagian besar materi track ini tidak akan cocok — itu sistem routing generasi sebelumnya yang masih didukung tapi tidak lagi dianjurkan untuk proyek baru.\n\n## Isi Folder yang Baru Dibuat\n\n```text\ntoko-online/\n├── src/app/\n│   ├── layout.tsx      <-- kerangka yang membungkus SEMUA halaman\n│   ├── page.tsx        <-- halaman untuk URL \"/\"\n│   └── globals.css\n├── public/             <-- berkas statis; /logo.png berarti public/logo.png\n├── next.config.ts\n├── package.json        <-- di sini ada scripts: dev, build, start, lint\n└── tsconfig.json\n```\n\nAturan yang membedakan Next.js dari React biasa: **nama berkas menentukan perilaku**. `page.tsx` membuat sebuah URL bisa diakses, `layout.tsx` membungkusnya, `loading.tsx` tampil saat menunggu. Folder tanpa `page.tsx` di dalamnya tidak menghasilkan URL apa pun.\n\n## Empat Perintah yang Akan Kamu Pakai Terus\n\n| Perintah | Fungsinya | Kapan dipakai |\n|---|---|---|\n| `npm run dev` | menyalakan dev server + hot reload | sehari-hari saat mengembangkan |\n| `npm run build` | membangun versi produksi | sebelum deploy, dan untuk menemukan error yang tidak muncul di dev |\n| `npm start` | menjalankan hasil build | menguji perilaku produksi di lokal |\n| `npm run lint` | memeriksa gaya & kesalahan umum | sebelum membuat Pull Request |\n\n`npm run build` layak dijalankan sesekali meskipun dev server-mu lancar: sebagian error tipe dan kesalahan pemakaian Server Component **hanya** muncul saat build.\n\n## Analogi Dunia Nyata\n\nReact itu seperti **mesin dan roda**: kuat, tapi kamu masih harus merakit rangka, lampu, dan sistem kemudinya sendiri (routing, rendering, optimasi). Next.js adalah **mobil jadi** dari bengkel yang sama: komponennya sama, tapi susunannya sudah ditentukan.\n\nKonsekuensinya dua arah. Kamu tidak perlu memutuskan struktur folder — tapi kamu **wajib** mengikuti konvensinya. `page.tsx` yang salah nama tidak akan pernah muncul sebagai halaman, dan tidak ada pesan error yang menjelaskan kenapa.\n\n## Jebakan yang Menjatuhkan Hampir Semua Pemula\n\n1. **Memilih Pages Router lalu mengikuti materi App Router.** Semua contoh gagal. Kalau ragu, periksa: ada folder `app/` berarti App Router, ada folder `pages/` berarti Pages Router.\n2. **Menamai berkas `Page.tsx` atau `index.tsx`.** Konvensinya huruf kecil semua: `page.tsx`. Berkas dengan nama lain di dalam folder route tidak menghasilkan URL.\n3. **Menjalankan `npm run dev` di folder induk.** Terminal harus berada di dalam folder proyek — periksa `package.json` ada di situ.\n4. **Menyalin folder proyek orang lain lengkap dengan `node_modules`.** Jauh lebih rapuh daripada `npm install` sendiri, dan sering menghasilkan error versi yang sulit dilacak.\n5. **Port 3000 sudah dipakai.** Next.js akan pindah ke 3001 dan menyebutkannya di baris `Local:` — bacalah alamat itu, jangan berasumsi selalu 3000.\n6. **Mengira dev server perlu dimatikan-nyalakan setiap kali menyimpan.** Hot reload sudah menanganinya; yang perlu restart hanya perubahan pada `next.config.ts` atau `.env`.\n\n## Kaitan ke Dunia Kerja\n\n- `create-next-app` adalah cara resmi memulai, dan di **interview** kamu bisa ditanya mengapa memilih Next.js dibanding React murni — jawabannya menyebut SEO, rendering di server, dan routing bawaan, bukan \"lebih modern\".\n- Di tim, **CI menjalankan `npm run build` dan `npm run lint`** pada setiap Pull Request. Kalau keduanya belum pernah kamu jalankan di lokal, PR-mu akan merah lebih dulu sebelum satu orang pun membacanya.\n- Struktur `app/` yang konsisten adalah alasan orang baru bisa langsung membaca proyek Next.js orang lain — itu nilai jual framework ini di perusahaan dengan pergantian anggota tim.\n\n> **Kapan dipakai:** sekali di awal setiap proyek. Setelah `npm run dev` menampilkan `✓ Ready`, buka `http://localhost:3000` dan pastikan halaman bawaan muncul **sebelum** kamu menghapus isinya — supaya kalau nanti ada yang rusak, kamu tahu penyebabnya kodemu, bukan pemasangannya.\n\n> **Catatan tentang latihan di BiLearn:** panel latihan track ini **tidak menjalankan Next.js** (butuh server sendiri, dan sebagian berkas hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus. Keluaran nyata ditampilkan di bagian **Contoh** setiap latihan."
+        },
+        {
+          "kind": "step",
+          "id": "next-1-0",
+          "title": "Membuat Proyek Next.js Pertama",
+          "explanation": "Proyek Next.js dibuat dengan `create-next-app`, dijalankan lewat `npx` supaya kamu memakai versi terbaru tanpa memasang apa pun secara global. Penanda `@latest` itu penting: tanpa ia, npx bisa memakai versi lama yang tersimpan di cache komputermu, dan kamu memulai proyek baru dengan perkakas usang. Nama proyek ditulis sebagai argumen terakhir dan akan menjadi nama foldernya — pakai huruf kecil dan tanda hubung, karena npm menolak nama berhuruf besar. Setelah perintah ini selesai, dua langkah berikutnya selalu sama: masuk ke foldernya lalu `npm run dev`. Jebakan yang sering: menjalankannya di dalam folder proyek yang sudah ada, sehingga proyek baru bersarang di dalam proyek lama dan dua `package.json` saling membingungkan.",
+          "example": {
+            "code": "npx create-next-app@latest blog-saya\ncd blog-saya\nnpm run dev",
+            "output": "Creating a new Next.js app in /home/bimo/blog-saya.\n\nInstalling dependencies:\n- react\n- react-dom\n- next\n\nSuccess! Created blog-saya\n\n  ▲ Next.js 16.2.12\n  - Local:   http://localhost:3000\n  ✓ Ready in 1.4s",
+            "note": "Kalau baris `Local:` menyebut port selain 3000, berarti 3000 sedang dipakai program lain — buka alamat yang disebutkan, jangan yang kamu hafal. Catatan jujur: perintah ini tidak dijalankan di panel preview; yang diperiksa adalah perintah yang kamu tulis, dan tesnya tetap bisa lulus."
+          },
+          "instruction": "Kamu berada di folder kosong dan ingin membuat proyek Next.js baru bernama `toko-online` memakai versi perkakas paling baru — tanpa memasang generator itu secara global lebih dulu. Tulis satu perintah yang melakukannya.",
+          "starterCode": "# tulis perintahnya di bawah ini\n",
+          "language": "text",
+          "tests": [
+            {
+              "pattern": "npx\\s+create-next-app@latest",
+              "message": "Jalankan generator resminya lewat `npx` (tanpa memasang global), dan tambahkan penanda versi terbaru setelah nama paketnya dengan tanda @ — tanpa itu npx bisa memakai versi lama dari cache."
+            },
+            {
+              "pattern": "create-next-app@latest\\s+toko-online",
+              "message": "Sebutkan nama proyeknya sebagai argumen terakhir, tepat setelah nama paket. Nama itu akan jadi nama folder, jadi tulis persis seperti yang diminta (huruf kecil dan tanda hubung)."
+            }
+          ],
+          "solution": "npx create-next-app@latest toko-online"
+        },
         {
           "kind": "materi",
           "id": "next-1-m1",

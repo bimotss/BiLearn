@@ -11,11 +11,12 @@ export const nodeExpressTrack: Track = {
   order: 9,
   modules: [
     {
-      slug: "node-runtime",
-      title: "Node.js Runtime & npm",
+      slug: "persiapan-node-runtime",
+      title: "Persiapan & Node.js Runtime",
       description:
-        "JavaScript keluar dari browser: file system, module, dan ekosistem npm.",
+        "Pasang Node.js versi LTS, siapkan proyek pertama, lalu pahami runtime-nya: file system, module, dan ekosistem npm.",
       topics: [
+        "Memasang Node.js LTS (nvm) & memverifikasi node -v / npm -v",
         "Apa itu Node.js & bedanya dengan browser",
         "Module system: ESM di Node",
         "npm: package.json, scripts, dependencies vs devDependencies",
@@ -25,6 +26,104 @@ export const nodeExpressTrack: Track = {
         "nodemon/tsx untuk development",
       ],
       items: [
+        {
+          kind: "materi",
+          id: "node-1-m0",
+          title: "Persiapan: Memasang Node.js dan Menyiapkan Proyek Pertama",
+          body:
+            "# Pengertian\n\n" +
+            "**Node.js** adalah program yang menjalankan JavaScript **di luar browser**. Sampai track ini, semua kode JavaScript-mu dieksekusi oleh browser; sekarang eksekutornya adalah Node, yang berjalan di terminal dan punya kemampuan yang tidak boleh dimiliki browser: membaca berkas di harddisk, membuka port jaringan, dan berbicara langsung dengan database.\n\n" +
+            "Sebelum itu semua, dua hal harus beres: **Node terpasang dengan versi yang benar**, dan **folder proyekmu punya `package.json`**.\n\n" +
+            "## Memasang Node.js\n\n" +
+            "| Cara | Perintah | Kapan dipilih |\n" +
+            "|---|---|---|\n" +
+            "| **nvm** (dianjurkan) | `nvm install --lts` lalu `nvm use --lts` | kamu akan mengerjakan lebih dari satu proyek — tiap proyek bisa butuh versi Node berbeda |\n" +
+            "| Installer resmi | unduh dari nodejs.org, pilih **LTS** | komputer baru, satu proyek, ingin cepat |\n" +
+            "| Homebrew (macOS) | `brew install node` | sudah biasa memakai brew |\n\n" +
+            "Selalu pilih **LTS** (*Long Term Support*), bukan versi \"Current\". LTS yang dipakai perusahaan, dan library populer diuji terhadapnya. Versi Current lebih baru tapi lebih sering membuat paket gagal terpasang.\n\n" +
+            "```text\n" +
+            "$ node -v\n" +
+            "v22.14.0\n" +
+            "\n" +
+            "$ npm -v\n" +
+            "10.9.2\n" +
+            "```\n\n" +
+            "`npm` ikut terpasang bersama Node — kamu tidak memasangnya terpisah. Kalau `node -v` jalan tapi `npm -v` tidak, pemasangannya tidak lengkap dan sebaiknya diulang.\n\n" +
+            "## Anatomi Proyek Node Pertamamu\n\n" +
+            "```text\n" +
+            "$ mkdir toko-api && cd toko-api\n" +
+            "$ npm init -y            <-- membuat package.json otomatis\n" +
+            "$ npm install express    <-- menambah dependency\n" +
+            "\n" +
+            "toko-api/\n" +
+            "├── package.json        <-- daftar dependency + scripts (WAJIB di-commit)\n" +
+            "├── package-lock.json   <-- versi persis tiap paket (WAJIB di-commit)\n" +
+            "├── node_modules/       <-- isi paketnya (JANGAN di-commit, masuk .gitignore)\n" +
+            "├── .env                <-- kredensial (JANGAN di-commit)\n" +
+            "└── src/\n" +
+            "    └── index.js        <-- kodemu\n" +
+            "```\n\n" +
+            "Aturan yang tidak bisa dinegosiasi: `node_modules` dan `.env` masuk `.gitignore`, sementara `package.json` dan `package-lock.json` **harus** ikut ke repo. Alasannya sederhana — dari dua berkas itu, orang lain bisa membangun ulang `node_modules` yang identik dengan `npm ci`.\n\n" +
+            "## Browser vs Node: Apa yang Hilang dan Apa yang Didapat\n\n" +
+            "| | Browser | Node.js |\n" +
+            "|---|---|---|\n" +
+            "| `window`, `document`, DOM | ada | **tidak ada** |\n" +
+            "| Membaca/menulis berkas | tidak boleh | `node:fs` |\n" +
+            "| Membuka server di sebuah port | tidak bisa | `node:http`, Express |\n" +
+            "| Variabel lingkungan | tidak ada | `process.env` |\n" +
+            "| Siapa yang menjalankan | pengunjung situs | kamu / server |\n\n" +
+            "Karena `document` tidak ada di Node, menyalin kode DOM ke berkas Node menghasilkan `ReferenceError: document is not defined` — dan itu error paling sering di hari pertama seorang frontend berpindah ke backend.\n\n" +
+            "## Analogi Dunia Nyata\n\n" +
+            "Browser itu seperti **ruang tamu**: tamu (pengunjung) boleh masuk, tapi ada banyak hal yang tidak boleh ia sentuh. Node.js adalah **dapur dan gudang**: di sini ada api, pisau, dan seluruh stok bahan. Kamu bisa melakukan apa saja — termasuk hal berbahaya seperti menghapus berkas atau membocorkan kredensial.\n\n" +
+            "Dari sini konsekuensi keamanannya jadi masuk akal: kode yang berjalan di Node dipercaya penuh oleh sistem, jadi setiap masukan dari pengguna harus dianggap tidak bisa dipercaya sampai divalidasi.\n\n" +
+            "## Jebakan yang Menjatuhkan Hampir Semua Pemula\n\n" +
+            "1. **Menjalankan `npm install` di folder yang salah.** Kalau `package.json` tidak ada di folder itu, npm membuat proyek baru atau memasang ke folder induk — dan kamu berakhir dengan `node_modules` berantakan di mana-mana. Periksa dengan `ls` bahwa `package.json` ada.\n" +
+            "2. **Meng-commit `node_modules`.** Ukurannya bisa ratusan megabyte dan isinya bisa dibangun ulang. Ini temuan yang hampir selalu diminta diperbaiki di code review pertama.\n" +
+            "3. **Mengira `npm install -g` menyelesaikan masalah versi.** Paket global tidak tercatat di `package.json`, jadi proyekmu jalan di komputermu dan gagal di komputer orang lain.\n" +
+            "4. **Memakai `require()` di berkas ESM atau `import` di berkas CommonJS.** Ini penyebab error `Cannot use import statement outside a module`; penentunya `\"type\": \"module\"` di `package.json`.\n" +
+            "5. **Menyalin kode browser (`document.querySelector`) ke Node.** Tidak akan pernah jalan — Node tidak punya DOM.\n" +
+            "6. **Lupa `.env` masuk `.gitignore`.** Sekali ter-commit, kredensialnya harus dianggap bocor dan wajib diganti, bukan cukup dihapus.\n\n" +
+            "## Kaitan ke Dunia Kerja\n\n" +
+            "- Hari pertama di proyek Node hampir selalu: `git clone`, `npm ci`, salin `.env.example` menjadi `.env`, `npm run dev`. Kalau salah satu langkah itu gagal, yang pertama dicurigai adalah versi Node — karena itu banyak repo memasang berkas `.nvmrc`.\n" +
+            "- Beda `npm install` dan **`npm ci`** adalah pertanyaan **interview** yang sering muncul: `ci` memasang tepat sesuai `package-lock.json` dan itulah yang dipakai di server build.\n" +
+            "- Di **code review**, `dependencies` vs `devDependencies` yang tertukar akan disorot: memasukkan library testing ke `dependencies` membuat image produksi membengkak.\n\n" +
+            "> **Kapan dipakai:** setiap kali memulai backend baru — `node -v` untuk memastikan versinya, `npm init -y` untuk membuat `package.json`, lalu `.gitignore` berisi `node_modules` dan `.env` **sebelum** commit pertama.\n\n" +
+            "> **Catatan tentang latihan di BiLearn:** panel latihan track ini **tidak menjalankan Node.js** (preview berjalan di dalam browser), jadi tidak ada keluaran terminal yang muncul di sana. Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus. Keluaran nyata ditampilkan di bagian **Contoh** setiap latihan.",
+        },
+        {
+          kind: "step",
+          id: "node-1-0",
+          title: "Menyiapkan Proyek Node Pertama",
+          explanation:
+            "Setiap proyek Node dimulai dari `package.json` — berkas yang mencatat nama proyek, daftar dependency, dan perintah `scripts`. Perintah `npm init` membuatnya secara interaktif dengan sederet pertanyaan, dan flag `-y` (atau `--yes`) menjawab semuanya dengan nilai default sehingga berkasnya langsung jadi. Kamu memakai bentuk cepat ini saat proyek latihan atau saat kamu memang akan menyunting berkasnya sendiri setelahnya. Jebakan pertama: menjalankannya di folder yang salah, sehingga `package.json` lahir di tempat tak terduga — pastikan kamu sudah `cd` ke folder proyek. Jebakan kedua: menjalankan `npm install <paket>` sebelum `package.json` ada; npm akan mencari ke folder induk dan bisa menambahkan dependency ke proyek lain tanpa kamu sadari.",
+          example: {
+            code: "mkdir toko-api\ncd toko-api\nnpm init -y",
+            output:
+              "Wrote to /home/bimo/toko-api/package.json:\n\n" +
+              "{\n" +
+              '  "name": "toko-api",\n' +
+              '  "version": "1.0.0",\n' +
+              '  "main": "index.js",\n' +
+              '  "scripts": {\n' +
+              '    "test": "echo \\"Error: no test specified\\" && exit 1"\n' +
+              "  },\n" +
+              '  "license": "ISC"\n' +
+              "}",
+            note: "Perhatikan `\"main\": \"index.js\"` dan belum adanya `\"type\": \"module\"` — selama itu belum ditambahkan, berkasmu diperlakukan sebagai CommonJS dan sintaks `import` akan ditolak.",
+          },
+          instruction:
+            "Kamu sudah berada di dalam folder proyek yang masih kosong dan ingin `package.json` dibuat langsung tanpa menjawab satu pun pertanyaan interaktif. Tulis satu perintah npm yang melakukannya.",
+          starterCode: "# tulis perintahnya di bawah ini\n",
+          language: "text",
+          tests: [
+            {
+              pattern: "npm\\s+init\\s+(-y|--yes)",
+              message:
+                "Perintahnya `npm init`, ditambah flag yang menyetujui semua pertanyaan default. Ada dua bentuk yang diterima: yang pendek satu huruf, atau yang panjang berawalan dua tanda minus.",
+            },
+          ],
+          solution: "npm init -y",
+        },
         {
           kind: "materi",
           id: "node-1-m1",

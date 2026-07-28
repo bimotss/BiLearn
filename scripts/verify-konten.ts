@@ -19,13 +19,9 @@ const ids = new Set<string>();
 // Allowlist sementara untuk modul pertama (persiapan/instalasi) per track.
 // Daftar ini menyusut setiap kali satu track selesai dikerjakan pada Ronde 2.
 const instalasiAllowlist = new Set<string>([
-  "nosql",
-  "spreadsheet",
-  "nextjs",
-  "python",
-  "node-express",
-  "javascript",
-  "sql",
+  // Ronde 4: daftar ini KOSONG. Semua 16 track sudah punya modul pertama
+  // bernama persiapan/instalasi. Jangan menambah entri baru ke sini —
+  // itu berarti menyembunyikan pelanggaran aturan #1, bukan menyelesaikannya.
 ]);
 
 function lapor(pesan: string) {

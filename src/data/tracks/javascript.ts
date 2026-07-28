@@ -12,6 +12,365 @@ export const javascriptTrack: Track = {
   order: 3,
   modules: [
     {
+      slug: "persiapan-alat-kerja",
+      title: "Persiapan & Alat Kerja",
+      description:
+        "Sebelum menulis satu baris logika: di mana JavaScript ditulis, bagaimana ia dijalankan, dan di mana pesan errornya muncul.",
+      topics: [
+        "Apa yang dikerjakan JavaScript — dan apa yang bukan tugasnya",
+        "Tiga tempat JavaScript bisa dijalankan: tag script, berkas .js, konsol browser",
+        "Menghubungkan berkas .js ke halaman (dan kenapa posisinya penting)",
+        "Membuka DevTools & membaca panel Console",
+        "console.log sebagai alat kerja utama, bukan sekadar contoh",
+        "Membaca pesan error pertamamu tanpa panik",
+      ],
+      items: [
+        {
+          kind: "materi",
+          id: "js-0-m1",
+          title: "Di Mana JavaScript Ditulis dan Dijalankan",
+          body:
+            "# Pengertian\n\n" +
+            "**JavaScript** adalah bahasa pemrograman yang dijalankan oleh browser. Kalau HTML menyusun isi halaman dan CSS mengatur tampilannya, JavaScript adalah satu-satunya dari ketiganya yang bisa **mengambil keputusan dan mengubah halaman setelah halaman itu terbuka**.\n\n" +
+            "Pertanyaan yang jarang dijawab tutorial — dan justru yang membuat pemula macet di hari pertama — bukan \"apa itu variabel\", tapi **\"kodenya saya tulis di mana, dan bagaimana saya tahu ia jalan?\"**. Modul ini menjawab itu lebih dulu.\n\n" +
+            "| Lapisan | Tugasnya | Contoh pertanyaan yang dijawabnya |\n" +
+            "|---|---|---|\n" +
+            "| **HTML** | struktur & makna | bagian mana yang judul, mana tombolnya? |\n" +
+            "| **CSS** | tampilan | warnanya apa, letaknya di mana? |\n" +
+            "| **JavaScript** | perilaku & logika | apa yang terjadi saat tombol itu diklik? |\n\n" +
+            "## Tiga Tempat JavaScript Bisa Kamu Jalankan\n\n" +
+            "```text\n" +
+            "1. KONSOL BROWSER (paling cepat, untuk mencoba satu-dua baris)\n" +
+            "   buka halaman apa pun -> F12 -> tab Console -> ketik -> Enter\n" +
+            "   kodenya hilang saat halaman dimuat ulang\n" +
+            "\n" +
+            "2. TAG <script> DI DALAM HTML (untuk kode pendek)\n" +
+            "   <script>\n" +
+            "     console.log('halo');\n" +
+            "   </script>\n" +
+            "\n" +
+            "3. BERKAS .js TERPISAH (cara yang dipakai di proyek nyata)\n" +
+            "   index.html  <-- memuat berkasnya\n" +
+            "   app.js      <-- kodenya di sini\n" +
+            "   <script src=\"app.js\" defer></script>\n" +
+            "```\n\n" +
+            "Cara ketiga yang dipakai di dunia kerja, karena kode terpisah dari markup bisa dibaca, dicari, dan diuji. Dua cara pertama tetap berguna: konsol untuk memeriksa cepat, tag `<script>` untuk contoh sekali pakai.\n\n" +
+            "## Kenapa `defer` Hampir Selalu Perlu\n\n" +
+            "Browser membaca HTML dari atas ke bawah. Kalau `<script>` diletakkan di `<head>` tanpa `defer`, kodenya berjalan **sebelum** elemen halaman ada, sehingga usaha mengambil tombol menghasilkan `null`:\n\n" +
+            "```text\n" +
+            "TANPA defer (script di head)          DENGAN defer\n" +
+            "-----------------------------         ------------------------------\n" +
+            "1. baca <head>                        1. baca <head>, catat script\n" +
+            "2. JALANKAN app.js  <-- tombol        2. bangun seluruh halaman\n" +
+            "   belum ada -> null                  3. JALANKAN app.js -> tombol ada\n" +
+            "3. bangun <body>\n" +
+            "```\n\n" +
+            "Dua jalan keluar yang sama-sama benar: tambahkan `defer`, atau letakkan `<script>` di baris terakhir sebelum `</body>`. Yang pertama lebih disukai sekarang.\n\n" +
+            "## DevTools: Panel yang Akan Kamu Buka Setiap Hari\n\n" +
+            "| Tab | Isinya | Kapan dipakai |\n" +
+            "|---|---|---|\n" +
+            "| **Console** | pesan `console.log` dan **semua error** | selalu — ini tempat pertama yang dilihat saat ada yang tidak jalan |\n" +
+            "| **Elements** | struktur halaman saat ini | memeriksa apakah JavaScript benar-benar mengubah isi halaman |\n" +
+            "| **Network** | permintaan ke server | nanti, saat belajar `fetch` |\n" +
+            "| **Sources** | berkas & breakpoint | saat butuh menghentikan kode di satu baris |\n\n" +
+            "Membukanya: `F12`, atau `Ctrl+Shift+I` (Windows/Linux), atau `Cmd+Option+I` (macOS).\n\n" +
+            "## Analogi Dunia Nyata\n\n" +
+            "Bayangkan sebuah toko. **HTML** adalah rak, meja kasir, dan papan namanya. **CSS** adalah warna dinding dan penataan lampunya. **JavaScript** adalah **pegawainya**: ia yang menghitung total belanja, menolak kartu yang kedaluwarsa, dan mengganti label \"stok habis\" saat barang terakhir terjual.\n\n" +
+            "Karena itu urutan belajarnya begini: pegawai tidak bisa bekerja di toko yang raknya belum ada.\n\n" +
+            "## Membaca Pesan Error Tanpa Panik\n\n" +
+            "Error di JavaScript **tidak** menghentikan halaman secara diam-diam seperti HTML. Ia muncul di Console dengan bentuk yang selalu sama:\n\n" +
+            "```text\n" +
+            "Uncaught TypeError: Cannot read properties of null (reading 'addEventListener')\n" +
+            "    at app.js:3\n" +
+            "^jenis error        ^apa yang terjadi                    ^berkas:baris\n" +
+            "```\n\n" +
+            "Baca dari kanan: **baris 3 di `app.js`**. Lalu ke tengah: sesuatu bernilai `null` padahal dipakai seolah objek. Tiga jenis error yang akan paling sering kamu lihat: `SyntaxError` (salah tulis, kode tidak jalan sama sekali), `ReferenceError` (nama yang dipakai tidak pernah dibuat), `TypeError` (nilainya ada tapi bukan jenis yang diharapkan).\n\n" +
+            "## Jebakan yang Menjatuhkan Hampir Semua Pemula\n\n" +
+            "1. **Mengira kode tidak jalan padahal errornya tidak dibaca.** Halaman terlihat diam karena JavaScript berhenti di baris pertama yang error. Konsol sudah memberi tahu alasannya — kebiasaan membuka Console lebih dulu menghemat berjam-jam.\n" +
+            "2. **Salah nama berkas di `src`.** `<script src=\"App.js\">` untuk berkas bernama `app.js` gagal di sebagian sistem (huruf besar-kecil dibedakan), dan gagalnya **senyap** kecuali kamu melihat tab Network atau pesan 404 di Console.\n" +
+            "3. **Menaruh `<script>` di `<head>` tanpa `defer`.** Ini penyebab nomor satu error `null` pada pemula.\n" +
+            "4. **Menulis JavaScript di dalam berkas `.css`, atau menyalin `<script>` ke dalam berkas `.js`.** Berkas `.js` berisi kode saja — tanpa tag apa pun.\n" +
+            "5. **Mengira `console.log` menampilkan sesuatu di halaman.** Ia menulis ke Console, bukan ke layar. Untuk mengubah halaman, nanti kamu memakai DOM.\n" +
+            "6. **Lupa menyimpan lalu menyalahkan kodenya.** Simpan, muat ulang (`F5`), baru menilai.\n\n" +
+            "## Kaitan ke Dunia Kerja\n\n" +
+            "- Di **code review**, `console.log` yang tertinggal di kode produksi hampir selalu diminta dihapus. Ia alat kerja saat mengembangkan, bukan bagian dari fitur.\n" +
+            "- Pertanyaan **interview** yang sangat sering muncul untuk junior: \"apa bedanya `defer` dan `async` pada tag script?\" Jawabannya berakar pada diagram di atas.\n" +
+            "- Kemampuan yang paling cepat membedakan pemula dari yang sudah bisa bekerja bukan hafalan sintaks, melainkan **membaca pesan error lalu menemukan barisnya**. Itulah yang dilatih sejak modul ini.\n\n" +
+            "> **Kapan dipakai:** setiap kali kamu memulai berkas JavaScript baru — hubungkan dengan `defer`, buka Console, dan pastikan satu `console.log` muncul sebelum menulis logika sungguhan. Langkah kecil ini memastikan kamu men-debug logika, bukan men-debug pemasangan berkas.\n\n" +
+            "> **Catatan tentang latihan di BiLearn:** untuk step berbahasa JavaScript, kode yang kamu tulis benar-benar dijalankan di panel preview, dan panel keluaran konsol muncul otomatis di bawahnya — jadi kamu tidak perlu menyiapkan `index.html` sendiri di sini.",
+        },
+        {
+          kind: "step",
+          id: "js-0-1",
+          title: "Menghubungkan berkas .js ke halaman",
+          explanation:
+            "Di proyek nyata, kode JavaScript hidup di berkas terpisah lalu dipanggil dari HTML memakai `<script src=\"...\">`. Atribut `defer` menyuruh browser menyelesaikan pembuatan halaman lebih dulu, baru menjalankan kodenya — tanpa itu, kode yang mencari elemen halaman akan mendapat `null` karena elemennya belum lahir. Kamu memakainya setiap kali memulai proyek baru, dan salah menuliskan nama berkas adalah kegagalan yang paling senyap: tidak ada yang muncul di layar, dan satu-satunya petunjuk adalah pesan 404 di Console. Jebakan lainnya, tag `<script>` **wajib** ditutup dengan `</script>` meskipun isinya kosong; menulisnya sebagai `<script src=\"app.js\" />` tidak dikenali HTML dan seluruh sisa halamanmu bisa ikut tidak tampil.",
+          example: {
+            code:
+              "<!-- ❌ dijalankan sebelum halaman ada -->\n" +
+              "<head>\n" +
+              "  <script src=\"main.js\"></script>\n" +
+              "</head>\n\n" +
+              "<!-- ✅ menunggu halaman selesai dibangun -->\n" +
+              "<head>\n" +
+              "  <script src=\"main.js\" defer></script>\n" +
+              "</head>",
+            output:
+              "Versi pertama, Console:\n" +
+              "Uncaught TypeError: Cannot read properties of null (reading 'addEventListener')\n\n" +
+              "Versi kedua, Console:\n" +
+              "(tidak ada error — elemen sudah ada saat kode berjalan)",
+            note: "Kalau kamu tidak boleh mengubah `<head>`, alternatif yang sama benarnya adalah menaruh `<script src=\"main.js\"></script>` tepat sebelum `</body>`.",
+          },
+          instruction:
+            "Halaman ini akan memakai kode dari berkas bernama `app.js` yang berada di folder yang sama. Tambahkan tag pemuat berkas itu di dalam `<head>`, dan pastikan kodenya baru berjalan setelah seluruh halaman selesai dibangun.",
+          starterCode:
+            "<!DOCTYPE html>\n" +
+            "<html lang=\"id\">\n" +
+            "<head>\n" +
+            "  <title>Latihan JS</title>\n" +
+            "  <!-- tambahkan pemuat berkas app.js di bawah ini -->\n" +
+            "</head>\n" +
+            "<body>\n" +
+            "  <button id=\"kirim\">Kirim</button>\n" +
+            "</body>\n" +
+            "</html>\n",
+          language: "html",
+          tests: [
+            {
+              pattern: "<script(?=[^>]*src=['\"]\\.?/?app\\.js['\"])[^>]*>",
+              message:
+                "Belum ada `<script>` yang memuat `app.js`. Isi atribut `src` dengan nama berkasnya — perhatikan huruf kecil semua.",
+            },
+            {
+              pattern: "<script(?=[^>]*src=['\"]\\.?/?app\\.js['\"])(?=[^>]*\\bdefer\\b)[^>]*>",
+              message:
+                "Tag-nya sudah ada, tapi belum menunggu halaman selesai dibangun. Tambahkan atribut `defer` (tanpa nilai) pada tag `<script>` itu.",
+            },
+            {
+              pattern: "<script[^>]*src=['\"][^'\"]*app\\.js['\"][^>]*>\\s*</script>",
+              message:
+                "Tutup tag-nya dengan `</script>` meskipun isinya kosong. Bentuk `<script ... />` tidak dikenali HTML.",
+            },
+          ],
+          solution:
+            "<!DOCTYPE html>\n" +
+            "<html lang=\"id\">\n" +
+            "<head>\n" +
+            "  <title>Latihan JS</title>\n" +
+            "  <script src=\"app.js\" defer></script>\n" +
+            "</head>\n" +
+            "<body>\n" +
+            "  <button id=\"kirim\">Kirim</button>\n" +
+            "</body>\n" +
+            "</html>",
+        },
+        {
+          kind: "step",
+          id: "js-0-2",
+          title: "console.log: alat kerja pertamamu",
+          explanation:
+            "`console.log()` menuliskan nilai ke panel **Console** di DevTools, bukan ke halaman. Fungsinya sederhana tapi perannya besar: inilah cara kamu memeriksa apakah kode benar-benar sampai ke suatu baris dan apa isi sebuah nilai pada saat itu. Kamu bisa memberinya beberapa argumen sekaligus, dipisah koma, dan semuanya dicetak dalam satu baris dipisah spasi. Jebakan yang sering: menulis `console.log` tanpa tanda kurung sama sekali (tidak terjadi apa-apa), atau lupa bahwa **teks harus dibungkus tanda kutip** sementara nama variabel justru tidak boleh dikutip — `console.log('harga')` mencetak kata `harga`, sedangkan `console.log(harga)` mencetak isinya. Terakhir, jangan lupa menghapus log sisa percobaan sebelum menyerahkan kode ke tim.",
+          example: {
+            code:
+              "const namaProduk = 'Kopi Gayo';\n" +
+              "const stok = 12;\n\n" +
+              "console.log('memeriksa data produk');\n" +
+              "console.log(namaProduk, stok);\n" +
+              "console.log('stok'); // teks apa adanya, bukan isi variabel",
+            output: "memeriksa data produk\nKopi Gayo 12\nstok",
+            note: "Perhatikan dua baris terakhir: yang berbeda hanya tanda kutip, tapi hasilnya jauh berbeda. Itu sumber kebingungan yang sangat umum di minggu pertama.",
+          },
+          instruction:
+            "Panel keluaran di bawah masih kosong. Buat satu variabel bernama `pesan` yang berisi teks `Halo BiLearn`, lalu cetak **isi variabel itu** ke konsol — bukan tulisan `pesan`.",
+          starterCode: "// tulis kodenya di bawah ini\n",
+          language: "js",
+          tests: [
+            {
+              pattern: "(const|let)\\s+pesan\\s*=\\s*['\"]Halo BiLearn['\"]",
+              message:
+                "Buat dulu variabelnya: pakai `const` atau `let`, beri nama `pesan`, dan isi dengan teks yang diminta di dalam tanda kutip.",
+            },
+            {
+              pattern: "console\\.log\\(\\s*pesan\\s*\\)",
+              message:
+                "Cetak isi variabelnya, jadi nama `pesan` di dalam `console.log()` TIDAK dibungkus tanda kutip. Kalau dikutip, yang tercetak justru kata \"pesan\".",
+            },
+          ],
+          solution: "const pesan = 'Halo BiLearn';\nconsole.log(pesan);",
+        },
+        {
+          kind: "step",
+          id: "js-0-3",
+          title: "Membaca pesan error dan memperbaikinya",
+          explanation:
+            "Ada tiga jenis error yang akan menemanimu terus: `SyntaxError` berarti tulisannya salah sehingga tidak ada satu baris pun yang dijalankan, `ReferenceError` berarti kamu memakai nama yang belum pernah dibuat, dan `TypeError` berarti nilainya ada tapi diperlakukan sebagai jenis yang bukan dirinya. Pesan error selalu menyebutkan **berkas dan baris**, dan itulah bagian yang dibaca lebih dulu — bukan menebak-nebak dari awal berkas. Kebiasaan yang membedakan orang yang cepat maju: baca pesannya sampai habis, buka barisnya, baru berpikir. Jebakan yang sering terjadi pada `ReferenceError` adalah salah huruf besar-kecil, karena JavaScript membedakan `totalHarga` dan `totalharga` sebagai dua nama berbeda.",
+          example: {
+            code:
+              "const totalHarga = 50000;\n" +
+              "console.log(totalharga);   // huruf H kecil\n" +
+              "console.log('selesai');",
+            output:
+              "Uncaught ReferenceError: totalharga is not defined\n    at app.js:2\n\n" +
+              "(baris ke-3 TIDAK pernah berjalan — eksekusi berhenti di error)",
+            note: "Perhatikan `selesai` tidak muncul. Error yang tidak ditangani menghentikan sisa kode, jadi \"kodeku cuma jalan separuh\" hampir selalu berarti ada error di Console.",
+          },
+          instruction:
+            "Kode di editor gagal dengan `ReferenceError` karena nama variabel yang dicetak tidak sama dengan nama yang dibuat. Perbaiki pemanggilannya sehingga konsol menampilkan angka `50000`, dan biarkan nama variabel aslinya apa adanya.",
+          starterCode:
+            "const totalHarga = 50000;\n" + "console.log(totalharga);\n",
+          language: "js",
+          tests: [
+            {
+              pattern: "console\\.log\\(\\s*totalHarga\\s*\\)",
+              message:
+                "Sesuaikan nama di dalam `console.log()` dengan nama variabel yang dideklarasikan. JavaScript membedakan huruf besar dan kecil.",
+            },
+            {
+              pattern: "totalharga",
+              flags: "", // sengaja peka huruf besar-kecil: totalHarga ≠ totalharga
+              mustNotMatch: true,
+              message:
+                "Masih ada `totalharga` (huruf h kecil) yang tertinggal di kode. Selama nama itu ada, `ReferenceError` tetap muncul.",
+            },
+          ],
+          solution: "const totalHarga = 50000;\nconsole.log(totalHarga);",
+        },
+        {
+          kind: "step",
+          id: "js-0-4",
+          title: "Memeriksa jenis nilai dengan typeof",
+          explanation:
+            "`typeof` memberi tahu jenis sebuah nilai dalam bentuk teks: `'string'`, `'number'`, `'boolean'`, `'undefined'`, atau `'object'`. Ini alat pemeriksa cepat saat sebuah nilai tidak berperilaku seperti dugaanmu — misalnya angka dari form yang ternyata berupa teks, sehingga `'2' + 3` menghasilkan `'23'` alih-alih `5`. Kamu akan sering memakainya berpasangan dengan `console.log` saat menelusuri data yang datang dari luar (input pengguna, API). Dua jebakan yang wajib kamu tahu sejak awal: `typeof null` mengembalikan `'object'` — kekeliruan bersejarah di JavaScript yang tidak pernah diperbaiki — dan `typeof` sebuah array juga `'object'`, bukan `'array'`, sehingga memeriksa array dilakukan dengan `Array.isArray()`.",
+          example: {
+            code:
+              "const umur = 20;\n" +
+              "const umurDariForm = '20';\n\n" +
+              "console.log(typeof umur, typeof umurDariForm);\n" +
+              "console.log(umur + 1, umurDariForm + 1);\n" +
+              "console.log(typeof null, typeof [1, 2]);",
+            output: "number string\n21 201\nobject object",
+            note: "Baris kedua adalah alasan `typeof` ada: `'20' + 1` menempelkan teks, bukan menjumlahkan. Bug seperti ini paling sering datang dari nilai form yang selalu berupa string.",
+          },
+          instruction:
+            "Variabel `hargaInput` di editor berisi angka dalam bentuk teks. Tanpa mengubah nilainya, cetak **jenis** nilai variabel itu ke konsol supaya kamu bisa membuktikan penyebab bug penjumlahannya.",
+          starterCode:
+            "const hargaInput = '15000';\n" + "// cetak jenis nilainya di bawah ini\n",
+          language: "js",
+          tests: [
+            {
+              pattern: "console\\.log\\(\\s*typeof\\s+hargaInput\\s*\\)|console\\.log\\(\\s*typeof\\s*\\(\\s*hargaInput\\s*\\)\\s*\\)",
+              message:
+                "Pakai `typeof` di dalam `console.log()` untuk memeriksa jenis nilai `hargaInput`. `typeof` tidak butuh tanda kurung, tapi memakainya juga boleh.",
+            },
+            {
+              pattern: "hargaInput\\s*=\\s*['\"]15000['\"]",
+              message:
+                "Biarkan nilai `hargaInput` apa adanya (tetap berupa teks `'15000'`) — yang diminta hanya memeriksa jenisnya, bukan memperbaikinya.",
+            },
+          ],
+          solution: "const hargaInput = '15000';\nconsole.log(typeof hargaInput);",
+        },
+        {
+          kind: "quiz",
+          id: "js-0-kuis",
+          title: "Kuis: Persiapan & Alat Kerja",
+          questions: [
+            {
+              id: "q1",
+              type: "pilihan-ganda",
+              question:
+                "Kamu menaruh `<script src=\"app.js\"></script>` di dalam `<head>` tanpa `defer`. Kodenya mencari tombol di halaman dan gagal dengan `TypeError: ... null`. Apa penyebabnya?",
+              choices: [
+                "Nama berkasnya salah, seharusnya App.js",
+                "Kode berjalan sebelum elemen tombol dibuat browser",
+                "JavaScript tidak boleh dipanggil dari head sama sekali",
+                "Tombol harus punya atribut onclick agar bisa dibaca",
+              ],
+              answerIndex: 1,
+              explanation:
+                "Browser membaca HTML dari atas ke bawah. Script di `head` tanpa `defer` dijalankan saat `<body>` belum dibangun, jadi pencarian tombol menghasilkan `null`. Pilihan pertama menggoda karena kesalahan nama berkas juga umum, tapi gejalanya berbeda: yang muncul adalah 404 di Console, bukan `null`. Memanggil script dari `head` sendiri tidak dilarang — asalkan memakai `defer`.",
+            },
+            {
+              id: "q2",
+              type: "pilihan-ganda",
+              question:
+                "Apa perbedaan hasil `console.log(harga)` dan `console.log('harga')` jika `const harga = 5000`?",
+              choices: [
+                "Keduanya mencetak 5000",
+                "Yang pertama mencetak 5000, yang kedua mencetak tulisan harga",
+                "Yang pertama error karena variabel harus dikutip",
+                "Keduanya mencetak tulisan harga",
+              ],
+              answerIndex: 1,
+              explanation:
+                "Tanda kutip menandai teks apa adanya, sedangkan tanpa kutip berarti nama variabel yang isinya dibaca. Ini kelihatan sepele tapi jadi sumber kebingungan nyata saat pemula men-debug: log-nya muncul, tapi yang tercetak nama variabelnya, bukan nilainya.",
+            },
+            {
+              id: "q3",
+              type: "pilihan-ganda",
+              question:
+                "Halaman terlihat 'tidak melakukan apa-apa' dan tidak ada perubahan di layar. Apa langkah pertama yang paling masuk akal?",
+              choices: [
+                "Menulis ulang seluruh kode dari awal",
+                "Menambahkan lebih banyak CSS agar terlihat",
+                "Membuka DevTools dan membaca tab Console",
+                "Mengganti browser",
+              ],
+              answerIndex: 2,
+              explanation:
+                "Error JavaScript menghentikan eksekusi dan melaporkan penyebabnya di Console, lengkap dengan berkas dan nomor baris. Menulis ulang kode tanpa membaca error berarti membuang informasi yang sudah diberikan gratis — dan kebiasaan membuka Console lebih dulu inilah yang paling cepat membedakan pemula dari orang yang sudah bisa bekerja.",
+            },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question:
+                "Kamu memakai nama variabel `totalHarga`, tapi menulis `console.log(totalharga)`. Error apa yang muncul?",
+              choices: [
+                "SyntaxError, karena tulisannya tidak valid",
+                "TypeError, karena jenis nilainya salah",
+                "ReferenceError, karena nama itu belum pernah dibuat",
+                "Tidak ada error, JavaScript mengabaikan huruf besar-kecil",
+              ],
+              answerIndex: 2,
+              explanation:
+                "JavaScript membedakan huruf besar dan kecil, jadi `totalharga` dianggap nama yang belum pernah dideklarasikan — itu definisi `ReferenceError`. `SyntaxError` muncul kalau tulisannya melanggar aturan bahasa (misalnya kurung tidak tertutup), dan `TypeError` muncul kalau nilainya ada tapi diperlakukan sebagai jenis yang bukan dirinya.",
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question:
+                "Nilai dari form selalu berupa teks. Apa hasil `'20' + 1` dan bagaimana cara paling cepat membuktikan penyebabnya?",
+              choices: [
+                "Hasilnya 21; buktikan dengan console.log saja",
+                "Hasilnya '201'; buktikan dengan typeof pada nilainya",
+                "Hasilnya error; buktikan dengan membuka tab Network",
+                "Hasilnya 20; buktikan dengan mengganti browser",
+              ],
+              answerIndex: 1,
+              explanation:
+                "Karena sisi kiri berupa string, operator `+` menempelkan teks alih-alih menjumlahkan, sehingga hasilnya `'201'`. `typeof` adalah pemeriksa tercepat untuk membedakan `number` dan `string` pada nilai yang datang dari luar. Ini bukan kasus langka — hampir semua bug penjumlahan pada formulir pemula berakar di sini.",
+            },
+            {
+              id: "q6",
+              type: "pilihan-ganda",
+              question:
+                "Mana pernyataan yang benar tentang tempat menulis JavaScript?",
+              choices: [
+                "Berkas .js berisi kode saja, tanpa tag <script> di dalamnya",
+                "Berkas .js wajib dibuka dengan <script> dan ditutup dengan </script>",
+                "Kode di konsol browser tersimpan permanen di halaman",
+                "JavaScript harus ditulis di dalam berkas .css agar bisa dipakai",
+              ],
+              answerIndex: 0,
+              explanation:
+                "Tag `<script>` adalah penanda milik HTML; di dalam berkas `.js` ia tidak diperlukan dan justru memicu `SyntaxError`. Kode yang diketik di konsol hilang saat halaman dimuat ulang — berguna untuk mencoba, bukan untuk menyimpan. Dan `.css` hanya untuk aturan tampilan.",
+            },
+          ],
+        },
+      ],
+    },
+    {
       slug: "dasar",
       title: "Dasar JavaScript",
       description:

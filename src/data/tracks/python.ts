@@ -11,11 +11,12 @@ export const pythonTrack: Track = {
   order: 15,
   modules: [
     {
-      slug: "dasar-python",
-      title: "Dasar Python",
+      slug: "persiapan-dasar-python",
+      title: "Persiapan & Dasar Python",
       description:
-        "Bahasa paling ramah pemula — dan paling diminta di lowongan data.",
+        "Pasang Python, jalankan berkas pertamamu, lalu kuasai fondasinya — bahasa paling ramah pemula dan paling diminta di lowongan data.",
       topics: [
+        "Memasang Python di Windows, macOS, Linux (python vs python3, PATH)",
         "Instalasi & menjalankan script (python, REPL)",
         "Variabel & tipe: int, float, str, bool",
         "f-string & operasi string",
@@ -25,6 +26,97 @@ export const pythonTrack: Track = {
         "Indentasi: kenapa Python memaksamu rapi",
       ],
       items: [
+        {
+          kind: "materi",
+          id: "python-1-m0",
+          title: "Persiapan: Memasang Python dan Menjalankan Berkas Pertama",
+          body:
+            "# Pengertian\n\n" +
+            "Sebelum belajar sintaks, satu hal harus beres dulu: **Python harus terpasang, dan kamu harus tahu di mana kodenya ditulis serta bagaimana menjalankannya.** Bagian ini yang paling sering dilewati tutorial, dan justru di sinilah pemula berhenti — bukan di konsep loop.\n\n" +
+            "Python adalah program yang membaca berkas berisi teks (`.py`) lalu menjalankan isinya baris per baris. Program pembaca itu disebut **interpreter**. Jadi ada dua benda berbeda yang perlu kamu bedakan sejak awal: **editor** tempat kamu menulis, dan **terminal** tempat kamu menjalankan.\n\n" +
+            "## Memasang Python\n\n" +
+            "| Sistem operasi | Cara memasang | Perintah yang dipakai setelahnya |\n" +
+            "|---|---|---|\n" +
+            "| Windows | unduh installer dari python.org, **centang \"Add python.exe to PATH\"** saat memasang | `python` |\n" +
+            "| macOS | `brew install python` (Python bawaan macOS sudah lama dan tidak untuk dipakai) | `python3` |\n" +
+            "| Linux (Ubuntu/Debian) | `sudo apt install python3 python3-pip python3-venv` | `python3` |\n\n" +
+            "Perbedaan `python` dan `python3` itu penyebab kebingungan nomor satu: di macOS dan Linux, `python` sering tidak ada atau menunjuk versi lama, sedangkan `python3` adalah yang benar. Cara memastikan hanya satu:\n\n" +
+            "```text\n" +
+            "$ python3 --version\n" +
+            "Python 3.12.4\n" +
+            "\n" +
+            "$ pip3 --version\n" +
+            "pip 24.0 from /usr/lib/python3/dist-packages/pip (python 3.12)\n" +
+            "```\n\n" +
+            "Kalau yang muncul `command not found`, Python belum terpasang atau (di Windows) kotak **Add to PATH** tadi tidak dicentang — dan jalan keluarnya memasang ulang sambil mencentangnya, bukan mengetik ulang perintahnya lebih keras.\n\n" +
+            "## Dua Cara Menjalankan Kode\n\n" +
+            "```text\n" +
+            "1. REPL (mode percakapan) — untuk mencoba satu-dua baris\n" +
+            "   $ python3\n" +
+            "   >>> 2 + 3\n" +
+            "   5\n" +
+            "   >>> exit()          <-- keluar (atau Ctrl+D)\n" +
+            "   kodenya TIDAK tersimpan\n" +
+            "\n" +
+            "2. BERKAS .py — cara yang dipakai untuk pekerjaan nyata\n" +
+            "   editor:   halo.py   ->   print(\"Halo\")\n" +
+            "   terminal: $ python3 halo.py\n" +
+            "             Halo\n" +
+            "```\n\n" +
+            "Tanda `>>>` adalah penanda REPL, dan **tidak pernah ikut diketik** ke dalam berkas. Menyalin contoh dari internet beserta `>>>`-nya adalah kesalahan klasik yang langsung menghasilkan `SyntaxError`.\n\n" +
+            "## Alur Kerja Sehari-hari\n\n" +
+            "```text\n" +
+            "  EDITOR (VS Code)              TERMINAL\n" +
+            "  ----------------              ------------------------\n" +
+            "  latihan/halo.py               $ cd ~/Documents/latihan\n" +
+            "     print(\"Halo\")     tulis    $ python3 halo.py\n" +
+            "     ^ simpan Ctrl+S            Halo\n" +
+            "                                ^ jalankan ulang tiap kali\n" +
+            "                                  berkas berubah\n" +
+            "```\n\n" +
+            "Terminal harus berada di folder yang sama dengan berkasmu. Kalau muncul `can't open file 'halo.py': No such file or directory`, itu bukan berarti kodenya salah — kamu sedang berada di folder lain. Periksa dengan `pwd` (macOS/Linux) atau `cd` (Windows).\n\n" +
+            "## Analogi Dunia Nyata\n\n" +
+            "Interpreter Python seperti **penerjemah lisan**: ia membaca satu baris, langsung menerjemahkan dan mengerjakannya, lalu lanjut ke baris berikutnya. Bahasa seperti Go atau C++ lebih mirip **penerjemah dokumen**: seluruh naskah diterjemahkan lebih dulu jadi satu berkas jadi, baru dijalankan.\n\n" +
+            "Konsekuensinya penting: Python **tidak memeriksa seluruh berkasmu sebelum mulai**. Baris 1 sampai 9 bisa berjalan mulus, lalu program berhenti di baris 10 karena salah tulis — jadi \"programku jalan separuh\" adalah perilaku normal, bukan keanehan.\n\n" +
+            "## Jebakan yang Menjatuhkan Hampir Semua Pemula\n\n" +
+            "1. **Mengetik `python3 halo.py` di dalam REPL.** Kalau prompt-mu masih `>>>`, kamu berada di dalam Python, bukan di terminal. Keluar dulu dengan `exit()`.\n" +
+            "2. **Menyimpan berkas tanpa akhiran `.py`.** Berkas `halo` atau `halo.py.txt` tidak dikenali sebagai program Python.\n" +
+            "3. **Menamai berkas dengan nama modul bawaan**, misalnya `random.py` atau `json.py`. Impor di kode lain akan mengambil berkasmu, bukan modul aslinya, dan pesan errornya sangat membingungkan.\n" +
+            "4. **Menyalin `>>>` dari contoh internet.** Ini langsung `SyntaxError`.\n" +
+            "5. **Mengira `pip install` memasang paket untuk semua proyek dengan aman.** Nanti kamu akan pakai *virtual environment* (`python3 -m venv .venv`) supaya paket satu proyek tidak menabrak proyek lain — dibahas lengkap di modul lingkungan kerja.\n" +
+            "6. **Menutup terminal lalu bingung outputnya hilang.** Keluaran `print()` tampil di terminal, bukan tersimpan di berkas.\n\n" +
+            "## Kaitan ke Dunia Kerja\n\n" +
+            "- Perintah `python3 nama_berkas.py` adalah cara paling umum menjalankan skrip otomasi di server, dan biasanya dibungkus **cron** untuk berjalan tiap hari.\n" +
+            "- Di **code review** proyek Python, dua hal pertama yang dilihat adalah apakah dependensi tercatat (`requirements.txt`) dan apakah skrip bisa dijalankan orang lain tanpa penjelasan lisan.\n" +
+            "- Pada **interview** untuk peran data, pertanyaan pembuka sering sesederhana \"bagaimana kamu menyiapkan lingkungan Python untuk proyek baru?\" — dan jawaban yang menyebut versi Python serta virtual environment langsung terdengar seperti orang yang pernah bekerja.\n\n" +
+            "> **Kapan dipakai:** setiap kali membuka proyek Python baru, tiga langkah ini dulu — periksa `python3 --version`, buat folder proyek, jalankan satu berkas `print()` sederhana. Setelah itu barulah menulis logika sungguhan.\n\n" +
+            "> **Catatan tentang latihan di BiLearn:** panel latihan track ini **tidak menjalankan Python** (browser tidak punya interpreter Python), jadi tidak ada keluaran yang muncul di sana. Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus. Keluaran nyata selalu ditampilkan di bagian **Contoh** setiap latihan supaya kamu tahu bentuk aslinya.",
+        },
+        {
+          kind: "step",
+          id: "python-1-0",
+          title: "Memastikan Python Terpasang",
+          explanation:
+            "Sebelum menulis satu baris kode, pastikan interpreter-nya benar-benar ada dan versinya modern (3.10 ke atas untuk mengikuti track ini). Polanya sama seperti hampir semua program baris perintah: nama program diikuti flag versi. Di macOS dan Linux, nama programnya `python3` — bukan `python`, yang sering menunjuk versi lama atau tidak ada sama sekali; di Windows biasanya `python` sudah cukup. Kamu menjalankan pemeriksaan ini setiap kali berpindah komputer atau setelah memasang ulang, dan jawabannya menentukan langkah berikutnya. Jebakan yang paling sering: `command not found` disimpulkan sebagai \"Python-nya rusak\", padahal artinya PATH belum berisi Python — di Windows itu efek dari tidak mencentang \"Add python.exe to PATH\" saat memasang.",
+          example: {
+            code: "pip3 --version",
+            output:
+              "pip 24.0 from /usr/lib/python3/dist-packages/pip (python 3.12)",
+            note: "Perhatikan `pip` menyebutkan versi Python yang menaunginya di dalam tanda kurung. Itu cara cepat memastikan `pip` yang kamu pakai memang milik interpreter yang sama — sumber kebingungan besar di komputer yang punya dua versi Python.",
+          },
+          instruction:
+            "Kamu baru memasang Python di macOS. Tulis perintah terminal yang menampilkan versi interpreter Python yang terpasang — perhatikan nama program yang benar di sistem itu, dan polanya sama dengan contoh di atas.",
+          starterCode: "# tulis perintahnya di bawah ini\n",
+          language: "text",
+          tests: [
+            {
+              pattern: "python3\\s+(--version|-V)",
+              message:
+                "Di macOS/Linux nama programnya `python3` (dengan angka 3), lalu flag versi. Ada dua bentuk flag yang diterima: yang panjang berawalan dua tanda minus, atau yang pendek berhuruf besar.",
+            },
+          ],
+          solution: "python3 --version",
+        },
         {
           kind: "materi",
           id: "python-1-m1",
