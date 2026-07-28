@@ -12,6 +12,237 @@ export const aiDevTrack: Track = {
   order: 13,
   modules: [
     {
+      slug: "persiapan-instalasi",
+      title: "Persiapan & Instalasi AI Tools",
+      description:
+        "Menyiapkan Copilot, Cursor, atau Antigravity di VS Code, serta memahami konfigurasi awal.",
+      topics: [
+        "Lanskap alat AI Dev: extension, IDE khusus, chat, dan CLI agent",
+        "Instalasi GitHub Copilot / Continue di VS Code",
+        "Mengatur file konfigurasi aturan (.cursorrules / AGENTS.md)",
+        "Memverifikasi ekstensi AI bekerja dan memberikan autocomplete",
+        "Opsi gratis dan AI lokal (Ollama / LM Studio) tanpa akun berbayar",
+      ],
+      items: [
+        {
+          kind: "materi",
+          id: "ai-0-m1",
+          title: "Menyiapkan Lingkungan AI-Assisted Development",
+          body:
+            "# Pengertian\n\n" +
+            "AI-Assisted Development bukan berarti menyerahkan tugas menulis kode ke mesin dan duduk bersantai. Ini adalah **gaya kerja berpasangan (pair programming) dengan model AI**, di mana kamu bertindak sebagai *lead engineer* (pengambil keputusan) dan AI bertindak sebagai asisten serba tahu yang mengetik sangat cepat.\n\n" +
+            "Sebelum mulai memakai AI untuk membantu koding harianmu, kamu perlu memahami lanskap alat yang tersedia, cara memasangnya di lingkungan kerja (VS Code atau IDE khusus), dan bagaimana mengatur aturan agar AI tidak menghasilkan kode yang melenceng dari standar timmu.\n\n" +
+            "## Lanskap Tool AI Dev\n\n" +
+            "Secara umum, alat AI untuk pengembangan perangkat lunak terbagi menjadi empat kategori:\n\n" +
+            "| Kategori | Contoh Tool | Karakteristik & Kegunaan Utama |\n" +
+            "|---|---|---|\n" +
+            "| **Inline Autocomplete** | GitHub Copilot, Continue, Codeium | Menyarankan baris/blok kode secara *real-time* saat mengetik di editor. |\n" +
+            "| **IDE AI Khusus** | Cursor, Antigravity, Windsurf | Editor turunan VS Code yang mengintegrasikan AI di tingkat repositori & arsitektur. |\n" +
+            "| **Chat LLM Web** | Claude 3.5 Sonnet, ChatGPT, Gemini | Tempat berdiskusi, merancang arsitektur, dan membedah error panjang. |\n" +
+            "| **CLI & Agent Tools** | AGY CLI, Aider, Claude Code | Menjalankan perintah multi-file langsung dari terminal secara otonom. |\n\n" +
+            "```text\n" +
+            "+-------------------------------------------------------------------------+\n" +
+            "|                  LANSKAP ALAT AI DEVELOPMENT                            |\n" +
+            "+-------------------------------------------------------------------------+\n" +
+            "| Inline Autocomplete  ---> Mengetik cepat (baris per baris)              |\n" +
+            "| Chat LLM Web         ---> Diskusi & perancangan arsitektur              |\n" +
+            "| AI Agent / Composer  ---> Perubahan otomatis multi-file                 |\n" +
+            "| Local Model (Ollama) ---> Kerja offline & privasi kode 100% aman       |\n" +
+            "+-------------------------------------------------------------------------+\n" +
+            "```\n\n" +
+            "## File Konfigurasi Aturan (.cursorrules / AGENTS.md)\n\n" +
+            "Setiap proyek yang sehat memiliki kesepakatan gaya kode. Agar AI tidak menyarankan kode dalam bahasa atau *framework* yang salah, kita memberikan instruksi khusus melalui file aturan proyek seperti `.cursorrules` atau `AGENTS.md` di *root* proyek.\n\n" +
+            "Contoh isi file `AGENTS.md`:\n" +
+            "```markdown\n" +
+            "# Aturan Proyek\n" +
+            "- Gunakan TypeScript versi strict.\n" +
+            "- Utamakan async/await dibanding callback.\n" +
+            "- Gunakan Bahasa Indonesia untuk komentar kode.\n" +
+            "```\n\n" +
+            "## Opsi Gratis & AI Lokal (Ollama)\n\n" +
+            "Jika kamu belum berlangganan layanan AI berbayar seperti GitHub Copilot ($10/bulan) atau Claude Pro, kamu bisa menggunakan **Ollama** di komputermu sendiri. Ollama menjalankan model open-source (seperti Qwen Coder atau Llama 3) secara lokal tanpa koneksi internet dan 100% gratis serta terjamin privasinya.\n\n" +
+            "## Jebakan & Kesalahan Umum saat Setup\n\n" +
+            "> **Jebakan:** Memasang terlalu banyak ekstensi AI sekaligus di VS Code (misalnya Copilot + Codeium + Tabnine). Ini menyebabkan konflik *autocomplete*, editor menjadi lambat, dan menyedot memori RAM komputermu. Pilih **satu** ekstensi *autocomplete* utama.\n\n" +
+            "## Kapan Dipakai di Dunia Kerja\n\n" +
+            "> **Dunia Kerja:** Saat masuk ke tim baru, hal pertama yang dilakukan senior engineer adalah memeriksa apakah ada file aturan AI (`.cursorrules` / `AGENTS.md`) di repositori. Memahami cara mengonfigurasi alat AI memastikan kamu bisa langsung produktif sejak hari pertama tanpa melanggar konvensi kode perusahaan.",
+        },
+        {
+          kind: "step",
+          id: "ai-0-1",
+          title: "Memilih dan Memasang Ekstensi AI di VS Code",
+          explanation:
+            "Memasang ekstensi AI seperti GitHub Copilot atau Continue di VS Code memerlukan pemahaman tentang cara ekstensi terhubung ke layanan model. Ekstensi ini menambahkan panel samping untuk obrolan serta fitur saran otomatis saat kamu mengetik di editor. Mengetahui cara mengaktifkan dan mengonfigurasi ekstensi AI adalah langkah dasar pertama sebelum kamu menggunakannya dalam alur kerja harian. Jangan lupa memeriksa lisensi dan login akun yang dibutuhkan.",
+          example: {
+            code: "# Perintah untuk memeriksa ekstensi VS Code yang terpasang di terminal:\ncode --list-extensions | grep -i copilot",
+            output: "github.copilot\ngithub.copilot-chat",
+            note: "Daftar ini menunjukkan ekstensi Copilot dan Copilot Chat telah terpasang dengan benar di VS Code.",
+          },
+          instruction:
+            "Tulis perintah terminal VS Code untuk melihat semua ekstensi terpasang dan memfilter ekstensi `copilot` memakai `grep`.",
+          starterCode: "# Tulis perintah di bawah ini\n",
+          language: "text",
+          tests: [
+            {
+              pattern: "code\\s+--list-extensions\\s*\\|\\s*grep\\s+-i\\s+copilot",
+              message:
+                "Gunakan perintah code --list-extensions | grep -i copilot.",
+            },
+          ],
+          solution: "code --list-extensions | grep -i copilot",
+        },
+        {
+          kind: "step",
+          id: "ai-0-2",
+          title: "Menulis File Aturan Proyek (.cursorrules / AGENTS.md)",
+          explanation:
+            "File `.cursorrules` atau `AGENTS.md` ditempatkan di folder utama proyek untuk memberikan konteks khusus kepada asisten AI. Tanpa file aturan ini, AI akan membuat tebakan berdasarkan pola umum yang belum tentu sesuai dengan standar tim atau proyekmu. Menulis instruksi spesifik seperti versi bahasa, pustaka yang dilarang, dan gaya kode memastikan saran AI konsisten dan siap pakai. Ini adalah praktik terbaik utama di tim modern.",
+          example: {
+            code: "# Contoh aturan proyek di AGENTS.md\n- Bahasa: TypeScript\n- Framework: Next.js App Router\n- Dilarang: library moment.js (gunakan date-fns)",
+            output: "AI akan mematuhi aturan ini saat memberikan saran kode atau refactoring di repositori ini.",
+            note: "File aturan membaca direktori root proyek setiap kali sesi obrolan atau agent dimulai.",
+          },
+          instruction:
+            "Tulis isi file aturan proyek `AGENTS.md` sederhana yang memuat tiga aturan: sebutkan **TypeScript**, larang pemakaian **var**, dan minta komentar dalam **Bahasa Indonesia**.",
+          starterCode: "# Tulis aturan proyek di bawah ini\n",
+          language: "text",
+          tests: [
+            {
+              pattern: "\\btypescript\\b",
+              flags: "i",
+              message: "Sebutkan penggunaan TypeScript.",
+            },
+            {
+              pattern: "(tanpa|dilarang|jangan)[\\s\\S]*var",
+              flags: "i",
+              message: "Larang penggunaan kata kunci var.",
+            },
+            {
+              pattern: "(bahasa indonesia|indonesia)",
+              flags: "i",
+              message: "Minta penggunaan komentar dalam Bahasa Indonesia.",
+            },
+          ],
+          solution: "# Aturan Proyek\n- Gunakan TypeScript strict mode.\n- Dilarang menggunakan var (gunakan const atau let).\n- Tulis semua komentar kode dalam Bahasa Indonesia.",
+        },
+        {
+          kind: "step",
+          id: "ai-0-3",
+          title: "Memverifikasi Ekstensi AI & Autocomplete Pertama",
+          explanation:
+            "Setelah ekstensi AI terpasang, kamu bisa mengujinya dengan mengetikkan komentar deskriptif di atas baris kode. Ekstensi akan menyodorkan saran berbentuk teks abu-abu (*ghost text*). Kamu bisa menekan tombol `Tab` untuk menerima saran atau `Esc` untuk menolaknya. Memahami mekanisme penerimaan dan penolakan ini menjaga alur mengetikmu tetap cepat tanpa terganggu oleh saran yang keliru.",
+          example: {
+            code: "// Menghitung luas persegi panjang dengan panjang dan lebar\nfunction hitungLuas(panjang, lebar) {\n  return panjang * lebar;\n}\nconsole.log(hitungLuas(5, 10));",
+            output: "50",
+            note: "Tekan Tab saat ghost text abu-abu muncul untuk menerima saran fungsi secara utuh.",
+          },
+          instruction:
+            "Tulis fungsi `hitungLuas(panjang, lebar)` yang mengembalikan perkalian `panjang * lebar`, lalu cetak hasil pemanggilannya `hitungLuas(5, 10)` ke konsol.",
+          starterCode: "// Tulis fungsi hitungLuas di bawah ini\n",
+          language: "js",
+          tests: [
+            {
+              pattern: "function\\s+hitungLuas\\s*\\(\\s*\\w+\\s*,\\s*\\w+\\s*\\)|const\\s+hitungLuas\\s*=",
+              message: "Buat fungsi hitungLuas(panjang, lebar).",
+            },
+            {
+              pattern: "return\\s+\\w+\\s*\\*\\s*\\w+",
+              message: "Kembalikan hasil perkalian panjang * lebar.",
+            },
+            {
+              pattern: "console\\.log\\(\\s*hitungLuas\\(5\\s*,\\s*10\\)\\s*\\)",
+              message: "Cetak hasil hitungLuas(5, 10) dengan console.log().",
+            },
+          ],
+          solution: "function hitungLuas(panjang, lebar) {\n  return panjang * lebar;\n}\nconsole.log(hitungLuas(5, 10));",
+        },
+        {
+          kind: "step",
+          id: "ai-0-4",
+          title: "Alternatif Lokal: Menjalankan Model dengan Ollama",
+          explanation:
+            "Ollama adalah alat CLI populer untuk menjalankan Large Language Model (LLM) secara lokal di komputermu tanpa perlu mengirim data ke server cloud. Ini sangat berguna jika kamu bekerja dengan kode rahasia perusahaan atau saat tidak ada koneksi internet. Kamu bisa menjalankan model seperti `qwen2.5-coder` dengan satu perintah sederhana di terminal. Mengetahui cara menggunakan AI lokal memberi fleksibilitas dan jaminan privasi penuh.",
+          example: {
+            code: "# Perintah untuk mengunduh dan menjalankan model coding gratis di terminal:\nollama run qwen2.5-coder:1.5b",
+            output: "pulling manifest...\nsuccess\n>>> Write a hello world function in JS",
+            note: "Model berjalan langsung menggunakan CPU/GPU komputermu sendiri.",
+          },
+          instruction:
+            "Tulis perintah terminal Ollama untuk menjalankan model `qwen2.5-coder:1.5b` di komputermu.",
+          starterCode: "# Tulis perintah Ollama di bawah ini\n",
+          language: "text",
+          tests: [
+            {
+              pattern: "ollama\\s+run\\s+qwen2\\.5-coder(:1\\.5b)?",
+              message: "Gunakan perintah ollama run qwen2.5-coder:1.5b.",
+            },
+          ],
+          solution: "ollama run qwen2.5-coder:1.5b",
+        },
+        {
+          kind: "quiz",
+          id: "ai-0-kuis",
+          title: "Kuis: Persiapan & Instalasi AI Tools",
+          questions: [
+            {
+              id: "q1",
+              type: "pilihan-ganda",
+              question: "Apa peran utama developer manusia dalam alur kerja AI-Assisted Development?",
+              choices: [
+                "Sebagai Lead Engineer yang mengarahkan, mengevaluasi, dan mengambil keputusan atas kode buatan AI",
+                "Hanya sebagai pengetik ulang teks yang dihasilkan AI tanpa perlu membaca",
+                "Membiarkan AI menjalankan server produksi secara penuh",
+                "Menghapus semua kode yang ditulis oleh manusia",
+              ],
+              answerIndex: 0,
+              explanation: "Developer manusia adalah penanggung jawab utama yang memverifikasi kebenaran dan keamanan kode, sementara AI berperan sebagai asisten pengetik.",
+            },
+            {
+              id: "q2",
+              type: "pilihan-ganda",
+              question: "Apa fungsi utama dari file aturan proyek seperti `.cursorrules` atau `AGENTS.md`?",
+              choices: [
+                "Mempercepat kecepatan internet saat koding",
+                "Memberikan petunjuk dan konvensi spesifik proyek agar AI tidak menghasilkan kode yang melenceng",
+                "Menghapus bug secara otomatis dari komputer",
+                "Mengganti warna tema editor VS Code",
+              ],
+              answerIndex: 1,
+              explanation: "File aturan memberikan konteks dan batasan teknologi proyek sehingga AI mengikuti konvensi tim secara konsisten.",
+            },
+            {
+              id: "q3",
+              type: "pilihan-ganda",
+              question: "Apa keunggulan utama menggunakan alat AI lokal seperti Ollama dibandingkan AI berbasis cloud?",
+              choices: [
+                "AI lokal membutuhkan biaya langganan bulanan mahal",
+                "Kode dan data proyek 100% aman di komputer lokal tanpa terkirim ke internet",
+                "AI lokal tidak memerlukan listrik sama sekali",
+                "AI lokal pasti 100% bebas dari kesalahan",
+              ],
+              answerIndex: 1,
+              explanation: "AI lokal berjalan sepenuhnya di komputermu, menjamin privasi kode rahasia dan dapat digunakan tanpa koneksi internet.",
+            },
+            {
+              id: "q4",
+              type: "pilihan-ganda",
+              question: "Tombol keyboard apa yang digunakan di VS Code untuk menerima saran kode abu-abu (ghost text) dari Copilot?",
+              choices: ["Ctrl + C", "Tab", "Spacebar", "Backspace"],
+              answerIndex: 1,
+              explanation: "Tombol Tab digunakan secara standar di VS Code untuk menerima saran autocomplete dari ekstensi AI.",
+            },
+            {
+              id: "q5",
+              type: "pilihan-ganda",
+              question: "Mengapa disarankan untuk tidak memasang terlalu banyak ekstensi autocomplete AI sekaligus di VS Code?",
+              choices: ["Karena akan menyebabkan konflik saran dan membuat editor lambat serta boros RAM", "Karena VS Code akan otomatis terhapus", "Karena AI akan marah dan memblokir akunmu", "Karena keyboard akan berhenti berfungsi"],
+              answerIndex: 0,
+              explanation: "Memasang beberapa ekstensi autocomplete sekaligus memicu perebutan fokus ghost text dan membebankan performa sistem.",
+            },
+          ],
+        },
+      ],
+    },
+    {
       slug: "cara-kerja-llm",
       title: "Cara Kerja & Batas LLM",
       description:
@@ -26,11 +257,47 @@ export const aiDevTrack: Track = {
       ],
       items: [
         {
+          kind: "materi",
+          id: "ai-1-m1",
+          title: "Bagaimana LLM Memproses dan Mengolah Kode",
+          body:
+            "# Pengertian\n\n" +
+            "Large Language Model (LLM) seperti GPT-4, Claude, atau Gemini sering kali terasa ajaib karena bisa menjawab pertanyaan matematika dan menulis kode rumit. Namun secara fundamental, **LLM tidak memiliki kesadaran, logika, atau 'pemahaman' tentang kode** seperti manusia.\n\n" +
+            "LLM adalah mesin statistik raksasa yang bekerja dengan prinsip **prediksi token berikutnya** (*next-token prediction*). Model membaca sekumpulan kata/kode yang kamu berikan, lalu menghitung statistik kata apa yang paling mungkin muncul setelahnya berdasarkan data dari miliaran baris kode yang telah dipelajarinya.\n\n" +
+            "## Konsep Penting: Token & Context Window\n\n" +
+            "Komputer tidak membaca kata per kata seperti manusia, melainkan dipecah menjadi **token** (potongan teks sepanjang ~4 karakter).\n\n" +
+            "```text\n" +
+            "+-------------------------------------------------------------------------+\n" +
+            "|                       PEMASOKAN TOKEN & MEMORI                          |\n" +
+            "+-------------------------------------------------------------------------+\n" +
+            "| Teks Asli:    \"const total = hitungHarga(100);\"                          |\n" +
+            "| Token:        [\"const\", \" total\", \" =\", \" hit\", \"ung\", \"Harga\", \"(\", \"100\", \");\"] |\n" +
+            "|                                                                         |\n" +
+            "| CONTEXT WINDOW (Kapasitas Memori Percakapan Maksimal):                   |\n" +
+            "| [ Token 1 ..... Token N ] ---> Jika melebihi batas, Token awal TERHAPUS! |\n" +
+            "+-------------------------------------------------------------------------+\n" +
+            "```\n\n" +
+            "### Batas Context Window\n\n" +
+            "Setiap sesi obrolan memiliki batas memori yang disebut **Context Window** (misalnya 128.000 token). Begitu percakapanmu atau potongan kode yang kamu tempel melebihi kapasitas ini, bagian paling awal percakapan akan terdorong keluar dan dilupakan oleh AI.\n\n" +
+            "| Istilah | Penjelasan Sederhana | Dampak pada Koding |\n" +
+            "|---|---|---|\n" +
+            "| **Token** | Potongan teks (~4 karakter / 0.75 kata) | Menentukan biaya API dan beban memori model. |\n" +
+            "| **Context Window** | Batas maksimal token dalam 1 sesi percakapan | Jika terlalu panjang, AI akan lupa instruksi di awal chat. |\n" +
+            "| **Halusinasi** | AI mengarang API/fungsi fiktif dengan yakin | Kode terlihat rapi tapi melempar TypeError saat dijalankan. |\n\n" +
+            "## Kekuatan vs Kelemahan Nyata AI\n\n" +
+            "- **Kekuatan Utama:** Sangat cepat membuat kode *boilerplate*, menerjemahkan bahasa (misal JS ke TS), menulis kerangka *test*, dan menjelaskan kode asing.\n" +
+            "- **Kelemahan Utama:** Tidak tahu logika bisnis internal perusahaanmu, sering melupakan *edge cases* (kondisi null/undefined), dan berhalusinasi saat ditanya API versi terbaru.\n\n" +
+            "## Jebakan & Kesalahan Umum\n\n" +
+            "> **Jebakan:** Meminta AI memperbaiki error dengan pertanyaan berulang 'Kamu yakin kode ini benar?'. AI akan selalu menjawab 'Ya, tentu!' dan tetap memberikan kode berhalusinasi yang sama. Jalankan kodenya dan berikan pesan error asli dari terminal!\n\n" +
+            "## Kapan Dipakai di Dunia Kerja\n\n" +
+            "> **Dunia Kerja:** Senior developer memanfaatkan AI untuk memotong waktu pekerjaan mekanis (seperti mengetik tipe data DTO atau skema JSON), lalu mengalokasikan 80% waktu dan energi mereka untuk meninjau kebenaran logika bisnis dan keamanan sistem.",
+        },
+        {
           kind: "step",
           id: "ai-1-1",
           title: "Prediksi Token: Kenapa AI Bisa Salah dengan Percaya Diri",
           explanation:
-            "LLM tidak 'memahami' kode seperti kamu. Ia memprediksi potongan teks (token) yang paling mungkin muncul berikutnya berdasarkan pola dari miliaran baris kode yang pernah dibacanya. Karena itu jawabannya selalu terdengar yakin — bahkan saat salah, sebab yang dinilai model adalah 'sepertinya begini polanya', bukan 'ini sudah saya uji'. Konsekuensi praktisnya cuma satu dan berlaku seumur karier: apa pun yang AI tulis, kamu jalankan dan buktikan sendiri sebelum percaya.",
+            "LLM tidak memverifikasi kebenaran kode di runtime saat menjawab pertanyaanmu. Ia memprediksi potongan teks (token) yang paling mungkin muncul berikutnya berdasarkan pola dari miliaran baris kode yang pernah dibacanya. Karena itu jawabannya selalu terdengar yakin — bahkan saat salah, sebab yang dinilai model adalah 'sepertinya begini polanya', bukan 'ini sudah saya uji'. Konsekuensi praktisnya cuma satu dan berlaku seumur karier: apa pun yang AI tulis, kamu jalankan dan buktikan sendiri sebelum percaya.",
           example: {
             code: "// AI menyarankan: 'pakai toFixed(2) untuk format harga'\nconst harga = 1250000;\nconsole.log(harga.toFixed(2));",
             output: "1250000.00",
@@ -71,7 +338,7 @@ export const aiDevTrack: Track = {
                 "Pakai method sort() bawaan JavaScript.",
             },
             {
-              pattern: "a\\.harga\\s*-\\s*b\\.harga|harga\\s*<\\s*|localeCompare",
+              pattern: "\\w+\\.harga\\s*-\\s*\\w+\\.harga|harga\\s*<\\s*|localeCompare",
               message:
                 "Beri fungsi pembanding di dalam sort, misalnya (a, b) => a.harga - b.harga.",
             },
@@ -106,7 +373,7 @@ export const aiDevTrack: Track = {
                 "Bulatkan ke atas memakai Math.ceil().",
             },
             {
-              pattern: "jumlahKarakter\\s*/\\s*4",
+              pattern: "(jumlahKarakter|32000)\\s*/\\s*4",
               message:
                 "Bagi jumlah karakter dengan 4 untuk memperkirakan token.",
             },
@@ -135,9 +402,9 @@ export const aiDevTrack: Track = {
           language: "jsx",
           tests: [
             {
-              pattern: "type\\s+User\\s*=\\s*\\{",
+              pattern: "(type|interface)\\s+User\\s*(=|\\{)",
               message:
-                "Buat type User = { ... }.",
+                "Buat type atau interface User.",
             },
             {
               pattern: "id\\s*:\\s*string",
@@ -246,35 +513,40 @@ export const aiDevTrack: Track = {
               choices: ["Halusinasi (Hallucination)", "Compilation Error", "Overfitting", "Refactoring"],
               answerIndex: 0,
               explanation: "Halusinasi adalah kondisi ketika AI menghasilkan respon fiktif yang terdengar meyakinkan namun tidak akurat secara nyata.",
-            }, {
+            },
+            {
               id: "q2",
               type: "pilihan-ganda",
               question: "Mengapa AI sering melupakan instruksi di awal percakapan jika sesi obrolan terlalu panjang?",
               choices: ["Karena server AI restart", "Karena mencapai batas Context Window", "Karena AI tidak suka percakapan panjang", "Karena koneksi internet terputus"],
               answerIndex: 1,
-              explanation: "Setiap model memiliki batas context window (jumlah token maksimal). Jika melebihi batas ini, token terlama akan dihapus."
-            }, {
+              explanation: "Setiap model memiliki batas context window (jumlah token maksimal). Jika melebihi batas ini, token terlama akan dihapus.",
+            },
+            {
               id: "q3",
               type: "pilihan-ganda",
               question: "Apa kelemahan utama AI saat digunakan untuk menulis kode perusahaan?",
               choices: ["AI tidak tahu logika bisnis spesifik dan aturan unik perusahaan", "AI tidak bisa mengetik cepat", "AI akan menghapus kode secara otomatis", "AI selalu menggunakan bahasa Assembly"],
               answerIndex: 0,
-              explanation: "AI dilatih dengan data publik, sehingga ia tidak tahu aturan bisnis, struktur, atau sistem internal spesifik di perusahaanmu yang bersifat rahasia."
-            }, {
+              explanation: "AI dilatih dengan data publik, sehingga ia tidak tahu aturan bisnis, struktur, atau sistem internal spesifik di perusahaanmu yang bersifat rahasia.",
+            },
+            {
               id: "q4",
               type: "pilihan-ganda",
               question: "Apa tujuan utama dari fitur Context Window pada model LLM?",
               choices: ["Menyimpan data percakapan selamanya di server", "Menentukan jumlah batas maksimal memori atau token yang bisa diingat dalam satu sesi", "Meningkatkan kecepatan pengetikan AI", "Menerjemahkan bahasa secara otomatis"],
               answerIndex: 1,
               explanation: "Context window adalah batas jumlah token maksimal yang dapat diproses oleh LLM dalam satu waktu. Jika melebihi batas, model akan mulai melupakan konteks dari awal percakapan.",
-            }, {
+            },
+            {
               id: "q5",
               type: "pilihan-ganda",
               question: "Pekerjaan apa yang sangat cocok dan efisien diserahkan kepada AI?",
               choices: ["Membuat arsitektur sistem skala besar tanpa pengawasan", "Menerjemahkan sintaks antar bahasa atau membuat kode boilerplate", "Menulis aturan bisnis unik perusahaan yang belum pernah ada", "Mengambil keputusan pemecatan karyawan"],
               answerIndex: 1,
               explanation: "AI sangat andal dalam translasi sintaks dan pembuatan kode berulang (boilerplate) karena tugas tersebut didasarkan pada pola umum yang banyak ditemukan di data pelatihannya.",
-            }]
+            },
+          ],
         },
       ],
     },
@@ -292,6 +564,40 @@ export const aiDevTrack: Track = {
         "Anti-pattern: prompt sekali-tembak untuk masalah kompleks",
       ],
       items: [
+        {
+          kind: "materi",
+          id: "ai-2-m1",
+          title: "Prinsip Dasar Prompting untuk Pemrograman",
+          body:
+            "# Pengertian\n\n" +
+            "**Prompting** adalah seni dan teknik memberikan instruksi kepada model AI agar menghasilkan respon yang akurat, relevan, dan aman. Di dunia pengembangan perangkat lunak, instruksi umum seperti *'buatkan kode login'* hampir selalu menghasilkan kode yang buruk atau tidak cocok dengan proyekmu.\n\n" +
+            "Prompting yang efektif memerlukan struktur yang jelas: menyertakan **konteks teknologi**, **pesan error persis**, **potongan kode terkait**, dan **batasan (constraints)**.\n\n" +
+            "## Anatomi Prompt yang Efektif\n\n" +
+            "Sebuah prompt koding yang berkualitas baik umumnya memiliki 4 elemen utama:\n\n" +
+            "```text\n" +
+            "+-------------------------------------------------------------------------+\n" +
+            "|                        ANATOMI PROMPT KODING                            |\n" +
+            "+-------------------------------------------------------------------------+\n" +
+            "| 1. KONTEKS    ---> \"Saya menggunakan Node 20 + Express 5\"               |\n" +
+            "| 2. MASALAH    ---> Tempelkan potongan kode & pesan error dari terminal  |\n" +
+            "| 3. TUJUAN     ---> \"Saya ingin req.body terbaca sebagai JSON\"           |\n" +
+            "| 4. CONSTRAINT ---> \"Tanpa library eksternal, gunakan async/await\"       |\n" +
+            "+-------------------------------------------------------------------------+\n" +
+            "```\n\n" +
+            "## Perbandingan Prompt Buruk vs Efektif\n\n" +
+            "| Elemen | Prompt Asal-asalan (Buruk) | Prompt Terstruktur (Efektif) |\n" +
+            "|---|---|---|\n" +
+            "| **Spesifikasi** | \"Perbaiki error di kode ini.\" | \"Node 20 + Express. TypeError: Cannot read 'email' of undefined at src/auth.js:12.\" |\n" +
+            "| **Batasan** | (Tidak ada batasan) | \"Gunakan TypeScript strict, jangan pakai library tambahan.\" |\n" +
+            "| **Metode** | \"Buatkan aplikasi e-commerce utuh.\" | \"Langkah 1: Tulis satu fungsi hitungTotal(items) yang menerima array.\" |\n" +
+            "| **Tujuan** | Mode produksi terus-menerus | Mode belajar: \"Jelaskan konsepnya, jangan berikan jawaban jadi.\" |\n\n" +
+            "## Iterasi vs Mengulang-ulang\n\n" +
+            "Saat AI memberikan jawaban yang meleset, **jangan ketik ulang prompt awal yang sama persis**. Lakukan **prompting iteratif**: sebutkan bagian mana dari jawaban AI yang sudah benar, bagian mana yang salah, dan apa yang sudah kamu coba secara manual.\n\n" +
+            "## Jebakan & Kesalahan Umum\n\n" +
+            "> **Jebakan Mega-Prompt:** Meminta seluruh fitur kompleks dalam satu prompt raksasa (*single-shot mega-prompt*). AI akan menghasilkan ratusan baris kode yang membingungkan dan sulit diverifikasi. Pecah tugas menjadi 3-5 langkah kecil yang bisa diuji satu per satu!\n\n" +
+            "## Kapan Dipakai di Dunia Kerja\n\n" +
+            "> **Dunia Kerja:** Keterampilan merumuskan prompt terstruktur sangat dihargai dalam *technical communication*. Engineer yang mampu menulis masalah dengan jelas ke AI juga biasanya sangat handal dalam menulis *issue ticket* Jira dan deskripsi Pull Request untuk timnya.",
+        },
         {
           kind: "step",
           id: "ai-2-1",
@@ -320,7 +626,7 @@ export const aiDevTrack: Track = {
                 "Tempelkan pesan error persis seperti yang muncul di terminal.",
             },
             {
-              pattern: "(ingin|tujuan|harapan|supaya|agar)[\\s\\S]*build",
+              pattern: "(ingin|tujuan|harapan|supaya|agar|bisa)[\\s\\S]*build",
               flags: "i",
               message:
                 "Sebutkan hasil akhir yang kamu inginkan, misalnya 'agar build berhasil lagi'.",
@@ -350,7 +656,7 @@ export const aiDevTrack: Track = {
                 "Sebutkan bahasanya: TypeScript.",
             },
             {
-              pattern: "(tanpa|jangan|tidak boleh)[\\s\\S]*(library|dependensi|paket|moment|dayjs)",
+              pattern: "(tanpa|jangan|tidak|bebas)[\\s\\S]*(library|dependensi|paket|moment|dayjs)",
               flags: "i",
               message:
                 "Larang penambahan library eksternal secara eksplisit.",
@@ -380,7 +686,7 @@ export const aiDevTrack: Track = {
           language: "text",
           tests: [
             {
-              pattern: "(sudah benar|sudah tepat|berhasil untuk)",
+              pattern: "(sudah benar|sudah tepat|berhasil|lancar)",
               flags: "i",
               message:
                 "Sebutkan bagian yang sudah benar agar tidak ikut ditulis ulang.",
@@ -525,35 +831,40 @@ export const aiDevTrack: Track = {
               ],
               answerIndex: 0,
               explanation: "Konteks berupa potongan kode terkait, traceback error lengkap, dan ekspektasi hasil memberikan informasi utuh bagi AI.",
-            }, {
+            },
+            {
               id: "q2",
               type: "pilihan-ganda",
               question: "Mengapa kita disarankan meminta alternatif atau trade-off dari AI?",
               choices: ["Agar AI merasa dihargai", "Untuk memastikan kita memilih pendekatan terbaik dan memahami konsekuensinya", "Karena AI selalu salah di jawaban pertama", "Agar proses berjalan lebih lambat"],
               answerIndex: 1,
-              explanation: "Dengan meminta alternatif, kita dipaksa mengevaluasi kelebihan dan kelemahan masing-masing solusi sebelum menerapkannya ke proyek."
-            }, {
+              explanation: "Dengan meminta alternatif, kita dipaksa mengevaluasi kelebihan dan kelemahan masing-masing solusi sebelum menerapkannya ke proyek.",
+            },
+            {
               id: "q3",
               type: "pilihan-ganda",
               question: "Apa kelemahan dari single-shot mega prompt (satu prompt panjang untuk membuat seluruh aplikasi)?",
               choices: ["Sangat efektif untuk aplikasi kompleks", "Hanya bisa digunakan oleh pengguna berbayar", "AI sering gagal menghasilkan kode berkualitas karena tugasnya terlalu besar dan tidak fokus", "Menghasilkan kode yang 100% sempurna tanpa bug"],
               answerIndex: 2,
-              explanation: "Memecah tugas besar menjadi bagian kecil (modular) jauh lebih efektif karena AI dapat fokus pada satu masalah spesifik di setiap prompt."
-            }, {
+              explanation: "Memecah tugas besar menjadi bagian kecil (modular) jauh lebih efektif karena AI dapat fokus pada satu masalah spesifik di setiap prompt.",
+            },
+            {
               id: "q4",
               type: "pilihan-ganda",
               question: "Apa yang sebaiknya dilakukan jika jawaban AI tidak sesuai dengan harapanmu pada percobaan pertama?",
               choices: ["Membuat obrolan baru dan mengulangi prompt dari awal persis sama", "Melakukan prompting iteratif dengan memberikan umpan balik untuk mempersempit instruksi", "Menyerah dan tidak lagi menggunakan AI", "Memarahi AI agar ia meminta maaf"],
               answerIndex: 1,
               explanation: "Menggunakan pendekatan iteratif dengan memberikan konteks tambahan atau koreksi jauh lebih efektif daripada memulai ulang dari nol.",
-            }, {
+            },
+            {
               id: "q5",
               type: "pilihan-ganda",
               question: "Mengapa menyebutkan batasan (constraint) seperti 'tanpa menggunakan library eksternal' pada prompt itu penting?",
               choices: ["Agar AI merasa tertantang", "Memastikan AI menghasilkan kode yang sesuai dengan pedoman atau batasan di proyek kita", "Supaya kodenya tidak bisa dibaca oleh orang lain", "Meningkatkan kecepatan respons AI secara drastis"],
               answerIndex: 1,
               explanation: "Constraint memastikan AI tidak memberikan solusi yang tidak bisa kita gunakan, seperti menambahkan library berukuran besar yang tidak diizinkan di proyek.",
-            }]
+            },
+          ],
         },
       ],
     },
@@ -571,6 +882,38 @@ export const aiDevTrack: Track = {
         "Menjaga flow: AI membantu fokus, bukan mengganti berpikir",
       ],
       items: [
+        {
+          kind: "materi",
+          id: "ai-3-m1",
+          title: "Mengintegrasikan AI ke Alur Kerja Harian Developer",
+          body:
+            "# Pengertian\n\n" +
+            "Mengintegrasikan alat AI ke alur kerja harian bukan berarti membiarkan AI mengambil alih seluruh proses pengembangan. Ini adalah tentang **memilih alat AI yang tepat untuk fase pengembangan yang tepat**.\n\n" +
+            "Setiap jenis alat AI memiliki kekuatan spesifik yang jika dipadukan dengan benar akan meningkatkan kecepatan dan kualitas kodingmu secara drastis.\n\n" +
+            "## Tiga Mode Utama Alur Kerja AI\n\n" +
+            "```text\n" +
+            "+-------------------------------------------------------------------------+\n" +
+            "|                     PETA ALUR KERJA ALAT AI                             |\n" +
+            "+-------------------------------------------------------------------------+\n" +
+            "| 1. FASE DESAIN & DISKUSI  ---> Gunakan Chat LLM (Claude / ChatGPT)      |\n" +
+            "| 2. FASE IMPLEMENTASI BARS ---> Gunakan Autocomplete (Copilot / Continue)|\n" +
+            "| 3. FASE REFACTOR MULTIFILE---> Gunakan AI Agent (Cursor Composer / AGY) |\n" +
+            "+-------------------------------------------------------------------------+\n" +
+            "```\n\n" +
+            "| Fitur / Mode | Kapan Digunakan | Kapan Dihindari / Berisiko |\n" +
+            "|---|---|---|\n" +
+            "| **Autocomplete** | Menulis kode berulang, mock data, atau kelanjutan fungsi sederhana | Menulis logika bisnis sensitif atau perhitungan angka ajaib |\n" +
+            "| **Sesi Chat** | Mengeksplorasi arsitektur, mendesain tabel, membedah error rumit | Tugas mengetik sederhana satu baris yang cukup autocomplete |\n" +
+            "| **AI Agent** | Perubahan lintas file (misal mengganti nama fungsi di 10 berkas) | Menjalankan di direktori git yang belum di-commit (*dirty working tree*) |\n\n" +
+            "## AI untuk Pengujian & Dokumentasi\n\n" +
+            "Dua area dengan ROI (*Return on Investment*) tertinggi untuk penggunaan AI adalah **pembuatan unit test** dan **penulisan dokumentasi/commit message**.\n\n" +
+            "- **Unit Test:** AI sangat andal membuat kerangka test dan menemukan *edge case* input (seperti input string kosong, angka negatif, atau `null`).\n" +
+            "- **Commit Message:** AI dapat membaca perubahan `git diff` dan merangkum pesan commit sesuai standar Conventional Commits (`fix:`, `feat:`).\n\n" +
+            "## Jebakan & Kesalahan Umum\n\n" +
+            "> **Jebakan:** Menjalankan AI Agent di direktori git yang memiliki banyak perubahan belum di-commit. Jika Agent membuat kesalahan di 15 berkas sekaligus, kamu tidak bisa membedakan mana perubahanmu dan mana perubahan Agent. **Selalu pastikan `git status` bersih sebelum menjalankan Agent!**\n\n" +
+            "## Kapan Dipakai di Dunia Kerja\n\n" +
+            "> **Dunia Kerja:** Dalam tim profesional, pengembang diwajibkan memeriksa `git diff` baris demi baris sebelum membuat Pull Request. Memahami kapan harus menerima saran autocomplete dan kapan menolaknya memastikan reputasimu sebagai engineer tetap terjaga.",
+        },
         {
           kind: "step",
           id: "ai-3-1",
@@ -593,12 +936,12 @@ export const aiDevTrack: Track = {
                 "Buat fungsi hitungOngkir(total).",
             },
             {
-              pattern: "300000",
+              pattern: "300_?000",
               message:
                 "Sertakan ambang gratis ongkir 300000.",
             },
             {
-              pattern: "15000",
+              pattern: "15_?000",
               message:
                 "Ongkir selain itu 15000.",
             },
@@ -674,7 +1017,7 @@ export const aiDevTrack: Track = {
                 "Sebutkan hasil yang diharapkan: var diganti const atau let.",
             },
             {
-              pattern: "(jangan|tanpa mengubah|kecuali|tidak boleh)",
+              pattern: "(jangan|tanpa|kecuali|tidak boleh)",
               flags: "i",
               message:
                 "Sebutkan bagian yang tidak boleh disentuh.",
@@ -761,7 +1104,7 @@ export const aiDevTrack: Track = {
           language: "js",
           tests: [
             {
-              pattern: "const\\s+status\\s*=\\s*user\\??\\.?\\s*profil",
+              pattern: "(const|let)\\s+status\\s*=\\s*user\\??\\.?\\s*profil",
               message:
                 "Buat variabel status dari user?.profil?.status.",
             },
@@ -771,7 +1114,7 @@ export const aiDevTrack: Track = {
                 "Pakai optional chaining (?.) agar tidak error saat profil kosong.",
             },
             {
-              pattern: "const\\s+aktif\\s*=\\s*status\\s*===\\s*['\"]aktif['\"]",
+              pattern: "(const|let)\\s+aktif\\s*=\\s*status\\s*===\\s*['\"]aktif['\"]",
               message:
                 "Buat variabel aktif hasil perbandingan status === 'aktif'.",
             },
@@ -795,35 +1138,40 @@ export const aiDevTrack: Track = {
               ],
               answerIndex: 1,
               explanation: "Selalu tinjau `git diff` untuk memastikan tidak ada perubahan sampingan yang tidak diinginkan dari eksekusi AI Agent.",
-            }, {
+            },
+            {
               id: "q2",
               type: "pilihan-ganda",
               question: "Kapan sebaiknya kita menggunakan fitur Autocomplete (seperti Copilot)?",
               choices: ["Untuk semua baris kode tanpa terkecuali", "Saat menulis pola yang berulang atau boilerplate", "Hanya saat aplikasi sudah di-deploy", "Saat merancang arsitektur database awal"],
               answerIndex: 1,
-              explanation: "Autocomplete paling bersinar saat menangani kode berulang (seperti mock data, type definition), karena pola tersebut mudah diprediksi dengan akurat."
-            }, {
+              explanation: "Autocomplete paling bersinar saat menangani kode berulang (seperti mock data, type definition), karena pola tersebut mudah diprediksi dengan akurat.",
+            },
+            {
               id: "q3",
               type: "pilihan-ganda",
               question: "Bagaimana cara terbaik menggunakan AI untuk membantu mendesain arsitektur aplikasi?",
               choices: ["Meminta AI langsung membuatkan seluruh file .js", "Gunakan sesi chat interaktif untuk berdiskusi tentang struktur tabel atau API sebelum menulis kode", "Gunakan AI Agent untuk langsung mengedit file produksi", "Abaikan arsitektur dan langsung jalankan kode"],
               answerIndex: 1,
-              explanation: "Membahas konsep dan arsitektur terlebih dahulu di chat membantu menghindari kesalahan fundamental sebelum kode aktual mulai ditulis."
-            }, {
+              explanation: "Membahas konsep dan arsitektur terlebih dahulu di chat membantu menghindari kesalahan fundamental sebelum kode aktual mulai ditulis.",
+            },
+            {
               id: "q4",
               type: "pilihan-ganda",
               question: "Apa keunggulan utama menggunakan AI untuk menghasilkan unit test?",
               choices: ["AI dapat menguji kode secara otomatis tanpa perlu dijalankan", "AI mampu memikirkan banyak edge case dan menulis suite test dalam waktu singkat", "AI bisa menggantikan seluruh peran QA Engineer", "Kode test buatan AI tidak perlu dicek lagi"],
               answerIndex: 1,
               explanation: "AI sangat kuat dalam membuat boilerplate test dan mengidentifikasi edge case (seperti input kosong atau null) yang mungkin terlewat oleh developer.",
-            }, {
+            },
+            {
               id: "q5",
               type: "pilihan-ganda",
               question: "Apa tujuan menggunakan standar seperti 'Conventional Commits' saat meminta AI membuat pesan commit?",
               choices: ["Membuat riwayat Git menjadi lebih berwarna", "Menjaga kerapian, struktur, dan konsistensi riwayat git log dalam tim", "Menyembunyikan detail perubahan dari manajer", "Menghapus pesan error dari terminal"],
               answerIndex: 1,
               explanation: "Format yang terstruktur memudahkan tim untuk membaca riwayat versi dan bahkan memungkinkan otomatisasi pembuatan changelog atau rilis.",
-            }]
+            },
+          ],
         },
       ],
     },
@@ -842,6 +1190,38 @@ export const aiDevTrack: Track = {
       ],
       items: [
         {
+          kind: "materi",
+          id: "ai-4-m1",
+          title: "Teknik Code Review Khusus Kode Generated AI",
+          body:
+            "# Pengertian\n\n" +
+            "Mengevaluasi kode buatan AI (*generated code*) memerlukan lensa pemeriksaan yang berbeda dibandingkan mereview kode buatan sesama pengembang manusia. Pengembang manusia biasanya membuat kesalahan logika akibat kecerobohan atau kelelahan, sementara **AI membuat kesalahan karena terlalu percaya diri terhadap pola yang tidak sesuai dengan runtime-mu**.\n\n" +
+            "Kode AI hampir selalu lolos uji visual pertama: kodenya rapi, variabelnya bernama bagus, dan menggunakan komentar yang terdengar meyakinkan. Namun di balik keindahan itu, sering kali tersembunyi bug fatal di *production*.\n\n" +
+            "## Tiga Bug Khas Kode Buatan AI\n\n" +
+            "```text\n" +
+            "+-------------------------------------------------------------------------+\n" +
+            "|                     BUG KHAS KODE GENERATED AI                          |\n" +
+            "+-------------------------------------------------------------------------+\n" +
+            "| 1. Terlewatnya Edge Cases ---> Lupa memeriksa null, undefined, array 0 |\n" +
+            "| 2. Celah Keamanan         ---> Hardcoded secret API key & SQL Injection |\n" +
+            "| 3. Sintaks Bercampur      ---> Menggabungkan API v1 lama & v2 terbaru  |\n" +
+            "+-------------------------------------------------------------------------+\n" +
+            "```\n\n" +
+            "## Checklist Review Kode AI Sebelum Commit\n\n" +
+            "Gunakan 5 poin *checklist* ini sebelum kamu menyetujui kode buatan AI ke repositori:\n\n" +
+            "| Poin Checklist | Yang Harus Diperiksa | Contoh Masalah |\n" +
+            "|---|---|---|\n" +
+            "| **1. Pengamanan Null** | Apakah semua akses objek bertingkat menggunakan optional chaining (`?.`)? | `user.profile.name` akan crash jika `profile` bernilai `undefined`. |\n" +
+            "| **2. Kredensial & Secrets** | Apakah ada token, password, atau API Key tertulis langsung di kode? | `const apiKey = 'sk-live-12345';` (Wajib pindah ke `.env`!). |\n" +
+            "| **3. Celah SQL Injection** | Apakah query database menyambung string masukan pengguna secara langsung? | `db.query('WHERE id = ' + req.id)` (Wajib gunakan parameter binding `?`). |\n" +
+            "| **4. Pembagian dengan Nol** | Apakah ada operasi aritmatika yang berpotensi menghasilkan `Infinity` atau `NaN`? | `total / count` tanpa pengecekan `count === 0`. |\n" +
+            "| **5. Lisensi Kode** | Apakah AI menjiplak algoritma utuh dari repositori berlisensi ketat (GPL)? | Ganti kode utilitas panjang buatan AI dengan library resmi terpercaya. |\n\n" +
+            "## Jebakan & Kesalahan Umum\n\n" +
+            "> **Jebakan:** Berasumsi bahwa 'karena kodenya jalan di komputer saya, berarti kodenya aman'. Kode AI yang mengandung celah SQL injection atau hardcoded secret akan *berjalan sempurna* saat dites manual, namun akan menjebol keamanan aplikasimu saat di-deploy ke publik!\n\n" +
+            "## Kapan Dipakai di Dunia Kerja\n\n" +
+            "> **Dunia Kerja:** Di perusahaan tech terkemuka, kamu yang menekan tombol *Merge Pull Request* adalah satu-satunya pihak yang bertanggung jawab jika terjadi kebocoran data. Mengetahui cara menemukan bug khas AI membuatmu menjadi reviewer yang disegani di tim.",
+        },
+        {
           kind: "step",
           id: "ai-4-1",
           title: "Bug Khas Kode AI: Kasus Tepi yang Terlewat",
@@ -857,12 +1237,12 @@ export const aiDevTrack: Track = {
           language: "js",
           tests: [
             {
-              pattern: "user\\?\\.alamat\\?\\.kota|user\\?\\.alamat\\?\\.\\w+",
+              pattern: "user\\?\\.alamat\\?\\.(kota|city)",
               message:
                 "Akses alamat dengan optional chaining: user?.alamat?.kota.",
             },
             {
-              pattern: "\\?\\?\\s*['\"]Belum diisi['\"]|\\|\\|\\s*['\"]Belum diisi['\"]",
+              pattern: "(\\?\\?|\\|\\|)\\s*['\"]Belum diisi['\"]",
               message:
                 "Beri nilai pengganti 'Belum diisi' saat data kosong.",
             },
@@ -937,7 +1317,7 @@ export const aiDevTrack: Track = {
                 "Hapus kunci asli dari kode.",
             },
             {
-              pattern: "\\?['\"]\\s*,\\s*\\[\\s*email\\s*\\]",
+              pattern: "\\?\\s*['\"]\\s*,\\s*\\[\\s*email\\s*\\]",
               message:
                 "Pakai query berparameter: '... = ?', [email].",
             },
@@ -993,7 +1373,7 @@ export const aiDevTrack: Track = {
           language: "js",
           tests: [
             {
-              pattern: "if\\s*\\(\\s*b\\s*===?\\s*0\\s*\\)",
+              pattern: "if\\s*\\(\\s*!b|b\\s*===?\\s*0\\s*\\)",
               message:
                 "Periksa dulu apakah b bernilai 0.",
             },
@@ -1063,35 +1443,40 @@ export const aiDevTrack: Track = {
               ],
               answerIndex: 0,
               explanation: "Pengembang yang menandatangani dan mempublikasikan commit memegang tanggung jawab penuh atas integritas kode produksi.",
-            }, {
+            },
+            {
               id: "q2",
               type: "pilihan-ganda",
               question: "Apa salah satu bug yang paling umum ditemui pada kode buatan AI?",
               choices: ["Selalu menggunakan variabel dengan nama dalam bahasa Indonesia", "Lupa menangani nilai null/undefined (edge cases)", "Mengubah warna tema terminal", "Membuat font menjadi lebih besar"],
               answerIndex: 1,
-              explanation: "AI sering menghasilkan 'happy path' code dan mengabaikan pengecekan null atau error handling yang proper."
-            }, {
+              explanation: "AI sering menghasilkan 'happy path' code dan mengabaikan pengecekan null atau error handling yang proper.",
+            },
+            {
               id: "q3",
               type: "pilihan-ganda",
               question: "Mengapa berbahaya jika kita langsung menyalin kode AI yang memuat kredensial atau API Key?",
               choices: ["Kode tersebut mungkin akan kadaluarsa besok", "Bisa menyebabkan rahasia perusahaan bocor atau digunakan oleh pihak tak bertanggung jawab", "Membuat ukuran file membesar", "AI akan meminta bayaran ekstra"],
               answerIndex: 1,
-              explanation: "API key hardcoded yang didapat dari atau dibagikan ke sistem publik berpotensi tinggi memicu pelanggaran keamanan dan kerugian finansial."
-            }, {
+              explanation: "API key hardcoded yang didapat dari atau dibagikan ke sistem publik berpotensi tinggi memicu pelanggaran keamanan dan kerugian finansial.",
+            },
+            {
               id: "q4",
               type: "pilihan-ganda",
               question: "Mengapa kode buatan AI sering kali gagal menangani nilai null atau undefined?",
               choices: ["AI memang diprogram untuk benci nilai null", "AI cenderung menghasilkan kode jalur bahagia (happy path) dan melupakan kondisi ekstrem", "Bahasa pemrograman tidak mendukung null", "Nilai null selalu menyebabkan komputer rusak"],
               answerIndex: 1,
               explanation: "Karena dilatih untuk mencari solusi yang paling umum, AI sering menulis kode yang berasumsi input selalu valid (happy path) tanpa error handling.",
-            }, {
+            },
+            {
               id: "q5",
               type: "pilihan-ganda",
               question: "Apa risiko hukum terbesar jika kita langsung menyalin algoritma kompleks yang dihasilkan oleh AI tanpa memeriksanya?",
               choices: ["Menurunkan performa komputer perusahaan", "AI akan meminta bagian saham dari perusahaan", "Kode tersebut mungkin menjiplak lisensi hak cipta dari repository open source yang membatasi penggunaan komersial", "Ukuran font kode akan berubah menjadi tidak standar"],
               answerIndex: 2,
               explanation: "Beberapa kode mungkin dihasilkan dari dataset berlisensi (seperti GPL) yang mengharuskan kodemu ikut bersifat open source, sehingga membahayakan rahasia dagang.",
-            }]
+            },
+          ],
         },
       ],
     },
@@ -1109,6 +1494,39 @@ export const aiDevTrack: Track = {
         "Kapan berhenti: tanda kamu di lubang kelinci AI",
       ],
       items: [
+        {
+          kind: "materi",
+          id: "ai-5-m1",
+          title: "Strategi Debugging dan Refactoring dengan AI",
+          body:
+            "# Pengertian\n\n" +
+            "Debugging dan refactoring adalah dua aktivitas pengembangan lunak yang menyedot waktu terbanyak. Menggunakan AI untuk kedua tugas ini memberikan **ROI (*Return on Investment*) tertinggi**, asalkan kamu menggunakannya dengan pendekatan terstruktur.\n\n" +
+            "Kesalahan terbesar pemula adalah menempelkan seluruh file 2.000 baris lalu berkata *'perbaiki bug-nya'*. AI akan kewalahan oleh *noise* dan memberikan solusi acak yang justru menambah masalah baru.\n\n" +
+            "## Metode Minimal Reproducible Snippet\n\n" +
+            "Saat meminta AI mendebug error, selalu isolasi masalah menjadi potongan kode terkecil (*minimal reproducible snippet*):\n\n" +
+            "```text\n" +
+            "+-------------------------------------------------------------------------+\n" +
+            "|              FORMAT DEBUGGING MINIMAL YANG EFEKTIF                      |\n" +
+            "+-------------------------------------------------------------------------+\n" +
+            "| 1. Potongan Kode Terkecil (10-20 baris yang memicu error)              |\n" +
+            "| 2. Pesan Error Asli Terminal (Traceback utuh tanpa dipotong)            |\n" +
+            "| 3. Ekspektasi vs Realita (\"Hasilnya NaN, seharusnya angka 15000\")       |\n" +
+            "+-------------------------------------------------------------------------+\n" +
+            "```\n\n" +
+            "## AI sebagai 'Interactive Rubber Duck'\n\n" +
+            "Dalam dunia pemrograman, *Rubber Duck Debugging* adalah teknik menjelaskan masalah baris demi baris kepada bebek karet di meja kerja. Dengan AI, bebek karet tersebut bisa membalas!\n\n" +
+            "Tuliskan dugaanmu, apa yang sudah kamu coba, dan bagian mana yang belum kamu periksa. AI akan menunjuk asumsi yang salah tanpa perlu meminta AI menuliskan kodenya.\n\n" +
+            "## Tanda Kamu Terjebak di 'AI Rabbit Hole'\n\n" +
+            "| Indikator | Tanda Bahaya | Tindakan Pemulihan |\n" +
+            "|---|---|---|\n" +
+            "| **Iterasi > 4x** | AI terus menerus melempar error baru di setiap balasan | Hentikan percakapan! Reset file dengan `git restore .`. |\n" +
+            "| **Kode Makin Pembengkakan** | Kode 10 baris membengkak jadi 80 baris dengan `try/catch` bertingkat | Kembalilah ke kondisi bersih terakhir dan buat langkah lebih kecil. |\n" +
+            "| **Loss of Control** | Kamu tidak bisa lagi menjelaskan baris kode yang disarankannya | Jangan commit kode yang tidak kamu pahami! |\n\n" +
+            "## Jebakan & Kesalahan Umum\n\n" +
+            "> **Jebakan Refactoring Serabutan:** Meminta AI 'rapikan kode ini' tanpa batasan. AI akan mengganti nama variabel, mengubah struktur `async/await`, dan mengedit gaya penulisan sekaligus. **Refactoring yang aman selalu memiliki 1 tujuan per permintaan** (misal: hanya konversi callback ke async/await).\n\n" +
+            "## Kapan Dipakai di Dunia Kerja\n\n" +
+            "> **Dunia Kerja:** Saat harus berhadapan dengan *legacy codebase* (kode lama tanpa dokumentasi), pengembang senior menggunakan AI untuk membedah alur data dan membuat ringkasan titik masuk (*entry point*) aplikasi sebelum mulai menyentuh kode.",
+        },
         {
           kind: "step",
           id: "ai-5-1",
@@ -1196,9 +1614,9 @@ export const aiDevTrack: Track = {
           language: "js",
           tests: [
             {
-              pattern: "async\\s+function\\s+tampilkanPesanan\\s*\\(\\s*id\\s*\\)",
+              pattern: "(async\\s+function\\s+tampilkanPesanan|const\\s+tampilkanPesanan\\s*=\\s*async)",
               message:
-                "Buat async function tampilkanPesanan(id).",
+                "Buat async function atau arrow function tampilkanPesanan.",
             },
             {
               pattern: "await\\s+ambilUser\\(\\s*id\\s*\\)",
@@ -1303,7 +1721,7 @@ export const aiDevTrack: Track = {
           language: "text",
           tests: [
             {
-              pattern: "git\\s+(checkout\\s+\\.|restore\\s+\\.|reset\\s+--hard)",
+              pattern: "git\\s+(checkout\\s+(\\S+\\s+)?\\.|restore\\s+\\.|reset\\s+--hard)",
               message:
                 "Pakai git restore . (atau git checkout .) untuk membuang perubahan lokal.",
             },
@@ -1321,41 +1739,46 @@ export const aiDevTrack: Track = {
               question: "Apa tindakan terbaik jika perbaikan bug bersama AI justru membuat kode semakin rumit dan menimbulkan error baru bertubi-tubi (Rabbit Hole)?",
               choices: [
                 "Terus melanjutkan prompt tanpa henti",
-                "Lakukan `git checkout .` untuk mereset kode ke kondisi bersih, lalu atur ulang pendekatan secara manual",
+                "Lakukan `git restore .` untuk mereset kode ke kondisi bersih, lalu atur ulang pendekatan secara manual",
                 "Menghapus seluruh folder proyek",
                 "Menjual komputer",
               ],
               answerIndex: 1,
-              explanation: "Mereset kode ke kondisi awal yang stabil (git checkout .) mencegah penumpukan kesalahan saat AI terjebak dalam alur pemecahan masalah yang salah.",
-            }, {
+              explanation: "Mereset kode ke kondisi awal yang stabil (git restore .) mencegah penumpukan kesalahan saat AI terjebak dalam alur pemecahan masalah yang salah.",
+            },
+            {
               id: "q2",
               type: "pilihan-ganda",
               question: "Bagaimana cara terbaik memberikan konteks kepada AI saat melakukan debugging?",
               choices: ["Kirim seluruh proyek (ribuan baris) sekaligus", "Beri potongan kode minimal (reproducible snippet) dan pesan error yang spesifik", "Cukup berikan pesan error saja tanpa kode", "Kirim screenshot kode dari HP"],
               answerIndex: 1,
-              explanation: "Memberikan reproducible snippet mengurangi noise, sehingga AI bisa fokus pada akar masalah dengan jauh lebih akurat."
-            }, {
+              explanation: "Memberikan reproducible snippet mengurangi noise, sehingga AI bisa fokus pada akar masalah dengan jauh lebih akurat.",
+            },
+            {
               id: "q3",
               type: "pilihan-ganda",
               question: "Apa prinsip penting saat melakukan refactoring kode menggunakan bantuan AI?",
               choices: ["Minta AI merombak seluruh sistem dalam satu kali request", "Fokus pada satu tujuan spesifik saja per permintaan (misal: ekstrak fungsi atau ubah ke async/await)", "Jangan pernah mereview hasil refactoring", "AI selalu tahu cara terbaik merombak kode"],
               answerIndex: 1,
-              explanation: "Refactoring bertahap (incremental) jauh lebih aman, meminimalisir bug baru, dan memudahkan manusia untuk meninjau perubahan per tahap."
-            }, {
+              explanation: "Refactoring bertahap (incremental) jauh lebih aman, meminimalisir bug baru, dan memudahkan manusia untuk meninjau perubahan per tahap.",
+            },
+            {
               id: "q4",
               type: "pilihan-ganda",
               question: "Apa analogi yang tepat saat menggunakan AI untuk menceritakan masalah logika dan mencari asumsi yang salah?",
               choices: ["Interactive Rubber Duck", "Black Box Testing", "Pair Programming", "Brute Force Attack"],
               answerIndex: 0,
               explanation: "Seperti Rubber Duck Debugging, menjelaskan masalah kepada AI sering kali membantu kita sendiri menemukan letak kesalahannya, ditambah respons kritis dari AI.",
-            }, {
+            },
+            {
               id: "q5",
               type: "pilihan-ganda",
               question: "Bagaimana AI dapat membantu saat kita harus berhadapan dengan codebase legacy (kode lawas) yang asing?",
               choices: ["Menghapus kode lawas tersebut tanpa perlu dibaca", "Memberikan penjelasan tingkat tinggi mengenai arsitektur dan alur data dari kode tersebut", "Mengubah bahasa kode menjadi bahasa Latin", "Mematikan server produksi jika kodenya buruk"],
               answerIndex: 1,
               explanation: "AI dapat membaca file panjang dan merangkum tujuan, input, dan output fungsinya, sehingga mempercepat proses orientasi pada sistem baru.",
-            }]
+            },
+          ],
         },
       ],
     },
@@ -1372,6 +1795,42 @@ export const aiDevTrack: Track = {
         "Portofolio di era AI: proses > hasil akhir",
       ],
       items: [
+        {
+          kind: "materi",
+          id: "ai-6-m1",
+          title: "Etika, Kerahasiaan Data, dan Pengembangan Karier",
+          body:
+            "# Pengertian\n\n" +
+            "Penggunaan AI di tempat kerja bukan hanya tentang efisiensi teknis, tetapi juga melibatkan **tanggung jawab etis, privasi data, dan strategi karier jangka panjang**.\n\n" +
+            "Seiring menjamurnya alat bantu AI, batas antara penggunaan yang profesional dan pelanggaran kerahasiaan menjadi sangat tipis jika kamu tidak memahaminya.\n\n" +
+            "## Kebijakan Kerahasiaan Kode & Kebocoran Data\n\n" +
+            "Banyak perusahaan memiliki kebijakan ketat yang melarang pengunggahan *source code* internal, data identitas pelanggan (*Personally Identifiable Information / PII*), atau kunci akses ke model AI publik.\n\n" +
+            "```text\n" +
+            "+-------------------------------------------------------------------------+\n" +
+            "|                     PANDUAN ETIKA PENULISAN PROMPT                      |\n" +
+            "+-------------------------------------------------------------------------+\n" +
+            "| ❌ DILARANG SAMBUNG: const dbPass = \"BankXYZ_Secret_2026!\";             |\n" +
+            "| ✅ WAJIB DIANONIMKAN: const dbPass = process.env.DB_PASSWORD;           |\n" +
+            "| ❌ DILARANG SAMBUNG: \"email: budi.santoso@perusahaan-x.co.id\"           |\n" +
+            "| ✅ WAJIB DIANONIMKAN: \"email: user@example.com\"                        |\n" +
+            "+-------------------------------------------------------------------------+\n" +
+            "```\n\n" +
+            "## Skill Manusia yang Naik Nilainya di Era AI\n\n" +
+            "Saat pembuatan baris kode sederhana menjadi komoditas murah yang dihasilkan AI dalam hitungan detik, keterampilan manusiawi berikut ini justru mengalami lonjakan nilai pasar:\n\n" +
+            "| Skill Manusia | Alasan Mengapa Tetap Mahal & Tidak Tergantikan |\n" +
+            "|---|---|\n" +
+            "| **System Architecture** | Menghubungkan antar-layanan kompleks dan mempertimbangkan trade-off skala. |\n" +
+            "| **Code Review & Auditing** | Menemukan celah keamanan dan *edge cases* yang terlewat oleh AI. |\n" +
+            "| **Domain Knowledge & Bisnis**| Memahami kebutuhan unik pengguna dan tujuan komersial perusahaan. |\n" +
+            "| **Empathetic Communication** | Berkomunikasi dengan *stakeholder* non-teknis dan menyelaraskan tim. |\n\n" +
+            "## Aturan 'Coba Dulu 15 Menit'\n\n" +
+            "Agar kemampuan pemecahan masalahmu (*problem-solving*) tidak tumpul karena ketergantungan instan pada AI, terapkan aturan **'Coba Dulu 15 Menit'**:\n\n" +
+            "> **Aturan 15 Menit:** Saat menghadapi bug baru, luangkan waktu 15 menit untuk menganalisis kode, menambahkan `console.log`, dan merumuskan hipotesis secara mandiri. Baru setelah 15 menit tidak ada titik terang, gunakan AI untuk memverifikasi dugaanmu.\n\n" +
+            "## Jebakan & Kesalahan Umum\n\n" +
+            "> **Jebakan Sesi Live Coding:** Menggunakan AI secara diam-diam saat sesi *technical interview* online. Penguji dapat dengan mudah mengenali respon hafalan AI atau gerakan mata kandidat. Jika AI diizinkan, jelaskan alur berpikirmu secara transparan saat berinteraksi dengan AI!\n\n" +
+            "## Kapan Dipakai di Dunia Kerja\n\n" +
+            "> **Dunia Kerja:** Dalam membuat portofolio proyek modern, perekrut senior tidak lagi terkesan oleh jumlah proyek yang kamu selesaikan. Mereka mencari **Architecture Decision Records (ADR)** — tulisan singkat yang menjelaskan *alasan* kamu memilih suatu teknologi dan *trade-off* yang kamu ambil.",
+        },
         {
           kind: "step",
           id: "ai-6-1",
@@ -1579,35 +2038,40 @@ export const aiDevTrack: Track = {
               ],
               answerIndex: 1,
               explanation: "Saat sintaks dasar dapat dihasilkan AI, kemampuan merancang arsitektur yang tepat dan mengevaluasi kualitas kode menjadi diferensiasi utama.",
-            }, {
+            },
+            {
               id: "q2",
               type: "pilihan-ganda",
               question: "Mengapa disarankan untuk selalu mencoba memecahkan masalah sendiri selama 15 menit sebelum bertanya ke AI?",
               choices: ["Agar AI tidak kelelahan", "Membangun otot berpikir kritis dan mencegah ketergantungan penuh pada AI", "Karena AI butuh waktu 15 menit untuk boot up", "Untuk menghemat token API"],
               answerIndex: 1,
-              explanation: "Berpikir mandiri (struggle) adalah bagian penting dari proses belajar. Ketergantungan instan akan menghambat perkembangan problem-solving mu."
-            }, {
+              explanation: "Berpikir mandiri (struggle) adalah bagian penting dari proses belajar. Ketergantungan instan akan menghambat perkembangan problem-solving mu.",
+            },
+            {
               id: "q3",
               type: "pilihan-ganda",
               question: "Bagaimana seharusnya kamu menonjolkan penggunaan AI dalam portofolio proyekmu?",
               choices: ["Menyembunyikannya sepenuhnya", "Mengklaim bahwa 100% kodenya ditulis tanpa bantuan alat apapun", "Menjelaskan proses, keputusan engineering, dan trade-off di balik kode tersebut", "Hanya menampilkan screenshot kode yang dihasilkan AI"],
               answerIndex: 2,
-              explanation: "Perekrut ingin melihat alur pemikiran, cara pengambilan keputusan, dan pemahamanmu terhadap sistem, bukan sekadar kemampuan men-generate kode."
-            }, {
+              explanation: "Perekrut ingin melihat alur pemikiran, cara pengambilan keputusan, dan pemahamanmu terhadap sistem, bukan sekadar kemampuan men-generate kode.",
+            },
+            {
               id: "q4",
               type: "pilihan-ganda",
               question: "Apa kebijakan terpenting sebelum memasukkan source code perusahaan ke dalam layanan AI seperti ChatGPT?",
               choices: ["Menyembunyikan nama penulis asli", "Memastikan kebijakan perusahaan mengizinkan dan platform AI tersebut tidak menggunakan datamu untuk pelatihan ulang", "Mengubah nama variabel menjadi bahasa Indonesia", "Menggunakan mode gelap pada browser"],
               answerIndex: 1,
               explanation: "Kode perusahaan adalah aset rahasia. Memasukkannya ke platform publik tanpa perlindungan privasi dapat membocorkan rahasia dagang.",
-            }, {
+            },
+            {
               id: "q5",
               type: "pilihan-ganda",
               question: "Mengapa arsitektur sistem dan komunikasi empati menjadi jauh lebih mahal nilainya di era AI?",
               choices: ["Karena AI tidak bisa berbicara", "Karena kemampuan teknis mengetik sintaks telah menjadi komoditas murah yang mudah diotomatisasi", "Karena pengguna internet semakin sedikit", "Karena sekolah sudah tidak mengajarkan pemrograman"],
               answerIndex: 1,
               explanation: "AI dapat menulis kode dengan cepat, tetapi menghubungkan berbagai komponen sistem dan memahami kebutuhan manusia hanya bisa dilakukan oleh engineer handal.",
-            }]
+            },
+          ],
         },
       ],
     },
