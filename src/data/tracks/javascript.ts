@@ -28,6 +28,81 @@ export const javascriptTrack: Track = {
       ],
       items: [
         {
+          kind: "materi",
+          id: "js-1-m1",
+          title: "Nilai, Keputusan, dan Pengulangan",
+          body:
+            "# Pengertian\n\n" +
+            "HTML menyusun isi, CSS mengatur tampilan, dan **JavaScript adalah satu-satunya dari ketiganya yang bisa berpikir**: menghitung, membandingkan, mengambil keputusan, mengulang pekerjaan, dan mengubah halaman setelah halaman itu terbuka.\n\n" +
+            "Berbeda dari dua track sebelumnya, di sini kamu tidak lagi mendeskripsikan sesuatu — kamu memberi **urutan instruksi** yang dijalankan dari atas ke bawah.\n\n" +
+            "## Tiga Bahan Dasar Setiap Program\n\n" +
+            "```text\n" +
+            "1. NILAI      data yang disimpan            const harga = 25000\n" +
+            "2. KEPUTUSAN  memilih jalan                 if (stok > 0) { ... }\n" +
+            "3. PENGULANGAN mengerjakan berulang         for (const item of daftar)\n" +
+            "```\n\n" +
+            "Seluruh program apa pun — dari kalkulator sampai aplikasi bank — tersusun dari tiga hal itu digabungkan dan disusun bertingkat.\n\n" +
+            "## Wadah Nilai: let dan const\n\n" +
+            "| Kata kunci | Nilainya boleh diganti? | Kapan dipakai |\n" +
+            "|---|---|---|\n" +
+            "| `const` | tidak | **pilihan utama** — hampir semua variabel |\n" +
+            "| `let` | boleh | hanya bila nilainya memang berubah (penghitung, penampung sementara) |\n" +
+            "| `var` | boleh | jangan dipakai lagi; aturan wilayahnya berbeda dan sering memunculkan bug |\n\n" +
+            "> **Satu hal yang sering disalahpahami:** `const` mengunci **wadahnya**, bukan isinya. `const daftar = [1, 2]` masih memperbolehkan `daftar.push(3)` — yang dilarang adalah `daftar = [4]`. Ini akan dibahas tuntas di modul Array & Object.\n\n" +
+            "## Tipe Data yang Akan Kamu Pakai Terus\n\n" +
+            "| Tipe | Isinya | Contoh |\n" +
+            "|---|---|---|\n" +
+            "| `string` | teks | `'Bimo'`, `\"Kopi\"`, `` `Halo ${nama}` `` |\n" +
+            "| `number` | semua angka, bulat maupun desimal | `20`, `-7`, `3.14` |\n" +
+            "| `boolean` | benar atau salah | `true`, `false` |\n" +
+            "| `null` | **sengaja** dikosongkan | `null` |\n" +
+            "| `undefined` | belum pernah diisi | `undefined` |\n\n" +
+            "Perbedaan `null` dan `undefined` bukan soal gaya: `undefined` biasanya berarti \"kamu lupa mengisi ini\", sedangkan `null` berarti \"ini memang kosong, dan itu disengaja\".\n\n" +
+            "## Type Coercion: Sumber Bug Paling Terkenal\n\n" +
+            "JavaScript diam-diam mengubah tipe nilai saat dua tipe berbeda bertemu, dan hasilnya sering mengejutkan:\n\n" +
+            "```text\n" +
+            "'5' + 1     ->  '51'      (+ dengan string berarti MENYAMBUNG)\n" +
+            "'5' - 1     ->  4         (- tidak punya arti untuk teks, jadi teks diubah jadi angka)\n" +
+            "'5' == 5    ->  true      (dikonversi dulu sebelum dibandingkan)\n" +
+            "'5' === 5   ->  false     (bandingkan nilai DAN tipe, tanpa konversi)\n" +
+            "```\n\n" +
+            "Dua kebiasaan yang menyelamatkanmu dari seluruh kelas bug ini: **selalu pakai `===`**, dan **konversi secara terbuka** dengan `Number(x)` atau `String(x)` saat memang perlu. Ini bukan teori — nilai dari input form **selalu** berupa string, jadi `nilai + 1` pada input angka menghasilkan teks, bukan penjumlahan.\n\n" +
+            "## Truthy dan Falsy\n\n" +
+            "Di dalam `if`, nilai apa pun diubah menjadi benar/salah. Yang **falsy hanya enam**:\n\n" +
+            "```text\nfalse    0    ''    null    undefined    NaN\n```\n\n" +
+            "Sisanya truthy — termasuk yang terasa \"kosong\": `'0'`, `'false'`, `[]`, dan `{}`. Karena itu `if (daftar)` **selalu** benar meski daftarnya kosong; yang benar adalah `if (daftar.length > 0)`.\n\n" +
+            "## Tiga Bentuk Keputusan\n\n" +
+            "```js\n" +
+            "// 1. if / else if / else — paling umum, boleh serumit apa pun\n" +
+            "if (nilai >= 80) { ... } else if (nilai >= 70) { ... } else { ... }\n\n" +
+            "// 2. ternary — satu keputusan singkat yang MENGHASILKAN nilai\n" +
+            "const status = nilai >= 60 ? 'lulus' : 'gagal';\n\n" +
+            "// 3. switch — satu nilai dibandingkan ke banyak kemungkinan tetap\n" +
+            "switch (peran) {\n" +
+            "  case 'admin': ...; break;   // break WAJIB, kalau tidak jatuh ke case berikutnya\n" +
+            "  default: ...;\n" +
+            "}\n" +
+            "```\n\n" +
+            "Ternary akan kamu pakai sangat sering nanti di React karena ia menghasilkan nilai dan bisa disisipkan di tengah tampilan. Aturan praktisnya: satu keputusan sederhana pakai ternary, keputusan bertingkat pakai `if` — ternary bersarang adalah salah satu hal yang paling sering dikomentari di code review.\n\n" +
+            "## Tiga Bentuk Pengulangan\n\n" +
+            "| Bentuk | Pakai saat |\n" +
+            "|---|---|\n" +
+            "| `for (let i = 0; i < n; i++)` | kamu benar-benar butuh nomor indeksnya |\n" +
+            "| `for (const item of daftar)` | hanya butuh isinya — **paling sering tepat** |\n" +
+            "| `while (kondisi)` | jumlah putaran tidak diketahui, berhenti karena kondisi |\n\n" +
+            "Dua kesalahan batas yang klasik: menulis `i <= daftar.length` (kelebihan satu putaran, hasilnya `undefined`), dan lupa mengubah kondisi di dalam `while` sehingga perulangannya tidak pernah berhenti dan tab browser membeku.\n\n" +
+            "## Analogi Dunia Nyata\n\n" +
+            "Program itu seperti **resep masakan**. Variabel adalah bahan yang sudah ditakar dan diberi label. Kondisi adalah instruksi bercabang — \"kalau kuahnya kurang asin, tambahkan garam\". Perulangan adalah \"aduk sepuluh kali\". Dan resep dibaca dari atas ke bawah: langkah kelima tidak bisa memakai bahan yang baru disiapkan di langkah kesembilan. Itu sebabnya urutan penulisan kode benar-benar menentukan.\n\n" +
+            "## Jebakan yang Sering Terjadi\n\n" +
+            "1. **Memakai `==`.** Konversi diam-diamnya membuat `0 == ''` bernilai benar.\n" +
+            "2. **Menjumlahkan nilai dari input form.** Isinya string, jadi `+` menyambung. Bungkus dengan `Number()`.\n" +
+            "3. **`if (array)` untuk memeriksa array kosong.** Array kosong itu truthy; pakai `.length`.\n" +
+            "4. **Salah batas pada loop.** Indeks mulai dari 0, jadi batasnya `<`, bukan `<=`.\n" +
+            "5. **Lupa `break` di `switch`.** Eksekusi jatuh ke case berikutnya tanpa peringatan.\n\n" +
+            "## Kaitan ke Dunia Kerja\n\n" +
+            "> **Kapan dipakai:** setiap hari, di setiap baris. Dan dua hal dari modul ini muncul di hampir semua technical interview JavaScript: perbedaan `==` dan `===`, serta daftar nilai falsy. Keduanya ditanyakan bukan untuk menguji hafalan, tapi karena orang yang tidak menguasainya akan menulis bug yang sama berulang kali.",
+        },
+        {
           kind: "step",
           id: "js-1-1",
           title: "let dan const",
@@ -252,6 +327,60 @@ export const javascriptTrack: Track = {
           solution: "const nilai = [80, 92, 75];\n\nfor (const n of nilai) {\n  console.log(n);\n}",
         },
         {
+          kind: "step",
+          id: "js-1-8",
+          title: "Ternary dan switch",
+          explanation:
+            "Selain `if`, ada dua bentuk keputusan yang punya wilayahnya sendiri. **Ternary** ditulis `kondisi ? nilaiBenar : nilaiSalah` dan bedanya dengan `if` bukan soal panjang: ternary **menghasilkan nilai**, sehingga bisa langsung ditaruh di sisi kanan tanda sama dengan atau disisipkan ke dalam template literal — dan itulah sebabnya ia muncul di mana-mana nanti di React. **switch** dipakai ketika satu nilai dibandingkan ke banyak kemungkinan tetap; ia membandingkan dengan `===`, jadi `'1'` tidak akan cocok dengan `case 1`. Dua jebakan yang wajib diingat: pada `switch`, lupa menulis `break` membuat eksekusi **jatuh ke case berikutnya** tanpa peringatan apa pun, dan `default` sebaiknya selalu ada sebagai jaring pengaman. Sedangkan pada ternary, jebakannya adalah menyarangkannya: ternary di dalam ternary di dalam ternary hampir mustahil dibaca ulang, dan itu salah satu hal yang paling sering diminta diubah saat code review.",
+          example: {
+            code:
+              "const umur = 20;\n\n" +
+              "// ternary: menghasilkan NILAI, jadi bisa langsung disimpan\n" +
+              "const status = umur >= 17 ? 'dewasa' : 'anak';\n" +
+              "console.log(`Status: ${status}`);\n\n" +
+              "// switch: satu nilai, banyak kemungkinan tetap\n" +
+              "const peran = 'editor';\n" +
+              "switch (peran) {\n" +
+              "  case 'admin':\n" +
+              "    console.log('Akses penuh');\n" +
+              "    break;\n" +
+              "  case 'editor':\n" +
+              "    console.log('Boleh mengubah artikel');\n" +
+              "    break;\n" +
+              "  default:\n" +
+              "    console.log('Hanya membaca');\n" +
+              "}",
+            output: "Status: dewasa\nBoleh mengubah artikel",
+            note: "Tanpa `break` pada case 'editor', keluaran berikutnya ('Hanya membaca') akan ikut tercetak — itulah yang disebut fall-through.",
+          },
+          instruction:
+            "Variabel `nilai` berisi 45. Buat `const lulus` yang berisi teks `'lulus'` bila nilai minimal 60 dan `'remedial'` bila tidak, memakai bentuk keputusan yang menghasilkan nilai dalam satu baris — bukan `if`. Lalu cetak hasilnya.",
+          starterCode: "const nilai = 45;\n\n",
+          language: "js",
+          tests: [
+            {
+              pattern:
+                "const\\s+lulus\\s*=\\s*nilai\\s*>=\\s*60\\s*\\?\\s*['\"]lulus['\"]\\s*:\\s*['\"]remedial['\"]",
+              message:
+                "Pakai ternary: `const lulus = nilai >= 60 ? 'lulus' : 'remedial';` — tanda tanya memisahkan kondisi dari hasil, titik dua memisahkan kedua hasilnya.",
+            },
+            {
+              pattern: "console\\.log\\(",
+              message: "Cetak hasilnya dengan `console.log`.",
+            },
+            {
+              pattern: "\\bif\\s*\\(",
+              mustNotMatch: true,
+              message:
+                "Untuk latihan ini jangan pakai `if` — intinya melatih bentuk yang menghasilkan nilai, karena bentuk itulah yang nanti dipakai di dalam JSX React.",
+            },
+          ],
+          solution:
+            "const nilai = 45;\n\n" +
+            "const lulus = nilai >= 60 ? 'lulus' : 'remedial';\n" +
+            "console.log(lulus);",
+        },
+        {
           kind: "quiz",
           id: "js-1-kuis",
           title: "Kuis: Dasar JavaScript",
@@ -333,11 +462,98 @@ export const javascriptTrack: Track = {
       ],
       items: [
         {
+          kind: "materi",
+          id: "js-2-m1",
+          title: "Fungsi, Scope, dan Closure",
+          body:
+            "# Pengertian\n\n" +
+            "**Fungsi** adalah sepotong pekerjaan yang diberi nama, sehingga bisa dipanggil kapan saja tanpa menulis ulang isinya. Ia menerima **parameter** (bahan masuk) dan memberikan **nilai kembalian** lewat `return` (hasil keluar).\n\n" +
+            "```text\n" +
+            "        parameter                  return\n" +
+            "            |                        |\n" +
+            "function luas(panjang, lebar) { return panjang * lebar; }\n" +
+            "                                       |\n" +
+            "const hasil = luas(5, 3);   <----------+  nilainya bisa dipakai lagi\n" +
+            "```\n\n" +
+            "> **Beda `return` dan `console.log` adalah kebingungan nomor satu di modul ini.** `console.log` hanya **menampilkan** ke layar lalu selesai; `return` **mengembalikan nilai** sehingga bisa disimpan, dijumlahkan, atau dikirim ke fungsi lain. Fungsi tanpa `return` menghasilkan `undefined`.\n\n" +
+            "## Dua Cara Menulis Fungsi\n\n" +
+            "```js\n" +
+            "// deklarasi biasa — punya nama sendiri, ter-hoisting\n" +
+            "function sapa(nama) {\n" +
+            "  return 'Halo ' + nama;\n" +
+            "}\n\n" +
+            "// arrow function — lebih ringkas, sangat umum di kode modern\n" +
+            "const sapa = (nama) => 'Halo ' + nama;   // return implisit, tanpa kurung kurawal\n" +
+            "```\n\n" +
+            "Arrow function bukan sekadar bentuk yang lebih pendek. Perbedaan yang benar-benar berdampak: **arrow function tidak punya `this` sendiri**, ia mewarisi `this` dari tempat ia ditulis. Justru karena itu ia menyelamatkanmu di dalam callback — sesuatu yang akan kamu lihat langsung di modul OOP.\n\n" +
+            "## Parameter: Default dan Rest\n\n" +
+            "```js\n" +
+            "function kirim(pesan, ulangi = 1) { ... }      // default: dipakai bila argumen tidak dikirim\n" +
+            "function jumlah(...angka) { ... }              // rest: mengumpulkan sisa argumen jadi array\n" +
+            "```\n\n" +
+            "Nilai bawaan hanya berlaku saat argumennya `undefined` — mengirim `null` **tidak** memicu nilai bawaan, dan itu jebakan yang sering lolos. Rest parameter wajib menjadi parameter terakhir.\n\n" +
+            "## Scope: Wilayah Hidup Sebuah Variabel\n\n" +
+            "```text\n" +
+            "const global = 1;              <- scope global: terlihat dari mana saja\n" +
+            "\n" +
+            "function hitung() {\n" +
+            "  const lokal = 2;             <- scope fungsi: hanya di dalam hitung()\n" +
+            "\n" +
+            "  if (true) {\n" +
+            "    const blok = 3;            <- scope blok: hanya di dalam { } ini\n" +
+            "  }\n" +
+            "  // blok TIDAK ada di sini\n" +
+            "}\n" +
+            "// lokal TIDAK ada di sini\n" +
+            "```\n\n" +
+            "Aturannya satu arah: kode **di dalam** boleh melihat ke luar, tapi kode di luar tidak bisa melihat ke dalam. `let` dan `const` menghormati scope blok; `var` tidak — itu salah satu alasan utama `var` ditinggalkan.\n\n" +
+            "## Hoisting dan Temporal Dead Zone\n\n" +
+            "JavaScript \"mengangkat\" deklarasi ke atas sebelum menjalankan kode, tapi perlakuannya berbeda:\n\n" +
+            "| Yang dideklarasikan | Dipakai sebelum barisnya |\n" +
+            "|---|---|\n" +
+            "| `function nama() {}` | **boleh** — deklarasi fungsi ikut terangkat utuh |\n" +
+            "| `var x` | jalan, tapi nilainya `undefined` (menyesatkan) |\n" +
+            "| `let` / `const` | **ReferenceError: Cannot access before initialization** |\n\n" +
+            "Rentang antara awal blok sampai baris deklarasi `let`/`const` itu disebut **temporal dead zone**. Error-nya terasa mengganggu, tapi justru itu gunanya: ia menghentikanmu di tempat kesalahan terjadi, alih-alih membiarkan `undefined` menyebar ke mana-mana seperti pada `var`.\n\n" +
+            "## Closure Tanpa Mistis\n\n" +
+            "Closure sering terdengar rumit, padahal isinya satu kalimat: **fungsi mengingat variabel dari tempat ia dibuat, bahkan setelah fungsi luarnya selesai berjalan.**\n\n" +
+            "```js\n" +
+            "function buatPenghitung() {\n" +
+            "  let jumlah = 0;              // variabel ini \"diingat\"\n" +
+            "  return () => ++jumlah;       // fungsi dalam tetap memegangnya\n" +
+            "}\n\n" +
+            "const naik = buatPenghitung();\n" +
+            "naik();  // 1\n" +
+            "naik();  // 2   <- nilainya bertahan, dan tidak bisa disentuh dari luar\n" +
+            "```\n\n" +
+            "Kegunaan nyatanya: membuat nilai privat (tidak bisa diubah sembarangan dari luar), menyimpan konfigurasi, dan pola *debounce* yang kamu pelajari di modul Browser API. Closure juga fondasi cara `useState` React bekerja — jadi memahaminya sekarang membuat modul React nanti terasa jauh lebih masuk akal.\n\n" +
+            "## Callback dan Higher-Order Function\n\n" +
+            "Di JavaScript, fungsi adalah **nilai biasa**: bisa disimpan di variabel, dikirim sebagai argumen, dan dikembalikan dari fungsi lain. Fungsi yang dikirim sebagai argumen disebut **callback**:\n\n" +
+            "```js\n" +
+            "tombol.addEventListener('click', () => console.log('diklik'));\n" +
+            "//                               ^^^^^^^^^^^^^^^^^^^^^^^^^ callback\n" +
+            "[1, 2, 3].map((n) => n * 2);   // map menerima callback\n" +
+            "```\n\n" +
+            "Sifat inilah yang membuat `map`, `filter`, `addEventListener`, dan seluruh kode asynchronous di modul-modul berikutnya mungkin ada.\n\n" +
+            "## Pure Function\n\n" +
+            "Fungsi **murni** memenuhi dua syarat: masukan sama selalu menghasilkan keluaran sama, dan ia tidak mengubah apa pun di luar dirinya. Fungsi murni mudah diuji, mudah dipindahkan, dan tidak pernah memberi kejutan — itu sebabnya modul Testing nanti dimulai dari fungsi murni.\n\n" +
+            "## Analogi Dunia Nyata\n\n" +
+            "Fungsi itu seperti **mesin jus**: kamu memasukkan buah (parameter), mesin bekerja, keluar jus (`return`). Mesin yang bagus tidak diam-diam mengganti isi kulkasmu — itulah fungsi murni. Sedangkan closure seperti **karyawan yang membawa catatan pribadi** dari ruang pelatihan: pelatihannya sudah selesai berbulan-bulan lalu, tapi catatannya masih ia pegang dan tidak seorang pun bisa membacanya.\n\n" +
+            "## Jebakan yang Sering Terjadi\n\n" +
+            "1. **`console.log` di dalam fungsi, bukan `return`.** Nilainya tidak bisa dipakai lagi di luar.\n" +
+            "2. **Lupa `return` pada arrow function berkurung kurawal.** `n => { n * 2 }` mengembalikan `undefined`.\n" +
+            "3. **Mengira nilai bawaan berlaku untuk `null`.** Ia hanya berlaku untuk `undefined`.\n" +
+            "4. **Mengakses `let` sebelum deklarasinya.** ReferenceError, bukan `undefined`.\n" +
+            "5. **Membuat fungsi yang mengubah variabel luar.** Sulit diuji dan sumber bug yang jejaknya jauh dari penyebabnya.\n\n" +
+            "## Kaitan ke Dunia Kerja\n\n" +
+            "> **Kapan dipakai:** closure dan `this` pada arrow function adalah dua pertanyaan interview JavaScript yang paling sering muncul. Yang dicari bukan definisi hafalan, melainkan apakah kamu bisa menyebut satu kasus nyata pemakaiannya — dan `buatPenghitung()` di atas sudah cukup sebagai jawaban.",
+        },
+        {
           kind: "step",
           id: "js-2-1",
           title: "Fungsi dengan parameter dan return",
           explanation:
-            "Perbedaan penting: `console.log` **menampilkan** nilai, `return` **mengembalikan** nilai agar bisa dipakai lagi. Fungsi tanpa `return` menghasilkan `undefined`. Pemula sering menulis `console.log` di dalam fungsi lalu bingung kenapa hasilnya tidak bisa dijumlahkan — karena yang keluar bukan nilai, tapi tampilan.",
+            "Perbedaan penting: `console.log` **menampilkan** nilai, `return` **mengembalikan** nilai agar bisa dipakai lagi. Fungsi tanpa `return` menghasilkan `undefined`. Pemula sering menulis `console.log` di dalam fungsi lalu bingung kenapa hasilnya tidak bisa dijumlahkan — karena yang keluar bukan nilai, tapi tampilan. Cara cepat menentukan mana yang kamu butuhkan: kalau hasilnya masih akan dipakai kode lain, pakai `return`; `console.log` hanya untuk melihat sesuatu saat sedang memeriksa kode. Satu hal lagi yang perlu diketahui sejak sekarang: `return` juga **menghentikan** fungsi seketika, jadi baris apa pun setelahnya di dalam fungsi itu tidak akan pernah dijalankan.",
           example: {
             code: "function totalHarga(harga, jumlah) {\n  return harga * jumlah;      // mengembalikan nilai\n}\n\nconst bayar = totalHarga(5000, 3);\nconsole.log(bayar);\nconsole.log(bayar + 1000);     // nilainya bisa dipakai lagi",
             output: "15000\n16000",
@@ -558,6 +774,59 @@ export const javascriptTrack: Track = {
             "function prosesAngka(angka, callback) {\n  return callback(angka);\n}\n\nconsole.log(prosesAngka(7, (n) => n * 2));",
         },
         {
+          kind: "step",
+          id: "js-2-7",
+          title: "Hoisting dan Temporal Dead Zone",
+          explanation:
+            "Sebelum menjalankan kodemu, JavaScript memindai berkasnya dan **mendaftarkan** semua deklarasi lebih dulu — perilaku itu bernama *hoisting*. Akibatnya berbeda tergantung cara kamu mendeklarasikan. Deklarasi `function` terangkat **utuh**, jadi memanggilnya sebelum barisnya ditulis tetap berhasil. `var` terangkat tapi nilainya belum ada, sehingga kamu mendapat `undefined` — menyesatkan, karena kode berjalan seolah tidak ada masalah. Sedangkan `let` dan `const` terangkat **tanpa boleh diakses**: rentang dari awal blok sampai baris deklarasinya disebut **temporal dead zone**, dan menyentuhnya melempar `ReferenceError: Cannot access before initialization`. Error itu terasa mengganggu, tapi justru itu gunanya — ia menghentikanmu tepat di tempat kesalahan terjadi, alih-alih membiarkan `undefined` menyebar sampai meledak di tempat lain. Aturan praktisnya sederhana: **deklarasikan variabel sebelum dipakai**, dan pakai `let`/`const` supaya kekeliruan urutan langsung terdengar.",
+          example: {
+            code:
+              "// deklarasi function terangkat utuh — ini BERHASIL\n" +
+              "console.log(sapa('Bimo'));\n" +
+              "function sapa(n) { return 'Halo ' + n; }\n\n" +
+              "// var: terangkat tapi belum berisi\n" +
+              "console.log(kota);   // undefined, bukan error\n" +
+              "var kota = 'Bandung';\n\n" +
+              "// let: temporal dead zone\n" +
+              "// console.log(umur);\n" +
+              "// ReferenceError: Cannot access 'umur' before initialization\n" +
+              "let umur = 20;\n" +
+              "console.log(umur);",
+            output:
+              "Halo Bimo\nundefined\n20\n\n" +
+              "Kalau baris console.log(umur) yang dikomentari itu diaktifkan, program berhenti di situ dengan:\n" +
+              "ReferenceError: Cannot access 'umur' before initialization",
+            note: "Perhatikan bedanya: `var` memberi `undefined` diam-diam, `let` berteriak. Yang berteriak justru lebih menolong.",
+          },
+          instruction:
+            "Kode di editor melempar `ReferenceError` karena variabelnya dipakai sebelum dideklarasikan. Perbaiki urutannya sehingga deklarasi `const pajak` berada sebelum pemakaiannya, tanpa mengubah `const` menjadi `var` dan tanpa mengubah nilai-nilainya.",
+          starterCode:
+            "const harga = 100000;\n" +
+            "const total = harga + harga * pajak;\n" +
+            "const pajak = 0.11;\n\n" +
+            "console.log(total);\n",
+          language: "js",
+          tests: [
+            {
+              pattern:
+                "const\\s+pajak\\s*=\\s*0\\.11\\s*;[\\s\\S]*const\\s+total\\s*=",
+              message:
+                "Pindahkan `const pajak = 0.11;` ke ATAS baris yang memakainya. Di dalam temporal dead zone, variabel `const` belum boleh disentuh sama sekali.",
+            },
+            {
+              pattern: "\\bvar\\s+pajak",
+              mustNotMatch: true,
+              message:
+                "Jangan menggantinya dengan `var`. Itu memang menghilangkan error-nya, tapi menggantinya dengan `undefined` yang diam — dan `total` akan menjadi `NaN` tanpa satu pun peringatan.",
+            },
+          ],
+          solution:
+            "const harga = 100000;\n" +
+            "const pajak = 0.11;\n" +
+            "const total = harga + harga * pajak;\n\n" +
+            "console.log(total);",
+        },
+        {
           kind: "quiz",
           id: "js-2-kuis",
           title: "Kuis: Fungsi",
@@ -646,11 +915,98 @@ export const javascriptTrack: Track = {
       ],
       items: [
         {
+          kind: "materi",
+          id: "js-3-m1",
+          title: "Array, Object, dan Jebakan Reference",
+          body:
+            "# Pengertian\n\n" +
+            "Sampai sini kamu menyimpan satu nilai per variabel. Data nyata tidak seperti itu: satu produk punya nama, harga, dan stok sekaligus; satu halaman menampilkan dua puluh produk. Untuk itu ada dua bentuk penampung:\n\n" +
+            "```text\n" +
+            "ARRAY   daftar berurutan, diakses lewat nomor indeks (mulai 0)\n" +
+            "        ['Senin', 'Selasa']          hari[0] -> 'Senin'\n\n" +
+            "OBJECT  pasangan nama-nilai, diakses lewat nama key\n" +
+            "        { nama: 'Kopi', harga: 25000 }    produk.nama -> 'Kopi'\n" +
+            "```\n\n" +
+            "Aturan praktisnya: **array untuk banyak hal sejenis**, **object untuk satu hal dengan banyak keterangan**. Data dari API hampir selalu berupa array berisi object — bentuk yang akan kamu tangani terus.\n\n" +
+            "## Reference vs Value — Jebakan Terpenting di Modul Ini\n\n" +
+            "Ini penyebab bug \"kok data saya berubah sendiri\" yang paling sering, dan wajib kamu pahami sebelum masuk React.\n\n" +
+            "```text\n" +
+            "PRIMITIF (string, number, boolean) disalin NILAINYA:\n" +
+            "  let a = 5;  let b = a;  b = 99;\n" +
+            "  a masih 5        <- aman, keduanya terpisah\n" +
+            "\n" +
+            "OBJECT & ARRAY disalin ALAMATNYA:\n" +
+            "  const asli = { stok: 5 };\n" +
+            "  const salah = asli;        <- BUKAN salinan, hanya nama kedua\n" +
+            "  salah.stok = 99;\n" +
+            "  asli.stok sekarang 99      <- ikut berubah!\n" +
+            "```\n\n" +
+            "Keduanya menunjuk ke **satu** object yang sama. Cara membuat salinan sungguhan:\n\n" +
+            "```js\n" +
+            "const salinan = { ...asli };            // object: spread\n" +
+            "const salinanArr = [...daftar];         // array: spread\n" +
+            "const dalam = structuredClone(asli);    // salinan mendalam, termasuk isi bersarang\n" +
+            "```\n\n" +
+            "> **Spread bersifat dangkal.** `{ ...user }` menyalin lapisan pertama saja — kalau `user.alamat` berupa object, alamatnya masih berbagi alamat memori yang sama. Untuk data bersarang pakai `structuredClone()`.\n\n" +
+            "Hal yang sama menjelaskan kenapa `const` tidak menghalangi `daftar.push(3)`: yang dikunci `const` adalah alamatnya, bukan isi di alamat itu.\n\n" +
+            "## Method Array yang Wajib Dikuasai\n\n" +
+            "| Method | Menghasilkan | Mengubah array asli? |\n" +
+            "|---|---|---|\n" +
+            "| `map` | array baru, tiap elemen diubah | tidak |\n" +
+            "| `filter` | array baru berisi yang lolos syarat | tidak |\n" +
+            "| `reduce` | satu nilai gabungan | tidak |\n" +
+            "| `find` | elemen pertama yang cocok, atau `undefined` | tidak |\n" +
+            "| `some` / `every` | boolean: ada yang cocok / semua cocok | tidak |\n" +
+            "| `includes` | boolean: nilai ada di dalamnya | tidak |\n" +
+            "| `slice` | potongan baru | tidak |\n" +
+            "| `push` / `pop` / `splice` / `sort` / `reverse` | — | **ya, memutasi** |\n\n" +
+            "Kolom terakhir itu yang penting. Kelompok pertama menghasilkan data baru dan meninggalkan aslinya utuh — itulah yang disukai React. Kelompok terakhir mengubah array di tempat, dan `sort` termasuk di dalamnya: `daftar.sort()` **mengubah `daftar`**, bukan hanya mengembalikan versi terurut.\n\n" +
+            "> **Jebakan `sort` yang paling sering:** tanpa fungsi pembanding, `sort` mengurutkan sebagai **teks**. Karena itu `[10, 9, 100].sort()` menghasilkan `[10, 100, 9]`. Untuk angka wajib `sort((a, b) => a - b)`.\n\n" +
+            "## Destructuring: Membongkar Isi\n\n" +
+            "```js\n" +
+            "const { nama, harga } = produk;        // ambil dua properti sekaligus\n" +
+            "const [pertama, kedua] = daftar;       // ambil dua elemen pertama\n" +
+            "const { alamat: { kota } } = user;     // bersarang\n" +
+            "const { diskon = 0 } = produk;         // nilai bawaan bila properti tidak ada\n" +
+            "```\n\n" +
+            "Bentuk ini muncul di baris pertama hampir setiap komponen React (`function Kartu({ nama, harga })`), jadi kebiasaan memakainya sekarang terbayar langsung nanti.\n\n" +
+            "## JSON: Bahasa Pertukaran Data\n\n" +
+            "JSON adalah **teks** yang bentuknya mirip object JavaScript, dan itulah format yang dipakai hampir semua API serta `localStorage`.\n\n" +
+            "```js\n" +
+            "const teks = JSON.stringify(produk);   // object -> teks (untuk dikirim/disimpan)\n" +
+            "const obj  = JSON.parse(teks);         // teks -> object (untuk dipakai)\n" +
+            "```\n\n" +
+            "Tiga hal yang perlu kamu tahu: `JSON.parse` **melempar error** kalau teksnya bukan JSON yang sah (jadi bungkus dengan `try/catch` saat sumbernya tidak kamu kuasai), `JSON.stringify` **membuang** fungsi dan `undefined`, serta `Date` berubah menjadi teks — jadi hasil `parse` tidak otomatis kembali menjadi objek tanggal. Sebagai bonus, `JSON.parse(JSON.stringify(obj))` adalah cara lama membuat salinan mendalam; sekarang `structuredClone` lebih tepat karena tidak merusak tipe data.\n\n" +
+            "## Map dan Set: Kapan Lebih Tepat\n\n" +
+            "| Pilih | Saat |\n" +
+            "|---|---|\n" +
+            "| `Object` | key-nya tetap dan kamu tahu namanya |\n" +
+            "| `Map` | key-nya dinamis, bisa berupa apa pun (termasuk object), dan urutannya penting |\n" +
+            "| `Set` | kamu hanya butuh kumpulan **nilai unik** |\n\n" +
+            "```js\n" +
+            "const unik = [...new Set([1, 2, 2, 3])];   // [1, 2, 3] — cara terpendek menghapus duplikat\n" +
+            "const stok = new Map();\n" +
+            "stok.set('kopi', 12);\n" +
+            "stok.get('kopi');                          // 12\n" +
+            "stok.size;                                 // jumlah entri, tanpa Object.keys\n" +
+            "```\n\n" +
+            "## Analogi Dunia Nyata\n\n" +
+            "Array itu seperti **rak bernomor**; object seperti **formulir berlabel**. Dan reference itu seperti **berbagi tautan dokumen** alih-alih mengirim fotokopi: dua orang membuka tautan yang sama, jadi suntingan siapa pun terlihat oleh keduanya. Kalau kamu ingin perubahanmu tidak memengaruhi dokumen asli, kamu harus membuat salinan lebih dulu — dan itulah persisnya arti spread.\n\n" +
+            "## Jebakan yang Sering Terjadi\n\n" +
+            "1. **`const b = a` pada object.** Bukan salinan; keduanya menunjuk data yang sama.\n" +
+            "2. **Mengira spread menyalin semuanya.** Ia dangkal; data bersarang tetap berbagi.\n" +
+            "3. **`sort()` tanpa pembanding.** Mengurutkan sebagai teks, dan memutasi array aslinya.\n" +
+            "4. **`find` yang tidak ketemu.** Hasilnya `undefined`, dan menyentuh propertinya melempar TypeError.\n" +
+            "5. **`JSON.parse` tanpa `try/catch`.** Satu respons rusak menjatuhkan seluruh halaman.\n\n" +
+            "## Kaitan ke Dunia Kerja\n\n" +
+            "> **Kapan dipakai:** `map`, `filter`, dan `reduce` muncul di hampir setiap technical interview frontend, dan `map` adalah cara React merender daftar. Sementara reference vs value adalah penyebab bug \"state tidak ter-update\" yang paling sering dialami orang saat pertama memakai React — memahaminya di sini menghemat berhari-hari kebingungan nanti.",
+        },
+        {
           kind: "step",
           id: "js-3-1",
           title: "Array dan aksesnya",
           explanation:
-            "Indeks array dimulai dari **0**, jadi elemen terakhir ada di `length - 1`. Cara modern mengambil elemen terakhir: `arr.at(-1)` — lebih jelas daripada `arr[arr.length - 1]`. Mengakses indeks yang tidak ada tidak menimbulkan error, hanya `undefined` (yang justru sering menyamarkan bug).",
+            "Indeks array dimulai dari **0**, jadi elemen terakhir ada di `length - 1`. Cara modern mengambil elemen terakhir: `arr.at(-1)` — lebih jelas daripada `arr[arr.length - 1]`. Mengakses indeks yang tidak ada tidak menimbulkan error, hanya `undefined` (yang justru sering menyamarkan bug). Sifat itu berbahaya karena error-nya muncul jauh kemudian: `daftar[5].nama` baru meledak sebagai `Cannot read properties of undefined`, dan yang tertulis di stack trace adalah baris itu — bukan baris tempat indeksnya salah dihitung. Perlu diingat juga bahwa `length` bukan indeks terakhir melainkan **jumlah** elemen, dan array di JavaScript boleh berisi campuran tipe apa pun sekaligus.",
           example: {
             code: "const hari = ['Senin', 'Selasa', 'Rabu'];\n\nconsole.log(hari[0]);        // indeks pertama = 0\nconsole.log(hari[2]);        // indeks terakhir = length - 1\nconsole.log(hari.at(-1));    // cara modern ambil terakhir\nconsole.log(hari.length);\nconsole.log(hari[5]);        // indeks tidak ada",
             output: "Senin\nRabu\nRabu\n3\nundefined",
@@ -786,7 +1142,7 @@ export const javascriptTrack: Track = {
           id: "js-3-5",
           title: "Object dan aksesnya",
           explanation:
-            "Object menyimpan data berpasangan `key: value`. Dua cara akses: notasi titik (`user.nama`) untuk key yang sudah kamu ketahui, dan notasi bracket (`user['nama']`) saat key-nya berupa variabel atau mengandung karakter khusus. Object adalah bentuk data yang kamu terima dari hampir semua API.",
+            "Object menyimpan data berpasangan `key: value`. Dua cara akses: notasi titik (`user.nama`) untuk key yang sudah kamu ketahui, dan notasi bracket (`user['nama']`) saat key-nya berupa variabel atau mengandung karakter khusus. Object adalah bentuk data yang kamu terima dari hampir semua API. Mengakses key yang tidak ada memberi `undefined` tanpa error — sama seperti array — sehingga salah ketik nama properti sering baru terasa beberapa baris kemudian. Untuk data bersarang yang belum pasti ada, `user?.alamat?.kota` jauh lebih aman daripada rantai titik biasa. Dan satu hal yang perlu diingat dari modul ini: object disimpan sebagai **alamat**, jadi menyalinnya dengan tanda sama dengan tidak menghasilkan salinan sungguhan.",
           example: {
             code: "const produk = {\n  nama: 'Kopi Arabika',\n  harga: 85000,\n  tersedia: true,\n};\n\nconsole.log(produk.nama);          // notasi titik\nconsole.log(produk['harga']);      // notasi bracket\n\nconst kunci = 'tersedia';\nconsole.log(produk[kunci]);        // bracket wajib untuk key dinamis",
             output: "Kopi Arabika\n85000\ntrue",
@@ -961,6 +1317,68 @@ export const javascriptTrack: Track = {
           solution: "const harga = [25000, 9000, 120000];\n\nconst urut = [...harga].sort((a, b) => a - b);\nconsole.log(urut);\nconsole.log(harga);",
         },
         {
+          kind: "step",
+          id: "js-3-10",
+          title: "Reference vs Value: Kenapa Data Berubah Sendiri",
+          explanation:
+            "Ini jebakan paling mahal di seluruh track ini, dan wajib kamu pahami sebelum masuk React. Nilai primitif — angka, teks, boolean — **disalin nilainya**, jadi `let b = a; b = 99` tidak menyentuh `a`. Object dan array berbeda: yang disalin adalah **alamatnya**, sehingga `const salinan = asli` hanya membuat nama kedua untuk data yang sama, dan mengubah satu ikut mengubah yang lain. Cara membuat salinan sungguhan adalah spread: `{ ...asli }` untuk object, `[...daftar]` untuk array. Tapi ada batas yang wajib diingat: **spread bersifat dangkal** — ia hanya menyalin lapisan pertama, sehingga object yang bersarang di dalamnya masih dibagi bersama. Untuk data bertingkat, `structuredClone(asli)` membuat salinan mendalam sungguhan. Hal yang sama juga menjelaskan kenapa `const` tidak menghalangi `daftar.push(3)`: yang dikunci `const` adalah alamatnya, bukan isi di alamat itu.",
+          example: {
+            code:
+              "const asli = { nama: 'Kopi', stok: 5 };\n\n" +
+              "// ❌ BUKAN salinan — dua nama untuk data yang SAMA\n" +
+              "const salah = asli;\n" +
+              "salah.stok = 99;\n" +
+              "console.log(asli.stok);        // ikut berubah!\n\n" +
+              "// ✅ salinan sungguhan\n" +
+              "const benar = { ...asli, stok: 1 };\n" +
+              "console.log(asli.stok, benar.stok);\n\n" +
+              "// spread itu DANGKAL: object bersarang masih dibagi\n" +
+              "const user = { nama: 'Bimo', alamat: { kota: 'Bandung' } };\n" +
+              "const dangkal = { ...user };\n" +
+              "dangkal.alamat.kota = 'Jakarta';\n" +
+              "console.log(user.alamat.kota);  // ikut berubah\n\n" +
+              "const dalam = structuredClone(user);\n" +
+              "dalam.alamat.kota = 'Surabaya';\n" +
+              "console.log(user.alamat.kota);  // kali ini aman",
+            output: "99\n99 1\nJakarta\nJakarta",
+            note: "Perhatikan baris terakhir: setelah structuredClone, kota asli tetap 'Jakarta' — perubahan pada salinan mendalam tidak menyentuh aslinya sama sekali.",
+          },
+          instruction:
+            "Object `pesanan` di editor tidak boleh berubah. Buat `const pesananBaru` yang berisi seluruh isi `pesanan` tapi dengan `jumlah` menjadi `5`, tanpa menyentuh object aslinya. Lalu cetak `jumlah` dari keduanya untuk membuktikan yang asli masih utuh — jangan memakai tanda sama dengan biasa untuk menyalinnya.",
+          starterCode:
+            "const pesanan = { produk: 'Kopi Gayo', jumlah: 1 };\n\n",
+          language: "js",
+          tests: [
+            {
+              pattern:
+                "const\\s+pesananBaru\\s*=\\s*\\{[\\s\\S]*\\.\\.\\.\\s*pesanan[\\s\\S]*\\}",
+              message:
+                "Pakai spread untuk menyalin: `const pesananBaru = { ...pesanan, ... };`. Menulis `= pesanan` saja hanya membuat nama kedua untuk data yang sama.",
+            },
+            {
+              pattern: "jumlah\\s*:\\s*5",
+              message:
+                "Di dalam object barunya, timpa `jumlah` menjadi 5. Properti yang ditulis SETELAH spread akan menimpa nilai aslinya.",
+            },
+            {
+              pattern: "console\\.log\\([\\s\\S]*pesanan\\s*\\.\\s*jumlah",
+              message:
+                "Cetak juga `pesanan.jumlah` supaya terbukti object aslinya tidak ikut berubah.",
+            },
+            {
+              pattern: "pesanan\\s*\\.\\s*jumlah\\s*=",
+              mustNotMatch: true,
+              message:
+                "Jangan mengubah object aslinya secara langsung. Seluruh inti latihan ini adalah menghasilkan data BARU tanpa menyentuh yang lama.",
+            },
+          ],
+          solution:
+            "const pesanan = { produk: 'Kopi Gayo', jumlah: 1 };\n\n" +
+            "const pesananBaru = { ...pesanan, jumlah: 5 };\n\n" +
+            "console.log(pesanan.jumlah);\n" +
+            "console.log(pesananBaru.jumlah);",
+        },
+        {
           kind: "quiz",
           id: "js-3-kuis",
           title: "Kuis: Array & Object",
@@ -1023,6 +1441,36 @@ export const javascriptTrack: Track = {
               explanation:
                 "React membandingkan referensi (===), bukan isi. Kalau kamu memutasi object yang sama, referensinya tidak berubah sehingga React tidak tahu perlu me-render ulang — UI tidak terupdate meski data sudah berubah. Membuat object baru dengan spread memberi referensi baru.",
             },
+            {
+              id: "q6",
+              type: "pilihan-ganda",
+              question:
+                "Kamu menyimpan object ke localStorage, tapi yang tersimpan malah teks `[object Object]`. Apa yang terlewat?",
+              choices: [
+                "localStorage hanya bisa menyimpan angka",
+                "Object harus diubah menjadi teks JSON lebih dulu dengan JSON.stringify",
+                "Perlu memakai await karena localStorage asynchronous",
+                "Nama key-nya tidak boleh mengandung huruf besar",
+              ],
+              answerIndex: 1,
+              explanation:
+                "`localStorage` hanya menyimpan **teks**, jadi object yang dimasukkan langsung akan diubah menjadi teks apa adanya — hasilnya `[object Object]`. Alurnya: `JSON.stringify` saat menyimpan, `JSON.parse` saat membaca. Perlu diingat `JSON.parse` melempar error kalau isinya bukan JSON yang sah, jadi bungkus dengan `try/catch` — satu nilai rusak di localStorage bisa menjatuhkan aplikasi setiap kali dibuka, dan pengguna tidak punya cara memperbaikinya sendiri.",
+            },
+            {
+              id: "q7",
+              type: "pilihan-ganda",
+              question:
+                "Kamu punya array berisi ratusan email dan ingin membuang duplikatnya. Cara mana yang paling ringkas?",
+              choices: [
+                "filter dengan indexOf di dalamnya",
+                "[...new Set(daftar)]",
+                "sort() lalu bandingkan tetangganya satu per satu",
+                "reduce dengan pengecekan includes",
+              ],
+              answerIndex: 1,
+              explanation:
+                "`Set` adalah kumpulan yang **hanya menerima nilai unik**, jadi memasukkan array ke dalamnya lalu menyebarnya kembali dengan spread menghapus duplikat dalam satu baris. Pilihan lain memang bekerja, tapi ketiganya memeriksa ulang isi array untuk setiap elemen sehingga jauh lebih lambat pada data besar. Pasangannya adalah `Map`, yang dipilih saat kamu butuh key berupa apa pun (termasuk object) dan urutan penyisipan yang terjaga.",
+            },
           ],
         },
       ],
@@ -1044,11 +1492,102 @@ export const javascriptTrack: Track = {
       ],
       items: [
         {
+          kind: "materi",
+          id: "js-4-m1",
+          title: "DOM: Menyentuh Halaman dari JavaScript",
+          body:
+            "# Pengertian\n\n" +
+            "Saat browser membaca HTML-mu, ia menyusunnya menjadi **pohon object** di memori. Pohon itu bernama **DOM** (*Document Object Model*), dan itulah yang sebenarnya kamu ubah dari JavaScript — bukan berkas HTML-nya.\n\n" +
+            "```text\n" +
+            "berkas index.html          DOM di memori              yang terlihat\n" +
+            "-----------------          -------------              -------------\n" +
+            "<h1>Judul</h1>      ->     document                ->   Judul\n" +
+            "                             └ html\n" +
+            "                                └ body\n" +
+            "                                   └ h1  \"Judul\"\n" +
+            "```\n\n" +
+            "> **Konsekuensi yang wajib kamu pahami:** perubahan lewat JavaScript hanya hidup di memori. Menyegarkan halaman membuat DOM dibangun ulang dari berkas HTML, jadi seluruh perubahanmu hilang. Kalau perubahan harus bertahan, ia perlu disimpan — ke server, atau ke `localStorage` seperti di modul Browser API.\n\n" +
+            "## Tiga Langkah yang Selalu Sama\n\n" +
+            "```text\n" +
+            "1. AMBIL      elemennya          const tombol = document.querySelector('#kirim')\n" +
+            "2. UBAH       isi atau tampilan  tombol.textContent = 'Mengirim...'\n" +
+            "3. DENGARKAN  peristiwa          tombol.addEventListener('click', ...)\n" +
+            "```\n\n" +
+            "Seluruh modul ini hanya variasi dari tiga langkah itu.\n\n" +
+            "## Mengambil Elemen\n\n" +
+            "| Cara | Hasilnya |\n" +
+            "|---|---|\n" +
+            "| `querySelector('.kartu')` | **satu** elemen pertama yang cocok, atau `null` |\n" +
+            "| `querySelectorAll('.kartu')` | daftar **semua** yang cocok (NodeList) |\n\n" +
+            "Keduanya memakai **selector CSS**, jadi seluruh pengetahuan CSS-mu langsung terpakai. Dua catatan yang menghemat waktu: hasil `querySelector` bisa `null` — dan menyentuh propertinya melempar `Cannot read properties of null`, error DOM paling sering. Sedangkan hasil `querySelectorAll` bukan array sungguhan; ia bisa di-`forEach` tapi tidak punya `map`, kecuali kamu ubah dulu dengan `[...semua]`.\n\n" +
+            "## Mengubah Isi dan Tampilan\n\n" +
+            "```js\n" +
+            "el.textContent = 'Teks baru';       // AMAN — teks tetap teks\n" +
+            "el.innerHTML   = '<b>Tebal</b>';    // menafsirkan HTML — hati-hati\n" +
+            "el.classList.add('aktif');          // cara yang benar untuk styling\n" +
+            "el.setAttribute('disabled', '');    // atribut HTML\n" +
+            "el.style.color = 'red';             // gaya langsung — hindari kalau bisa\n" +
+            "```\n\n" +
+            "> **Jangan pernah memasukkan data dari pengguna ke `innerHTML`.** Kalau isinya `<img src=x onerror=...>`, kode itu benar-benar dijalankan browser. Celah ini bernama **XSS**, dan ia salah satu kerentanan web paling umum. Untuk teks, `textContent` selalu jawaban yang benar.\n\n" +
+            "Untuk tampilan, biarkan CSS yang mengatur dan JavaScript hanya berganti class. Selain lebih rapi, keadaan visualnya jadi bisa dibaca dari HTML — dan itu jauh lebih mudah diperbaiki daripada belasan baris `el.style`.\n\n" +
+            "## Membangun Elemen dari Data\n\n" +
+            "```js\n" +
+            "const li = document.createElement('li');\n" +
+            "li.textContent = produk.nama;\n" +
+            "daftarEl.append(li);        // masukkan ke DOM\n" +
+            "li.remove();                // hapus\n" +
+            "```\n\n" +
+            "Pola merender daftar dari array inilah **inti semua framework**. React, Vue, dan Svelte pada dasarnya mengotomatiskan langkah ini — jadi mengerjakannya manual sekali membuat framework nanti terasa seperti kemudahan, bukan sihir.\n\n" +
+            "## Event: Halaman yang Menjawab\n\n" +
+            "```js\n" +
+            "el.addEventListener('click', (event) => { ... });\n" +
+            "//                   ^^^^^     ^^^^^\n" +
+            "//                   nama      object berisi keterangan peristiwa\n" +
+            "```\n\n" +
+            "| Yang sering dipakai | Terjadi saat |\n" +
+            "|---|---|\n" +
+            "| `click` | elemen diklik atau disentuh |\n" +
+            "| `input` | isi kotak masukan berubah, setiap ketikan |\n" +
+            "| `change` | nilai selesai berubah (select, checkbox) |\n" +
+            "| `submit` | form dikirim — **pasang di `<form>`, bukan di tombolnya** |\n\n" +
+            "Dua anggota `event` yang paling sering kamu pakai: `event.preventDefault()` untuk membatalkan perilaku bawaan (form yang me-refresh halaman, tautan yang berpindah), dan `event.target` yang menunjuk elemen persis tempat peristiwa itu berasal.\n\n" +
+            "## Event Delegation\n\n" +
+            "Peristiwa **naik** dari elemen anak ke induknya. Sifat itu bisa dimanfaatkan: alih-alih memasang seratus pendengar di seratus tombol, pasang **satu** di induknya lalu periksa `event.target`.\n\n" +
+            "```js\n" +
+            "daftar.addEventListener('click', (e) => {\n" +
+            "  const tombol = e.target.closest('.hapus');\n" +
+            "  if (!tombol) return;             // klik di tempat lain — abaikan\n" +
+            "  tombol.closest('li').remove();\n" +
+            "});\n" +
+            "```\n\n" +
+            "Selain lebih hemat, pola ini punya keunggulan yang menentukan: ia **tetap bekerja untuk elemen yang dibuat nanti**. Pendengar yang dipasang satu-satu hanya mengenal elemen yang sudah ada saat kode itu dijalankan — itu sebabnya tombol pada baris yang baru ditambahkan sering \"tidak bisa diklik\".\n\n" +
+            "## dataset: Menitipkan Data di Elemen\n\n" +
+            "```html\n" +
+            "<button data-produk-id=\"42\" data-harga=\"85000\">Beli</button>\n" +
+            "```\n\n" +
+            "```js\n" +
+            "tombol.dataset.produkId;   // \"42\"   — tanda hubung menjadi camelCase\n" +
+            "tombol.dataset.harga;      // \"85000\" — SELALU string\n" +
+            "```\n\n" +
+            "Ini jembatan resmi antara HTML dan JavaScript, dan pasangan alami event delegation: satu pendengar di induk, lalu identitas barisnya dibaca dari `dataset`. Ingat dua hal: nilainya selalu string (bungkus `Number()` bila perlu dihitung), dan isinya terbaca siapa pun yang membuka DevTools — jadi jangan menaruh apa pun yang menentukan tagihan di sana.\n\n" +
+            "## Analogi Dunia Nyata\n\n" +
+            "HTML adalah **cetak biru bangunan**; DOM adalah **bangunan yang sudah berdiri**. Kamu tidak bisa memindahkan tembok dengan menggambar ulang cetak birunya — kamu memindahkan tembok yang sudah berdiri itu. Dan karena kamu mengubah bangunannya saja, cetak biru tetap seperti semula: dibangun ulang dari cetak biru (menyegarkan halaman) mengembalikan semuanya ke bentuk awal.\n\n" +
+            "## Jebakan yang Sering Terjadi\n\n" +
+            "1. **Script berjalan sebelum elemennya ada.** Hasil `querySelector` jadi `null`. Taruh `<script>` sebelum `</body>` atau pakai atribut `defer`.\n" +
+            "2. **`innerHTML` untuk data pengguna.** Celah XSS; pakai `textContent`.\n" +
+            "3. **Memasang pendengar `submit` di tombol.** Pasang di `<form>` agar tombol Enter juga tertangani.\n" +
+            "4. **Lupa `preventDefault()` pada form.** Halaman ter-refresh dan seolah tidak terjadi apa-apa.\n" +
+            "5. **Memasang pendengar satu-satu pada elemen yang dibuat dinamis.** Pakai delegation.\n" +
+            "6. **`querySelectorAll(...).map(...)`.** NodeList bukan array; ubah dulu dengan spread.\n\n" +
+            "## Kaitan ke Dunia Kerja\n\n" +
+            "> **Kapan dipakai:** modul ini adalah pertama kalinya kodemu benar-benar terasa seperti aplikasi. Meski nanti kamu memakai React, konsepnya tetap: mengambil data, merender daftar, mendengarkan peristiwa. Dan pertanyaan interview \"apa itu event delegation dan kenapa berguna\" masih sering muncul justru karena jawabannya menunjukkan apakah seseorang paham peristiwa itu naik.",
+        },
+        {
           kind: "step",
           id: "js-4-1",
           title: "querySelector",
           explanation:
-            "`document.querySelector` mencari elemen memakai **selector CSS** — jadi pengetahuan CSS-mu langsung terpakai. Ia mengembalikan elemen **pertama** yang cocok, atau `null` kalau tidak ada. Menyentuh properti dari `null` inilah penyebab error paling sering: `Cannot read properties of null`.",
+            "`document.querySelector` mencari elemen memakai **selector CSS** — jadi pengetahuan CSS-mu langsung terpakai. Ia mengembalikan elemen **pertama** yang cocok, atau `null` kalau tidak ada. Menyentuh properti dari `null` inilah penyebab error paling sering: `Cannot read properties of null`. Penyebab tersering hasilnya `null` cuma dua: nama selectornya keliru, atau **script berjalan sebelum elemennya ada** — dan yang kedua diperbaiki dengan menaruh `<script>` sebelum `</body>` atau memakai atribut `defer`. Perlu diketahui juga bahwa `querySelectorAll` mengembalikan NodeList, bukan array sungguhan: ia bisa di-`forEach` tapi tidak punya `map`, kecuali kamu ubah dulu dengan `[...semua]`.",
           example: {
             code: "// selector CSS yang sama seperti di stylesheet\nconst kotak = document.querySelector('.teks');    // class\nconst semua = document.querySelectorAll('p');     // SEMUA yang cocok\n\nconsole.log(kotak.textContent);\nconsole.log(semua.length);",
             output: "Paragraf\n1",
@@ -1080,7 +1619,7 @@ export const javascriptTrack: Track = {
           id: "js-4-2",
           title: "Mengubah teks dan style",
           explanation:
-            "`textContent` mengubah teks dengan aman. Hindari `innerHTML` untuk data dari pengguna — string yang mengandung tag akan dieksekusi sebagai HTML, dan itulah celah **XSS**. Untuk styling, jangan atur satu-satu lewat `style`; lebih baik `classList.add()` dengan class yang sudah didefinisikan di CSS.",
+            "`textContent` mengubah teks dengan aman. Hindari `innerHTML` untuk data dari pengguna — string yang mengandung tag akan dieksekusi sebagai HTML, dan itulah celah **XSS**. Untuk styling, jangan atur satu-satu lewat `style`; lebih baik `classList.add()` dengan class yang sudah didefinisikan di CSS. Alasannya bukan kerapian belaka: dengan class, seluruh keadaan visual terbaca dari HTML dan bisa diubah dari satu tempat di stylesheet — sedangkan belasan baris `el.style` menyebar aturan tampilan ke dalam logika. Method `classList` yang akan kamu pakai terus ada empat: `add`, `remove`, `toggle` (ada berarti hapus, tidak ada berarti tambah), dan `contains` untuk memeriksa.",
           example: {
             code: "const el = document.querySelector('h1');\n\nel.textContent = 'Teks Baru';       // aman\nel.classList.add('terpilih');       // tambah class\nel.classList.remove('lama');        // hapus class\nel.classList.toggle('buka');        // ada→hapus, tidak ada→tambah",
             output:
@@ -1144,7 +1683,7 @@ export const javascriptTrack: Track = {
           id: "js-4-4",
           title: "Membaca input dan preventDefault",
           explanation:
-            "Form secara default me-refresh halaman saat disubmit — itu perilaku HTML asli. Untuk menanganinya dengan JavaScript, panggil `event.preventDefault()`. Nilai input dibaca lewat properti `.value` (selalu berupa **string**, jadi angka perlu dikonversi dengan `Number()`).",
+            "Form secara default me-refresh halaman saat disubmit — itu perilaku HTML asli. Untuk menanganinya dengan JavaScript, panggil `event.preventDefault()`. Nilai input dibaca lewat properti `.value` (selalu berupa **string**, jadi angka perlu dikonversi dengan `Number()`). Sifat itu penyebab bug yang terlihat aneh: pada `type=\"number\"` sekalipun, `nilai + 1` menghasilkan `'51'` alih-alih `6` karena operator `+` menyambung teks. Satu hal lagi soal penempatan: pasang pendengarnya di elemen `<form>`, bukan di tombolnya — dengan begitu menekan Enter di dalam kotak masukan ikut tertangani, sesuatu yang sangat sering dilakukan pengguna.",
           example: {
             code: "const f = document.querySelector('form');\nconst kotak = document.querySelector('input');\n\nf.addEventListener('submit', (e) => {\n  e.preventDefault();               // tanpa ini halaman refresh\n  console.log(kotak.value);         // selalu string\n  console.log(Number(kotak.value)); // konversi kalau butuh angka\n});",
             output:
@@ -1224,7 +1763,7 @@ export const javascriptTrack: Track = {
           id: "js-4-6",
           title: "Event delegation",
           explanation:
-            "Kalau daftarmu punya 100 tombol, memasang 100 listener itu pemborosan — dan tombol yang ditambahkan **setelah** listener dipasang tidak akan berfungsi. Solusinya: pasang **satu** listener di parent, lalu periksa `event.target` untuk tahu elemen mana yang diklik. Ini pertanyaan interview yang sering muncul.",
+            "Kalau daftarmu punya 100 tombol, memasang 100 listener itu pemborosan — dan tombol yang ditambahkan **setelah** listener dipasang tidak akan berfungsi. Solusinya: pasang **satu** listener di parent, lalu periksa `event.target` untuk tahu elemen mana yang diklik. Ini pertanyaan interview yang sering muncul. Keunggulan yang paling menentukan: pendengar di induk **tetap bekerja untuk elemen yang dibuat nanti** — sedangkan pendengar yang dipasang satu-satu hanya mengenal elemen yang sudah ada saat kodenya dijalankan, dan itulah sebabnya tombol pada baris yang baru ditambahkan sering terasa \"tidak bisa diklik\". Satu jebakan praktis: `event.target` menunjuk elemen **persis** yang tersentuh, jadi klik pada ikon di dalam tombol memberimu ikonnya, bukan tombolnya — untuk itu pakai `event.target.closest('.tombol')`.",
           example: {
             code: "const tabel = document.querySelector('table');\n\n// SATU listener untuk semua baris, termasuk yang ditambah nanti\ntabel.addEventListener('click', (e) => {\n  if (e.target.tagName === 'TD') {\n    console.log('Sel diklik: ' + e.target.textContent);\n  }\n});",
             output: "Mengklik sel mana pun menampilkan isinya, tanpa perlu listener per sel.",
@@ -1256,6 +1795,62 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "const daftar = document.querySelector('#daftar');\n\ndaftar.addEventListener('click', (e) => {\n  if (e.target.tagName === 'LI') {\n    console.log(e.target.textContent);\n  }\n});",
+        },
+        {
+          kind: "step",
+          id: "js-4-7",
+          title: "dataset: Menitipkan Data di Elemen",
+          explanation:
+            "Saat kamu merender daftar dari data, setiap baris perlu membawa identitasnya sendiri — kalau tidak, tombol \"hapus\" tidak tahu baris mana yang dimaksud. Cara resminya bukan menumpangkannya ke `class` atau `id`, melainkan atribut `data-*`: namanya bebas setelah awalan `data-`, sah menurut standar, dan tidak berpengaruh apa pun ke tampilan. Di JavaScript ia dibaca lewat `element.dataset`, dengan satu konversi yang perlu diingat — tanda hubung berubah menjadi camelCase, sehingga `data-produk-id` diakses sebagai `dataset.produkId`. Pasangan alaminya adalah event delegation: satu pendengar di elemen induk, lalu identitas barisnya dibaca dari `dataset` milik `event.target`. Dua hal yang wajib disadari: nilainya **selalu string**, jadi bungkus dengan `Number()` bila perlu dihitung; dan isinya terbaca siapa pun yang membuka DevTools, jadi jangan pernah menaruh harga atau nilai apa pun yang menentukan tagihan di sana — server tetap harus memastikannya sendiri.",
+          example: {
+            code:
+              "// HTML: <li data-user-id=\"7\" data-peran=\"admin\">Bimo</li>\n\n" +
+              "const li = document.querySelector('li');\n\n" +
+              "console.log(li.dataset.userId);    // \"7\"  — tanda hubung jadi camelCase\n" +
+              "console.log(li.dataset.peran);     // \"admin\"\n" +
+              "console.log(typeof li.dataset.userId);   // selalu string\n" +
+              "console.log(Number(li.dataset.userId) + 1);\n\n" +
+              "li.dataset.peran = 'editor';       // boleh diubah dari JavaScript",
+            output: "7\nadmin\nstring\n8",
+            note: "Perhatikan baris ketiga: '7' adalah teks, bukan angka. Menjumlahkannya tanpa Number() menghasilkan '71', bukan 8.",
+          },
+          instruction:
+            "Daftar produk di preview memakai atribut `data-harga` pada setiap tombol. Pasang **satu** pendengar klik di elemen `#daftar`, lalu saat sebuah tombol diklik, cetak harga produk itu sebagai **angka** yang sudah ditambah 1000 sebagai biaya layanan. Baca harganya dari dataset milik elemen yang diklik.",
+          starterCode:
+            "const daftar = document.querySelector('#daftar');\n\n",
+          language: "js",
+          previewHtml:
+            "<ul id=\"daftar\">\n  <li><button data-harga=\"85000\">Kopi Gayo</button></li>\n  <li><button data-harga=\"12000\">Teh Tarik</button></li>\n</ul>",
+          tests: [
+            {
+              pattern:
+                "daftar\\s*\\.\\s*addEventListener\\s*\\(\\s*['\"]click['\"]",
+              message:
+                "Pasang pendengarnya sekali saja di `#daftar` dengan `daftar.addEventListener('click', ...)` — inilah event delegation.",
+            },
+            {
+              pattern:
+                "(e|event|ev)\\s*\\.\\s*target[\\s\\S]*dataset\\s*\\.\\s*harga",
+              message:
+                "Baca harganya dari elemen yang benar-benar diklik: `e.target.dataset.harga`.",
+            },
+            {
+              pattern: "Number\\s*\\(",
+              message:
+                "Nilai dataset selalu berupa string, jadi bungkus dengan `Number(...)` sebelum ditambah — kalau tidak, hasilnya jadi teks tersambung.",
+            },
+            {
+              pattern: "1000",
+              message: "Tambahkan biaya layanan 1000 pada harganya.",
+            },
+          ],
+          solution:
+            "const daftar = document.querySelector('#daftar');\n\n" +
+            "daftar.addEventListener('click', (e) => {\n" +
+            "  const harga = e.target.dataset.harga;\n" +
+            "  if (!harga) return;\n" +
+            "  console.log(Number(harga) + 1000);\n" +
+            "});",
         },
         {
           kind: "quiz",
@@ -1351,6 +1946,97 @@ export const javascriptTrack: Track = {
       ],
       items: [
         {
+          kind: "materi",
+          id: "js-5-m1",
+          title: "JavaScript Modern: Menulis Lebih Sedikit, Salah Lebih Jarang",
+          body:
+            "# Pengertian\n\n" +
+            "Sejak 2015 JavaScript mendapat tambahan setiap tahun, dan yang dibahas di modul ini adalah bagian yang **paling sering kamu lihat di kode nyata**. Semuanya bukan fitur eksotis: kalau kamu membuka repositori React mana pun hari ini, sintaks di modul ini ada di hampir setiap berkas.\n\n" +
+            "Tema besarnya satu: **menghapus kode penjaga yang berulang** — pemeriksaan null yang bertumpuk, penyalinan manual, dan pembongkaran object baris demi baris.\n\n" +
+            "## Optional Chaining dan Nullish Coalescing\n\n" +
+            "```js\n" +
+            "// sebelum: penjagaan bertumpuk\n" +
+            "const kota = user && user.alamat && user.alamat.kota;\n\n" +
+            "// sekarang\n" +
+            "const kota = user?.alamat?.kota ?? 'Tidak diketahui';\n" +
+            "```\n\n" +
+            "`?.` berhenti dengan aman dan menghasilkan `undefined` begitu menemui `null`/`undefined`, alih-alih melempar `Cannot read properties of null`. Ia juga bekerja pada pemanggilan fungsi (`fn?.()`) dan indeks array (`arr?.[0]`).\n\n" +
+            "| Operator | Mengambil sisi kanan saat sisi kiri… |\n" +
+            "|---|---|\n" +
+            "| `\\|\\|` | **falsy apa pun** — termasuk `0`, `''`, `false` |\n" +
+            "| `??` | **hanya** `null` atau `undefined` |\n\n" +
+            "> **Perbedaan itu bukan detail.** `stok \\|\\| 10` mengubah stok 0 menjadi 10 — bug yang tampak masuk akal di kode dan salah di kenyataan. Untuk angka, harga, dan nilai yang boleh nol, `??` adalah pilihan yang benar.\n\n" +
+            "Pasangannya `&&` juga sering dipakai sebagai penjaga singkat: `daftar.length > 0 && tampilkan()` — dan pola inilah yang nanti kamu lihat di JSX React untuk menampilkan sesuatu secara kondisional.\n\n" +
+            "## Spread dan Rest: Sintaks Sama, Arah Berlawanan\n\n" +
+            "```text\n" +
+            "SPREAD  menyebar isi        [...a, ...b]        { ...user, aktif: true }\n" +
+            "REST    mengumpulkan sisa   function f(...args)  const { id, ...sisa } = user\n" +
+            "```\n\n" +
+            "Cara cepat membedakannya: kalau `...` ada di tempat **nilai** dibuat, ia menyebar; kalau ada di tempat **nama** dideklarasikan (parameter atau destructuring), ia mengumpulkan.\n\n" +
+            "Pola yang akan kamu pakai terus, dan yang menjadi cara baku memperbarui state di React:\n\n" +
+            "```js\n" +
+            "const diperbarui = { ...produk, stok: produk.stok - 1 };   // ganti satu properti\n" +
+            "const ditambah   = [...daftar, itemBaru];                  // tambah tanpa push\n" +
+            "const tanpaSatu  = daftar.filter((x) => x.id !== id);      // hapus tanpa splice\n" +
+            "```\n\n" +
+            "Ketiganya menghasilkan data **baru** dan meninggalkan yang lama utuh. Ingat juga batasnya: spread bersifat dangkal, jadi untuk data bersarang pakai `structuredClone()`.\n\n" +
+            "## Object Literal yang Lebih Ringkas\n\n" +
+            "```js\n" +
+            "const nama = 'Bimo';\n" +
+            "const field = 'umur';\n\n" +
+            "const user = {\n" +
+            "  nama,                    // shorthand: sama dengan nama: nama\n" +
+            "  [field]: 20,             // computed key: nama key dari variabel\n" +
+            "  sapa() { ... },          // method shorthand\n" +
+            "};\n" +
+            "```\n\n" +
+            "Computed key sangat berguna saat menangani form: `{ ...form, [e.target.name]: e.target.value }` memperbarui field mana pun dengan satu baris, tanpa satu cabang `if` per field.\n\n" +
+            "## Method Modern yang Layak Dikenali\n\n" +
+            "| Method | Gunanya |\n" +
+            "|---|---|\n" +
+            "| `arr.at(-1)` | elemen terakhir, lebih jelas daripada `arr[arr.length - 1]` |\n" +
+            "| `arr.flat()` | meratakan array bersarang satu tingkat |\n" +
+            "| `Object.entries` / `fromEntries` | object ⇄ array pasangan, pasangan wajib saat mengolah form |\n" +
+            "| `structuredClone(obj)` | salinan mendalam sungguhan, pengganti `JSON.parse(JSON.stringify(...))` |\n" +
+            "| `arr.toSorted()` | versi terurut **tanpa memutasi** aslinya (berbeda dari `sort`) |\n\n" +
+            "## Module: import dan export\n\n" +
+            "```js\n" +
+            "// hitung.js\n" +
+            "export function tambah(a, b) { return a + b; }      // named export\n" +
+            "export default function kali(a, b) { return a * b; } // default export, satu per berkas\n\n" +
+            "// app.js\n" +
+            "import kali, { tambah } from './hitung.js';\n" +
+            "```\n\n" +
+            "Dua hal yang sering menghambat pemula: di browser, `import` hanya bekerja bila script dimuat dengan `<script type=\"module\">`, dan jalur berkas relatif **wajib** diawali `./`. Selain itu module otomatis berjalan dalam mode ketat dan punya scope-nya sendiri — variabel di dalamnya tidak lagi bocor ke seluruh halaman seperti pada script biasa.\n\n" +
+            "## Iterator dan Generator (pengenalan)\n\n" +
+            "Kamu tidak perlu menulisnya sekarang, tapi perlu tahu keberadaannya. Segala hal yang bisa dipakai di `for...of` — array, string, `Map`, `Set` — adalah **iterable**. Dan `function*` beserta `yield` membuat fungsi yang bisa berhenti lalu dilanjutkan, sehingga nilainya dihasilkan satu per satu saat diminta, bukan sekaligus:\n\n" +
+            "```js\n" +
+            "function* nomorAntre() {\n" +
+            "  let n = 1;\n" +
+            "  while (true) yield n++;   // tak terbatas, tapi tidak membebani memori\n" +
+            "}\n" +
+            "```\n\n" +
+            "Kenali bentuknya agar tidak bingung saat menemukannya di kode pustaka; pemakaian sehari-harinya jarang.\n\n" +
+            "## Kenapa Ada npm dan Bundler\n\n" +
+            "```text\n" +
+            "npm        mengunduh & mengunci versi kode buatan orang lain (node_modules)\n" +
+            "bundler    menyatukan puluhan berkas modulmu menjadi berkas yang efisien\n" +
+            "           untuk browser, sekaligus menerjemahkan sintaks baru bila perlu\n" +
+            "           (Vite dan Turbopack adalah dua yang paling umum sekarang)\n" +
+            "```\n\n" +
+            "Keduanya ada karena satu alasan praktis: proyek nyata terdiri dari ratusan berkas dan puluhan pustaka, dan mengirim semuanya apa adanya ke browser akan lambat. Kamu akan memakainya langsung di track React dan Next.js.\n\n" +
+            "## Analogi Dunia Nyata\n\n" +
+            "Fitur-fitur di modul ini seperti **perkakas listrik**: pekerjaannya sama seperti yang bisa kamu lakukan dengan tangan, hanya jauh lebih cepat dan lebih kecil kemungkinan cedera. `?.` adalah sarung tangan — bukan mengubah pekerjaannya, tapi mencegah satu jenis luka yang sering terjadi.\n\n" +
+            "## Jebakan yang Sering Terjadi\n\n" +
+            "1. **Memakai `||` untuk nilai yang boleh nol.** Pakai `??`.\n" +
+            "2. **Mengira `?.` menyembunyikan semua error.** Ia hanya menangani `null`/`undefined`; salah nama properti tetap menghasilkan `undefined` tanpa peringatan.\n" +
+            "3. **Mengira spread menyalin mendalam.** Ia dangkal.\n" +
+            "4. **Lupa `./` pada jalur import** atau lupa `type=\"module\"` di HTML.\n" +
+            "5. **Lebih dari satu `export default` per berkas.** Hanya boleh satu.\n\n" +
+            "## Kaitan ke Dunia Kerja\n\n" +
+            "> **Kapan dipakai:** sintaks modul ini adalah bahasa sehari-hari kode frontend hari ini. Kalau kamu membaca komponen React dan melihat `{ ...state, [name]: value }` atau `data?.user?.nama ?? '-'` tanpa perlu berhenti berpikir, kamu sudah siap masuk track berikutnya.",
+        },
+        {
           kind: "step",
           id: "js-5-1",
           title: "Optional chaining (?.)",
@@ -1385,7 +2071,7 @@ export const javascriptTrack: Track = {
           id: "js-5-2",
           title: "Nullish coalescing (??)",
           explanation:
-            "`??` mengembalikan sisi kanan **hanya jika** sisi kiri `null` atau `undefined`. Bedanya dengan `||` sangat penting: `0 || 10` menghasilkan `10` (karena 0 falsy), sedangkan `0 ?? 10` menghasilkan `0`. Untuk nilai yang boleh nol — jumlah stok, harga diskon, skor — `??` adalah pilihan yang benar.",
+            "`??` mengembalikan sisi kanan **hanya jika** sisi kiri `null` atau `undefined`. Bedanya dengan `||` sangat penting: `0 || 10` menghasilkan `10` (karena 0 falsy), sedangkan `0 ?? 10` menghasilkan `0`. Untuk nilai yang boleh nol — jumlah stok, harga diskon, skor — `??` adalah pilihan yang benar. Jebakan yang sama juga mengenai string: `nama || 'Tamu'` mengubah nama kosong `''` menjadi 'Tamu', yang mungkin memang kamu inginkan — tapi itu keputusan yang harus sadar, bukan kebetulan. `??` berpasangan alami dengan `?.` karena keduanya hanya peduli pada `null` dan `undefined`, sehingga `data?.stok ?? 0` menangani data yang belum datang tanpa merusak angka nol yang sah.",
           example: {
             code: "const diskon = 0;\nconst nama = null;\n\nconsole.log(diskon ?? 100);   // 0 bukan null → pakai 0\nconsole.log(diskon || 100);   // 0 falsy → ditimpa jadi 100\nconsole.log(nama ?? 'Tamu');  // null → pakai fallback",
             output: "0\n100\nTamu",
@@ -1413,25 +2099,27 @@ export const javascriptTrack: Track = {
           id: "js-5-3",
           title: "Rest parameter",
           explanation:
-            "`...angka` di parameter mengumpulkan **semua argumen sisanya** menjadi array. Berbeda dari spread yang menyebar, rest mengumpulkan — sintaksnya sama, arah kerjanya berlawanan. Berguna untuk fungsi yang menerima jumlah argumen bebas.",
+            "`...angka` di parameter mengumpulkan **semua argumen sisanya** menjadi array. Berbeda dari spread yang menyebar, rest mengumpulkan — sintaksnya sama, arah kerjanya berlawanan. Berguna untuk fungsi yang menerima jumlah argumen bebas, misalnya fungsi penjumlah atau pencatat log yang tidak tahu akan diberi berapa nilai. Karena hasilnya array sungguhan, seluruh method array langsung bisa dipakai di dalamnya — `reduce`, `map`, `filter` — dan itu bedanya dari `arguments` di kode lama yang bukan array. Dua aturan yang mengikat: rest **wajib** menjadi parameter terakhir, dan hanya boleh ada satu per fungsi.",
           example: {
             code: "function gabung(pemisah, ...kata) {\n  // kata sekarang berupa array\n  return kata.join(pemisah);\n}\n\nconsole.log(gabung('-', 'a', 'b', 'c'));\nconsole.log(gabung('-', 'x'));",
             output: "a-b-c\nx",
             note: "Rest parameter harus jadi parameter TERAKHIR. Ia mengumpulkan semua argumen sisa menjadi satu array.",
           },
           instruction:
-            "Buat fungsi `jumlahkan(...angka)` yang mengembalikan total semua argumen memakai `reduce`. Tampilkan `jumlahkan(1, 2, 3, 4)`.",
+            "Buat fungsi bernama `jumlahkan` yang bisa dipanggil dengan **berapa pun** jumlah angka lalu mengembalikan totalnya — kumpulkan argumennya jadi satu array, lalu ringkas menjadi satu nilai. Buktikan dengan menampilkan hasil pemanggilan `jumlahkan(1, 2, 3, 4)`.",
           starterCode: "",
           language: "js",
           tests: [
             {
               pattern:
-                "(function\\s+jumlahkan|const\\s+jumlahkan\\s*=)[\\s\\S]{0,30}\\.\\.\\.\\s*angka",
-              message: "Buat fungsi jumlahkan(...angka).",
+                "(function\\s+jumlahkan|const\\s+jumlahkan\\s*=)[\\s\\S]{0,30}\\.\\.\\.\\s*\\w+",
+              message:
+                "Kumpulkan argumennya dengan rest parameter, misalnya `function jumlahkan(...angka)`. Nama parameternya bebas — yang wajib adalah tiga titik di depannya.",
             },
             {
-              pattern: "angka\\.reduce\\(",
-              message: "Gunakan angka.reduce(...) untuk menjumlahkan.",
+              pattern: "\\w+\\s*\\.\\s*reduce\\s*\\(",
+              message:
+                "Ringkas array-nya menjadi satu nilai dengan `reduce`, misalnya `angka.reduce((a, b) => a + b, 0)`. Nilai awal `0` penting agar pemanggilan tanpa argumen tetap menghasilkan angka.",
             },
             {
               pattern:
@@ -1447,7 +2135,7 @@ export const javascriptTrack: Track = {
           id: "js-5-4",
           title: "Spread untuk array",
           explanation:
-            "Spread juga bekerja pada array: `[...a, ...b]` menggabungkan tanpa mengubah aslinya. Ini penting untuk state di React — jangan pakai `push` yang memutasi array, tapi buat array baru. Menambahkan item: `[...daftar, itemBaru]`.",
+            "Spread juga bekerja pada array: `[...a, ...b]` menggabungkan tanpa mengubah aslinya. Ini penting untuk state di React — jangan pakai `push` yang memutasi array, tapi buat array baru. Menambahkan item: `[...daftar, itemBaru]`. Posisi tanda `...` menentukan letak penyisipannya, jadi `['z', ...lama]` menaruh isi lama di belakang. Untuk menghapus, pasangannya adalah `filter` yang juga menghasilkan array baru. Ingat batasnya: spread bersifat **dangkal** — pada array berisi object, object di dalamnya masih dibagi bersama array aslinya, dan untuk itu kamu butuh `structuredClone`.",
           example: {
             code: "const lama = ['a', 'b'];\n\nconst tambahAkhir = [...lama, 'c'];\nconst tambahAwal  = ['z', ...lama];\nconst salinan     = [...lama];\n\nconsole.log(tambahAkhir);\nconsole.log(tambahAwal);\nconsole.log(lama);        // tetap utuh",
             output: '["a","b","c"]\n["z","a","b"]\n["a","b"]',
@@ -1643,6 +2331,91 @@ export const javascriptTrack: Track = {
       ],
       items: [
         {
+          kind: "materi",
+          id: "js-6-m1",
+          title: "Asynchronous: Kenapa JavaScript Tidak Menunggu",
+          body:
+            "# Pengertian\n\n" +
+            "JavaScript menjalankan kodemu di **satu jalur** saja. Kalau ia berhenti menunggu balasan server selama dua detik, seluruh halaman ikut membeku: tombol tidak bisa diklik, animasi berhenti, teks tidak bisa dipilih.\n\n" +
+            "Solusinya bukan menambah jalur, melainkan **tidak menunggu**: pekerjaan yang lama dititipkan, lalu kodemu lanjut. Begitu titipannya selesai, hasilnya dikerjakan kemudian. Itulah arti *asynchronous*, dan dari satu kalimat itu lahir seluruh isi modul ini.\n\n" +
+            "## Event Loop dalam Satu Gambar\n\n" +
+            "```text\n" +
+            "console.log('A');\n" +
+            "setTimeout(() => console.log('B'), 0);   // dititipkan, meski 0 milidetik\n" +
+            "console.log('C');\n" +
+            "\n" +
+            "keluaran:  A  C  B\n" +
+            "                 ^\n" +
+            "  B menunggu SELURUH kode utama selesai lebih dulu — bukan soal lama-cepat,\n" +
+            "  tapi soal urutan antrean.\n" +
+            "```\n\n" +
+            "Aturannya: kode utama dijalankan sampai habis, baru antrean titipan diperiksa. `setTimeout(fn, 0)` karena itu berarti \"jalankan segera **setelah** semua kode sekarang selesai\", bukan \"jalankan sekarang\".\n\n" +
+            "Satu hal yang sering mengejutkan: Promise punya antrean sendiri yang **lebih diprioritaskan** daripada `setTimeout`. Jadi pada kode yang memuat keduanya, hasil Promise selalu muncul lebih dulu meski timernya 0.\n\n" +
+            "## Tiga Generasi Cara Menuliskannya\n\n" +
+            "```text\n" +
+            "1. CALLBACK      fn(hasil => fn2(hasil, hasil2 => ...))   -> \"callback hell\", sulit dibaca\n" +
+            "2. PROMISE       ambil().then(...).catch(...)             -> rantai, tidak lagi bertumpuk\n" +
+            "3. ASYNC/AWAIT   const data = await ambil();             -> terbaca seperti kode biasa\n" +
+            "```\n\n" +
+            "Ketiganya masih kamu temui di kode nyata, tapi **tulis kode barumu dengan async/await**. Kamu tetap perlu mengenali Promise karena `async/await` sesungguhnya hanya cara lain menulis Promise — dan beberapa hal, seperti menjalankan banyak permintaan sekaligus, memang lebih jelas ditulis dengan Promise langsung.\n\n" +
+            "## Promise: Tiga Keadaan\n\n" +
+            "```text\n" +
+            "pending  ->  fulfilled   (berhasil, ada nilainya)   -> .then()  / await\n" +
+            "         ->  rejected    (gagal, ada alasannya)      -> .catch() / try-catch\n" +
+            "```\n\n" +
+            "`await` menunggu sebuah Promise selesai lalu memberikan **isinya**. Karena itu `await` hanya boleh berada di dalam fungsi `async`, dan fungsi `async` selalu mengembalikan Promise — jadi memanggilnya tanpa `await` memberimu Promise-nya, bukan datanya.\n\n" +
+            "## fetch: Mengambil Data dari Internet\n\n" +
+            "```js\n" +
+            "async function ambilProduk(id) {\n" +
+            "  try {\n" +
+            "    const res = await fetch(`https://api.contoh.id/produk/${id}`);\n" +
+            "    if (!res.ok) throw new Error(`Gagal: ${res.status}`);   // WAJIB\n" +
+            "    const data = await res.json();                          // dua kali await\n" +
+            "    return data;\n" +
+            "  } catch (e) {\n" +
+            "    console.error(e.message);\n" +
+            "    return null;\n" +
+            "  }\n" +
+            "}\n" +
+            "```\n\n" +
+            "> **Jebakan wajib diingat: `fetch` TIDAK menganggap 404 atau 500 sebagai kegagalan.** Selama servernya menjawab — apa pun jawabannya — Promise-nya dianggap berhasil. Yang membuat `fetch` gagal hanya masalah jaringan. Karena itu **selalu** periksa `res.ok` sendiri; tanpa baris itu, halaman error dari server akan kamu perlakukan sebagai data.\n\n" +
+            "Perhatikan juga ada **dua** `await`: satu untuk balasannya tiba, satu lagi untuk membaca isi badannya sebagai JSON.\n\n" +
+            "Untuk mengirim data:\n\n" +
+            "```js\n" +
+            "await fetch(url, {\n" +
+            "  method: 'POST',\n" +
+            "  headers: { 'Content-Type': 'application/json' },\n" +
+            "  body: JSON.stringify({ nama: 'Bimo' }),   // body harus TEKS, bukan object\n" +
+            "});\n" +
+            "```\n\n" +
+            "## Menjalankan Beberapa Permintaan Sekaligus\n\n" +
+            "| Cara | Perilakunya |\n" +
+            "|---|---|\n" +
+            "| `await a(); await b();` | berurutan — total waktunya dijumlahkan |\n" +
+            "| `Promise.all([a(), b()])` | paralel; **gagal satu, gagal semua** |\n" +
+            "| `Promise.allSettled([...])` | paralel; melaporkan hasil masing-masing, tidak ada yang menjatuhkan yang lain |\n" +
+            "| `Promise.race([...])` | yang tercepat selesai yang dipakai |\n\n" +
+            "Kesalahan yang paling sering: menaruh `await` di dalam `for` untuk lima permintaan yang tidak saling bergantung. Lima kali 300 milidetik menjadi 1,5 detik, padahal dengan `Promise.all` cukup 300 milidetik. Pakai `allSettled` bila sebagian gagal masih dapat diterima — misalnya memuat tiga widget dashboard yang berdiri sendiri.\n\n" +
+            "## Pola UI yang Benar: Tiga Keadaan\n\n" +
+            "```text\n" +
+            "loading   tampilkan penanda proses, matikan tombolnya\n" +
+            "success   tampilkan datanya\n" +
+            "error     tampilkan pesan yang bisa ditindaklanjuti + tombol coba lagi\n" +
+            "```\n\n" +
+            "Melupakan keadaan `loading` membuat aplikasi terasa rusak — pengguna mengklik dan tidak terjadi apa-apa, lalu mengklik lagi sehingga permintaannya terkirim dua kali. Melupakan `error` membuat halaman kosong tanpa penjelasan. Ketiganya wajib, dan pola inilah yang nanti kamu tulis dengan `useState` di React.\n\n" +
+            "## Analogi Dunia Nyata\n\n" +
+            "Bayangkan **memesan makanan di kedai kopi**. Kasir tidak berdiri diam menunggu pesananmu jadi — ia memberimu nomor antrean dan melayani orang berikutnya. Itu asynchronous. Nomor antrean adalah Promise: bukan kopinya, tapi janji bahwa kopinya akan ada. `await` adalah kamu memilih duduk menunggu nomormu dipanggil. Dan `Promise.all` adalah memesan tiga minuman sekaligus lalu menunggu ketiganya siap, alih-alih memesan satu, menunggu, lalu memesan lagi.\n\n" +
+            "## Jebakan yang Sering Terjadi\n\n" +
+            "1. **Tidak memeriksa `res.ok`.** 404 bukan error bagi `fetch`.\n" +
+            "2. **Lupa `await` pada `res.json()`.** Yang kamu pegang jadi Promise, dan `data.nama` berisi `undefined`.\n" +
+            "3. **`await` di luar fungsi `async`.** SyntaxError (kecuali di module tingkat atas).\n" +
+            "4. **`await` di dalam loop untuk permintaan yang tidak saling bergantung.** Lambat tanpa alasan.\n" +
+            "5. **Mengirim object langsung sebagai `body`.** Harus `JSON.stringify` lebih dulu.\n" +
+            "6. **`try/catch` tanpa `res.ok`.** Blok catch tidak akan pernah tersentuh oleh 404.\n\n" +
+            "## Kaitan ke Dunia Kerja\n\n" +
+            "> **Kapan dipakai:** hampir semua fitur yang kamu kerjakan di pekerjaan nyata menyentuh data dari server. Dua hal dari modul ini paling sering ditanyakan di interview: menjelaskan event loop dengan contoh `setTimeout(fn, 0)`, dan bahwa `fetch` tidak melempar error pada 404. Yang kedua itu bug produksi nyata, bukan trivia.",
+        },
+        {
           kind: "step",
           id: "js-6-1",
           title: "setTimeout dan urutan eksekusi",
@@ -1745,7 +2518,7 @@ export const javascriptTrack: Track = {
           id: "js-6-4",
           title: "fetch: mengambil data dari API",
           explanation:
-            "`fetch` mengembalikan Promise berisi object Response — perhatikan bahwa datanya belum siap, perlu `await res.json()` sebagai langkah kedua. **Jebakan penting:** fetch **tidak** melempar error untuk status 404 atau 500; ia hanya gagal saat jaringan bermasalah. Karena itu kamu harus memeriksa `res.ok` sendiri.",
+            "`fetch` mengembalikan Promise berisi object Response — perhatikan bahwa datanya belum siap, perlu `await res.json()` sebagai langkah kedua. **Jebakan penting:** fetch **tidak** melempar error untuk status 404 atau 500; ia hanya gagal saat jaringan bermasalah. Karena itu kamu harus memeriksa `res.ok` sendiri. Tanpa baris pemeriksaan itu, halaman error dari server akan kamu perlakukan sebagai data — dan bug-nya muncul beberapa langkah kemudian sebagai `undefined` yang sulit dilacak asalnya. Perhatikan juga bahwa dibutuhkan **dua** kali `await`: satu sampai balasannya tiba, satu lagi untuk membaca isi badannya sebagai JSON. Melupakan `await` yang kedua membuatmu memegang Promise, sehingga `data.nama` berisi `undefined` padahal permintaannya berhasil.",
           example: {
             code: "async function ambilUser() {\n  const res = await fetch('https://jsonplaceholder.typicode.com/users/1');\n\n  console.log(res.status);   // 200\n  console.log(res.ok);       // true kalau status 200-299\n\n  if (!res.ok) return;       // WAJIB diperiksa sendiri\n\n  const data = await res.json();   // langkah kedua\n  console.log(data.name);\n}\n\nambilUser();",
             output: "200\ntrue\nLeanne Graham",
@@ -1818,7 +2591,7 @@ export const javascriptTrack: Track = {
           id: "js-6-6",
           title: "Promise.all: request paralel",
           explanation:
-            "Kalau kamu `await` tiga request berurutan, totalnya adalah jumlah semua waktunya. `Promise.all` menjalankannya **bersamaan**, sehingga total hanya selama yang paling lambat. Catatan penting: kalau satu gagal, semuanya gagal — pakai `Promise.allSettled` bila kamu ingin tetap mendapat hasil yang berhasil.",
+            "Kalau kamu `await` tiga request berurutan, totalnya adalah jumlah semua waktunya. `Promise.all` menjalankannya **bersamaan**, sehingga total hanya selama yang paling lambat. Catatan penting: kalau satu gagal, semuanya gagal — pakai `Promise.allSettled` bila kamu ingin tetap mendapat hasil yang berhasil. Kesalahan yang paling sering di sini adalah menaruh `await` di dalam `for` untuk beberapa permintaan yang **tidak** saling bergantung: lima permintaan berdurasi 300 milidetik menjadi 1,5 detik, padahal dijalankan bersamaan cukup 300 milidetik. Aturan pemilihannya: `all` saat semuanya wajib berhasil, `allSettled` saat sebagian gagal masih bisa diterima (misalnya tiga widget dashboard yang berdiri sendiri), dan `race` saat kamu hanya butuh yang tercepat.",
           example: {
             code: "const t = (ms, label) =>\n  new Promise((r) => setTimeout(() => r(label), ms));\n\nasync function jalan() {\n  // ❌ berurutan: total 300 + 300 = 600ms\n  // const a = await t(300, 'A');\n  // const b = await t(300, 'B');\n\n  // ✅ paralel: total hanya ~300ms\n  const [a, b] = await Promise.all([t(300, 'A'), t(300, 'B')]);\n  console.log(a, b);\n}\n\njalan();",
             output: "A B",
@@ -1936,6 +2709,83 @@ export const javascriptTrack: Track = {
         "Strategi debugging sistematis (reproduce → isolate → fix)",
       ],
       items: [
+        {
+          kind: "materi",
+          id: "js-7-m1",
+          title: "Error dan Debugging: Keterampilan Harian yang Jarang Diajarkan",
+          body:
+            "# Pengertian\n\n" +
+            "Menulis kode yang jalan dari percobaan pertama itu jarang. Yang sebenarnya kamu kerjakan sepanjang hari sebagai developer adalah **mencari tahu kenapa kode tidak berperilaku seperti dugaanmu** — dan itu keterampilan yang bisa dilatih, bukan bakat.\n\n" +
+            "Perbedaan antara pemula dan orang berpengalaman di sini bukan jumlah bug, tapi **kecepatan menemukan penyebabnya**. Pemula menebak dan mengubah baris secara acak; yang berpengalaman membaca pesan errornya sampai habis.\n\n" +
+            "## Tiga Jenis Error yang Perlu Kamu Kenali\n\n" +
+            "| Jenis | Artinya | Contoh penyebab |\n" +
+            "|---|---|---|\n" +
+            "| `SyntaxError` | tulisannya tidak sah, **kode tidak jalan sama sekali** | kurung atau kurawal tidak seimbang |\n" +
+            "| `ReferenceError` | nama yang dipakai tidak ada | salah ketik nama variabel, atau memakai `let` sebelum deklarasinya |\n" +
+            "| `TypeError` | nilainya ada, tapi bukan jenis yang bisa diperlakukan begitu | `null.nama`, atau memanggil sesuatu yang bukan fungsi |\n\n" +
+            "Membedakan ketiganya langsung memangkas separuh pencarian: `SyntaxError` berarti masalahnya tulisan (dan seringnya beberapa baris **di atas** yang ditunjuk), `ReferenceError` berarti masalah nama atau urutan, sedangkan `TypeError` berarti asumsimu tentang isi sebuah nilai keliru — dan yang terakhir inilah yang paling sering.\n\n" +
+            "> **Dua pesan yang akan kamu lihat ratusan kali:** `Cannot read properties of null (reading 'x')` berarti sesuatu yang kamu harap ada ternyata `null` — biasanya hasil `querySelector` yang tidak ketemu. Dan `x is not a function` biasanya berarti salah ketik nama method, atau nilainya bukan jenis yang kamu duga.\n\n" +
+            "## Membaca Stack Trace\n\n" +
+            "```text\n" +
+            "TypeError: Cannot read properties of undefined (reading 'nama')\n" +
+            "    at tampilkanUser (app.js:42)      <- BARIS PALING ATAS: tempat error terjadi\n" +
+            "    at render (app.js:88)             <- siapa yang memanggilnya\n" +
+            "    at main (app.js:120)              <- siapa yang memanggil itu\n" +
+            "```\n\n" +
+            "Baris **paling atas** adalah tempat kejadiannya; baris di bawahnya adalah jalur bagaimana kode sampai ke sana. Cara membacanya: mulai dari atas untuk tahu apa yang rusak, lalu turun untuk tahu **dari mana** nilai yang rusak itu datang. Abaikan baris yang menyebut berkas di dalam `node_modules` — kesalahannya hampir selalu di kodemu, bukan di pustakanya.\n\n" +
+            "## try / catch / finally dan throw\n\n" +
+            "```js\n" +
+            "try {\n" +
+            "  const data = JSON.parse(teksDariServer);   // bisa gagal\n" +
+            "} catch (e) {\n" +
+            "  console.error('Data tidak bisa dibaca:', e.message);\n" +
+            "} finally {\n" +
+            "  setLoading(false);                          // SELALU dijalankan, gagal atau tidak\n" +
+            "}\n" +
+            "```\n\n" +
+            "`finally` adalah tempat yang tepat untuk membersihkan keadaan — mematikan penanda *loading*, menutup koneksi — karena ia berjalan pada kedua kemungkinan.\n\n" +
+            "Kamu juga boleh **melempar** error sendiri dengan `throw new Error('pesan')`. Kapan itu tepat? Ketika fungsimu menerima sesuatu yang mustahil dikerjakan: pembagian dengan nol, umur negatif, atau respons server yang bentuknya tidak sesuai. Melempar lebih awal jauh lebih baik daripada mengembalikan `null` yang kemudian meledak sepuluh baris di tempat lain — jejaknya jadi sulit dilacak.\n\n" +
+            "> **Yang harus dihindari: `catch` kosong.** `catch (e) {}` membuat error hilang tanpa jejak, dan bug yang tidak meninggalkan jejak adalah bug yang paling lama diperbaiki. Minimal catat pesannya.\n\n" +
+            "## console Lebih dari log\n\n" +
+            "| Perintah | Gunanya |\n" +
+            "|---|---|\n" +
+            "| `console.table(arr)` | menampilkan array of object sebagai tabel — jauh terbaca untuk data API |\n" +
+            "| `console.group()` / `groupEnd()` | mengelompokkan keluaran agar tidak bercampur |\n" +
+            "| `console.time('x')` / `timeEnd('x')` | mengukur lama sebuah proses |\n" +
+            "| `console.trace()` | menampilkan jalur pemanggilan tanpa perlu melempar error |\n" +
+            "| `console.error` / `warn` | ikut menampilkan stack trace dan mudah difilter di panel |\n\n" +
+            "## Breakpoint: Berhenti dan Melihat ke Dalam\n\n" +
+            "`console.log` bertaburan di mana-mana ada batasnya. Cara yang lebih cepat: buka **DevTools → Sources**, klik nomor baris untuk memasang **breakpoint**, lalu muat ulang halaman. Eksekusi berhenti tepat di baris itu dan kamu bisa melihat isi **semua** variabel pada saat itu.\n\n" +
+            "```text\n" +
+            "Resume (F8)      lanjutkan sampai breakpoint berikutnya\n" +
+            "Step over (F10)  jalankan baris ini, jangan masuk ke dalam fungsinya\n" +
+            "Step into (F11)  masuk ke dalam fungsi yang dipanggil di baris ini\n" +
+            "Watch            pantau nilai sebuah ekspresi terus-menerus\n" +
+            "```\n\n" +
+            "Menulis `debugger;` di dalam kodemu punya efek sama dengan memasang breakpoint, dan berguna saat baris yang ingin kamu periksa sulit ditemukan di panel.\n\n" +
+            "## Network Tab: Saat Datanya yang Bermasalah\n\n" +
+            "Kalau tampilan kosong padahal kode terasa benar, buka **DevTools → Network** dan periksa empat hal berurutan: apakah permintaannya **terkirim**, berapa **status**-nya (404? 401? 500?), apa isi **Response**-nya, dan apa yang dikirim di **Payload**. Empat pertanyaan itu memisahkan dengan cepat \"bug di kodeku\" dari \"servernya memang menjawab lain\" — dan itu menentukan siapa yang harus memperbaikinya.\n\n" +
+            "## Strategi Sistematis: Reproduce → Isolate → Fix\n\n" +
+            "```text\n" +
+            "1. REPRODUCE  temukan langkah persis yang selalu memunculkan bug-nya.\n" +
+            "              Bug yang tidak bisa diulang tidak bisa dipastikan selesai.\n" +
+            "2. ISOLATE    persempit wilayahnya. Matikan separuh kode; masih terjadi?\n" +
+            "              Berarti penyebabnya di separuh yang tersisa. Ulangi.\n" +
+            "3. FIX        perbaiki PENYEBABNYA, bukan gejalanya. Lalu jalankan ulang\n" +
+            "              langkah nomor 1 untuk membuktikan bug-nya benar-benar hilang.\n" +
+            "```\n\n" +
+            "Langkah 2 itu yang paling sering dilewati, padahal paling berdampak: membelah wilayah pencarian berulang kali menemukan penyebab jauh lebih cepat daripada membaca seluruh kode dari awal.\n\n" +
+            "## Analogi Dunia Nyata\n\n" +
+            "Debugging itu seperti **mencari kebocoran air di rumah**. Pemula langsung membongkar dinding tempat air terlihat menggenang. Tukang berpengalaman menutup keran satu per satu untuk mempersempit wilayah, karena air mengalir — tempat munculnya hampir selalu bukan tempat bocornya. Stack trace adalah jejak aliran itu, dibaca dari genangan ke arah sumbernya.\n\n" +
+            "## Jebakan yang Sering Terjadi\n\n" +
+            "1. **Tidak membaca pesan errornya sampai habis.** Sebagian besar pesan menyebut penyebabnya secara harfiah.\n" +
+            "2. **`catch` kosong.** Bug jadi tak berjejak.\n" +
+            "3. **Mengubah beberapa hal sekaligus.** Kalau bug hilang, kamu tidak tahu yang mana penyebabnya.\n" +
+            "4. **Mencari `SyntaxError` tepat di baris yang ditunjuk.** Penyebabnya sering beberapa baris di atas.\n" +
+            "5. **Menutup gejala dengan `if (x)`.** Nilai `undefined` itu ada asalnya; cari asalnya.\n\n" +
+            "## Kaitan ke Dunia Kerja\n\n" +
+            "> **Kapan dipakai:** ini keterampilan yang paling sering dipakai dan paling jarang diajarkan. Di sesi wawancara teknis berbasis kasus, yang dinilai justru caramu mendekati masalah: apakah kamu membaca pesannya, mempersempit wilayahnya, dan menjelaskan dugaanmu — atau langsung mengubah baris secara acak sambil berharap.",
+        },
         {
           kind: "step",
           id: "js-7-1",
@@ -2186,6 +3036,21 @@ export const javascriptTrack: Track = {
               explanation:
                 "console.table(data) menampilkan data terstruktur sebagai tabel dengan kolom yang bisa diurutkan — jauh lebih mudah dibaca daripada console.log untuk data dari API.",
             },
+            {
+              id: "q6",
+              type: "pilihan-ganda",
+              question:
+                "Daftar produk di halamanmu kosong padahal kodenya terasa benar. Di mana kamu memeriksa lebih dulu untuk memisahkan \"bug di kodeku\" dari \"servernya menjawab lain\"?",
+              choices: [
+                "Menambahkan console.log di seluruh berkas",
+                "Tab Network di DevTools: apakah permintaannya terkirim, berapa status-nya, dan apa isi Response-nya",
+                "Menyegarkan halaman beberapa kali",
+                "Tab Elements untuk memeriksa CSS",
+              ],
+              answerIndex: 1,
+              explanation:
+                "Tab Network menjawab empat pertanyaan sekaligus: permintaannya terkirim atau tidak, status-nya (404, 401, 500), isi Response-nya, dan apa yang kamu kirim di Payload. Jawabannya langsung menentukan siapa yang harus memperbaiki — kalau server mengembalikan 401, tidak ada gunanya menyisir logika render. Menaburkan `console.log` menggoda karena terasa produktif, tapi ia menjawab pertanyaan yang lebih sempit dan butuh waktu jauh lebih lama.",
+            },
           ],
         },
       ],
@@ -2205,6 +3070,108 @@ export const javascriptTrack: Track = {
         "Komposisi fungsi & higher-order function",
       ],
       items: [
+        {
+          kind: "materi",
+          id: "js-8-m1",
+          title: "Dua Cara Menyusun Kode: Object dan Fungsi",
+          body:
+            "# Pengertian\n\n" +
+            "Begitu programmu tumbuh melewati beberapa ratus baris, pertanyaannya bukan lagi \"bagaimana caranya jalan\" tapi **\"bagaimana menyusunnya agar tetap bisa dibaca\"**. Ada dua jawaban besar, dan keduanya dipakai berdampingan di kode nyata:\n\n" +
+            "```text\n" +
+            "OOP                            FUNCTIONAL\n" +
+            "kumpulkan data + perilakunya   pisahkan data dari perilaku\n" +
+            "jadi satu object               olah data lewat fungsi kecil\n" +
+            "class, method, this            pure function, map/filter/reduce\n" +
+            "```\n\n" +
+            "Frontend modern condong ke gaya kedua — React dibangun di atasnya — tapi kamu tetap akan membaca `class` di kode Node.js, pustaka, dan proyek lama. Jadi keduanya perlu.\n\n" +
+            "## Class: Cetakan untuk Object\n\n" +
+            "```js\n" +
+            "class Produk {\n" +
+            "  #stok = 0;                       // field privat: hanya bisa diakses di dalam class\n" +
+            "  static pajak = 0.11;             // milik class, bukan milik tiap object\n\n" +
+            "  constructor(nama, harga) {       // dijalankan otomatis saat new Produk(...)\n" +
+            "    this.nama = nama;              // this = object yang sedang dibuat\n" +
+            "    this.harga = harga;\n" +
+            "  }\n\n" +
+            "  get hargaAkhir() {               // getter: dipakai seperti properti, bukan method\n" +
+            "    return this.harga * (1 + Produk.pajak);\n" +
+            "  }\n\n" +
+            "  set stok(nilai) {                // setter: tempat menaruh validasi\n" +
+            "    if (nilai < 0) throw new Error('Stok tidak boleh negatif');\n" +
+            "    this.#stok = nilai;\n" +
+            "  }\n" +
+            "}\n\n" +
+            "const p = new Produk('Kopi', 20000);\n" +
+            "p.hargaAkhir;      // 22200 — tanpa tanda kurung, karena getter\n" +
+            "p.stok = -5;       // melempar Error, karena lewat setter\n" +
+            "```\n\n" +
+            "Empat hal di atas layak diingat: **constructor** menyiapkan object baru, **getter/setter** membuat nilai turunan dan validasi terasa seperti properti biasa, **`static`** untuk hal yang milik seluruh class (bukan tiap object), dan **`#field`** untuk data yang tidak boleh disentuh dari luar.\n\n" +
+            "## Inheritance dan Kapan Menghindarinya\n\n" +
+            "```js\n" +
+            "class Admin extends User {\n" +
+            "  constructor(nama, level) {\n" +
+            "    super(nama);        // WAJIB dipanggil lebih dulu sebelum memakai this\n" +
+            "    this.level = level;\n" +
+            "  }\n" +
+            "}\n" +
+            "```\n\n" +
+            "Inheritance terasa elegan di contoh, dan menyulitkan di proyek nyata: rantai warisan tiga tingkat membuat kamu harus membuka tiga berkas untuk tahu satu method sebenarnya melakukan apa. Nasihat yang sudah lama disepakati banyak tim: **utamakan komposisi daripada pewarisan** — gabungkan kemampuan kecil, jangan membangun pohon keluarga. Pakai `extends` saat hubungannya benar-benar \"adalah jenis dari\", dan berhenti di satu tingkat.\n\n" +
+            "## this: Aturan yang Sebenarnya\n\n" +
+            "`this` tidak ditentukan oleh tempat fungsi **ditulis**, tapi oleh **cara ia dipanggil**:\n\n" +
+            "| Cara dipanggil | Isi `this` |\n" +
+            "|---|---|\n" +
+            "| `obj.method()` | `obj` |\n" +
+            "| `fn()` biasa | `undefined` (mode ketat) |\n" +
+            "| `new Kelas()` | object baru yang sedang dibuat |\n" +
+            "| di dalam arrow function | **diwarisi** dari tempat ia ditulis |\n" +
+            "| `fn.call(x)` / `fn.apply(x)` / `fn.bind(x)` | ditentukan olehmu secara eksplisit |\n\n" +
+            "```js\n" +
+            "class Tombol {\n" +
+            "  constructor() { this.jumlah = 0; }\n\n" +
+            "  // ❌ this hilang: dipanggil oleh browser sebagai fungsi biasa\n" +
+            "  pasangSalah(el) { el.addEventListener('click', function () { this.jumlah++; }); }\n\n" +
+            "  // ✅ arrow function mewarisi this dari sekitarnya\n" +
+            "  pasangBenar(el) { el.addEventListener('click', () => { this.jumlah++; }); }\n" +
+            "}\n" +
+            "```\n\n" +
+            "Inilah alasan paling praktis arrow function ada, dan gejalanya khas: `Cannot read properties of undefined (reading 'jumlah')` di dalam callback.\n\n" +
+            "## Prototype: Apa yang Terjadi di Balik class\n\n" +
+            "JavaScript sebenarnya tidak punya class seperti Java. `class` hanyalah **penulisan yang lebih rapi** di atas mekanisme yang sudah ada sejak awal: **prototype**.\n\n" +
+            "```text\n" +
+            "const p = new Produk('Kopi', 20000);\n" +
+            "\n" +
+            "p.hitung()  ->  ada di p sendiri?  tidak\n" +
+            "                ada di Produk.prototype?  ya  -> jalankan\n" +
+            "                (kalau tidak, naik lagi ke Object.prototype, lalu null)\n" +
+            "```\n\n" +
+            "Rantai pencarian itu bernama **prototype chain**, dan ia menjelaskan dua hal yang sering terasa ajaib: kenapa method tidak digandakan di setiap object (semuanya berbagi satu salinan di prototype), dan kenapa `[].map` bisa dipanggil padahal kamu tidak pernah menulisnya. Kamu jarang perlu menyentuh prototype secara langsung, tapi pertanyaan \"apa bedanya class dan prototype\" masih sering muncul di interview.\n\n" +
+            "## Immutability: Kenapa Framework Menyukainya\n\n" +
+            "```js\n" +
+            "// ❌ memutasi — React tidak tahu ada yang berubah\n" +
+            "state.daftar.push(item);\n\n" +
+            "// ✅ menghasilkan data baru\n" +
+            "setState({ ...state, daftar: [...state.daftar, item] });\n" +
+            "```\n\n" +
+            "React membandingkan **alamat** data lama dan baru untuk memutuskan perlu merender ulang atau tidak. Kalau kamu mengubah isi di alamat yang sama, alamatnya tidak berubah, dan React menyimpulkan tidak ada yang perlu diperbarui — inilah sumber keluhan \"state saya tidak ter-update\" yang paling sering. Karena itu biasakan sekarang: `map`, `filter`, dan spread menghasilkan data baru; `push`, `splice`, dan `sort` memutasi.\n\n" +
+            "## Komposisi Fungsi dan Higher-Order Function\n\n" +
+            "**Higher-order function** adalah fungsi yang menerima atau mengembalikan fungsi lain — `map`, `filter`, dan `addEventListener` semuanya termasuk. Sifat ini memungkinkan kamu menyusun perilaku dari bagian kecil:\n\n" +
+            "```js\n" +
+            "const kaliDengan = (n) => (x) => x * n;    // fungsi yang MEMBUAT fungsi\n" +
+            "const dobel = kaliDengan(2);\n" +
+            "[1, 2, 3].map(dobel);                      // [2, 4, 6]\n" +
+            "```\n\n" +
+            "Keuntungannya bukan kepintaran, tapi kemudahan pengujian: fungsi kecil yang murni bisa diuji satu per satu tanpa menyiapkan apa pun — dan itu langsung kamu praktikkan di modul Testing.\n\n" +
+            "## Analogi Dunia Nyata\n\n" +
+            "OOP itu seperti **peralatan dapur khusus**: rice cooker menyimpan sekaligus memasak nasi — data dan perilaku dalam satu benda. Functional itu seperti **pisau dan talenan**: alat sederhana yang tidak menyimpan apa pun, dipakai berurutan untuk mengolah bahan. Dapur profesional punya keduanya, dan memilih berdasarkan pekerjaannya — bukan berdasarkan mana yang lebih modern.\n\n" +
+            "## Jebakan yang Sering Terjadi\n\n" +
+            "1. **Lupa `new`.** Memanggil `Produk(...)` tanpa `new` melempar TypeError.\n" +
+            "2. **Lupa `super()`** sebelum memakai `this` di constructor turunan.\n" +
+            "3. **`function` biasa sebagai callback di dalam class.** `this` hilang; pakai arrow function.\n" +
+            "4. **Pewarisan tiga tingkat.** Sulit dilacak; utamakan komposisi.\n" +
+            "5. **Memutasi state.** Framework tidak melihat perubahannya.\n\n" +
+            "## Kaitan ke Dunia Kerja\n\n" +
+            "> **Kapan dipakai:** `this` dan immutability adalah dua topik dari modul ini yang paling sering muncul di interview frontend, dan keduanya bukan trivia — keliru di keduanya menghasilkan bug yang benar-benar terjadi di produksi. Sementara `class` akan kamu temui langsung begitu masuk backend di track Node.js.",
+        },
         {
           kind: "step",
           id: "js-8-1",
@@ -2384,6 +3351,83 @@ export const javascriptTrack: Track = {
             "function pengali(faktor) {\n  return (angka) => angka * faktor;\n}\n\nconst kaliTiga = pengali(3);\nconsole.log(kaliTiga(5));",
         },
         {
+          kind: "step",
+          id: "js-8-6",
+          title: "Getter, Setter, dan static",
+          explanation:
+            "Tiga fitur class ini menyelesaikan masalah yang berbeda. **Getter** membuat nilai yang dihitung dari properti lain terasa seperti properti biasa: ditulis `get hargaAkhir()` di dalam class, dipakai `produk.hargaAkhir` **tanpa tanda kurung** — jadi saat rumusnya berubah, seluruh pemakainya tidak perlu diubah. **Setter** adalah tempat menaruh validasi di jalur masuk: `set stok(nilai)` dijalankan setiap kali seseorang menulis `produk.stok = -5`, sehingga nilai mustahil bisa ditolak di satu tempat alih-alih diperiksa di dua puluh tempat pemakaian. **`static`** menandai sesuatu yang milik **class-nya**, bukan milik tiap object — cocok untuk nilai tetap bersama seperti tarif pajak, atau fungsi pembantu yang tidak butuh data satu object tertentu, dan diaksesnya lewat nama class (`Produk.pajak`). Jebakan yang perlu diingat: getter tidak boleh menerima parameter, setter wajib menerima tepat satu, dan getter yang di dalamnya mengerjakan sesuatu yang berat atau mengubah data akan mengejutkan pemakainya — karena dari luar ia terlihat seperti sekadar membaca properti.",
+          example: {
+            code:
+              "class Lingkaran {\n" +
+              "  static PI = 3.14;              // milik class, bukan tiap object\n\n" +
+              "  constructor(radius) { this._radius = radius; }\n\n" +
+              "  get luas() {                   // dipakai TANPA tanda kurung\n" +
+              "    return Lingkaran.PI * this._radius ** 2;\n" +
+              "  }\n\n" +
+              "  set radius(nilai) {            // tempat validasi\n" +
+              "    if (nilai <= 0) throw new Error('Radius harus positif');\n" +
+              "    this._radius = nilai;\n" +
+              "  }\n" +
+              "}\n\n" +
+              "const c = new Lingkaran(10);\n" +
+              "console.log(c.luas);           // 314 — tanpa ()\n" +
+              "console.log(Lingkaran.PI);     // diakses lewat NAMA CLASS\n" +
+              "c.radius = 5;\n" +
+              "console.log(c.luas);",
+            output: "314\n3.14\n78.5",
+            note: "`c.luas` tanpa tanda kurung karena getter. Menulis `c.luas()` justru error: hasilnya angka, dan angka bukan fungsi.",
+          },
+          instruction:
+            "Lengkapi class `Karyawan` di editor. Tambahkan getter bernama `gajiTahunan` yang mengembalikan `gajiBulanan` dikali 12, lalu tambahkan properti static bernama `mataUang` bernilai `'IDR'`. Setelah itu cetak gaji tahunan sebuah karyawan dan nilai static-nya lewat nama class.",
+          starterCode:
+            "class Karyawan {\n" +
+            "  constructor(nama, gajiBulanan) {\n" +
+            "    this.nama = nama;\n" +
+            "    this.gajiBulanan = gajiBulanan;\n" +
+            "  }\n" +
+            "}\n\n" +
+            "const k = new Karyawan('Bimo', 8000000);\n",
+          language: "js",
+          tests: [
+            {
+              pattern:
+                "get\\s+gajiTahunan\\s*\\(\\s*\\)\\s*\\{[\\s\\S]*this\\s*\\.\\s*gajiBulanan\\s*\\*\\s*12",
+              message:
+                "Tulis `get gajiTahunan() { return this.gajiBulanan * 12; }` — getter tidak menerima parameter apa pun.",
+            },
+            {
+              pattern: "static\\s+mataUang\\s*=\\s*['\"]IDR['\"]",
+              message:
+                "Tambahkan `static mataUang = 'IDR';` di dalam class — properti static tidak memakai `this`.",
+            },
+            {
+              pattern: "console\\.log\\([\\s\\S]*k\\s*\\.\\s*gajiTahunan(?!\\s*\\()",
+              message:
+                "Cetak `k.gajiTahunan` TANPA tanda kurung. Getter dipakai seperti properti biasa; menambahkan `()` justru melempar error.",
+            },
+            {
+              pattern:
+                "console\\.log\\([\\s\\S]*Karyawan\\s*\\.\\s*mataUang",
+              message:
+                "Properti static diakses lewat nama class: `Karyawan.mataUang`, bukan `k.mataUang`.",
+            },
+          ],
+          solution:
+            "class Karyawan {\n" +
+            "  static mataUang = 'IDR';\n\n" +
+            "  constructor(nama, gajiBulanan) {\n" +
+            "    this.nama = nama;\n" +
+            "    this.gajiBulanan = gajiBulanan;\n" +
+            "  }\n\n" +
+            "  get gajiTahunan() {\n" +
+            "    return this.gajiBulanan * 12;\n" +
+            "  }\n" +
+            "}\n\n" +
+            "const k = new Karyawan('Bimo', 8000000);\n" +
+            "console.log(k.gajiTahunan);\n" +
+            "console.log(Karyawan.mataUang);",
+        },
+        {
           kind: "quiz",
           id: "js-8-kuis",
           title: "Kuis: OOP & Functional",
@@ -2457,6 +3501,21 @@ export const javascriptTrack: Track = {
               explanation:
                 "12. pengali(4) mengembalikan fungsi yang mengingat f = 4 (closure), lalu fungsi itu langsung dipanggil dengan 3 sehingga 3 × 4 = 12. Pola pemanggilan berantai seperti ini umum di library fungsional.",
             },
+            {
+              id: "q6",
+              type: "pilihan-ganda",
+              question:
+                "Kamu membuat 1.000 object dari sebuah class. Berapa salinan method-nya yang tersimpan di memori, dan kenapa?",
+              choices: [
+                "1.000 salinan — setiap object punya method-nya sendiri",
+                "Satu salinan, karena method tinggal di prototype dan semua object berbagi lewat prototype chain",
+                "Tidak ada; method dibuat ulang setiap kali dipanggil",
+                "Tergantung jumlah parameter method-nya",
+              ],
+              answerIndex: 1,
+              explanation:
+                "Method yang ditulis di dalam `class` disimpan sekali di `Kelas.prototype`, dan setiap object hanya menyimpan **tautan** ke sana. Saat kamu memanggil `obj.hitung()`, JavaScript mencari di object itu dulu, lalu naik ke prototype-nya — rantai pencarian itu bernama prototype chain. Mekanisme yang sama menjelaskan kenapa `[].map` bisa dipanggil padahal kamu tidak pernah menuliskannya: ia tinggal di `Array.prototype`. Sebaliknya, fungsi yang kamu tulis di dalam `constructor` memang digandakan per object.",
+            },
           ],
         },
       ],
@@ -2477,11 +3536,97 @@ export const javascriptTrack: Track = {
       ],
       items: [
         {
+          kind: "materi",
+          id: "js-9-m1",
+          title: "Browser API: Kemampuan yang Sudah Ada Tanpa Pustaka",
+          body:
+            "# Pengertian\n\n" +
+            "Browser bukan hanya penampil halaman. Ia menyediakan puluhan **API** siap pakai — menyimpan data, membaca alamat, mengamati posisi scroll, mengakses papan klip — dan semuanya bisa dipakai **tanpa memasang pustaka apa pun**.\n\n" +
+            "Modul ini penting karena satu alasan praktis: banyak pemula memasang pustaka pihak ketiga untuk pekerjaan yang sudah bisa dikerjakan browser dalam tiga baris. Itu menambah ukuran unduhan dan satu ketergantungan yang harus dirawat.\n\n" +
+            "## localStorage: Ingatan yang Bertahan\n\n" +
+            "```js\n" +
+            "localStorage.setItem('tema', 'gelap');            // simpan\n" +
+            "localStorage.getItem('tema');                     // baca -> 'gelap'\n" +
+            "localStorage.removeItem('tema');                  // hapus satu\n\n" +
+            "// object WAJIB diubah jadi teks lebih dulu\n" +
+            "localStorage.setItem('user', JSON.stringify(user));\n" +
+            "const user = JSON.parse(localStorage.getItem('user') ?? 'null');\n" +
+            "```\n\n" +
+            "| | `localStorage` | `sessionStorage` |\n" +
+            "|---|---|---|\n" +
+            "| Bertahan | sampai dihapus, meski browser ditutup | hanya selama tab itu terbuka |\n" +
+            "| Cakupan | per domain | per tab |\n\n" +
+            "Empat batas yang wajib kamu tahu: isinya **selalu teks** (angka `5` kembali sebagai `'5'`), kapasitasnya sekitar **5 MB**, ia **tidak aman** untuk data sensitif karena bisa dibaca siapa pun lewat DevTools maupun skrip lain di halaman yang sama, dan operasinya **sinkron** — menyimpan data besar berulang kali bisa membuat halaman tersendat. Untuk data terstruktur yang besar, IndexedDB pilihannya; untuk token sesi, cookie ber-`HttpOnly` jauh lebih tepat.\n\n" +
+            "> **Pola yang aman:** bungkus `JSON.parse` dengan `try/catch`. Satu nilai rusak di localStorage bisa menjatuhkan seluruh aplikasi setiap kali dibuka, dan pengguna tidak punya cara memperbaikinya sendiri.\n\n" +
+            "## URL dan URLSearchParams\n\n" +
+            "```js\n" +
+            "// alamat: /produk?kategori=kopi&halaman=2\n" +
+            "const p = new URLSearchParams(location.search);\n" +
+            "p.get('kategori');         // 'kopi'\n" +
+            "p.get('tidakAda');         // null\n" +
+            "p.set('halaman', '3');\n" +
+            "p.toString();              // 'kategori=kopi&halaman=3'  (otomatis di-encode)\n" +
+            "```\n\n" +
+            "Menyimpan keadaan tampilan — kata pencarian, filter, urutan, nomor halaman — di alamat URL punya keuntungan yang sering diremehkan: halamannya bisa **dibagikan dan di-bookmark**, dan tombol kembali browser bekerja seperti yang diharapkan pengguna. Jangan pernah menyusun query string dengan penggabungan teks sendiri; spasi dan karakter khusus akan merusaknya, sedangkan `URLSearchParams` menanganinya otomatis.\n\n" +
+            "## History API\n\n" +
+            "```js\n" +
+            "history.pushState({}, '', '?halaman=2');      // ganti alamat TANPA memuat ulang\n" +
+            "history.replaceState({}, '', '?halaman=2');   // ganti tanpa menambah riwayat\n" +
+            "window.addEventListener('popstate', ...);     // pengguna menekan tombol kembali\n" +
+            "```\n\n" +
+            "Inilah mekanisme di balik semua *single-page app*: alamat berubah, tombol kembali berfungsi, tapi halaman tidak dimuat ulang. Router React dan Next.js dibangun tepat di atas tiga baris ini.\n\n" +
+            "## Timer: setTimeout, setInterval, requestAnimationFrame\n\n" +
+            "| Alat | Untuk |\n" +
+            "|---|---|\n" +
+            "| `setTimeout` | menjalankan sekali setelah jeda |\n" +
+            "| `setInterval` | menjalankan berulang tiap jeda |\n" +
+            "| `requestAnimationFrame` | animasi — menyesuaikan diri dengan laju gambar layar |\n\n" +
+            "Untuk animasi, `requestAnimationFrame` hampir selalu lebih tepat daripada `setInterval`: ia berhenti sendiri saat tab tidak aktif (menghemat baterai) dan tidak pernah menggambar lebih cepat daripada kemampuan layar. Dan setiap timer yang kamu buat **wajib dibersihkan** dengan `clearTimeout`/`clearInterval` saat tidak lagi dibutuhkan — timer yang tertinggal terus berjalan di latar belakang dan itu penyebab umum kebocoran memori.\n\n" +
+            "## Debounce dan Throttle\n\n" +
+            "```js\n" +
+            "// debounce: tunggu sampai pengguna BERHENTI mengetik 400 ms\n" +
+            "let timer;\n" +
+            "input.addEventListener('input', (e) => {\n" +
+            "  clearTimeout(timer);                        // batalkan rencana sebelumnya\n" +
+            "  timer = setTimeout(() => cari(e.target.value), 400);\n" +
+            "});\n" +
+            "```\n\n" +
+            "Tanpa debounce, kotak pencarian mengirim satu permintaan **per ketikan** — sepuluh huruf berarti sepuluh permintaan, dan jawaban yang datang bisa saling menyalip sehingga hasil yang tampil bukan milik kata terakhir. Bedanya dengan *throttle*: debounce menunggu sampai kegiatannya berhenti (cocok untuk pencarian), throttle membatasi frekuensi maksimal (cocok untuk peristiwa scroll).\n\n" +
+            "## IntersectionObserver: Lazy Load dan Infinite Scroll\n\n" +
+            "```js\n" +
+            "const pengamat = new IntersectionObserver((entries) => {\n" +
+            "  for (const e of entries) {\n" +
+            "    if (e.isIntersecting) muatHalamanBerikutnya();\n" +
+            "  }\n" +
+            "});\n" +
+            "pengamat.observe(document.querySelector('#penanda-bawah'));\n" +
+            "```\n\n" +
+            "Cara lama mengerjakan ini adalah mendengarkan peristiwa `scroll` lalu menghitung posisi sendiri — berjalan puluhan kali per detik dan membuat halaman tersendat. `IntersectionObserver` melakukannya di luar jalur utama dan hanya memberi tahu saat status \"terlihat/tidak terlihat\" benar-benar berubah. Dipakai untuk memuat gambar saat mendekati layar, infinite scroll, dan menghitung bagian mana yang benar-benar dibaca pengunjung.\n\n" +
+            "## FormData, Clipboard, dan Geolocation\n\n" +
+            "```js\n" +
+            "const data = Object.fromEntries(new FormData(form));   // seluruh isi form jadi object\n" +
+            "await navigator.clipboard.writeText('disalin');        // butuh HTTPS + interaksi pengguna\n" +
+            "navigator.geolocation.getCurrentPosition(ok, gagal);   // memunculkan dialog izin\n" +
+            "```\n\n" +
+            "`FormData` membaca berdasarkan atribut `name`, jadi input tanpa `name` tidak akan pernah terbaca — dan ia satu-satunya cara mengirim berkas unggahan. Sementara Clipboard dan Geolocation adalah contoh API yang butuh **izin dan konteks aman**: keduanya hanya bekerja di HTTPS (localhost dihitung aman), dan Geolocation selalu memunculkan dialog yang bisa ditolak pengguna. Karena bisa ditolak, kodemu wajib menangani kasus gagalnya — bukan menganggap izin selalu diberikan.\n\n" +
+            "## Analogi Dunia Nyata\n\n" +
+            "Browser API itu seperti **fasilitas yang sudah terpasang di apartemen sewaan**: air panas, lift, tempat penyimpanan di basement. Banyak orang membeli dispenser sendiri (memasang pustaka) padahal keran air panasnya sudah ada. Mengetahui isi bangunanmu menghemat uang, tempat, dan perawatan.\n\n" +
+            "## Jebakan yang Sering Terjadi\n\n" +
+            "1. **Menyimpan object langsung ke localStorage.** Hasilnya teks `[object Object]`; pakai `JSON.stringify`.\n" +
+            "2. **`JSON.parse` tanpa `try/catch`.** Satu nilai rusak menjatuhkan aplikasi setiap kali dibuka.\n" +
+            "3. **Menyimpan token di localStorage.** Bisa dibaca skrip lain; cookie `HttpOnly` lebih tepat.\n" +
+            "4. **Lupa membersihkan timer.** Kebocoran memori dan pekerjaan yang terus berjalan tanpa terlihat.\n" +
+            "5. **Menyusun query string dengan penggabungan teks.** Pakai `URLSearchParams` agar aman ter-encode.\n" +
+            "6. **Menganggap izin selalu diberikan.** Clipboard dan Geolocation bisa ditolak.\n\n" +
+            "## Kaitan ke Dunia Kerja\n\n" +
+            "> **Kapan dipakai:** debounce pada kotak pencarian, filter yang tersimpan di URL, dan infinite scroll adalah tiga permintaan fitur yang sangat sering datang. Menyelesaikannya dengan API bawaan — bukan dengan memasang pustaka — adalah salah satu hal yang membuat pekerjaanmu terlihat matang saat direview.",
+        },
+        {
           kind: "step",
           id: "js-9-1",
           title: "localStorage",
           explanation:
-            "`localStorage` menyimpan data di browser secara permanen (sampai dihapus). Batas pentingnya: **hanya bisa menyimpan string**, jadi object harus dilewatkan `JSON.stringify` saat menyimpan dan `JSON.parse` saat membaca. Jangan pernah menyimpan token sensitif di sini — bisa dibaca skrip apa pun di halaman (risiko XSS).",
+            "`localStorage` menyimpan data di browser secara permanen (sampai dihapus). Batas pentingnya: **hanya bisa menyimpan string**, jadi object harus dilewatkan `JSON.stringify` saat menyimpan dan `JSON.parse` saat membaca. Jangan pernah menyimpan token sensitif di sini — bisa dibaca skrip apa pun di halaman (risiko XSS), dan untuk token sesi cookie ber-`HttpOnly` jauh lebih tepat. Dua batas lain yang perlu kamu tahu: kapasitasnya sekitar 5 MB per domain, dan operasinya berjalan **sinkron** sehingga menyimpan data besar berulang kali bisa membuat halaman tersendat. Bungkus juga `JSON.parse` dengan `try/catch`, karena satu nilai rusak di localStorage akan menjatuhkan aplikasimu setiap kali dibuka — dan pengguna tidak punya cara memperbaikinya sendiri.",
           example: {
             code: "// string biasa: langsung bisa\nlocalStorage.setItem('nama', 'Bimo');\nconsole.log(localStorage.getItem('nama'));\n\n// ❌ object tanpa stringify\nlocalStorage.setItem('a', { x: 1 });\nconsole.log(localStorage.getItem('a'));\n\n// ✅ object dengan stringify + parse\nlocalStorage.setItem('b', JSON.stringify({ x: 1 }));\nconsole.log(JSON.parse(localStorage.getItem('b')).x);",
             output: "Bimo\n[object Object]\n1",
@@ -2586,7 +3731,7 @@ export const javascriptTrack: Track = {
           id: "js-9-4",
           title: "FormData",
           explanation:
-            "`FormData` mengumpulkan seluruh nilai form sekaligus berdasarkan atribut `name` — jauh lebih ringkas daripada membaca setiap input satu per satu. Ia juga wajib dipakai untuk upload file. `Object.fromEntries` mengubahnya menjadi object biasa yang siap dikirim sebagai JSON.",
+            "`FormData` mengumpulkan seluruh nilai form sekaligus berdasarkan atribut `name` — jauh lebih ringkas daripada membaca setiap input satu per satu. Ia juga wajib dipakai untuk upload file. `Object.fromEntries` mengubahnya menjadi object biasa yang siap dikirim sebagai JSON. Konsekuensi dari cara kerjanya: input **tanpa atribut `name`** tidak akan pernah terbaca, dan itu penyebab \"kok fieldku hilang\" yang paling sering. Perlu diketahui juga bahwa `fromEntries` hanya mengambil nilai terakhir bila ada beberapa field bernama sama — untuk checkbox berkelompok pakai `fd.getAll('nama')` supaya semuanya terambil.",
           example: {
             code: "const f = document.querySelector('form');\n\nf.addEventListener('submit', (e) => {\n  e.preventDefault();\n\n  const fd = new FormData(f);\n  console.log(fd.get('email'));          // ambil satu field\n  console.log(Object.fromEntries(fd));   // jadikan object utuh\n});",
             output:
@@ -2696,6 +3841,21 @@ export const javascriptTrack: Track = {
               explanation:
                 "Keduanya punya API yang sama, hanya masa hidupnya berbeda: sessionStorage per-tab dan hilang saat tab ditutup, localStorage bertahan lintas sesi. Keduanya sama-sama hanya menyimpan string.",
             },
+            {
+              id: "q6",
+              type: "pilihan-ganda",
+              question:
+                "Kamu membuat infinite scroll. Halaman jadi tersendat karena kode menghitung posisi di setiap peristiwa scroll. Apa penggantinya?",
+              choices: [
+                "setInterval yang memeriksa posisi setiap 100 ms",
+                "IntersectionObserver, yang memberi tahu hanya saat elemen benar-benar masuk atau keluar layar",
+                "requestAnimationFrame di dalam pendengar scroll",
+                "Menambah debounce pada pendengar scroll",
+              ],
+              answerIndex: 1,
+              explanation:
+                "Peristiwa `scroll` bisa terpicu puluhan kali per detik, dan menghitung posisi di dalamnya memaksa browser mengukur ulang tata letak setiap kali. `IntersectionObserver` mengerjakannya di luar jalur utama dan hanya memanggil kodemu saat status \"terlihat/tidak terlihat\" benar-benar berubah — dipakai untuk infinite scroll, lazy load gambar, dan mengukur bagian mana yang benar-benar dibaca. Debounce menggoda karena juga mengurangi frekuensi, tapi ia hanya menunda gejalanya; perhitungan posisinya tetap ada.",
+            },
           ],
         },
       ],
@@ -2715,6 +3875,96 @@ export const javascriptTrack: Track = {
         "TDD ringan: test dulu untuk fungsi murni",
       ],
       items: [
+        {
+          kind: "materi",
+          id: "js-10-m1",
+          title: "Testing: Menulis Kode yang Berani Kamu Ubah",
+          body:
+            "# Pengertian\n\n" +
+            "**Test** adalah kode yang memeriksa kode lain. Bukan untuk membuktikan programmu sempurna — itu tidak mungkin — melainkan untuk menjawab satu pertanyaan yang muncul setiap hari di pekerjaan nyata: *\"kalau aku mengubah bagian ini, apakah ada yang rusak di tempat lain?\"*\n\n" +
+            "Tanpa test, jawabannya hanya bisa didapat dengan mengklik-klik seluruh aplikasi secara manual. Setelah aplikasinya cukup besar, tidak ada yang benar-benar melakukannya — dan di situlah orang mulai takut menyentuh kode lama.\n\n" +
+            "## Kenapa Test Ada\n\n" +
+            "```text\n" +
+            "REGRESI     bug yang muncul kembali di bagian yang tadinya sudah benar.\n" +
+            "            Test menangkapnya dalam hitungan detik, bukan setelah\n" +
+            "            dilaporkan pengguna.\n" +
+            "\n" +
+            "REFACTOR    memperbaiki bentuk kode tanpa mengubah perilakunya.\n" +
+            "            Mustahil dilakukan dengan tenang tanpa test — kamu tidak\n" +
+            "            punya cara membuktikan perilakunya masih sama.\n" +
+            "```\n\n" +
+            "Manfaat ketiga yang jarang disebut: test adalah **dokumentasi yang tidak bisa basi**. Membaca nama-nama test sebuah fungsi memberimu daftar perilaku yang dijaminnya — dan berbeda dari komentar, ia gagal kalau sudah tidak sesuai kenyataan.\n\n" +
+            "## Anatomi Sebuah Test\n\n" +
+            "```js\n" +
+            "describe('hitungTotal', () => {              // kelompok test untuk satu unit\n" +
+            "  it('menjumlahkan harga semua item', () => { // satu perilaku, satu test\n" +
+            "    const hasil = hitungTotal([1000, 2000]);  // jalankan\n" +
+            "    expect(hasil).toBe(3000);                 // periksa\n" +
+            "  });\n" +
+            "});\n" +
+            "```\n\n" +
+            "Namanya berbeda antar alat (`it` atau `test`; Vitest, Jest, dan Node test runner semuanya memakai bentuk ini), tapi susunannya sama di mana pun. Tulis nama test sebagai **kalimat perilaku** — \"mengembalikan 0 untuk daftar kosong\" — bukan \"test 1\". Saat suatu hari test itu gagal di pipeline, namanya itulah satu-satunya petunjuk yang langsung terbaca.\n\n" +
+            "## Arrange – Act – Assert\n\n" +
+            "```js\n" +
+            "it('memberi diskon 10% untuk member', () => {\n" +
+            "  const pesanan = { total: 100000, member: true };   // ARRANGE  siapkan\n" +
+            "  const hasil = hitungDiskon(pesanan);               // ACT      kerjakan\n" +
+            "  expect(hasil).toBe(90000);                         // ASSERT   periksa\n" +
+            "});\n" +
+            "```\n\n" +
+            "Tiga bagian, dan urutannya selalu sama. Kalau satu test punya beberapa blok Act dan Assert yang bergantian, itu tanda ia sedang menguji lebih dari satu perilaku — pecah menjadi beberapa test. Test yang gagal harus langsung memberi tahu **apa** yang rusak; test yang menguji lima hal sekaligus hanya memberi tahu bahwa \"ada sesuatu\".\n\n" +
+            "## Matcher yang Paling Sering Dipakai\n\n" +
+            "| Matcher | Untuk |\n" +
+            "|---|---|\n" +
+            "| `toBe(x)` | nilai primitif — angka, teks, boolean |\n" +
+            "| `toEqual(x)` | object dan array — membandingkan **isinya** |\n" +
+            "| `toContain(x)` | satu elemen ada di dalam array atau teks |\n" +
+            "| `toThrow()` | fungsi memang melempar error |\n" +
+            "| `toBeNull()` / `toBeUndefined()` | nilai kosong yang spesifik |\n\n" +
+            "> **Beda `toBe` dan `toEqual` adalah kesalahan pemula nomor satu di modul ini,** dan penyebabnya sudah kamu pelajari: object dibandingkan berdasarkan **alamat**, bukan isi. `expect({a: 1}).toBe({a: 1})` **gagal** karena keduanya dua object berbeda yang kebetulan isinya sama. Untuk object dan array, pakai `toEqual`.\n\n" +
+            "Untuk `toThrow`, ingat satu hal: yang dikirim harus **fungsi yang belum dijalankan** — `expect(() => bagi(1, 0)).toThrow()`. Menulis `expect(bagi(1, 0))` membuat error-nya terjadi sebelum `expect` bekerja, dan test-nya gagal karena alasan yang salah.\n\n" +
+            "## Menguji Edge Case\n\n" +
+            "Test untuk masukan normal jarang menemukan bug; bug hidup di tepi. Daftar periksa yang bisa kamu pakai untuk fungsi apa pun:\n\n" +
+            "```text\n" +
+            "- daftar kosong  []           -> apakah hasilnya 0, atau malah error?\n" +
+            "- satu elemen                 -> apakah rata-ratanya benar?\n" +
+            "- angka nol dan negatif       -> apakah diskon negatif ditolak?\n" +
+            "- null / undefined            -> apakah dilempar error yang jelas?\n" +
+            "- teks bukan angka  '12abc'   -> apakah dikonversi diam-diam jadi NaN?\n" +
+            "- nilai sangat besar          -> apakah masih masuk akal?\n" +
+            "```\n\n" +
+            "Kebiasaan yang membedakan: saat sebuah bug ditemukan di produksi, **tulis dulu test yang menangkap bug itu**, baru perbaiki kodenya. Dengan begitu bug yang sama tidak akan pernah kembali tanpa diketahui.\n\n" +
+            "## Mock: Mengganti Bagian yang Tidak Ingin Kamu Jalankan\n\n" +
+            "```js\n" +
+            "const kirimEmail = vi.fn();                  // fungsi palsu yang mencatat pemanggilan\n" +
+            "\n" +
+            "daftarkanUser({ email: 'a@b.c' }, kirimEmail);\n" +
+            "\n" +
+            "expect(kirimEmail).toHaveBeenCalledTimes(1);\n" +
+            "expect(kirimEmail).toHaveBeenCalledWith('a@b.c');\n" +
+            "```\n\n" +
+            "Mock dipakai untuk hal yang **lambat, berbayar, atau di luar kendalimu**: mengirim email sungguhan, memanggil API pihak ketiga, menulis ke database. Tapi ada garis yang perlu dijaga: kalau sebuah test mengganti hampir semua bagiannya dengan mock, yang kamu uji tinggal mock-nya sendiri — bukan kodemu. Aturan praktisnya: **fungsi murni tidak butuh mock sama sekali**, dan itu satu alasan lagi untuk menulis logika dalam bentuk fungsi murni.\n\n" +
+            "## TDD Ringan\n\n" +
+            "```text\n" +
+            "1. tulis test yang GAGAL      (perilaku yang kamu inginkan, belum ada kodenya)\n" +
+            "2. tulis kode paling sederhana sampai test itu LULUS\n" +
+            "3. rapikan kodenya, test tetap lulus\n" +
+            "```\n\n" +
+            "Kamu tidak harus menerapkannya untuk semua hal. Tapi untuk **fungsi murni** — menghitung harga, memvalidasi format, mengubah bentuk data — urutan ini justru terasa lebih cepat, karena kamu memikirkan perilaku yang diinginkan lebih dulu sebelum tenggelam dalam detail implementasi.\n\n" +
+            "## Analogi Dunia Nyata\n\n" +
+            "Test itu seperti **sabuk pengaman**, bukan seperti asuransi. Asuransi membayar setelah kecelakaan; sabuk pengaman mengubah cara kamu mengemudi — kamu berani menyalip karena tahu ada pengaman. Efek terbesar test bukan pada bug yang tertangkap, tapi pada **keberanian mengubah kode**. Tim tanpa test cenderung menumpuk kode baru di samping kode lama, karena tidak ada yang berani menyentuh yang sudah jalan.\n\n" +
+            "## Jebakan yang Sering Terjadi\n\n" +
+            "1. **`toBe` untuk object atau array.** Pakai `toEqual`.\n" +
+            "2. **`expect(fn())` untuk `toThrow`.** Kirim fungsinya, jangan panggil: `expect(() => fn())`.\n" +
+            "3. **Nama test tidak deskriptif.** \"test 1\" tidak memberi tahu apa pun saat gagal.\n" +
+            "4. **Satu test menguji lima perilaku.** Saat gagal, kamu tidak tahu yang mana.\n" +
+            "5. **Mock berlebihan.** Yang teruji tinggal mock-nya.\n" +
+            "6. **Hanya menguji jalur yang berhasil.** Bug hidup di edge case, bukan di jalur normal.\n\n" +
+            "## Catatan tentang Panel Preview\n\n" +
+            "> Latihan di modul ini menuliskan **bentuk** test yang benar. Panel preview BiLearn tidak menjalankan test runner, jadi tidak akan ada laporan lulus/gagal — yang menilai jawabanmu adalah tombol Jalankan Tes. Untuk mempraktikkannya sungguhan di komputermu, pasang Vitest (`npm i -D vitest`) lalu jalankan `npx vitest`.\n\n" +
+            "## Kaitan ke Dunia Kerja\n\n" +
+            "> **Kapan dipakai:** di banyak perusahaan, *pull request* tanpa test tidak akan disetujui, dan pipeline CI menjalankan seluruh test sebelum kode boleh naik ke produksi. Kamu tidak perlu menjadi ahli — cukup bisa menulis test untuk fungsi murni, memahami perbedaan `toBe` dan `toEqual`, dan tahu kapan mock berlebihan. Itu sudah di atas rata-rata pelamar tingkat awal.",
+        },
         {
           kind: "step",
           id: "js-10-1",
@@ -2957,6 +4207,21 @@ export const javascriptTrack: Track = {
               answerIndex: 1,
               explanation:
                 "Arrange (siapkan), Act (jalankan), Assert (periksa). Memisahkan ketiganya secara visual membuat test langsung terbaca — saat gagal, kamu tahu di bagian mana masalahnya tanpa membaca ulang seluruh test.",
+            },
+            {
+              id: "q6",
+              type: "pilihan-ganda",
+              question:
+                "Fungsi `daftarkanUser` mengirim email sungguhan. Kamu ingin mengujinya tanpa benar-benar mengirim email. Apa yang kamu pakai, dan apa batasnya?",
+              choices: [
+                "Mock (vi.fn) untuk fungsi pengirim email — tapi kalau hampir semua bagian di-mock, yang teruji tinggal mock-nya sendiri",
+                "Jalankan saja; satu email percobaan tidak masalah",
+                "Hapus bagian pengiriman email dari fungsinya",
+                "Bungkus seluruh test dengan try/catch",
+              ],
+              answerIndex: 0,
+              explanation:
+                "Mock adalah fungsi palsu yang mencatat pemanggilannya, sehingga kamu bisa memeriksa `toHaveBeenCalledWith(...)` tanpa menyentuh dunia luar. Ia tepat untuk hal yang lambat, berbayar, atau di luar kendalimu — email, API pihak ketiga, database. Batasnya itu yang sering dilupakan: test yang seluruh bagiannya di-mock tidak lagi menguji kodemu. Karena itu logika inti sebaiknya ditulis sebagai fungsi murni, yang justru **tidak butuh mock sama sekali**.",
             },
           ],
         },
