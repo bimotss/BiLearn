@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import "./globals.css";
 
@@ -6,6 +7,10 @@ export const metadata: Metadata = {
   title: "BiLearn — Belajar Coding yang Kepake di Dunia Kerja",
   description:
     "Platform belajar coding interaktif gaya freeCodeCamp. Kurikulum berbasis lowongan kerja nyata Indonesia. Semua akses terbuka, gratis.",
+  icons: {
+    icon: "/logo.svg",
+    apple: "/logo.jpg",
+  },
 };
 
 export default function RootLayout({
@@ -18,7 +23,8 @@ export default function RootLayout({
       <body className="flex min-h-full flex-col bg-white text-neutral-900">
         <header className="border-b border-neutral-200">
           <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-            <Link href="/" className="text-xl font-bold">
+            <Link href="/" className="flex items-center gap-2 text-xl font-bold">
+              <Image src="/logo.svg" alt="BiLearn logo" width={32} height={32} priority />
               Bi<span className="text-gold-700">Learn</span>
             </Link>
             <div className="flex gap-6 text-sm font-medium text-neutral-600">
