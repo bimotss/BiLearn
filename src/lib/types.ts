@@ -44,13 +44,30 @@ export interface Materi {
   body: string;
 }
 
-export interface StepChoice {
+/**
+ * Varian "susun kode": user tidak mengetik, ia merangkai kode dari kepingan
+ * yang disediakan. Hasil rangkaiannya adalah kode sungguhan, jadi dinilai
+ * memakai `tests` step yang sama dengan mode ngetik — bukan mesin penilai
+ * kedua yang bisa bergeser sendiri.
+ */
+export interface StepSusunKode {
   /** Pertanyaan. Kalau kosong, UI memakai `instruction`. */
   question?: string;
-  /** 3–4 pilihan. Boleh berisi potongan kode. */
-  choices: string[];
-  answerIndex: number;
-  /** Kenapa benar DAN kenapa distraktornya menggoda. Wajib. */
+  /**
+   * Kepingan yang BENAR, ditulis dalam urutan yang benar. Digabung dengan
+   * `pemisah`, hasilnya wajib lolos seluruh `tests` step ini (dijaga skrip).
+   */
+  potongan: string[];
+  /**
+   * Kepingan pengecoh. WAJIB diambil dari kesalahan nyata (`href` alih-alih
+   * `src`, `</img>`, tag penutup tanpa garis miring), bukan dikarang atau
+   * dipotong-potong dari solusi. Skrip verifikasi menolak pengecoh yang
+   * ternyata tidak membuat satu tes pun gagal.
+   */
+  pengecoh: string[];
+  /** Perekat antar kepingan: " " (default) untuk satu baris, "\n" untuk banyak baris. */
+  pemisah?: string;
+  /** Kenapa susunannya begitu DAN kenapa pengecohnya menggoda. Wajib. */
   explanation: string;
 }
 
@@ -91,8 +108,8 @@ export interface Step {
   tests: StepTest[];
   /** Contoh solusi — ditampilkan jika user memilih "Lihat solusi" */
   solution: string;
-  /** Varian pilihan ganda, dipakai saat user memilih mode "pilihan-ganda". */
-  pilihanGanda?: StepChoice;
+  /** Varian susun kode, dipakai saat user memilih mode "pilihan-ganda". */
+  susunKode?: StepSusunKode;
 }
 
 /** Contoh kerja yang ditampilkan sebelum user mengerjakan tugas */

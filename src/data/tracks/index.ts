@@ -58,7 +58,7 @@ export function itemTersediaDiMode(
 ): boolean {
   if (item.kind !== "step") return true;
   if (mode === "koding") return true;
-  return Boolean(item.pilihanGanda);
+  return Boolean(item.susunKode);
 }
 
 /** Item yang menjadi target progress untuk sebuah mode. */

@@ -24,6 +24,25 @@ const instalasiAllowlist = new Set<string>([
   // itu berarti menyembunyikan pelanggaran aturan #1, bukan menyelesaikannya.
 ]);
 
+/** Jarak edit Levenshtein — dipakai mencari potongan yang paling mirip. */
+function jarakEdit(a: string, b: string): number {
+  const baris = Array.from({ length: b.length + 1 }, (_, i) => i);
+  for (let i = 1; i <= a.length; i++) {
+    let sebelumnya = baris[0];
+    baris[0] = i;
+    for (let j = 1; j <= b.length; j++) {
+      const simpan = baris[j];
+      baris[j] = Math.min(
+        baris[j] + 1,
+        baris[j - 1] + 1,
+        sebelumnya + (a[i - 1] === b[j - 1] ? 0 : 1)
+      );
+      sebelumnya = simpan;
+    }
+  }
+  return baris[b.length];
+}
+
 function lapor(pesan: string) {
   console.log(`❌ ${pesan}`);
   masalah++;
@@ -325,74 +344,116 @@ for (const track of tracks) {
           );
         }
 
-        // 5. Aturan keras untuk pilihanGanda
-        if (s.pilihanGanda) {
-          const pg = s.pilihanGanda;
+        // 5. Aturan keras untuk susunKode (mode "susun kode")
+        if (s.susunKode) {
+          const sk = s.susunKode;
+          const pemisah = sk.pemisah ?? " ";
+          const potongan = sk.potongan ?? [];
+          const pengecoh = sk.pengecoh ?? [];
 
-          // a. choices berjumlah 3-4, tidak duplikat
-          if (!pg.choices || pg.choices.length < 3 || pg.choices.length > 4) {
+          // a. Jumlah kepingan masuk akal
+          if (potongan.length < 2) {
             lapor(
-              `pilihanGanda.choices harus berjumlah 3–4: ${s.id}`
+              `susunKode.potongan minimal 2 keping (${potongan.length}): ${s.id}`
             );
           }
-          const normChoices = (pg.choices || []).map((c) =>
-            c.trim().toLowerCase().replace(/\s+/g, " ")
-          );
-          if (new Set(normChoices).size !== normChoices.length) {
+          if (pengecoh.length < 2) {
             lapor(
-              `pilihanGanda.choices mengandung opsi duplikat: ${s.id}`
+              `susunKode.pengecoh minimal 2 keping (${pengecoh.length}): ${s.id}`
             );
           }
-
-          // b. answerIndex di dalam rentang
-          if (
-            typeof pg.answerIndex !== "number" ||
-            pg.answerIndex < 0 ||
-            pg.answerIndex >= (pg.choices?.length ?? 0)
-          ) {
+          if (potongan.length + pengecoh.length > 12) {
             lapor(
-              `pilihanGanda.answerIndex di luar rentang: ${s.id}`
+              `susunKode total keping ${potongan.length + pengecoh.length} (maksimal 12 — lebih dari itu jadi tebak-tebakan): ${s.id}`
             );
           }
 
-          // c. explanation ada, minimal 200 karakter, dan memuat kata kunci penjelasan pengecoh
-          const pgExp = pg.explanation?.trim() ?? "";
-          if (!pgExp) {
-            lapor(`pilihanGanda.explanation kosong: ${s.id}`);
+          // b. Pengecoh tidak boleh kembar dengan potongan atau sesamanya.
+          //    Potongan BOLEH berulang: daftar bersarang memang butuh dua <ul>.
+          // Sengaja PEKA huruf besar-kecil: di kode, `Index` dan `index`
+          // adalah dua hal berbeda, dan itu justru sering jadi bahan pengecoh.
+          const norm = (t: string) => t.trim().replace(/\s+/g, " ");
+          const setPotongan = new Set(potongan.map(norm));
+          for (const p of pengecoh) {
+            if (setPotongan.has(norm(p))) {
+              lapor(
+                `pengecoh susunKode "${p}" sama dengan salah satu potongan benar (soal jadi ambigu): ${s.id}`
+              );
+            }
+          }
+          const normPengecoh = pengecoh.map(norm);
+          if (new Set(normPengecoh).size !== normPengecoh.length) {
+            lapor(`susunKode.pengecoh memuat keping kembar: ${s.id}`);
+          }
+          if ([...potongan, ...pengecoh].some((p) => !p.trim())) {
+            lapor(`susunKode memuat keping kosong: ${s.id}`);
+          }
+
+          // c. ATURAN INTI: susunan benar WAJIB lolos seluruh tes step ini.
+          //    Tanpa ini, soal bisa saja tidak punya jawaban — dan itu baru
+          //    ketahuan setelah user mentok, bukan saat verifikasi.
+          const kodeBenar = potongan.join(pemisah);
+          const gagal = (s.tests ?? []).filter((t) => !lulus(t, kodeBenar));
+          if (gagal.length > 0) {
+            lapor(
+              `susunan benar susunKode GAGAL ${gagal.length} tes step-nya sendiri ("${kodeBenar}"): ${s.id}`
+            );
+          }
+
+          // d. Pengecoh tidak boleh berupa potongan yang sebenarnya ada di
+          //    dalam solusi asli — itu bukan pengecoh, itu jawaban.
+          const solusiNorm = norm(s.solution ?? "");
+          for (const p of pengecoh) {
+            if (norm(p).length >= 4 && solusiNorm.includes(norm(p))) {
+              lapor(
+                `pengecoh susunKode "${p}" muncul di dalam solution (berarti ia benar, bukan pengecoh): ${s.id}`
+              );
+            }
+          }
+
+          // e. ATURAN INTI: pengecoh harus benar-benar merusak jawaban.
+          //
+          //    Diuji dengan menukarnya dengan potongan yang PALING MIRIP —
+          //    karena di situlah user akan tergoda memakainya. Kalau semua tes
+          //    tetap lulus, pengecoh itu sebenarnya jawaban yang sah juga
+          //    (mis. beda tanda kutip saja), dan soalnya jadi menyesatkan.
+          if (gagal.length === 0 && potongan.length > 0) {
+            for (const peng of pengecoh) {
+              let terdekat = 0;
+              let jarakMin = Infinity;
+              potongan.forEach((p, i) => {
+                const d = jarakEdit(p, peng);
+                if (d < jarakMin) {
+                  jarakMin = d;
+                  terdekat = i;
+                }
+              });
+              const variasi = [...potongan];
+              variasi[terdekat] = peng;
+              const teks = variasi.join(pemisah);
+              if ((s.tests ?? []).every((t) => lulus(t, teks))) {
+                lapor(
+                  `pengecoh susunKode "${peng}" tidak merusak apa pun saat menggantikan "${potongan[terdekat]}" — berarti ia jawaban yang sah juga: ${s.id}`
+                );
+              }
+            }
+          }
+
+          // e. explanation wajib, minimal 200 karakter, menjelaskan pengecoh
+          const skExp = sk.explanation?.trim() ?? "";
+          if (!skExp) {
+            lapor(`susunKode.explanation kosong: ${s.id}`);
           } else {
-            if (pgExp.length < 200) {
+            if (skExp.length < 200) {
               lapor(
-                `pilihanGanda.explanation terlalu pendek (${pgExp.length} karakter, minimal 200): ${s.id}`
+                `susunKode.explanation terlalu pendek (${skExp.length} karakter, minimal 200): ${s.id}`
               );
             }
-            if (!/menggoda|sering|keliru|jebakan/i.test(pgExp)) {
+            if (!/menggoda|sering|keliru|jebakan/i.test(skExp)) {
               lapor(
-                `pilihanGanda.explanation tidak menjelaskan pengecoh (harus memuat kata "menggoda", "sering", "keliru", atau "jebakan"): ${s.id}`
+                `susunKode.explanation tidak menjelaskan pengecoh (harus memuat kata "menggoda", "sering", "keliru", atau "jebakan"): ${s.id}`
               );
             }
-          }
-
-          // d. Tidak ada pilihan yang berisi "semua benar", "semua salah", etc.
-          for (const c of pg.choices || []) {
-            if (
-              /semua benar|semua salah|tidak ada yang benar|bukan salah satu di atas/i.test(
-                c
-              )
-            ) {
-              lapor(
-                `pilihanGanda.choices memuat opsi dilarang ("${c}"): ${s.id}`
-              );
-            }
-          }
-
-          // e. question/instruction tidak boleh sama persis dengan salah satu choices
-          const qText = (pg.question?.trim() || s.instruction.trim())
-            .toLowerCase()
-            .replace(/\s+/g, " ");
-          if (normChoices.includes(qText)) {
-            lapor(
-              `pilihanGanda.question (atau instruction) tidak boleh sama persis dengan salah satu choices: ${s.id}`
-            );
           }
         }
       } else {
@@ -438,38 +499,22 @@ for (const track of tracks) {
       }
     }
 
-    // g. Per modul yang punya >=4 step ber-pilihanGanda: answerIndex tidak boleh bernilai sama semua
-    const modChoiceSteps = modul.items.filter(
-      (i) => i.kind === "step" && Boolean((i as Step).pilihanGanda)
-    ) as Step[];
-    if (modChoiceSteps.length >= 4) {
-      const firstIdx = modChoiceSteps[0].pilihanGanda!.answerIndex;
-      if (modChoiceSteps.every((s) => s.pilihanGanda!.answerIndex === firstIdx)) {
-        lapor(
-          `answerIndex pilihanGanda di modul bernilai sama semua (${firstIdx}): ${track.slug}/${modul.slug}`
-        );
-      }
-    }
   }
 
-  // f. Per track: jawaban benar tidak boleh menjadi pilihan terpanjang pada > 60% step ber-pilihanGanda
-  const trackChoiceSteps = track.modules
+  // f. Per track: kolam kepingan tidak boleh selalu berisi seluruh jawaban tanpa
+  //    pengecoh yang berarti. Kalau pengecohnya cuma 2 di semua step, mode ini
+  //    berubah jadi "pakai semua keping" — bisa diselesaikan tanpa berpikir.
+  const trackSusun = track.modules
     .flatMap((m) => m.items)
-    .filter((i) => i.kind === "step" && Boolean((i as Step).pilihanGanda)) as Step[];
-  if (trackChoiceSteps.length > 0) {
-    let longestCount = 0;
-    for (const cs of trackChoiceSteps) {
-      const pg = cs.pilihanGanda!;
-      const maxLen = Math.max(...pg.choices.map((c) => c.length));
-      const ansLen = pg.choices[pg.answerIndex]?.length ?? 0;
-      if (ansLen === maxLen) {
-        longestCount++;
-      }
-    }
-    const ratio = longestCount / trackChoiceSteps.length;
-    if (ratio > 0.6) {
+    .filter((i) => i.kind === "step" && Boolean((i as Step).susunKode)) as Step[];
+  if (trackSusun.length >= 5) {
+    const semuaKepingDipakai = trackSusun.filter((cs) => {
+      const sk = cs.susunKode!;
+      return sk.pengecoh.length === 0;
+    }).length;
+    if (semuaKepingDipakai > 0) {
       lapor(
-        `jawaban benar pilihanGanda menjadi pilihan terpanjang pada ${(ratio * 100).toFixed(1)}% step (>60%): ${track.slug}`
+        `${semuaKepingDipakai} step susunKode tanpa pengecoh sama sekali: ${track.slug}`
       );
     }
   }
@@ -482,11 +527,11 @@ for (const track of tracks) {
   const m = items.filter((i) => i.kind === "materi").length;
   const s = items.filter((i) => i.kind === "step").length;
   const pgSteps = items.filter(
-    (i) => i.kind === "step" && Boolean((i as Step).pilihanGanda)
+    (i) => i.kind === "step" && Boolean((i as Step).susunKode)
   ).length;
   const k = items.filter((i) => i.kind === "quiz").length;
   const status = items.length === 0 ? "⬜ kosong" : "✅";
-  const pgInfo = pgSteps > 0 ? ` (${pgSteps} punya mode pilihan ganda)` : "";
+  const pgInfo = pgSteps > 0 ? ` (${pgSteps} punya mode susun kode)` : "";
   console.log(
     `${status} ${track.title.padEnd(28)} ${m} materi, ${String(s).padStart(3)} step${pgInfo}, ${k} kuis  (${track.modules.length} modul)`
   );

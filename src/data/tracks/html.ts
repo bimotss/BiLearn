@@ -114,16 +114,21 @@ export const htmlTrack: Track = {
             },
           ],
           solution: "index.html",
-          pilihanGanda: {
-            question: "Ketika kamu membuat halaman utama sebuah situs, nama berkas mana yang paling tepat digunakan agar otomatis dibuka oleh server web?",
-            choices: [
-              "home.html",
-              "index.html",
-              "index.txt",
-              "Halaman-Utama.html",
+          susunKode: {
+            question:
+              "Rangkai nama berkas untuk halaman utama situsmu, lengkap dengan ekstensinya.",
+            potongan: [
+              "index",
+              ".html",
             ],
-            answerIndex: 1,
-            explanation: "`index.html` adalah nama standar yang diperlakukan istimewa oleh server web ketika alamat dibuka tanpa menyebut nama berkas. Pilihan `home.html` sering keliru dianggap sebagai nama default karena artinya rumah, padahal server tidak mengenalinya secara otomatis. Pilihan `index.txt` juga menggoda bagi pemula yang lupa mengubah ekstensi berkas, sehingga browser membukanya sebagai teks biasa. Pilihan `Halaman-Utama.html` mengandung huruf besar dan spasi yang berisiko memicu salah ketik.",
+            pengecoh: [
+              "home",
+              ".txt",
+              "Index",
+            ],
+            pemisah: "",
+            explanation:
+              "Nama `index.html` diperlakukan istimewa oleh hampir semua server web: ia yang disajikan saat alamat dibuka tanpa menyebut nama berkas. Keping `home` menggoda karena artinya \"rumah\" dan terdengar seperti halaman depan, padahal server tidak mengenalinya secara otomatis. Keping `.txt` adalah jebakan bagi yang lupa mengganti ekstensi — berkasnya terbuka sebagai teks biasa, bukan halaman web. Keping `Index` berhuruf besar: banyak server membedakan huruf besar-kecil, sehingga `Index.html` dianggap berkas yang lain sama sekali dan pengunjung mendapat halaman 404.",
           },
         },
         {
@@ -183,16 +188,28 @@ export const htmlTrack: Track = {
             "  <h1>Bimo Aresdaffa</h1>\n" +
             "</body>\n" +
             "</html>",
-          pilihanGanda: {
-            question: "Di dalam struktur dokumen HTML utuh, di manakah posisi yang tepat untuk meletakkan tag `<title>`?",
-            choices: [
-              "Di dalam tag `<body>` agar judulnya muncul di tengah halaman web",
-              "Di dalam tag `<head>` sebagai keterangan tentang judul tab browser",
-              "Di luar tag `<html>` supaya dibaca paling awal oleh mesin pencari",
-              "Di dalam tag `<!DOCTYPE html>` sebagai parameter konfigurasi dokumen",
+          susunKode: {
+            question:
+              "Susun kerangka utuh sebuah halaman profil: doctype, pembungkus dokumen berbahasa Indonesia, bagian keterangan berisi judul tab `Profil Bimo`, dan bagian isi berisi judul utama `Bimo Aresdaffa`.",
+            potongan: [
+              "<!DOCTYPE html>",
+              "<html lang=\"id\">",
+              "<head>",
+              "<title>Profil Bimo</title>",
+              "</head>",
+              "<body>",
+              "<h1>Bimo Aresdaffa</h1>",
+              "</body>",
+              "</html>",
             ],
-            answerIndex: 1,
-            explanation: "Tag `<title>` berfungsi menentukan teks yang muncul di tab browser dan merupakan bagian dari metadata dokumen, sehingga wajib diletakkan di dalam `<head>`. Pilihan menaruhnya di `<body>` sering keliru dipilih pemula yang mengira title adalah judul halaman yang terlihat di layar. Pilihan menaruhnya di luar `<html>` juga menggoda karena dikira metadata luar, padahal tag di luar html melanggar sintaks dasar HTML.",
+            pengecoh: [
+              "<html lang=\"en\">",
+              "<h1>Profil Bimo</h1>",
+              "<title>Bimo Aresdaffa</title>",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Urutannya selalu sama: doctype, lalu `<html>`, lalu `<head>` yang berisi keterangan, baru `<body>` yang berisi apa yang dilihat pengunjung. Keping `<html lang=\"en\">` menggoda karena hampir semua contoh di internet berbahasa Inggris, padahal `lang` menentukan bagaimana screen reader melafalkan teksmu — halaman Indonesia yang ditandai `en` akan dibacakan dengan lafal Inggris. Dua keping sisanya menukar isi `<title>` dengan isi `<h1>`; itu kekeliruan yang sering terjadi karena keduanya sama-sama terasa seperti \"judul\", padahal `<title>` hanya muncul di tab dan `<h1>` hanya muncul di halaman.",
           },
         },
         {
@@ -261,16 +278,28 @@ export const htmlTrack: Track = {
             "  <h1>Menu Hari Ini</h1>\n" +
             "</body>\n" +
             "</html>",
-          pilihanGanda: {
-            question: "Mengapa teks judul `<h1>` yang kamu tulis di dalam elemen `<head>` tidak muncul di layar browser?",
-            choices: [
-              "Karena elemen `<head>` hanya memuat metadata dan keterangan dokumen, bukan isi yang terlihat",
-              "Karena tag `<h1>` membutuhkan atribut `visible=\"true\"` agar dapat ditampilkan oleh browser",
-              "Karena browser mengalami error saat membaca tag heading di luar tag `<body>`",
-              "Karena isi `<head>` baru ditampilkan setelah seluruh halaman selesai dimuat",
+          susunKode: {
+            question:
+              "Susun dokumen ini supaya judul tab `Warung Bu Sri` berada di tempat yang benar, dan judul halaman `Menu Hari Ini` juga di tempatnya.",
+            potongan: [
+              "<!DOCTYPE html>",
+              "<html lang=\"id\">",
+              "<head>",
+              "<title>Warung Bu Sri</title>",
+              "</head>",
+              "<body>",
+              "<h1>Menu Hari Ini</h1>",
+              "</body>",
+              "</html>",
             ],
-            answerIndex: 0,
-            explanation: "Browser hanya menampilkan konten yang berada di dalam elemen `<body>` ke layar penjelajah. Konten di dalam `<head>` khusus untuk metadata dan konfigurasi dokumen. Pilihan mengenai atribut `visible` sering keliru dianggap sebagai solusi oleh pemula, padahal HTML tidak memiliki atribut seperti itu. Pilihan bahwa browser mengalami error juga menggoda karena halaman tampak kosong, padahal browser tidak pernah melempar error melainkan hanya mengabaikan tampilannya. Pilihan tentang menunggu halaman selesai dimuat terdengar masuk akal bagi yang pernah melihat halaman tampil bertahap, padahal lamanya menunggu tidak akan mengubah apa pun: isi `<head>` memang tidak pernah dirender.",
+            pengecoh: [
+              "<title>Menu Hari Ini</title>",
+              "<h1>Warung Bu Sri</h1>",
+              "<head><h1>Menu Hari Ini</h1></head>",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`<head>` menjawab \"halaman ini tentang apa\", `<body>` menjawab \"apa yang dilihat pengunjung\". Karena itu nama warung ada di `<title>` dan judul isi ada di `<h1>` di dalam `<body>`. Dua keping pertama menukar isi keduanya — kekeliruan yang sering terjadi karena sama-sama terasa seperti judul. Keping ketiga memasukkan `<h1>` ke dalam `<head>`, dan inilah jebakan yang paling membingungkan pemula: browser tidak menampilkan pesan error apa pun, halamannya hanya tampak kosong, sehingga orang mengira dirinya yang salah menulis kode padahal ia cuma salah ruangan.",
           },
         },
         {
@@ -337,16 +366,22 @@ export const htmlTrack: Track = {
           solution:
             "<h2>Menu Hari Ini</h2>\n" +
             "<p>Nasi rames, soto ayam, dan es teh.</p>",
-          pilihanGanda: {
-            question: "Bagaimana cara menyajikan potongan kode HTML di editor latihan BiLearn saat kamu ingin menyimpannya sebagai berkas `index.html` utuh di komputermu sendiri?",
-            choices: [
-              "Langsung menyimpannya apa adanya sebagai `index.html`, karena browser toh otomatis menambahkan kerangka dokumennya",
-              "Membungkus potongan kode tersebut di dalam kerangka dokumen `<!DOCTYPE html>`, `<html>`, `<head>`, dan `<body>`",
-              "Menambahkan `<!DOCTYPE html>` saja di baris pertama, karena hanya bagian itu yang wajib ada di berkas",
-              "Menambahkan atribut `standalone=\"true\"` pada elemen terluar supaya browser tahu berkas itu berdiri sendiri",
+          susunKode: {
+            question:
+              "Susun ulang isi yang benar-benar tampil di layar sebagai potongan kode saja — tanpa kerangka dokumen.",
+            potongan: [
+              "<h2>Menu Hari Ini</h2>",
+              "<p>Nasi rames, soto ayam, dan es teh.</p>",
             ],
-            answerIndex: 1,
-            explanation: "Di editor BiLearn kamu cukup menulis potongan isi `<body>`, namun di komputer lokal kamu wajib membungkusnya dengan kerangka HTML utuh lengkap dengan doctype, html, head, dan body. Pilihan pertama adalah yang paling menggoda, dan alasannya justru karena separuhnya benar: browser memang diam-diam menyisipkan `<html>`, `<head>`, dan `<body>` ke dalam DOM saat berkasmu tidak punya itu — sehingga halaman tetap tampil dan kamu mengira semuanya beres. Yang tidak ikut disisipkan adalah `<!DOCTYPE html>`, dan tanpa doctype browser jatuh ke mode kompatibilitas lama (quirks mode) yang menghitung ukuran elemen dengan aturan berbeda, jadi tata letakmu bergeser tanpa sebab yang jelas. Pilihan menambahkan doctype saja keliru karena kerangka itu satu paket, bukan satu baris.",
+            pengecoh: [
+              "<!DOCTYPE html>",
+              "<html lang=\"id\">",
+              "<body>",
+              "</body>",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Di panel latihan BiLearn kamu cukup menulis isi `<body>`-nya saja; kerangka dokumennya dipasangkan di balik layar. Keping doctype, `<html>`, dan `<body>` sengaja disediakan karena sangat menggoda: kamu baru saja berlatih menulisnya di step sebelumnya, jadi tanganmu ingin memasangnya lagi. Di sini justru itu yang keliru — memasang kerangka di dalam kerangka menghasilkan dokumen bertumpuk. Yang perlu kamu bawa pulang: di BiLearn tulis potongannya, di komputermu sendiri barulah potongan itu dibungkus kerangka lengkap.",
           },
         },
         {
@@ -544,16 +579,22 @@ export const htmlTrack: Track = {
             },
           ],
           solution: "<h1>Halo Dunia</h1>",
-          pilihanGanda: {
-            question: "Mana bentuk penulisan elemen heading utama (`h1`) yang benar sesuai tata bahasa HTML?",
-            choices: [
-              "`<h1>Halo Dunia<h1>`",
-              "`<h1>Halo Dunia</h1>`",
-              "`<h1 text=\"Halo Dunia\">`",
-              "`<heading1>Halo Dunia</heading1>`",
+          susunKode: {
+            question:
+              "Rangkai satu elemen heading tingkat satu yang berisi teks `Halo Dunia`.",
+            potongan: [
+              "<h1>",
+              "Halo Dunia",
+              "</h1>",
             ],
-            answerIndex: 1,
-            explanation: "Elemen `h1` adalah elemen berpasangan yang memerlukan tag pembuka `<h1>` dan tag penutup `</h1>` dengan garis miring. Pilihan tanpa garis miring (`<h1>...<h1>`) sering keliru ditulis pemula dan merupakan jebakan klasik yang membuat browser bingung menentukan akhir elemen. Pilihan `<heading1>` juga menggoda karena namanya terkesan lebih jelas, padahal nama tag resminya disingkat menjadi `h1`.",
+            pengecoh: [
+              "<heading1>",
+              "</heading1>",
+              "<h1/>",
+            ],
+            pemisah: "",
+            explanation:
+              "Elemen berpasangan selalu punya tiga bagian: tag pembuka, isi, lalu tag penutup yang bergaris miring. Keping `<heading1>` dan `</heading1>` menggoda karena namanya terdengar lebih jelas dan mudah diingat, padahal HTML hanya mengenal `h1` sampai `h6` — tag karangan sendiri tidak akan dianggap heading oleh browser maupun mesin pencari. Keping `<h1/>` adalah jebakan yang datang dari kebiasaan menulis tag tunggal seperti `<br>`: elemen yang punya isi tidak pernah ditutup dengan garis miring di depan kurung.",
           },
         },
         {
@@ -585,16 +626,23 @@ export const htmlTrack: Track = {
           ],
           solution:
             "<h1>Halo Dunia</h1>\n<p>Ini paragraf pertamaku di BiLearn.</p>",
-          pilihanGanda: {
-            question: "Mengapa kamu harus membungkus teks deskripsi panjang ke dalam tag `<p>` alih-alih membiarkannya tanpa tag?",
-            choices: [
-              "Agar browser memberikan jarak antar-paragraf secara otomatis dan menandai blok teks secara semantik",
-              "Agar teks otomatis berubah menjadi tebal dan berukuran lebih besar daripada teks di sekitarnya",
-              "Karena teks yang tidak dibungkus tag apa pun akan diabaikan browser dan tidak ditampilkan sama sekali",
-              "Supaya setiap baris baru yang kamu tekan di editor ikut tampil sebagai baris baru di halaman",
+          susunKode: {
+            question:
+              "Susun sebuah paragraf di bawah heading `Halo Dunia` yang sudah ada.",
+            potongan: [
+              "<h1>Halo Dunia</h1>",
+              "<p>",
+              "Ini paragraf pertamaku di BiLearn.",
+              "</p>",
             ],
-            answerIndex: 0,
-            explanation: "Tag `<p>` menyatakan paragraf secara semantik dan memberi jarak vertikal alami antar blok teks. Pilihan bahwa teks tanpa tag tidak ditampilkan sering keliru dipercayai, padahal browser tetap menampilkannya — hanya saja semua teks menempel menjadi satu baris beruntun. Pilihan tentang baris baru adalah jebakan yang paling sering menjerat: di editor kamu menekan Enter dan melihat baris terpisah, tetapi HTML memampatkan semua spasi dan pergantian baris menjadi satu spasi, sehingga hasilnya tetap menyambung. Pilihan bahwa teks berubah menjadi tebal juga menggoda karena pemula sering tertukar antara fungsi paragraf dan heading.",
+            pengecoh: [
+              "<paragraph>",
+              "</paragraph>",
+              "<p/>",
+            ],
+            pemisah: " ",
+            explanation:
+              "Paragraf ditulis dengan `<p>` dan wajib ditutup `</p>`; browser memberi jarak vertikal antar paragraf secara otomatis. Keping `<paragraph>` dan `</paragraph>` menggoda justru karena lebih terbaca — banyak pemula menyangka nama tag boleh dieja panjang. Browser tidak mengeluh, ia hanya memperlakukan tag asing itu sebagai elemen tak dikenal tanpa jarak paragraf. Keping `<p/>` adalah jebakan yang sering muncul pada orang yang pernah menyentuh XML atau JSX, tempat tag kosong memang ditulis begitu; di HTML, paragraf punya isi sehingga harus dibuka dan ditutup.",
           },
         },
         {
@@ -623,16 +671,22 @@ export const htmlTrack: Track = {
           ],
           solution:
             "<h1>Halo Dunia</h1>\n<p>Ini paragraf pertamaku di BiLearn.</p>\n<h2>Tentang Saya</h2>",
-          pilihanGanda: {
-            question: "Bagaimana prinsip penggunaan heading `<h1>` sampai `<h6>` yang tepat untuk struktur dokumen HTML?",
-            choices: [
-              "Pilih heading berdasarkan ukuran huruf yang kamu inginkan di layar",
-              "Gunakan `<h1>` untuk topik utama halaman, lalu `<h2>` dan `<h3>` sesuai hierarki isi dokumen",
-              "Gunakan beberapa `<h1>` dalam satu paragraf agar teks terasa penting",
-              "Lewati `<h2>` dan langsung pakai `<h3>` kalau ukurannya sudah pas di layar",
+          susunKode: {
+            question:
+              "Rangkai heading tingkat dua yang berisi teks `Tentang Saya`.",
+            potongan: [
+              "<h2>",
+              "Tentang Saya",
+              "</h2>",
             ],
-            answerIndex: 1,
-            explanation: "Heading berfungsi membangun struktur dan daftar isi dokumen (hierarki semantik), bukan untuk mengatur estetika ukuran huruf. Memilih heading berdasarkan ukuran tampilan adalah kesalahan yang sering terjadi pada pemula; kalau yang kamu inginkan hanya ukuran teks berbeda, itu pekerjaan CSS. Menggunakan banyak `<h1>` dalam satu halaman juga merupakan jebakan yang membingungkan mesin pencari dan pengguna screen reader. Pilihan melewati `<h2>` langsung ke `<h3>` adalah yang paling menggoda karena hasilnya di layar terlihat rapi; tetapi screen reader membacakan daftar heading sebagai kerangka isi, dan tingkat yang bolong membuat pendengarnya mengira ada bagian yang terlewat.",
+            pengecoh: [
+              "<h3>",
+              "</h3>",
+              "<h2/>",
+            ],
+            pemisah: " ",
+            explanation:
+              "Tingkat heading menyatakan susunan isi, bukan ukuran huruf: `<h1>` topik utama halaman, `<h2>` bagian di bawahnya, `<h3>` sub-bagiannya lagi. Keping `<h3>` menggoda karena di layar hasilnya cuma sedikit lebih kecil dan terlihat sama-sama rapi, padahal melompati tingkat membuat screen reader membacakan kerangka isi yang bolong dan pendengarnya mengira ada bagian yang terlewat. Keping `<h2/>` adalah jebakan tag tunggal: heading punya isi, jadi ia dibuka dan ditutup, bukan ditutup sendiri.",
           },
         },
         {
@@ -667,16 +721,24 @@ export const htmlTrack: Track = {
           ],
           solution:
             '<h1>Halo Dunia</h1>\n<a href="https://bilearn.id">Kunjungi BiLearn</a>',
-          pilihanGanda: {
-            question: "Mana penulisan elemen tautan (`<a>`) yang benar untuk membuka halaman `https://bilearn.id` dengan teks `Kunjungi BiLearn`?",
-            choices: [
-              "`<a src=\"https://bilearn.id\">Kunjungi BiLearn</a>`",
-              "`<a href=\"https://bilearn.id\">Kunjungi BiLearn</a>`",
-              "`<link to=\"https://bilearn.id\">Kunjungi BiLearn</link>`",
-              "`<a href=\"https://bilearn.id\" />`",
+          susunKode: {
+            question:
+              "Rangkai sebuah tautan berteks `Kunjungi BiLearn` yang mengarah ke `https://bilearn.id`.",
+            potongan: [
+              "<a",
+              "href=\"https://bilearn.id\"",
+              ">",
+              "Kunjungi BiLearn",
+              "</a>",
             ],
-            answerIndex: 1,
-            explanation: "Elemen `<a>` menggunakan atribut `href` untuk menentukan URL tujuan, dan teks yang diklik berada di antara tag pembuka dan penutup. Pilihan yang menggunakan atribut `src` adalah jebakan paling sering karena pemula sering keliru membedakan antara atribut alamat tautan (`href`) dengan alamat gambar/sumber (`src`). Pilihan `<link>` juga menggoda bagi pemula yang belajar React, padahal di HTML murni `<link>` dipakai di head.",
+            pengecoh: [
+              "src=\"https://bilearn.id\"",
+              "<link",
+              "</link>",
+            ],
+            pemisah: " ",
+            explanation:
+              "Tautan memakai elemen `<a>` dengan atribut `href` yang menunjuk alamat tujuan, dan teks yang diklik berada di antara tag pembuka dan penutup. Keping `src=\"...\"` adalah pengecoh yang paling sering menjerat: `href` dan `src` sama-sama berisi alamat, tapi `href` berarti \"ke mana ini menuju\" sementara `src` berarti \"apa yang dimuat ke dalam halaman\" seperti pada gambar. Keping `<link` juga menggoda karena namanya persis kata \"link\"; padahal di HTML `<link>` dipakai di dalam `<head>` untuk menyambungkan berkas CSS, bukan untuk membuat tautan yang bisa diklik.",
           },
         },
         {
@@ -707,16 +769,23 @@ export const htmlTrack: Track = {
             },
           ],
           solution: '<img src="https://picsum.photos/200" alt="Foto acak">',
-          pilihanGanda: {
-            question: "Manakah pernyataan yang BENAR mengenai penulisan elemen gambar (`<img>`) di HTML?",
-            choices: [
-              "Elemen `<img>` wajib selalu ditutup dengan `</img>`, persis seperti elemen `<p>` dan `<h1>` yang sudah kamu pelajari sebelumnya",
-              "`<img>` adalah tag tunggal (self-closing), menggunakan atribut `src` untuk lokasi berkas dan `alt` untuk teks alternatif",
-              "Atribut `alt` digunakan khusus untuk mengatur dan menentukan ukuran tinggi serta lebar gambar dalam satuan piksel",
-              "Lokasi berkas gambar ditunjuk dengan atribut `href`, sama seperti cara elemen tautan `<a>` menunjuk alamat tujuannya",
+          susunKode: {
+            question:
+              "Rangkai sebuah elemen gambar yang menampilkan `https://picsum.photos/200` dengan teks alternatif `Foto acak`.",
+            potongan: [
+              "<img",
+              "src=\"https://picsum.photos/200\"",
+              "alt=\"Foto acak\"",
+              ">",
             ],
-            answerIndex: 1,
-            explanation: "Elemen `<img>` merupakan elemen void/tunggal tanpa penutup `</img>`. Atribut `src` menentukan lokasi berkas dan `alt` menyediakan teks pengganti bagi screen reader maupun saat gambar gagal dimuat. Menulis tag penutup `</img>` sering keliru dilakukan pemula yang terbiasa dengan elemen berpasangan. Pilihan `href` adalah pengecoh yang paling menggoda karena keduanya sama-sama berisi alamat, dan tertukarnya `href` dengan `src` termasuk kesalahan yang paling sering muncul di minggu-minggu pertama: browser tidak memberi pesan error, gambarnya hanya tidak muncul. Menganggap `alt` sebagai pengatur ukuran juga jebakan umum akibat kurang memahami arti teks alternatif.",
+            pengecoh: [
+              "href=\"https://picsum.photos/200\"",
+              "title=\"Foto acak\"",
+              "<image",
+            ],
+            pemisah: " ",
+            explanation:
+              "`<img>` adalah elemen tunggal: ia tidak punya isi sehingga tidak perlu `</img>`. Alamat berkasnya ditunjuk `src`, dan `alt` menyediakan teks pengganti bagi pengguna screen reader maupun saat gambarnya gagal dimuat. Keping `href` menggoda karena sama-sama berisi alamat, dan tertukarnya `href` dengan `src` termasuk kekeliruan yang paling sering muncul di minggu-minggu pertama — browser tidak memberi pesan error, gambarnya hanya tidak muncul. Keping `title` juga terasa masuk akal sebagai \"keterangan gambar\", padahal isinya cuma muncul saat kursor didiamkan di atas gambar dan tidak menolong pengguna screen reader. Keping `<image` adalah tebakan nama yang wajar tapi bukan nama elemen di HTML.",
           },
         },
         {
@@ -757,16 +826,24 @@ export const htmlTrack: Track = {
             },
           ],
           solution: "<h2>Fitur</h2>\n<ul>\n  <li>Gratis</li>\n  <li>Terbuka</li>\n  <li>Bahasa Indonesia</li>\n</ul>",
-          pilihanGanda: {
-            question: "Kamu ingin membuat daftar langkah-langkah resep masakan yang wajib diikuti berurutan dari nomor 1 sampai 3. Elemen mana yang paling tepat digunakan?",
-            choices: [
-              "Elemen `<ul>` berisi item `<li>` dengan nomor diketik manual di dalam teks",
-              "Elemen `<ol>` berisi item `<li>` tanpa perlu mengetik nomor manual di teksnya",
-              "Elemen `<list>` dengan atribut `type=\"numbered\"`",
-              "Beberapa elemen `<p>` yang dipisahkan oleh tag `<br>`",
+          susunKode: {
+            question:
+              "Susun daftar tiga fitur produk yang urutannya tidak penting: `Gratis`, `Terbuka`, dan `Bahasa Indonesia`.",
+            potongan: [
+              "<ul>",
+              "<li>Gratis</li>",
+              "<li>Terbuka</li>",
+              "<li>Bahasa Indonesia</li>",
+              "</ul>",
             ],
-            answerIndex: 1,
-            explanation: "Elemen `<ol>` (ordered list) membuat daftar bernomor otomatis sesuai urutan langkah. Pilihan menggunakan `<ul>` lalu mengetik nomor sendiri di dalam `<li>` sering keliru dilakukan pemula; hal ini membuat nomor menjadi ganda di browser tertentu atau merusak pembacaan screen reader. Pilihan `<list>` juga menggoda karena namanya terkesan alami, padahal HTML menggunakan `<ol>` dan `<ul>`.",
+            pengecoh: [
+              "<ol>",
+              "</ol>",
+              "<li>Gratis<li>",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Daftar yang urutannya tidak penting memakai `<ul>` (unordered list); setiap butirnya dibungkus `<li>`. Keping `<ol>` dan `</ol>` menggoda karena hasilnya di layar tetap terlihat seperti daftar yang rapi — bedanya `<ol>` memberi nomor, dan nomor itu menyiratkan urutan yang sebenarnya tidak ada pada daftar fitur. Keping `<li>Gratis<li>` adalah jebakan tag penutup tanpa garis miring: sekilas terlihat berpasangan, tetapi browser membacanya sebagai dua butir daftar yang dibuka dan tidak pernah ditutup, sehingga strukturnya berantakan.",
           },
         },
         {
@@ -801,16 +878,26 @@ export const htmlTrack: Track = {
             },
           ],
           solution: "<ul>\n  <li>Frontend\n    <ul>\n      <li>HTML</li>\n      <li>CSS</li>\n    </ul>\n  </li>\n</ul>",
-          pilihanGanda: {
-            question: "Di manakah posisi penulisan tag sub-daftar `<ul>` yang benar saat membuat daftar bersarang di HTML?",
-            choices: [
-              "Di antara dua tag `<li>`, sebagai saudara langsung dari item daftar utama",
-              "Di dalam elemen `<li>` induk sebelum tag penutup `</li>`-nya",
-              "Di luar elemen `<ul>` utama pada baris terpisah",
-              "Di dalam elemen `<li>` induk, tetapi ditulis setelah tag penutup `</li>`-nya",
+          susunKode: {
+            question:
+              "Susun daftar dua tingkat: butir `Frontend` yang di dalamnya berisi sub-daftar `HTML` dan `CSS`.",
+            potongan: [
+              "<ul>",
+              "<li>Frontend",
+              "<ul>",
+              "<li>HTML</li>",
+              "<li>CSS</li>",
+              "</ul>",
+              "</li>",
+              "</ul>",
             ],
-            answerIndex: 1,
-            explanation: "Dalam daftar bersarang, sub-daftar `<ul>` atau `<ol>` wajib diletakkan DI DALAM elemen `<li>` milik induknya, yaitu sebelum `</li>` ditutup. Menaruh `<ul>` anak sebagai saudara langsung dari `<li>` sering keliru terjadi karena tampilannya di layar tampak mirip, padahal struktur HTML tersebut tidak valid dan membuat hubungan hierarki induk-anak menjadi terputus bagi screen reader. Pilihan yang menaruhnya setelah `</li>` adalah jebakan yang paling halus: kalimatnya menyebut \"di dalam `<li>` induk\", tetapi begitu `</li>` sudah ditutup, elemen itu justru berada di luar — dan browser diam saja, tidak ada pesan error apa pun yang memberitahumu.",
+            pengecoh: [
+              "<li>HTML<li>",
+              "<li>CSS<li>",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Pada daftar bersarang, sub-daftar diletakkan DI DALAM `<li>` induknya — perhatikan bahwa `</li>` milik `Frontend` baru ditutup setelah `</ul>` anaknya. Karena itu di kolam kepingan ada dua `<ul>` dan dua `</ul>`: satu untuk daftar luar, satu untuk daftar dalam. Kekeliruan yang sering terjadi adalah menutup `</li>` lebih dulu lalu menaruh sub-daftarnya di luar, dan itu tidak menghasilkan pesan error apa pun — hubungan induk-anak hanya hilang diam-diam bagi screen reader. Dua keping pengecoh memakai tag penutup tanpa garis miring, jebakan yang membuat butir daftar tidak pernah tertutup.",
           },
         },
         {
@@ -846,16 +933,24 @@ export const htmlTrack: Track = {
             },
           ],
           solution: "<section id=\"tentang\" class=\"kartu\">\n  <h2>Tentang Saya</h2>\n</section>",
-          pilihanGanda: {
-            question: "Apakah perbedaan mendasar antara atribut `id` dan `class` pada elemen HTML?",
-            choices: [
-              "`id` bersifat unik (hanya 1 per halaman), sedangkan `class` boleh dipakai berulang pada banyak elemen",
-              "`id` khusus untuk memberi warna, sedangkan `class` khusus untuk menentukan ukuran teks",
-              "`id` boleh dipakai berulang kali, sedangkan `class` harus unik untuk setiap elemen",
-              "`id` hanya berlaku untuk tag `<div>`, sedangkan `class` berlaku untuk semua tag HTML",
+          susunKode: {
+            question:
+              "Rangkai sebuah `<section>` beridentitas `tentang` dan berkelas `kartu`, yang berisi judul `Tentang Saya`.",
+            potongan: [
+              "<section",
+              "id=\"tentang\"",
+              "class=\"kartu\"",
+              ">",
+              "<h2>Tentang Saya</h2>",
+              "</section>",
             ],
-            answerIndex: 0,
-            explanation: "Atribut `id` adalah identitas unik yang hanya boleh dimiliki oleh satu elemen dalam satu halaman. Sebaliknya, `class` digunakan untuk menandai sekelompok elemen yang memiliki ciri atau gaya serupa. Memakai `id` secara berulang pada beberapa elemen adalah jebakan klasik pemula yang sering menyebabkan kegagalan navigasi jangkar link maupun skrip JavaScript.",
+            pengecoh: [
+              "class=\"tentang\"",
+              "id=\"kartu\"",
+            ],
+            pemisah: " ",
+            explanation:
+              "`id` adalah identitas unik — hanya boleh dimiliki satu elemen dalam satu halaman — sedangkan `class` menandai sekelompok elemen yang berbagi ciri atau gaya yang sama. Karena itu nama bagiannya (`tentang`) menjadi `id`, dan nama tampilannya (`kartu`) menjadi `class`. Dua keping pengecoh menukar keduanya, dan ini kekeliruan yang sangat sering terjadi karena di layar hasilnya bisa terlihat sama persis. Akibatnya baru terasa nanti: tautan jangkar `#tentang` tidak lagi menemukan sasarannya, dan gaya `.kartu` menempel pada elemen yang salah.",
           },
         },
         {
@@ -886,16 +981,23 @@ export const htmlTrack: Track = {
             },
           ],
           solution: "<img src=\"../aset/foto.jpg\" alt=\"Foto artikel\">",
-          pilihanGanda: {
-            question: "Halaman HTML milikmu berada di folder `blog/`. Kamu ingin menampilkan gambar yang berada di folder `aset/` yang posisinya sejajar dengan folder `blog/`. Path `src` mana yang tepat?",
-            choices: [
-              "`src=\"aset/foto.jpg\"` (mencari langsung folder aset di dalam direktori saat ini tanpa keluar folder terlebih dahulu)",
-              "`src=\"../aset/foto.jpg\"` (naik satu tingkat folder lebih dulu, lalu masuk ke folder aset)",
-              "`src=\"/blog/aset/foto.jpg\"` (masuk ke folder blog lalu ke aset)",
-              "`src=\"https://localhost/foto.jpg\"` (menggunakan URL absolut lokal)",
+          susunKode: {
+            question:
+              "Halamanmu ada di folder `blog/`, gambarnya di folder `aset/` yang sejajar dengan `blog/`. Rangkai elemen gambar yang menunjuk `foto.jpg` di sana, dengan teks alternatif `Foto artikel`.",
+            potongan: [
+              "<img",
+              "src=\"../aset/foto.jpg\"",
+              "alt=\"Foto artikel\"",
+              ">",
             ],
-            answerIndex: 1,
-            explanation: "Tanda `../` digunakan pada path relatif untuk naik satu tingkat folder keluar dari folder `blog/`, baru kemudian masuk ke folder `aset/foto.jpg`. Menulis `src=\"aset/foto.jpg\"` tanpa `../` adalah kesalahan yang sangat sering terjadi karena pemula mengira browser otomatis mencari folder di tingkat teratas, padahal path relatif dihitung dari lokasi berkas HTML berada.",
+            pengecoh: [
+              "src=\"aset/foto.jpg\"",
+              "src=\"/aset/foto.jpg\"",
+              "alt=\"foto.jpg\"",
+            ],
+            pemisah: " ",
+            explanation:
+              "Path relatif dihitung dari lokasi berkas HTML-nya, bukan dari akar situs. Karena halamanmu ada di dalam `blog/`, kamu perlu naik satu tingkat dulu dengan `../` sebelum masuk ke `aset/`. Keping `src=\"aset/foto.jpg\"` adalah pengecoh yang paling sering dipilih: ia terlihat paling bersih, tapi artinya \"cari folder aset DI DALAM blog\" — folder yang tidak ada. Keping `src=\"/aset/foto.jpg\"` dengan garis miring di depan menggoda karena terasa seperti jalan pintas ke folder utama; itu memang path absolut dari akar situs, dan biasanya rusak begitu situsmu dipasang di dalam subfolder. Keping `alt=\"foto.jpg\"` keliru karena teks alternatif seharusnya menerangkan isi gambar kepada orang yang tidak bisa melihatnya, bukan mengulang nama berkasnya.",
           },
         },
         {
@@ -930,16 +1032,23 @@ export const htmlTrack: Track = {
             },
           ],
           solution: "<p>Jl. Anggrek No. 7<br>\nSurabaya 60111</p>\n<hr>\n<!-- di bawah ini nanti diisi daftar produk -->",
-          pilihanGanda: {
-            question: "Manakah penggunaan elemen `<br>` yang TEPAT sesuai standar penulisan HTML?",
-            choices: [
-              "Ditulis berulang kali untuk memberi jarak lebar antar-paragraf tanpa perlu CSS",
-              "Digunakan untuk memotong baris di dalam satu blok teks alamat atau bait puisi",
-              "Digunakan sebagai garis pemisah horizontal antar bagian artikel",
-              "Ditulis berpasangan dengan `</br>` untuk membungkus teks yang pindah baris",
+          susunKode: {
+            question:
+              "Susun satu paragraf berisi dua baris alamat, lalu garis pemisah, lalu sebuah komentar HTML.",
+            potongan: [
+              "<p>Jl. Anggrek No. 7<br>",
+              "Surabaya 60111</p>",
+              "<hr>",
+              "<!-- di bawah ini nanti diisi daftar produk -->",
             ],
-            answerIndex: 1,
-            explanation: "Tag `<br>` berfungsi untuk memutus baris (line break) di dalam satu blok kalimat seperti bait puisi atau baris alamat. Menggunakan beberapa `<br>` berturut-turut untuk memberi jarak antar paragraf adalah kebiasaan keliru yang sering ditemui; memberi jarak antar paragraf harus menggunakan margin CSS. Untuk garis pemisah horizontal digunakan `<hr>`. Pilihan `</br>` adalah jebakan yang paling menggoda karena hampir semua tag yang sudah kamu pelajari memang berpasangan; `<br>` termasuk elemen void yang tidak punya isi, sehingga tidak ada yang perlu ditutup.",
+            pengecoh: [
+              "</br>",
+              "<!-- -->",
+              "<break>",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`<br>` memotong baris di dalam satu blok teks — persis yang dibutuhkan alamat surat — sedangkan `<hr>` menggambar garis pemisah antar bagian, dan `<!-- ... -->` adalah catatan yang hanya terbaca di kode. Keping `</br>` adalah jebakan yang paling menggoda karena hampir semua tag yang sudah kamu pelajari memang berpasangan; `<br>` termasuk elemen tanpa isi, jadi tidak ada yang perlu ditutup. Keping `<!-- -->` terlihat seperti komentar yang sah, tapi kosong — komentar yang tidak mengatakan apa pun tidak menolong siapa pun yang membaca kodemu nanti. Keping `<break>` adalah tebakan nama yang wajar tapi tidak dikenal browser.",
           },
         },
         {

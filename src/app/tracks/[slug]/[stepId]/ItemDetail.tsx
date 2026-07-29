@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import StepView from "@/components/StepView";
-import StepChoiceView from "@/components/StepChoiceView";
+import StepSusunKodeView from "@/components/StepSusunKodeView";
 import QuizView from "@/components/QuizView";
 import MateriView from "@/components/MateriView";
 import { getTrack, getTrackItems } from "@/data/tracks";
@@ -28,13 +28,13 @@ export default function ItemDetail({
   const item = items[index];
   const prev = items[index - 1];
   const next = items[index + 1];
-  const hasPilihanGanda = item.kind === "step" && Boolean(item.pilihanGanda);
+  const hasSusunKode = item.kind === "step" && Boolean(item.susunKode);
 
   // Step tanpa varian dikerjakan lewat editor, jadi statusnya ada di dunia
   // koding — walaupun mode aktifnya pilihan ganda. Tanpa penyesuaian ini,
   // user menyelesaikan step lalu tidak melihat tanda selesai sama sekali.
   const diLuarMode =
-    item.kind === "step" && mode === "pilihan-ganda" && !hasPilihanGanda;
+    item.kind === "step" && mode === "pilihan-ganda" && !hasSusunKode;
   const finished =
     ready &&
     (diLuarMode
@@ -84,8 +84,8 @@ export default function ItemDetail({
         />
       ) : item.kind === "step" ? (
         mode === "pilihan-ganda" ? (
-          hasPilihanGanda ? (
-            <StepChoiceView
+          hasSusunKode ? (
+            <StepSusunKodeView
               key={item.id}
               step={item}
               onPassed={() => markDone(track.slug, item.id, "pilihan-ganda")}

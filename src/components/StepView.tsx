@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import type { Step } from "@/lib/types";
+import { jalankanTes } from "@/lib/tes";
 import { InlineMarkdown } from "./MarkdownRenderer";
 
 interface Props {
@@ -173,17 +174,7 @@ export default function StepView({ step, onPassed }: Props) {
   }, [code, step.language, step.previewHtml, step.loadTailwind]);
 
   function runTests() {
-    const res = step.tests.map((t) => {
-      let pass = false;
-      try {
-        const cocok = new RegExp(t.pattern, t.flags ?? "i").test(code);
-        // mustNotMatch: lulus justru kalau pattern TIDAK ditemukan
-        pass = t.mustNotMatch ? !cocok : cocok;
-      } catch {
-        pass = false;
-      }
-      return { pass, message: t.message };
-    });
+    const res = jalankanTes(step.tests, code);
     setResults(res);
     if (res.every((r) => r.pass)) {
       setPassed(true);
