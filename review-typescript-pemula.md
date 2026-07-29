@@ -281,3 +281,103 @@ Ini pelanggaran checklist 9b panduan yang lolos dari skrip verifikasi:
 | 46 `solution` vs tesnya sendiri, dan 46 `starterCode` | semua solution lulus, tidak ada starter yang lolos |
 | 114 potongan kode step `jsx` dikompilasi Babel (meniru `StepView.tsx`) | 0 gagal — tidak ada error merah di preview |
 | `npm run build` | **belum diuji** — sandbox Linux tidak punya binary SWC arm64. Jalankan di Mac. |
+
+---
+
+# Ronde 5 — Pemeriksaan Mandor (29 Juli 2026)
+
+Track ini sudah dinyatakan bersih tiga kali. Pemeriksaan ini dimulai dari kecurigaan bahwa "bersih menurut skrip" belum berarti benar: `verify:konten` dan `audit:lanjutan` **memang 0 pelanggaran** saat ronde ini dibuka, jadi seluruh temuan di bawah adalah hal yang lolos dari kedua skrip itu. Semuanya dibuktikan dengan skrip sekali-pakai di `/tmp`, bukan dengan membaca ulang.
+
+## A. Tes yang menolak jawaban yang sama-sama benar (5 temuan)
+
+Diuji dengan 53 kasus variasi jawaban terhadap `new RegExp(...)`. Lima di antaranya menolak jawaban yang **benar dan lazim**:
+
+| Step | Jawaban benar yang ditolak | Akar masalah |
+|---|---|---|
+| `ts-3-1` | `type Role = "user" \| "admin" \| "guest"` | pattern mematok urutan anggota union |
+| `ts-3-6` | `type Direction = "LEFT" \| "RIGHT" \| "UP" \| "DOWN"` | idem |
+| `ts-3-5` | `const isNumber = (val: unknown): val is number => ...` | hanya menerima `function`, padahal `ts-1-6` di track yang sama sudah menerima arrow function |
+| `ts-3-8` | properti `host` ditulis sebelum `port` | pattern mematok urutan properti |
+| `ts-2-5` | jawaban benar **plus** objek contoh `const a: Admin = { id, name, email, role }` | `mustNotMatch` memakai `[\s\S]*` sehingga menyapu seluruh berkas, lalu menuduh user "menyalin properti User" |
+
+Urutan anggota union adalah kelas kesalahan yang sama dengan "urutan atribut HTML" yang diperbaiki di Ronde 4 — dan track ini **sudah** membebaskan urutan di `ts-1-5`, `ts-2-1`, dan `ts-5-2`, jadi ketiga step di atas justru tidak konsisten dengan tetangganya sendiri. Perbaikan memakai lookahead (`(?=[\s\S]*"admin")…`) sehingga urutan bebas tapi kelengkapannya tetap ditagih, dan tes pemisah `|` dipecah menjadi tes tersendiri agar pesan gagalnya spesifik.
+
+## B. `mustNotMatch` yang menghukum komentar user
+
+Temuan yang tidak akan pernah muncul dari membaca konten: **larangan diuji terhadap teks mentah, termasuk isi komentar.** Jadi user yang menulis catatan untuk dirinya sendiri akan dinyatakan salah meski kodenya benar:
+
+| Step | Jawaban benar yang ditolak |
+|---|---|
+| `ts-4-1` | `// versi lama: function identity(arg: any): any` |
+| `ts-5-2` | `// catatan: Omit<User, "id"> kurang aman` |
+| `ts-3-6` | `// hindari enum Direction karena meninggalkan kode` |
+
+Ini bukan kasus karangan: penjelasan ketiga step itu **menyuruh** user membandingkan dengan bentuk yang dilarang, jadi menuliskannya sebagai komentar adalah reaksi wajar. Sepuluh pattern `mustNotMatch` sekarang diawali `^[^/\n]*` dengan flag `im`, sehingga larangan hanya berlaku pada baris yang bukan komentar.
+
+## C. Tes yang terlalu longgar — jawaban keliru lolos (2 temuan)
+
+| Step | Jawaban keliru yang lolos | Sebabnya |
+|---|---|---|
+| `ts-6-1` | menghapus properti `harga` dari `interface Produk` | pattern `harga\s*:\s*number` ikut cocok dengan **pesan error di komentar `starterCode`** (`Type '{ id: number; harga: number; }' …`), jadi tes lulus tanpa user menyentuh interface-nya |
+| `ts-4-3` | `data: User` (tipe tetap bernama lain) | `data\s*:\s*\w+` menerima nama apa pun; daftar larangan hanya memuat tipe primitif |
+
+`ts-6-1` diperketat menjadi `interface\s+Produk\s*\{[^}]*harga\s*:\s*number` (harus di dalam badan interface, bukan di komentar), dan `ts-4-3` sekarang memakai backreference ke nama parameter generic yang user tulis sendiri — `interface ResponseBox<(\w+)>[\s\S]*?data:\s*\1` — sehingga `data: T` lulus, `data: User` tidak, apa pun nama parameternya.
+
+## D. `example` yang tidak sesuai kodenya sendiri (3 temuan)
+
+**1. `ts-4-5`: contoh memakai `useState` tanpa `import`.** `starterCode` step yang sama punya `import { useState } from "react";`, contohnya tidak. Dibuktikan dengan `tsc --strict`: `error TS2304: Cannot find name 'useState'`. Bagi pemula yang baru diberi tahu "React belum kamu pelajari", `useState` muncul dari langit — dan contohnya berbeda dari editornya. Baris import ditambahkan.
+
+**2. `ts-6-1`: `example.output` mengutip error `tsc` sementara baris pemicunya dikomentari.** Kodenya berakhir `// const b: Baris = dariCsv;`, jadi compiler sebenarnya **tidak** menghasilkan error apa pun — keluaran yang mustahil muncul dari kodenya. Komentarnya dibuka dan diberi penunjuk `// <- baris inilah yang ditolak`, lalu dibuktikan dengan `tsc` bahwa ketiga baris bertingkat yang dikutip keluar persis apa adanya.
+
+**3. `ts-6-5`: `note` bicara tentang kode yang bukan miliknya.** Note pada `example` berbunyi "halaman preview tidak memuat elemen `#username`, jadi panel bawah akan memberitahu bahwa potongan ini belum bisa dijalankan" — padahal contohnya memakai `document.createElement("canvas")`, yang **berjalan normal** di preview dan mencetak `CANVAS` (sudah dieksekusi untuk memastikan). Elemen `#username` ada di `starterCode`, bukan di contoh. Catatan jujur soal preview dipindahkan ke `instruction` tempatnya seharusnya, dan note-nya diperbaiki.
+
+## E. Lima `solution` yang merujuk deklarasi yang tidak ikut ditampilkan
+
+Tombol "Lihat solusi" menampilkan `step.solution` apa adanya sebagai blok terpisah (`StepView.tsx` baris 270) — ia tidak digabung dengan isi editor. Di modul 5, lima solution hanya berisi potongan satu baris yang memakai nama yang tidak terlihat di situ:
+
+| Step | Yang ditampilkan | Yang tidak ikut |
+|---|---|---|
+| `ts-5-1` | `type DraftUser = Partial<User>;` | `interface User` |
+| `ts-5-2` | `type UserPreview = Pick<User, …>;` | `interface User` |
+| `ts-5-4` | `type Result = ReturnType<typeof getData>;` | `function getData` |
+| `ts-5-5` | `type ConfigKeys = keyof typeof config;` | `const config` |
+| `ts-5-6` | `type Opsional<T> = …` | `interface Produk` |
+
+Tiga puluh tiga step lain di track ini **sudah** menyertakan konteksnya (`ts-2-3`, `ts-2-5`, `ts-3-8`, `ts-6-1`, `ts-6-3`, `ts-6-5`), jadi modul 5 satu-satunya yang menyimpang. Kelimanya kini menyertakan deklarasi yang dirujuk. Diperiksa ulang dengan skrip: 0 solution yang tersisa merujuk nama yang tidak ia deklarasikan sendiri.
+
+## F. Materi modul 1 tanpa bagian jebakan yang sebenarnya
+
+`ts-1-m1` lolos aturan Ronde 3 hanya karena skrip menerima frasa "sering membingungkan", dan bagian itu berisi **satu** kebingungan (kapan menulis anotasi) — bukan daftar kesalahan umum seperti enam materi lainnya. Ia juga materi paling tipis di track (2.442 karakter vs rata-rata 3.500). Ditambahkan lima jebakan nyata: anotasi tidak memeriksa data runtime, `number[]` tidak menjamin isinya ada, `any` sebagai tambalan, menganotasi yang sudah jelas, dan `null` vs `undefined` di bawah `strict`.
+
+## G. Yang diperiksa dan ternyata sudah benar
+
+Supaya jelas batas pemeriksaan ini:
+
+- **38 `solution` step `jsx` di-type-check `tsc --strict` sebagai berkas `.tsx` terisolasi** (satu modul per berkas, bukan satu scope global seperti percobaan pertama yang menghasilkan 40 error palsu karena tabrakan nama). Hasilnya bersih; satu-satunya sisa adalah `ts-6-6` karena paket `zod` tidak terpasang di repo ini.
+- **33 `example.code` dijalankan sungguhan di Node** setelah ditranspilasi: 30 keluarannya sama persis dengan `example.output`. Tiga selisihnya (`ts-0-5`, `ts-1-5`, `ts-6-1`) memang mengutip pesan compiler, bukan keluaran runtime — dan ketiganya diverifikasi verbatim dengan `tsc`, termasuk nomor baris dan kolom (`index.ts:8:25` pada `ts-0-5` terbukti tepat).
+- **Pesan error yang dikutip konten cocok verbatim** dengan keluaran `tsc --strict`: TS2322 tiga baris bertingkat, TS2345, TS18047, TS18048, TS6504.
+- **Urutan konsep.** Satu-satunya pemakaian sebelum diajarkan adalah `keyof typeof` di `ts-3-7`, yang **sengaja** dibiarkan sejak Ronde 3 dengan gloss + penunjuk ke modul 5. Tidak ada yang baru.
+- **Cakupan `topics`.** Ke-42 bab di tujuh modul tersentuh; tidak ada bab menganggur.
+- **Panjang `explanation`.** Ke-46 step ≥350 karakter setelah kode dan URL diabaikan.
+- **Kejujuran preview.** Step yang tidak mungkin menampilkan hasil (`ts-6-5`, `ts-6-6`, seluruh modul 5) sudah menyatakannya; `ts-6-5` diperbaiki di bagian D.
+
+## H. Bukti verifikasi Ronde 5
+
+| Pemeriksaan | Perintah | Hasil |
+|---|---|---|
+| Konten (aturan keras) | `verify:konten` | ✅ 0 pelanggaran — 7 materi, 46 step, 7 kuis, 42 soal |
+| Audit kualitas lanjutan | `audit:lanjutan` | ✅ 0 temuan |
+| Tipe proyek | `npx tsc --noEmit` | bersih |
+| Lint | `npx eslint src scripts` | bersih |
+| Variasi jawaban (urutan union, urutan properti, nama variabel bebas, arrow function, `Array<T>` vs `T[]`, petik tunggal/ganda, flag npm) | skrip sekali-pakai | **53/53 sesuai harapan** (sebelum perbaikan: 48/53) |
+| Jawaban keliru & `mustNotMatch` terhadap komentar | skrip sekali-pakai | **15/15 sesuai harapan** (sebelum perbaikan: 9/15) |
+| 38 `solution` `jsx` di-type-check `tsc --strict` terisolasi | skrip sekali-pakai | 0 error (kecuali `zod` tidak terpasang) |
+| 33 `example.code` dieksekusi di Node | skrip sekali-pakai | 30 sama persis; 3 sisanya kutipan pesan compiler, diverifikasi terpisah dengan `tsc` |
+| `solution` merujuk nama yang tidak ia deklarasikan | skrip sekali-pakai | 5 → **0** |
+| `npm run build` | — | **tidak diuji.** Sandbox Linux ini tidak punya binary SWC arm64. Belum terbukti lulus; wajib dijalankan di Mac sebelum deploy. |
+
+## I. Kesimpulan
+
+Tiga ronde sebelumnya menyatakan track ini selesai, dan kedua skrip verifikasi memang bersih sejak awal ronde ini. Yang tetap ditemukan: **7 tes menolak jawaban benar, 2 tes meloloskan jawaban keliru, 3 contoh tidak sesuai kodenya sendiri, dan 5 solution merujuk deklarasi yang tidak ikut ditampilkan.** Tidak satu pun bisa dilihat `verify:konten` — semuanya butuh menjalankan regex terhadap jawaban alternatif, menjalankan contohnya, dan membaca `StepView.tsx` untuk tahu apa yang benar-benar dilihat user.
+
+Pelajaran yang layak dibawa ke track lain: **`mustNotMatch` diuji terhadap komentar user juga**, dan **pattern positif bisa lulus karena mencocokkan pesan error yang sengaja ditaruh di `starterCode`**. Dua pola itu kemungkinan besar ada di 12 track lain dan tidak akan pernah dilaporkan skrip mana pun.

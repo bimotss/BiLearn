@@ -378,6 +378,12 @@ export const typescriptTrack: Track = {
             "> **Kapan TIDAK dipakai:** saat kamu langsung memberi nilai. `let kota = \"Bandung\"` sudah cukup jelas — menulis `let kota: string = \"Bandung\"` hanya menambah kebisingan. Ini dibahas tuntas di step Type Inference.\n\n" +
             "## Analogi Dunia Nyata\n\n" +
             "Anotasi tipe itu seperti **label pada wadah bumbu di dapur**. Wadah tanpa label tetap bisa diisi apa saja, dan kamu mungkin masih ingat isinya hari ini. Masalahnya muncul tiga bulan kemudian, atau saat orang lain memasak di dapurmu. Label tidak mengubah rasa masakan — ia mencegah gula masuk ke tumisan.\n\n" +
+            "## Jebakan yang Sering Menjatuhkan Pemula\n\n" +
+            "1. **Mengira anotasi memeriksa data saat aplikasi berjalan.** `let umur: number` tidak menghalangi apa pun kalau angkanya datang dari server sebagai teks — anotasi sudah hilang sebelum kode dijalankan.\n" +
+            "2. **Mengira `number[]` menjamin isinya ada.** Ia mengunci **jenis** isi, bukan jumlahnya. Array kosong tetap sah, jadi `nilai[0]` bisa saja `undefined`.\n" +
+            "3. **Menambal error dengan `any`.** Errornya hilang seketika, dan bersamanya hilang juga seluruh perlindungan di baris-baris berikutnya.\n" +
+            "4. **Menganotasi variabel yang sudah jelas.** `let kota: string = \"Bandung\"` bukan salah, tapi ia teks tambahan yang harus ikut dirawat setiap kali nilainya berganti jenis.\n" +
+            "5. **Mengira `null` dan `undefined` bisa dipertukarkan.** Dengan `strict` menyala keduanya tipe berbeda, dan `string` tidak menerima salah satu pun tanpa kamu tuliskan.\n\n" +
             "## Satu Hal yang Sering Membingungkan\n\n" +
             "Di step pertama modul ini kamu diminta **menulis** anotasi secara eksplisit, lalu beberapa step kemudian diminta **tidak** menulisnya. Itu bukan kontradiksi:\n\n" +
             "- Saat belajar, menulis anotasi eksplisit membuatmu terbiasa dengan bentuknya.\n" +
@@ -1016,10 +1022,10 @@ export const typescriptTrack: Track = {
               message: "Tambahkan properti `role` bertipe `string` di dalam Admin.",
             },
             {
-              pattern: "interface\\s+Admin[\\s\\S]*\\b(email|name)\\s*:",
+              pattern: "interface\\s+Admin[^{]*\\{[^}]*\\b(email|name)\\s*:",
               mustNotMatch: true,
               message:
-                "Kamu menyalin ulang properti milik User ke dalam Admin. Cukup warisi dengan `extends` — itu inti latihan ini.",
+                "Kamu menyalin ulang properti milik User ke dalam badan interface Admin. Cukup warisi dengan `extends` — itu inti latihan ini.",
             },
           ],
           solution:
@@ -1240,12 +1246,18 @@ export const typescriptTrack: Track = {
           tests: [
             {
               pattern:
-                "type\\s+Role\\s*=\\s*\\|?\\s*['\"]admin['\"]\\s*\\|\\s*['\"]user['\"]\\s*\\|\\s*['\"]guest['\"]",
+                "type\\s+Role\\s*=(?=[\\s\\S]*['\"]admin['\"])(?=[\\s\\S]*['\"]user['\"])(?=[\\s\\S]*['\"]guest['\"])",
               message:
-                "Tulis ketiga nilainya sebagai literal (pakai tanda kutip) dan pisahkan dengan `|`, urut admin, user, guest.",
+                "Sebutkan ketiga nilainya sebagai literal berkutip: `\"admin\"`, `\"user\"`, dan `\"guest\"`. Urutannya bebas — yang penting ketiganya ada.",
             },
             {
-              pattern: "type\\s+Role\\s*=\\s*string",
+              pattern: "['\"]\\s*\\|\\s*['\"]",
+              message:
+                "Ketiga kemungkinan itu perlu dipisahkan tanda `|`. Boleh satu baris (`\"admin\" | \"user\"`) atau bertingkat ke bawah dengan `|` di awal tiap baris.",
+            },
+            {
+              pattern: "^[^/\\n]*type\\s+Role\\s*=\\s*string",
+              flags: "im",
               mustNotMatch: true,
               message:
                 "`string` menerima teks apa pun, termasuk typo seperti \"amdin\". Sebutkan ketiga nilainya satu per satu.",
@@ -1427,9 +1439,9 @@ export const typescriptTrack: Track = {
           tests: [
             {
               pattern:
-                "function\\s+isNumber\\s*\\(\\s*val\\s*:\\s*unknown\\s*\\)\\s*:\\s*val\\s+is\\s+number",
+                "(function\\s+isNumber\\s*\\(|const\\s+isNumber\\s*=\\s*\\()\\s*val\\s*:\\s*unknown\\s*\\)\\s*:\\s*val\\s+is\\s+number",
               message:
-                "Tipe kembaliannya bukan `boolean`, melainkan penanda `val is number` — tulis `function isNumber(val: unknown): val is number`.",
+                "Tipe kembaliannya bukan `boolean`, melainkan penanda `val is number` — tulis `function isNumber(val: unknown): val is number`. Bentuk arrow function juga diterima.",
             },
             {
               pattern: "typeof\\s+val\\s*===\\s*['\"]number['\"]",
@@ -1468,12 +1480,18 @@ export const typescriptTrack: Track = {
           tests: [
             {
               pattern:
-                "type\\s+Direction\\s*=\\s*\\|?\\s*['\"]UP['\"]\\s*\\|\\s*['\"]DOWN['\"]\\s*\\|\\s*['\"]LEFT['\"]\\s*\\|\\s*['\"]RIGHT['\"]\\s*;?",
+                "type\\s+Direction\\s*=(?=[\\s\\S]*['\"]UP['\"])(?=[\\s\\S]*['\"]DOWN['\"])(?=[\\s\\S]*['\"]LEFT['\"])(?=[\\s\\S]*['\"]RIGHT['\"])",
               message:
-                "Keempat arah harus disebut semua dan dipisahkan `|`, urut UP, DOWN, LEFT, RIGHT.",
+                "Keempat arah harus disebut semua sebagai literal berkutip: `\"UP\"`, `\"DOWN\"`, `\"LEFT\"`, `\"RIGHT\"`. Urutannya bebas.",
             },
             {
-              pattern: "enum\\s+Direction",
+              pattern: "['\"]\\s*\\|\\s*['\"]",
+              message:
+                "Pisahkan tiap arah dengan tanda `|`. Boleh satu baris atau bertingkat ke bawah dengan `|` di awal tiap baris.",
+            },
+            {
+              pattern: "^[^/\\n]*enum\\s+Direction",
+              flags: "im",
               mustNotMatch: true,
               message:
                 "Justru `enum` yang ingin kita hindari di step ini karena ia meninggalkan kode di hasil kompilasi. Pakai `type` dengan union literal.",
@@ -1542,12 +1560,13 @@ export const typescriptTrack: Track = {
           tests: [
             {
               pattern:
-                "const\\s+appConfig\\s*=\\s*\\{[\\s\\S]*port\\s*:\\s*3000[\\s\\S]*host\\s*:\\s*['\"]localhost['\"][\\s\\S]*\\}\\s*satisfies\\s+Konfigurasi",
+                "const\\s+appConfig\\s*=\\s*\\{(?=[\\s\\S]*port\\s*:\\s*3000)(?=[\\s\\S]*host\\s*:\\s*['\"]localhost['\"])[\\s\\S]*\\}\\s*satisfies\\s+Konfigurasi",
               message:
-                "Bentuknya `const appConfig = { port: 3000, host: \"localhost\" } satisfies Konfigurasi;` — kata `satisfies` ditulis setelah kurung kurawal penutup.",
+                "Bentuknya `const appConfig = { port: 3000, host: \"localhost\" } satisfies Konfigurasi;` — kata `satisfies` ditulis setelah kurung kurawal penutup. Urutan kedua propertinya bebas.",
             },
             {
-              pattern: "const\\s+appConfig\\s*:\\s*Konfigurasi",
+              pattern: "^[^/\\n]*const\\s+appConfig\\s*:\\s*Konfigurasi",
+              flags: "im",
               mustNotMatch: true,
               message:
                 "Kamu memakai anotasi titik dua. Itu melebarkan tipenya dan menghilangkan detail nilai — gunakan `satisfies` di akhir objek.",
@@ -1761,7 +1780,8 @@ export const typescriptTrack: Track = {
                 "Deklarasikan parameter tipenya di antara `<` dan `>` setelah nama fungsi, lalu pakai nama yang SAMA untuk tipe parameter dan tipe kembalian — misalnya `function identity<T>(arg: T): T`.",
             },
             {
-              pattern: ":\\s*any\\b",
+              pattern: "^[^/\\n]*:\\s*any\\b",
+              flags: "im",
               mustNotMatch: true,
               message:
                 "Jangan pakai `any` — justru itulah yang sedang kita hindari di step ini.",
@@ -1846,16 +1866,18 @@ export const typescriptTrack: Track = {
                 "Tulis parameter tipenya di antara kurung sudut setelah nama interface, misalnya `interface ResponseBox<T> {`.",
             },
             {
-              pattern: "data\\s*:\\s*\\w+\\s*;?",
+              pattern:
+                "interface\\s+ResponseBox\\s*<\\s*(\\w+)\\s*>[\\s\\S]*?data\\s*:\\s*\\1\\b",
               message:
-                "Properti `data` harus bertipe parameter generic-mu (misalnya `data: T`), bukan tipe tetap.",
+                "Properti `data` harus memakai nama parameter generic yang kamu tulis di kurung sudut. Kalau parameternya `T`, tulis `data: T` — bukan nama tipe lain.",
             },
             {
               pattern: "success\\s*:\\s*boolean",
               message: "Tambahkan properti `success` bertipe `boolean`.",
             },
             {
-              pattern: "data\\s*:\\s*(string|number|boolean|object|any)\\b",
+              pattern: "^[^/\\n]*data\\s*:\\s*(string|number|boolean|object|any)\\b",
+              flags: "im",
               mustNotMatch: true,
               message:
                 "Properti `data` masih memakai tipe tetap. Isinya berbeda tiap endpoint, jadi pakai parameter generic-mu.",
@@ -1908,6 +1930,7 @@ export const typescriptTrack: Track = {
             "Kamu akan jauh lebih sering membaca generics daripada menulisnya, dan tempat pertama kamu menemuinya adalah React. **React belum kamu pelajari, dan step ini tidak menuntutmu memahaminya** — tiga keterangan ini cukup: sebuah *komponen* adalah fungsi biasa yang namanya diawali huruf besar dan mengembalikan tampilan; tulisan mirip HTML di dalam JavaScript itu disebut *JSX*; dan `useState` adalah fungsi React untuk menyimpan satu nilai yang bisa berubah, yang mengembalikan dua hal sekaligus — nilainya sekarang dan fungsi untuk menggantinya. Yang perlu kamu perhatikan di sini murni soal kurung sudut. `useState<number>(0)` berarti \"buat state yang isinya angka, mulai dari 0\", dan dari situ React menyimpulkan bahwa fungsi pengubahnya hanya menerima angka. Dalam banyak kasus kamu tidak perlu menulis kurung sudut sama sekali karena nilai awal sudah cukup untuk disimpulkan — tetapi ada satu situasi yang mengharuskannya: ketika nilai awalnya `null` sementara nantinya akan diisi objek, seperti `useState<User | null>(null)`. Tanpa penyebutan itu, TypeScript menyimpulkan tipenya sebagai `null` saja dan menolak semua pengisian berikutnya — salah satu error paling membingungkan yang dialami pemula React.",
           example: {
             code:
+              "import { useState } from \"react\";\n\n" +
               "function DaftarNama() {\n" +
               "  const [nama, setNama] = useState<string[]>([]);\n" +
               "  return <p>Jumlah nama: {nama.length}</p>;\n" +
@@ -2174,7 +2197,13 @@ export const typescriptTrack: Track = {
                 "Utility yang membuat semua properti opsional bernama `Partial`. Tulis `type DraftUser = Partial<User>;`.",
             },
           ],
-          solution: "type DraftUser = Partial<User>;",
+          solution:
+            "interface User {\n" +
+            "  id: number;\n" +
+            "  name: string;\n" +
+            "  email: string;\n" +
+            "}\n\n" +
+            "type DraftUser = Partial<User>;",
         },
         {
           kind: "step",
@@ -2214,13 +2243,20 @@ export const typescriptTrack: Track = {
                 "Pakai `Pick` (daftar putih), sebutkan kedua nama properti sebagai teks dan gabungkan dengan `|`, misalnya `Pick<User, \"name\" | \"email\">`.",
             },
             {
-              pattern: "Omit\\s*<",
+              pattern: "^[^/\\n]*Omit\\s*<",
+              flags: "im",
               mustNotMatch: true,
               message:
                 "`Omit` bersifat daftar hitam — kolom rahasia yang ditambahkan nanti akan ikut terbawa. Step ini meminta pendekatan daftar putih.",
             },
           ],
-          solution: 'type UserPreview = Pick<User, "name" | "email">;',
+          solution:
+            "interface User {\n" +
+            "  id: number;\n" +
+            "  name: string;\n" +
+            "  email: string;\n" +
+            "}\n\n" +
+            'type UserPreview = Pick<User, "name" | "email">;',
         },
         {
           kind: "step",
@@ -2287,7 +2323,11 @@ export const typescriptTrack: Track = {
                 "Bentuknya `type Result = ReturnType<typeof getData>;`. Kata `typeof` wajib ada — tanpanya kamu memberikan nilai ke tempat yang meminta tipe.",
             },
           ],
-          solution: "type Result = ReturnType<typeof getData>;",
+          solution:
+            "function getData() {\n" +
+            "  return { id: 1, nama: \"Kopi Gayo\", harga: 85000 };\n" +
+            "}\n\n" +
+            "type Result = ReturnType<typeof getData>;",
         },
         {
           kind: "step",
@@ -2324,7 +2364,13 @@ export const typescriptTrack: Track = {
                 "Urutannya `keyof typeof config` — `typeof` mengubah nilai menjadi tipe, lalu `keyof` mengambil daftar key-nya.",
             },
           ],
-          solution: "type ConfigKeys = keyof typeof config;",
+          solution:
+            "const config = {\n" +
+            "  apiUrl: \"https://api.bilearn.id\",\n" +
+            "  timeout: 5000,\n" +
+            "  debug: false,\n" +
+            "};\n\n" +
+            "type ConfigKeys = keyof typeof config;",
         },
         {
           kind: "step",
@@ -2362,13 +2408,19 @@ export const typescriptTrack: Track = {
                 "Bentuknya `type Opsional<T> = { [K in keyof T]?: T[K] };` — perhatikan tanda `?` sebelum titik dua, dan `T[K]` untuk mengambil tipe nilai aslinya.",
             },
             {
-              pattern: "Partial\\s*<",
+              pattern: "^[^/\\n]*Partial\\s*<",
+              flags: "im",
               mustNotMatch: true,
               message:
                 "Step ini justru meminta kamu menulis sendiri versi Partial-nya, supaya paham cara kerjanya dari dalam.",
             },
           ],
-          solution: "type Opsional<T> = { [K in keyof T]?: T[K] };",
+          solution:
+            "interface Produk {\n" +
+            "  nama: string;\n" +
+            "  harga: number;\n" +
+            "}\n\n" +
+            "type Opsional<T> = { [K in keyof T]?: T[K] };",
         },
         {
           kind: "step",
@@ -2571,8 +2623,9 @@ export const typescriptTrack: Track = {
             code:
               "interface Baris { id: number; jumlah: number }\n" +
               "const dariCsv = { id: 1, jumlah: \"3\" };\n" +
-              "// const b: Baris = dariCsv;",
+              "const b: Baris = dariCsv;   // <- baris inilah yang ditolak",
             output:
+              "Menjalankan tsc pada kode di atas menghasilkan:\n" +
               "Type '{ id: number; jumlah: string; }' is not assignable to type 'Baris'.\n" +
               "  Types of property 'jumlah' are incompatible.\n" +
               "    Type 'string' is not assignable to type 'number'.\n\n" +
@@ -2595,12 +2648,13 @@ export const typescriptTrack: Track = {
           language: "jsx",
           tests: [
             {
-              pattern: "harga\\s*:\\s*number\\s*;?",
+              pattern: "interface\\s+Produk\\s*\\{[^}]*harga\\s*:\\s*number",
               message:
-                "Ubah tipe properti `harga` di dalam interface menjadi `number`, sesuai data yang benar.",
+                "Di dalam badan `interface Produk`, properti `harga` harus bertipe `number`. Jangan menghapus propertinya — yang perlu diubah tipenya.",
             },
             {
-              pattern: "harga\\s*:\\s*string",
+              pattern: "^[^/\\n]*harga\\s*:\\s*string",
+              flags: "im",
               mustNotMatch: true,
               message:
                 "Masih ada `harga: string` di interface. Itulah sumber ketidakcocokan yang disebut baris terakhir pesan error.",
@@ -2771,10 +2825,10 @@ export const typescriptTrack: Track = {
               "const kanvas = document.createElement(\"canvas\") as HTMLCanvasElement;\n" +
               "console.log(kanvas.tagName);",
             output: "CANVAS",
-            note: "Bedanya: pada kasus kedua kamu benar-benar tahu bentuknya; pada kasus pertama kamu cuma berharap. Catatan preview: halaman preview tidak memuat elemen `#username`, jadi panel bawah akan memberitahu bahwa potongan ini belum bisa dijalankan sendiri — itu wajar, dan yang dinilai adalah bentuk kodenya.",
+            note: "Bedanya: pada kasus kedua kamu benar-benar tahu bentuknya; pada kasus pertama kamu cuma berharap. `createElement` membuat elemennya sendiri, jadi contoh ini benar-benar berjalan di preview dan mencetak CANVAS.",
           },
           instruction:
-            "Variabel `elem` di editor berisi hasil `document.getElementById`, yang menurut compiler bisa berupa elemen HTML umum atau `null` — sehingga `.value` ditolak. Kamu sudah memastikan sendiri bahwa elemen itu memang sebuah input teks. Buat konstanta baru bernama `input` yang menegaskan tipe `elem` sebagai elemen input HTML, lalu cetak nilainya.",
+            "Variabel `elem` di editor berisi hasil `document.getElementById`, yang menurut compiler bisa berupa elemen HTML umum atau `null` — sehingga `.value` ditolak. Kamu sudah memastikan sendiri bahwa elemen itu memang sebuah input teks. Buat konstanta baru bernama `input` yang menegaskan tipe `elem` sebagai elemen input HTML, lalu cetak nilainya. Catatan jujur: halaman preview tidak memuat elemen `#username`, jadi panel bawah akan berkata potongan ini belum bisa dijalankan sendiri — itu wajar, dan tesnya tetap bisa lulus karena yang dinilai adalah bentuk kodenya.",
           starterCode:
             "const elem = document.getElementById(\"username\");\n" +
             "// console.log(elem.value);\n" +
