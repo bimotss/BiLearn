@@ -17,7 +17,7 @@ export default function ItemDetail({
   stepId: string;
 }) {
   const track = getTrack(slug);
-  const { ready, mode, setMode, isDone, markDone } = useProgress();
+  const { ready, mode, isDone, isDoneDi, markDone } = useProgress();
 
   if (!track) notFound();
 
@@ -28,9 +28,18 @@ export default function ItemDetail({
   const item = items[index];
   const prev = items[index - 1];
   const next = items[index + 1];
-  const finished = ready && isDone(track.slug, item.id);
-
   const hasPilihanGanda = item.kind === "step" && Boolean(item.pilihanGanda);
+
+  // Step tanpa varian dikerjakan lewat editor, jadi statusnya ada di dunia
+  // koding — walaupun mode aktifnya pilihan ganda. Tanpa penyesuaian ini,
+  // user menyelesaikan step lalu tidak melihat tanda selesai sama sekali.
+  const diLuarMode =
+    item.kind === "step" && mode === "pilihan-ganda" && !hasPilihanGanda;
+  const finished =
+    ready &&
+    (diLuarMode
+      ? isDoneDi(track.slug, item.id, "koding")
+      : isDone(track.slug, item.id));
 
   return (
     <div className="space-y-6">
@@ -41,38 +50,23 @@ export default function ItemDetail({
         >
           ← {track.title}
         </Link>
-        <div className="flex flex-wrap items-center gap-4">
-          {/* Segmented control pemilih mode global */}
-          <div className="inline-flex rounded-lg border border-neutral-200 bg-neutral-100 p-1 text-xs font-medium">
-            <button
-              type="button"
-              onClick={() => setMode("koding")}
-              className={`rounded-md px-3 py-1.5 transition ${
-                mode === "koding"
-                  ? "bg-white text-neutral-900 shadow-sm font-semibold"
-                  : "text-neutral-600 hover:text-neutral-900"
+        {/*
+          Pemilih mode sekarang tinggal satu, di header utama (PenunjukMode),
+          supaya tidak ada dua sumber kebenaran di layar yang sama — dan supaya
+          mode juga terlihat dari halaman depan.
+        */}
+        <span className="text-sm text-neutral-500">
+          {index + 1} / {items.length}
+          {finished && (
+            <span
+              className={`ml-2 font-medium ${
+                mode === "pilihan-ganda" ? "text-purple-700" : "text-green-600"
               }`}
             >
-              ⌨️ Koding
-            </button>
-            <button
-              type="button"
-              onClick={() => setMode("pilihan-ganda")}
-              className={`rounded-md px-3 py-1.5 transition ${
-                mode === "pilihan-ganda"
-                  ? "bg-white text-neutral-900 shadow-sm font-semibold"
-                  : "text-neutral-600 hover:text-neutral-900"
-              }`}
-            >
-              🔘 Pilihan Ganda
-            </button>
-          </div>
-
-          <span className="text-sm text-neutral-500">
-            {index + 1} / {items.length}
-            {finished && <span className="ml-2 font-medium text-green-600">✓ selesai</span>}
-          </span>
-        </div>
+              ✓ selesai
+            </span>
+          )}
+        </span>
       </div>
 
       <h1 className="text-2xl font-bold">
@@ -81,10 +75,12 @@ export default function ItemDetail({
       </h1>
 
       {item.kind === "materi" ? (
+        // Materi & kuis isinya sama di dua mode, jadi sekali selesai berlaku
+        // di kedua dunia.
         <MateriView
           key={item.id}
           materi={item}
-          onPassed={() => markDone(track.slug, item.id)}
+          onPassed={() => markDone(track.slug, item.id, "keduanya")}
         />
       ) : item.kind === "step" ? (
         mode === "pilihan-ganda" ? (
@@ -97,7 +93,10 @@ export default function ItemDetail({
           ) : (
             <div className="space-y-6">
               <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
-                ℹ️ Step ini belum tersedia dalam mode pilihan ganda. Menampilkan mode koding.
+                ℹ️ Step ini belum punya soal pilihan ganda, jadi yang tampil
+                mode ngetik. Kalau kamu menyelesaikannya di sini, itu tercatat
+                sebagai pencapaian mode ngetik — bukan mode pilihan ganda,
+                karena kamu memang mengetik kodenya sendiri.
               </div>
               <StepView
                 key={item.id}
@@ -117,7 +116,7 @@ export default function ItemDetail({
         <QuizView
           key={item.id}
           quiz={item}
-          onPassed={() => markDone(track.slug, item.id)}
+          onPassed={() => markDone(track.slug, item.id, "keduanya")}
         />
       )}
 

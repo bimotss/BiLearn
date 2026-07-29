@@ -2,23 +2,23 @@
 
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getTrack, getTrackItems } from "@/data/tracks";
+import { getTrack, getTrackItems, itemTersediaDiMode } from "@/data/tracks";
 import { useProgress } from "@/lib/progress";
 
 export default function TrackDetail({ slug }: { slug: string }) {
   const track = getTrack(slug);
-  const { ready, isDone, doneCount, doneMode } = useProgress();
+  const { ready, mode, isDone, doneCount, totalCount } = useProgress();
 
   if (!track) notFound();
 
   const items = getTrackItems(track);
+  const modePg = ready && mode === "pilihan-ganda";
   const done = ready ? doneCount(track.slug) : 0;
-  const pct = items.length > 0 ? Math.round((done / items.length) * 100) : 0;
-
-  const trackDoneMode = ready ? (doneMode[track.slug] ?? {}) : {};
-  const choiceDoneCount = Object.values(trackDoneMode).filter(
-    (m) => m === "pilihan-ganda"
-  ).length;
+  const total = ready ? totalCount(track.slug) : items.length;
+  const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+  // Berapa step yang belum punya soal pilihan ganda — dipakai untuk
+  // menerangkan kenapa angka di mode ini lebih kecil.
+  const belumAdaSoal = items.length - total;
 
   return (
     <div className="space-y-8">
@@ -37,13 +37,19 @@ export default function TrackDetail({ slug }: { slug: string }) {
           <p className="text-neutral-600">{track.description}</p>
           <p className="text-sm text-neutral-500">
             ±{track.hours} jam
-            {items.length > 0 &&
-              ` · ${done} dari ${items.length} selesai (${pct}%)${
-                choiceDoneCount > 0
-                  ? ` — ${choiceDoneCount} di antaranya lewat mode pilihan ganda`
-                  : ""
-              }`}
+            {total > 0 && ` · ${done} dari ${total} selesai (${pct}%)`}
+            {modePg && (
+              <span className="ml-1 font-medium text-purple-700">
+                · mode pilihan ganda
+              </span>
+            )}
           </p>
+          {modePg && belumAdaSoal > 0 && (
+            <p className="text-xs text-neutral-500">
+              {belumAdaSoal} step lain belum punya soal pilihan ganda, jadi
+              belum ikut dihitung di mode ini. Step-nya tetap bisa kamu buka.
+            </p>
+          )}
         </div>
       </section>
 
@@ -96,7 +102,9 @@ export default function TrackDetail({ slug }: { slug: string }) {
             <ul className="mt-4 space-y-2">
               {mod.items.map((item) => {
                 const finished = ready && isDone(track.slug, item.id);
-                const itemMode = finished ? trackDoneMode[item.id] ?? "koding" : null;
+                // Di mode pilihan ganda, step yang belum punya soal tetap
+                // ditampilkan — hanya ditandai bahwa ia di luar hitungan.
+                const diLuarMode = ready && !itemTersediaDiMode(item, mode);
 
                 return (
                   <li key={item.id}>
@@ -107,16 +115,14 @@ export default function TrackDetail({ slug }: { slug: string }) {
                       <span
                         className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs ${
                           finished
-                            ? itemMode === "pilihan-ganda"
+                            ? modePg
                               ? "bg-purple-600 text-white"
                               : "bg-green-500 text-white"
                             : "bg-neutral-100 text-neutral-400"
                         }`}
                       >
                         {finished
-                          ? itemMode === "pilihan-ganda"
-                            ? "🔘"
-                            : "✓"
+                          ? "✓"
                           : item.kind === "quiz"
                           ? "?"
                           : item.kind === "materi"
@@ -124,9 +130,9 @@ export default function TrackDetail({ slug }: { slug: string }) {
                           : "‹›"}
                       </span>
                       <span className="flex-1">{item.title}</span>
-                      {finished && itemMode === "pilihan-ganda" && (
-                        <span className="rounded bg-purple-100 px-2 py-0.5 text-xs text-purple-800 font-medium">
-                          Pilihan Ganda
+                      {diLuarMode && (
+                        <span className="rounded bg-neutral-100 px-2 py-0.5 text-xs font-medium text-neutral-500">
+                          Belum ada soalnya
                         </span>
                       )}
                       <span className="text-xs uppercase tracking-wide text-neutral-400">

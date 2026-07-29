@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { PemilihModeAwal, PenunjukMode } from "@/components/ModeBelajarBar";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -27,19 +28,21 @@ export default function RootLayout({
               <Image src="/logo.svg" alt="BiLearn logo" width={32} height={32} priority />
               Bi<span className="text-gold-700">Learn</span>
             </Link>
-            <div className="flex gap-6 text-sm font-medium text-neutral-600">
+            <div className="flex items-center gap-4 text-sm font-medium text-neutral-600 sm:gap-6">
               <Link href="/" className="hover:text-gold-700">
                 Semua Track
               </Link>
               <Link href="/paths" className="hover:text-gold-700">
                 Learning Path
               </Link>
+              <PenunjukMode />
             </div>
           </nav>
         </header>
         <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8">
           {children}
         </main>
+        <PemilihModeAwal />
         <footer className="border-t border-neutral-200 py-6 text-center text-sm text-neutral-500">
           BiLearn — semua materi terbuka, belajar dengan urutanmu sendiri.
         </footer>

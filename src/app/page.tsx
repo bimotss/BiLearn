@@ -6,7 +6,8 @@ import { getPath } from "@/data/paths";
 import { useProgress } from "@/lib/progress";
 
 export default function HomePage() {
-  const { progress, ready, doneCount, setActivePath } = useProgress();
+  const { progress, ready, mode, doneCount, totalCount, setActivePath } =
+    useProgress();
   const activePath = ready ? getPath(progress.activePath ?? "") : undefined;
 
   // Dengan path aktif: track diurutkan sesuai path (sisanya di bawah).
@@ -80,10 +81,13 @@ export default function HomePage() {
         </h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {ordered.map((track, i) => {
-            const items = getTrackItems(track);
+            // Angka mengikuti dunia yang sedang aktif. Sebelum localStorage
+            // terbaca, pakai jumlah item apa adanya supaya tidak ada lompatan
+            // tampilan saat hydration.
+            const semuaItem = getTrackItems(track);
             const done = ready ? doneCount(track.slug) : 0;
-            const pct =
-              items.length > 0 ? Math.round((done / items.length) * 100) : 0;
+            const total = ready ? totalCount(track.slug) : semuaItem.length;
+            const pct = total > 0 ? Math.round((done / total) * 100) : 0;
             const inPath = activePath?.trackSlugs.includes(track.slug);
             return (
               <Link
@@ -113,18 +117,29 @@ export default function HomePage() {
                 </p>
                 <div className="mt-3 flex items-center justify-between text-xs text-neutral-500">
                   <span>±{track.hours} jam</span>
-                  {items.length > 0 ? (
+                  {total > 0 ? (
                     <span>
-                      {done}/{items.length} selesai ({pct}%)
+                      {done}/{total} selesai ({pct}%)
+                      {ready && mode === "pilihan-ganda" && (
+                        <span className="ml-1 text-purple-700">· pilihan ganda</span>
+                      )}
                     </span>
                   ) : (
-                    <span>{track.modules.length} modul</span>
+                    <span>
+                      {ready && mode === "pilihan-ganda"
+                        ? "belum ada soal pilihan ganda"
+                        : `${track.modules.length} modul`}
+                    </span>
                   )}
                 </div>
-                {items.length > 0 && (
+                {total > 0 && (
                   <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-neutral-100">
                     <div
-                      className="h-full rounded-full bg-gold-500 transition-all"
+                      className={`h-full rounded-full transition-all ${
+                        ready && mode === "pilihan-ganda"
+                          ? "bg-purple-500"
+                          : "bg-gold-500"
+                      }`}
                       style={{ width: `${pct}%` }}
                     />
                   </div>

@@ -174,13 +174,39 @@ export interface LearningPath {
 
 // ---------- Progress (localStorage, MVP tanpa login) ----------
 
+/** Dua jalur belajar yang progressnya berdiri sendiri-sendiri. */
+export type ModeBelajar = "koding" | "pilihan-ganda";
+
 export interface Progress {
-  /** itemId yang sudah selesai, per track: trackSlug -> itemIds */
+  /**
+   * itemId yang sudah selesai di dunia KODING, per track: trackSlug -> itemIds.
+   *
+   * Bentuk dan nama field ini sengaja tidak diubah: progress lama yang sudah
+   * ada di browser user tersimpan di sini, dan sebelum mode pilihan ganda ada,
+   * semua penyelesaian memang lewat mengetik kode.
+   */
   completed: Record<string, string[]>;
+  /**
+   * itemId yang sudah selesai di dunia PILIHAN GANDA. Berdiri sendiri:
+   * menyelesaikan step di sini tidak menambah apa pun di `completed`.
+   * Materi dan kuis dicatat di kedua tempat karena isinya tidak berbeda.
+   */
+  completedPilihanGanda?: Record<string, string[]>;
   /** Path yang sedang dipilih user (opsional) */
   activePath?: string;
   /** Mode belajar global pilihan user: "koding" (default) | "pilihan-ganda" */
-  mode?: "koding" | "pilihan-ganda";
-  /** Mode penyelesaian per item: trackSlug -> itemId -> mode */
-  doneMode?: Record<string, Record<string, "koding" | "pilihan-ganda">>;
+  mode?: ModeBelajar;
+  /**
+   * true kalau user sudah pernah menjawab (atau melewati) layar pemilihan
+   * mode. Dipakai supaya layar itu tidak muncul lagi setiap kali membuka situs.
+   */
+  modeDipilih?: boolean;
+  /**
+   * PENINGGALAN. Dulu dipakai untuk menandai mode penyelesaian saat progress
+   * masih satu ember. Tidak ditulis lagi, tapi sengaja tidak dihapus: field
+   * inilah yang dibaca sekali untuk memindahkan progress lama ke dua dunia.
+   */
+  doneMode?: Record<string, Record<string, ModeBelajar>>;
+  /** Penanda bahwa pemisahan ke dua dunia sudah dijalankan untuk data ini. */
+  duaDuniaSiap?: boolean;
 }

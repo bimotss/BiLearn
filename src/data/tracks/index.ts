@@ -1,4 +1,4 @@
-import type { Track } from "@/lib/types";
+import type { ModeBelajar, ModuleItem, Track } from "@/lib/types";
 import { htmlTrack } from "./html";
 import { cssTrack } from "./css";
 import { javascriptTrack } from "./javascript";
@@ -42,4 +42,31 @@ export function getTrack(slug: string): Track | undefined {
 /** Semua item (step+kuis) sebuah track, urut */
 export function getTrackItems(track: Track) {
   return track.modules.flatMap((m) => m.items);
+}
+
+/**
+ * Apakah satu item bisa dikerjakan di mode tertentu.
+ *
+ * Materi dan kuis tidak terpengaruh mode — isinya sama persis di dua-duanya.
+ * Step hanya masuk mode "pilihan-ganda" kalau varian soalnya sudah ditulis;
+ * step yang belum punya varian tetap DITAMPILKAN di daftar (aturan: jangan
+ * menyembunyikan step), hanya saja tidak ikut dihitung sebagai target mode itu.
+ */
+export function itemTersediaDiMode(
+  item: ModuleItem,
+  mode: ModeBelajar
+): boolean {
+  if (item.kind !== "step") return true;
+  if (mode === "koding") return true;
+  return Boolean(item.pilihanGanda);
+}
+
+/** Item yang menjadi target progress untuk sebuah mode. */
+export function getTrackItemsForMode(track: Track, mode: ModeBelajar) {
+  return getTrackItems(track).filter((i) => itemTersediaDiMode(i, mode));
+}
+
+/** Item yang penyelesaiannya berlaku di KEDUA dunia (materi & kuis). */
+export function itemLintasMode(item: ModuleItem): boolean {
+  return item.kind !== "step";
 }
