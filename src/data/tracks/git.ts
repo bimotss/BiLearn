@@ -132,6 +132,22 @@ export const gitTrack: Track = {
             },
           ],
           solution: "git --version",
+          susunKode: {
+            question:
+              "Susun perintah yang menampilkan versi Git yang terpasang di komputermu.",
+            potongan: [
+              "git",
+              "--version",
+            ],
+            pengecoh: [
+              "--help",
+              "-v",
+              "--v",
+            ],
+            pemisah: " ",
+            explanation:
+              "Opsi panjang di dunia terminal ditulis dengan **dua** tanda minus (`--version`), sedangkan satu tanda minus dipakai untuk opsi satu huruf seperti `-m`. Keping `-v` dan `--v` menggoda karena banyak program lain menerimanya sebagai singkatan versi, tapi Git menolaknya dengan `unknown option` — dan kekeliruan ini sering membuat pemula menyangka Git-nya belum terpasang padahal hanya salah opsi. Keping `--help` sah dan berjalan, tapi yang muncul daftar perintah, bukan nomor versi; membedakan keduanya penting saat kamu melaporkan bug atau mengikuti tutorial yang meminta versi minimal tertentu.",
+          },
         },
         {
           kind: "step",
@@ -160,6 +176,25 @@ export const gitTrack: Track = {
             },
           ],
           solution: 'git config --global user.name "Bimo Daffa"',
+          susunKode: {
+            question:
+              "Susun perintah yang menetapkan nama penulis commit menjadi `Bimo Daffa` untuk semua repositori di komputermu.",
+            potongan: [
+              "git",
+              "config",
+              "--global",
+              "user.name",
+              "\"Bimo Daffa\"",
+            ],
+            pengecoh: [
+              "--local",
+              "user.username",
+              "user.email",
+            ],
+            pemisah: " ",
+            explanation:
+              "`--global` menyimpan konfigurasinya sekali untuk seluruh repositori di komputermu, dan `user.name` adalah kunci yang dibaca Git saat menyusun identitas penulis commit. Keping `--local` menggoda karena terdengar lebih aman, tapi ia hanya berlaku di repositori yang sedang kamu buka — dan gagal total kalau dijalankan di folder yang belum pernah di-`git init`. Keping `user.username` sering ditebak karena istilah *username* lebih akrab, padahal Git tidak mengenal kunci itu: perintahnya tetap sukses tanpa pesan apa pun, lalu commit-mu keluar dengan nama yang salah. Keping `user.email` mengisi kolom yang berbeda.",
+          },
         },
         {
           kind: "step",
@@ -185,6 +220,23 @@ export const gitTrack: Track = {
             },
           ],
           solution: "git add app.js",
+          susunKode: {
+            question:
+              "Susun perintah yang memasukkan berkas `app.js` ke staging area, siap ikut commit berikutnya.",
+            potongan: [
+              "git",
+              "add",
+              "app.js",
+            ],
+            pengecoh: [
+              "stage",
+              "commit",
+              ".",
+            ],
+            pemisah: " ",
+            explanation:
+              "`git add` memindahkan perubahan ke staging area — ruang tunggu tempat kamu memilih apa saja yang ikut commit berikutnya. Keping `stage` menggoda karena istilah resminya memang *staging area* dan banyak antarmuka grafis memakai tombol bertulisan \"Stage\", tapi nama perintahnya tetap `add`. Keping `commit` melompati satu langkah: tanpa `add` lebih dulu, tidak ada apa pun di ruang tunggu untuk disimpan. Keping titik adalah jebakan yang paling sering merugikan: `git add .` menyapu **semua** berkas yang berubah, termasuk `.env` atau berkas percobaan yang belum siap, dan itulah cara kredensial paling sering bocor ke repositori.",
+          },
         },
         {
           kind: "step",
@@ -209,6 +261,24 @@ export const gitTrack: Track = {
             },
           ],
           solution: 'git commit -m "feat: tambah navigasi utama"',
+          susunKode: {
+            question:
+              "Susun perintah commit dengan pesan berkonvensi `feat: tambah navigasi utama`.",
+            potongan: [
+              "git",
+              "commit",
+              "-m",
+              "\"feat: tambah navigasi utama\"",
+            ],
+            pengecoh: [
+              "-am",
+              "\"feat tambah navigasi utama\"",
+              "'tambah navigasi utama'",
+            ],
+            pemisah: " ",
+            explanation:
+              "Opsi `-m` menyertakan pesan langsung di perintah, dan pesannya wajib dibungkus tanda kutip supaya spasi tidak dianggap sebagai argumen terpisah. Keping `-am` menggoda karena terlihat seperti jalan pintas yang sama, padahal huruf `a` diam-diam ikut menyertakan **semua** berkas terlacak yang berubah — melewati staging area yang barusan kamu pelajari, dan sering membawa perubahan yang belum siap. Keping tanpa titik dua tidak dikenali sebagai Conventional Commits, sehingga alat pembuat changelog otomatis mengabaikannya. Keping tanpa awalan tipe adalah kekeliruan yang sering muncul di repositori tim: pesannya benar secara isi, tapi jenis perubahannya tidak terbaca mesin.",
+          },
         },
         {
           kind: "step",
@@ -234,6 +304,23 @@ export const gitTrack: Track = {
             },
           ],
           solution: "git log --oneline",
+          susunKode: {
+            question:
+              "Susun perintah yang menampilkan riwayat commit dalam bentuk ringkas satu baris per commit.",
+            potongan: [
+              "git",
+              "log",
+              "--oneline",
+            ],
+            pengecoh: [
+              "--online",
+              "--pretty",
+              "history",
+            ],
+            pemisah: " ",
+            explanation:
+              "`--oneline` memadatkan tiap commit menjadi satu baris berisi hash pendek dan judulnya, bentuk yang paling sering dipakai untuk melihat sejarah dengan cepat. Keping `--online` adalah salah ketik yang sering terjadi karena kata itu jauh lebih akrab; Git menjawab dengan `unknown option` dan sebagian orang menyangka perintahnya yang salah. Keping `--pretty` menggoda karena ia memang opsi yang sah, tapi ia butuh format di belakangnya seperti `--pretty=oneline`; berdiri sendiri, ia tidak memberi bentuk ringkas yang diminta. Keping `history` datang dari kebiasaan terminal (`history` menampilkan perintah shell), bukan perintah Git.",
+          },
         },
         {
           kind: "step",
@@ -257,6 +344,22 @@ export const gitTrack: Track = {
             },
           ],
           solution: "node_modules/\n.env",
+          susunKode: {
+            question:
+              "Susun isi berkas `.gitignore` yang membuat Git mengabaikan folder dependensi dan berkas kredensial.",
+            potongan: [
+              "node_modules/",
+              ".env",
+            ],
+            pengecoh: [
+              "node-modules/",
+              "npm_modules/",
+              "env",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Isi `.gitignore` dicocokkan **secara harfiah** dengan nama berkas dan folder, jadi satu huruf berbeda membuat aturannya tidak mengenai apa pun — dan Git tidak pernah memperingatkanmu soal itu. Keping `node-modules/` dengan tanda hubung serta `npm_modules/` adalah kekeliruan ejaan yang sering terjadi karena nama aslinya jarang diketik manual; akibatnya ratusan megabyte tetap ikut ter-commit. Keping `env` tanpa titik di depan menggoda karena terlihat lebih rapi, padahal ia mengabaikan berkas atau folder bernama `env`, sementara `.env` yang berisi kata sandi tetap terlacak — jebakan yang berujung pada kredensial bocor.",
+          },
         },
         {
           kind: "step",
@@ -281,6 +384,23 @@ export const gitTrack: Track = {
             },
           ],
           solution: "git restore script.js",
+          susunKode: {
+            question:
+              "Susun perintah yang membuang perubahan lokal pada berkas `script.js` dan mengembalikannya seperti commit terakhir.",
+            potongan: [
+              "git",
+              "restore",
+              "script.js",
+            ],
+            pengecoh: [
+              "reset",
+              "revert",
+              "undo",
+            ],
+            pemisah: " ",
+            explanation:
+              "`git restore <berkas>` menimpa isi berkas di folder kerjamu dengan versi terakhir yang tersimpan — perintah ini **tidak bisa dibatalkan**, karena perubahan yang belum pernah di-commit memang tidak tersimpan di mana pun. Keping `reset` menggoda karena namanya terdengar paling cocok untuk \"mengembalikan\", padahal `git reset <berkas>` mengeluarkan berkas dari staging area dan justru **tidak** menyentuh isinya. Keping `revert` bekerja pada commit, bukan berkas: ia membuat commit baru yang membatalkan commit lama. Keping `undo` sering ditebak karena akrab dari editor teks, tapi Git tidak punya perintah bernama itu.",
+          },
         },
         {
           kind: "step",
@@ -305,6 +425,23 @@ export const gitTrack: Track = {
             },
           ],
           solution: "git diff --staged",
+          susunKode: {
+            question:
+              "Kamu sudah menjalankan `git add`. Susun perintah yang menampilkan isi perubahan yang benar-benar akan ikut ter-commit.",
+            potongan: [
+              "git",
+              "diff",
+              "--staged",
+            ],
+            pengecoh: [
+              "--unstaged",
+              "--all",
+              "status",
+            ],
+            pemisah: " ",
+            explanation:
+              "`git diff` tanpa opsi menampilkan perubahan yang **belum** di-`add`, jadi setelah staging ia terlihat kosong — dan di sinilah `--staged` (nama lain: `--cached`) diperlukan untuk melihat isi yang benar-benar akan tersimpan. Keping `--unstaged` menggoda karena terdengar sebagai pasangan logis dari `--staged`, padahal opsi itu tidak ada; perilaku \"belum di-stage\" sudah menjadi bawaan tanpa opsi apa pun. Keping `--all` sering ditebak untuk \"lihat semuanya\", tapi bukan itu namanya di `git diff`. Keping `status` hanya menampilkan **nama** berkas, bukan baris yang berubah — dan membaca nama saja adalah kekeliruan yang sering meloloskan `console.log` sisa debug ke repositori.",
+          },
         },
         {
           kind: "step",
@@ -335,6 +472,24 @@ export const gitTrack: Track = {
             },
           ],
           solution: "git restore --staged rahasia.txt",
+          susunKode: {
+            question:
+              "Berkas `rahasia.txt` terlanjur masuk staging lewat `git add .`. Susun perintah yang mengeluarkannya dari staging tanpa menghapus isinya.",
+            potongan: [
+              "git",
+              "restore",
+              "--staged",
+              "rahasia.txt",
+            ],
+            pengecoh: [
+              "--cached",
+              "reset",
+              "rm",
+            ],
+            pemisah: " ",
+            explanation:
+              "`git restore --staged <berkas>` hanya memindahkan berkas keluar dari ruang tunggu; isinya di folder kerjamu tetap utuh. Perhatikan bedanya dengan `git restore <berkas>` tanpa opsi itu, yang justru menghapus perubahanmu — satu opsi memisahkan \"batal ikut commit\" dari \"buang hasil kerjaku\". Keping `--cached` menggoda karena bunyinya mirip dan memang dipakai di perintah lain (`git rm --cached`), tapi `git restore` tidak mengenalnya. Keping `reset` sering dipakai orang dari kebiasaan lama; bentuk yang benar adalah `git reset HEAD <berkas>`, bukan `reset --staged`. Keping `rm` adalah jebakan paling mahal: ia benar-benar menghapus berkasnya.",
+          },
         },
         {
           kind: "quiz",
@@ -531,6 +686,22 @@ export const gitTrack: Track = {
             },
           ],
           solution: "git branch",
+          susunKode: {
+            question:
+              "Susun perintah yang menampilkan daftar seluruh branch lokal di repositori ini.",
+            potongan: [
+              "git",
+              "branch",
+            ],
+            pengecoh: [
+              "checkout",
+              "list",
+              "show-branch",
+            ],
+            pemisah: " ",
+            explanation:
+              "`git branch` tanpa argumen menampilkan daftar branch lokal dan menandai branch aktif dengan tanda bintang. Keping `checkout` menggoda karena keduanya sama-sama berurusan dengan branch, padahal `git checkout` **berpindah** — dan tanpa argumen ia justru mengeluarkan pesan error, sementara dengan argumen yang salah ia bisa membuatmu masuk ke keadaan *detached HEAD* yang membingungkan pemula. Keping `list` sering ditebak karena kata itu dipakai di banyak alat lain, tapi Git tidak mengenalnya sebagai perintah. Keping `show-branch` memang perintah Git yang sah, tapi keluarannya berupa diagram perbandingan commit antar branch, bukan daftar sederhana.",
+          },
         },
         {
           kind: "step",
@@ -555,6 +726,24 @@ export const gitTrack: Track = {
             },
           ],
           solution: "git switch -c feature/checkout",
+          susunKode: {
+            question:
+              "Susun perintah yang membuat branch `feature/checkout` sekaligus langsung berpindah ke sana.",
+            potongan: [
+              "git",
+              "switch",
+              "-c",
+              "feature/checkout",
+            ],
+            pengecoh: [
+              "-b",
+              "branch",
+              "feature checkout",
+            ],
+            pemisah: " ",
+            explanation:
+              "`git switch -c` membuat branch baru lalu langsung berpindah ke sana; huruf `c` berarti *create*. Keping `-b` adalah kekeliruan yang sangat sering terjadi karena kedua opsi itu melakukan hal yang sama — bedanya `-b` milik perintah lama `git checkout -b`, dan mencampur keduanya menghasilkan `unknown switch`. Keping `branch` menggoda karena `git branch feature/checkout` memang membuat branch, tapi kamu **tetap tertinggal** di branch lama; commit berikutnya masuk ke tempat yang salah, dan ini salah satu kebingungan paling umum di minggu pertama. Keping dengan spasi membuat Git membaca dua argumen terpisah — nama branch tidak boleh mengandung spasi.",
+          },
         },
         {
           kind: "step",
@@ -579,6 +768,23 @@ export const gitTrack: Track = {
             },
           ],
           solution: "git merge fix/header",
+          susunKode: {
+            question:
+              "Kamu sedang berada di branch tujuan. Susun perintah yang menggabungkan branch `fix/header` ke branch yang sedang aktif.",
+            potongan: [
+              "git",
+              "merge",
+              "fix/header",
+            ],
+            pengecoh: [
+              "rebase",
+              "pull",
+              "main",
+            ],
+            pemisah: " ",
+            explanation:
+              "`git merge <branch>` menarik pekerjaan dari branch yang kamu sebut **ke dalam** branch yang sedang aktif — arah inilah yang paling sering tertukar, dan menjalankannya dari branch yang salah menggabungkan sejarah ke tempat yang tidak kamu inginkan. Keping `main` menggoda justru karena itu nama yang paling sering diketik; hasilnya kebalikan dari yang diminta soal. Keping `rebase` sama-sama menyatukan pekerjaan tapi dengan cara berbeda: ia menulis ulang commit-mu di atas branch lain, jadi keliru memilihnya mengubah riwayat yang mungkin sudah dipakai orang lain. Keping `pull` mengambil dari remote, bukan dari branch lokal.",
+          },
         },
         {
           kind: "step",
@@ -603,6 +809,24 @@ export const gitTrack: Track = {
             },
           ],
           solution: 'git commit -m "fix: selesaikan konflik merge"',
+          susunKode: {
+            question:
+              "Konflik sudah kamu bereskan dan berkasnya sudah di-`add`. Susun perintah commit penutupnya dengan pesan `fix: selesaikan konflik merge`.",
+            potongan: [
+              "git",
+              "commit",
+              "-m",
+              "\"fix: selesaikan konflik merge\"",
+            ],
+            pengecoh: [
+              "--continue",
+              "--amend",
+              "\"selesaikan konflik merge\"",
+            ],
+            pemisah: " ",
+            explanation:
+              "Setelah menandai konflik selesai dengan `git add`, penutupnya adalah commit biasa — Git sudah menyiapkan keadaan merge dan tinggal menunggu commit itu. Keping `--continue` menggoda karena kata itu memang muncul di petunjuk terminal, tapi bentuknya `git merge --continue` atau `git rebase --continue`, bukan opsi dari `git commit`. Keping `--amend` adalah kekeliruan yang berbahaya di tengah merge: alih-alih menutup penggabungan, ia menimpa commit sebelumnya dan mengubah riwayat yang mungkin sudah dipakai orang lain. Keping tanpa awalan tipe sering lolos di tim: pesannya jelas bagi manusia, tapi tidak terbaca oleh alat changelog yang membaca konvensi.",
+          },
         },
         {
           kind: "step",
@@ -627,6 +851,23 @@ export const gitTrack: Track = {
             },
           ],
           solution: "git stash pop",
+          susunKode: {
+            question:
+              "Kamu menyimpan pekerjaan setengah jadi dengan `git stash`. Susun perintah yang mengembalikannya dan sekaligus membuangnya dari daftar simpanan.",
+            potongan: [
+              "git",
+              "stash",
+              "pop",
+            ],
+            pengecoh: [
+              "apply",
+              "push",
+              "unstash",
+            ],
+            pemisah: " ",
+            explanation:
+              "`git stash pop` mengembalikan simpanan terakhir ke folder kerjamu **lalu menghapusnya** dari daftar, sehingga tidak menumpuk simpanan usang. Keping `apply` menggoda karena hasilnya di layar terlihat sama persis, tapi simpanannya tetap tertinggal di daftar; setelah beberapa kali, kamu punya tumpukan `stash@{0}` sampai `stash@{7}` dan tidak lagi ingat mana yang mana — kekeliruan yang sering menimbulkan konflik saat salah satunya dipakai lagi. Keping `push` justru arah sebaliknya: itulah perintah untuk **menyimpan** ke stash. Keping `unstash` terdengar paling masuk akal tapi tidak ada di Git.",
+          },
         },
         {
           kind: "step",
@@ -651,6 +892,23 @@ export const gitTrack: Track = {
             },
           ],
           solution: "git rebase main",
+          susunKode: {
+            question:
+              "Susun perintah yang menyusun ulang commit branch-mu supaya berdiri di atas `main` terbaru.",
+            potongan: [
+              "git",
+              "rebase",
+              "main",
+            ],
+            pengecoh: [
+              "merge",
+              "-i",
+              "master",
+            ],
+            pemisah: " ",
+            explanation:
+              "`git rebase main` memindahkan commit branch-mu supaya seolah dibuat setelah commit terakhir `main`, menghasilkan riwayat lurus tanpa commit gabungan. Keping `merge` menggoda karena tujuannya mirip, tapi hasilnya berbeda bentuk: merge menambah satu commit gabungan dan mempertahankan percabangan asli — perbedaan yang hampir selalu jadi bahan diskusi saat menentukan aturan repositori tim. Keping `-i` mengubahnya menjadi rebase interaktif tanpa menyebut target, sehingga yang muncul editor daftar commit, bukan penyusunan ulang yang diminta. Keping `master` adalah nama lama branch utama; di repositori baru namanya `main`, dan salah nama membuat Git berhenti dengan `invalid upstream`.",
+          },
         },
         {
           kind: "step",
@@ -675,6 +933,24 @@ export const gitTrack: Track = {
             },
           ],
           solution: "git switch -c fix/login-error",
+          susunKode: {
+            question:
+              "Kamu akan memperbaiki bug login. Susun perintah yang membuat sekaligus berpindah ke branch bernama `fix/login-error`.",
+            potongan: [
+              "git",
+              "switch",
+              "-c",
+              "fix/login-error",
+            ],
+            pengecoh: [
+              "feat/login-error",
+              "checkout",
+              "fix_login_error",
+            ],
+            pemisah: " ",
+            explanation:
+              "Konvensi penamaan branch memakai awalan jenis pekerjaan (`fix/`, `feat/`, `chore/`) lalu ringkasan berhuruf kecil dengan tanda hubung — begitu tim punya puluhan branch, awalan inilah yang membuat daftarnya bisa dibaca. Keping `feat/login-error` menggoda karena isi ringkasannya benar, tapi awalannya menyatakan fitur baru padahal ini perbaikan bug; kekeliruan ini membuat catatan rilis salah golong. Keping `fix_login_error` memakai garis bawah, gaya yang lazim untuk nama variabel tapi jarang untuk branch, sehingga branch-mu terlihat asing di daftar tim. Keping `checkout` tidak cocok dengan opsi `-c`, yang milik `switch`.",
+          },
         },
         {
           kind: "quiz",
@@ -865,6 +1141,25 @@ export const gitTrack: Track = {
             },
           ],
           solution: "git push -u origin main",
+          susunKode: {
+            question:
+              "Susun perintah yang mengirim branch `main` ke remote `origin` untuk pertama kali sekaligus mengaitkannya.",
+            potongan: [
+              "git",
+              "push",
+              "-u",
+              "origin",
+              "main",
+            ],
+            pengecoh: [
+              "origin/main",
+              "-f",
+              "master",
+            ],
+            pemisah: " ",
+            explanation:
+              "Pada push pertama, nama remote dan nama branch ditulis **terpisah**, dan `-u` mengaitkan keduanya sehingga push berikutnya cukup `git push`. Keping `origin/main` menggoda karena bentuk itu memang kamu lihat di keluaran `git status` dan `git log`, tapi di sana ia menunjuk salinan lokal branch remote — sebagai argumen push, Git membacanya sebagai satu nama yang tidak ada. Keping `-f` adalah opsi paling berbahaya di Git: ia menimpa riwayat di server dan bisa menghapus commit rekan tim tanpa peringatan. Keping `master` sering keliru dipakai karena nama lama; sejak beberapa tahun terakhir bawaannya `main`.",
+          },
         },
         {
           kind: "step",
@@ -889,6 +1184,23 @@ export const gitTrack: Track = {
             },
           ],
           solution: "ssh -T git@github.com",
+          susunKode: {
+            question:
+              "Susun perintah yang menguji apakah kunci SSH-mu sudah dikenali GitHub.",
+            potongan: [
+              "ssh",
+              "-T",
+              "git@github.com",
+            ],
+            pengecoh: [
+              "bimo@github.com",
+              "https://github.com",
+              "git",
+            ],
+            pemisah: " ",
+            explanation:
+              "Pengujian SSH ke GitHub selalu memakai pengguna `git`, bukan namamu — GitHub mengenali **siapa kamu** dari kunci yang kamu kirim, bukan dari nama pengguna di depan alamatnya. Keping `bimo@github.com` adalah kekeliruan yang sangat sering terjadi karena terasa masuk akal; hasilnya `Permission denied (publickey)`, dan orang lalu menyangka kuncinya rusak padahal hanya salah nama pengguna. Keping `https://github.com` mencampur dua protokol: `ssh` tidak menerima alamat HTTPS. Keping `git` di posisi awal menggoda karena hampir semua perintah di modul ini diawali kata itu, tapi yang menguji koneksi di sini program `ssh`, bukan Git.",
+          },
         },
         {
           kind: "step",
@@ -913,6 +1225,23 @@ export const gitTrack: Track = {
             },
           ],
           solution: "git fetch origin",
+          susunKode: {
+            question:
+              "Susun perintah yang mengunduh pembaruan dari remote `origin` **tanpa** langsung menggabungkannya ke branch-mu.",
+            potongan: [
+              "git",
+              "fetch",
+              "origin",
+            ],
+            pengecoh: [
+              "pull",
+              "remote",
+              "upstream",
+            ],
+            pemisah: " ",
+            explanation:
+              "`git fetch` hanya mengunduh commit terbaru ke salinan remote lokal, sehingga kamu bisa memeriksanya lebih dulu dengan `git log origin/main` sebelum memutuskan menggabungkan. Keping `pull` adalah jebakan yang paling sering menimbulkan kejutan: ia melakukan fetch **lalu langsung merge**, jadi konflik bisa muncul di tengah pekerjaanmu tanpa kamu minta. Keping `remote` menggoda karena kata itu memang bagian dari topik ini, tapi `git remote` mengurusi daftar alamat server, bukan mengunduh commit. Keping `upstream` adalah nama remote kedua yang lazim di alur fork — sah sebagai nama, tapi bukan remote yang diminta soal.",
+          },
         },
         {
           kind: "step",
@@ -948,6 +1277,27 @@ export const gitTrack: Track = {
             },
           ],
           solution: "# Portofolio Ku\n\nKumpulan proyek latihan saya selama belajar web development.\n\n## Cara menjalankan\n\n```bash\nnpm install\nnpm run dev\n```",
+          susunKode: {
+            question:
+              "Susun isi `README.md` proyek portofoliomu: judul utama, satu kalimat deskripsi, satu bagian cara menjalankan, dan blok kode berisi perintah instalasinya.",
+            potongan: [
+              "# Portofolio Ku",
+              "Kumpulan proyek latihan saya selama belajar web development.",
+              "## Cara menjalankan",
+              "```bash",
+              "npm install",
+              "npm run dev",
+              "```",
+            ],
+            pengecoh: [
+              "#Portofolio Ku",
+              "**Cara menjalankan**",
+              "``",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Markdown menuntut bentuk yang tepat: tanda pagar wajib diikuti **spasi** sebelum teks judul, dan blok kode dibuka serta ditutup dengan tiga backtick. Keping `#Portofolio Ku` tanpa spasi adalah kekeliruan yang sering terjadi dan diam: GitHub menampilkannya sebagai teks biasa, bukan judul. Keping `**Cara menjalankan**` menggoda karena hasilnya terlihat tebal seperti judul, padahal ia bukan heading — jadi tidak muncul di daftar isi otomatis dan tidak bisa ditautkan sebagai jangkar. Keping dua backtick meninggalkan blok kode yang tidak tertutup, sehingga seluruh isi README di bawahnya ikut tertelan menjadi kode.",
+          },
         },
         {
           kind: "step",
@@ -972,6 +1322,24 @@ export const gitTrack: Track = {
             },
           ],
           solution: 'git commit -m "fix #5: perbaiki galeri gambar"',
+          susunKode: {
+            question:
+              "Susun perintah commit yang menutup issue nomor 5 dengan pesan `fix #5: perbaiki galeri gambar`.",
+            potongan: [
+              "git",
+              "commit",
+              "-m",
+              "\"fix #5: perbaiki galeri gambar\"",
+            ],
+            pengecoh: [
+              "-am",
+              "\"fix 5: perbaiki galeri gambar\"",
+              "\"fix #5 perbaiki galeri gambar\"",
+            ],
+            pemisah: " ",
+            explanation:
+              "Tanda pagar diikuti angka adalah cara GitHub mengenali nomor issue, dan tanpa itu commit-mu tidak pernah tertaut ke tiket mana pun. Keping `\"fix 5: ...\"` menggoda karena angkanya tetap tertulis dan pesannya terbaca wajar bagi manusia, tapi GitHub tidak melihat rujukan apa pun — kekeliruan yang sering membuat tim kehilangan jejak antara kode dan tiketnya. Keping tanpa titik dua melanggar konvensi sehingga tipe perubahannya tidak terbaca alat otomatis. Keping `-am` melewati staging area dan diam-diam menyertakan semua berkas terlacak yang berubah, termasuk yang belum siap ikut.",
+          },
         },
         {
           kind: "step",
@@ -996,6 +1364,23 @@ export const gitTrack: Track = {
             },
           ],
           solution: "git clone https://github.com/bimo/app.git",
+          susunKode: {
+            question:
+              "Susun perintah yang menyalin repositori `https://github.com/bimo/app.git` beserta seluruh riwayatnya ke komputermu.",
+            potongan: [
+              "git",
+              "clone",
+              "https://github.com/bimo/app.git",
+            ],
+            pengecoh: [
+              "fork",
+              "pull",
+              "https://github.com/bimo/app.zip",
+            ],
+            pemisah: " ",
+            explanation:
+              "`git clone` mengunduh seluruh repositori **beserta riwayat commit-nya**, sehingga kamu langsung bisa membuat branch dan melihat sejarah proyek. Keping `fork` menggoda karena kata itu selalu disebut berbarengan dengan clone, padahal fork dilakukan lewat tombol di situs GitHub — Git di terminal tidak punya perintah bernama itu. Keping `pull` mensyaratkan sudah ada repositori lokal; di folder kosong ia hanya menghasilkan `not a git repository`. Keping berkas `.zip` adalah kekeliruan yang sering diambil pemula karena tombol *Download ZIP* terlihat lebih sederhana: kodenya memang didapat, tapi tanpa riwayat, tanpa branch, dan tidak bisa di-push kembali.",
+          },
         },
         {
           kind: "step",
@@ -1031,6 +1416,24 @@ export const gitTrack: Track = {
             },
           ],
           solution: "## Halo, saya Bimo\n\n- Frontend developer, fokus React & TypeScript\n- Sedang menyelesaikan track Next.js di BiLearn\n- Portofolio: https://bimo.dev",
+          susunKode: {
+            question:
+              "Susun isi README profil GitHub-mu: sapaan sebagai subjudul tingkat dua, dua butir keahlian atau lebih, dan satu tautan lengkap ke portofoliomu.",
+            potongan: [
+              "## Halo, saya Bimo",
+              "- Frontend developer, fokus React & TypeScript",
+              "- Sedang menyelesaikan track Next.js di BiLearn",
+              "- Portofolio: https://bimo.dev",
+            ],
+            pengecoh: [
+              "**Halo, saya Bimo**",
+              "- Portofolio: bimo.dev",
+              "- Portofolio: linkedin.com/in/bimo",
+            ],
+            pemisah: "\n",
+            explanation:
+              "README profil dibaca perekrut sebelum mereka membuka satu pun repositorimu, jadi bentuknya harus rapi: subjudul asli, butir daftar yang bisa dipindai cepat, dan tautan yang benar-benar bisa diklik. Keping `**Halo, saya Bimo**` menggoda karena tampilannya tebal mirip judul, tapi ia bukan heading sehingga strukturnya tidak terbaca. Keping `bimo.dev` dan `linkedin.com/in/bimo` adalah kekeliruan yang sangat sering terjadi: tanpa awalan `https://`, GitHub menampilkannya sebagai teks biasa — perekrut harus menyalin dan menempelkannya sendiri, dan sebagian besar tidak akan repot melakukannya.",
+          },
         },
         {
           kind: "step",
@@ -1055,6 +1458,25 @@ export const gitTrack: Track = {
             },
           ],
           solution: "git pull --rebase origin main",
+          susunKode: {
+            question:
+              "Susun perintah yang menarik pembaruan `main` dari `origin` sekaligus menggabungkannya, tapi menjaga riwayat tetap lurus tanpa commit gabungan tambahan.",
+            potongan: [
+              "git",
+              "pull",
+              "--rebase",
+              "origin",
+              "main",
+            ],
+            pengecoh: [
+              "--no-rebase",
+              "--force",
+              "fetch",
+            ],
+            pemisah: " ",
+            explanation:
+              "`git pull --rebase` mengunduh commit baru lalu menyusun ulang commit lokalmu di atasnya, sehingga tidak lahir commit gabungan yang mengotori riwayat. Keping `--no-rebase` menggoda karena namanya terdengar netral, padahal itulah perilaku bawaan yang justru membuat commit gabungan — persis yang diminta soal untuk dihindari. Keping `--force` bukan opsi `pull` dan sering keliru dibawa dari kebiasaan `push`; di Git, kata *force* hampir selalu berarti ada sesuatu yang akan hilang. Keping `fetch` hanya mengunduh tanpa menggabungkan, jadi branch-mu tetap tertinggal — dan pekerjaan penggabungannya masih menunggu.",
+          },
         },
         {
           kind: "quiz",
@@ -1275,6 +1697,25 @@ export const gitTrack: Track = {
             },
           ],
           solution: "git switch -c fix/BIL-42-tombol-checkout-mobile",
+          susunKode: {
+            question:
+              "Tiket **BIL-42**, jenis **Bug**: 'Tombol checkout tidak muncul di layar HP'. Susun perintah yang membuat sekaligus pindah ke branch sesuai konvensi tim.",
+            potongan: [
+              "git",
+              "switch",
+              "-c",
+              "fix/BIL-42-tombol-checkout-mobile",
+            ],
+            pengecoh: [
+              "feat/BIL-42-tombol-checkout-mobile",
+              "fix/tombol-checkout-mobile",
+              "fix/BIL-42_tombol_checkout_mobile",
+              "-b",
+            ],
+            pemisah: " ",
+            explanation:
+              "Nama branch yang baik memuat tiga hal sekaligus: awalan jenis pekerjaan, kode tiket, dan ringkasan singkat berhuruf kecil — supaya siapa pun yang membuka daftar branch tahu isinya tanpa bertanya. Keping berawalan `feat/` menggoda karena ringkasannya sudah benar, tapi ini perbaikan bug; salah awalan membuat catatan rilis salah golong. Keping tanpa `BIL-42` adalah kekeliruan yang sering terjadi saat orang buru-buru: begitu ada dua puluh branch aktif, tidak ada lagi yang bisa menghubungkannya ke tiket. Keping bergaris bawah memakai gaya penamaan variabel, bukan branch; hampir semua alat CI dan papan tiket mencocokkan pola bertanda hubung, jadi tautan otomatis ke tiketnya tidak terbentuk. Keping `-b` adalah opsi milik `git checkout`, dan mencampurnya dengan `switch` membuat Git berhenti dengan `unknown switch`.",
+          },
         },
         {
           kind: "step",
@@ -1307,6 +1748,25 @@ export const gitTrack: Track = {
             },
           ],
           solution: "git push -u origin fix/BIL-42-tombol-checkout-mobile",
+          susunKode: {
+            question:
+              "Susun perintah yang mengirim branch `fix/BIL-42-tombol-checkout-mobile` ke `origin` untuk pertama kali sekaligus mengaitkannya.",
+            potongan: [
+              "git",
+              "push",
+              "-u",
+              "origin",
+              "fix/BIL-42-tombol-checkout-mobile",
+            ],
+            pengecoh: [
+              "-f",
+              "origin/fix/BIL-42-tombol-checkout-mobile",
+              "main",
+            ],
+            pemisah: " ",
+            explanation:
+              "Opsi `-u` (kependekan `--set-upstream`) mencatat pasangan branch lokal dan remote sekali saja, sehingga `git push` dan `git pull` berikutnya tidak perlu menyebut nama apa pun lagi. Keping `main` adalah kekeliruan yang paling mahal di modul ini: perintahnya berhasil, tapi pekerjaanmu masuk langsung ke branch utama tanpa melewati review — dan di repositori yang terlindungi, ia ditolak dengan pesan yang membingungkan. Keping `origin/fix/...` menggoda karena bentuk itu muncul di `git status`, padahal sebagai argumen push nama remote dan nama branch ditulis terpisah. Keping `-f` menimpa riwayat di server.",
+          },
         },
         {
           kind: "step",
@@ -1350,6 +1810,25 @@ export const gitTrack: Track = {
           ],
           solution:
             'git commit -m "fix: tampilkan tombol checkout di layar kecil"',
+          susunKode: {
+            question:
+              "Kamu memperbaiki CSS yang menyembunyikan tombol checkout di layar kecil. Susun perintah commit dengan pesan berkonvensi yang menyebut `tombol checkout`.",
+            potongan: [
+              "git",
+              "commit",
+              "-m",
+              "\"fix: tampilkan tombol checkout di layar kecil\"",
+            ],
+            pengecoh: [
+              "\"feat: tampilkan tombol checkout di layar kecil\"",
+              "\"fix - tampilkan tombol checkout di layar kecil\"",
+              "\"fix: tampilkan tombol checkout di layar kecil.\"",
+              "-am",
+            ],
+            pemisah: " ",
+            explanation:
+              "Conventional Commits menuntut bentuk yang tepat: tipe, titik dua, spasi, lalu ringkasan berhuruf kecil tanpa titik di akhir — karena judul commit dibaca seperti judul, bukan kalimat. Keping `feat:` menggoda karena perubahannya memang membuat sesuatu \"muncul\", padahal ini memperbaiki perilaku yang rusak; salah tipe membuat versi rilis naik ke angka yang keliru pada alat otomatis. Keping bertanda hubung adalah kekeliruan yang sering terjadi karena terlihat sama rapinya, tapi pemisah yang dikenali hanya titik dua. Keping bertitik di akhir terlihat sepele, namun linter commit di banyak repositori menolaknya dan push-mu berhenti di situ. Keping `-am` menggoda sebagai jalan pintas, padahal huruf `a` ikut menyertakan semua berkas terlacak yang berubah — melewati staging dan sering membawa perubahan yang belum siap.",
+          },
         },
         {
           kind: "step",
@@ -1406,6 +1885,27 @@ export const gitTrack: Track = {
             "1. Buka halaman keranjang di lebar 375px\n" +
             "2. Pastikan tombol checkout terlihat dan bisa diklik\n\n" +
             "Closes #42",
+          susunKode: {
+            question:
+              "Susun deskripsi PR untuk perbaikan tombol checkout (tiket BIL-42, issue GitHub nomor 42): tiga bagian Apa, Kenapa, Cara uji beserta isinya, lalu penanda agar issue-nya tertutup otomatis.",
+            potongan: [
+              "## Apa",
+              "Memperbaiki CSS yang menyembunyikan tombol checkout di layar kecil.",
+              "## Kenapa",
+              "Pengguna HP tidak bisa menyelesaikan pembelian sama sekali (BIL-42).",
+              "## Cara uji",
+              "1. Buka halaman keranjang di lebar 375px\n2. Pastikan tombol checkout terlihat dan bisa diklik",
+              "Closes #42",
+            ],
+            pengecoh: [
+              "**Apa**",
+              "Closes 42",
+              "Related to #42",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Deskripsi PR yang baik menjawab tiga pertanyaan reviewer sebelum sempat ditanyakan — apa yang berubah, kenapa perlu, dan bagaimana mengujinya — lalu ditutup kata kunci yang menautkan issue-nya. Keping `**Apa**` menggoda karena tampil tebal seperti judul, tapi ia bukan heading sehingga PR panjang jadi sulit dipindai. Keping `Closes 42` adalah kekeliruan yang sangat sering terjadi: tanpa tanda pagar, GitHub tidak melihat rujukan apa pun dan issue-nya tetap terbuka setelah PR di-merge. Keping `Related to #42` memang menautkan issue, tapi tidak termasuk kata kunci penutup — hanya `Closes`, `Fixes`, atau `Resolves` yang menutupnya otomatis.",
+          },
         },
         {
           kind: "step",
@@ -1448,6 +1948,22 @@ export const gitTrack: Track = {
           ],
           solution:
             'git commit -m "test: tambah test tampilan tombol checkout di layar kecil"\ngit push',
+          susunKode: {
+            question:
+              "Reviewer meminta kamu menambahkan test. Susun dua perintah berurutan: commit berkonvensi untuk penambahan test, lalu push ke branch yang sudah terkait.",
+            potongan: [
+              "git commit -m \"test: tambah test tampilan tombol checkout di layar kecil\"",
+              "git push",
+            ],
+            pengecoh: [
+              "git commit -m \"fix: tambah test tampilan tombol checkout di layar kecil\"",
+              "git push -u origin fix/BIL-42-tombol-checkout-mobile",
+              "git push origin",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Menambah test adalah perubahan bertipe `test:`, dan karena branch-nya sudah dikaitkan pada push pertama, `git push` polos sudah cukup. Keping bertipe `fix:` menggoda karena pekerjaan ini masih bagian dari perbaikan yang sama, tapi commit itu tidak mengubah perilaku aplikasi sama sekali — dan riwayat yang jujur soal jenis perubahan itulah yang membuat `git log` berguna saat mencari penyebab bug. Keping `push -u origin <branch>` adalah kekeliruan yang sering diulang-ulang: opsi itu hanya diperlukan sekali, dan mengulangnya membuat perintah panjang tanpa manfaat. Keping `git push origin` berhenti setengah jalan tanpa menyebut apa yang dikirim.",
+          },
         },
         {
           kind: "step",
@@ -1513,6 +2029,25 @@ export const gitTrack: Track = {
             "// 2. Kegagalan fetch tidak ditangani: kalau server balas 500, res.json()\n" +
             "//    bisa melempar error dan data.items jadi undefined. Periksa res.ok\n" +
             "//    lalu bungkus dengan try/catch dan kembalikan pesan yang jelas.",
+          susunKode: {
+            question:
+              "Susun komentar review untuk potongan kode di panel kanan. Sebutkan **dua** masalah seriusnya secara spesifik, bukan penilaian umum.",
+            potongan: [
+              "// Komentar review:",
+              "// 1. API_KEY tertulis langsung di kode (hardcoded secret). Kalau repo ini ter-push publik, key aktif ini bocor.",
+              "//    Pindahkan ke variabel lingkungan lewat .env dan jangan pernah di-commit.",
+              "// 2. Fetch yang tidak ditangani: kalau server balas 500, data.items jadi undefined.",
+              "//    Periksa res.ok lalu bungkus dengan try/catch dan kembalikan pesan yang jelas.",
+            ],
+            pengecoh: [
+              "// 1. Ada yang agak aneh di bagian atas fungsi ini, tolong dicek dan dirapikan lagi ya sebelum di-merge.",
+              "//    Pindahkan saja ke tempat lain yang lebih aman sebelum di-push.",
+              "//    Periksa saja apakah tampilannya sudah benar di browser sebelum merge.",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Review yang berguna menyebut **masalahnya, akibatnya, dan langkah perbaikannya** — itulah bedanya dengan komentar yang hanya menambah pekerjaan bagi penulis kode. Ketiga keping pengecoh menggoda karena terdengar sopan dan tetap terasa seperti review sungguhan, tapi tak satu pun menyebut apa yang salah: \"ada yang aneh\" tidak menunjukkan kredensial yang tertulis di kode, \"tempat yang lebih aman\" tidak menyebut variabel lingkungan, dan \"periksa tampilannya\" melewatkan kegagalan `fetch` sama sekali. Inilah kekeliruan yang paling sering membuat proses review berputar dua tiga ronde tanpa satu pun masalah nyata terselesaikan.",
+          },
         },
         {
           kind: "step",
@@ -1558,6 +2093,22 @@ export const gitTrack: Track = {
             },
           ],
           solution: "git fetch origin\ngit merge origin/main",
+          susunKode: {
+            question:
+              "PR-mu bentrok dengan `main`. Susun dua perintah pertama alur penyelesaiannya, tanpa meninggalkan branch fiturmu.",
+            potongan: [
+              "git fetch origin",
+              "git merge origin/main",
+            ],
+            pengecoh: [
+              "git pull origin main",
+              "git merge main",
+              "git switch main",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Konflik diselesaikan **di branch fiturmu**: ambil dulu keadaan terbaru server dengan `fetch`, lalu gabungkan `origin/main` ke branch yang sedang aktif. Keping `git switch main` adalah jebakan yang paling sering menjerat karena terasa logis \"memperbarui main dulu\", padahal begitu kamu pindah, konflik PR tetap ada dan pekerjaanmu tertinggal di branch lain. Keping `git merge main` menggoda karena namanya lebih pendek, tapi `main` lokalmu bisa berumur berhari-hari; yang baru saja diunduh adalah `origin/main`. Keping `git pull origin main` menggabungkan tanpa memberimu kesempatan memeriksa apa yang datang lebih dulu.",
+          },
         },
         {
           kind: "step",
@@ -1600,6 +2151,23 @@ export const gitTrack: Track = {
             },
           ],
           solution: "fix: tampilkan tombol checkout di layar kecil (#42)",
+          susunKode: {
+            question:
+              "PR nomor **42** akan ditutup dengan Squash and merge. Susun pesan commit gabungannya sesuai konvensi, lengkap dengan nomor PR-nya.",
+            potongan: [
+              "fix:",
+              "tampilkan tombol checkout di layar kecil",
+              "(#42)",
+            ],
+            pengecoh: [
+              "feat:",
+              "#42",
+              "(PR 42)",
+            ],
+            pemisah: " ",
+            explanation:
+              "Pada Squash and merge, seluruh commit di PR dipadatkan menjadi **satu** commit di `main`, jadi pesannya adalah satu-satunya jejak yang tersisa: tipe konvensi di depan dan nomor PR dalam tanda kurung di belakang. Keping `feat:` salah menggolongkan perbaikan bug sebagai fitur baru. Keping `#42` tanpa kurung menggoda karena nomornya sudah benar dan tetap tertaut di GitHub, tapi bentuk berkurung itulah yang dibaca alat pembuat changelog — kekeliruan yang baru terasa saat rilis disusun. Keping `(PR 42)` sering ditulis karena terasa lebih jelas bagi manusia, sayangnya tanpa tanda pagar ia tidak menjadi tautan ke PR-nya.",
+          },
         },
         {
           kind: "step",
@@ -1653,6 +2221,24 @@ export const gitTrack: Track = {
             "git add src/draft.js\n" +
             'git commit -m "feat: tambah tombol simpan draft"\n' +
             "git push -u origin feat/BIL-58-tombol-simpan-draft",
+          susunKode: {
+            question:
+              "Tiket **BIL-58**, jenis **Feature**: 'Tambah tombol simpan draft'. Susun empat perintah berurutan: buat+pindah branch, stage `src/draft.js`, commit berkonvensi yang menyebut `draft`, lalu push pertama kali.",
+            potongan: [
+              "git switch -c feat/BIL-58-tombol-simpan-draft",
+              "git add src/draft.js",
+              "git commit -m \"feat: tambah tombol simpan draft\"",
+              "git push -u origin feat/BIL-58-tombol-simpan-draft",
+            ],
+            pengecoh: [
+              "git switch -c fix/BIL-58-tombol-simpan-draft",
+              "git add .",
+              "git push origin feat/BIL-58-tombol-simpan-draft",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Satu siklus PR selalu berjalan dalam urutan yang sama: branch bernama sesuai konvensi, staging berkas yang **memang** kamu ubah, commit berkonvensi, lalu push pertama dengan `-u`. Keping berawalan `fix/` menggoda karena hampir semua contoh sebelumnya memakainya, padahal tiket ini bertanda Feature. Keping `git add .` adalah kekeliruan yang paling sering merugikan: ia menyapu seluruh berkas berubah — termasuk `.env`, berkas sementara, dan potongan percobaan — dan reviewer lalu harus membaca perubahan yang tidak ada hubungannya dengan tiket. Keping push tanpa `-u` berhasil hari ini, tapi setiap push berikutnya menuntutmu mengetik nama branch panjang itu lagi.",
+          },
         },
         {
           kind: "quiz",
@@ -1856,6 +2442,23 @@ export const gitTrack: Track = {
             },
           ],
           solution: "git revert abc1234",
+          susunKode: {
+            question:
+              "Commit `abc1234` sudah terlanjur ada di branch bersama. Susun perintah yang membatalkan efeknya tanpa menghapus riwayat.",
+            potongan: [
+              "git",
+              "revert",
+              "abc1234",
+            ],
+            pengecoh: [
+              "reset",
+              "--hard",
+              "undo",
+            ],
+            pemisah: " ",
+            explanation:
+              "`git revert` membuat commit **baru** yang membatalkan isi commit lama, sehingga riwayat tetap utuh — itulah satu-satunya cara aman membatalkan sesuatu yang sudah dipush ke branch bersama. Keping `reset` menggoda karena hasilnya di komputermu terlihat sama bersihnya, tapi ia **menghapus** commit dari riwayat; begitu branch itu dipakai orang lain, kamu terpaksa force push dan commit rekanmu bisa ikut hilang. Keping `--hard` memperparah keadaan dengan membuang perubahan yang belum tersimpan sama sekali — kekeliruan yang paling sering ditangisi pemula. Keping `undo` tidak ada di Git meski namanya paling menenangkan.",
+          },
         },
         {
           kind: "step",
@@ -1880,6 +2483,22 @@ export const gitTrack: Track = {
             },
           ],
           solution: "git reflog",
+          susunKode: {
+            question:
+              "Kamu kehilangan commit setelah salah melakukan reset. Susun perintah yang menampilkan seluruh pergerakan HEAD, termasuk commit yang sudah tidak terlihat lagi.",
+            potongan: [
+              "git",
+              "reflog",
+            ],
+            pengecoh: [
+              "log",
+              "history",
+              "restore",
+            ],
+            pemisah: " ",
+            explanation:
+              "`git reflog` mencatat **setiap** perpindahan HEAD di komputermu — termasuk commit yang sudah tidak lagi tersambung ke branch mana pun — dan dari situ commit yang hilang bisa dipulihkan lewat hash-nya. Keping `log` adalah kekeliruan yang sering membuat orang menyerah terlalu cepat: `git log` hanya menampilkan commit yang **masih terjangkau** dari branch saat ini, jadi commit yang baru saja kamu buang justru tidak muncul, dan kesimpulannya seolah pekerjaan itu benar-benar lenyap. Keping `history` menampilkan riwayat perintah shell, bukan Git. Keping `restore` bekerja pada isi berkas, bukan pada riwayat perpindahan HEAD.",
+          },
         },
         {
           kind: "step",
@@ -1904,6 +2523,25 @@ export const gitTrack: Track = {
             },
           ],
           solution: "git checkout a1b2c3d -- index.html",
+          susunKode: {
+            question:
+              "Susun perintah yang mengambil versi berkas `index.html` dari commit `a1b2c3d` tanpa berpindah branch.",
+            potongan: [
+              "git",
+              "checkout",
+              "a1b2c3d",
+              "--",
+              "index.html",
+            ],
+            pengecoh: [
+              "revert",
+              "HEAD",
+              "-",
+            ],
+            pemisah: " ",
+            explanation:
+              "Tanda `--` memisahkan nama commit dari nama berkas; tanpa pemisah itu, Git bisa menyangka `index.html` adalah nama branch dan menjawab `pathspec did not match any file(s) known to git` — pesan yang membingungkan justru karena berkasnya jelas-jelas ada. Keping satu tanda minus adalah kekeliruan yang sering terjadi karena selisihnya cuma satu karakter, padahal `-` sendirian berarti \"branch sebelumnya\". Keping `HEAD` menggoda karena terasa aman, tapi ia mengambil versi commit **terakhir**, bukan versi lama yang kamu cari. Keping `revert` bekerja pada seluruh commit, bukan pada satu berkas.",
+          },
         },
         {
           kind: "step",
@@ -1928,6 +2566,23 @@ export const gitTrack: Track = {
             },
           ],
           solution: "git cherry-pick f9e8d7c",
+          susunKode: {
+            question:
+              "Susun perintah yang menyalin satu commit `f9e8d7c` dari branch lain ke branch yang sedang aktif.",
+            potongan: [
+              "git",
+              "cherry-pick",
+              "f9e8d7c",
+            ],
+            pengecoh: [
+              "cherry pick",
+              "merge",
+              "copy",
+            ],
+            pemisah: " ",
+            explanation:
+              "`git cherry-pick` menyalin **satu** commit tertentu ke branch aktif — berguna saat perbaikan mendesak sudah ada di branch lain tapi kamu belum ingin menarik seluruh isinya. Keping `cherry pick` dengan spasi adalah kekeliruan yang sering terjadi karena kita membacanya sebagai dua kata; Git membaca `pick` sebagai argumen dan menjawab `cherry is not a git command`. Keping `merge` menggoda karena sama-sama memindahkan pekerjaan, tapi ia membawa **semua** commit di branch itu, bukan hanya satu. Keping `copy` terdengar paling deskriptif dan justru itu jebakannya — Git tidak punya perintah bernama demikian.",
+          },
         },
         {
           kind: "step",
@@ -1963,6 +2618,22 @@ export const gitTrack: Track = {
             },
           ],
           solution: "git rm --cached .env\necho \".env\" >> .gitignore",
+          susunKode: {
+            question:
+              "Berkas `.env` terlanjur masuk repositori. Susun dua baris: keluarkan dari pelacakan Git tanpa menghapusnya dari komputermu, lalu daftarkan namanya agar diabaikan.",
+            potongan: [
+              "git rm --cached .env",
+              "echo \".env\" >> .gitignore",
+            ],
+            pengecoh: [
+              "git rm -f .env",
+              "git rm .env",
+              "echo \".env\" >> gitignore",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`--cached` membuat Git berhenti melacak berkasnya sambil membiarkan salinan di komputermu tetap utuh — dan itu penting, karena `.env`-mu masih berisi kredensial yang dipakai aplikasi berjalan. Keping `git rm -f .env` adalah jebakan yang paling mahal di seluruh modul ini: ia benar-benar menghapus berkasnya dari harddisk, dan isinya tidak ada di mana pun lagi. Keping `git rm .env` melakukan hal yang sama tanpa tanda bahaya apa pun di perintahnya. Keping `gitignore` tanpa titik di depan sering terjadi karena titik itu mudah tertinggal; berkas yang lahir bernama `gitignore` diabaikan Git, dan `.env`-mu ikut ter-commit lagi pada commit berikutnya.",
+          },
         },
         {
           kind: "step",
@@ -1987,6 +2658,23 @@ export const gitTrack: Track = {
             },
           ],
           solution: "git bisect reset",
+          susunKode: {
+            question:
+              "Pencarian bug dengan bisect sudah selesai. Susun perintah yang mengakhiri sesinya dan mengembalikanmu ke keadaan semula.",
+            potongan: [
+              "git",
+              "bisect",
+              "reset",
+            ],
+            pengecoh: [
+              "stop",
+              "end",
+              "good",
+            ],
+            pemisah: " ",
+            explanation:
+              "`git bisect reset` menutup sesi pencarian dan mengembalikanmu ke commit tempat kamu berdiri sebelum bisect dimulai — tanpa itu, kamu tertinggal di keadaan *detached HEAD* di tengah riwayat, dan commit yang kamu buat di sana bisa hilang. Keping `stop` dan `end` menggoda karena keduanya kata paling wajar untuk mengakhiri sesuatu, tapi Git menjawab dengan daftar subperintah yang sah; kekeliruan ini sering membuat orang menutup terminal begitu saja dan meninggalkan repositori dalam keadaan bisect. Keping `good` adalah subperintah yang sungguh ada, tapi artinya menandai commit ini bebas bug — pencariannya justru berlanjut.",
+          },
         },
         {
           kind: "quiz",

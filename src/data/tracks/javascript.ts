@@ -164,6 +164,24 @@ export const javascriptTrack: Track = {
             "  <button id=\"kirim\">Kirim</button>\n" +
             "</body>\n" +
             "</html>",
+          susunKode: {
+            question:
+              "Halaman ini memakai kode dari berkas `app.js`. Susun isi `<head>` yang memuat berkas itu dan menjalankannya setelah seluruh halaman selesai dibangun.",
+            potongan: [
+              "<head>",
+              "  <title>Latihan JS</title>",
+              "  <script src=\"app.js\" defer></script>",
+              "</head>",
+            ],
+            pengecoh: [
+              "  <script href=\"app.js\" defer></script>",
+              "  <script src=\"app.js\"></script>",
+              "  <script src=\"app.js\" async></script>",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Berkas JavaScript dimuat dengan `<script src=\"...\">`, dan `defer` menunda eksekusinya sampai seluruh HTML selesai dibangun — tanpa itu kode yang mencari tombol di `<body>` mendapat `null` karena tombolnya belum ada. Keping `href` menggoda karena baru saja kamu pakai untuk `<link>` CSS, padahal `<script>` selalu memakai `src` dan browser diam saja kalau salah. Keping tanpa `defer` adalah jebakan yang paling sering menjerat: berkasnya benar-benar termuat, jadi tidak ada pesan error, hanya kodenya berjalan terlalu awal. Keping `async` juga sering keliru dipilih karena sama-sama terdengar \"tidak memblokir\", tapi `async` menjalankan kode begitu berkasnya selesai diunduh — bisa sebelum halaman siap.",
+          },
         },
         {
           kind: "step",
@@ -198,6 +216,22 @@ export const javascriptTrack: Track = {
             },
           ],
           solution: "const pesan = 'Halo BiLearn';\nconsole.log(pesan);",
+          susunKode: {
+            question:
+              "Susun kode yang menyimpan teks `Halo BiLearn` ke sebuah variabel, lalu mencetak isi variabel itu ke konsol.",
+            potongan: [
+              "const pesan = 'Halo BiLearn';",
+              "console.log(pesan);",
+            ],
+            pengecoh: [
+              "console.log('pesan');",
+              "const pesan = 'Halo, BiLearn';",
+              "let pesan = Halo BiLearn;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Nama variabel ditulis tanpa tanda kutip; begitu diberi kutip ia berubah menjadi teks biasa. Keping `console.log('pesan');` adalah jebakan yang sangat sering terjadi di hari pertama — konsol mencetak tulisan `pesan`, bukan isinya, dan karena tidak ada pesan error banyak orang mengira kodenya sudah benar. Keping `let pesan = Halo BiLearn;` menggoda karena terlihat rapi tanpa kutip, padahal tanpa kutip JavaScript menyangka itu nama variabel lain dan melempar `ReferenceError`. Keping dengan koma tambahan menunjukkan bahwa isi string dibandingkan huruf demi huruf: satu tanda baca berbeda sudah membuat hasilnya bukan yang diminta.",
+          },
         },
         {
           kind: "step",
@@ -235,6 +269,22 @@ export const javascriptTrack: Track = {
             },
           ],
           solution: "const totalHarga = 50000;\nconsole.log(totalHarga);",
+          susunKode: {
+            question:
+              "Kode ini melempar `ReferenceError` karena nama yang dicetak tidak sama dengan nama yang dibuat. Susun versi yang berjalan, dengan nama variabel aslinya dibiarkan apa adanya.",
+            potongan: [
+              "const totalHarga = 50000;",
+              "console.log(totalHarga);",
+            ],
+            pengecoh: [
+              "console.log(totalharga);",
+              "const totalharga = 50000;",
+              "console.log(\"totalHarga\");",
+            ],
+            pemisah: "\n",
+            explanation:
+              "JavaScript membedakan huruf besar dan kecil: `totalHarga` dan `totalharga` adalah dua nama yang sama sekali berbeda, dan memanggil nama yang tidak pernah dideklarasikan menghasilkan `ReferenceError`. Keping `console.log(totalharga);` adalah sumber bug aslinya — mata kita membaca dua kata itu sebagai hal yang sama, dan inilah kekeliruan yang paling sering memakan waktu pemula. Keping `const totalharga = 50000;` menggoda karena \"menyamakan\" kedua nama juga membuat error hilang, tapi caranya salah arah: yang diperbaiki seharusnya pemanggilannya, bukan deklarasinya. Keping bertanda kutip mencetak tulisan `totalHarga`, bukan angka 50000.",
+          },
         },
         {
           kind: "step",
@@ -270,6 +320,22 @@ export const javascriptTrack: Track = {
             },
           ],
           solution: "const hargaInput = '15000';\nconsole.log(typeof hargaInput);",
+          susunKode: {
+            question:
+              "Variabel `hargaInput` berisi angka dalam bentuk teks. Susun kode yang membuktikan jenis nilainya di konsol, tanpa mengubah nilainya.",
+            potongan: [
+              "const hargaInput = '15000';",
+              "console.log(typeof hargaInput);",
+            ],
+            pengecoh: [
+              "const hargaInput = 15000;",
+              "console.log(\"typeof hargaInput\");",
+              "console.log(hargaInput.typeof);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`typeof` adalah operator, bukan properti dan bukan fungsi: ia ditulis di depan nilai yang ingin diperiksa dan mengembalikan nama jenisnya sebagai teks, di sini `string`. Keping `const hargaInput = 15000;` menggoda karena memang \"memperbaiki\" bug penjumlahannya, tapi soal ini meminta pembuktian penyebabnya — begitu kutipnya dihapus, tidak ada lagi yang bisa dibuktikan. Keping `console.log(hargaInput.typeof);` adalah kekeliruan yang sering muncul dari kebiasaan memakai titik untuk segala hal; hasilnya `undefined`, bukan `string`. Keping bertanda kutip hanya mencetak kalimatnya sendiri dan merupakan jebakan klasik saat menyalin contoh.",
+          },
         },
         {
           kind: "quiz",
@@ -492,6 +558,23 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "const nama = 'Bimo';\nlet umur = 20;\nconsole.log(nama, umur);",
+          susunKode: {
+            question:
+              "Susun kode yang menyimpan nama `Bimo` ke variabel yang tidak akan diganti, umur `20` ke variabel yang masih bisa berubah, lalu mencetak keduanya.",
+            potongan: [
+              "const nama = 'Bimo';",
+              "let umur = 20;",
+              "console.log(nama, umur);",
+            ],
+            pengecoh: [
+              "let nama = 'Bimo';",
+              "const umur = 20;",
+              "print(nama, umur);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`const` dipakai untuk nilai yang tidak akan diganti sepanjang hidup variabelnya, `let` untuk yang akan berubah — dan pilihannya bukan soal selera, tapi soal memberi tahu pembaca kode berikutnya mana yang boleh disentuh. Keping `const umur = 20;` menggoda karena kodenya tetap berjalan hari ini, tapi begitu suatu saat kamu menulis `umur = 21` program berhenti dengan `TypeError: Assignment to constant variable`. Keping `let nama` adalah kebalikannya: sah, tapi membuang jaminan yang sebenarnya kamu punya. Keping `print(...)` adalah kekeliruan yang sering terbawa dari Python; di JavaScript pencetak ke konsol bernama `console.log`.",
+          },
         },
         {
           kind: "step",
@@ -525,6 +608,24 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "const nama = 'Bimo';\nconst umur = 20;\n\nconst pesan = `Halo, saya ${nama} berumur ${umur} tahun`;\nconsole.log(pesan);",
+          susunKode: {
+            question:
+              "Susun kode yang menghasilkan kalimat `Halo, saya Bimo berumur 20 tahun` dengan menyisipkan variabel `nama` dan `umur` ke dalam satu teks.",
+            potongan: [
+              "const nama = 'Bimo';",
+              "const umur = 20;",
+              "const pesan = `Halo, saya ${nama} berumur ${umur} tahun`;",
+              "console.log(pesan);",
+            ],
+            pengecoh: [
+              "const pesan = 'Halo, saya ${nama} berumur ${umur} tahun';",
+              "const pesan = `Halo, saya {nama} berumur {umur} tahun`;",
+              "const pesan = \"Halo, saya \" + nama + \" berumur \" + umur + \" tahun\";",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Penyisipan variabel hanya bekerja di dalam backtick, dan bentuknya utuh: tanda dolar, kurung kurawal, nama variabel. Keping berpetik tunggal adalah jebakan yang paling sering terjadi — tidak ada pesan error sama sekali, konsol hanya mencetak `${nama}` mentah-mentah, dan orang menghabiskan waktu lama mencari kesalahan di tempat lain. Keping tanpa tanda dolar keliru dengan cara yang sama diamnya. Keping penyambungan dengan tanda tambah sebetulnya menghasilkan kalimat yang persis sama, dan justru itu yang membuatnya menggoda; ia ditolak di sini karena latihannya tentang template literal, dan pada kalimat panjang bentuk sambung-menyambung itulah yang melahirkan kutip hilang serta spasi ganda.",
+          },
         },
         {
           kind: "step",
@@ -552,6 +653,22 @@ export const javascriptTrack: Track = {
             },
           ],
           solution: "console.log('5' == 5);\nconsole.log('5' === 5);",
+          susunKode: {
+            question:
+              "Susun dua baris yang membandingkan teks `'5'` dengan angka `5`: satu memakai pembanding longgar, satu memakai pembanding ketat.",
+            potongan: [
+              "console.log('5' == 5);",
+              "console.log('5' === 5);",
+            ],
+            pengecoh: [
+              "console.log('5' = 5);",
+              "console.log('5' == '5');",
+              "console.log(5 === 5);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`==` mengubah jenis data dulu sebelum membandingkan sehingga `'5' == 5` bernilai `true`, sedangkan `===` membandingkan nilai sekaligus jenisnya sehingga hasilnya `false`. Keping bertanda sama dengan tunggal adalah kekeliruan yang sering terjadi karena ketiga bentuk itu mirip: satu tanda berarti *memberi nilai*, bukan membandingkan, dan di dalam `if` ia diam-diam selalu bernilai benar. Keping `'5' == '5'` dan `5 === 5` menggoda karena keduanya menghasilkan `true` juga, tapi keduanya membandingkan dua nilai berjenis sama — justru perbedaan jenis itulah yang sedang kamu buktikan di sini.",
+          },
         },
         {
           kind: "step",
@@ -588,6 +705,25 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "const nilai = 85;\n\nif (nilai >= 80) {\n  console.log('A');\n} else if (nilai >= 70) {\n  console.log('B');\n} else {\n  console.log('C');\n}",
+          susunKode: {
+            question:
+              "Nilai ujian tersimpan di variabel `nilai`. Susun percabangan yang mencetak `A` untuk nilai minimal 80, `B` untuk minimal 70, dan `C` untuk sisanya.",
+            potongan: [
+              "const nilai = 85;",
+              "if (nilai >= 80) {\n  console.log('A');",
+              "} else if (nilai >= 70) {\n  console.log('B');",
+              "} else {\n  console.log('C');",
+              "}",
+            ],
+            pengecoh: [
+              "if (nilai > 80) {\n  console.log('A');",
+              "} if (nilai >= 70) {\n  console.log('B');",
+              "} else if (nilai < 70) {\n  console.log('C');",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Rantai `if / else if / else` berhenti di cabang pertama yang benar, jadi urutannya harus dari syarat paling ketat ke paling longgar. Keping `nilai > 80` menggoda karena bacaannya nyaris sama, padahal nilai tepat 80 jatuh ke cabang B — kesalahan batas seperti ini sering lolos dari pengujian karena datanya kebetulan tidak pernah pas di angka batas. Keping `} if (...)` menghilangkan kata `else` sehingga rantainya pecah menjadi dua percabangan berdiri sendiri, dan nilai 85 mencetak dua huruf sekaligus. Keping `} else if (nilai < 70)` terlihat lebih tegas menyebut syaratnya, tapi menghapus cabang penutup: nilai yang tidak masuk syarat mana pun akhirnya tidak mencetak apa-apa.",
+          },
         },
         {
           kind: "step",
@@ -621,6 +757,23 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "for (let i = 1; i <= 5; i++) {\n  console.log(i);\n}",
+          susunKode: {
+            question:
+              "Susun perulangan yang mencetak angka 1 sampai 5, masing-masing di baris konsol sendiri.",
+            potongan: [
+              "for (let i = 1; i <= 5; i++) {",
+              "  console.log(i);",
+              "}",
+            ],
+            pengecoh: [
+              "for (let i = 0; i <= 5; i++) {",
+              "for (let i = 1; i < 5; i++) {",
+              "  console.log('i');",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Tiga bagian di dalam kurung `for` punya tugas berbeda: nilai awal, syarat lanjut, dan langkah naik. Karena hitungannya mulai dari 1, syaratnya harus `i <= 5` agar angka 5 ikut tercetak. Keping `i = 0` menggoda karena hampir semua perulangan array memang dimulai dari nol, tapi di sini ia menambah satu baris `0` di awal. Keping `i < 5` adalah kesalahan pagar (*off-by-one*) yang paling sering terjadi dalam pemrograman: kodenya berjalan tanpa error, hanya angka terakhir yang diam-diam hilang. Keping `console.log('i');` mencetak huruf `i` lima kali, jebakan yang sama seperti mencetak nama variabel bertanda kutip.",
+          },
         },
         {
           kind: "step",
@@ -653,6 +806,23 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "console.log(Boolean(0));\nconsole.log(Boolean(''));\nconsole.log(Boolean([]));",
+          susunKode: {
+            question:
+              "Susun tiga baris yang membuktikan nilai kebenaran dari angka nol, teks kosong, dan array kosong.",
+            potongan: [
+              "console.log(Boolean(0));",
+              "console.log(Boolean(''));",
+              "console.log(Boolean([]));",
+            ],
+            pengecoh: [
+              "console.log(Boolean(\"0\"));",
+              "console.log(Boolean(null));",
+              "console.log(Boolean({}));",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Hanya ada segelintir nilai *falsy* di JavaScript — `0`, `''`, `null`, `undefined`, `NaN`, dan `false` — dan semua yang lain bernilai benar, termasuk array kosong. Keping `Boolean(\"0\")` adalah jebakan yang sangat sering menjerat: angka nol memang falsy, tapi teks berisi karakter nol punya panjang satu sehingga hasilnya `true`, dan inilah sumber bug klasik saat membaca angka dari input form. Keping `Boolean(null)` dan `Boolean({})` menggoda karena keduanya juga terdengar seperti \"kosong\", padahal `null` falsy sementara objek kosong justru truthy — yang perlu kamu buktikan di sini adalah tiga kasus yang sudah disebut soal, bukan sekadar tiga nilai yang terdengar mirip.",
+          },
         },
         {
           kind: "step",
@@ -687,6 +857,24 @@ export const javascriptTrack: Track = {
             },
           ],
           solution: "const nilai = [80, 92, 75];\n\nfor (const n of nilai) {\n  console.log(n);\n}",
+          susunKode: {
+            question:
+              "Array `nilai` berisi beberapa angka. Susun perulangan yang mencetak setiap isinya satu per satu tanpa memakai indeks sama sekali.",
+            potongan: [
+              "const nilai = [80, 92, 75];",
+              "for (const n of nilai) {",
+              "  console.log(n);",
+              "}",
+            ],
+            pengecoh: [
+              "for (const n in nilai) {",
+              "for (let i = 0; i < nilai.length; i++) {",
+              "  console.log(nilai[i]);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`for...of` menelusuri **isi** array, jadi variabel di dalamnya langsung berupa nilainya dan kamu tidak perlu mengurus indeks maupun panjang array. Keping `for...in` adalah kekeliruan yang sering terjadi karena hanya berbeda satu kata: ia menelusuri **kunci**, dan pada array kuncinya berupa teks `\"0\"`, `\"1\"`, `\"2\"` — sehingga penjumlahan mendadak menyambung teks alih-alih menambah angka. Keping `for` klasik dengan `i++` memang bekerja, tapi soal ini justru meminta bentuk tanpa indeks, dan bentuk klasik itulah yang melahirkan `i <= nilai.length` beserta `undefined` di ujungnya. Keping `nilai[i]` membawa indeks kembali masuk lewat pintu belakang.",
+          },
         },
         {
           kind: "step",
@@ -741,6 +929,24 @@ export const javascriptTrack: Track = {
             "const nilai = 45;\n\n" +
             "const lulus = nilai >= 60 ? 'lulus' : 'remedial';\n" +
             "console.log(lulus);",
+          susunKode: {
+            question:
+              "Nilai ujian tersimpan di `nilai`. Susun satu baris keputusan yang menghasilkan teks `'lulus'` bila nilainya minimal 60 dan `'remedial'` bila tidak, lalu cetak hasilnya.",
+            potongan: [
+              "const nilai = 45;",
+              "const lulus = nilai >= 60 ? 'lulus' : 'remedial';",
+              "console.log(lulus);",
+            ],
+            pengecoh: [
+              "const lulus = nilai >= 60 ? 'remedial' : 'lulus';",
+              "const lulus = nilai >= 60 ? lulus : remedial;",
+              "if (nilai >= 60) { lulus = 'lulus'; }",
+              "if (nilai >= 60) console.log('lulus');",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Ternary membaca seperti kalimat: syarat, tanda tanya, hasil bila benar, titik dua, hasil bila salah. Urutan itu tetap dan tidak boleh dibalik. Keping yang menukar kedua hasilnya adalah kekeliruan yang sering lolos dari mata karena bentuknya tetap rapi — programnya jalan, hanya jawabannya terbalik, dan baru ketahuan saat ada yang protes. Keping tanpa tanda kutip mengubah kedua hasil menjadi nama variabel yang tidak pernah dibuat sehingga muncul `ReferenceError`. Kedua keping ber-`if` menggoda karena itulah bentuk yang paling kamu kenal, tapi `if` adalah pernyataan yang tidak menghasilkan nilai: ia tidak bisa mengisi sebuah `const`, dan versi yang langsung mencetak membuat hasilnya tidak tersimpan di mana pun untuk dipakai lagi.",
+          },
         },
         {
           kind: "quiz",
@@ -943,6 +1149,24 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "function luas(panjang, lebar) {\n  return panjang * lebar;\n}\n\nconsole.log(luas(5, 3));",
+          susunKode: {
+            question:
+              "Susun fungsi `luas` yang menerima panjang dan lebar lalu **mengembalikan** hasil perkaliannya, dan cetak hasil pemanggilannya untuk 5 dan 3.",
+            potongan: [
+              "function luas(panjang, lebar) {",
+              "  return panjang * lebar;",
+              "}",
+              "console.log(luas(5, 3));",
+            ],
+            pengecoh: [
+              "  console.log(panjang * lebar);",
+              "function luas(panjang lebar) {",
+              "console.log(luas);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`return` menyerahkan nilai kembali ke pemanggilnya sehingga hasilnya bisa disimpan, dijumlahkan, atau dikirim ke tempat lain. Keping `console.log(panjang * lebar);` di dalam fungsi adalah jebakan yang paling sering menjerat: layarnya menampilkan angka yang benar sehingga terasa berhasil, padahal fungsinya mengembalikan `undefined` dan nilainya tidak bisa dipakai untuk apa pun. Keping tanpa koma di antara parameter membuat berkasnya gagal dijalankan sejak baris pertama. Keping `console.log(luas);` menggoda karena namanya sudah benar, tapi tanpa tanda kurung yang tercetak adalah isi fungsinya sendiri — fungsi hanya berjalan kalau dipanggil.",
+          },
         },
         {
           kind: "step",
@@ -983,6 +1207,23 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "const luas = (panjang, lebar) => panjang * lebar;\n\nconsole.log(luas(4, 6));",
+          susunKode: {
+            question:
+              "Susun ulang fungsi `luas` menjadi arrow function yang mengembalikan nilainya tanpa kurung kurawal dan tanpa kata `return`, lalu cetak hasilnya untuk 4 dan 6.",
+            potongan: [
+              "const luas = (panjang, lebar) => panjang * lebar;",
+              "console.log(luas(4, 6));",
+            ],
+            pengecoh: [
+              "const luas = (panjang, lebar) => { panjang * lebar; };",
+              "function luas(panjang, lebar) { return panjang * lebar; }",
+              "const luas = (panjang, lebar) => panjang + lebar;",
+              "console.log(luas(4 * 6));",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Arrow function tanpa kurung kurawal memakai *implicit return*: hasil dari satu ekspresi di kanan tanda panah langsung dikembalikan. Keping berkurung kurawal adalah kekeliruan yang sangat sering terjadi karena bentuknya terlihat lebih lengkap dan aman — begitu kurawal dipasang, badan fungsi kembali butuh `return`, dan tanpa itu nilainya `undefined` tanpa satu pun pesan error. Keping versi `function` menggoda karena hasil hitungnya sama persis, tapi soal ini meminta versi lamanya dihapus; menyisakan keduanya berarti ada dua definisi `luas` di satu berkas. Keping bertanda tambah mengubah luas menjadi penjumlahan — salah operator, bentuk tetap benar. Keping `luas(4 * 6)` sering keliru ditulis saat orang terburu-buru: fungsinya menerima dua argumen, dan mengirim hasil perkaliannya membuat `lebar` bernilai `undefined`.",
+          },
         },
         {
           kind: "step",
@@ -1024,6 +1265,25 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "function sapa(nama, sapaan = 'Halo') {\n  return `${sapaan}, ${nama}!`;\n}\n\nconsole.log(sapa('Bimo'));\nconsole.log(sapa('Bimo', 'Hai'));",
+          susunKode: {
+            question:
+              "Susun fungsi `sapa` yang menyapa dengan kata sapaan bawaan `Halo` bila pemanggilnya tidak menyebutkan sapaan, lalu cetak dua pemanggilan: tanpa sapaan dan dengan sapaan `Hai`.",
+            potongan: [
+              "function sapa(nama, sapaan = 'Halo') {",
+              "  return `${sapaan}, ${nama}!`;",
+              "}",
+              "console.log(sapa('Bimo'));",
+              "console.log(sapa('Bimo', 'Hai'));",
+            ],
+            pengecoh: [
+              "function sapa(sapaan = 'Halo', nama) {",
+              "  return `${nama}, ${sapaan}!`;",
+              "console.log(sapa('Bimo', 'Halo'));",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Parameter bawaan dipakai saat pemanggilnya tidak mengirim argumen untuk posisi itu, dan karena JavaScript mencocokkan argumen **berdasarkan urutan**, parameter berbawaan harus diletakkan di belakang. Keping yang menaruhnya di depan menggoda karena terbaca lebih rapi, tapi `sapa('Bimo')` lalu mengisi `sapaan` dengan `'Bimo'` dan meninggalkan `nama` sebagai `undefined`. Keping yang menukar isi template menghasilkan `Bimo, Halo!` — kalimatnya masih terbaca wajar, dan kekeliruan seperti ini sering lolos sampai ada pengguna yang menyadarinya. Keping dengan argumen kedua `'Halo'` hanya mengulang nilai bawaannya, jadi ia tidak membuktikan apa pun tentang penimpaan nilai bawaan.",
+          },
         },
         {
           kind: "step",
@@ -1061,6 +1321,27 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "const luar = 'aku di luar';\n\nfunction cek() {\n  const dalam = 'aku di dalam';\n  console.log(luar);\n  console.log(dalam);\n}\n\ncek();",
+          susunKode: {
+            question:
+              "Susun kode yang membuktikan wilayah variabel: satu variabel di luar fungsi, satu di dalam fungsi `cek`, dan fungsi itu mencetak keduanya lalu dipanggil.",
+            potongan: [
+              "const luar = 'aku di luar';",
+              "function cek() {",
+              "  const dalam = 'aku di dalam';",
+              "  console.log(luar);",
+              "  console.log(dalam);",
+              "}",
+              "cek();",
+            ],
+            pengecoh: [
+              "let luar = 'aku di luar';",
+              "function cek(luar) {",
+              "  var dalam = 'aku di dalam';",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Fungsi bisa membaca variabel dari wilayah di luarnya, tapi tidak sebaliknya — `dalam` lenyap begitu `cek()` selesai, dan memanggilnya dari luar menghasilkan `ReferenceError`. Keping `function cek(luar)` menggoda karena terlihat seperti \"memberi tahu fungsi soal variabel luar\", padahal parameter dengan nama sama justru menutupi (*shadow*) variabel aslinya, dan selama pemanggilnya tidak mengirim apa-apa isinya menjadi `undefined`. Keping `var dalam` masih berjalan hari ini, tapi wilayahnya adalah seluruh fungsi dan bukan blok — inilah sumber bug yang sering muncul saat `var` dideklarasikan di dalam perulangan lalu terbaca dari luar blok. Keping `let luar` sah secara sintaks, hanya saja nilainya tidak pernah berubah, dan menandai nilai tetap dengan `let` adalah catatan code review yang sering kamu terima.",
+          },
         },
         {
           kind: "step",
@@ -1105,6 +1386,28 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "function buatCounter() {\n  let hitung = 0;\n  return function () {\n    hitung++;\n    return hitung;\n  };\n}\n\nconst naik = buatCounter();\nconsole.log(naik());\nconsole.log(naik());",
+          susunKode: {
+            question:
+              "Susun sebuah pabrik penghitung bernama `buatCounter` yang menyimpan hitungannya sendiri dan mengembalikan fungsi penaik, lalu panggil fungsi itu dua kali dan cetak hasilnya.",
+            potongan: [
+              "function buatCounter() {",
+              "  let hitung = 0;",
+              "  return function () {",
+              "    hitung++;\n    return hitung;\n  };\n}",
+              "const naik = buatCounter();",
+              "console.log(naik());",
+              "console.log(naik());",
+            ],
+            pengecoh: [
+              "  const hitung = 0;",
+              "  return hitung++;",
+              "const naik = buatCounter;",
+              "console.log(naik);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Closure adalah fungsi yang tetap mengingat variabel dari tempat ia dibuat, bahkan setelah fungsi luarnya selesai — itulah sebabnya `hitung` bertahan di antara dua pemanggilan dan mencetak 1 lalu 2. Keping `const hitung = 0;` menggoda karena `const` memang kebiasaan yang baik, tapi `hitung++` pada nilai konstan langsung melempar `TypeError`. Keping `return hitung++;` adalah kekeliruan yang sering terjadi: yang dikembalikan angkanya, bukan fungsinya, sehingga tidak ada apa pun yang bisa dipanggil ulang. Keping `buatCounter` tanpa tanda kurung menyimpan fungsi pabriknya, bukan hasilnya, dan `naik()` jadi membuat penghitung baru tiap kali. Keping `console.log(naik)` mencetak isi fungsi, bukan angkanya.",
+          },
         },
         {
           kind: "step",
@@ -1144,6 +1447,24 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "function prosesAngka(angka, callback) {\n  return callback(angka);\n}\n\nconsole.log(prosesAngka(7, (n) => n * 2));",
+          susunKode: {
+            question:
+              "Susun fungsi `prosesAngka` yang menyerahkan angka ke fungsi lain yang dikirim pemanggilnya, lalu cetak hasilnya untuk angka 7 dengan callback yang mengalikan dua.",
+            potongan: [
+              "function prosesAngka(angka, callback) {",
+              "  return callback(angka);",
+              "}",
+              "console.log(prosesAngka(7, (n) => n * 2));",
+            ],
+            pengecoh: [
+              "  return callback;",
+              "console.log(prosesAngka(7, n * 2));",
+              "console.log(prosesAngka((n) => n * 2, 7));",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Callback adalah fungsi yang dikirim sebagai argumen supaya bagian yang berubah-ubah bisa ditentukan oleh pemanggilnya — pola yang nanti kamu temui di `map`, `filter`, dan penanganan event. Keping `return callback;` mengembalikan fungsinya tanpa pernah menjalankannya; ini kekeliruan yang sering terjadi karena tanda kurung mudah tertinggal, dan hasilnya bukan angka melainkan sebuah fungsi. Keping `prosesAngka(7, n * 2)` menggoda karena terbaca seperti \"kalikan dua\", padahal `n` belum ada nilainya di titik itu sehingga langsung `ReferenceError`. Keping dengan urutan argumen terbalik mengirim fungsi ke posisi angka, dan `callback(angka)` lalu mencoba memanggil angka 7 sebagai fungsi.",
+          },
         },
         {
           kind: "step",
@@ -1197,6 +1518,24 @@ export const javascriptTrack: Track = {
             "const pajak = 0.11;\n" +
             "const total = harga + harga * pajak;\n\n" +
             "console.log(total);",
+          susunKode: {
+            question:
+              "Kode ini melempar `ReferenceError` karena sebuah variabel dipakai sebelum dideklarasikan. Susun urutan yang berjalan, tanpa mengganti `const` menjadi `var`.",
+            potongan: [
+              "const harga = 100000;",
+              "const pajak = 0.11;",
+              "const total = harga + harga * pajak;",
+              "console.log(total);",
+            ],
+            pengecoh: [
+              "var pajak = 0.11;",
+              "let pajak;",
+              "var total = harga + harga * pajak;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Variabel `const` dan `let` memang diangkat ke atas bloknya, tapi berada di *Temporal Dead Zone* sampai baris deklarasinya dieksekusi — memakainya lebih awal menghasilkan `ReferenceError`, jadi urutan barisnya benar-benar menentukan. Keping `var pajak` adalah jebakan yang paling sering dipakai orang untuk \"menghilangkan error\": errornya memang hilang, diganti sesuatu yang lebih buruk, yaitu nilai `undefined` yang membuat totalnya `NaN` tanpa peringatan apa pun. Keping `let pajak;` melakukan hal serupa dengan cara yang lebih halus. Keping `var total` menyebar variabel hasil ke seluruh fungsi, dan itu yang membuat bug tabrakan nama sulit dilacak di berkas panjang.",
+          },
         },
         {
           kind: "quiz",
@@ -1410,6 +1749,24 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "const buah = ['apel', 'mangga', 'jeruk'];\n\nconsole.log(buah[0]);\nconsole.log(buah.at(-1));\nconsole.log(buah.length);",
+          susunKode: {
+            question:
+              "Susun kode yang membuat array tiga buah, lalu mencetak elemen pertamanya, elemen terakhirnya, dan jumlah isinya.",
+            potongan: [
+              "const buah = ['apel', 'mangga', 'jeruk'];",
+              "console.log(buah[0]);",
+              "console.log(buah.at(-1));",
+              "console.log(buah.length);",
+            ],
+            pengecoh: [
+              "console.log(buah[1]);",
+              "console.log(buah.at(3));",
+              "console.log(buah.size);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Indeks array dimulai dari nol, jadi elemen pertama ada di `[0]` dan elemen terakhir ada di indeks `panjang - 1` — itulah sebabnya `.at(-1)` yang menghitung dari belakang jauh lebih aman. Keping `buah[1]` adalah kekeliruan yang sangat sering terjadi karena kita terbiasa menghitung mulai dari satu; hasilnya `mangga`, dan tidak ada error yang memberitahu. Keping `.at(3)` menggoda karena array memang berisi tiga item, padahal indeks 3 sudah melewati ujung dan menghasilkan `undefined`. Keping `.size` adalah jebakan yang datang dari `Map` dan `Set`: array memakai `.length`, dan salah properti hanya menghasilkan `undefined`, bukan error.",
+          },
         },
         {
           kind: "step",
@@ -1442,6 +1799,23 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "const angka = [1, 2, 3, 4];\n\nconst dobel = angka.map((n) => n * 2);\nconsole.log(dobel);",
+          susunKode: {
+            question:
+              "Susun kode yang membuat array baru berisi setiap angka dikali dua, lalu mencetak array barunya.",
+            potongan: [
+              "const angka = [1, 2, 3, 4];",
+              "const dobel = angka.map((n) => n * 2);",
+              "console.log(dobel);",
+            ],
+            pengecoh: [
+              "const dobel = angka.forEach((n) => n * 2);",
+              "const dobel = angka.filter((n) => n * 2);",
+              "const dobel = angka.map((n) => n + 2);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`map` menjalankan fungsimu untuk setiap elemen lalu mengumpulkan hasilnya ke array **baru** — array aslinya tidak tersentuh. Keping `forEach` adalah kekeliruan yang paling sering terjadi: bentuknya nyaris identik dan kodenya tidak error, tapi `forEach` selalu mengembalikan `undefined`, jadi `dobel` menjadi `undefined` dan bug baru terasa jauh di bawah. Keping `filter` menggoda karena sama-sama menghasilkan array baru, padahal ia memilih elemen berdasarkan benar/salah — setiap angka bukan nol dianggap benar, sehingga hasilnya justru seluruh isi array yang asli. Keping bertanda tambah salah operator: hasilnya bertambah dua, bukan berlipat dua.",
+          },
         },
         {
           kind: "step",
@@ -1475,6 +1849,23 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "const angka = [1, 2, 3, 4, 5, 6];\n\nconst genap = angka.filter((n) => n % 2 === 0);\nconsole.log(genap);",
+          susunKode: {
+            question:
+              "Susun kode yang menyaring hanya angka genap dari sebuah array, lalu mencetak hasil saringannya.",
+            potongan: [
+              "const angka = [1, 2, 3, 4, 5, 6];",
+              "const genap = angka.filter((n) => n % 2 === 0);",
+              "console.log(genap);",
+            ],
+            pengecoh: [
+              "const genap = angka.map((n) => n % 2 === 0);",
+              "const genap = angka.filter((n) => n / 2 === 0);",
+              "const genap = angka.filter((n) => n % 2 === 1);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`filter` menyimpan elemen yang membuat fungsimu bernilai benar, dan sisa pembagian `% 2` bernilai nol tepat pada angka genap. Keping `map` menggoda karena bentuk fungsinya sama persis, tapi hasilnya bukan daftar angka melainkan daftar `true`/`false` sepanjang array asli — kekeliruan yang sering baru ketahuan saat hasilnya ditampilkan ke layar. Keping `n / 2 === 0` menukar sisa bagi dengan pembagian biasa; hasil bagi baru nol kalau angkanya sendiri nol, jadi saringannya mengembalikan array kosong. Keping `=== 1` menyaring angka ganjil — jebakan yang mudah lolos karena hasilnya tetap terlihat masuk akal.",
+          },
         },
         {
           kind: "step",
@@ -1508,6 +1899,24 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "const harga = [15000, 20000, 5000];\n\nconst total = harga.reduce((jumlah, h) => jumlah + h, 0);\nconsole.log(total);",
+          susunKode: {
+            question:
+              "Susun kode yang menjumlahkan seluruh isi array `harga` menjadi satu angka total dengan nilai awal nol, lalu mencetak totalnya.",
+            potongan: [
+              "const harga = [15000, 20000, 5000];",
+              "const total = harga.reduce((jumlah, h) => jumlah + h, 0);",
+              "console.log(total);",
+            ],
+            pengecoh: [
+              "const total = harga.reduce((jumlah, h) => jumlah + h);",
+              "const total = harga.reduce((jumlah, h) => jumlah + h, 1);",
+              "const total = harga.map((jumlah, h) => jumlah + h, 0);",
+              "console.log(harga.total);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`reduce` meringkas seluruh array menjadi satu nilai: parameter pertama adalah hasil sementara, parameter kedua elemen yang sedang diproses, dan angka di belakang adalah nilai awalnya. Keping tanpa nilai awal menggoda karena hasilnya kebetulan tetap benar untuk array ini, tapi pada array kosong ia melempar `TypeError: Reduce of empty array with no initial value` — bug yang sering baru muncul di produksi saat datanya belum ada. Keping bernilai awal `1` diam-diam menambah seribu ke total. Keping `map` salah alat: ia mengembalikan array, bukan satu angka, dan argumen kedua di sana bukan nilai awal melainkan penentu `this`. Keping `harga.total` menggoda karena namanya persis seperti yang kamu cari, padahal array tidak punya properti bernama itu — hasilnya `undefined`, bukan error.",
+          },
         },
         {
           kind: "step",
@@ -1548,6 +1957,27 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "const user = {\n  nama: 'Bimo',\n  umur: 20,\n  aktif: true,\n};\n\nconsole.log(user.nama);\nconsole.log(user['umur']);",
+          susunKode: {
+            question:
+              "Susun object `user` berisi nama `Bimo`, umur `20`, dan status aktif, lalu cetak namanya dengan notasi titik dan umurnya dengan notasi kurung siku.",
+            potongan: [
+              "const user = {",
+              "  nama: 'Bimo',",
+              "  umur: 20,",
+              "  aktif: true,",
+              "};",
+              "console.log(user.nama);",
+              "console.log(user['umur']);",
+            ],
+            pengecoh: [
+              "  umur = 20,",
+              "  aktif: 'true',",
+              "console.log(user[umur]);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Di dalam object, pasangan kunci dan nilai dipisahkan titik dua — bukan tanda sama dengan, karena kamu sedang menyusun data, bukan memberi nilai ke variabel. Keping `umur = 20,` adalah kekeliruan yang sering terjadi saat berpindah dari menulis variabel ke menulis object, dan berkasnya langsung gagal dijalankan. Keping `aktif: 'true',` menggoda karena di layar tampak sama, padahal teks `'true'` bukan nilai boolean: teks apa pun yang tidak kosong selalu dianggap benar, termasuk `'false'`. Keping `user[umur]` tanpa tanda kutip mencari variabel bernama `umur` yang tidak pernah ada — di dalam kurung siku, nama properti harus berupa teks.",
+          },
         },
         {
           kind: "step",
@@ -1583,6 +2013,24 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "const user = { nama: 'Bimo', umur: 20, kota: 'Jakarta' };\n\nconst { nama, kota } = user;\nconsole.log(nama);\nconsole.log(kota);",
+          susunKode: {
+            question:
+              "Susun kode yang mengambil `nama` dan `kota` dari object `user` sekaligus dalam satu baris, lalu mencetak keduanya.",
+            potongan: [
+              "const user = { nama: 'Bimo', umur: 20, kota: 'Jakarta' };",
+              "const { nama, kota } = user;",
+              "console.log(nama);",
+              "console.log(kota);",
+            ],
+            pengecoh: [
+              "const [nama, kota] = user;",
+              "const { name, city } = user;",
+              "const { nama, umur } = user;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Destructuring object mencocokkan **nama properti**, bukan urutan, jadi `const { nama, kota } = user` mengambil dua properti sekaligus tanpa peduli posisinya di dalam object. Keping berkurung siku adalah kekeliruan yang sering terjadi karena bentuknya mirip: kurung siku dipakai untuk array, dan memakainya pada object melempar `TypeError: user is not iterable`. Keping `{ name, city }` menggoda karena nama Inggrisnya terasa lebih rapi, padahal properti yang tidak ada menghasilkan `undefined` tanpa satu pun peringatan — inilah jebakan diam yang paling sering memakan waktu. Keping `{ nama, umur }` mengambil properti yang salah, dan `console.log(kota)` lalu gagal karena `kota` tidak pernah dibuat.",
+          },
         },
         {
           kind: "step",
@@ -1621,6 +2069,24 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "const user = { nama: 'Bimo', umur: 20 };\n\nconst userBaru = { ...user, umur: 21 };\nconsole.log(user);\nconsole.log(userBaru);",
+          susunKode: {
+            question:
+              "Susun kode yang membuat salinan `user` dengan umur menjadi 21, tanpa mengubah object aslinya, lalu cetak keduanya sebagai bukti.",
+            potongan: [
+              "const user = { nama: 'Bimo', umur: 20 };",
+              "const userBaru = { ...user, umur: 21 };",
+              "console.log(user);",
+              "console.log(userBaru);",
+            ],
+            pengecoh: [
+              "const userBaru = user;",
+              "const userBaru = { umur: 21, ...user };",
+              "const userBaru = { ...user, umur: 20 };",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Tanda sama dengan pada object tidak menyalin apa pun — ia hanya memberi nama kedua untuk data yang sama, sehingga mengubah salah satunya mengubah keduanya. Keping `const userBaru = user;` adalah jebakan paling terkenal di JavaScript dan penyebab bug \"datanya berubah sendiri\" yang sering muncul di aplikasi nyata. Keping dengan urutan terbalik menggoda karena semua bahannya ada dan bentuknya rapi, tapi properti yang ditulis lebih dulu ditimpa oleh spread di belakangnya, jadi umurnya kembali menjadi 20 tanpa jejak. Keping terakhir menyalin dengan benar tapi lupa mengubah nilainya — kekeliruan salin-tempel yang sering lolos karena kodenya berjalan mulus.",
+          },
         },
         {
           kind: "step",
@@ -1654,6 +2120,24 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "const users = [\n  { id: 1, nama: 'Ana' },\n  { id: 2, nama: 'Budi' },\n];\n\nconst hasil = users.find((u) => u.id === 2);\nconsole.log(hasil);\nconsole.log(['a', 'b'].includes('b'));",
+          susunKode: {
+            question:
+              "Susun kode yang mencari user ber-`id` 2 dari sebuah array object dan mencetaknya, lalu mencetak hasil pemeriksaan apakah `'b'` ada di dalam array `['a', 'b']`.",
+            potongan: [
+              "const users = [\n  { id: 1, nama: 'Ana' },\n  { id: 2, nama: 'Budi' },\n];",
+              "const hasil = users.find((u) => u.id === 2);",
+              "console.log(hasil);",
+              "console.log(['a', 'b'].includes('b'));",
+            ],
+            pengecoh: [
+              "const hasil = users.filter((u) => u.id === 2);",
+              "const hasil = users.find((u) => u.id = 2);",
+              "console.log(['a', 'b'].indexOf('b'));",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`find` mengembalikan **elemen pertama** yang cocok, atau `undefined` kalau tidak ada satu pun. Keping `filter` menggoda karena syaratnya ditulis persis sama, tapi hasilnya selalu berupa array — sehingga `hasil.nama` menjadi `undefined` dan orang bingung mencari sebabnya. Keping dengan satu tanda sama dengan adalah kekeliruan yang jauh lebih berbahaya daripada terlihat: ia bukan membandingkan melainkan **menimpa** `id` setiap user menjadi 2, dan datanya rusak diam-diam. Keping `indexOf` mengembalikan posisi, bukan benar/salah; jebakannya, posisi `0` bernilai falsy sehingga pemeriksaan `if` justru gagal untuk elemen pertama.",
+          },
         },
         {
           kind: "step",
@@ -1687,6 +2171,24 @@ export const javascriptTrack: Track = {
             },
           ],
           solution: "const harga = [25000, 9000, 120000];\n\nconst urut = [...harga].sort((a, b) => a - b);\nconsole.log(urut);\nconsole.log(harga);",
+          susunKode: {
+            question:
+              "Susun kode yang membuat versi terurut dari termurah ke termahal tanpa mengubah array `harga` aslinya, lalu cetak keduanya.",
+            potongan: [
+              "const harga = [25000, 9000, 120000];",
+              "const urut = [...harga].sort((a, b) => a - b);",
+              "console.log(urut);",
+              "console.log(harga);",
+            ],
+            pengecoh: [
+              "const urut = harga.sort((a, b) => a - b);",
+              "const urut = [...harga].sort();",
+              "const urut = [...harga].sort((a, b) => a > b);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`sort` mengurutkan array **di tempat**, jadi array aslinya ikut berubah — itulah sebabnya isinya disalin dulu dengan spread sebelum diurutkan. Keping tanpa spread adalah kekeliruan yang sering terjadi karena hasil cetak pertamanya terlihat benar; yang rusak adalah data asli yang mungkin masih dipakai bagian lain program. Keping `sort()` tanpa pembanding menggoda karena terlihat paling sederhana, padahal secara bawaan `sort` membandingkan sebagai **teks**, sehingga 120000 dianggap lebih kecil daripada 25000. Keping `a > b` mengembalikan `true`/`false`, bukan angka negatif/positif seperti yang diminta `sort`, dan hasilnya urutan yang tidak dapat diandalkan.",
+          },
         },
         {
           kind: "step",
@@ -1749,6 +2251,24 @@ export const javascriptTrack: Track = {
             "const pesananBaru = { ...pesanan, jumlah: 5 };\n\n" +
             "console.log(pesanan.jumlah);\n" +
             "console.log(pesananBaru.jumlah);",
+          susunKode: {
+            question:
+              "Object `pesanan` tidak boleh berubah. Susun kode yang membuat versi barunya dengan jumlah 5, lalu membuktikan lewat cetakan bahwa jumlah aslinya masih 1.",
+            potongan: [
+              "const pesanan = { produk: 'Kopi Gayo', jumlah: 1 };",
+              "const pesananBaru = { ...pesanan, jumlah: 5 };",
+              "console.log(pesanan.jumlah);",
+              "console.log(pesananBaru.jumlah);",
+            ],
+            pengecoh: [
+              "const pesananBaru = { pesanan, jumlah: 5 };",
+              "pesanan.jumlah = 5;",
+              "const pesananBaru = { jumlah: 5 };",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Object disimpan sebagai rujukan, jadi menyalinnya butuh pembuatan object baru — dan tiga titik spread itulah yang menyalin isinya, lalu properti yang kamu sebut sesudahnya menimpa nilai lama. Keping `{ pesanan, jumlah: 5 }` tanpa tiga titik adalah kekeliruan yang sering terjadi karena bentuknya nyaris sama: hasilnya object bersarang, `pesananBaru.produk` menjadi `undefined`, dan tidak ada error yang menunjukkannya. Keping `pesanan.jumlah = 5;` menggoda karena paling pendek dan langsung berhasil di layar, padahal ia merusak object yang justru diminta tetap utuh — pola yang sering menjadi bug di aplikasi yang datanya dipakai banyak bagian sekaligus. Keping `{ jumlah: 5 }` membuat object baru tapi kehilangan `produk`.",
+          },
         },
         {
           kind: "quiz",
@@ -1985,6 +2505,22 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "const judul = document.querySelector('#judul');\nconsole.log(judul.textContent);",
+          susunKode: {
+            question:
+              "Halaman punya `<h1 id=\"judul\">`. Susun kode yang mengambil elemen itu dan mencetak isi teksnya ke konsol.",
+            potongan: [
+              "const judul = document.querySelector('#judul');",
+              "console.log(judul.textContent);",
+            ],
+            pengecoh: [
+              "const judul = document.querySelector('judul');",
+              "const judul = document.getElementById('#judul');",
+              "console.log(judul.value);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`querySelector` menerima selector CSS, jadi mencari berdasarkan `id` wajib memakai tanda pagar seperti di berkas CSS. Keping tanpa pagar adalah kekeliruan yang sangat sering terjadi: ia justru mencari elemen bernama tag `<judul>`, tidak menemukannya, dan mengembalikan `null` — sehingga baris berikutnya gagal dengan `Cannot read properties of null`. Keping `getElementById('#judul')` adalah kebalikannya dan sama menjebaknya: fungsi itu menerima id polos tanpa pagar, dan menambahkan pagar membuatnya selalu gagal. Keping `.value` menggoda karena terdengar seperti \"isi\", padahal `value` hanya dimiliki elemen form seperti `<input>`; untuk teks biasa yang dipakai adalah `textContent`.",
+          },
         },
         {
           kind: "step",
@@ -2017,6 +2553,23 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "const judul = document.querySelector('#judul');\n\njudul.textContent = 'Judul Baru';\njudul.classList.add('aktif');",
+          susunKode: {
+            question:
+              "Susun kode yang mengganti teks elemen `#judul` menjadi `Judul Baru` sekaligus menambahkan kelas `aktif` padanya.",
+            potongan: [
+              "const judul = document.querySelector('#judul');",
+              "judul.textContent = 'Judul Baru';",
+              "judul.classList.add('aktif');",
+            ],
+            pengecoh: [
+              "judul.textContent == 'Judul Baru';",
+              "judul.classList.add('.aktif');",
+              "judul.class = 'aktif';",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Mengubah tampilan lewat DOM berarti **memberi nilai** ke properti elemennya, dan menambah kelas dilakukan dengan `classList.add` agar kelas yang sudah ada tidak terhapus. Keping bertanda sama dengan ganda adalah kekeliruan yang sering terjadi karena hanya berbeda satu karakter: ia membandingkan lalu membuang hasilnya, tulisan di layar tidak berubah sama sekali, dan tidak ada error. Keping `add('.aktif')` menggoda karena kita baru saja memakai titik di selector CSS, padahal `classList` menerima nama kelas polos — dengan titik, kelasnya benar-benar bernama `.aktif` dan tidak pernah cocok dengan aturan CSS-mu. Keping `judul.class` bukan properti yang ada; namanya `className`, dan itu pun menimpa seluruh kelas lama.",
+          },
         },
         {
           kind: "step",
@@ -2049,6 +2602,24 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "const tombol = document.querySelector('#tombol');\n\ntombol.addEventListener('click', () => {\n  console.log('Tombol diklik');\n});",
+          susunKode: {
+            question:
+              "Susun kode yang memasang pendengar klik pada tombol `#tombol` dan mencetak `Tombol diklik` setiap kali tombolnya ditekan.",
+            potongan: [
+              "const tombol = document.querySelector('#tombol');",
+              "tombol.addEventListener('click', () => {",
+              "  console.log('Tombol diklik');",
+              "});",
+            ],
+            pengecoh: [
+              "tombol.addEventListener('onclick', () => {",
+              "tombol.addEventListener(click, () => {",
+              "  alert('Tombol diklik');",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`addEventListener` menerima **nama peristiwa** sebagai teks, lalu fungsi yang dijalankan saat peristiwa itu terjadi. Keping `'onclick'` adalah kekeliruan yang sangat sering terjadi karena atribut HTML memang bernama `onclick`; di `addEventListener` awalan `on` tidak dipakai, dan yang paling menjebak adalah tidak ada error apa pun — pendengarnya terpasang untuk peristiwa yang tidak pernah terjadi. Keping `click` tanpa tanda kutip mencari variabel bernama `click` sehingga langsung `ReferenceError`. Keping `alert` menggoda karena hasilnya paling terlihat, tapi ia menghentikan seluruh halaman sampai pengguna menekan OK, dan panel konsol tetap kosong.",
+          },
         },
         {
           kind: "step",
@@ -2087,6 +2658,26 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "const form = document.querySelector('#form');\nconst input = document.querySelector('#nama');\n\nform.addEventListener('submit', (e) => {\n  e.preventDefault();\n  console.log(input.value);\n});",
+          susunKode: {
+            question:
+              "Susun penanganan submit form `#form` yang mencegah halaman dimuat ulang, lalu mencetak isi input `#nama`.",
+            potongan: [
+              "const form = document.querySelector('#form');",
+              "const input = document.querySelector('#nama');",
+              "form.addEventListener('submit', (e) => {",
+              "  e.preventDefault();",
+              "  console.log(input.value);",
+              "});",
+            ],
+            pengecoh: [
+              "form.addEventListener('click', (e) => {",
+              "  e.preventDefault;",
+              "  console.log(input.textContent);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Form punya perilaku bawaan mengirim data lalu memuat ulang halaman, dan `e.preventDefault()` itulah yang membatalkannya sebelum kodemu sempat berjalan. Keping `e.preventDefault;` tanpa tanda kurung adalah jebakan yang sering menjerat: menyebut nama fungsi tidak menjalankannya, tidak ada error yang muncul, dan gejalanya cuma halaman berkedip lalu semua isian hilang. Keping `'click'` menggoda karena tombol kirimnya memang diklik, tapi form juga bisa dikirim dengan menekan Enter di kolom isian — peristiwa yang benar-benar perlu ditangani adalah `submit`. Keping `.textContent` salah properti: isi yang diketik pengguna hanya ada di `value`, sedangkan `textContent` sebuah `<input>` selalu kosong.",
+          },
         },
         {
           kind: "step",
@@ -2129,6 +2720,27 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "const buah = ['apel', 'mangga', 'jeruk'];\nconst daftar = document.querySelector('#daftar');\n\nbuah.forEach((nama) => {\n  const li = document.createElement('li');\n  li.textContent = nama;\n  daftar.append(li);\n});",
+          susunKode: {
+            question:
+              "Susun kode yang membuat satu elemen `<li>` untuk setiap isi array `buah` dan memasukkannya ke dalam `#daftar`.",
+            potongan: [
+              "const buah = ['apel', 'mangga', 'jeruk'];",
+              "const daftar = document.querySelector('#daftar');",
+              "buah.forEach((nama) => {",
+              "  const li = document.createElement('li');",
+              "  li.textContent = nama;",
+              "  daftar.append(li);",
+              "});",
+            ],
+            pengecoh: [
+              "  const li = document.createElement('<li>');",
+              "  li.innerHTML = nama;",
+              "  document.append(li);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`createElement` menerima **nama tag polos**, bukan potongan HTML, lalu elemen yang sudah jadi ditempelkan ke induknya dengan `append`. Keping `createElement('<li>')` adalah kekeliruan yang sering terjadi karena kita terbiasa menulis tag lengkap; hasilnya elemen dengan nama tag tidak sah dan browser tidak menampilkannya. Keping `innerHTML` menggoda karena hasilnya terlihat sama persis untuk teks biasa, tapi ia menafsirkan isinya sebagai HTML — begitu datanya datang dari pengguna, itulah pintu masuk serangan XSS, dan inilah alasan `textContent` menjadi bawaan yang aman. Keping `document.append(li)` menempelkan item ke ujung halaman, bukan ke dalam daftarnya.",
+          },
         },
         {
           kind: "step",
@@ -2167,6 +2779,26 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "const daftar = document.querySelector('#daftar');\n\ndaftar.addEventListener('click', (e) => {\n  if (e.target.tagName === 'LI') {\n    console.log(e.target.textContent);\n  }\n});",
+          susunKode: {
+            question:
+              "Susun **satu** pendengar klik di `#daftar` yang mencetak teks item yang benar-benar diklik, sehingga item yang ditambahkan nanti pun ikut tertangani.",
+            potongan: [
+              "const daftar = document.querySelector('#daftar');",
+              "daftar.addEventListener('click', (e) => {",
+              "  if (e.target.tagName === 'LI') {",
+              "    console.log(e.target.textContent);",
+              "  }",
+              "});",
+            ],
+            pengecoh: [
+              "daftar.querySelectorAll('li').addEventListener('click', (e) => {",
+              "    console.log(e.currentTarget.textContent);",
+              "    console.log(this.textContent);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Delegasi memanfaatkan naiknya peristiwa ke elemen induk: satu pendengar di daftar cukup untuk semua item, termasuk item yang baru dibuat setelah kodenya berjalan. Keping `querySelectorAll(...).addEventListener` adalah kekeliruan yang sangat sering terjadi — hasilnya sebuah NodeList, bukan satu elemen, jadi langsung `TypeError`, dan kalaupun dipasang satu per satu item baru tetap tidak tertangani. Keping `currentTarget` menggoda karena namanya terdengar paling tepat, padahal ia selalu menunjuk elemen tempat pendengar dipasang, yaitu seluruh daftar. Keping `this` adalah jebakan klasik: di dalam arrow function ia tidak menunjuk elemen mana pun.",
+          },
         },
         {
           kind: "step",
@@ -2223,6 +2855,26 @@ export const javascriptTrack: Track = {
             "  if (!harga) return;\n" +
             "  console.log(Number(harga) + 1000);\n" +
             "});",
+          susunKode: {
+            question:
+              "Setiap tombol produk membawa `data-harga`. Susun satu pendengar klik di `#daftar` yang mencetak harga tombol yang diklik setelah ditambah biaya layanan 1000, dengan hasil berupa angka.",
+            potongan: [
+              "const daftar = document.querySelector('#daftar');",
+              "daftar.addEventListener('click', (e) => {",
+              "  const harga = e.target.dataset.harga;",
+              "  if (!harga) return;",
+              "  console.log(Number(harga) + 1000);",
+              "});",
+            ],
+            pengecoh: [
+              "  const harga = e.target.data.harga;",
+              "  const harga = e.target.dataset['data-harga'];",
+              "  console.log(harga + 1000);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Atribut `data-*` dibaca lewat `dataset`, dan nama setelah `data-` menjadi kuncinya — nilainya **selalu berupa teks**, apa pun isinya. Keping `harga + 1000` adalah jebakan utama step ini: tanda tambah pada teks berarti menyambung, jadi keluarannya `150001000`, sebuah angka palsu yang tampak wajar sekilas dan sering lolos sampai ada yang menghitung ulang. Keping `e.target.data.harga` menggoda karena atributnya memang ditulis `data-harga`, padahal properti bernama `data` tidak ada dan hasilnya `undefined`. Keping `dataset['data-harga']` keliru dengan cara serupa: di dalam `dataset`, awalan `data-` sudah dibuang.",
+          },
         },
         {
           kind: "quiz",
@@ -2437,6 +3089,23 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "const user = { nama: 'Bimo', alamat: { kota: 'Jakarta' } };\n\nconsole.log(user.alamat?.kota);\nconsole.log(user.kontak?.email);",
+          susunKode: {
+            question:
+              "Object `user` punya `alamat` tapi belum tentu punya `kontak`. Susun kode yang mencetak kota dan email tanpa membuat program berhenti saat datanya tidak ada.",
+            potongan: [
+              "const user = { nama: 'Bimo', alamat: { kota: 'Jakarta' } };",
+              "console.log(user.alamat?.kota);",
+              "console.log(user.kontak?.email);",
+            ],
+            pengecoh: [
+              "console.log(user.kontak.email);",
+              "console.log(user?.alamat.kota);",
+              "console.log(user.alamat.kota);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Tanda `?.` menghentikan penelusuran dan menghasilkan `undefined` begitu bagian sebelumnya bernilai `null` atau `undefined`, jadi ia dipasang tepat **sebelum properti yang mungkin tidak ada**. Keping `user.kontak.email` adalah jebakan aslinya: `user.kontak` bernilai `undefined`, dan membaca `.email` darinya menghentikan seluruh skrip dengan `Cannot read properties of undefined`. Keping `user?.alamat.kota` sering keliru ditulis karena tanda tanyanya dipasang di tempat yang salah — yang dijaga justru `user` yang sudah pasti ada, sementara `alamat` tetap tanpa perlindungan. Keping tanpa tanda tanya sama sekali menggoda karena hari ini datanya kebetulan lengkap; ia baru meledak saat API mengirim data yang tidak utuh.",
+          },
         },
         {
           kind: "step",
@@ -2465,6 +3134,23 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "const stok = 0;\n\nconsole.log(stok ?? 10);\nconsole.log(stok || 10);",
+          susunKode: {
+            question:
+              "Stok bernilai `0`. Susun dua baris yang membandingkan nilai bawaan `10` versi `??` dan versi `||`, supaya bedanya terlihat di panel keluaran.",
+            potongan: [
+              "const stok = 0;",
+              "console.log(stok ?? 10);",
+              "console.log(stok || 10);",
+            ],
+            pengecoh: [
+              "console.log(stok ?: 10);",
+              "console.log(stok && 10);",
+              "console.log(stok | 10);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`??` hanya menggantikan nilai `null` dan `undefined`, sedangkan `||` menggantikan **semua** nilai falsy — itulah sebabnya stok `0` yang sah berubah menjadi `10` di baris kedua, dan bug seperti ini sering muncul pada harga, jumlah, dan nilai ujian. Keping `?:` menggoda karena bentuk itu memang ada di PHP dan Kotlin, tapi JavaScript tidak mengenalnya dan berkasnya langsung gagal. Keping `&&` melakukan kebalikannya: ia mengembalikan nilai kiri kalau kiri falsy, jadi hasilnya `0`, dan kekeliruan ini sering lolos karena angkanya kebetulan terlihat benar. Keping satu garis tegak adalah operator bit, bukan logika.",
+          },
         },
         {
           kind: "step",
@@ -2501,6 +3187,24 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "function jumlahkan(...angka) {\n  return angka.reduce((a, b) => a + b, 0);\n}\n\nconsole.log(jumlahkan(1, 2, 3, 4));",
+          susunKode: {
+            question:
+              "Susun fungsi `jumlahkan` yang menerima berapa pun jumlah angka lalu mengembalikan totalnya, dan buktikan dengan memanggilnya memakai empat angka.",
+            potongan: [
+              "function jumlahkan(...angka) {",
+              "  return angka.reduce((a, b) => a + b, 0);",
+              "}",
+              "console.log(jumlahkan(1, 2, 3, 4));",
+            ],
+            pengecoh: [
+              "function jumlahkan(angka) {",
+              "  return angka.forEach((a, b) => a + b, 0);",
+              "console.log(jumlahkan([1, 2, 3, 4]));",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Tiga titik di depan parameter mengumpulkan **semua** argumen sisa menjadi satu array sungguhan, sehingga fungsinya bisa dipanggil dengan jumlah angka berapa pun. Keping tanpa tiga titik menggoda karena kodenya tetap berjalan, tapi `angka` hanya berisi argumen pertama dan `.reduce` langsung gagal karena angka bukan array. Keping `forEach` adalah kekeliruan yang sering terjadi: ia menjalankan fungsinya tapi tidak mengumpulkan apa pun, jadi hasilnya `undefined`. Keping yang mengirim `[1, 2, 3, 4]` sebagai satu array terlihat paling masuk akal, padahal di fungsi rest ia menghasilkan array di dalam array dan totalnya menjadi teks `01,2,3,4`.",
+          },
         },
         {
           kind: "step",
@@ -2535,6 +3239,26 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "const a = [1, 2];\nconst b = [3, 4];\n\nconst gabung = [...a, ...b];\nconst tambah = [...a, 99];\nconsole.log(gabung);\nconsole.log(tambah);",
+          susunKode: {
+            question:
+              "Susun kode yang menggabungkan array `a` dan `b` menjadi satu array baru, lalu membuat array lain berisi isi `a` ditambah angka 99 di akhir, dan mencetak keduanya.",
+            potongan: [
+              "const a = [1, 2];",
+              "const b = [3, 4];",
+              "const gabung = [...a, ...b];",
+              "const tambah = [...a, 99];",
+              "console.log(gabung);",
+              "console.log(tambah);",
+            ],
+            pengecoh: [
+              "const gabung = [a, b];",
+              "const tambah = a.push(99);",
+              "const tambah = [99, ...a];",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Spread menyalin **isi** array ke array baru, jadi `[...a, ...b]` menghasilkan empat angka sejajar, bukan array bersarang. Keping `[a, b]` adalah kekeliruan yang sering terjadi karena bentuknya paling singkat; hasilnya array berisi dua array, dan `gabung.length` menjadi 2 alih-alih 4. Keping `a.push(99)` menggoda karena itulah cara menambah elemen yang paling dikenal, tapi `push` mengubah array aslinya dan mengembalikan panjang barunya — jadi `tambah` berisi angka 3, bukan array. Keping `[99, ...a]` menaruh angka tambahannya di depan; urutan di dalam kurung siku menentukan urutan hasilnya.",
+          },
         },
         {
           kind: "step",
@@ -2575,6 +3299,25 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "const nama = 'Bimo';\nconst umur = 20;\nconst kunci = 'kota';\n\nconst user = { nama, umur, [kunci]: 'Jakarta' };\nconsole.log(user);",
+          susunKode: {
+            question:
+              "Susun object `user` yang mengambil nilai dari variabel `nama` dan `umur` tanpa mengulang namanya, ditambah satu properti yang **nama kuncinya** diambil dari isi variabel `kunci`.",
+            potongan: [
+              "const nama = 'Bimo';",
+              "const umur = 20;",
+              "const kunci = 'kota';",
+              "const user = { nama, umur, [kunci]: 'Jakarta' };",
+              "console.log(user);",
+            ],
+            pengecoh: [
+              "const user = { nama: nama, umur: umur, kunci: 'Jakarta' };",
+              "const user = { nama, umur, ['kunci']: 'Jakarta' };",
+              "const user = { nama, umur = 20, [kunci]: 'Jakarta' };",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Kurung siku di sekitar nama kunci berarti \"pakai **isi** variabel ini sebagai nama properti\", sehingga kuncinya menjadi `kota`, bukan `kunci`. Keping tanpa kurung siku adalah kekeliruan yang sering terjadi karena terbaca wajar; hasilnya properti bernama `kunci`, dan `user.kota` menjadi `undefined` tanpa error apa pun. Keping `['kunci']` menggoda karena kurung sikunya sudah benar, tapi tanda kutip di dalamnya mengubahnya kembali menjadi teks tetap — kurung siku hanya berguna kalau isinya sebuah variabel. Keping `umur = 20` mencampur cara memberi nilai variabel ke dalam object; di dalam object pemisahnya titik dua.",
+          },
         },
         {
           kind: "step",
@@ -2606,6 +3349,24 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "export function luas(p, l) {\n  return p * l;\n}\n\nexport default luas;",
+          susunKode: {
+            question:
+              "Susun isi sebuah berkas modul yang mengekspor fungsi `luas` sebagai named export sekaligus menjadikannya default export.",
+            potongan: [
+              "export function luas(p, l) {",
+              "  return p * l;",
+              "}",
+              "export default luas;",
+            ],
+            pengecoh: [
+              "export default function luas(p, l) {",
+              "module.exports = luas;",
+              "default export luas;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Named export menempelkan kata `export` di depan deklarasinya sehingga berkas lain bisa memanggilnya dengan nama, sedangkan default export ditulis terpisah dan hanya boleh ada **satu** per berkas. Keping `export default function luas(...)` menggoda karena terasa seperti menggabungkan dua permintaan soal sekaligus, padahal ia menjadikan fungsinya default saja — dan begitu baris `export default luas;` juga ikut terpasang, berkasnya gagal karena ada dua default dalam satu modul. Keping `module.exports` berasal dari CommonJS; mencampurnya di berkas ES Module adalah kekeliruan yang sering terjadi saat menyalin jawaban lama dari internet, dan hasilnya `module is not defined`. Keping `default export` membalik urutan kata kuncinya.",
+          },
         },
         {
           kind: "quiz",
@@ -2818,6 +3579,25 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "console.log('Pertama');\n\nsetTimeout(() => {\n  console.log('Kedua');\n}, 0);\n\nconsole.log('Ketiga');",
+          susunKode: {
+            question:
+              "Susun kode yang mencetak `Pertama`, menjadwalkan `Kedua` dengan tunda 0 ms, lalu mencetak `Ketiga` — supaya urutan keluarannya membuktikan cara kerja antrean.",
+            potongan: [
+              "console.log('Pertama');",
+              "setTimeout(() => {",
+              "  console.log('Kedua');",
+              "}, 0);",
+              "console.log('Ketiga');",
+            ],
+            pengecoh: [
+              "setInterval(() => {",
+              "console.log(Pertama);",
+              "document.write('Ketiga');",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Meski ditunda 0 milidetik, isi `setTimeout` tetap masuk antrean dan baru dijalankan setelah seluruh kode biasa selesai — itulah sebabnya keluarannya `Pertama`, `Ketiga`, lalu `Kedua`. Keping `setInterval` menggoda karena bentuk pemanggilannya sama persis, tapi ia mengulang selamanya; dengan tunda 0 ia membanjiri konsol dan halaman ikut berat, dan kekeliruan ini sering baru disadari setelah tab menjadi macet. Keping `console.log(Pertama)` tanpa tanda kutip mencari variabel yang tidak ada sehingga skripnya berhenti di baris pertama. Keping `document.write` adalah API lama yang menimpa seluruh isi halaman kalau dipanggil setelah halaman selesai dimuat, dan panel konsol tetap kosong.",
+          },
         },
         {
           kind: "step",
@@ -2850,6 +3630,26 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "const janji = new Promise((resolve) => {\n  setTimeout(() => resolve('Sukses'), 500);\n});\n\njanji.then((hasil) => {\n  console.log(hasil);\n});",
+          susunKode: {
+            question:
+              "Susun sebuah Promise yang berhasil dengan nilai `Sukses` setelah 500 ms, lalu tangani hasilnya dan cetak ke konsol.",
+            potongan: [
+              "const janji = new Promise((resolve) => {",
+              "  setTimeout(() => resolve('Sukses'), 500);",
+              "});",
+              "janji.then((hasil) => {",
+              "  console.log(hasil);",
+              "});",
+            ],
+            pengecoh: [
+              "const janji = Promise((resolve) => {",
+              "  setTimeout(() => return 'Sukses', 500);",
+              "janji.catch((hasil) => {",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Promise adalah janji hasil di masa depan: fungsi di dalamnya menerima `resolve`, dan memanggil `resolve(nilai)` itulah yang menandai janjinya berhasil sekaligus mengirim nilainya ke `.then`. Keping tanpa `new` adalah kekeliruan yang sering terjadi karena huruf awalnya besar seperti fungsi biasa; hasilnya `TypeError: Promise constructor cannot be invoked without 'new'`. Keping dengan `return` menggoda karena di fungsi biasa itulah cara mengembalikan nilai, padahal nilai yang di-`return` dari dalam `setTimeout` tidak pergi ke mana pun dan janjinya menggantung selamanya tanpa pesan error. Keping `.catch` hanya berjalan saat janjinya gagal, jadi hasil suksesnya tidak akan pernah tercetak.",
+          },
         },
         {
           kind: "step",
@@ -2884,6 +3684,26 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "const janji = new Promise((resolve) => {\n  setTimeout(() => resolve('Data siap'), 300);\n});\n\nasync function ambilData() {\n  const hasil = await janji;\n  console.log(hasil);\n}\n\nambilData();",
+          susunKode: {
+            question:
+              "Susun fungsi asinkron `ambilData` yang menunggu sebuah Promise selesai lalu mencetak hasilnya, dan jalankan fungsinya.",
+            potongan: [
+              "const janji = new Promise((resolve) => {\n  setTimeout(() => resolve('Data siap'), 300);\n});",
+              "async function ambilData() {",
+              "  const hasil = await janji;",
+              "  console.log(hasil);",
+              "}",
+              "ambilData();",
+            ],
+            pengecoh: [
+              "function async ambilData() {",
+              "  const hasil = janji;",
+              "  const hasil = janji.then();",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`await` hanya boleh dipakai di dalam fungsi yang ditandai `async`, dan tugasnya menahan baris berikutnya sampai janjinya selesai lalu menyerahkan nilainya. Keping `function async ambilData()` membalik urutan kata kuncinya — kekeliruan yang sering terjadi karena keduanya memang ditulis berdampingan — dan berkasnya langsung gagal sebelum satu baris pun berjalan. Keping tanpa `await` justru yang paling menjebak: kodenya berjalan mulus tanpa error, tapi yang tercetak `Promise { <pending> }` alih-alih datanya, dan pemula sering menyangka Promise-nya rusak. Keping `janji.then()` menggoda karena `then` memang cara lain menangani Promise, tapi mencampurnya begini mengembalikan Promise baru, bukan nilai — pilih salah satu gaya, jangan keduanya.",
+          },
         },
         {
           kind: "step",
@@ -2921,6 +3741,27 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "async function ambil() {\n  const res = await fetch('https://jsonplaceholder.typicode.com/todos/1');\n  if (!res.ok) {\n    console.log('Gagal: ' + res.status);\n    return;\n  }\n  const data = await res.json();\n  console.log(data);\n}\n\nambil();",
+          susunKode: {
+            question:
+              "Susun fungsi asinkron yang mengambil data dari sebuah API, berhenti dengan pesan kalau responsnya gagal, lalu mencetak isi JSON-nya.",
+            potongan: [
+              "async function ambil() {",
+              "  const res = await fetch('https://jsonplaceholder.typicode.com/todos/1');",
+              "  if (!res.ok) {\n    console.log('Gagal: ' + res.status);\n    return;\n  }",
+              "  const data = await res.json();",
+              "  console.log(data);",
+              "}",
+              "ambil();",
+            ],
+            pengecoh: [
+              "  const res = fetch('https://jsonplaceholder.typicode.com/todos/1');",
+              "  if (!res.error) {\n    console.log('Gagal: ' + res.status);\n    return;\n  }",
+              "  const data = res.json();",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`fetch` mengembalikan Promise berisi respons, dan membaca isinya dengan `.json()` juga menghasilkan Promise — jadi keduanya butuh `await`. Keping `fetch` tanpa `await` adalah kekeliruan yang sering terjadi dan gejalanya membingungkan: `res.ok` menjadi `undefined`, sehingga pemeriksaannya seolah selalu gagal. Keping `res.json()` tanpa `await` menghasilkan `Promise { <pending> }` di konsol, bukan datanya. Keping `res.error` menggoda karena namanya terdengar paling masuk akal untuk memeriksa kegagalan, padahal properti itu tidak ada — dan inilah jebakan besar `fetch`: status 404 dan 500 **tidak** melempar error, satu-satunya penanda adalah `res.ok`.",
+          },
         },
         {
           kind: "step",
@@ -2957,6 +3798,28 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "async function ambil() {\n  try {\n    const res = await fetch('https://domain-tidak-ada-12345.test/data');\n    const data = await res.json();\n    console.log(data);\n  } catch (error) {\n    console.log('Terjadi kesalahan: ' + error.message);\n  }\n}\n\nambil();",
+          susunKode: {
+            question:
+              "Susun pengambilan data ke alamat yang tidak bisa dijangkau, dibungkus penanganan error, dan cetak pesan errornya saat gagal.",
+            potongan: [
+              "async function ambil() {",
+              "  try {",
+              "    const res = await fetch('https://domain-tidak-ada-12345.test/data');",
+              "    const data = await res.json();\n    console.log(data);",
+              "  } catch (error) {",
+              "    console.log('Terjadi kesalahan: ' + error.message);",
+              "  }\n}",
+              "ambil();",
+            ],
+            pengecoh: [
+              "    const res = fetch('https://domain-tidak-ada-12345.test/data');",
+              "  } catch {",
+              "    console.log('Terjadi kesalahan: ' + error.text);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`try/catch` hanya menangkap error dari kode yang benar-benar **ditunggu** di dalamnya, dan objek yang ditangkap membawa keterangannya di `error.message`. Keping `fetch` tanpa `await` adalah jebakan paling halus di sini: janjinya gagal di luar blok `try`, sehingga `catch` tidak pernah berjalan dan yang muncul justru peringatan `Unhandled promise rejection`. Keping `} catch {` tanpa nama variabel sah secara sintaks, tapi kamu kehilangan objek errornya sehingga baris di bawahnya gagal — kekeliruan yang sering terjadi saat menyalin potongan kode. Keping `error.text` menggoda karena terdengar wajar; properti itu tidak ada dan hasilnya `undefined`.",
+          },
         },
         {
           kind: "step",
@@ -2987,6 +3850,27 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "const a = new Promise((r) => setTimeout(() => r('A'), 300));\nconst b = new Promise((r) => setTimeout(() => r('B'), 200));\n\nasync function jalan() {\n  const hasil = await Promise.all([a, b]);\n  console.log(hasil);\n}\n\njalan();",
+          susunKode: {
+            question:
+              "Dua Promise berjalan sendiri-sendiri. Susun kode yang menunggu keduanya selesai bersamaan lalu mencetak kedua hasilnya sekaligus.",
+            potongan: [
+              "const a = new Promise((r) => setTimeout(() => r('A'), 300));",
+              "const b = new Promise((r) => setTimeout(() => r('B'), 200));",
+              "async function jalan() {",
+              "  const hasil = await Promise.all([a, b]);",
+              "  console.log(hasil);",
+              "}",
+              "jalan();",
+            ],
+            pengecoh: [
+              "  const hasil = await Promise.all(a, b);",
+              "  const hasil = [await a, await b];",
+              "  const hasil = await Promise.race([a, b]);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`Promise.all` menerima **satu array** berisi janji-janji, menunggu semuanya selesai, lalu mengembalikan array hasil dengan urutan yang sama seperti masukannya. Keping tanpa kurung siku adalah kekeliruan yang sering terjadi karena kita terbiasa mengirim argumen berderet; argumen kedua diabaikan dan hasilnya tidak lengkap. Keping `[await a, await b]` menggoda karena hasil akhirnya identik, tapi ia menunggu berurutan sehingga totalnya 500 ms alih-alih 300 ms — inilah perbedaan yang sering ditanyakan saat interview. Keping `Promise.race` hanya mengembalikan janji yang selesai **paling cepat**, jadi hasilnya cuma satu nilai.",
+          },
         },
         {
           kind: "quiz",
@@ -3186,6 +4070,22 @@ export const javascriptTrack: Track = {
             },
           ],
           solution: "const angka = 5;\nangka();",
+          susunKode: {
+            question:
+              "Susun dua baris yang sengaja memicu `TypeError`: sebuah angka disimpan ke variabel, lalu variabel itu dipanggil seolah sebuah fungsi.",
+            potongan: [
+              "const angka = 5;",
+              "angka();",
+            ],
+            pengecoh: [
+              "angkaa();",
+              "angka;",
+              "const nomor = 5;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`TypeError` muncul saat nilainya **ada** tapi diperlakukan dengan cara yang tidak sesuai jenisnya — di sini angka 5 dipanggil seperti fungsi, dan pesannya berbunyi `angka is not a function`. Keping `angkaa();` menghasilkan jenis error yang berbeda, `ReferenceError: angkaa is not defined`, dan membedakan keduanya adalah keterampilan membaca error yang paling sering dipakai sehari-hari: satu berarti namanya tidak ada, satu lagi berarti jenisnya salah. Keping `angka;` menggoda karena terlihat seperti \"memakai\" variabelnya, padahal menyebut nama saja tidak melakukan apa-apa dan tidak ada error yang muncul. Keping `const nomor = 5;` membuat nama yang dipanggil tidak pernah dideklarasikan.",
+          },
         },
         {
           kind: "step",
@@ -3227,6 +4127,27 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "try {\n  JSON.parse('{ rusak }');\n} catch (error) {\n  console.log(error.name);\n} finally {\n  console.log('Selesai');\n}",
+          susunKode: {
+            question:
+              "Susun blok penanganan error yang mencoba mengurai JSON rusak, mencetak **jenis** errornya saat gagal, lalu selalu mencetak `Selesai` di akhir apa pun hasilnya.",
+            potongan: [
+              "try {",
+              "  JSON.parse('{ rusak }');",
+              "} catch (error) {",
+              "  console.log(error.name);",
+              "} finally {",
+              "  console.log('Selesai');",
+              "}",
+            ],
+            pengecoh: [
+              "  JSON.stringify('{ rusak }');",
+              "} catch {",
+              "} else {",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`finally` selalu dijalankan — baik saat `try` berhasil maupun saat `catch` menangani error — sehingga ia dipakai untuk pembersihan seperti menutup koneksi atau mematikan indikator loading. Keping `JSON.stringify` bergerak ke arah sebaliknya: ia mengubah objek menjadi teks, jadi tidak ada error yang terpicu dan blok `catch` tidak pernah berjalan; tertukarnya kedua fungsi ini sering terjadi karena namanya sama-sama diawali `JSON`. Keping `} catch {` membuang objek errornya sehingga `error.name` gagal — kekeliruan yang sering muncul saat menyalin potongan kode. Keping `} else {` menggoda karena mirip percabangan biasa, padahal `try` tidak mengenal `else`.",
+          },
         },
         {
           kind: "step",
@@ -3268,6 +4189,28 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "function bagi(a, b) {\n  if (b === 0) {\n    throw new Error('Pembagi tidak boleh nol');\n  }\n  return a / b;\n}\n\ntry {\n  console.log(bagi(10, 0));\n} catch (error) {\n  console.log(error.message);\n}",
+          susunKode: {
+            question:
+              "Susun fungsi `bagi` yang menolak pembagi nol dengan melempar error, lalu uji dengan pemanggilan yang memang bermasalah dan tangkap pesannya.",
+            potongan: [
+              "function bagi(a, b) {",
+              "  if (b === 0) {",
+              "    throw new Error('Pembagi tidak boleh nol');",
+              "  }",
+              "  return a / b;\n}",
+              "try {",
+              "  console.log(bagi(10, 0));",
+              "} catch (error) {\n  console.log(error.message);\n}",
+            ],
+            pengecoh: [
+              "    return new Error('Pembagi tidak boleh nol');",
+              "  if (b = 0) {",
+              "  console.log(bagi(0, 10));",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`throw` menghentikan fungsi saat itu juga dan melempar objek error ke pemanggil terdekat yang punya `catch`. Keping `return new Error(...)` adalah kekeliruan yang sangat sering terjadi karena objek errornya memang dibuat dengan benar, tapi ia hanya dikembalikan sebagai nilai biasa: `catch` tidak pernah berjalan, dan yang tercetak justru `Error: Pembagi tidak boleh nol` sebagai hasil bagi yang seolah sukses. Keping `if (b = 0)` memakai satu tanda sama dengan sehingga ia **mengubah** `b` menjadi 0 lalu bernilai falsy — syaratnya tidak pernah benar. Keping `bagi(0, 10)` menggoda karena angkanya sama, tapi urutannya terbalik dan pembaginya sah, jadi tidak ada error yang diuji.",
+          },
         },
         {
           kind: "step",
@@ -3302,6 +4245,25 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "const users = [\n  { id: 1, nama: 'Ana' },\n  { id: 2, nama: 'Budi' },\n];\n\nconsole.table(users);\n\nconsole.time('loop');\nfor (let i = 0; i < 1000; i++) {\n  // pekerjaan\n}\nconsole.timeEnd('loop');",
+          susunKode: {
+            question:
+              "Susun kode yang menampilkan array `users` dalam bentuk tabel, lalu mengukur berapa lama sebuah perulangan berjalan dengan label `loop`.",
+            potongan: [
+              "const users = [\n  { id: 1, nama: 'Ana' },\n  { id: 2, nama: 'Budi' },\n];",
+              "console.table(users);",
+              "console.time('loop');",
+              "for (let i = 0; i < 1000; i++) {\n  // pekerjaan\n}",
+              "console.timeEnd('loop');",
+            ],
+            pengecoh: [
+              "console.log(users);",
+              "console.timeStart('loop');",
+              "console.timeEnd('perulangan');",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`console.table` menampilkan array of object sebagai tabel berkolom sehingga membandingkan baris jadi jauh lebih cepat, sementara `console.time` dan `console.timeEnd` mengukur durasi dan **wajib memakai label yang sama persis**. Keping `console.log` menggoda karena selalu berhasil, tapi objek bersarang tampil terlipat dan harus dibuka satu per satu. Keping `console.timeStart` tidak ada di JavaScript — nama pembukanya cukup `console.time`, dan kekeliruan ini sering muncul karena penutupnya memang bernama `timeEnd`. Keping berlabel `perulangan` adalah jebakan yang paling sering terjadi: labelnya tidak cocok, pengukurannya tidak pernah ditutup, dan konsol hanya berkata `Timer 'perulangan' does not exist`.",
+          },
         },
         {
           kind: "step",
@@ -3333,6 +4295,24 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "function ambilTerakhir(arr) {\n  return arr[arr.length - 1];\n}\n\nconsole.log(ambilTerakhir([1, 2, 3]));",
+          susunKode: {
+            question:
+              "Fungsi ini seharusnya mengembalikan elemen terakhir array, tapi hasilnya `undefined`. Susun versi yang benar dan cetak hasilnya.",
+            potongan: [
+              "function ambilTerakhir(arr) {",
+              "  return arr[arr.length - 1];",
+              "}",
+              "console.log(ambilTerakhir([1, 2, 3]));",
+            ],
+            pengecoh: [
+              "  return arr[arr.length];",
+              "  return arr[-1];",
+              "console.log(ambilTerakhir);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Indeks terakhir selalu `panjang - 1` karena penomorannya dimulai dari nol — array berisi tiga elemen memakai indeks 0, 1, dan 2. Keping `arr[arr.length]` adalah bug aslinya dan kesalahan pagar yang paling sering terjadi dalam pemrograman: ia menunjuk satu langkah melewati ujung dan mengembalikan `undefined` tanpa error, sehingga bug ini bisa menyelinap jauh ke dalam aplikasi. Keping `arr[-1]` menggoda karena di Python itulah cara mengambil elemen terakhir; di JavaScript kurung siku bernilai negatif dianggap nama properti biasa yang tidak ada, dan hasilnya juga `undefined`. Keping tanpa tanda kurung mencetak isi fungsinya, bukan hasil pemanggilannya.",
+          },
         },
         {
           kind: "quiz",
@@ -3583,6 +4563,28 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "class Produk {\n  constructor(nama, harga) {\n    this.nama = nama;\n    this.harga = harga;\n  }\n\n  info() {\n    return `${this.nama} - Rp${this.harga}`;\n  }\n}\n\nconst p = new Produk('Sepatu', 450000);\nconsole.log(p.info());",
+          susunKode: {
+            question:
+              "Susun `class Produk` yang menyimpan nama dan harga saat dibuat serta punya method `info()` berisi keduanya, lalu buat satu produk dan cetak hasil `info()`-nya.",
+            potongan: [
+              "class Produk {",
+              "  constructor(nama, harga) {",
+              "    this.nama = nama;\n    this.harga = harga;",
+              "  }",
+              "  info() {\n    return `${this.nama} - Rp${this.harga}`;\n  }",
+              "}",
+              "const p = new Produk('Sepatu', 450000);",
+              "console.log(p.info());",
+            ],
+            pengecoh: [
+              "    nama = nama;\n    harga = harga;",
+              "  constructor: (nama, harga) {",
+              "const p = Produk('Sepatu', 450000);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`constructor` berjalan otomatis saat `new` dipanggil, dan `this` menunjuk objek baru yang sedang dibuat — tanpa `this`, nilainya hanya masuk ke variabel lokal yang langsung hilang. Keping `nama = nama;` adalah kekeliruan yang sangat sering terjadi: kodenya tidak error, tapi `p.nama` menjadi `undefined` dan `info()` mencetak `undefined - Rpundefined`. Keping `constructor:` dengan titik dua menggoda karena isi class terlihat seperti object literal, padahal di dalam class anggotanya ditulis tanpa titik dua dan tanpa koma. Keping tanpa `new` langsung dihentikan JavaScript dengan `TypeError: Class constructor Produk cannot be invoked without 'new'`.",
+          },
         },
         {
           kind: "step",
@@ -3621,6 +4623,28 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "class Produk {\n  constructor(nama, harga) {\n    this.nama = nama;\n    this.harga = harga;\n  }\n}\n\nclass Diskon extends Produk {\n  constructor(nama, harga, potongan) {\n    super(nama, harga);\n    this.potongan = potongan;\n  }\n\n  hargaAkhir() {\n    return this.harga - this.potongan;\n  }\n}\n\nconst d = new Diskon('Sepatu', 450000, 50000);\nconsole.log(d.hargaAkhir());",
+          susunKode: {
+            question:
+              "Susun `class Diskon` yang mewarisi `Produk`, menambah properti potongan, dan punya method penghitung harga setelah diskon bernama `hargaAkhir`. Buat satu objeknya lalu cetak hasilnya.",
+            potongan: [
+              "class Produk {\n  constructor(nama, harga) {\n    this.nama = nama;\n    this.harga = harga;\n  }\n}",
+              "class Diskon extends Produk {",
+              "  constructor(nama, harga, potongan) {",
+              "    super(nama, harga);",
+              "    this.potongan = potongan;\n  }",
+              "  hargaAkhir() {\n    return this.harga - this.potongan;\n  }\n}",
+              "const d = new Diskon('Sepatu', 450000, 50000);",
+              "console.log(d.hargaAkhir());",
+            ],
+            pengecoh: [
+              "class Diskon implements Produk {",
+              "    Produk(nama, harga);",
+              "const d = new Produk('Sepatu', 450000, 50000);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`extends` membuat class anak mewarisi seluruh properti dan method induknya, dan `super(...)` wajib dipanggil **sebelum** menyentuh `this` di constructor anak. Keping `implements` menggoda karena kata itu memang ada di Java dan TypeScript, tapi JavaScript hanya mengenal `extends` untuk pewarisan. Keping `Produk(nama, harga);` adalah kekeliruan yang sering terjadi saat orang menebak cara memanggil induk; hasilnya `TypeError` karena class tidak bisa dipanggil seperti fungsi biasa, dan bahkan bila lolos, `this` tetap kosong. Keping `new Produk(...)` membuat objek dari class induk sehingga `hargaAkhir` tidak ada — jebakan yang sering muncul setelah menyalin baris lama.",
+          },
         },
         {
           kind: "step",
@@ -3652,6 +4676,27 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "class Orang {\n  constructor(nama) {\n    this.nama = nama;\n  }\n  sapaNanti() {\n    setTimeout(() => {\n      console.log('Halo ' + this.nama);\n    }, 100);\n  }\n}\n\nnew Orang('Bimo').sapaNanti();",
+          susunKode: {
+            question:
+              "Nilai `this.nama` hilang saat dipakai di dalam timer. Susun versi yang mencetak `Halo Bimo` dengan benar.",
+            potongan: [
+              "class Orang {\n  constructor(nama) {\n    this.nama = nama;\n  }",
+              "  sapaNanti() {",
+              "    setTimeout(() => {",
+              "      console.log('Halo ' + this.nama);",
+              "    }, 100);",
+              "  }\n}",
+              "new Orang('Bimo').sapaNanti();",
+            ],
+            pengecoh: [
+              "    setTimeout(function () {",
+              "    setInterval(() => {",
+              "    setTimeout(this.sapa, 100);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Arrow function tidak punya `this` sendiri; ia meminjam `this` dari tempat ia ditulis, yaitu method `sapaNanti`, sehingga `this.nama` tetap terbaca saat timer berbunyi. Keping `function () {` adalah jebakan aslinya dan salah satu bug paling terkenal di JavaScript: fungsi biasa membuat `this` baru yang tidak menunjuk objeknya, jadi yang muncul `Halo undefined` — bukan error, hanya hasil yang salah. Keping `setInterval` mengulang selamanya sehingga sapaannya tidak berhenti. Keping `setTimeout(this.sapa, 100)` menggoda karena terlihat rapi, tapi menyerahkan method sebagai nilai membuatnya kehilangan pemiliknya — kekeliruan yang sama, dengan bentuk berbeda.",
+          },
         },
         {
           kind: "step",
@@ -3687,6 +4732,26 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "function tambahItem(daftar, item) {\n  return [...daftar, item];\n}\n\nconst asli = ['a'];\nconsole.log(tambahItem(asli, 'b'));\nconsole.log(asli);",
+          susunKode: {
+            question:
+              "Susun `tambahItem` versi murni: ia mengembalikan daftar baru tanpa mengubah daftar aslinya. Buktikan dengan mencetak hasilnya dan daftar aslinya.",
+            potongan: [
+              "function tambahItem(daftar, item) {",
+              "  return [...daftar, item];",
+              "}",
+              "const asli = ['a'];",
+              "console.log(tambahItem(asli, 'b'));",
+              "console.log(asli);",
+            ],
+            pengecoh: [
+              "  daftar.push(item);\n  return daftar;",
+              "  return [daftar, item];",
+              "  return [...daftar, ...item];",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Fungsi murni tidak menyentuh apa pun di luar dirinya: masukan yang sama selalu menghasilkan keluaran yang sama, dan itulah yang membuatnya mudah diuji. Keping `daftar.push(item)` menggoda karena paling pendek dan hasil cetakannya terlihat benar, padahal ia mengubah array milik pemanggil — sumber bug \"data berubah sendiri\" yang sering muncul di aplikasi besar. Keping `[daftar, item]` lupa tiga titik sehingga hasilnya array bersarang. Keping `...item` memakai spread pada tempat yang keliru: item berupa teks `'b'` ikut dipecah menjadi huruf-huruf, dan pada teks panjang barulah kerusakannya terlihat jelas.",
+          },
         },
         {
           kind: "step",
@@ -3724,6 +4789,25 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "function pengali(faktor) {\n  return (angka) => angka * faktor;\n}\n\nconst kaliTiga = pengali(3);\nconsole.log(kaliTiga(5));",
+          susunKode: {
+            question:
+              "Susun `pengali` yang menerima sebuah faktor lalu mengembalikan fungsi pengali, dan pakai untuk membuat pengali tiga; cetak hasilnya untuk angka 5.",
+            potongan: [
+              "function pengali(faktor) {",
+              "  return (angka) => angka * faktor;",
+              "}",
+              "const kaliTiga = pengali(3);",
+              "console.log(kaliTiga(5));",
+            ],
+            pengecoh: [
+              "  return angka * faktor;",
+              "const kaliTiga = pengali;",
+              "console.log(kaliTiga(3));",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Higher-order function adalah fungsi yang mengembalikan fungsi lain; fungsi yang dikembalikan masih mengingat `faktor` lewat closure, jadi `kaliTiga` selamanya mengalikan dengan tiga. Keping `return angka * faktor;` adalah kekeliruan yang sering terjadi karena terasa lebih langsung, padahal `angka` belum ada di titik itu — dan yang dikembalikan sebuah nilai, bukan fungsi, sehingga `kaliTiga(5)` gagal. Keping `pengali` tanpa tanda kurung menggoda karena namanya benar, tapi yang tersimpan adalah pabriknya sendiri sehingga `kaliTiga(5)` justru membuat pengali baru. Keping `kaliTiga(3)` menukar faktor dengan angka yang dikalikan.",
+          },
         },
         {
           kind: "step",
@@ -3801,6 +4885,28 @@ export const javascriptTrack: Track = {
             "const k = new Karyawan('Bimo', 8000000);\n" +
             "console.log(k.gajiTahunan);\n" +
             "console.log(Karyawan.mataUang);",
+          susunKode: {
+            question:
+              "Lengkapi `class Karyawan` dengan penghitung gaji tahunan yang dibaca seperti properti dan sebuah nilai mata uang milik class-nya sendiri, lalu cetak keduanya.",
+            potongan: [
+              "class Karyawan {",
+              "  static mataUang = 'IDR';",
+              "  constructor(nama, gajiBulanan) {\n    this.nama = nama;\n    this.gajiBulanan = gajiBulanan;\n  }",
+              "  get gajiTahunan() {\n    return this.gajiBulanan * 12;\n  }",
+              "}",
+              "const k = new Karyawan('Bimo', 8000000);",
+              "console.log(k.gajiTahunan);",
+              "console.log(Karyawan.mataUang);",
+            ],
+            pengecoh: [
+              "  const mataUang = 'IDR';",
+              "console.log(k.gajiTahunan());",
+              "console.log(k.mataUang);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Getter dibaca **seperti properti** tanpa tanda kurung, sementara anggota `static` menempel pada class-nya, bukan pada objek hasil `new`. Keping `k.gajiTahunan()` adalah jebakan yang paling sering menjerat: bentuknya terasa benar karena isinya sebuah perhitungan, tapi getter sudah mengembalikan angka, dan memanggil angka menghasilkan `TypeError: k.gajiTahunan is not a function`. Keping `k.mataUang` keliru dengan arah sebaliknya — nilai static tidak ikut ke objeknya, jadi hasilnya `undefined` tanpa error. Keping `const mataUang` menggoda karena begitulah cara membuat nilai tetap di luar class, padahal di dalam badan class kata `const` tidak sah.",
+          },
         },
         {
           kind: "quiz",
@@ -4031,6 +5137,23 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "localStorage.setItem('pengaturan', JSON.stringify({ tema: 'gelap' }));\n\nconst data = JSON.parse(localStorage.getItem('pengaturan'));\nconsole.log(data);",
+          susunKode: {
+            question:
+              "Susun kode yang menyimpan object pengaturan bertema gelap ke localStorage dengan kunci `pengaturan`, lalu membacanya kembali sebagai object dan mencetaknya.",
+            potongan: [
+              "localStorage.setItem('pengaturan', JSON.stringify({ tema: 'gelap' }));",
+              "const data = JSON.parse(localStorage.getItem('pengaturan'));",
+              "console.log(data);",
+            ],
+            pengecoh: [
+              "localStorage.setItem('pengaturan', { tema: 'gelap' });",
+              "const data = localStorage.getItem('pengaturan');",
+              "const data = JSON.parse(localStorage.get('pengaturan'));",
+            ],
+            pemisah: "\n",
+            explanation:
+              "localStorage hanya bisa menyimpan **teks**, jadi object wajib diubah dulu dengan `JSON.stringify` dan dikembalikan dengan `JSON.parse` saat dibaca. Keping tanpa `stringify` adalah jebakan klasik: JavaScript diam-diam mengubah object menjadi teks `[object Object]`, tidak ada error, dan datamu hilang tanpa jejak sampai kamu membacanya kembali. Keping tanpa `JSON.parse` mengembalikan teks JSON mentah, sehingga `data.tema` menjadi `undefined` — kekeliruan yang sering muncul karena hasil cetaknya sekilas terlihat seperti object. Keping `localStorage.get` menggoda karena nama itu dipakai di banyak pustaka lain; API bawaan browser bernama `getItem`.",
+          },
         },
         {
           kind: "step",
@@ -4063,6 +5186,23 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "const params = new URLSearchParams('?q=sepatu&halaman=2');\n\nconsole.log(params.get('q'));\nconsole.log(params.get('halaman'));",
+          susunKode: {
+            question:
+              "Susun kode yang membaca nilai `q` dan `halaman` dari query string sebuah URL hasil pencarian.",
+            potongan: [
+              "const params = new URLSearchParams('?q=sepatu&halaman=2');",
+              "console.log(params.get('q'));",
+              "console.log(params.get('halaman'));",
+            ],
+            pengecoh: [
+              "const params = URLSearchParams('?q=sepatu&halaman=2');",
+              "console.log(params.q);",
+              "console.log(params.get(halaman));",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`URLSearchParams` mengurai query string menjadi objek khusus yang isinya dibaca lewat `.get('nama')`, dan hasilnya selalu berupa teks — termasuk `halaman` yang terlihat seperti angka. Keping tanpa `new` gagal dengan `TypeError: Constructor URLSearchParams requires 'new'`, kekeliruan yang sering terjadi karena banyak fungsi bawaan lain memang tidak membutuhkannya. Keping `params.q` menggoda karena hasil uraiannya terasa seperti object biasa, padahal properti langsung seperti itu tidak ada dan hasilnya `undefined`. Keping tanpa tanda kutip mencari variabel bernama `halaman` sehingga langsung `ReferenceError`.",
+          },
         },
         {
           kind: "step",
@@ -4100,6 +5240,28 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "function debounce(fn, jeda) {\n  let timer;\n  return function (...args) {\n    clearTimeout(timer);\n    timer = setTimeout(() => fn(...args), jeda);\n  };\n}\n\nconst cari = debounce((kata) => console.log('Mencari: ' + kata), 300);\ncari('s');\ncari('se');\ncari('sepatu');",
+          susunKode: {
+            question:
+              "Susun sebuah `debounce` yang menunda pemanggilan sampai pengguna berhenti mengetik, lalu uji dengan tiga pemanggilan beruntun.",
+            potongan: [
+              "function debounce(fn, jeda) {",
+              "  let timer;",
+              "  return function (...args) {",
+              "    clearTimeout(timer);",
+              "    timer = setTimeout(() => fn(...args), jeda);",
+              "  };\n}",
+              "const cari = debounce((kata) => console.log('Mencari: ' + kata), 300);",
+              "cari('s');\ncari('se');\ncari('sepatu');",
+            ],
+            pengecoh: [
+              "    clearInterval(timer);",
+              "    timer = setInterval(() => fn(...args), jeda);",
+              "  const inner = function (...args) {",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Debounce bekerja dengan membatalkan jadwal lama setiap kali fungsinya dipanggil lagi, sehingga hanya panggilan terakhir yang benar-benar berjalan — pola wajib untuk kolom pencarian agar API tidak dihujani permintaan. Keping `clearInterval` menggoda karena namanya bersaudara, tapi ia hanya membatalkan jadwal dari `setInterval`; jadwal `setTimeout` lama tetap hidup dan ketiga pencarian tetap terkirim. Keping `setInterval` mengubah penundaan menjadi pengulangan tanpa henti. Keping `const inner = function ...` adalah kekeliruan yang sering terjadi saat menulis fungsi bersarang: fungsinya dibuat tapi tidak pernah dikembalikan, jadi `cari` bernilai `undefined`.",
+          },
         },
         {
           kind: "step",
@@ -4141,6 +5303,26 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "const form = document.querySelector('#form');\n\nform.addEventListener('submit', (e) => {\n  e.preventDefault();\n  const data = new FormData(form);\n  console.log(Object.fromEntries(data));\n});",
+          susunKode: {
+            question:
+              "Susun penanganan submit yang membaca seluruh isi form sekaligus dan mencetaknya sebagai object biasa.",
+            potongan: [
+              "const form = document.querySelector('#form');",
+              "form.addEventListener('submit', (e) => {",
+              "  e.preventDefault();",
+              "  const data = new FormData(form);",
+              "  console.log(Object.fromEntries(data));",
+              "});",
+            ],
+            pengecoh: [
+              "  const data = new FormData();",
+              "  console.log(Object.entries(data));",
+              "  console.log(JSON.stringify(data));",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`new FormData(form)` membaca **seluruh** kolom form sekaligus berdasarkan atribut `name` masing-masing, jadi kamu tidak perlu memanggil `querySelector` satu per satu. Keping `new FormData()` tanpa argumen menggoda karena tetap berjalan tanpa error, tapi isinya kosong — dan inilah kekeliruan yang sering membuat orang menyangka form-nya bermasalah. Keping `JSON.stringify(data)` adalah jebakan yang sangat sering terjadi: FormData bukan object biasa, sehingga hasilnya `{}` dan datanya seolah lenyap. Keping `Object.entries` bekerja pada properti object biasa, bukan pada isi FormData, jadi hasilnya array kosong; pengubahnya adalah `Object.fromEntries`.",
+          },
         },
         {
           kind: "quiz",
@@ -4376,6 +5558,26 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "function total(arr) {\n  return arr.reduce((a, b) => a + b, 0);\n}\n\ndescribe('total', () => {\n  it('menjumlahkan semua angka dalam array', () => {\n    expect(total([1, 2])).toBe(3);\n  });\n});",
+          susunKode: {
+            question:
+              "Susun satu berkas test untuk fungsi `total`: satu kelompok bernama `total`, satu kasus uji berdeskripsi jelas, dan satu pemeriksaan bahwa `[1, 2]` menghasilkan 3.",
+            potongan: [
+              "function total(arr) {\n  return arr.reduce((a, b) => a + b, 0);\n}",
+              "describe('total', () => {",
+              "  it('menjumlahkan semua angka dalam array', () => {",
+              "    expect(total([1, 2])).toBe(3);",
+              "  });",
+              "});",
+            ],
+            pengecoh: [
+              "describe(total, () => {",
+              "  it('cek', () => {",
+              "    expect(total([1, 2]) === 3);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Sebuah test punya tiga lapis: `describe` mengelompokkan, `it` menyatakan **perilaku** yang diuji dalam satu kalimat, dan `expect(...).toBe(...)` memutuskan lulus atau gagal. Keping `expect(total([1, 2]) === 3);` adalah jebakan paling berbahaya di seluruh modul ini: tanpa matcher, tidak ada yang pernah diperiksa, sehingga testnya **selalu hijau** dan memberi rasa aman palsu. Keping `describe(total, ...)` mengirim fungsinya sendiri sebagai judul; laporannya lalu menampilkan seluruh isi kode alih-alih nama. Keping `it('cek', ...)` menggoda karena cepat ditulis, tapi saat test gagal enam bulan lagi, kata `cek` tidak memberi tahu apa yang sebenarnya rusak.",
+          },
         },
         {
           kind: "step",
@@ -4411,6 +5613,22 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "expect(2 + 1).toBe(3);\nexpect([1, 2]).toEqual([1, 2]);",
+          susunKode: {
+            question:
+              "Susun dua pemeriksaan: satu untuk hasil penjumlahan angka, satu untuk membandingkan isi dua array.",
+            potongan: [
+              "expect(2 + 1).toBe(3);",
+              "expect([1, 2]).toEqual([1, 2]);",
+            ],
+            pengecoh: [
+              "expect([1, 2]).toBe([1, 2]);",
+              "expect(2 + 1).toBe('3');",
+              "assert(2 + 1 === 3);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`toBe` membandingkan **identitas** — cocok untuk angka, teks, dan boolean — sedangkan `toEqual` menelusuri isi object dan array sampai ke dalam. Keping `expect([1, 2]).toBe([1, 2]);` adalah kekeliruan yang paling sering terjadi bagi pemula testing: kedua array terlihat sama persis, tapi keduanya object berbeda di memori, jadi testnya gagal dengan pesan yang membingungkan karena kedua nilainya dicetak identik. Keping `toBe('3')` menggoda karena angka dan teks tampak sama di layar; `toBe` memakai perbandingan ketat sehingga `'3'` tidak sama dengan `3`. Keping `assert(...)` mencampur gaya pustaka lain yang tidak dikenali di berkas ini.",
+          },
         },
         {
           kind: "step",
@@ -4446,6 +5664,26 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "function total(arr) {\n  return arr.reduce((a, b) => a + b, 0);\n}\n\nit('menjumlahkan data penjualan', () => {\n  const data = [10, 20];\n  const hasil = total(data);\n  expect(hasil).toBe(30);\n});",
+          susunKode: {
+            question:
+              "Susun satu test dengan tiga bagian yang terpisah jelas: menyiapkan data, menjalankan fungsinya, lalu memeriksa hasilnya.",
+            potongan: [
+              "function total(arr) {\n  return arr.reduce((a, b) => a + b, 0);\n}",
+              "it('menjumlahkan data penjualan', () => {",
+              "  const data = [10, 20];",
+              "  const hasil = total(data);",
+              "  expect(hasil).toBe(30);",
+              "});",
+            ],
+            pengecoh: [
+              "  const data = ['10', '20'];",
+              "  const hasil = total([10, 20]);",
+              "  expect(total(data)).toBe(30);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Pola Arrange–Act–Assert memisahkan penyiapan data, pemanggilan fungsi, dan pemeriksaan hasil menjadi tiga baris berbeda; saat testnya gagal, kamu langsung tahu bagian mana yang bermasalah. Keping `['10', '20']` menggoda karena isinya terlihat sama di layar, padahal `reduce` menyambungnya menjadi teks `01020` — jebakan yang sering muncul ketika data datang dari form atau CSV. Keping yang menuliskan `[10, 20]` langsung di dalam pemanggilan dan keping yang membungkus pemanggilan ke dalam `expect` sama-sama menggabungkan dua bagian menjadi satu baris: kodenya berjalan, tapi nilai antaranya tidak bisa diperiksa saat testnya gagal.",
+          },
         },
         {
           kind: "step",
@@ -4479,6 +5717,27 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "function total(arr) {\n  return arr.reduce((a, b) => a + b, 0);\n}\n\nit('mengembalikan 0 untuk array kosong', () => {\n  expect(total([])).toBe(0);\n});\n\nit('menangani angka negatif', () => {\n  expect(total([-5, 5])).toBe(0);\n});",
+          susunKode: {
+            question:
+              "Susun dua test kasus tepi untuk `total`: array kosong dan array yang berisi angka negatif.",
+            potongan: [
+              "function total(arr) {\n  return arr.reduce((a, b) => a + b, 0);\n}",
+              "it('mengembalikan 0 untuk array kosong', () => {",
+              "  expect(total([])).toBe(0);",
+              "});",
+              "it('menangani angka negatif', () => {",
+              "  expect(total([-5, 5])).toBe(0);",
+              "});",
+            ],
+            pengecoh: [
+              "  expect(total([])).toBe(undefined);",
+              "  expect(total([0])).toBe(0);",
+              "  expect(total([-5, 5])).toBe(10);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Kasus tepi adalah tempat bug bersembunyi: array kosong, angka nol, nilai negatif, dan data yang belum ada. Keping `toBe(undefined)` menggoda karena banyak fungsi memang mengembalikan `undefined` untuk masukan kosong, padahal `reduce` di sini punya nilai awal `0` — dan justru karena itulah nilai awal tersebut ditulis. Keping `total([0])` sering keliru dianggap sama dengan array kosong, padahal ia berisi satu elemen; kasus \"benar-benar tidak ada isi\" jadi tidak pernah teruji. Keping `toBe(10)` mengabaikan tanda minus: `-5 + 5` bernilai nol, dan test yang mengharapkan 10 akan gagal setiap kali dijalankan.",
+          },
         },
         {
           kind: "step",
@@ -4506,6 +5765,24 @@ export const javascriptTrack: Track = {
           ],
           solution:
             "function bagi(a, b) {\n  if (b === 0) throw new Error('Pembagi tidak boleh nol');\n  return a / b;\n}\n\nit('melempar error saat pembagi nol', () => {\n  expect(() => bagi(10, 0)).toThrow();\n});",
+          susunKode: {
+            question:
+              "Susun test yang memastikan `bagi(10, 0)` benar-benar melempar error.",
+            potongan: [
+              "function bagi(a, b) {\n  if (b === 0) throw new Error('Pembagi tidak boleh nol');\n  return a / b;\n}",
+              "it('melempar error saat pembagi nol', () => {",
+              "  expect(() => bagi(10, 0)).toThrow();",
+              "});",
+            ],
+            pengecoh: [
+              "  expect(bagi(10, 0)).toThrow();",
+              "  expect(() => bagi(10, 0)).toBe(Error);",
+              "  expect(() => bagi(0, 10)).toThrow();",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Untuk menguji error, yang dikirim ke `expect` harus berupa **fungsi**, bukan hasil pemanggilannya — supaya test runner yang menjalankannya sendiri di dalam pengaman. Keping `expect(bagi(10, 0))` adalah kekeliruan yang sangat sering terjadi: errornya meledak sebelum `expect` sempat berjalan, jadi testnya gagal dengan pesan error asli dan seolah-olah kodenya yang salah, padahal justru itu perilaku yang diinginkan. Keping `toBe(Error)` menggoda karena menyebut kelas errornya, tapi yang dibandingkan adalah fungsi dengan class — selalu gagal. Keping `bagi(0, 10)` menukar urutan argumen sehingga pembaginya sah dan tidak ada error yang terpicu.",
+          },
         },
         {
           kind: "quiz",
