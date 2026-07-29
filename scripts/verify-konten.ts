@@ -324,6 +324,77 @@ for (const track of tracks) {
             `example.output menjelaskan MANFAAT, bukan hasil nyata: ${s.id}\n   → "${out}"`
           );
         }
+
+        // 5. Aturan keras untuk pilihanGanda
+        if (s.pilihanGanda) {
+          const pg = s.pilihanGanda;
+
+          // a. choices berjumlah 3-4, tidak duplikat
+          if (!pg.choices || pg.choices.length < 3 || pg.choices.length > 4) {
+            lapor(
+              `pilihanGanda.choices harus berjumlah 3–4: ${s.id}`
+            );
+          }
+          const normChoices = (pg.choices || []).map((c) =>
+            c.trim().toLowerCase().replace(/\s+/g, " ")
+          );
+          if (new Set(normChoices).size !== normChoices.length) {
+            lapor(
+              `pilihanGanda.choices mengandung opsi duplikat: ${s.id}`
+            );
+          }
+
+          // b. answerIndex di dalam rentang
+          if (
+            typeof pg.answerIndex !== "number" ||
+            pg.answerIndex < 0 ||
+            pg.answerIndex >= (pg.choices?.length ?? 0)
+          ) {
+            lapor(
+              `pilihanGanda.answerIndex di luar rentang: ${s.id}`
+            );
+          }
+
+          // c. explanation ada, minimal 200 karakter, dan memuat kata kunci penjelasan pengecoh
+          const pgExp = pg.explanation?.trim() ?? "";
+          if (!pgExp) {
+            lapor(`pilihanGanda.explanation kosong: ${s.id}`);
+          } else {
+            if (pgExp.length < 200) {
+              lapor(
+                `pilihanGanda.explanation terlalu pendek (${pgExp.length} karakter, minimal 200): ${s.id}`
+              );
+            }
+            if (!/menggoda|sering|keliru|jebakan/i.test(pgExp)) {
+              lapor(
+                `pilihanGanda.explanation tidak menjelaskan pengecoh (harus memuat kata "menggoda", "sering", "keliru", atau "jebakan"): ${s.id}`
+              );
+            }
+          }
+
+          // d. Tidak ada pilihan yang berisi "semua benar", "semua salah", etc.
+          for (const c of pg.choices || []) {
+            if (
+              /semua benar|semua salah|tidak ada yang benar|bukan salah satu di atas/i.test(
+                c
+              )
+            ) {
+              lapor(
+                `pilihanGanda.choices memuat opsi dilarang ("${c}"): ${s.id}`
+              );
+            }
+          }
+
+          // e. question/instruction tidak boleh sama persis dengan salah satu choices
+          const qText = (pg.question?.trim() || s.instruction.trim())
+            .toLowerCase()
+            .replace(/\s+/g, " ");
+          if (normChoices.includes(qText)) {
+            lapor(
+              `pilihanGanda.question (atau instruction) tidak boleh sama persis dengan salah satu choices: ${s.id}`
+            );
+          }
+        }
       } else {
         quizzes++;
         const q = item as Quiz;
@@ -366,6 +437,41 @@ for (const track of tracks) {
         }
       }
     }
+
+    // g. Per modul yang punya >=4 step ber-pilihanGanda: answerIndex tidak boleh bernilai sama semua
+    const modChoiceSteps = modul.items.filter(
+      (i) => i.kind === "step" && Boolean((i as Step).pilihanGanda)
+    ) as Step[];
+    if (modChoiceSteps.length >= 4) {
+      const firstIdx = modChoiceSteps[0].pilihanGanda!.answerIndex;
+      if (modChoiceSteps.every((s) => s.pilihanGanda!.answerIndex === firstIdx)) {
+        lapor(
+          `answerIndex pilihanGanda di modul bernilai sama semua (${firstIdx}): ${track.slug}/${modul.slug}`
+        );
+      }
+    }
+  }
+
+  // f. Per track: jawaban benar tidak boleh menjadi pilihan terpanjang pada > 60% step ber-pilihanGanda
+  const trackChoiceSteps = track.modules
+    .flatMap((m) => m.items)
+    .filter((i) => i.kind === "step" && Boolean((i as Step).pilihanGanda)) as Step[];
+  if (trackChoiceSteps.length > 0) {
+    let longestCount = 0;
+    for (const cs of trackChoiceSteps) {
+      const pg = cs.pilihanGanda!;
+      const maxLen = Math.max(...pg.choices.map((c) => c.length));
+      const ansLen = pg.choices[pg.answerIndex]?.length ?? 0;
+      if (ansLen === maxLen) {
+        longestCount++;
+      }
+    }
+    const ratio = longestCount / trackChoiceSteps.length;
+    if (ratio > 0.6) {
+      lapor(
+        `jawaban benar pilihanGanda menjadi pilihan terpanjang pada ${(ratio * 100).toFixed(1)}% step (>60%): ${track.slug}`
+      );
+    }
   }
 }
 
@@ -375,10 +481,14 @@ for (const track of tracks) {
   const items = track.modules.flatMap((m) => m.items);
   const m = items.filter((i) => i.kind === "materi").length;
   const s = items.filter((i) => i.kind === "step").length;
+  const pgSteps = items.filter(
+    (i) => i.kind === "step" && Boolean((i as Step).pilihanGanda)
+  ).length;
   const k = items.filter((i) => i.kind === "quiz").length;
   const status = items.length === 0 ? "⬜ kosong" : "✅";
+  const pgInfo = pgSteps > 0 ? ` (${pgSteps} punya mode pilihan ganda)` : "";
   console.log(
-    `${status} ${track.title.padEnd(28)} ${m} materi, ${String(s).padStart(3)} step, ${k} kuis  (${track.modules.length} modul)`
+    `${status} ${track.title.padEnd(28)} ${m} materi, ${String(s).padStart(3)} step${pgInfo}, ${k} kuis  (${track.modules.length} modul)`
   );
 }
 

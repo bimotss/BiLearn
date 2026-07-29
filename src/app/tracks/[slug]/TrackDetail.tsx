@@ -7,13 +7,18 @@ import { useProgress } from "@/lib/progress";
 
 export default function TrackDetail({ slug }: { slug: string }) {
   const track = getTrack(slug);
-  const { ready, isDone, doneCount } = useProgress();
+  const { ready, isDone, doneCount, doneMode } = useProgress();
 
   if (!track) notFound();
 
   const items = getTrackItems(track);
   const done = ready ? doneCount(track.slug) : 0;
   const pct = items.length > 0 ? Math.round((done / items.length) * 100) : 0;
+
+  const trackDoneMode = ready ? (doneMode[track.slug] ?? {}) : {};
+  const choiceDoneCount = Object.values(trackDoneMode).filter(
+    (m) => m === "pilihan-ganda"
+  ).length;
 
   return (
     <div className="space-y-8">
@@ -31,7 +36,13 @@ export default function TrackDetail({ slug }: { slug: string }) {
           <h1 className="text-3xl font-bold">{track.title}</h1>
           <p className="text-neutral-600">{track.description}</p>
           <p className="text-sm text-neutral-500">
-            ±{track.hours} jam{items.length > 0 && ` · ${done}/${items.length} selesai (${pct}%)`}
+            ±{track.hours} jam
+            {items.length > 0 &&
+              ` · ${done} dari ${items.length} selesai (${pct}%)${
+                choiceDoneCount > 0
+                  ? ` — ${choiceDoneCount} di antaranya lewat mode pilihan ganda`
+                  : ""
+              }`}
           </p>
         </div>
       </section>
@@ -85,6 +96,8 @@ export default function TrackDetail({ slug }: { slug: string }) {
             <ul className="mt-4 space-y-2">
               {mod.items.map((item) => {
                 const finished = ready && isDone(track.slug, item.id);
+                const itemMode = finished ? trackDoneMode[item.id] ?? "koding" : null;
+
                 return (
                   <li key={item.id}>
                     <Link
@@ -94,13 +107,28 @@ export default function TrackDetail({ slug }: { slug: string }) {
                       <span
                         className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs ${
                           finished
-                            ? "bg-green-500 text-white"
+                            ? itemMode === "pilihan-ganda"
+                              ? "bg-purple-600 text-white"
+                              : "bg-green-500 text-white"
                             : "bg-neutral-100 text-neutral-400"
                         }`}
                       >
-                        {finished ? "✓" : item.kind === "quiz" ? "?" : item.kind === "materi" ? "📖" : "‹›"}
+                        {finished
+                          ? itemMode === "pilihan-ganda"
+                            ? "🔘"
+                            : "✓"
+                          : item.kind === "quiz"
+                          ? "?"
+                          : item.kind === "materi"
+                          ? "📖"
+                          : "‹›"}
                       </span>
                       <span className="flex-1">{item.title}</span>
+                      {finished && itemMode === "pilihan-ganda" && (
+                        <span className="rounded bg-purple-100 px-2 py-0.5 text-xs text-purple-800 font-medium">
+                          Pilihan Ganda
+                        </span>
+                      )}
                       <span className="text-xs uppercase tracking-wide text-neutral-400">
                         {item.kind === "quiz" ? "Kuis" : item.kind === "materi" ? "Materi" : "Praktek"}
                       </span>

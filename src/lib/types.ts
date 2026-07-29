@@ -44,6 +44,16 @@ export interface Materi {
   body: string;
 }
 
+export interface StepChoice {
+  /** Pertanyaan. Kalau kosong, UI memakai `instruction`. */
+  question?: string;
+  /** 3–4 pilihan. Boleh berisi potongan kode. */
+  choices: string[];
+  answerIndex: number;
+  /** Kenapa benar DAN kenapa distraktornya menggoda. Wajib. */
+  explanation: string;
+}
+
 /** Challenge interaktif kecil: baca penjelasan singkat → langsung ngoding */
 export interface Step {
   kind: "step";
@@ -81,6 +91,8 @@ export interface Step {
   tests: StepTest[];
   /** Contoh solusi — ditampilkan jika user memilih "Lihat solusi" */
   solution: string;
+  /** Varian pilihan ganda, dipakai saat user memilih mode "pilihan-ganda". */
+  pilihanGanda?: StepChoice;
 }
 
 /** Contoh kerja yang ditampilkan sebelum user mengerjakan tugas */
@@ -167,4 +179,8 @@ export interface Progress {
   completed: Record<string, string[]>;
   /** Path yang sedang dipilih user (opsional) */
   activePath?: string;
+  /** Mode belajar global pilihan user: "koding" (default) | "pilihan-ganda" */
+  mode?: "koding" | "pilihan-ganda";
+  /** Mode penyelesaian per item: trackSlug -> itemId -> mode */
+  doneMode?: Record<string, Record<string, "koding" | "pilihan-ganda">>;
 }

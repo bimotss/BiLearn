@@ -65,15 +65,38 @@ export function useProgress() {
     () => false
   );
 
-  const markDone = useCallback((trackSlug: string, itemId: string) => {
-    const current = getSnapshot();
-    const done = new Set(current.completed[trackSlug] ?? []);
-    if (done.has(itemId)) return;
-    done.add(itemId);
-    write({
-      ...current,
-      completed: { ...current.completed, [trackSlug]: [...done] },
-    });
+  const markDone = useCallback(
+    (
+      trackSlug: string,
+      itemId: string,
+      mode?: "koding" | "pilihan-ganda"
+    ) => {
+      const current = getSnapshot();
+      const done = new Set(current.completed[trackSlug] ?? []);
+      const usedMode = mode ?? "koding";
+      const currentDoneMode = current.doneMode ?? {};
+      const trackDoneMode = currentDoneMode[trackSlug] ?? {};
+
+      if (done.has(itemId) && trackDoneMode[itemId] === usedMode) return;
+
+      done.add(itemId);
+      write({
+        ...current,
+        completed: { ...current.completed, [trackSlug]: [...done] },
+        doneMode: {
+          ...currentDoneMode,
+          [trackSlug]: {
+            ...trackDoneMode,
+            [itemId]: usedMode,
+          },
+        },
+      });
+    },
+    []
+  );
+
+  const setMode = useCallback((mode: "koding" | "pilihan-ganda") => {
+    write({ ...getSnapshot(), mode });
   }, []);
 
   const setActivePath = useCallback((pathSlug: string | undefined) => {
@@ -91,5 +114,18 @@ export function useProgress() {
     [progress]
   );
 
-  return { progress, ready, markDone, setActivePath, isDone, doneCount };
+  const mode = progress.mode ?? "koding";
+  const doneMode = progress.doneMode ?? {};
+
+  return {
+    progress,
+    ready,
+    mode,
+    doneMode,
+    setMode,
+    markDone,
+    setActivePath,
+    isDone,
+    doneCount,
+  };
 }

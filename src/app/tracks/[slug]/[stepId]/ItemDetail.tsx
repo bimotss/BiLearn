@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import StepView from "@/components/StepView";
+import StepChoiceView from "@/components/StepChoiceView";
 import QuizView from "@/components/QuizView";
 import MateriView from "@/components/MateriView";
 import { getTrack, getTrackItems } from "@/data/tracks";
@@ -16,7 +17,7 @@ export default function ItemDetail({
   stepId: string;
 }) {
   const track = getTrack(slug);
-  const { ready, isDone, markDone } = useProgress();
+  const { ready, mode, setMode, isDone, markDone } = useProgress();
 
   if (!track) notFound();
 
@@ -29,19 +30,49 @@ export default function ItemDetail({
   const next = items[index + 1];
   const finished = ready && isDone(track.slug, item.id);
 
+  const hasPilihanGanda = item.kind === "step" && Boolean(item.pilihanGanda);
+
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-neutral-200 pb-4">
         <Link
           href={`/tracks/${track.slug}`}
-          className="text-sm text-gold-700 hover:underline"
+          className="text-sm text-gold-700 hover:underline font-medium"
         >
           ← {track.title}
         </Link>
-        <span className="text-sm text-neutral-500">
-          {index + 1} / {items.length}
-          {finished && <span className="ml-2 text-green-600">✓ selesai</span>}
-        </span>
+        <div className="flex flex-wrap items-center gap-4">
+          {/* Segmented control pemilih mode global */}
+          <div className="inline-flex rounded-lg border border-neutral-200 bg-neutral-100 p-1 text-xs font-medium">
+            <button
+              type="button"
+              onClick={() => setMode("koding")}
+              className={`rounded-md px-3 py-1.5 transition ${
+                mode === "koding"
+                  ? "bg-white text-neutral-900 shadow-sm font-semibold"
+                  : "text-neutral-600 hover:text-neutral-900"
+              }`}
+            >
+              ⌨️ Koding
+            </button>
+            <button
+              type="button"
+              onClick={() => setMode("pilihan-ganda")}
+              className={`rounded-md px-3 py-1.5 transition ${
+                mode === "pilihan-ganda"
+                  ? "bg-white text-neutral-900 shadow-sm font-semibold"
+                  : "text-neutral-600 hover:text-neutral-900"
+              }`}
+            >
+              🔘 Pilihan Ganda
+            </button>
+          </div>
+
+          <span className="text-sm text-neutral-500">
+            {index + 1} / {items.length}
+            {finished && <span className="ml-2 font-medium text-green-600">✓ selesai</span>}
+          </span>
+        </div>
       </div>
 
       <h1 className="text-2xl font-bold">
@@ -56,11 +87,32 @@ export default function ItemDetail({
           onPassed={() => markDone(track.slug, item.id)}
         />
       ) : item.kind === "step" ? (
-        <StepView
-          key={item.id}
-          step={item}
-          onPassed={() => markDone(track.slug, item.id)}
-        />
+        mode === "pilihan-ganda" ? (
+          hasPilihanGanda ? (
+            <StepChoiceView
+              key={item.id}
+              step={item}
+              onPassed={() => markDone(track.slug, item.id, "pilihan-ganda")}
+            />
+          ) : (
+            <div className="space-y-6">
+              <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+                ℹ️ Step ini belum tersedia dalam mode pilihan ganda. Menampilkan mode koding.
+              </div>
+              <StepView
+                key={item.id}
+                step={item}
+                onPassed={() => markDone(track.slug, item.id, "koding")}
+              />
+            </div>
+          )
+        ) : (
+          <StepView
+            key={item.id}
+            step={item}
+            onPassed={() => markDone(track.slug, item.id, "koding")}
+          />
+        )
       ) : (
         <QuizView
           key={item.id}
