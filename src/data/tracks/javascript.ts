@@ -606,10 +606,13 @@ export const javascriptTrack: Track = {
           language: "js",
           tests: [
             {
+              // Sengaja hanya menerima dua bentuk yang BENAR-BENAR mencetak 1..5.
+              // Pola lama `i\s*<=?\s*(5|6)` juga meloloskan `i < 5` (cuma 1..4)
+              // dan `i <= 6` (jadi 1..6) — dua jawaban yang salah.
               pattern:
-                "for\\s*\\(\\s*let\\s+i\\s*=\\s*1\\s*;\\s*i\\s*<=?\\s*(5|6)\\s*;\\s*i\\+\\+\\s*\\)",
+                "for\\s*\\(\\s*let\\s+i\\s*=\\s*1\\s*;\\s*(i\\s*<=\\s*5|i\\s*<\\s*6)\\s*;\\s*i\\+\\+\\s*\\)",
               message:
-                "Buat for (let i = 1; i <= 5; i++) — mulai dari 1 sampai 5.",
+                "Batasnya harus benar-benar berhenti di 5. Dua bentuk yang diterima: `i <= 5` atau `i < 6`. Menulis `i < 5` hanya mencetak sampai 4, dan `i <= 6` kelebihan satu putaran — kesalahan batas yang paling sering terjadi pada loop.",
             },
             {
               pattern: "console\\.log\\(\\s*i\\s*\\)",
@@ -953,8 +956,12 @@ export const javascriptTrack: Track = {
             note: "Tanpa kurung kurawal, nilai ekspresinya otomatis dikembalikan. Kalau memakai kurawal, kamu WAJIB menulis return.",
           },
           instruction:
-            "Ubah fungsi `luas` menjadi arrow function dengan implicit return (tanpa kurung kurawal), lalu tampilkan `luas(4, 6)`.",
-          starterCode: "// ubah jadi arrow function\n",
+            "Fungsi `luas` di editor masih ditulis dengan gaya lama. Tulis ulang menjadi arrow function ber-implicit return (tanpa kurung kurawal dan tanpa `return`), hapus versi lamanya, lalu tampilkan `luas(4, 6)`.",
+          starterCode:
+            "function luas(panjang, lebar) {\n" +
+            "  return panjang * lebar;\n" +
+            "}\n\n" +
+            "// tulis ulang sebagai arrow function di bawah ini, lalu hapus versi di atas\n",
           language: "js",
           tests: [
             {
@@ -962,6 +969,12 @@ export const javascriptTrack: Track = {
                 "const\\s+luas\\s*=\\s*\\(\\s*panjang\\s*,\\s*lebar\\s*\\)\\s*=>\\s*panjang\\s*\\*\\s*lebar",
               message:
                 "Buat const luas = (panjang, lebar) => panjang * lebar; — tanpa kurung kurawal.",
+            },
+            {
+              pattern: "function\\s+luas",
+              mustNotMatch: true,
+              message:
+                "Versi lamanya masih ada. Hapus `function luas(...) { ... }` — kalau keduanya dibiarkan, deklarasi `const` dan `function` dengan nama sama justru memicu SyntaxError.",
             },
             {
               pattern: "console\\.log\\(\\s*luas\\(\\s*4\\s*,\\s*6\\s*\\)",
@@ -3664,9 +3677,12 @@ export const javascriptTrack: Track = {
                 "Kembalikan array baru: return [...daftar, item];",
             },
             {
-              pattern: "^(?![\\s\\S]*\\.push\\()",
+              // House style: pakai mustNotMatch, bukan negative lookahead —
+              // lihat catatan pada StepTest di src/lib/types.ts.
+              pattern: "\\.push\\(",
+              mustNotMatch: true,
               message:
-                "Hapus daftar.push(item) — fungsi pure tidak boleh mengubah argumennya.",
+                "Hapus `daftar.push(item)` — fungsi pure tidak boleh mengubah argumennya. Selama `push` masih ada, array milik pemanggil ikut berubah meski kamu juga mengembalikan array baru.",
             },
           ],
           solution:
@@ -3989,7 +4005,7 @@ export const javascriptTrack: Track = {
           example: {
             code: "// string biasa: langsung bisa\nlocalStorage.setItem('nama', 'Bimo');\nconsole.log(localStorage.getItem('nama'));\n\n// ❌ object tanpa stringify\nlocalStorage.setItem('a', { x: 1 });\nconsole.log(localStorage.getItem('a'));\n\n// ✅ object dengan stringify + parse\nlocalStorage.setItem('b', JSON.stringify({ x: 1 }));\nconsole.log(JSON.parse(localStorage.getItem('b')).x);",
             output: "Bimo\n[object Object]\n1",
-            note: "localStorage hanya paham string. Object wajib di-stringify saat menyimpan dan di-parse saat dibaca.",
+            note: "localStorage hanya paham string. Object wajib di-stringify saat menyimpan dan di-parse saat dibaca. Catatan jujur soal preview: panel di bawah berjalan di iframe ber-sandbox, jadi `localStorage`-nya diganti versi in-memory — perilakunya sama untuk latihan ini, tapi datanya HILANG saat halaman dimuat ulang. Di browser sungguhan, data itu bertahan sampai kamu menghapusnya.",
           },
           instruction:
             "Simpan object `{ tema: 'gelap' }` ke localStorage dengan key `'pengaturan'` (pakai JSON.stringify), lalu baca kembali dengan JSON.parse dan tampilkan.",
