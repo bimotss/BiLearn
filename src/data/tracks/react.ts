@@ -30,7 +30,7 @@ export const reactTrack: Track = {
           "kind": "materi",
           "id": "react-0-m1",
           "title": "Mental Model React & Persiapan Lingkungan Development",
-          "body": "# Pengertian Mental Model React\n\nReact adalah library JavaScript populer ciptaan Meta untuk membangun User Interface (UI) berbasis komponen. Berbeda dari JavaScript DOM murni di mana kamu secara imperatif memberi instruksi langkah-demi-langkah ke browser (`document.querySelector('#btn').addEventListener(...)`), React menganut paradigma **deklaratif**.\n\nSatu rumus inti yang wajib kamu ingat sepanjang karier React kamu:\n$$\\\\text{UI} = f(\\\\text{state})$$\n\nTampilan UI di layar hanyalah hasil keluaran dari sebuah fungsi yang menerima data (state). Ketika state berubah, React secara otomatis memperbarui tampilan tanpa kamu perlu menyentuh DOM secara manual.\n\n## Visualisasi Alur Kerja React (Virtual DOM)\n\n```text\n+-------------------+      +-----------------------+      +--------------------+\n| State/Data Berubah| ---> | React Buat Virtual DOM| ---> | Diffing Algorithm  |\n+-------------------+      +-----------------------+      +--------------------+\n                                                                    |\n                                                                    v\n                                                          +--------------------+\n                                                          | Minimal Update DOM |\n                                                          +--------------------+\n```\n\n## Tabel Perbandingan Tool Setup Proyek React\n\n| Tool | Kecepatan Startup | Status Industri | Catatan Penggunaan |\n|---|---|---|---|\n| **Vite** | Sangat Cepat (< 1 detik) | Standard Utama | Memakai Native ESM & Esbuild. Sangat direkomendasikan. |\n| **Create React App (CRA)** | Lambat (10-30 detik) | Deprecated (Usang) | Memakai Webpack lama. Jangan gunakan untuk proyek baru. |\n| **Next.js** | Cepat | Standard Fullstack/SSR | Framework di atas React untuk Routing & Server Rendering. |\n\n## Analogi Dunia Nyata\n\nBayangkan kamu memesan makanan di restoran cepat saji. Di JavaScript murni (imperatif), kamu harus masuk ke dapur, menyalakan kompor, memasak daging, memotong roti, dan menyusun burger sendiri. Di React (deklaratif), kamu cukup memesan 'Paket Burger Nomor 3' di kasir. Kasir (React) yang akan berkoordinasi dengan dapur (DOM) untuk menyiapkan hidangan persis sesuai pesananmu.\n\n## Jebakan & Kesalahan Umum\n\n> **Jebakan 1: Membuka file `index.html` langsung di browser**\n> File React/Vite tidak bisa dibuka langsung via `file://...` karena membutuhkan kompilasi JSX & modul ESM. Kamu wajib menjalankannya melalui dev server (`npm run dev`).\n\n> **Jebakan 2: Versi Node.js yang usang**\n> Vite membutuhkan Node.js minimal versi 18+. Pastikan memeriksa versi Node.js kamu sebelum memulai (`node -v`).\n\n## Kaitan ke Dunia Kerja\n\nSaat wawancara kerja atau onboarding di perusahaan tech, kamu akan diminta melakukan *clone* repository dan menjalankan environment lokal. Kemahiran mempersiapkan env React dengan Vite, mengkonfigurasi TypeScript, serta menggunakan React DevTools untuk menginspeksi hierarki komponen adalah skill mendasar yang langsung diuji pada hari pertama kamu bekerja."
+          "body": "# Pengertian Mental Model React\n\nReact adalah library JavaScript populer ciptaan Meta untuk membangun User Interface (UI) berbasis komponen. Berbeda dari JavaScript DOM murni di mana kamu secara imperatif memberi instruksi langkah-demi-langkah ke browser (`document.querySelector('#btn').addEventListener(...)`), React menganut paradigma **deklaratif**.\n\nSatu rumus inti yang wajib kamu ingat sepanjang karier React kamu:\n\n```text\nUI = f(state)\n```\n\nTampilan UI di layar hanyalah hasil keluaran dari sebuah fungsi yang menerima data (state). Ketika state berubah, React secara otomatis memperbarui tampilan tanpa kamu perlu menyentuh DOM secara manual.\n\n## Visualisasi Alur Kerja React (Virtual DOM)\n\n```text\n+-------------------+      +-----------------------+      +--------------------+\n| State/Data Berubah| ---> | React Buat Virtual DOM| ---> | Diffing Algorithm  |\n+-------------------+      +-----------------------+      +--------------------+\n                                                                    |\n                                                                    v\n                                                          +--------------------+\n                                                          | Minimal Update DOM |\n                                                          +--------------------+\n```\n\n## Tabel Perbandingan Tool Setup Proyek React\n\n| Tool | Kecepatan Startup | Status Industri | Catatan Penggunaan |\n|---|---|---|---|\n| **Vite** | Sangat Cepat (< 1 detik) | Standard Utama | Memakai Native ESM & Esbuild. Sangat direkomendasikan. |\n| **Create React App (CRA)** | Lambat (10-30 detik) | Deprecated (Usang) | Memakai Webpack lama. Jangan gunakan untuk proyek baru. |\n| **Next.js** | Cepat | Standard Fullstack/SSR | Framework di atas React untuk Routing & Server Rendering. |\n\n## Analogi Dunia Nyata\n\nBayangkan kamu memesan makanan di restoran cepat saji. Di JavaScript murni (imperatif), kamu harus masuk ke dapur, menyalakan kompor, memasak daging, memotong roti, dan menyusun burger sendiri. Di React (deklaratif), kamu cukup memesan 'Paket Burger Nomor 3' di kasir. Kasir (React) yang akan berkoordinasi dengan dapur (DOM) untuk menyiapkan hidangan persis sesuai pesananmu.\n\n## Jebakan & Kesalahan Umum\n\n> **Jebakan 1: Membuka file `index.html` langsung di browser**\n> File React/Vite tidak bisa dibuka langsung via `file://...` karena membutuhkan kompilasi JSX & modul ESM. Kamu wajib menjalankannya melalui dev server (`npm run dev`).\n\n> **Jebakan 2: Versi Node.js yang usang**\n> Vite membutuhkan Node.js minimal versi 18+. Pastikan memeriksa versi Node.js kamu sebelum memulai (`node -v`).\n\n## Yang Bisa & Tidak Bisa Ditampilkan Panel Preview di Sini\n\nBaca ini sekali, supaya kamu tidak menyimpulkan jawabanmu salah padahal benar. Panel preview di latihan React mengompilasi kodemu dengan Babel, lalu **merender komponen terakhir yang terdefinisi** di editor. Konsekuensinya:\n\n| Bentuk kode yang kamu tulis | Yang muncul di panel |\n|---|---|\n| Komponen utuh (`function Kartu() { return <p>Hai</p>; }`) | Hasil visualnya benar-benar tampil |\n| Potongan sebaris (`setCount(prev => prev + 1);`) | Tidak ada visual — panel hanya menyatakan sintaksmu sudah benar |\n| Kode yang memakai library (React Router, Zustand, TanStack Query, Testing Library) | Tidak dijalankan; library-nya tidak terpasang di preview |\n| Kode yang menyebut berkas lain (`import Header from './components/Header'`) | Impor diabaikan; hasil lintas berkas tidak terlihat |\n\nSebagian besar latihan di track ini berbentuk potongan, karena yang dilatih adalah **menulis pola yang benar**. Kalau panel tidak menampilkan apa pun, itu bukan tanda kegagalan: **tesnya tetap bisa lulus**, dan setiap latihan seperti itu diberi catatan di bagian contoh.\n\n## Kaitan ke Dunia Kerja\n\nSaat wawancara kerja atau onboarding di perusahaan tech, kamu akan diminta melakukan *clone* repository dan menjalankan environment lokal. Kemahiran mempersiapkan env React dengan Vite, mengkonfigurasi TypeScript, serta menggunakan React DevTools untuk menginspeksi hierarki komponen adalah skill mendasar yang langsung diuji pada hari pertama kamu bekerja."
         },
         {
           "kind": "step",
@@ -48,7 +48,7 @@ export const reactTrack: Track = {
           "tests": [
             {
               "pattern": "node\\s+-v|node\\s+--version",
-              "message": "Gunakan perintah: node -v"
+              "message": "Perintah pemeriksa versi di dunia CLI hampir selalu berupa nama programnya diikuti opsi versi (`-v` atau `--version`). Kalau terminal menjawab `command not found`, Node.js memang belum terpasang — bukan perintahmu yang salah."
             }
           ],
           "solution": "node -v"
@@ -89,11 +89,11 @@ export const reactTrack: Track = {
           "explanation": "Titik masuk utama aplikasi React Vite adalah `src/main.tsx`. File ini menggunakan `ReactDOM.createRoot` untuk merender komponen utama `App.tsx` ke dalam elemen HTML ber-id `root` yang ada di `index.html`. Dengan metode ini, seluruh pohon komponen React disuntikkan ke dalam satu tempat di DOM browser. Jebakan umum adalah menghapus div id='root' di index.html yang mengakibatkan aplikasi React tidak muncul di layar.",
           "example": {
             "code": "import React from \"react\";\nimport ReactDOM from \"react-dom/client\";\nimport App from \"./App\";\n\nReactDOM.createRoot(document.getElementById(\"root\")!).render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>\n);",
-            "output": "Elemen App dirender ke div#root di index.html.",
-            "note": "React.StrictMode membantu mendeteksi potensi bug dan efek samping tak terduga selama masa pengembangan."
+            "output": "index.html sebelum React jalan:\n<div id=\"root\"></div>\n\nSetelah main.tsx dijalankan:\n<div id=\"root\">\n  <h1>BiLearn</h1>\n</div>",
+            "note": "React.StrictMode membantu mendeteksi potensi bug dan efek samping tak terduga selama masa pengembangan. Catatan jujur soal panel preview: Testing Library dan test runner-nya tidak ada di sana, jadi kode tes tidak dijalankan — yang diperiksa kodenya, dan tesnya tetap bisa lulus."
           },
           "instruction": "Berkas `src/main.tsx` adalah titik masuk aplikasi: ia mencari satu elemen kosong di `index.html` yang ber-id `root`, lalu menempelkan komponen `App` ke dalamnya. Lengkapi baris di editor sehingga React membuat root di elemen itu dan merender `<App />` ke dalamnya.",
-          "starterCode": "// Lengkapi pemanggilan ReactDOM.createRoot di bawah\nReactDOM.createRoot(",
+          "starterCode": "// src/main.tsx\n// Buat root React di elemen #root, lalu render <App /> ke dalamnya.\n",
           "language": "jsx",
           "tests": [
             {
@@ -296,7 +296,7 @@ export const reactTrack: Track = {
           "tests": [
             {
               "pattern": "function\\s+Judul\\s*\\(\\s*\\)\\s*\\{[\\s\\S]*return\\s*\\(?\\s*<h1>\\s*Dashboard\\s*</h1>",
-              "message": "Buat function Judul() yang me-return elemen <h1> berisi teks Dashboard."
+              "message": "Buat sebuah fungsi bernama `Judul` yang MENGEMBALIKAN elemen `<h1>` berisi teks yang diminta. Inti latihannya: kamu tidak memerintahkan browser mengubah apa pun — kamu hanya mendeskripsikan hasil akhirnya, dan React yang mengurus sisanya."
             },
             {
               "pattern": "document\\.",
@@ -313,16 +313,24 @@ export const reactTrack: Track = {
           "explanation": "Komponen React adalah fungsi JavaScript murni yang mengembalikan deskripsi antarmuka berbentuk JSX. Nama fungsi komponen wajib diawali dengan huruf kapital (PascalCase) agar React dapat membedakannya dari tag HTML bawaan browser seperti `<div>` atau `<button>`. Fitur ini mempermudah kita memecah tampilan antarmuka menjadi bagian-bagian kecil yang terisolasi dan dapat digunakan kembali. Jebakan umum bagi pemula adalah lupa menyertakan kata kunci `return` saat membuat fungsi komponen multi-baris.",
           "example": {
             "code": "function Header() {\n  return <header className=\"navbar\">Selamat Datang</header>;\n}",
-            "output": "Elemen header dirender ke layar.",
-            "note": "Nama fungsi komponen harus diawali huruf kapital agar React mengenalinya sebagai komponen."
+            "output": "HTML yang dihasilkan di halaman:\n<header class=\"navbar\">Selamat Datang</header>",
+            "note": "Perhatikan `className` (bukan `class`) dan huruf H besar pada `Header`. Menulis `function header()` membuat JSX mencarinya sebagai tag HTML bernama <header> — komponenmu tidak pernah dipanggil."
           },
-          "instruction": "Buat komponen `function Button()` yang mengembalikan `<button className=\"btn\">Klik Saya</button>`.",
+          "instruction": "Halaman butuh satu tombol yang bisa dipakai ulang. Buat komponen bernama `Button` yang mengembalikan sebuah elemen tombol bertuliskan `Klik Saya`, dan beri elemen itu kelas CSS `btn` (ingat: di JSX atribut kelas ditulis berbeda dari HTML).",
           "starterCode": "// Tulis komponen Button di bawah ini\n",
           "language": "jsx",
           "tests": [
             {
-              "pattern": "function\\s+Button\\s*\\(\\s*\\)\\s*\\{\\s*return\\s*<button\\s+className=[\"']btn[\"']>\\s*Klik Saya\\s*</button>\\s*;?\\s*\\}",
-              "message": "Definisikan function Button() yang mengembalikan <button className=\"btn\">Klik Saya</button>"
+              "pattern": "(function\\s+Button\\s*\\(|const\\s+Button\\s*=)",
+              "message": "Belum ada komponen bernama `Button`. Dua bentuk diterima: `function Button() {...}` atau `const Button = () => ...`. Yang wajib: huruf B besar, karena JSX menganggap nama berhuruf kecil sebagai tag HTML bawaan."
+            },
+            {
+              "pattern": "<button\\s+className\\s*=\\s*[\"']btn[\"']\\s*>\\s*Klik Saya\\s*</button>",
+              "message": "Kelas CSS di JSX ditulis `className` — kata `class` sudah dipakai JavaScript untuk mendeklarasikan kelas, jadi React memakai nama properti DOM-nya. Isi tombolnya ditulis di antara tag pembuka dan penutup."
+            },
+            {
+              "pattern": "return\\s*[\\(<]",
+              "message": "Komponen harus MENGEMBALIKAN JSX-nya dengan `return` (boleh dibungkus tanda kurung untuk penulisan multi-baris). Fungsi yang tidak mengembalikan apa pun merender kosong — tanpa pesan error apa pun."
             }
           ],
           "solution": "function Button() {\n  return <button className=\"btn\">Klik Saya</button>;\n}"
@@ -334,20 +342,20 @@ export const reactTrack: Track = {
           "explanation": "JSX mewajibkan seluruh elemen yang dikembalikan dibungkus dalam tepat satu elemen root utama atau Fragment (`<>...</>`). Karakteristik ini disebabkan karena fungsi JavaScript biasa tidak dapat mengembalikan dua nilai objek terpisah secara bersamaan tanpa pembungkus. Selain itu, atribut `class` di HTML ditulis sebagai `className` di JSX untuk menghindari bentrokan dengan kata kunci kelas JavaScript, dan variabel JS disematkan menggunakan kurung kurawal `{}`. Jebakan yang sering ditemui adalah lupa menutup tag tunggal seperti `<img />` atau `<input />` yang memicu error kompilasi.",
           "example": {
             "code": "function Card() {\n  const produk = \"Laptop\";\n  return (\n    <div className=\"card\">\n      <h2>{produk}</h2>\n    </div>\n  );\n}",
-            "output": "<h2>Laptop</h2> di dalam div.card",
+            "output": "HTML yang dihasilkan:\n<div class=\"card\">\n  <h2>Laptop</h2>\n</div>",
             "note": "Gunakan <>...</> (Fragment) jika tidak ingin menambah elemen div ekstra di HTML."
           },
-          "instruction": "Buat komponen `function Title()` dengan `const judul = \"BiLearn\"`, lalu kembalikan `<h1>{judul}</h1>`.",
+          "instruction": "Buat komponen `Title`. Di dalamnya, simpan teks `BiLearn` pada sebuah variabel bernama `judul`, lalu tampilkan ISI variabel itu di dalam elemen `<h1>` — bukan menulis teksnya langsung di JSX.",
           "starterCode": "// Tulis komponen Title di sini\n",
           "language": "jsx",
           "tests": [
             {
               "pattern": "const\\s+judul\\s*=\\s*['\"]BiLearn['\"]",
-              "message": "Deklarasikan const judul = \"BiLearn\""
+              "message": "Simpan dulu teksnya ke sebuah variabel bernama `judul`. Tujuan latihan ini bukan menampilkan teks, tapi membuktikan bahwa JSX bisa membaca nilai dari JavaScript."
             },
             {
               "pattern": "<h1>\\s*\\{\\s*judul\\s*\\}\\s*</h1>",
-              "message": "Kembalikan <h1>{judul}</h1>"
+              "message": "Sisipkan variabelnya ke dalam JSX memakai kurung kurawal. Menulis `<h1>judul</h1>` tanpa kurawal menampilkan kata \"judul\" apa adanya — kesalahan yang sangat sering terjadi di hari-hari pertama memakai JSX."
             }
           ],
           "solution": "function Title() {\n  const judul = \"BiLearn\";\n  return <h1>{judul}</h1>;\n}"
@@ -358,12 +366,12 @@ export const reactTrack: Track = {
           "title": "Render Kondisional: &&, Ternary, Early Return",
           "explanation": "Render kondisional memungkinkan kita menampilkan atau menyembunyikan komponen antarmuka berdasarkan kondisi logika data tertentu. Kamu dapat menggunakan operator ternary (`kondisi ? <KomponenA /> : <KomponenB />`) untuk dua cabang kondisi, atau operator boolean `&&` untuk kondisi tunggal. Teknik ini sangat vital untuk menampilkan indikator loading, status login pengguna, atau pesan kesalahan. Jebakan klasik pada operator `&&` adalah jika variabel di sebelah kiri bernilai angka `0`, React akan merender angka `0` tersebut ke layar alih-alih menyembunyikannya.",
           "example": {
-            "code": "function Status({ isOnline }) {\n  return <div>{isOnline ? \"Online\" : \"Offline\"}</div>;\n}",
-            "output": "Menampilkan 'Online' jika isOnline true, sebaliknya 'Offline'.",
-            "note": "Untuk kondisi tunggal gunakan: isLogin && <UserMenu />."
+            "code": "const isOnline = true;\n\nfunction Status() {\n  // dua cabang: pakai ternary\n  return <div>{isOnline ? \"Online\" : \"Offline\"}</div>;\n}",
+            "output": "isOnline = true  →  <div>Online</div>\nisOnline = false →  <div>Offline</div>",
+            "note": "Ternary dipakai kalau ada dua kemungkinan tampilan. Untuk \"tampil atau tidak tampil sama sekali\", `kondisi && <Elemen />` lebih ringkas — dan itu yang kamu latih di tugas ini."
           },
-          "instruction": "Tombol Logout hanya boleh muncul untuk pengguna yang sudah masuk. Di dalam JSX, tampilkan elemen `<button>Logout</button>` hanya ketika variabel `isLoggedIn` bernilai true — pakai bentuk paling ringkas untuk kondisi tanpa cabang else.",
-          "starterCode": "// Tulis return kondisional di sini\n",
+          "instruction": "Komponen `Navbar` di editor sudah punya variabel `isLoggedIn`. Ganti komentar di dalam `<nav>` sehingga tombol bertuliskan `Logout` muncul HANYA ketika `isLoggedIn` bernilai true — pakai bentuk paling ringkas untuk kondisi tanpa cabang else.",
+          "starterCode": "function Navbar() {\n  const isLoggedIn = true;\n\n  return (\n    <nav>\n      <span>BiLearn</span>\n      {/* tampilkan tombol Logout di sini, hanya kalau isLoggedIn true */}\n    </nav>\n  );\n}\n",
           "language": "jsx",
           "tests": [
             {
@@ -375,7 +383,7 @@ export const reactTrack: Track = {
               "message": "Elemen yang muncul secara kondisional ditulis setelah operatornya. Pastikan tombolnya ditutup dengan `</button>`."
             }
           ],
-          "solution": "{isLoggedIn && <button>Logout</button>}"
+          "solution": "function Navbar() {\n  const isLoggedIn = true;\n\n  return (\n    <nav>\n      <span>BiLearn</span>\n      {isLoggedIn && <button>Logout</button>}\n    </nav>\n  );\n}"
         },
         {
           "kind": "step",
@@ -383,21 +391,21 @@ export const reactTrack: Track = {
           "title": "Render List dengan map & Key",
           "explanation": "Daftar data array dirender ke dalam struktur JSX dengan memanfaatkan fungsi bawaan JavaScript `array.map()`. Setiap elemen list yang dihasilkan oleh fungsi map wajib diberi prop `key` dengan nilai identitas unik (seperti ID dari database). Prop `key` ini membantu Virtual DOM React melacak item mana yang ditambah, diubah, atau dihapus secara presisi tanpa merender ulang seluruh isi daftar. Jebakan paling berisiko adalah menggunakan `index` array sebagai key pada daftar yang dapat dihapus atau diurutkan ulang.",
           "example": {
-            "code": "const item = [\"Apel\", \"Jeruk\"];\nreturn (\n  <ul>\n    {item.map((b, i) => (\n      <li key={i}>{b}</li>\n    ))}\n  </ul>\n);",
-            "output": "Daftar ul berisi li Apel dan Jeruk",
-            "note": "Prop key membantu React menentukan elemen mana yang berubah saat re-render."
+            "code": "const buah = [\n  { id: 7, nama: \"Apel\" },\n  { id: 9, nama: \"Jeruk\" },\n];\n\nfunction DaftarBuah() {\n  return (\n    <ul>\n      {/* ✅ key dari id yang stabil, bukan dari urutan */}\n      {buah.map((b) => (\n        <li key={b.id}>{b.nama}</li>\n      ))}\n    </ul>\n  );\n}",
+            "output": "HTML yang dihasilkan:\n<ul>\n  <li>Apel</li>\n  <li>Jeruk</li>\n</ul>\n\n(atribut key tidak ikut muncul di HTML — key hanya dipakai React di memori)",
+            "note": "`key` tidak pernah muncul di HTML hasil. Kalau daftarnya bisa dihapus atau diurutkan ulang, `key={index}` membuat React salah mencocokkan baris: yang terhapus item ke-2, yang hilang dari layar bisa item ke-3, dan isi input di dalam baris ikut tertukar."
           },
-          "instruction": "Buat komponen `function Menu()` dengan `const hobi = ['Koding', 'Membaca']` lalu render list `<ul>` menggunakan `map()` dengan prop `key`.",
+          "instruction": "Buat komponen `Menu` yang menampilkan daftar hobi sebagai `<ul>`. Simpan datanya di sebuah array bernama `hobi` berisi `Koding` dan `Membaca`, lalu ubah setiap isinya menjadi elemen `<li>`. Jangan lupa properti yang diminta React untuk setiap item daftar.",
           "starterCode": "// Tulis komponen Menu di sini\n",
           "language": "jsx",
           "tests": [
             {
               "pattern": "hobi\\.map",
-              "message": "Gunakan hobi.map(...) untuk merender list"
+              "message": "Daftar di JSX dibuat dengan mengubah array menjadi array elemen — `.map()` adalah metode yang melakukannya. `.forEach()` tidak bisa dipakai di sini karena ia tidak mengembalikan apa pun."
             },
             {
               "pattern": "key=",
-              "message": "Tambahkan prop key pada elemen <li>"
+              "message": "Setiap elemen hasil `.map()` butuh properti `key`. Tanpa itu React memberi peringatan di konsol dan kehilangan cara melacak baris mana yang berubah. Untuk daftar teks tetap seperti ini `key={index}` masih boleh; begitu daftarnya bisa dihapus atau diurutkan, wajib memakai id yang stabil."
             }
           ],
           "solution": "function Menu() {\n  const hobi = [\"Koding\", \"Membaca\"];\n  return (\n    <ul>\n      {hobi.map((item, index) => (\n        <li key={index}>{item}</li>\n      ))}\n    </ul>\n  );\n}"
@@ -434,10 +442,10 @@ export const reactTrack: Track = {
           "explanation": "Mengisolasi setiap komponen ke dalam berkasnya sendiri di folder `src/components/` adalah praktik arsitektur terbaik dalam pengembangan React. Komponen diekspor menggunakan `export default` atau named export agar dapat di-import dengan rapi di bagian aplikasi lain. Pola ini menjaga agar kode proyek tetap bersih, terorganisir, serta mempermudah pencarian file saat aplikasi tumbuh menjadi sangat besar. Jebakan umum adalah mencampur belasan komponen berbeda ke dalam satu file `App.tsx` raksasa.",
           "example": {
             "code": "// src/components/Button.tsx\nexport default function Button() { return <button>OK</button>; }",
-            "output": "Struktur file terisolasi dan mudah di-import di tempat lain.",
+            "output": "Isi berkas src/components/Button.tsx:\nexport default function Button() { return <button>OK</button>; }\n\nCara memakainya dari berkas lain:\nimport Button from './components/Button';\n// lalu <Button /> di dalam JSX",
             "note": "Gunakan export default atau named export secara konsisten di tim."
           },
-          "instruction": "Lakukan export default pada sebuah fungsi komponen bernama `Card` yang mengembalikan elemen `<div>Card</div>`.",
+          "instruction": "Kamu membuat berkas baru `src/components/Card.tsx`. Tulis satu komponen bernama `Card` yang mengembalikan sebuah `<div>` bertuliskan `Card`, dan ekspor komponen itu sebagai ekspor utama berkasnya supaya bisa diimpor dari berkas lain.",
           "starterCode": "// Tulis export default di bawah ini\n",
           "language": "jsx",
           "tests": [
@@ -557,19 +565,19 @@ export const reactTrack: Track = {
           "example": {
             "code": "interface UserProps { name: string; }\nfunction UserCard({ name }: UserProps) {\n  return <h3>{name}</h3>;\n}",
             "output": "<h3>Budi</h3>",
-            "note": "Props bersifat Read-Only! Jangan pernah mengubah nilai props secara langsung. Catatan jujur: panel preview di bawah tidak mengompilasi berkas ini, jadi kamu tidak akan melihat hasil visualnya di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
+            "note": "Props bersifat Read-Only: menulis `name = \"Budi\"` di dalam `UserCard` tidak mengubah apa pun di induknya, dan di mode strict TypeScript malah ditolak. Catatan jujur soal panel preview: komponen ini butuh props dari luar, sedangkan preview merender komponenmu tanpa props — jadi yang muncul `<h3>` kosong atau pesan bahwa potongan ini butuh sesuatu dari luar. Tesnya tetap bisa lulus."
           },
-          "instruction": "Buat interface `BadgeProps { text: string }` dan komponen `function Badge({ text }: BadgeProps)` yang mengembalikan `<span>{text}</span>`.",
+          "instruction": "Komponen `Badge` dipakai untuk menampilkan label kecil, misalnya `Baru` atau `Diskon`. Tulis tipe props-nya dengan nama `BadgeProps` — satu properti bertipe teks bernama `text` — lalu buat komponen `Badge` yang membongkar properti itu langsung di parameternya dan menampilkannya di dalam `<span>`.",
           "starterCode": "// Tulis BadgeProps dan komponen Badge di sini\n",
-          "language": "text",
+          "language": "jsx",
           "tests": [
             {
               "pattern": "interface\\s+BadgeProps\\s*\\{\\s*text\\s*:\\s*string\\s*;?\\s*\\}",
-              "message": "Definisikan interface BadgeProps { text: string; }"
+              "message": "Bentuk props dideklarasikan lebih dulu sebagai `interface BadgeProps` (atau `type`) dengan satu properti `text: string`. Ini yang membuat editor menolak `<Badge tex=\"x\" />` — salah tulis nama props tertangkap sebelum aplikasi dijalankan."
             },
             {
-              "pattern": "function\\s+Badge\\s*\\(\\s*\\{\\s*text\\s*\\}\\s*:\\s*BadgeProps\\s*\\)",
-              "message": "Gunakan destructuring: function Badge({ text }: BadgeProps)"
+              "pattern": "(function\\s+Badge\\s*\\(|const\\s+Badge\\s*=\\s*\\(?)\\s*\\{\\s*text\\s*\\}\\s*:\\s*BadgeProps\\s*\\)?",
+              "message": "Bongkar props langsung di parameternya (`{ text }`) lalu beri anotasi tipe di belakangnya. Menulis `function Badge(props: BadgeProps)` juga benar di dunia nyata, tapi latihan ini melatih pola destructuring yang paling umum dipakai di codebase React."
             }
           ],
           "solution": "interface BadgeProps {\n  text: string;\n}\n\nfunction Badge({ text }: BadgeProps) {\n  return <span>{text}</span>;\n}"
@@ -582,15 +590,15 @@ export const reactTrack: Track = {
           "example": {
             "code": "interface ModalProps { children: React.ReactNode; }\nfunction Modal({ children }: ModalProps) {\n  return <div className=\"modal\">{children}</div>;\n}",
             "output": "Pemakaian:\n<Modal><p>Isi Modal</p></Modal>\n\nHTML yang dihasilkan:\n<div class=\"modal\">\n  <p>Isi Modal</p>\n</div>",
-            "note": "Tipe React.ReactNode digunakan untuk mengetik prop children di TypeScript. Catatan jujur: panel preview di bawah tidak mengompilasi berkas ini, jadi kamu tidak akan melihat hasil visualnya di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
+            "note": "`React.ReactNode` adalah tipe paling longgar untuk isi JSX: teks, angka, elemen, array elemen, bahkan `null`. Catatan jujur: preview merender komponenmu tanpa children, jadi panelnya tampak kosong — tesnya tetap bisa lulus."
           },
-          "instruction": "Buat `interface CardProps { children: React.ReactNode }` dan komponen `function Card({ children }: CardProps)` yang mengembalikan `<div>{children}</div>`.",
+          "instruction": "Buat komponen pembungkus `Card` yang bisa diisi apa saja: `<Card><p>Halo</p></Card>`. Tulis tipe props-nya bernama `CardProps` dengan properti khusus yang menampung isi di antara tag pembuka dan penutup, beri tipe paling longgar untuk isi JSX, lalu tampilkan isi itu di dalam sebuah `<div>`.",
           "starterCode": "// Tulis CardProps dan komponen Card di sini\n",
-          "language": "text",
+          "language": "jsx",
           "tests": [
             {
               "pattern": "interface\\s+CardProps\\s*\\{\\s*children\\s*:\\s*React\\.ReactNode\\s*;?\\s*\\}",
-              "message": "Definisikan CardProps { children: React.ReactNode; }"
+              "message": "Isi antar-tag masuk ke props bernama `children`, dan tipenya `React.ReactNode`. Memberi tipe `string` membuat `<Card><p>Halo</p></Card>` ditolak TypeScript, padahal itu pemakaian yang paling umum."
             }
           ],
           "solution": "interface CardProps {\n  children: React.ReactNode;\n}\n\nfunction Card({ children }: CardProps) {\n  return <div>{children}</div>;\n}"
@@ -601,9 +609,9 @@ export const reactTrack: Track = {
           "title": "Komposisi vs Konfigurasi",
           "explanation": "Komposisi komponen adalah teknik merakit UI dari bagian-bagian komponen kecil fleksibel seperti menyusun blok LEGO, daripada membuat satu komponen raksasa dengan puluhan props konfigurasi. Pola komposisi membuat komponen lebih mudah diuji, fleksibel untuk perubahan desain di masa depan, dan mencegah kerumitan passing props yang tidak perlu. Teknik ini merupakan fondasi utama saat membangun sistem desain (Design System) aplikasi. Jebakan umum adalah memaksakan satu komponen menangani terlalu banyak variasi tampilan sekaligus via atribut boolean.",
           "example": {
-            "code": "<Card><CardHeader /><CardBody /></Card>",
-            "output": "Struktur fleksibel dan mudah dipelihara.",
-            "note": "Pola komposisi meminimalkan prop drilling."
+            "code": "// ❌ konfigurasi: setiap variasi baru menambah props\n<Card title=\"Kopi\" subtitle=\"Gayo\" showFooter={true} footerText=\"Beli\" />\n\n// ✅ komposisi: isi ditentukan pemakainya\n<Card>\n  <CardHeader>Kopi Gayo</CardHeader>\n  <CardBody>Stok 12</CardBody>\n</Card>",
+            "output": "HTML dari versi komposisi:\n<div class=\"card\">\n  <h3>Kopi Gayo</h3>\n  <p>Stok 12</p>\n</div>",
+            "note": "Keduanya menghasilkan tampilan serupa. Bedanya muncul saat desainer minta tambahan gambar di tengah kartu: versi komposisi tidak perlu diubah sama sekali, versi konfigurasi butuh props baru lagi. Catatan jujur: potongan ini bukan komponen utuh, jadi panel preview tidak menampilkan hasil visual — tesnya tetap bisa lulus."
           },
           "instruction": "Buatlah elemen JSX di mana komponen `<Card>` membungkus komponen `<Header />` di dalamnya.",
           "starterCode": "// Tulis elemen JSX di bawah ini\n",
@@ -626,17 +634,25 @@ export const reactTrack: Track = {
           "title": "Lifting State Up",
           "explanation": "Lifting state up adalah pola memindahkan state ke komponen induk terdekat ketika dua atau lebih komponen anak membutuhkan akses ke data yang sama. Komponen induk menjadi sumber kebenaran tunggal (*single source of truth*) dan membagikan data tersebut ke anak-anaknya melalui props. Teknik ini menjaga agar data di seluruh bagian aplikasi tetap sinkron dan konsisten. Jebakan yang sering terjadi adalah menaikkan state terlalu tinggi ke root aplikasi padahal data tersebut hanya dibutuhkan oleh dua komponen bersebelahan.",
           "example": {
-            "code": "// State dikelola di ParentComponent, dioper ke ChildA dan ChildB via props",
-            "output": "Data tersinkronisasi antar komponen anak.",
-            "note": "Single source of truth berada pada komponen induk."
+            "code": "function Induk() {\n  const [suhu, setSuhu] = useState(28);   // state DINAIKKAN ke induk\n  return (\n    <div>\n      <Slider nilai={suhu} onUbah={setSuhu} />\n      <Termometer nilai={suhu} />\n    </div>\n  );\n}",
+            "output": "Slider digeser ke 31 → kedua anak ikut berubah:\n<input type=\"range\" value=\"31\">\n<p>31°C</p>",
+            "note": "Kalau `suhu` disimpan di dalam Slider, Termometer tidak punya cara membacanya — itulah alasan state dinaikkan ke induk terdekat yang dimiliki keduanya. Catatan jujur: potongan ini memanggil komponen yang tidak ada di editor, jadi panel preview tidak menampilkan hasil; tesnya tetap bisa lulus."
           },
           "instruction": "Buat komponen `ParentComponent` yang mengembalikan elemen `<div>` berisi `<ChildA />` dan `<ChildB />`.",
           "starterCode": "// Tulis komponen ParentComponent di sini\n",
           "language": "jsx",
           "tests": [
             {
-              "pattern": "function\\s+ParentComponent\\s*\\(\\s*\\)\\s*\\{\\s*return\\s*<div>\\s*<ChildA\\s*/>\\s*<ChildB\\s*/>\\s*</div>\\s*;?\\s*\\}",
-              "message": "Definisikan ParentComponent yang merender <div><ChildA /><ChildB /></div>"
+              "pattern": "(function\\s+ParentComponent\\s*\\(|const\\s+ParentComponent\\s*=)",
+              "message": "Belum ada komponen `ParentComponent`. Induk inilah yang nanti memegang state bersama kedua anaknya."
+            },
+            {
+              "pattern": "<ChildA\\s*/>[\\s\\S]*<ChildB\\s*/>",
+              "message": "Kedua anak harus dirender oleh induk yang sama — itu syarat sebelum state bisa dinaikkan. Urutannya: `<ChildA />` lebih dulu, lalu `<ChildB />`."
+            },
+            {
+              "pattern": "<div>[\\s\\S]*</div>",
+              "message": "Bungkus keduanya dalam satu elemen `<div>`. JSX hanya boleh mengembalikan satu elemen root — kalau tidak ingin menambah div, pakai Fragment `<>...</>`."
             }
           ],
           "solution": "function ParentComponent() {\n  return <div><ChildA /><ChildB /></div>;\n}"
@@ -648,19 +664,19 @@ export const reactTrack: Track = {
           "explanation": "Default props dapat diberikan secara elegan menggunakan fitur nilai bawaan pada destructuring parameter fungsi JavaScript (`function Avatar({ size = 40 })`). Pola modern ini menggantikan penggunaan atribut `defaultProps` lama yang sudah tidak direkomendasikan pada komponen fungsi React. Memberikan nilai default mencegah terjadinya kesalahan render saat komponen dipanggil tanpa menyertakan prop opsional tersebut. Jebakan umum adalah lupa menentukan tipe opsional (`size?: number`) di interface TypeScript saat menggunakan default value.",
           "example": {
             "code": "function Button({ color = \"blue\", text }: ButtonProps) {\n  return <button className={color}>{text}</button>;\n}",
-            "output": "Menggunakan warna 'blue' jika prop color tidak diberikan.",
-            "note": "Pola default parameter JS ini menggantikan defaultProps lama."
+            "output": "<Button text=\"Simpan\" />              → <button class=\"blue\">Simpan</button>\n<Button text=\"Hapus\" color=\"red\" />  → <button class=\"red\">Hapus</button>",
+            "note": "Nilai default hanya dipakai kalau props-nya `undefined`. Mengirim `color={null}` TIDAK memicu default — jebakan yang sering muncul saat nilai datang dari API."
           },
-          "instruction": "Tulis parameter fungsi komponen `function Avatar({ size = 40 }: AvatarProps)`.",
-          "starterCode": "// Tulis parameter komponen Avatar di sini\n",
+          "instruction": "Tipe `AvatarProps` di editor sudah menyatakan `size` opsional. Buat komponen `Avatar` yang membongkar `size` di parameternya dan memberinya nilai bawaan `40` supaya `<Avatar />` tanpa props tetap punya ukuran. Komponennya cukup mengembalikan `<div>Avatar</div>`.",
+          "starterCode": "interface AvatarProps {\n  size?: number;   // tanda tanya = opsional\n}\n\n// Tulis komponen Avatar di bawah ini\n",
           "language": "jsx",
           "tests": [
             {
               "pattern": "function\\s+Avatar\\s*\\(\\s*\\{\\s*size\\s*=\\s*40\\s*\\}\\s*:\\s*AvatarProps\\s*\\)",
-              "message": "Gunakan: function Avatar({ size = 40 }: AvatarProps)"
+              "message": "Nilai bawaan diberikan di dalam destructuring parameter: `{ size = 40 }`. Cara lama `Avatar.defaultProps = ...` sudah tidak disarankan untuk komponen fungsi dan React memperingatkannya di versi baru."
             }
           ],
-          "solution": "function Avatar({ size = 40 }: AvatarProps) {\n  return <div>Avatar</div>;\n}"
+          "solution": "interface AvatarProps {\n  size?: number;\n}\n\nfunction Avatar({ size = 40 }: AvatarProps) {\n  return <div>Avatar</div>;\n}"
         },
         {
           "kind": "step",
@@ -668,11 +684,11 @@ export const reactTrack: Track = {
           "title": "Memecah UI Jadi Pohon Komponen",
           "explanation": "Memecah maket desain UI (*mockup*) menjadi pohon hierarki komponen yang rapi adalah langkah awal paling penting dalam membangun aplikasi React. Setiap komponen idealnya memegang satu tanggung jawab tunggal (*Single Responsibility Principle*), seperti komponen Navbar, Sidebar, atau Footer. Pendekatan modular ini membuat kode lebih mudah dirawat dan dikembangkan oleh tim secara paralel. Jebakan bagi pemula adalah membuat komponen yang terlalu besar sehingga sulit dibaca dan diuji.",
           "example": {
-            "code": "function App() { return <main><Navbar /><Content /></main>; }",
-            "output": "Hierarki komponen bersih dan modular.",
-            "note": "Setiap komponen idealnya memiliki 1 tanggung jawab tunggal (Single Responsibility)."
+            "code": "function App() {\n  return (\n    <main>\n      <Navbar />\n      <Content />\n    </main>\n  );\n}",
+            "output": "Pohon komponennya:\nApp\n├─ Navbar\n└─ Content\n\nHTML yang dihasilkan:\n<main>\n  <nav>...</nav>\n  <section>...</section>\n</main>",
+            "note": "Satu komponen = satu tanggung jawab. Patokan praktis di lapangan: kalau kamu sulit memberi nama sebuah komponen, biasanya ia mengerjakan dua hal sekaligus. Catatan jujur: `Navbar` dan `Content` tidak ada di editor, jadi panel preview tidak menampilkan hasilnya."
           },
-          "instruction": "Buat komponen `function App()` yang mengembalikan `<main><Navbar /></main>`.",
+          "instruction": "Mulailah pohon komponen aplikasimu: buat komponen `App` yang mengembalikan satu elemen `<main>` sebagai wadah, dan di dalamnya tempatkan komponen `Navbar` (anggap komponennya sudah ada di berkas lain).",
           "starterCode": "// Tulis komponen App di sini\n",
           "language": "jsx",
           "tests": [
@@ -790,9 +806,9 @@ export const reactTrack: Track = {
           "title": "useState: Nilai, Setter, dan Re-render",
           "explanation": "Di React, mengubah variabel biasa (`let counter = 0`) tidak akan memperbarui tampilan di layar — React tidak tahu variabel itu berubah. Kamu wajib memakai `useState`. Hook ini memberikan dua hal: wadah untuk menyimpan nilai (state), dan remot kontrolnya (fungsi setter). Kalau kamu memakai remot itu untuk mengganti nilai, React akan otomatis menggambar ulang (re-render) tampilanmu agar sesuai data terbaru.",
           "example": {
-            "code": "import { useState } from \"react\";\nconst [count, setCount] = useState(0);\nsetCount(count + 1);",
-            "output": "Count bertambah dan React merender ulang komponen secara otomatis.",
-            "note": "Selalu panggil useState di tingkat teratas komponen."
+            "code": "import { useState } from \"react\";\n\nfunction Penghitung() {\n  const [jumlah, setJumlah] = useState(0);\n  console.log(\"render dengan jumlah =\", jumlah);\n  return <button onClick={() => setJumlah(jumlah + 1)}>{jumlah}</button>;\n}",
+            "output": "Konsol saat halaman dibuka:\nrender dengan jumlah = 0\n\nSetelah tombol diklik sekali:\nrender dengan jumlah = 1\n\nTombol di layar berubah dari 0 menjadi 1.",
+            "note": "Perhatikan konsolnya: fungsi komponen dijalankan ULANG setiap kali state berubah. Itulah arti \"re-render\" — bukan hanya satu bagian layar yang ditambal, tapi fungsinya benar-benar dipanggil lagi dengan nilai baru. Catatan jujur: potongan sebaris seperti ini bukan komponen utuh, jadi panel preview tidak menampilkan hasil visual — yang diperiksa kodenya, dan tesnya tetap bisa lulus."
           },
           "instruction": "Deklarasikan variabel state bernama `count` dengan fungsi setternya `setCount`, dan beri nilai awal `0`.",
           "starterCode": "// Tulis useState di bawah ini\n",
@@ -815,9 +831,9 @@ export const reactTrack: Track = {
           "title": "Event Handler: onClick, onChange, onSubmit",
           "explanation": "Event handler di React digunakan untuk menangani interaksi pengguna seperti klik tombol (`onClick`), perubahan input (`onChange`), atau pengiriman formulir (`onSubmit`). Penulisan nama event menggunakan format camelCase dan menerima fungsi callback yang akan dieksekusi saat event terjadi. Pada penanganan form submit, sangat penting memanggil `e.preventDefault()` untuk mencegah perilaku default browser yang memuat ulang (*reload*) seluruh halaman. Jebakan paling sering adalah langsung memanggil fungsi event `onClick={handleClick()}` alih-alih mengoper referensinya `onClick={handleClick}`.",
           "example": {
-            "code": "function Form() {\n  const handleSubmit = (e) => {\n    e.preventDefault();\n  };\n  return <form onSubmit={handleSubmit}>...</form>;\n}",
-            "output": "Form disubmit secara AJAX tanpa memuat ulang browser.",
-            "note": "e.preventDefault() wajib dipanggil saat submit form di React."
+            "code": "function Form() {\n  const handleSubmit = (e) => {\n    e.preventDefault();\n    console.log(\"data dikirim dari JavaScript\");\n  };\n  return (\n    <form onSubmit={handleSubmit}>\n      <button>Kirim</button>\n    </form>\n  );\n}",
+            "output": "Dengan e.preventDefault():\ndata dikirim dari JavaScript      ← tercetak, halaman tetap\n\nTanpa e.preventDefault():\n(konsol kosong sekejap, lalu halaman dimuat ulang dan seluruh state hilang)",
+            "note": "`preventDefault` tidak mengirim apa pun ke server — ia hanya membatalkan perilaku bawaan form. Pengiriman datanya tetap kamu tulis sendiri, biasanya dengan `fetch`. Catatan jujur: potongan sebaris seperti ini bukan komponen utuh, jadi panel preview tidak menampilkan hasil visual — yang diperiksa kodenya, dan tesnya tetap bisa lulus."
           },
           "instruction": "Di dalam fungsi handler form, panggil metode pada objek event `e` untuk mencegah halaman termuat ulang secara default.",
           "starterCode": "// Tulis kode pemanggilan fungsi di bawah ini\n",
@@ -837,16 +853,25 @@ export const reactTrack: Track = {
           "explanation": "State di React bertindak seperti potret (*snapshot*) nilai pada saat siklus render tersebut dieksekusi. Memanggil fungsi setter state seperti `setCount(count + 1)` beberapa kali secara berturut-turut di dalam satu handler event tidak akan menambah nilai bertahap, karena seluruh pemanggilan membaca nilai snapshot `count` yang sama. Memahami konsep snapshot ini sangat penting agar kamu tidak bingung saat nilai state belum berubah seketika di baris kode berikutnya. Jebakan klasik adalah mencoba membaca nilai state terbaru langsung di baris bawah setelah panggilan `setCount`.",
           "example": {
             "code": "// Dua pemanggilan ini membaca nilai 'count' snapshot yang SAMA\nsetCount(count + 1);\nsetCount(count + 1);",
-            "output": "Count hanya bertambah 1, bukan 2.",
-            "note": "Gunakan updater function jika ingin menambah berturut-turut."
+            "output": "count sebelum diklik: 0\ncount setelah diklik : 1      ← bukan 2!\n\nAlasannya: di render ini `count` bernilai 0, jadi kedua baris sama-sama berarti setCount(0 + 1).",
+            "note": "Ganti dua baris itu dengan `setCount(prev => prev + 1)` dua kali, dan hasilnya benar-benar 2. Bentuk itu yang kamu latih di step berikutnya."
           },
-          "instruction": "Buat fungsi `IncrementTwice` yang memanggil `setCount(count + 1)` sebanyak dua kali berturut-turut untuk melihat efek snapshot.",
+          "instruction": "Buktikan sendiri jebakan snapshot-nya. Buat fungsi bernama `IncrementTwice` yang berisi DUA baris penambahan state memakai bentuk \"nilai jadi\" (`setCount` dengan `count + 1`), bukan bentuk updater. Hasilnya nanti hanya naik satu — itu memang yang ingin ditunjukkan.",
           "starterCode": "// Tulis fungsi di sini\n",
           "language": "jsx",
           "tests": [
             {
-              "pattern": "function\\s+IncrementTwice\\s*\\(\\s*\\)\\s*\\{\\s*setCount\\(\\s*count\\s*\\+\\s*1\\s*\\)\\s*;?\\s*setCount\\(\\s*count\\s*\\+\\s*1\\s*\\)\\s*;?\\s*\\}",
-              "message": "Buat fungsi IncrementTwice yang berisi setCount(count + 1) dua kali"
+              "pattern": "(function\\s+IncrementTwice\\s*\\(|const\\s+IncrementTwice\\s*=)",
+              "message": "Belum ada fungsi bernama `IncrementTwice`. Fungsi inilah yang nanti dipasang ke `onClick` tombol."
+            },
+            {
+              "pattern": "setCount\\s*\\(\\s*count\\s*\\+\\s*1\\s*\\)[\\s\\S]*setCount\\s*\\(\\s*count\\s*\\+\\s*1\\s*\\)",
+              "message": "Tulis penambahannya DUA kali dengan bentuk `setCount(count + 1)`. Latihan ini sengaja memakai bentuk yang keliru supaya kamu melihat akibatnya: keduanya membaca `count` dari snapshot render yang sama."
+            },
+            {
+              "pattern": "prev\\s*=>",
+              "mustNotMatch": true,
+              "message": "Untuk step ini JANGAN memakai bentuk updater (`prev => ...`) — bentuk itu justru bekerja benar, jadi jebakannya tidak akan terlihat. Bentuk updater dilatih di step setelah ini."
             }
           ],
           "solution": "function IncrementTwice() {\n  setCount(count + 1);\n  setCount(count + 1);\n}"
@@ -857,9 +882,9 @@ export const reactTrack: Track = {
           "title": "Updater Function (prev => ...)",
           "explanation": "Updater function (`setCount(prev => prev + 1)`) adalah cara meng-update state di mana kita mengoper fungsi callback yang menerima nilai state paling akhir sebagai argumennya. Pola ini sangat krusial digunakan jika nilai state baru bergantung pada kalkulasi nilai state sebelumnya atau saat terjadi pembaruan state berturut-turut di dalam satu event handler. Menggunakan updater function menjamin kamu selalu bekerja dengan data Paling segar dari antrean pembaruan React. Jebakan pemula adalah mengabaikan pola ini pada operasi perhitungan nilai bertahap.",
           "example": {
-            "code": "setCount(prev => prev + 1);",
-            "output": "State diupdate secara reliabel berdasarkan nilai paling akhir.",
-            "note": "Gunakan pola ini jika state baru dihitung dari state lama."
+            "code": "// dipanggil tiga kali berturut-turut dalam satu handler\nsetCount(prev => prev + 1);\nsetCount(prev => prev + 1);\nsetCount(prev => prev + 1);",
+            "output": "count sebelum: 0\ncount sesudah: 3\n\nBandingkan dengan setCount(count + 1) tiga kali → hasilnya tetap 1.",
+            "note": "React menyimpan ketiga fungsi itu di antrean, lalu menjalankannya berurutan: 0→1, 1→2, 2→3. Karena tiap fungsi menerima hasil sebelumnya, snapshot render tidak lagi jadi masalah. Catatan jujur: potongan sebaris seperti ini bukan komponen utuh, jadi panel preview tidak menampilkan hasil visual — yang diperiksa kodenya, dan tesnya tetap bisa lulus."
           },
           "instruction": "Tombol bonus menambah skor 10 poin, tapi menekannya dua kali cepat hanya menambah 10 karena `score` yang dibaca masih nilai lama (state adalah snapshot). Panggil `setScore` dengan bentuk yang menerima nilai sebelumnya sebagai argumen, lalu tambahkan 10 padanya. Beri nama parameternya `prev`.",
           "starterCode": "// Tulis setScore di sini\n",
@@ -883,8 +908,8 @@ export const reactTrack: Track = {
           "explanation": "Objek dan array di dalam state React wajib diperbarui secara immutable (tanpa mutasi langsung) menggunakan teknik penyalinan seperti spread operator (`[...items, newItem]`). Perubahan referensi objek/array baru inilah yang memberi tahu React bahwa data telah berubah sehingga proses re-render UI dapat terpicu. Memutasi array secara langsung dengan `.push()` atau `.splice()` akan membuat referensi memori tetap sama sehingga layar tidak akan diperbarui. Jebakan yang sering ditemui adalah mengira `.push()` sudah cukup untuk mengubah tampilan state di layar.",
           "example": {
             "code": "const [items, setItems] = useState(['A', 'B']);\nsetItems([...items, 'C']);",
-            "output": "['A', 'B', 'C'] dirender sebagai array baru.",
-            "note": "Spread operator [...] membuat array baru sehingga React mendeteksi perubahan state."
+            "output": "items sebelum: [\"A\", \"B\"]\nitems sesudah: [\"A\", \"B\", \"C\"]\n\nDaftar di layar:\n<li>A</li>\n<li>B</li>\n<li>C</li>",
+            "note": "Bandingkan dengan `items.push(\"C\")`: isi arraynya juga berubah, tapi React membandingkan ALAMAT array — alamatnya sama, jadi layar tidak diperbarui dan kamu akan mengira datanya tidak masuk. Catatan jujur: potongan sebaris seperti ini bukan komponen utuh, jadi panel preview tidak menampilkan hasil visual — yang diperiksa kodenya, dan tesnya tetap bisa lulus."
           },
           "instruction": "Perbarui array `items` dengan menambahkan elemen string 'Baru' ke akhir array tanpa memutasi array asli.",
           "starterCode": "// Tulis setItems di sini\n",
@@ -911,9 +936,9 @@ export const reactTrack: Track = {
           "title": "Kesalahan Umum: Mutasi Langsung & State Redundan",
           "explanation": "Kesalahan umum yang sering dilakukan pemula adalah membuat state baru untuk data yang sebenarnya bisa kalkulasi langsung dari state/props yang sudah ada (state redundan). Membuat state redundan berisiko tinggi menyebabkan data tidak sinkron jika salah satu state lupa diperbarui. Selalu hitung variabel data turunan secara langsung di dalam body fungsi komponen saat proses render berlangsung. Jebakan umum adalah membuat state `fullName` terpisah padahal nilainya cukup digabungkan dari `firstName + ' ' + lastName`.",
           "example": {
-            "code": "// ❌ Jangan buat state fullName tambahan!\nconst fullName = firstName + ' ' + lastName; // ✅ Cukup hitung di render",
-            "output": "Kode lebih bersih dan tidak berisiko out-of-sync.",
-            "note": "Hindari duplikasi data state yang bisa dikalkulasi saat render."
+            "code": "const [harga, setHarga] = useState(10000);\nconst [jumlah, setJumlah] = useState(2);\n\n// ❌ state ketiga yang harus kamu ingat perbarui sendiri\n// const [total, setTotal] = useState(20000);\n\n// ✅ dihitung ulang otomatis setiap render\nconst total = harga * jumlah;\nconsole.log(total);",
+            "output": "20000\n\nSetelah setJumlah(3):\n30000\n\nVersi state ketiga: layar masih menampilkan 20000 sampai kamu ingat memanggil setTotal juga.",
+            "note": "Inilah bug \"out of sync\" yang khas: dua sumber kebenaran untuk satu angka. Nilai yang bisa DIHITUNG dari state lain tidak boleh disimpan sebagai state sendiri. Catatan jujur: potongan sebaris seperti ini bukan komponen utuh, jadi panel preview tidak menampilkan hasil visual — yang diperiksa kodenya, dan tesnya tetap bisa lulus."
           },
           "instruction": "Hitung string `fullName` dari `firstName` dan `lastName` secara langsung saat komponen di-render.",
           "starterCode": "// Tulis variabel fullName di sini\n",
@@ -1030,8 +1055,8 @@ export const reactTrack: Track = {
           "explanation": "Di HTML biasa, elemen input menyimpan datanya sendiri secara diam-diam. Di React, kita 'mengikat' input tersebut ke dalam state agar React memegang kendali penuh — inilah yang disebut Controlled Input. Kenapa harus begitu? Agar data form selalu tersinkronisasi di satu tempat (Single Source of Truth) dan mudah divalidasi setiap kali kamu mengetik. Dengan begitu, kamu bisa langsung menampilkan pesan error 'password terlalu pendek' secara real-time.",
           "example": {
             "code": "<input value={name} onChange={(e) => setName(e.target.value)} />",
-            "output": "Input terikat sempurna dengan state nama secara real-time.",
-            "note": "e.target.value mengambil nilai string terbaru dari elemen input."
+            "output": "Pengguna mengetik \"Bim\":\nname = \"B\"  → render\nname = \"Bi\" → render\nname = \"Bim\"→ render\n\nIsi kotak input selalu sama dengan nilai state, karena kotaknya menampilkan state — bukan menyimpan sendiri.",
+            "note": "Kalau `value={name}` dipasang tapi `onChange` lupa ditulis, kotaknya jadi tidak bisa diketik sama sekali: setiap ketikan langsung ditimpa nilai state yang tidak pernah berubah. Ini keluhan nomor satu pemula React. Catatan jujur: potongan sebaris seperti ini bukan komponen utuh, jadi panel preview tidak menampilkan hasil visual — yang diperiksa kodenya, dan tesnya tetap bisa lulus."
           },
           "instruction": "Buatlah sebuah elemen `<input>` teks yang dikendalikan (controlled). Kaitkan nilainya dengan state `text` dan perbarui nilainya pada event `onChange`.",
           "starterCode": "// Tulis input di bawah ini\n",
@@ -1056,7 +1081,7 @@ export const reactTrack: Track = {
           "example": {
             "code": "const handleChange = (e) => {\n  setForm({ ...form, [e.target.name]: e.target.value });\n};",
             "output": "Konsol mencatat state objek form diperbarui, misal: { username: 'budi', age: 20 }",
-            "note": "Pastikan setiap elemen input memiliki atribut 'name' yang cocok dengan key di state form."
+            "note": "Pastikan setiap elemen input memiliki atribut 'name' yang cocok dengan key di state form. Catatan jujur: potongan sebaris seperti ini bukan komponen utuh, jadi panel preview tidak menampilkan hasil visual — yang diperiksa kodenya, dan tesnya tetap bisa lulus."
           },
           "instruction": "Di dalam fungsi handler input, perbarui state `form` dengan mempertahankan nilai-nilai yang ada sebelumnya, lalu perbarui hanya field yang memicu event secara dinamis menggunakan sintaks array (computed property).",
           "starterCode": "// Tulis setForm di sini\n",
@@ -1083,11 +1108,11 @@ export const reactTrack: Track = {
           "title": "Validasi Sederhana & Pesan Error",
           "explanation": "Validasi formulir sederhana dilakukan dengan memeriksa nilai state input saat handler `onSubmit` dieksekusi atau secara real-time di event `onChange`. Jika nilai input tidak memenuhi kriteria (misalnya string kosong), kita menyimpan pesan kesalahan ke dalam state error dan membatalkan proses submit. Tanda kesalahan tersebut kemudian dirender secara kondisional di bawah elemen input untuk memberi umpan balik langsung kepada pengguna. Jebakan pemula adalah langsung mengirim data ke server tanpa melakukan validasi di tingkat client terlebih dahulu.",
           "example": {
-            "code": "if (!email) setError('Email wajib diisi!');",
-            "output": "Pesan error muncul jika input kosong.",
-            "note": "Beri indikasi visual seperti border merah pada input yang bermasalah."
+            "code": "const [error, setError] = useState(\"\");\n\nfunction handleSubmit(e) {\n  e.preventDefault();\n  if (!email) {\n    setError(\"Email wajib diisi!\");\n    return;                 // hentikan, jangan kirim ke server\n  }\n  setError(\"\");\n}\n// di JSX: {error && <p className=\"merah\">{error}</p>}",
+            "output": "Submit dengan email kosong:\n<p class=\"merah\">Email wajib diisi!</p>\n\nSubmit dengan email terisi:\n(pesan hilang, proses lanjut)",
+            "note": "Perhatikan `return` setelah `setError`: tanpa itu, kode di bawahnya tetap jalan dan data kosong tetap terkirim. Validasi di client hanya untuk kenyamanan pengguna — server WAJIB memeriksa ulang. Catatan jujur: potongan sebaris seperti ini bukan komponen utuh, jadi panel preview tidak menampilkan hasil visual — yang diperiksa kodenya, dan tesnya tetap bisa lulus."
           },
-          "instruction": "Terapkan logika validasi yang memeriksa apakah nilai variabel `text` bernilai truthy. Jika tidak (falsy), atur error state dengan memanggil `setError` dan berikan argumen 'Wajib diisi!'.",
+          "instruction": "Form catatan tidak boleh dikirim dalam keadaan kosong. Di dalam handler submit, periksa isi state `text`: kalau belum ada isinya, simpan pesan `Wajib diisi!` ke state error lewat setter-nya. Cukup satu baris pemeriksaan — pakai bentuk negasi, bukan membandingkan dengan string kosong.",
           "starterCode": "// Tulis validasi di sini\n",
           "language": "jsx",
           "tests": [
@@ -1109,8 +1134,8 @@ export const reactTrack: Track = {
           "explanation": "Menambah, mengedit, dan menghapus item dari daftar array di memori client (CRUD Client) adalah operasi mendasar dalam membangun antarmuka interaktif. Penambahan dilakukan dengan spread operator `[...list, newItem]`, penghapusan dengan `.filter()`, dan pengubahan dengan `.map()`. Seluruh metode tersebut mengembalikan array baru tanpa memutasi array asli sehingga sesuai dengan prinsip immutability React. Jebakan yang harus dihindari adalah menggunakan metode mutasi `splice()` yang merusak state asli.",
           "example": {
             "code": "const deleteItem = (id) => {\n  setItems(items.filter(item => item.id !== id));\n};",
-            "output": "Item yang dipilih hilang dari daftar secara instan.",
-            "note": "filter() mengembalikan array baru tanpa mengubah array asli (immutable)."
+            "output": "items sebelum: [{id:1,\"Kopi\"}, {id:2,\"Teh\"}, {id:3,\"Susu\"}]\ndeleteItem(2)\nitems sesudah: [{id:1,\"Kopi\"}, {id:3,\"Susu\"}]",
+            "note": "`filter` menyisakan item yang syaratnya BENAR — jadi syaratnya ditulis \"yang id-nya bukan yang dihapus\", bukan sebaliknya. Menukar `!==` menjadi `===` menghapus semua item kecuali satu. Catatan jujur: potongan sebaris seperti ini bukan komponen utuh, jadi panel preview tidak menampilkan hasil visual — yang diperiksa kodenya, dan tesnya tetap bisa lulus."
           },
           "instruction": "Perbarui array `items` dengan menghapus elemen yang memiliki `item.id` yang sama dengan argumen `id` menggunakan metode `.filter()`.",
           "starterCode": "// Tulis setItems filter di sini\n",
@@ -1137,9 +1162,9 @@ export const reactTrack: Track = {
           "title": "Filter & Search di Client",
           "explanation": "Pencarian dan penyaringan data (*filter & search*) di tingkat client dilakukan dengan menghitung data terfilter secara langsung di dalam body komponen saat render, memanfaatkan nilai state pencarian (`searchTerm`). Kita menggunakan metode `.filter()` dan `.includes()` pada daftar array utama tanpa perlu membuat state array baru untuk menyimpan hasil filter. Pendekatan ini memastikan data yang tampil selalu sinkron dengan query yang diketikkan pengguna. Jebakan umum adalah membuat state array ganda yang membingungkan alur data.",
           "example": {
-            "code": "const filtered = items.filter(item => item.name.includes(query));",
-            "output": "Daftar otomatis menyusut sesuai kata kunci pencarian.",
-            "note": "Gunakan toLowerCase() agar pencarian tidak sensitif huruf besar/kecil."
+            "code": "const items = [{ name: \"Kopi Gayo\" }, { name: \"Teh Hijau\" }, { name: \"Kopi Toraja\" }];\nconst query = \"kopi\";\n\nconst filtered = items.filter((i) =>\n  i.name.toLowerCase().includes(query.toLowerCase())\n);\nconsole.log(filtered);",
+            "output": "[{ name: \"Kopi Gayo\" }, { name: \"Kopi Toraja\" }]\n\nTanpa toLowerCase() di kedua sisi:\n[]      ← karena \"Kopi\" ≠ \"kopi\"",
+            "note": "Hasil pencarian tidak perlu disimpan ke state: ia dihitung ulang setiap render dari `items` dan `query`, jadi mustahil ketinggalan sinkron. Catatan jujur: potongan sebaris seperti ini bukan komponen utuh, jadi panel preview tidak menampilkan hasil visual — yang diperiksa kodenya, dan tesnya tetap bisa lulus."
           },
           "instruction": "Deklarasikan variabel `filtered` yang menyaring array `items`, sehingga hanya menyisakan item yang nama (`name`)-nya mengandung teks dalam `query`.",
           "starterCode": "// Tulis pencarian filtered di sini\n",
@@ -1167,8 +1192,8 @@ export const reactTrack: Track = {
           "explanation": "Input berupa elemen checkbox, radio button, dan dropdown select di React dikelola sedikit berbeda dari input teks biasa. Checkbox menggunakan properti `e.target.checked` untuk mengambil nilai boolean true/false, sedangkan radio button dan select menggunakan `e.target.value`. Menyesuaikan penanganan sesuai tipe input HTML memastikan semua bentuk masukan pengguna dapat ditangkap ke dalam state dengan benar. Jebakan umum adalah mencoba membaca `e.target.value` pada elemen checkbox yang selalu mengembalikan string `'on'`.",
           "example": {
             "code": "<input type=\"checkbox\" checked={isAgree} onChange={(e) => setIsAgree(e.target.checked)} />",
-            "output": "Status centang checkbox terikat dengan boolean state.",
-            "note": "Perhatikan penggunaan e.target.checked (bukan e.target.value) untuk checkbox."
+            "output": "Sebelum dicentang: isAgree = false\nSetelah dicentang : isAgree = true\n\nKalau handler-nya salah memakai e.target.value:\nisAgree = \"on\"     ← string, bukan boolean; kotaknya lalu macet tercentang",
+            "note": "Checkbox memakai `checked` + `e.target.checked`; input teks memakai `value` + `e.target.value`. Nilai `\"on\"` itu keluaran HTML asli untuk checkbox tanpa atribut value — dan karena string kosong pun \"truthy\" begitu ada isinya, bug ini tampak seperti checkbox yang tidak bisa dimatikan. Catatan jujur: potongan sebaris seperti ini bukan komponen utuh, jadi panel preview tidak menampilkan hasil visual — yang diperiksa kodenya, dan tesnya tetap bisa lulus."
           },
           "instruction": "Buatlah sebuah input bertipe checkbox yang dikendalikan oleh state. Gunakan properti `agree` untuk mengikat nilainya, dan perbarui melalui fungsi `setAgree` saat event perubahannya (change) terjadi.",
           "starterCode": "// Tulis input checkbox di bawah ini\n",
@@ -1289,10 +1314,10 @@ export const reactTrack: Track = {
           "explanation": "Hook `useEffect` digunakan untuk menyinkronkan komponen dengan sistem di luar React (*side effects*) seperti berlangganan event browser, mengutip timer, atau menyunting elemen dokumen. Efek ini dijalankan secara asinkron setelah proses render selesai digambar ke layar browser agar tidak menghambat responsivitas tampilan UI. Namun, efek sebaiknya tidak digunakan untuk menghitung data turunan sederhana yang bisa dikalkulasi langsung saat render. Jebakan paling berisiko adalah memicu re-render tanpa henti karena mengubah state di dalam effect tanpa kontrol dependency.",
           "example": {
             "code": "useEffect(() => {\n  document.title = 'Halaman Utama';\n}, []);",
-            "output": "Judul tab browser diperbarui saat komponen selesai mount.",
-            "note": "Jangan gunakan effect jika data bisa dihitung langsung saat render."
+            "output": "Sebelum effect jalan, judul tab: \"Vite + React + TS\"\nSetelah komponen mount, judul tab: \"Halaman Utama\"\n\n(judul berubah SETELAH tampilan tergambar — karena itu kadang terlihat berkedip sekejap)",
+            "note": "`document.title` milik browser, bukan React — dan itulah definisi side effect: menyentuh sesuatu di luar komponen. Menyetel judul langsung di badan komponen (tanpa effect) bekerja di layar, tapi ikut berjalan setiap render dan melanggar aturan \"render harus murni\". Catatan jujur: potongan sebaris seperti ini bukan komponen utuh, jadi panel preview tidak menampilkan hasil visual — yang diperiksa kodenya, dan tesnya tetap bisa lulus."
           },
-          "instruction": "Di dalam useEffect, ubah judul tab browser dengan memodifikasi `document.title` menjadi 'BiLearn'.",
+          "instruction": "Halaman ini harus mengubah judul yang tampil di tab browser menjadi `BiLearn` setelah komponen tampil. Tulis satu baris di dalam effect yang menyetel properti judul dokumen ke teks itu.",
           "starterCode": "// Tulis baris document.title di sini\n",
           "language": "jsx",
           "tests": [
@@ -1302,7 +1327,7 @@ export const reactTrack: Track = {
             },
             {
               "pattern": "['\"]BiLearn['\"]",
-              "message": "Isi dengan teks yang diminta, dibungkus tanda kutip."
+              "message": "Isi judulnya dengan teks `BiLearn` di antara tanda kutip. Untuk judul yang berubah-ubah (misal nama produk), teksnya diambil dari state/props dan nama itu WAJIB masuk dependency array — kalau tidak, judulnya tertinggal di nilai lama."
             }
           ],
           "solution": "document.title = 'BiLearn';"
@@ -1311,19 +1336,19 @@ export const reactTrack: Track = {
           "kind": "step",
           "id": "react-5-2",
           "title": "Dependency Array: [], [dep], Tanpa Array",
-          "explanation": "`[]` = jalan 1x saat mount. `[count]` = jalan saat count berubah. Tanpa array = jalan setiap kali re-render (bahaya!).",
+          "explanation": "Argumen kedua `useEffect` adalah daftar nilai yang diawasi, dan bentuknya menentukan KAPAN effect dijalankan: `[]` berarti sekali saja setelah komponen pertama muncul, `[id]` berarti sekali saat muncul plus setiap kali `id` berubah, dan tanpa array sama sekali berarti setiap selesai render. Dipakai kapan? `[]` untuk inisialisasi yang cuma perlu sekali, `[dep]` untuk mengambil ulang data ketika parameternya berganti — bentuk yang paling sering kamu tulis di kerja nyata. Jebakan pertama: tanpa array, sementara di dalam effect ada `setState`, kamu mendapat perulangan render tak berhenti dan tab browser membeku. Jebakan kedua yang lebih halus: menghapus sebuah variabel dari array supaya effect \"tidak jalan terus\" — effect lalu memakai nilai lama yang basi, dan gejalanya berupa data yang tidak pernah berubah meski URL sudah berganti. Aturan praktisnya: masukkan semua nilai dari luar effect yang dipakai di dalamnya, lalu kurangi jumlah pemicunya dengan cara lain.",
           "example": {
             "code": "useEffect(() => {\n  console.log(count);\n}, [count]);",
-            "output": "Pesan konsol muncul setiap kali variabel count berubah.",
-            "note": "Selalu masukkan semua variabel yang dipakai di dalam effect ke dependency array."
+            "output": "Konsol saat halaman dibuka:\n0\n\nSetelah tombol tambah diklik dua kali:\n1\n2\n\nSaat state LAIN (misal nama) berubah:\n(tidak ada baris baru — count tidak berubah)",
+            "note": "Bandingkan dengan `useEffect(() => console.log(count))` tanpa array: baris baru muncul pada SETIAP render, termasuk saat state yang tidak berhubungan berubah. Catatan jujur: potongan sebaris seperti ini bukan komponen utuh, jadi panel preview tidak menampilkan hasil visual — yang diperiksa kodenya, dan tesnya tetap bisa lulus."
           },
-          "instruction": "Tulis `useEffect` yang mengamati variabel `id` di dependency array `[id]`.",
+          "instruction": "Komponen detail produk perlu menjalankan ulang effect-nya setiap kali produk yang dibuka berganti, tapi tidak pada render lain. Tulis satu `useEffect` yang isinya mencetak `id` ke konsol, dan atur argumen keduanya supaya effect itu jalan saat komponen muncul dan setiap kali nilai `id` berubah.",
           "starterCode": "// Tulis useEffect dengan dependency [id] di sini\n",
           "language": "jsx",
           "tests": [
             {
               "pattern": "useEffect\\(\\s*\\(\\s*\\)\\s*=>\\s*\\{[\\s\\S]*\\}\\s*,\\s*\\[\\s*id\\s*\\]\\s*\\)",
-              "message": "Gunakan dependency array [id]"
+              "message": "Effect butuh dua argumen: fungsinya, lalu daftar nilai yang diawasi. Isi daftarnya dengan `id` saja — array kosong membuat effect tidak pernah mengambil produk baru, dan tanpa array ia jalan di setiap render."
             }
           ],
           "solution": "useEffect(() => {\n  console.log(id);\n}, [id]);"
@@ -1335,11 +1360,11 @@ export const reactTrack: Track = {
           "explanation": "Fungsi pembersih (*cleanup function*) adalah fungsi yang dikembalikan (`return () => { ... }`) di dalam callback `useEffect`. Fungsi ini secara otomatis dieksekusi oleh React saat komponen dilepas dari layar (*unmount*) atau sebelum effect dijalankan kembali pada render berikutnya. Menulis fungsi cleanup sangat vital untuk membatalkan koneksi, menghentikan timer (`clearInterval`), atau menghapus event listener browser agar tidak terjadi kebocoran memori (*memory leak*). Jebakan umum adalah lupa melepaskan `addEventListener` yang telah dipasang.",
           "example": {
             "code": "useEffect(() => {\n  const timer = setInterval(() => {}, 1000);\n  return () => clearInterval(timer); // Cleanup\n}, []);",
-            "output": "Timer dihentikan sehingga tidak terjadi memory leak saat komponen ditutup.",
-            "note": "Selalu bersihkan listener/timer di return function."
+            "output": "Konsol dengan cleanup (StrictMode, dev):\ntimer 1 dibuat\ntimer 1 dibersihkan\ntimer 2 dibuat\n→ satu timer berjalan\n\nKonsol tanpa cleanup:\ntimer 1 dibuat\ntimer 2 dibuat\n→ dua timer berjalan; angka di layar naik dua kali lebih cepat",
+            "note": "Gejala lupa cleanup jarang berupa error — yang muncul justru \"aneh\": angka melompat dua-dua, atau pesan yang sama diterima dua kali. Itu sebabnya jebakan ini bisa lolos berhari-hari."
           },
-          "instruction": "Tuliskan fungsi kembalian (return) dari useEffect yang akan membersihkan `timer` dengan menggunakan fungsi bawaan `clearInterval`.",
-          "starterCode": "// Tulis cleanup function di bawah ini\n",
+          "instruction": "Komponen `Jam` di editor memasang `setInterval` tapi tidak pernah menghentikannya, jadi timer menumpuk setiap kali komponen dipasang ulang. Lengkapi effect-nya: kembalikan sebuah fungsi yang menghentikan `timer` itu memakai fungsi bawaan pasangan `setInterval`.",
+          "starterCode": "function Jam() {\n  useEffect(() => {\n    const timer = setInterval(() => console.log(\"tik\"), 1000);\n\n    // tulis fungsi pembersihnya di bawah ini\n  }, []);\n\n  return <p>Jam berjalan</p>;\n}\n",
           "language": "jsx",
           "tests": [
             {
@@ -1351,7 +1376,7 @@ export const reactTrack: Track = {
               "message": "Hentikan timer-nya dengan `clearInterval()` beserta penanda yang dikembalikan `setInterval`. Tanpa ini, setiap kali komponen dipasang ulang timer baru menumpuk — dan angka di layar melompat dua kali lebih cepat tanpa penyebab yang kelihatan."
             }
           ],
-          "solution": "return () => clearInterval(timer);"
+          "solution": "function Jam() {\n  useEffect(() => {\n    const timer = setInterval(() => console.log(\"tik\"), 1000);\n\n    return () => clearInterval(timer);\n  }, []);\n\n  return <p>Jam berjalan</p>;\n}"
         },
         {
           "kind": "step",
@@ -1360,8 +1385,8 @@ export const reactTrack: Track = {
           "explanation": "Pengambilan data asinkron (*data fetching*) dengan `fetch()` di dalam `useEffect` rawan mengalami masalah *race condition* jika pengguna berpindah halaman atau mengganti kata kunci pencarian dengan cepat sebelum respon API sebelumnya selesai. Untuk mengatasinya, kita menggunakan `AbortController` di dalam fungsi cleanup untuk membatalkan permintaan jaringan yang tidak lagi relevan. Pola ini memastikan bahwa data yang tampil di layar selalu berasal dari permintaan jaringan paling akhir. Jebakan umum adalah mengabaikan error pembatalan `AbortError` di blok catch.",
           "example": {
             "code": "useEffect(() => {\n  const controller = new AbortController();\n  fetch(url, { signal: controller.signal });\n  return () => controller.abort();\n}, [url]);",
-            "output": "Mencegah race condition dan pencemaran state dari request usang.",
-            "note": "AbortController adalah standar pencegahan race condition di React."
+            "output": "Pengguna mengetik \"ko\" lalu cepat menjadi \"kopi\":\n\nTanpa abort:\nrespons \"kopi\" tiba → layar benar\nrespons \"ko\"   tiba belakangan → layar KEMBALI ke hasil lama\n\nDengan abort:\nrequest \"ko\" dibatalkan (AbortError)\nlayar tetap menampilkan hasil \"kopi\"",
+            "note": "Inilah race condition: yang menentukan isi layar bukan permintaan terakhir, tapi respons yang tiba paling akhir. Karena `abort()` melempar `AbortError`, blok catch-mu harus mengabaikan error jenis itu — kalau tidak, pengguna melihat pesan gagal yang tidak pernah benar-benar terjadi. Catatan jujur: potongan sebaris seperti ini bukan komponen utuh, jadi panel preview tidak menampilkan hasil visual — yang diperiksa kodenya, dan tesnya tetap bisa lulus."
           },
           "instruction": "Untuk mencegah request diteruskan saat komponen sudah di-unmount, panggil metode `abort()` pada objek `controller` di dalam fungsi cleanup.",
           "starterCode": "// Tulis kode di bawah ini\n",
@@ -1406,8 +1431,8 @@ export const reactTrack: Track = {
           "explanation": "Dokumentasi resmi React menekankan panduan 'You Might Not Need an Effect' untuk mengedukasi pengembang agar tidak menyalahgunakan `useEffect`. Banyak kasus yang biasanya diselesaikan dengan effect—seperti mentransformasi data untuk render, menangani event klik pengguna, atau mereset state saat props berubah—sebenarnya lebih bersih jika ditangani di event handler atau dihitung langsung saat render. Menghindari effect yang tidak perlu membuat performa aplikasi lebih cepat dan lebih mudah didebug. Jebakan umum adalah menggunakan `useEffect` untuk menyinkronkan dua state yang saling berhubungan.",
           "example": {
             "code": "// ❌ BUKAN EFFECT:\n// useEffect(() => setFullName(first + last), [first, last]);\n\n// ✅ CUKUP:\nconst fullName = first + ' ' + last;",
-            "output": "Menghindari re-render ekstra yang memperlambat aplikasi.",
-            "note": "Transformasi data untuk render sebaiknya langsung dihitung di body komponen."
+            "output": "Versi effect (❌):\nrender 1: fullName = \"\"          ← layar sempat kosong\neffect jalan → setFullName\nrender 2: fullName = \"Bimo Ares\"\n\nVersi hitung langsung (✅):\nrender 1: fullName = \"Bimo Ares\"",
+            "note": "Dua render versus satu, dan versi effect punya satu momen di mana layar menampilkan nilai kosong. Pada daftar panjang, kedipan seperti ini yang membuat aplikasi terasa lambat padahal datanya sudah ada. Catatan jujur: potongan sebaris seperti ini bukan komponen utuh, jadi panel preview tidak menampilkan hasil visual — yang diperiksa kodenya, dan tesnya tetap bisa lulus."
           },
           "instruction": "Hitung variabel boolean bernama `isAdult` langsung dari properti/state `age` (yang dianggap bernilai angka). Variabel ini bernilai true jika age 18 ke atas.",
           "starterCode": "// Tulis variabel isAdult di sini\n",
@@ -1520,19 +1545,32 @@ export const reactTrack: Track = {
           "kind": "step",
           "id": "react-6-1",
           "title": "Aturan Hooks (Rules of Hooks)",
-          "explanation": "Aturan Hooks: 1. Panggil Hooks HANYA di tingkat teratas komponen React (jangan di dalam loop/if). 2. Panggil Hooks HANYA dari Komponen atau Custom Hook.",
+          "explanation": "Rules of Hooks ada dua: hook hanya boleh dipanggil di tingkat teratas fungsi (tidak di dalam `if`, loop, atau fungsi bersarang), dan hanya dari komponen React atau custom hook — bukan dari fungsi biasa atau event handler. Alasannya teknis dan penting: React tidak mengenali hook dari namanya, ia hanya menghitung URUTAN pemanggilan pada setiap render, lalu memasangkan hook ke-1 dengan state ke-1, hook ke-2 dengan state ke-2, dan seterusnya. Kalau sebuah hook dilewati karena berada di dalam `if` yang kali ini bernilai false, seluruh urutannya bergeser dan nilai state bisa tertukar antar hook. Kapan aturan ini terasa mengikat? Saat kamu ingin \"memakai state hanya kalau ada props tertentu\" — jalan keluarnya bukan menaruh hook di dalam `if`, tapi memanggil hook tanpa syarat lalu membuat kondisinya di dalam nilainya. Jebakannya: React memang melempar error `Rendered fewer hooks than expected`, tapi pesan itu muncul di render BERIKUTNYA, sering di komponen yang sama sekali tidak kamu sentuh, jadi sulit dilacak kalau kamu tidak tahu aturan ini.",
           "example": {
-            "code": "// ❌ Salah: if (condition) useState();\n// ✅ Benar: useState di top-level",
-            "output": "Menjamin urutan pemanggilan hooks konsisten di setiap render.",
-            "note": "React mengandalkan urutan pemanggilan hooks untuk mengasosiasikan state."
+            "code": "function Profil({ login }) {\n  // ❌ hook di dalam if — jumlah hook berubah antar render\n  if (login) {\n    const [nama, setNama] = useState(\"\");\n  }\n\n  // ✅ hook selalu dipanggil, kondisinya yang diatur\n  const [nama2, setNama2] = useState(\"\");\n  const tampil = login ? nama2 : \"tamu\";\n  return <p>{tampil}</p>;\n}",
+            "output": "Versi ❌ saat login berubah dari true ke false:\nError: Rendered fewer hooks than expected. This may be caused by an accidental early return statement.\n\nVersi ✅:\n<p>tamu</p>",
+            "note": "Pesan errornya menyebut \"early return\", padahal penyebab paling sering justru hook di dalam `if` — keduanya sama-sama membuat jumlah hook berbeda antar render."
           },
-          "instruction": "Buatlah sebuah komponen `Header` yang mendeklarasikan `const [theme] = useState('dark');` di tingkat teratas komponen, mematuhi Aturan Hooks.",
+          "instruction": "Buat komponen `Header` yang menyimpan tema tampilannya di state dengan nilai awal `dark`. Panggil hook-nya di tempat yang diizinkan Rules of Hooks, dan karena nilainya belum akan diubah di latihan ini, ambil saja nilainya (setter-nya tidak perlu). Komponennya cukup mengembalikan `<div>Header</div>`.",
           "starterCode": "// Tulis komponen Header di sini\n",
           "language": "jsx",
           "tests": [
             {
-              "pattern": "function\\s+Header\\s*\\(\\s*\\)\\s*\\{\\s*const\\s*\\[\\s*theme\\s*\\]\\s*=\\s*useState\\(\\s*['\"]dark['\"]\\s*\\)\\s*;?[\\s\\S]*\\}",
-              "message": "Deklarasikan useState di tingkat teratas komponen Header"
+              "pattern": "(function\\s+Header\\s*\\(|const\\s+Header\\s*=)",
+              "message": "Belum ada komponen bernama `Header`. Hook hanya boleh dipanggil dari dalam komponen atau custom hook — memanggilnya di luar keduanya membuat React melempar \"Invalid hook call\"."
+            },
+            {
+              "pattern": "const\\s*\\[\\s*theme\\s*[,\\]]",
+              "message": "Ambil nilainya saja dengan destructuring array: `const [theme]`. Menulis `const theme = useState(\"dark\")` membuat `theme` berisi ARRAY dua elemen, sehingga `{theme}` di JSX mencetak sesuatu yang tidak kamu harapkan."
+            },
+            {
+              "pattern": "useState\\(\\s*['\"]dark['\"]\\s*\\)",
+              "message": "Beri nilai awal `\"dark\"` pada hook-nya. Nilai awal ini hanya dipakai pada render pertama — mengubahnya nanti tidak akan mengatur ulang state yang sudah ada."
+            },
+            {
+              "pattern": "(if\\s*\\([^)]*\\)\\s*\\{?\\s*const\\s*\\[|for\\s*\\([^)]*\\)\\s*\\{?\\s*const\\s*\\[)",
+              "mustNotMatch": true,
+              "message": "Hook-nya tidak boleh berada di dalam `if` atau loop, meskipun kodenya terlihat jalan. Letakkan di baris pertama badan komponen, sebelum percabangan apa pun."
             }
           ],
           "solution": "function Header() {\n  const [theme] = useState('dark');\n  return <div>Header</div>;\n}"
@@ -1541,22 +1579,38 @@ export const reactTrack: Track = {
           "kind": "step",
           "id": "react-6-2",
           "title": "Membuat Custom Hook useFetch",
-          "explanation": "Custom Hook `useLocalStorage` memposting logika penyimpanan dan pemanggilan data dari `window.localStorage` ke dalam satu Hook yang reusable. Dengan membuat Custom Hook ini, komponen antarmuka dapat membaca dan menyimpan data ke penyimpanan lokal browser dengan sintaks yang persis seperti `useState` biasa tanpa perlu menulis panggilan `localStorage.getItem` dan `setItem` berulang kali. Pola ini memisahkan logika penyimpanan teknis dari komponen tampilan UI. Jebakan umum adalah lupa melakukan `JSON.stringify` saat menyimpan objek dan `JSON.parse` saat membaca kembali datanya.",
+          "explanation": "Custom hook adalah fungsi biasa yang namanya diawali `use` dan boleh memanggil hook lain di dalamnya — dengan itu, logika berulang seperti \"ambil data dari URL, simpan hasilnya, catat statusnya\" bisa dipindahkan keluar dari komponen. `useFetch` adalah contoh paling sering ditulis orang: di dalamnya ada `useState` untuk menampung data dan `useEffect` untuk mengambilnya, lalu nilai itu dikembalikan supaya komponen mana pun cukup menulis satu baris. Kapan kamu membuatnya? Begitu pola yang sama muncul di komponen kedua — sebelum itu, menulisnya langsung di komponen lebih jelas dibaca. Yang perlu kamu tahu: custom hook membagikan LOGIKA, bukan STATE. Dua komponen yang memanggil `useFetch` yang sama punya salinan state masing-masing, jadi jangan berharap keduanya otomatis sinkron — salah paham ini sering muncul saat orang mengira custom hook bisa dipakai sebagai state global. Jebakan kedua: tanpa penanda status, komponen membaca `data` yang masih `null` pada render pertama dan langsung gagal di `data.nama`.",
           "example": {
-            "code": "function useFetch(url) {\n  const [data, setData] = useState(null);\n  useEffect(() => { fetch(url).then(r => r.json()).then(setData); }, [url]);\n  return data;\n}",
-            "output": "Mengembalikan data ber-tipe yang siap dikonsumsi komponen mana saja.",
-            "note": "Custom Hook harus selalu diawali kata 'use'."
+            "code": "// custom hook lain yang sama seringnya dipakai: useLocalStorage\nfunction useLocalStorage(kunci, awal) {\n  const [nilai, setNilai] = useState(() => {\n    const tersimpan = localStorage.getItem(kunci);\n    return tersimpan ? JSON.parse(tersimpan) : awal;   // objek WAJIB di-parse\n  });\n\n  useEffect(() => {\n    localStorage.setItem(kunci, JSON.stringify(nilai)); // dan di-stringify\n  }, [kunci, nilai]);\n\n  return [nilai, setNilai];   // bentuknya sengaja meniru useState\n}\n\n// pemakaiannya di komponen:\n// const [tema, setTema] = useLocalStorage(\"tema\", \"gelap\");",
+            "output": "Kunjungan pertama:\ntema = \"gelap\"          (dari nilai awal)\n\nSetelah setTema(\"terang\") lalu halaman di-refresh:\ntema = \"terang\"        (dibaca kembali dari localStorage)\n\nKalau JSON.stringify dilupakan untuk objek:\ntema = \"[object Object]\"",
+            "note": "Perhatikan bentuk kembaliannya: array `[nilai, setter]` supaya pemakaiannya terasa seperti `useState`. Meniru bentuk hook bawaan adalah kebiasaan yang membuat custom hook mudah dipakai orang lain. Catatan jujur: potongan sebaris seperti ini bukan komponen utuh, jadi panel preview tidak menampilkan hasil visual — yang diperiksa kodenya, dan tesnya tetap bisa lulus."
           },
-          "instruction": "Definisikan deklarasi fungsi Custom Hook `function useFetch(url)`.",
-          "starterCode": "// Tulis fungsi useFetch di sini\n",
+          "instruction": "Pola \"ambil data dari sebuah URL\" sudah ditulis ulang di tiga komponen. Pindahkan ke satu custom hook: buat fungsi bernama `useFetch` yang menerima `url`, menyimpan hasilnya di state bernama `data` (nilai awal `null`), mengambil datanya di dalam sebuah effect yang dijalankan ulang ketika `url` berubah, lalu mengembalikan `data` itu.",
+          "starterCode": "// Tulis custom hook useFetch di bawah ini.\n// Kerangkanya: state untuk data → effect untuk mengambil → kembalikan datanya.\n",
           "language": "jsx",
           "tests": [
             {
-              "pattern": "function\\s+useFetch\\s*\\(\\s*url\\s*\\)",
-              "message": "Definisikan: function useFetch(url)"
+              "pattern": "(function\\s+useFetch\\s*\\(\\s*url|const\\s+useFetch\\s*=\\s*\\(?\\s*url)",
+              "message": "Namanya wajib diawali `use` — itulah yang membuat plugin ESLint React memberlakukan Rules of Hooks padanya. Fungsi bernama `fetchData` yang memanggil `useState` di dalamnya tidak diperiksa siapa pun, dan itu sumber bug yang sulit dilacak."
+            },
+            {
+              "pattern": "useState\\(\\s*null\\s*\\)",
+              "message": "Data hasil jaringan belum ada saat render pertama, jadi state-nya dimulai dari `null`. Nilai awal inilah yang harus diperiksa komponen sebelum membaca isinya."
+            },
+            {
+              "pattern": "useEffect\\(",
+              "message": "Pengambilan datanya adalah side effect, jadi letakkan di dalam `useEffect` — bukan langsung di badan hook. Memanggil `fetch` di badan hook membuatnya berjalan lagi di setiap render."
+            },
+            {
+              "pattern": "\\[\\s*url\\s*\\]",
+              "message": "Masukkan `url` ke dependency array supaya data diambil ulang saat URL-nya berganti. Dengan `[]`, hook ini akan terus menampilkan data alamat pertama meski komponen dipakai untuk alamat lain."
+            },
+            {
+              "pattern": "return\\s+data",
+              "message": "Kembalikan `data` dari hook-nya — tanpa itu, komponen pemanggil tidak mendapat apa pun. Di proyek nyata biasanya dikembalikan sebagai object `{ data, loading, error }`."
             }
           ],
-          "solution": "function useFetch(url) {\n  // Logika fetch\n}"
+          "solution": "function useFetch(url) {\n  const [data, setData] = useState(null);\n\n  useEffect(() => {\n    fetch(url)\n      .then((r) => r.json())\n      .then(setData);\n  }, [url]);\n\n  return data;\n}"
         },
         {
           "kind": "step",
@@ -1565,8 +1619,8 @@ export const reactTrack: Track = {
           "explanation": "Hook `useRef` mengembalikan sebuah objek ref mutabel dengan properti `.current` yang nilainya bertahan di antara siklus render tanpa memicu re-render UI saat nilainya diubah. Use case utama `useRef` adalah untuk mengakses dan memanipulasi elemen DOM secara langsung (seperti memberi fokus pada input via `inputRef.current.focus()`) atau menyimpan nilai kredensial seperti ID timer. Memahami perbedaan `useRef` dan `useState` penting agar kamu tahu kapan butuh update UI dan kapan hanya butuh menyimpan nilai internal. Jebakan umum adalah mencoba merender atribut `ref.current` di dalam JSX untuk elemen yang berubah-ubah.",
           "example": {
             "code": "const inputRef = useRef(null);\nconst focusInput = () => inputRef.current.focus();\nreturn <input ref={inputRef} />;",
-            "output": "Elemen input mendapatkan fokus saat tombol diklik.",
-            "note": "Ubah inputRef.current tidak akan memicu re-render komponen."
+            "output": "Sebelum tombol diklik:\ninputRef.current → <input>\ndocument.activeElement → <body>\n\nSetelah tombol diklik:\ndocument.activeElement → <input>   (kursor berkedip di dalam kotak)",
+            "note": "Pada render PERTAMA `inputRef.current` masih `null` — React baru mengisinya setelah elemennya benar-benar ada di layar. Karena itu memanggil `.focus()` langsung di badan komponen menghasilkan \"Cannot read properties of null\"; tempatnya di dalam effect atau event handler. Catatan jujur: potongan sebaris seperti ini bukan komponen utuh, jadi panel preview tidak menampilkan hasil visual — yang diperiksa kodenya, dan tesnya tetap bisa lulus."
           },
           "instruction": "Deklarasikan variabel `inputRef` dan gunakan hook yang tepat untuk menyimpannya dengan nilai awal `null`.",
           "starterCode": "// Tulis useRef di sini\n",
@@ -1590,10 +1644,10 @@ export const reactTrack: Track = {
           "explanation": "`useMemo` dan `useCallback` adalah Hook yang disediakan React untuk melakukan optimasi performa melalui teknik memoization. `useMemo` meng-cache hasil perhitungan komputasi yang berat, sedangkan `useCallback` meng-cache referensi fungsi agar tidak dibuat ulang pada setiap render. Namun, kedua hook ini tidak boleh digunakan secara sembarangan pada semua fungsi karena overhead alokasi memorinya justru bisa membuat aplikasi lebih lambat jika kodenya sederhana. Jebakan umum adalah membungkus seluruh fungsi event handler dengan `useCallback` tanpa alasan optimasi yang terukur.",
           "example": {
             "code": "const total = useMemo(() => hitungMahal(items), [items]);",
-            "output": "hitungMahal hanya dijalankan ulang saat data items berubah.",
-            "note": "Jangan gunakan ini secara berlebihan (optimasi prematur) sebelum ada masalah performa nyata."
+            "output": "Konsol (hitungMahal mencetak \"menghitung...\" setiap kali dipanggil):\n\nrender 1 (items baru)   → menghitung...\nrender 2 (ketik di input, items sama) → (tidak ada baris baru)\nrender 3 (items berubah) → menghitung...",
+            "note": "Tanpa `useMemo`, baris \"menghitung...\" muncul di SETIAP render — termasuk saat kamu hanya mengetik di input yang tidak berhubungan. Itu gejala yang membenarkan pemakaian useMemo; tanpa gejala itu, useMemo hanya menambah kerja. Catatan jujur: potongan sebaris seperti ini bukan komponen utuh, jadi panel preview tidak menampilkan hasil visual — yang diperiksa kodenya, dan tesnya tetap bisa lulus."
           },
-          "instruction": "Gunakan `useMemo` untuk memanggil fungsi `hitung(data)` dan me-return hasilnya. Jadikan array berisi `data` sebagai dependensinya.",
+          "instruction": "Fungsi `hitung(data)` berat dan hasilnya hanya berubah kalau `data` berubah, tapi sekarang ia dijalankan ulang setiap kali komponen render. Bungkus pemanggilannya dengan hook memoization yang tepat, dan tentukan pemicu perhitungan ulangnya hanya pada `data`.",
           "starterCode": "// Tulis useMemo di sini\n",
           "language": "jsx",
           "tests": [
@@ -1603,7 +1657,7 @@ export const reactTrack: Track = {
             },
             {
               "pattern": "hitung\\(\\s*data\\s*\\)",
-              "message": "Panggil fungsi perhitungannya di dalam fungsi itu."
+              "message": "Perhitungannya ditulis DI DALAM fungsi yang kamu berikan ke `useMemo`, lalu hasilnya dikembalikan. Bentuk `() => hitung(data)` berarti \"jalankan ini nanti kalau perlu\" — bedanya besar dengan `hitung(data)` yang berjalan sekarang."
             },
             {
               "pattern": "\\[\\s*data\\s*\\]",
@@ -1616,30 +1670,34 @@ export const reactTrack: Track = {
           "kind": "step",
           "id": "react-6-5",
           "title": "Membaca Hooks Library Pihak Ketiga",
-          "explanation": "Membaca dan memahami Custom Hooks dari library populer pihak ketiga (seperti `useDebounce`, `useMediaQuery`, atau `useOnClickOutside`) adalah keterampilan penting dalam pengembangan aplikasi skala industri. Library tersebut membungkus logika browser yang kompleks ke dalam API Hook yang bersih dan siap pakai sehingga kamu tidak perlu merancang solusi dari nol. Mengintegrasikan Custom Hooks eksternal menghemat waktu pengembangan dan meningkatkan keandalan kode. Jebakan umum adalah membuat Custom Hook rumit sendiri padahal sudah ada solusi library teruji yang tersedia di komunitas npm.",
+          "explanation": "Sebagian besar hook yang kamu pakai di kerja nyata ditulis orang lain (`useSWR`, `useDebounce`, `useMediaQuery`, `useOnClickOutside`), jadi keterampilan yang sebenarnya dinilai adalah membaca dokumentasinya lalu tahu bentuk kembaliannya. Ada dua bentuk yang dominan: TUPLE seperti hook bawaan (`const [nilai, setNilai] = useLocalStorage(...)`) dan OBJECT seperti hook data (`const { data, isLoading } = useSWR(...)`). Kapan bedanya penting? Saat kamu salah menebak: membongkar object dengan kurung siku menghasilkan `undefined` tanpa pesan error apa pun, dan halamanmu diam-diam kosong. Jebakan berikutnya adalah nama propertinya yang tidak seragam antar library — `isLoading`, `loading`, dan `isPending` berarti hal yang sama tetapi hanya satu yang benar untuk library yang kamu pakai. Karena itu kebiasaan membuka dokumentasi jauh lebih berguna daripada menghafal, dan itulah yang dilatih di step ini.",
           "example": {
-            "code": "const { data, isLoading } = useQuery(['users'], fetchUsers);",
-            "output": "Mengonsumsi state async server dari library pihak ketiga.",
-            "note": "Memahami prinsip Custom Hook membuat pembelajaran library baru menjadi mudah."
+            "code": "// dokumentasi usehooks-ts menyatakan useLocalStorage MENGEMBALIKAN TUPLE\nconst [tema, setTema] = useLocalStorage(\"tema\", \"gelap\");\n\n// ❌ bentuk yang salah tebak untuk hook yang sama:\n// const { tema } = useLocalStorage(\"tema\", \"gelap\");",
+            "output": "Bentuk tuple (benar):\ntema = \"gelap\"\n\nBentuk object (salah tebak):\ntema = undefined\n→ lalu di layar: \"Cannot read properties of undefined\" saat nilainya dipakai",
+            "note": "Tidak ada pesan error yang menyebut \"kamu salah membongkar\" — yang muncul cuma `undefined`. Itu sebabnya baris pertama yang dibaca dari dokumentasi sebuah hook adalah bentuk nilai kembaliannya. Catatan jujur: library pihak ketiga tidak terpasang di panel preview, jadi potongan ini tidak dijalankan; tesnya tetap bisa lulus."
           },
-          "instruction": "Panggil hook `useQuery()` dan lakukan destructuring pada objek yang dikembalikan untuk mengambil nilai `data` dan `isLoading`.",
-          "starterCode": "// Tulis destructuring useQuery di sini\n",
+          "instruction": "Dokumentasi SWR menyebut: `useSWR(kunci, fetcher)` mengembalikan sebuah OBJECT berisi antara lain `data` dan `isLoading`. Panggil hook itu dengan kunci `'/api/users'` dan fungsi `fetcher`, lalu ambil kedua properti itu dengan bentuk destructuring yang sesuai bentuk kembaliannya.",
+          "starterCode": "// Anggap fungsi fetcher sudah tersedia:\n// const fetcher = (url) => fetch(url).then((r) => r.json());\n\n// Panggil useSWR dan ambil data + isLoading di bawah ini\n",
           "language": "jsx",
           "tests": [
             {
-              "pattern": "const\\s*\\{[^}]*data[^}]*\\}\\s*=",
-              "message": "Hook library pihak ketiga biasanya mengembalikan satu OBJECT, jadi diambil dengan destructuring object (kurung kurawal) — beda dari `useState` yang mengembalikan array (kurung siku). Nama propertinya harus persis seperti di dokumentasi."
+              "pattern": "const\\s*\\{[^}]*\\bdata\\b[^}]*\\}\\s*=",
+              "message": "Dokumentasinya menyebut nilai kembaliannya OBJECT, jadi bongkar dengan kurung kurawal. Memakai kurung siku (`const [data] = ...`) tidak menghasilkan error apa pun — isinya cuma `undefined`, dan itu jauh lebih sulit dilacak daripada error."
             },
             {
               "pattern": "isLoading\\s*[,}]",
-              "message": "Ambil juga penanda status memuatnya. Nama inilah yang berbeda antar library (`isLoading`, `loading`, `isPending`) — jadi kebiasaan membaca dokumentasi lebih penting daripada menghafal."
+              "message": "Ambil juga penanda status memuatnya. Nama persisnya berbeda antar library (`isLoading` di SWR, `isPending` di TanStack Query versi baru, `loading` di beberapa hook lama), jadi yang dipakai selalu yang tertulis di dokumentasi versi itu."
             },
             {
-              "pattern": "useQuery\\(\\s*\\)",
-              "message": "Panggil hook-nya dengan tanda kurung. Hook hanya boleh dipanggil di tingkat teratas komponen — bukan di dalam `if` atau loop."
+              "pattern": "useSWR\\s*\\(\\s*['\"]/api/users['\"]\\s*,",
+              "message": "Panggil `useSWR` dengan dua argumen: kuncinya (biasanya URL-nya sendiri) lalu fungsi pengambil datanya. Kunci itu juga dipakai SWR sebagai identitas cache — dua komponen dengan kunci sama berbagi satu hasil."
+            },
+            {
+              "pattern": ",\\s*fetcher\\s*\\)",
+              "message": "Argumen kedua adalah fungsi `fetcher` yang sudah tersedia di editor. Sebut namanya saja tanpa tanda kurung: kamu memberikan fungsinya kepada SWR, bukan hasil pemanggilannya."
             }
           ],
-          "solution": "const { data, isLoading } = useQuery();"
+          "solution": "const { data, isLoading } = useSWR('/api/users', fetcher);"
         },
         {
           "kind": "quiz",
@@ -1688,28 +1746,28 @@ export const reactTrack: Track = {
             {
               "id": "q4",
               "type": "pilihan-ganda",
-              "question": "Kamu sedang mendesain sistem routing berbasis React Router v6. Untuk mendeklarasikan navigasi bersarang dengan UI bersama (layouting), fitur apa yang biasa digunakan?",
+              "question": "Kotak pencarian memanggil API setiap kali satu huruf diketik, sehingga satu kata \"kopi gayo\" menghasilkan 9 request. Hook seperti apa yang tepat dipakai, dan apa yang ia lakukan?",
               "choices": [
-                "Komponen <Outlet />",
-                "Metode window.location.href",
-                "Fungsi useNavigate",
-                "Tag <a> standar browser"
+                "useMemo — menyimpan hasil pencarian di memori supaya request kedua tidak perlu",
+                "useDebounce — menunda pemakaian nilai input sampai pengguna berhenti mengetik beberapa ratus milidetik",
+                "useRef — menyimpan kata kunci tanpa memicu render sehingga API tidak dipanggil",
+                "useEffect tanpa dependency array — supaya effect-nya berjalan satu kali saja"
               ],
-              "answerIndex": 0,
-              "explanation": "<Outlet /> digunakan di dalam komponen rute induk untuk menandai di mana komponen rute anak akan dirender."
+              "answerIndex": 1,
+              "explanation": "`useDebounce` mengembalikan versi \"tertunda\" dari nilai yang kamu berikan; effect pencarianmu bergantung pada nilai tertunda itu, jadi API baru dipanggil setelah pengguna berhenti mengetik. `useMemo` menggoda karena terdengar seperti menghemat pekerjaan, tapi ia hanya menyimpan hasil perhitungan di render yang sama — request-nya tetap terkirim. `useRef` memang tidak memicu render, tapi nilainya juga tidak memicu pencarian ulang sama sekali. Dan `useEffect` tanpa dependency array justru berjalan di SETIAP render, bukan sekali."
             },
             {
               "id": "q5",
               "type": "pilihan-ganda",
-              "question": "Manakah cara terbaik untuk berpindah halaman (navigasi) secara programatis (misal setelah pengguna berhasil login) di React Router?",
+              "question": "Dua komponen berbeda sama-sama memanggil custom hook `useCounter()` yang di dalamnya ada `useState(0)`. Salah satu komponen menaikkan angkanya. Apa yang terjadi pada komponen yang lain?",
               "choices": [
-                "Memanggil fungsi yang dikembalikan oleh hook useNavigate()",
-                "Mengganti nilai window.location.href secara langsung",
-                "Menggunakan elemen <Link> yang di-klik otomatis lewat ref",
-                "Menggunakan useHref()"
+                "Angkanya ikut naik, karena custom hook membagikan state yang sama",
+                "Angkanya tetap, karena setiap pemanggilan hook membuat state-nya sendiri",
+                "React melempar error karena satu hook dipakai dua komponen",
+                "Angkanya ikut naik hanya kalau kedua komponen bersaudara"
               ],
-              "answerIndex": 0,
-              "explanation": "Hook useNavigate() direkomendasikan untuk navigasi secara dinamis atau berdasarkan logika bisnis."
+              "answerIndex": 1,
+              "explanation": "Custom hook membagikan LOGIKA, bukan state. Setiap komponen yang memanggilnya mendapat salinan state sendiri — sama seperti dua komponen yang masing-masing menulis `useState(0)`. Pilihan pertama menggoda karena inilah salah paham paling umum tentang custom hook, dan orang yang mempercayainya biasanya memakai custom hook sebagai pengganti state global lalu bingung kenapa datanya tidak pernah sinkron. Untuk state yang benar-benar dibagi, yang dipakai Context atau library seperti Zustand — materi modul berikutnya."
             }
           ]
         }
@@ -1740,9 +1798,9 @@ export const reactTrack: Track = {
           "title": "Prop Drilling: Masalah yang Sebenarnya",
           "explanation": "Prop Drilling adalah kendala di mana data harus dioper melewati belasan komponen perantara yang sebenarnya tidak membutuhkan data tersebut, hanya demi menyampaikan data ke komponen anak di tingkat terdalam. Kendala ini membuat kode komponen perantara menjadi kotor, sulit di-refactor, dan rentan patah saat struktur komponen diubah. React Context hadir untuk mengatasi masalah ini dengan menyediakan saluran distribusi data langsung dari komponen induk teratas ke komponen anak manapun yang membutuhkan. Jebakan pemula adalah langsung menggunakan Context untuk semua data padahal komponennnya hanya berjarak 1-2 level.",
           "example": {
-            "code": "// App -> Layout -> Sidebar -> UserProfile (Prop Drilling 4 level)",
-            "output": "Komposisi komponen menjadi tidak fleksibel dan rawan bug.",
-            "note": "React Context atau State Management hadir untuk memecahkan masalah ini."
+            "code": "// user hanya dipakai di UserProfile, tapi harus lewat dua perantara\nfunction App() {\n  const user = { name: \"Bimo\" };\n  return <Layout user={user} />;\n}\n\nfunction Layout({ user }) {      // tidak memakai user\n  return <Sidebar user={user} />;\n}\n\nfunction Sidebar({ user }) {     // juga tidak memakai user\n  return <UserProfile user={user} />;\n}\n\nfunction UserProfile({ user }) {\n  return <div>{user.name}</div>;  // yang benar-benar butuh\n}",
+            "output": "Yang tampil di layar:\n<div>Bimo</div>\n\nBiaya yang tidak terlihat: menambah satu data baru (misal `theme`) berarti menyunting 4 berkas, dan menghapus props di satu perantara membuat `user` menjadi undefined di ujung rantai.",
+            "note": "Perhatikan `Layout` dan `Sidebar`: keduanya menerima dan meneruskan `user` tanpa pernah memakainya. Itulah prop drilling — dan itu juga sebabnya jarak 1–2 level BUKAN masalah: yang bikin sakit adalah perantara yang tidak berkepentingan."
           },
           "instruction": "Buatlah sebuah komponen kosong bernama `UserProfile` yang mendestrukturisasi properti `user` dari objek props yang diterimanya.",
           "starterCode": "// Tulis komponen UserProfile di sini\n",
@@ -1750,7 +1808,7 @@ export const reactTrack: Track = {
           "tests": [
             {
               "pattern": "function\\s+UserProfile\\s*\\(\\s*\\{\\s*user\\s*\\}\\s*\\)\\s*\\{",
-              "message": "Definisikan komponen UserProfile yang menerima prop 'user'"
+              "message": "Buat komponen `UserProfile` yang membongkar props `user` di parameternya (`{ user }`). Komponen inilah ujung rantai yang benar-benar memakai datanya — sisanya cuma jalur lewat."
             }
           ],
           "solution": "function UserProfile({ user }) {\n  return <div>{user.name}</div>;\n}"
@@ -1763,9 +1821,9 @@ export const reactTrack: Track = {
           "example": {
             "code": "const ThemeContext = createContext(\"light\");\nfunction App() {\n  return <ThemeContext.Provider value=\"dark\"><Card /></ThemeContext.Provider>;\n}",
             "output": "Card dan seluruh keturunannya bisa mengakses nilai 'dark'.",
-            "note": "Provider menentukan nilai data global yang tersedia di cabang komponen tersebut."
+            "note": "Provider menentukan nilai data global yang tersedia di cabang komponen tersebut. Catatan jujur: potongan sebaris seperti ini bukan komponen utuh, jadi panel preview tidak menampilkan hasil visual — yang diperiksa kodenya, dan tesnya tetap bisa lulus."
           },
-          "instruction": "Bungkus komponen `<Card />` dengan menggunakan `ThemeContext.Provider`. Berikan nilai properti `value` dengan string 'dark'.",
+          "instruction": "Objek `ThemeContext` sudah dibuat dengan `createContext`. Sekarang bagikan nilai `dark` ke seluruh cabang di bawahnya: bungkus `<Card />` dengan komponen pembagi nilai milik context itu, dan isi nilainya lewat props yang namanya sudah ditentukan React.",
           "starterCode": "// Tulis Provider di bawah ini\n",
           "language": "jsx",
           "tests": [
@@ -1792,7 +1850,7 @@ export const reactTrack: Track = {
           "example": {
             "code": "const [state, dispatch] = useReducer(todoReducer, []);",
             "output": "dispatch({ type: 'ADD_TODO', payload: 'Belajar' }) memperbarui state global secara terprediksi.",
-            "note": "Pola ini menyerupai cara kerja Redux tanpa perlu memasang library luar."
+            "note": "Pola ini menyerupai cara kerja Redux tanpa perlu memasang library luar. Catatan jujur: potongan sebaris seperti ini bukan komponen utuh, jadi panel preview tidak menampilkan hasil visual — yang diperiksa kodenya, dan tesnya tetap bisa lulus."
           },
           "instruction": "Panggil hook `useReducer` dengan memberikan argumen `reducer` dan status awal `initial`. Lakukan destructuring untuk mengambil `state` dan fungsi `dispatch`.",
           "starterCode": "// Tulis useReducer di sini\n",
@@ -1820,8 +1878,8 @@ export const reactTrack: Track = {
           "explanation": "Penggunaan Context yang paling umum di dunia kerja adalah untuk mengelola state tema aplikasi (Light/Dark Mode) dan state autentikasi pengguna (status login, data profil, token JWT). Dengan menyembunyikan logika penyimpanan token dan pengubahan tema di dalam Provider khusus, komponen UI seperti Navbar atau Avatar dapat membaca status login secara instan di mana saja. Pola ini menjaga agar logika autentikasi terisolasi dengan rapi. Jebakan umum adalah menyatukan Context Theme dan Context Auth ke dalam satu Provider tunggal yang menyebabkan re-render yang tidak perlu.",
           "example": {
             "code": "const { theme, toggleTheme } = useTheme();",
-            "output": "Akses dan manipulasi mode tema UI dari mana saja.",
-            "note": "Buat custom hook seperti useTheme() untuk mempermudah konsumsi ThemeContext."
+            "output": "Di dalam Navbar:\ntheme = \"gelap\"\n→ <nav class=\"gelap\">\n\nSetelah toggleTheme() dipanggil:\ntheme = \"terang\"\n→ <nav class=\"terang\">   (seluruh komponen pembaca context ikut berubah)",
+            "note": "`useTheme()` adalah custom hook satu baris yang isinya `useContext(ThemeContext)`. Gunanya bukan menghemat huruf: kalau nanti sumber tema berpindah ke Zustand, yang diubah hanya isi hook itu — komponen pemakainya tidak perlu disentuh sama sekali. Catatan jujur: potongan sebaris seperti ini bukan komponen utuh, jadi panel preview tidak menampilkan hasil visual — yang diperiksa kodenya, dan tesnya tetap bisa lulus."
           },
           "instruction": "Panggil custom hook `useAuth()` dan lakukan destructuring pada hasil objeknya untuk mendapatkan properti `user` serta fungsi `logout`.",
           "starterCode": "// Tulis useAuth di sini\n",
@@ -1844,17 +1902,25 @@ export const reactTrack: Track = {
           "title": "Perangkap Performa Context",
           "explanation": "Salah satu perangkap utama React Context adalah bahwa semua komponen yang memanggil `useContext(MyContext)` akan selalu di-re-render setiap kali nilai di atribut `value` Provider berubah, sekecil apapun perubahannya. Untuk mengoptimalkannya, kita harus memisahkan Context menjadi beberapa Provider yang lebih spesifik (misalnya memisahkan `UserContext` dan `ThemeContext`) atau memisahkan state dan fungsi dispatch ke dalam Context terpisah. Pola ini mencegah terjadinya re-render massal yang dapat memperlambat aplikasi. Jebakan umum adalah membuat objek baru langsung di inline prop `value={{ user, setUser }}` tanpa di-memoize.",
           "example": {
-            "code": "// Pisahkan UserContext (jarang berubah) dan NotificationContext (sering berubah)",
-            "output": "Mencegah re-render yang tidak perlu pada seluruh pohon komponen.",
-            "note": "Memisah Provider adalah teknik optimasi utama pada React Context."
+            "code": "// ❌ satu context untuk segalanya — objek value BARU di setiap render\n<AppContext.Provider value={{ user, theme, notif }}>\n\n// ✅ dipisah per kecepatan perubahan, dan nilainya dimemoize\nconst nilaiUser = useMemo(() => ({ user, setUser }), [user]);\n<UserContext.Provider value={nilaiUser}>\n  <NotifContext.Provider value={notif}>",
+            "output": "Versi ❌ — satu notifikasi masuk:\nrender: Navbar, Sidebar, TabelProduk, Footer   (semuanya, padahal cuma notif berubah)\n\nVersi ✅ — satu notifikasi masuk:\nrender: BelNotifikasi",
+            "note": "Dua sebab re-render massal yang berbeda: (1) satu context menampung data yang kecepatan perubahannya beda-beda, dan (2) `value={{ ... }}` membuat OBJEK BARU setiap render, sehingga pembacanya dianggap perlu render ulang meski isinya sama. Keduanya harus diperbaiki, bukan salah satu. Catatan jujur: potongan sebaris seperti ini bukan komponen utuh, jadi panel preview tidak menampilkan hasil visual — yang diperiksa kodenya, dan tesnya tetap bisa lulus."
           },
           "instruction": "Buat sebuah struktur JSX di mana `AuthProvider` membungkus `ThemeProvider` untuk memisahkan konteks state (auth state dan theme state) agar pembaruan bisa dikelola secara terpisah.",
           "starterCode": "// Tulis Provider di bawah ini\n",
           "language": "jsx",
           "tests": [
             {
-              "pattern": "<AuthProvider>\\s*<ThemeProvider>",
-              "message": "Bungkus <ThemeProvider> di dalam <AuthProvider>"
+              "pattern": "<AuthProvider>[\\s\\S]*<ThemeProvider>",
+              "message": "Susun dua Provider terpisah, bukan satu Provider berisi semua data: `AuthProvider` di luar, `ThemeProvider` di dalamnya. Urutannya penting kalau yang di dalam membaca nilai dari yang di luar."
+            },
+            {
+              "pattern": "</ThemeProvider>[\\s\\S]*</AuthProvider>",
+              "message": "Tutup keduanya dengan urutan terbalik dari pembukanya — yang di dalam ditutup lebih dulu. Menyilangkan tag penutup membuat JSX menolak kodenya dengan pesan tentang tag yang tidak cocok."
+            },
+            {
+              "pattern": "<App\\s*/>",
+              "message": "Letakkan `<App />` di bagian paling dalam, supaya seluruh aplikasi bisa membaca kedua context itu. Komponen di LUAR Provider tidak akan melihat nilainya — penyebab `undefined` yang paling sering saat memakai context."
             }
           ],
           "solution": "<AuthProvider>\n  <ThemeProvider>\n    <App />\n  </ThemeProvider>\n</AuthProvider>"
@@ -1866,8 +1932,8 @@ export const reactTrack: Track = {
           "explanation": "Zustand adalah pustaka manajemen state global modern yang sangat populer di ekosistem React sebagai alternatif dari Context dan Redux. Zustand tidak membutuhkan bungkus `<Provider>` di sekitar pohon komponen dan memiliki performa yang sangat tinggi karena menggunakan selektor presisi untuk membaca state (`useStore(state => state.bears)`). Memahami kapan menggunakan Context dan kapan beralih ke Zustand merupakan keputusan arsitektur penting dalam proyek React industri. Jebakan pemula adalah memicu re-render berlebih di Zustand karena membaca seluruh objek store tanpa fungsi selektor.",
           "example": {
             "code": "import { create } from \"zustand\";\nconst useStore = create((set) => ({\n  bears: 0,\n  increase: () => set((state) => ({ bears: state.bears + 1 })),\n}));",
-            "output": "Akses dan ubah state global langsung dari hook useStore().",
-            "note": "Zustand banyak menggantikan Redux pada aplikasi React modern."
+            "output": "Pemakaian di komponen:\nconst bears = useStore((s) => s.bears);   → 0\nklik tombol → increase()\nconst bears = useStore((s) => s.bears);   → 1\n\nKomponen yang hanya membaca s.honey: TIDAK ikut render.",
+            "note": "Perhatikan fungsi selektor `(s) => s.bears`: itulah alasan Zustand hemat render. Menulis `const state = useStore()` tanpa selektor membuat komponenmu render ulang setiap kali BAGIAN MANA PUN dari store berubah — kembali seperti context raksasa yang ingin dihindari. Catatan jujur: paket `zustand` tidak tersedia di panel preview, jadi potongan ini tidak dijalankan di sini."
           },
           "instruction": "Gunakan fungsi `create` dari library Zustand untuk membuat sebuah store bernama `useStore`. State awalnya berisi nilai `count` sebesar 0.",
           "starterCode": "// Tulis create Zustand di sini\n",
@@ -1992,11 +2058,11 @@ export const reactTrack: Track = {
           "explanation": "Dalam aplikasi web profesional, pengambilan data dari REST API atau GraphQL harus mengelola tiga keadaan (*states*) antarmuka secara eksplisit: indikator pemuatan (`isLoading`), data hasil yang berhasil diterima (`data`), dan penanganan kesalahan jaringan (`error`). Menangani ketiga kondisi ini menjamin aplikasi tidak mengalami kelesuan (*freeze*) dan pengguna selalu mendapatkan informasi yang jelas mengenai status jaringan. Jebakan umum pemula adalah menganggap pemanggilan API pasti selalu berhasil tanpa membuat tampilan untuk kondisi error.",
           "example": {
             "code": "if (isLoading) return <p>Memuat data...</p>;\nif (error) return <p>Gagal memuat!</p>;\nreturn <div>{data.name}</div>;",
-            "output": "User mendapat kepastian respon dalam situasi apa pun.",
-            "note": "Selalu sediakan Fallback UI untuk state loading dan error."
+            "output": "Tiga kemungkinan tampilan dari komponen yang sama:\n\nsedang memuat  → <p>Memuat data...</p>\ngagal jaringan → <p>Gagal memuat!</p>\nberhasil       → <div>Kopi Gayo</div>",
+            "note": "Urutannya tidak boleh ditukar: kalau baris `data.name` dijalankan sebelum pemeriksaan loading, `data` masih `null` dan komponenmu melempar \"Cannot read properties of null\". Keadaan keempat yang sering terlupa: berhasil tapi datanya KOSONG — daftar kosong perlu pesannya sendiri, bukan layar hampa."
           },
-          "instruction": "Terapkan early return untuk menangani status loading. Jika `isLoading` bernilai true, kembalikan elemen `<p>Loading...</p>`.",
-          "starterCode": "// Tulis if isLoading di bawah ini\n",
+          "instruction": "Komponen `Profil` di editor sudah menangani keadaan gagal dan berhasil, tapi pada render pertama `data` masih `null` sehingga barisnya melempar error. Tambahkan penanganan keadaan memuat di baris paling awal komponen: kalau `isLoading` masih true, hentikan render lebih awal dan tampilkan paragraf bertuliskan `Loading...`.",
+          "starterCode": "function Profil({ isLoading, error, data }) {\n  // tulis penanganan keadaan memuat di sini\n\n  if (error) return <p>Gagal memuat!</p>;\n  return <div>{data.name}</div>;\n}\n",
           "language": "jsx",
           "tests": [
             {
@@ -2004,11 +2070,11 @@ export const reactTrack: Track = {
               "message": "Tangani keadaan memuat dengan *early return* di awal komponen, sebelum kode yang memakai datanya. Melewati ini membuat komponen mencoba membaca data yang masih `undefined` — penyebab paling sering \"Cannot read properties of undefined\" pada halaman yang mengambil data."
             },
             {
-              "pattern": "return\\s*<p>\\s*Loading\\.\\.\\.\\s*</p>",
+              "pattern": "return\\s*\\(?\\s*<p>\\s*Loading\\.\\.\\.\\s*</p>",
               "message": "Kembalikan penanda sementara berupa elemen `<p>` bertuliskan teks yang diminta. Di produksi bagian ini biasanya diganti skeleton, tapi polanya sama."
             }
           ],
-          "solution": "if (isLoading) return <p>Loading...</p>;"
+          "solution": "function Profil({ isLoading, error, data }) {\n  if (isLoading) return <p>Loading...</p>;\n\n  if (error) return <p>Gagal memuat!</p>;\n  return <div>{data.name}</div>;\n}"
         },
         {
           "kind": "step",
@@ -2016,11 +2082,11 @@ export const reactTrack: Track = {
           "title": "Pola Fetch-on-Render & Masalahnya",
           "explanation": "Pola Fetch-on-Render terjadi ketika komponen anak baru memicu panggilan API setelah komponen induknya selesai merender data, menciptakan efek pengunduhan berantai (*waterfall network request*). Efek rantai ini membuat waktu muat aplikasi menjadi sangat lambat karena permintaan jaringan harus mengantri satu per satu. Untuk mengatasinya, data fetching sebaiknya dilakukan secara paralel di tingkat teratas atau menggunakan teknik prefetching data. Jebakan umum adalah menempatkan panggilan API terpisah di dalam 5 komponen berjenjang yang saling membungkus.",
           "example": {
-            "code": "// Parent fetch -> render -> Child fetch -> render (Waterfall Delay)",
-            "output": "Aplikasi terasa lambat karena komponen menunggu urutan request.",
-            "note": "Solusinya adalah mengunduh data secara paralel atau memanfaatkan Server Components."
+            "code": "// ❌ berurutan: yang kedua baru mulai setelah yang pertama selesai\nconst user = await fetch(\"/api/user\").then((r) => r.json());\nconst pesan = await fetch(\"/api/pesan\").then((r) => r.json());\n\n// ✅ bersamaan: keduanya berangkat lalu ditunggu sekali\nconst [user2, pesan2] = await Promise.all([\n  fetch(\"/api/user\").then((r) => r.json()),\n  fetch(\"/api/pesan\").then((r) => r.json()),\n]);",
+            "output": "Masing-masing request butuh 400 ms:\n\nversi berurutan : total 800 ms\nversi Promise.all: total 410 ms\n\nDi waterfall komponen (induk fetch → anak fetch), penundaan ini berlipat sebanyak tingkat komponennya.",
+            "note": "Promise.all hanya mempercepat request yang TIDAK saling bergantung. Kalau alamat request kedua berasal dari hasil pertama, urutannya memang tidak bisa dihindari — yang bisa diperbaiki adalah membuat backend mengembalikan keduanya sekaligus. Catatan jujur: potongan sebaris seperti ini bukan komponen utuh, jadi panel preview tidak menampilkan hasil visual — yang diperiksa kodenya, dan tesnya tetap bisa lulus."
           },
-          "instruction": "Tuliskan sebuah array literal `[usersPromise, postsPromise]` lalu bungkus ke dalam pemanggilan `Promise.all()` agar kedua permintaan tersebut bisa berjalan secara paralel tanpa waterfall.",
+          "instruction": "Dua permintaan yang tidak saling bergantung, `usersPromise` dan `postsPromise`, sekarang ditunggu satu per satu sehingga halaman lambat tampil. Tulis satu pemanggilan yang menjalankan keduanya bersamaan dan menunggu keduanya selesai sekali — masukkan kedua promise itu sebagai satu daftar argumennya (urutan: users lebih dulu).",
           "starterCode": "// Tulis Promise.all di bawah ini\n",
           "language": "jsx",
           "tests": [
@@ -2042,16 +2108,24 @@ export const reactTrack: Track = {
           "explanation": "TanStack Query (React Query) adalah pustaka data fetching dan manajemen server-state terkemuka yang menangani pengunduhan, penyimpan memori sementara (*caching*), dan pembaruan data secara otomatis. Dengan Hook `useQuery`, kamu tidak perlu lagi mengelola state loading, error, dan data secara manual menggunakan `useEffect`. TanStack Query juga otomatis menyegarkan data (*refetch*) saat jendela browser kembali difokuskan oleh pengguna. Jebakan pemula adalah mencoba menyimpan data hasil `useQuery` ke dalam `useState` lokal yang redundan.",
           "example": {
             "code": "const { data, isLoading } = useQuery({\n  queryKey: ['todos'],\n  queryFn: fetchTodos,\n});",
-            "output": "Data di-cache dan otomatis di-refetch di background saat tab browser aktif.",
-            "note": "Standard industri data fetching di aplikasi React modern."
+            "output": "Kunjungan pertama ke halaman:\nisLoading = true  → <p>Memuat...</p>\nisLoading = false → daftar todo tampil   (request ke server: 1)\n\nPindah halaman lalu kembali:\ndaftar langsung tampil dari cache (isLoading = false)\nlalu data disegarkan di belakang layar   (request ke server: 2)",
+            "note": "Standard industri data fetching di aplikasi React modern. Catatan jujur soal panel preview: paket `@tanstack/react-query` tidak terpasang di sana, jadi potongan ini tidak dijalankan — yang diperiksa kodenya, dan tesnya tetap bisa lulus."
           },
           "instruction": "Panggil hook `useQuery` dengan melewatkan sebuah objek argumen. Objek tersebut harus memiliki properti `queryKey` bernilai `['users']` dan properti `queryFn` bernilai fungsi `fetchUsers`.",
           "starterCode": "// Tulis useQuery di sini\n",
           "language": "jsx",
           "tests": [
             {
-              "pattern": "useQuery\\(\\s*\\{\\s*queryKey\\s*:\\s*\\[\\s*['\"]users['\"]\\s*\\]\\s*,\\s*queryFn\\s*:\\s*fetchUsers\\s*\\}\\s*\\)",
-              "message": "Gunakan: useQuery({ queryKey: ['users'], queryFn: fetchUsers })"
+              "pattern": "useQuery\\s*\\(\\s*\\{",
+              "message": "Sejak TanStack Query v5, `useQuery` menerima SATU objek opsi. Bentuk lama `useQuery(['users'], fetchUsers)` yang banyak beredar di tutorial sudah dihapus dan akan melempar error."
+            },
+            {
+              "pattern": "queryKey\\s*:\\s*\\[\\s*['\"]users['\"]\\s*\\]",
+              "message": "`queryKey` adalah identitas cache-nya dan bentuknya ARRAY, bukan string. Menulis `queryKey: \"users\"` ditolak TypeScript, dan array inilah yang nanti kamu tambahi parameter (`[\"users\", page]`) supaya tiap halaman punya cache sendiri."
+            },
+            {
+              "pattern": "queryFn\\s*:\\s*fetchUsers\\b",
+              "message": "`queryFn` diisi FUNGSI pengambil datanya — sebut namanya tanpa tanda kurung. Menulis `queryFn: fetchUsers()` menjalankan fungsinya sekarang lalu menyerahkan hasilnya, sehingga TanStack tidak bisa mengulang permintaan saat perlu."
             }
           ],
           "solution": "useQuery({ queryKey: ['users'], queryFn: fetchUsers });"
@@ -2062,9 +2136,9 @@ export const reactTrack: Track = {
           "title": "Mutasi Data & Optimistic Update",
           "explanation": "Mutasi data (operasi POST, PUT, DELETE ke server API) dikelola dengan sangat mudah menggunakan Hook `useMutation` dari TanStack Query. Setelah proses mutasi data berhasil di backend server, kita memanggil `queryClient.invalidateQueries({ queryKey: ['todos'] })` untuk memberi tahu TanStack Query agar otomatis mengunduh ulang data terbaru. Pola ini memastikan data yang ada di layar selalu sinkron dengan server backend tanpa perlu memuat ulang seluruh halaman. Jebakan umum adalah lupa meng-invalidasi cache setelah melakukan mutasi.",
           "example": {
-            "code": "// Langsung centang todo di UI ➔ Kirim request POST ke server ➔ Rollback jika error",
-            "output": "UI terasa sangat responsif dan tidak ada jeda tunggu bagi user.",
-            "note": "Memberikan User Experience (UX) kelas atas."
+            "code": "async function tambah(baru) {\n  const sebelumnya = todos;              // simpan untuk rollback\n  setTodos([...todos, baru]);            // 1. tampilkan lebih dulu\n  try {\n    await fetch(\"/api/todos\", { method: \"POST\", body: JSON.stringify(baru) });\n  } catch {\n    setTodos(sebelumnya);                 // 2. gagal → kembalikan\n    alert(\"Gagal menyimpan, dibatalkan.\");\n  }\n}",
+            "output": "Server normal:\n0 ms  : item muncul di daftar\n250 ms: server mengonfirmasi — tidak ada perubahan tampilan\n\nServer menolak:\n0 ms  : item muncul di daftar\n250 ms: item HILANG lagi + pesan \"Gagal menyimpan, dibatalkan.\"",
+            "note": "Bagian yang paling sering dilupakan bukan bagian optimisnya, tapi rollback-nya. Tanpa menyimpan `sebelumnya`, item yang gagal disimpan tetap terlihat ada sampai halaman dimuat ulang — pengguna mengira datanya tersimpan padahal tidak. Catatan jujur soal panel preview: paket `@tanstack/react-query` tidak terpasang di sana, jadi potongan ini tidak dijalankan — yang diperiksa kodenya, dan tesnya tetap bisa lulus."
           },
           "instruction": "Lakukan perbaruan state `todos` secara optimis dengan memasukkan item baru `newTodo` ke dalam salinan array `todos` yang ada.",
           "starterCode": "// Tulis optimisitik update di bawah ini\n",
@@ -2087,9 +2161,9 @@ export const reactTrack: Track = {
           "title": "Pagination & Infinite Scroll",
           "explanation": "Pola navigasi halaman (*pagination*) dan daftar gulir tanpa batas (*infinite scroll*) adalah fitur standar dalam menampilkan ribuan data pada aplikasi modern. TanStack Query menyediakan fitur bawaan `placeholderData: keepPreviousData` agar tampilan halaman sebelumnya tidak hilang atau berkedip saat data halaman baru sedang diunduh di belakang layar. Fitur ini memberikan pengalaman pengguna yang sangat halus dan responsif. Jebakan umum adalah menghapus data lama seketika sebelum data halaman berikutnya selesai diunduh.",
           "example": {
-            "code": "const { data } = useQuery([\"users\", page], () => fetchUsers(page));",
-            "output": "Data di-fetch sesuai halaman aktif tanpa memuat data ribuan sekaligus.",
-            "note": "Menjaga memori browser tetap ringan."
+            "code": "// bentuk v5: satu objek opsi\nconst { data, isPlaceholderData } = useQuery({\n  queryKey: [\"users\", page],                 // page ikut jadi bagian kunci\n  queryFn: () => fetchUsers(page),\n  placeholderData: keepPreviousData,         // tahan data halaman lama\n});",
+            "output": "page = 1 → 20 nama tampil\nklik \"berikutnya\" (page = 2):\n  tanpa placeholderData → daftar KOSONG sekejap, tinggi halaman melompat\n  dengan placeholderData → daftar halaman 1 tetap terlihat sampai data 2 tiba",
+            "note": "Bentuk lama `useQuery([\"users\", page], fn)` yang masih banyak di tutorial adalah API v3/v4 dan sudah dihapus di v5 — kalau kamu menyalinnya, yang muncul error tentang argumen yang tidak dikenali. Selalu cocokkan contoh dengan versi di `package.json`. Catatan jujur soal panel preview: paket `@tanstack/react-query` tidak terpasang di sana, jadi potongan ini tidak dijalankan — yang diperiksa kodenya, dan tesnya tetap bisa lulus."
           },
           "instruction": "Tentukan properti `queryKey` di dalam objek argumen berupa array yang berisi string 'items' diikuti dengan variabel `page` agar cache data terpisah untuk setiap halaman.",
           "starterCode": "// Tulis queryKey di bawah ini\n",
@@ -2113,8 +2187,8 @@ export const reactTrack: Track = {
           "explanation": "Mengirimkan token autentikasi (seperti Bearer JWT Token) di dalam header HTTP `Authorization` adalah standar keamanan utama saat berkomunikasi dengan API backend terlindungi. Panggilan API yang menggunakan `fetch` atau library `axios` mengonfigurasi header ini agar server dapat memverifikasi identitas pengguna sebelum memberikan akses data. Memahami pengelolaan token header ini penting agar kamu dapat membuat fitur aplikasi yang aman. Jebakan umum adalah menyimpan token akses rahasia secara tidak aman di variabel global yang rentan dibaca script berbahaya.",
           "example": {
             "code": "fetch('/api/user', {\n  headers: { Authorization: `Bearer ${token}` }\n});",
-            "output": "Server mengenali identitas pengguna yang sah.",
-            "note": "Simpan token di Memory/HttpOnly Cookie demi keamanan."
+            "output": "Dengan header Authorization:\nHTTP 200\n{ \"id\": 7, \"name\": \"Bimo\" }\n\nTanpa header itu (atau spasi setelah \"Bearer\" hilang):\nHTTP 401\n{ \"message\": \"Unauthenticated.\" }",
+            "note": "401 berarti server tidak mengenali kamu; 403 berarti dikenali tapi tidak berhak. Membedakan keduanya menghemat waktu debugging. Soal penyimpanan: token di `localStorage` bisa dibaca skrip pihak ketiga mana pun yang masuk ke halamanmu — cookie HttpOnly tidak. Catatan jujur: potongan sebaris seperti ini bukan komponen utuh, jadi panel preview tidak menampilkan hasil visual — yang diperiksa kodenya, dan tesnya tetap bisa lulus."
           },
           "instruction": "Definisikan objek `headers` yang mendefinisikan kunci `Authorization`. Isinya adalah sebuah template literal (menggunakan backtick) yang menggabungkan kata 'Bearer ' dengan variabel `${token}`.",
           "starterCode": "// Tulis objek headers di sini\n",
@@ -2182,28 +2256,28 @@ export const reactTrack: Track = {
             {
               "id": "q4",
               "type": "pilihan-ganda",
-              "question": "Bolehkah kita membuat Custom Hook (contoh: useFetch) yang di dalamnya tidak memanggil hook React bawaan sama sekali?",
+              "question": "Halaman daftar produk memakai `queryKey: ['produk']` saja, padahal datanya diambil per halaman (`fetchProduk(page)`). Apa gejala yang muncul saat pengguna menekan \"halaman berikutnya\"?",
               "choices": [
-                "Boleh, namun secara fungsional ia sama saja dengan fungsi JS biasa (utility) dan konvensi kata 'use' menjadi tidak bermakna di React",
-                "Tidak, React akan memblokirnya di console",
-                "Boleh dan sangat dianjurkan untuk perhitungan matematis biasa",
-                "Tidak boleh, nama use wajib diikuti hook lain"
+                "Aplikasi melempar error karena queryKey tidak boleh berupa array satu elemen",
+                "Halaman 2 menampilkan data halaman 1 dari cache, dan kadang tidak pernah diperbarui",
+                "Semua halaman diunduh sekaligus sehingga browser kehabisan memori",
+                "TanStack Query otomatis menambahkan nomor halaman ke queryKey"
               ],
-              "answerIndex": 0,
-              "explanation": "Tujuan custom hook adalah membagikan logika stateful (logika yang memakai hook lain). Jika murni fungsi stateless tanpa hooks, sebaiknya buat fungsi helper biasa."
+              "answerIndex": 1,
+              "explanation": "`queryKey` adalah identitas cache. Kalau nomor halaman tidak ikut di dalamnya, TanStack menganggap semua halaman adalah data yang sama, jadi ia menyajikan isi cache halaman 1 untuk halaman 2. Pilihan ketiga menggoda karena terdengar seperti masalah performa yang wajar, tapi justru kebalikannya yang terjadi: request-nya malah tidak dilakukan. Aturannya sederhana — semua nilai yang mempengaruhi hasil request harus masuk ke queryKey, mirip dependency array pada useEffect."
             },
             {
               "id": "q5",
               "type": "pilihan-ganda",
-              "question": "Apa syarat utama penamaan sebuah Custom Hook di React yang akan dicek otomatis oleh ESLint plugin-react-hooks?",
+              "question": "Optimistic update sudah diterapkan: item langsung tampil sebelum server menjawab. Bagian apa yang paling sering dilupakan, dan apa akibatnya bagi pengguna?",
               "choices": [
-                "Namanya harus mengandung kata 'Hook'",
-                "Namanya harus berakhiran 'Component'",
-                "Namanya harus dimulai dengan awalan 'use' dan huruf kapital, contohnya 'useWindowSize'",
-                "Tidak ada aturan penamaan"
+                "Menampilkan spinner — tanpa itu pengguna tidak tahu ada proses berjalan",
+                "Menyimpan state sebelumnya untuk dikembalikan saat request gagal — tanpa itu pengguna mengira datanya tersimpan padahal tidak",
+                "Memanggil invalidateQueries dua kali — tanpa itu cache tidak pernah tersegarkan",
+                "Menambahkan await pada setState — tanpa itu UI tidak terbarui"
               ],
-              "answerIndex": 2,
-              "explanation": "Awalan 'use' (contoh: useFetchData) memberi tahu React dan linter bahwa fungsi ini adalah hook dan harus mematuhi Aturan Hooks."
+              "answerIndex": 1,
+              "explanation": "Inti optimistic update ada dua bagian: menampilkan hasil lebih dulu, DAN mengembalikannya kalau server menolak (rollback). Bagian kedua yang biasanya hilang, dan akibatnya paling buruk: item tetap terlihat ada di layar sampai halaman dimuat ulang, sehingga pengguna yakin datanya sudah tersimpan. Pilihan pertama menggoda tapi bertentangan dengan tujuannya — optimistic update justru dipakai supaya tidak ada spinner. Pilihan terakhir keliru secara teknis: `setState` bukan fungsi async dan tidak bisa di-`await`."
             }
           ]
         }
@@ -2235,10 +2309,10 @@ export const reactTrack: Track = {
           "explanation": "React Router mengelola navigasi client-side (SPA) dengan menggunakan komponen utama `<BrowserRouter>`, `<Routes>`, `<Route>`, dan `<Link>`. Komponen `<Route path='/about' element={<About />} />` memetakan jalur URL di address bar browser dengan komponen tampilan yang sesuai. Untuk berpindah halaman tanpa memicu proses reload browser, kita wajib menggunakan `<Link to='/about'>` alih-alih tag `<a>` biasa. Jebakan paling sering terjadi adalah lupa membungkus seluruh aplikasi di dalam `<BrowserRouter>` yang mengakibatkan error komponen router.",
           "example": {
             "code": "<NavLink to=\"/about\" className={({ isActive }) => isActive ? \"active\" : \"\"}>About</NavLink>",
-            "output": "Menu About otomatis bercahaya/aktif saat URL berada di /about.",
-            "note": "Gunakan NavLink untuk pembuatan komponen Navbar utama."
+            "output": "URL /about:\n<a href=\"/about\" class=\"active\">About</a>\n\nURL /kontak:\n<a href=\"/about\" class=\"\">About</a>",
+            "note": "Gunakan NavLink untuk pembuatan komponen Navbar utama. Catatan jujur soal panel preview: `react-router-dom` tidak terpasang di sana dan tidak ada URL yang bisa diubah, jadi potongan ini tidak dijalankan — tesnya tetap bisa lulus."
           },
-          "instruction": "Gunakan komponen `<Link>` dari React Router untuk membuat tautan ke rute `/profil` dengan teks tampilan 'Profil'.",
+          "instruction": "Navbar butuh tautan menuju halaman profil di `/profil`, dan halaman TIDAK boleh dimuat ulang saat diklik. Tulis satu elemen tautan versi React Router dengan tulisan `Profil` yang bisa diklik pengguna — perhatikan bahwa nama props tujuannya bukan `href`.",
           "starterCode": "// Tulis elemen Link di sini\n",
           "language": "jsx",
           "tests": [
@@ -2265,7 +2339,7 @@ export const reactTrack: Track = {
           "example": {
             "code": "import { useParams } from \"react-router-dom\";\nfunction UserDetail() {\n  const { id } = useParams();\n  return <h2>User ID: {id}</h2>;\n}",
             "output": "<h2>User ID: 42</h2> saat mengakses /user/42.",
-            "note": "String key pada useParams() harus cocok dengan nama variabel di deklarasi Route."
+            "note": "String key pada useParams() harus cocok dengan nama variabel di deklarasi Route. Catatan jujur soal panel preview: `react-router-dom` tidak terpasang di sana dan tidak ada URL yang bisa diubah, jadi potongan ini tidak dijalankan — tesnya tetap bisa lulus."
           },
           "instruction": "Panggil hook `useParams` dan lakukan destructuring pada objek yang dikembalikan untuk mengekstrak nilai parameter `id`.",
           "starterCode": "// Tulis useParams di sini\n",
@@ -2290,7 +2364,7 @@ export const reactTrack: Track = {
           "example": {
             "code": "function DashboardLayout() {\n  return (\n    <div>\n      <Sidebar />\n      <Outlet /> {/* Isi Halaman Anak */}\n    </div>\n  );\n}",
             "output": "Sidebar tidak di-render ulang saat berpindah antar tab dashboard.",
-            "note": "Outlet adalah tempat komponen anak dirender di dalam layout parent."
+            "note": "Outlet adalah tempat komponen anak dirender di dalam layout parent. Catatan jujur soal panel preview: `react-router-dom` tidak terpasang di sana dan tidak ada URL yang bisa diubah, jadi potongan ini tidak dijalankan — tesnya tetap bisa lulus."
           },
           "instruction": "Render elemen placeholder khusus dari React Router DOM di dalam komponen layout agar konten rute anak (child route) dapat ditampilkan.",
           "starterCode": "// Tulis elemen Outlet di sini\n",
@@ -2310,8 +2384,8 @@ export const reactTrack: Track = {
           "explanation": "Programmatic Navigation adalah teknik memicu perpindahan halaman rute melalui kode logika JavaScript (bukan karena klik tombol link oleh pengguna) dengan menggunakan Hook `useNavigate()`. Fitur ini sangat krusial digunakan untuk mengalihkan (*redirect*) pengguna secara otomatis ke halaman dashboard setelah sukses melakukan login, atau mengembalikan pengguna ke halaman sebelumnya setelah membatalkan formulir. Jebakan pemula adalah memanggil `navigate()` langsung di dalam body fungsi komponen tanpa dikontrol oleh handler event atau effect.",
           "example": {
             "code": "const navigate = useNavigate();\nconst handleLogin = () => {\n  navigate(\"/dashboard\");\n};",
-            "output": "Browser otomatis berpindah ke /dashboard saat login berhasil.",
-            "note": "Gunakan navigate(-1) untuk membuat tombol 'Kembali'."
+            "output": "Address bar sebelum: /login\nhandleLogin() dijalankan\nAddress bar sesudah: /dashboard\n\nHalaman TIDAK dimuat ulang — state React lain tetap utuh (bandingkan dengan window.location.href yang memuat ulang semuanya).",
+            "note": "Gunakan navigate(-1) untuk membuat tombol 'Kembali'. Catatan jujur soal panel preview: `react-router-dom` tidak terpasang di sana dan tidak ada URL yang bisa diubah, jadi potongan ini tidak dijalankan — tesnya tetap bisa lulus."
           },
           "instruction": "Panggil fungsi `navigate` (yang sebelumnya sudah diinisiasi dari `useNavigate()`) dengan argumen string `'/login'` untuk melakukan navigasi ke halaman login.",
           "starterCode": "// Tulis navigate di sini\n",
@@ -2336,7 +2410,7 @@ export const reactTrack: Track = {
           "example": {
             "code": "<Route path=\"/login\" element={<Login />} />",
             "output": "Route standar yang memetakan path /login ke komponen Login.",
-            "note": "Selalu tempatkan path='*' di bagian paling akhir daftar Route."
+            "note": "Selalu tempatkan path='*' di bagian paling akhir daftar Route. Catatan jujur soal panel preview: `react-router-dom` tidak terpasang di sana dan tidak ada URL yang bisa diubah, jadi potongan ini tidak dijalankan — tesnya tetap bisa lulus."
           },
           "instruction": "Buat elemen `<Route>` penangkap (catch-all) dengan `path=\"*\"` yang akan menampilkan elemen `<NotFound />` jika tidak ada rute lain yang cocok.",
           "starterCode": "// Tulis Route 404 di sini\n",
@@ -2360,10 +2434,10 @@ export const reactTrack: Track = {
           "explanation": "Lazy Loading rute menggunakan `React.lazy()` dan komponen `<Suspense fallback={<Loading />}>` adalah teknik optimasi performa *code-splitting* untuk memecah ukuran bundel JavaScript utama aplikasi. Dengan lazy loading, browser hanya akan mengunduh berkas kode untuk halaman yang sedang dibuka oleh pengguna saja, bukan mengunduh seluruh halaman aplikasi di awal. Pola ini sangat ampuh mempercepat waktu muat awal (*initial load time*) aplikasi React skala besar. Jebakan umum adalah tidak membungkus komponen lazy dengan `<Suspense>` yang memicu error saat rute diakses.",
           "example": {
             "code": "const Dashboard = React.lazy(() => import('./Dashboard'));\n<Suspense fallback={<div>Loading...</div>}><Dashboard /></Suspense>",
-            "output": "Ukuran bundle awal aplikasi menjadi jauh lebih kecil.",
-            "note": "Sangat direkomendasikan untuk halaman admin yang ukurannya besar."
+            "output": "npm run build tanpa lazy:\ndist/assets/index.js   612 kB\n\nDengan lazy untuk Dashboard:\ndist/assets/index.js   240 kB\ndist/assets/Dashboard-9f1c.js  372 kB   ← baru diunduh saat /dashboard dibuka",
+            "note": "Nama berkas berakhiran hash seperti `Dashboard-9f1c.js` itulah bukti code-splitting berhasil; kamu bisa melihatnya di tab Network saat rutenya pertama kali dibuka. Catatan jujur: `Suspense` dan `import()` dinamis tidak tersedia di panel preview, jadi potongan ini tidak dijalankan di sini — tesnya tetap bisa lulus."
           },
-          "instruction": "Bungkus komponen `<Home />` menggunakan `<Suspense>`. Berikan elemen `<p>Memuat...</p>` pada properti `fallback` agar tampil selama Home masih diunduh.",
+          "instruction": "Komponen `Home` sekarang dimuat malas dengan `React.lazy`, sehingga berkasnya baru diunduh saat rutenya dibuka — dan React butuh sesuatu untuk ditampilkan selama unduhan itu. Bungkus `<Home />` dengan komponen batas penangguhan milik React, lalu isi props tampilan sementaranya dengan paragraf bertuliskan `Memuat...`.",
           "starterCode": "// Tulis Suspense di sini\n",
           "language": "jsx",
           "tests": [
@@ -2482,8 +2556,8 @@ export const reactTrack: Track = {
           "explanation": "Filosofi utama React Testing Library (RTL) adalah menguji komponen antarmuka berdasarkan bagaimana pengguna akhir berinteraksi dengannya, bukan berdasarkan detail implementasi teknis di dalam kode. RTL mendorong kita mencari elemen menggunakan nama role aksesibilitas (`screen.getByRole('button', { name: /kirim/i })`) atau teks label yang terlihat di layar. Pendekatan ini membuat tes otomatis kamu sangat tahan terhadap refactoring kode internal. Jebakan utama yang harus dihindari adalah mencari elemen berdasarkan nama class CSS atau id internal yang mudah berubah.",
           "example": {
             "code": "const button = screen.getByRole('button', { name: /kirim/i });",
-            "output": "Mancari tombol dengan label 'kirim' di screen.",
-            "note": "Memastikan komponen ramah aksesibilitas untuk screen reader."
+            "output": "Untuk markup <button>Kirim Pesan</button>:\nditemukan → <button>Kirim Pesan</button>\n\nUntuk markup <div onClick={...}>Kirim Pesan</div>:\nTestingLibraryElementError: Unable to find an accessible element with the role \"button\"",
+            "note": "Memastikan komponen ramah aksesibilitas untuk screen reader. Catatan jujur soal panel preview: Testing Library dan test runner-nya tidak ada di sana, jadi kode tes tidak dijalankan — yang diperiksa kodenya, dan tesnya tetap bisa lulus."
           },
           "instruction": "Tuliskan perintah RTL `screen` untuk mengambil elemen tombol di layar berdasarkan peran (role) aksesibilitasnya, lalu simpan di konstanta `btn`.",
           "starterCode": "// Tulis getByRole di bawah ini\n",
@@ -2511,8 +2585,8 @@ export const reactTrack: Track = {
           "explanation": "Fungsi `render()` dari RTL digunakan untuk merender komponen React ke dalam lingkungan DOM virtual untuk keperluan pengujian. Objek `screen` menyediakan berbagai metode pencarian elemen (seperti `getByText`, `findByRole`, `queryByTestId`), sedangkan pustaka `@testing-library/jest-dom` menyediakan fungsi penegasan (*matchers*) yang sangat deskriptif seperti `toBeInTheDocument()` atau `toBeDisabled()`. Menguasai kombinasi fungsi ini penting agar kamu dapat membuat assertion tes yang bersih. Jebakan umum adalah membedakan `getBy` (melempar error jika tak ada) dan `queryBy` (mengembalikan null).",
           "example": {
             "code": "render(<Header />);\nexpect(screen.getByText('Halo')).toBeInTheDocument();",
-            "output": "Test pas jika teks 'Halo' ada di dalam dokumen.",
-            "note": "screen.getByText mencari elemen berbasis konten teks."
+            "output": "$ npx vitest run\n\n ✓ Header.test.tsx (1 test) 24ms\n   ✓ menampilkan sapaan\n\nKalau teksnya tidak ada:\n × menampilkan sapaan\n   TestingLibraryElementError: Unable to find an element with the text: Halo",
+            "note": "screen.getByText mencari elemen berbasis konten teks. Catatan jujur soal panel preview: Testing Library dan test runner-nya tidak ada di sana, jadi kode tes tidak dijalankan — yang diperiksa kodenya, dan tesnya tetap bisa lulus."
           },
           "instruction": "Tuliskan pengujian ekspektasi Jest/Testing Library untuk memastikan variabel `element` benar-benar berada di dalam DOM virtual (`toBeInTheDocument`).",
           "starterCode": "// Tulis expect di sini\n",
@@ -2536,8 +2610,8 @@ export const reactTrack: Track = {
           "explanation": "Pustaka `@testing-library/user-event` adalah standar utama untuk mensimulasikan interaksi pengguna nyata secara asinkron di dalam kode tes, seperti mengetik karakter pada input (`userEvent.type`), menekan tombol klik (`userEvent.click`), atau memilih opsi dropdown. Berbeda dari `fireEvent` yang kaku, `userEvent` Mensimulasikan seluruh rangkaian event browser secara alami (termasuk event focus, hover, dan keydown). Jebakan paling sering adalah lupa menggunakan kata kunci `await` saat memanggil fungsi-fungsi `userEvent` yang bersifat asinkron.",
           "example": {
             "code": "const button = screen.getByRole('button');\nawait userEvent.click(button);",
-            "output": "Simulasi klik pengguna dijalankan secara async.",
-            "note": "userEvent lebih disukai daripada fireEvent karena lebih realistis."
+            "output": "Urutan event yang benar-benar dikirim userEvent.click:\npointerover → pointerdown → mousedown → focus → pointerup → mouseup → click\n\nfireEvent.click hanya mengirim: click",
+            "note": "userEvent lebih disukai daripada fireEvent karena lebih realistis. Catatan jujur soal panel preview: Testing Library dan test runner-nya tidak ada di sana, jadi kode tes tidak dijalankan — yang diperiksa kodenya, dan tesnya tetap bisa lulus."
           },
           "instruction": "Jalankan fungsi asinkron dari pustaka `userEvent` untuk memicu aksi klik pada variabel `button`.",
           "starterCode": "// Tulis userEvent.click di sini\n",
@@ -2561,8 +2635,8 @@ export const reactTrack: Track = {
           "explanation": "Menguji komponen formulir interaktif melibatkan simulasi lengkap dari pengisian data oleh pengguna hingga verifikasi keluaran pesan kesalahan di layar. Kita mensimulasikan pengetikan pada input yang salah, memicu klik tombol submit, lalu menegaskan bahwa elemen pesan error (`screen.getByText(/email tidak valid/i)`) benar-benar muncul di dokumen DOM. Pengujian ini memastikan alur kerja formulir bebas dari bug sebelum dirilis ke pengguna. Jebakan umum adalah tidak menunggu proses render kondisi error selesai sebelum membuat assertion.",
           "example": {
             "code": "await userEvent.type(screen.getByRole('textbox'), 'bimo@test.com');\nawait userEvent.click(screen.getByRole('button'));",
-            "output": "Form terisi dan disubmit pada test.",
-            "note": "Uji pesan error yang muncul saat input diisi secara salah."
+            "output": "Setelah kedua baris dijalankan:\ninput.value  = \"bimo@test.com\"\nonSubmit terpanggil: 1 kali\n\nKalau `await` dilupakan:\ninput.value  = \"\"\nassertion gagal padahal kodenya sudah benar",
+            "note": "Uji pesan error yang muncul saat input diisi secara salah. Catatan jujur soal panel preview: Testing Library dan test runner-nya tidak ada di sana, jadi kode tes tidak dijalankan — yang diperiksa kodenya, dan tesnya tetap bisa lulus."
           },
           "instruction": "Simulasikan pengguna mengetikkan teks `'Halo'` secara asinkron ke dalam elemen `input` menggunakan `userEvent.type`.",
           "starterCode": "// Tulis userEvent.type di bawah ini\n",
@@ -2589,20 +2663,28 @@ export const reactTrack: Track = {
           "title": "Mock Fetch / API di Test (MSW)",
           "explanation": "Saat menguji komponen yang melakukan panggilan REST API backend, kita tidak boleh melakukan panggilan jaringan sungguhan ke server produksi. Sebagai gantinya, kita menggunakan pustaka Mock Service Worker (MSW) untuk mencegat panggilan HTTP di tingkat jaringan dan mengembalikan data tiruan (*mock data*) yang konsisten. Teknik mocking ini membuat tes otomatis kamu berjalan super cepat, independen dari koneksi internet, dan terisolasi dari gangguan server backend. Jebakan pemula adalah mencoba melakukan fetch sungguhan saat running tes CI.",
           "example": {
-            "code": "function mockApiHandler(path, data) {\n  return { path: path, response: data };\n}\nconsole.log(mockApiHandler('/api/users', []));",
-            "output": "{ path: \"/api/users\", response: [] }",
-            "note": "Pengujian unit harus bisa berjalan tanpa koneksi internet."
+            "code": "import { http, HttpResponse } from \"msw\";\n\n// handler untuk kasus GAGAL — sama pentingnya dengan kasus berhasil\nexport const handlers = [\n  http.get(\"/api/profil\", () => {\n    return HttpResponse.json({ message: \"Server sibuk\" }, { status: 500 });\n  }),\n];",
+            "output": "Komponen yang diuji menerima:\nHTTP 500 { \"message\": \"Server sibuk\" }\n\nsehingga test bisa memastikan tampilan errornya muncul:\n✓ menampilkan pesan gagal saat server error",
+            "note": "Nilai terbesar MSW justru di sini: memaksa kondisi yang sulit direproduksi di server sungguhan (500, timeout, data kosong). Catatan jujur: paket `msw` tidak tersedia di panel preview, jadi potongan ini tidak dijalankan — tesnya tetap bisa lulus."
           },
-          "instruction": "Buat fungsi `mockApiHandler(path, data)` yang mengembalikan objek handler palsu `{ path: path, response: data }`.",
-          "starterCode": "// Tulis fungsi mockApiHandler di bawah ini\n",
+          "instruction": "Tulis satu handler MSW untuk permintaan GET ke `/api/users` yang membalas dengan JSON berisi array satu pengguna: `[{ id: 1, name: 'Bimo' }]`. Pakai `http` dan `HttpResponse` dari `msw` (anggap keduanya sudah diimpor).",
+          "starterCode": "// import { http, HttpResponse } from \"msw\";  ← anggap sudah ada\n\n// Tulis satu handler GET /api/users di bawah ini\n",
           "language": "jsx",
           "tests": [
             {
-              "pattern": "path\\s*:\\s*path\\s*,\\s*response\\s*:\\s*data|\\{\\s*path\\s*,\\s*response\\s*:\\s*data\\s*\\}",
-              "message": "Kembalikan objek: { path: path, response: data }"
+              "pattern": "http\\.get\\s*\\(\\s*['\"]/api/users['\"]",
+              "message": "Handler dibuat per metode HTTP: `http.get(\"<jalur>\", ...)`. Jalurnya harus cocok dengan yang benar-benar dipanggil komponen — kalau berbeda satu huruf, MSW membiarkan request lolos ke jaringan sungguhan dan test-mu jadi bergantung internet."
+            },
+            {
+              "pattern": "HttpResponse\\.json\\s*\\(",
+              "message": "Balasannya dibuat dengan `HttpResponse.json(...)`, yang sekaligus menyetel header `Content-Type`. Mengembalikan objek biasa tidak cukup: yang ditiru MSW adalah respons HTTP, bukan nilai kembalian fungsi."
+            },
+            {
+              "pattern": "id\\s*:\\s*1[\\s\\S]*name\\s*:\\s*['\"]Bimo['\"]",
+              "message": "Isi datanya berupa ARRAY berisi satu objek `{ id: 1, name: \"Bimo\" }` — bentuknya harus sama dengan yang dikirim API sungguhan, termasuk soal array atau bukan. Mock yang bentuknya beda dari kenyataan membuat test lulus sementara aplikasinya rusak."
             }
           ],
-          "solution": "function mockApiHandler(path, data) {\n  return { path: path, response: data };\n}"
+          "solution": "http.get('/api/users', () => {\n  return HttpResponse.json([{ id: 1, name: 'Bimo' }]);\n});"
         },
         {
           "kind": "step",
@@ -2612,7 +2694,7 @@ export const reactTrack: Track = {
           "example": {
             "code": "function shouldTestItem(type) {\n  return type === 'user_behavior' ? true : false;\n}\nconsole.log(shouldTestItem('user_behavior'));",
             "output": "true",
-            "note": "Fokus pada apa yang dilihat dan dirasakan oleh pengguna."
+            "note": "Fokus pada apa yang dilihat dan dirasakan oleh pengguna. Catatan jujur: potongan sebaris seperti ini bukan komponen utuh, jadi panel preview tidak menampilkan hasil visual — yang diperiksa kodenya, dan tesnya tetap bisa lulus."
           },
           "instruction": "Buat fungsi `shouldTestItem(targetType)` yang mengembalikan `true` jika `targetType === 'user_behavior'` dan `false` jika sebaliknya.",
           "starterCode": "// Tulis fungsi shouldTestItem di sini\n",
@@ -2620,7 +2702,7 @@ export const reactTrack: Track = {
           "tests": [
             {
               "pattern": "targetType\\s*===\\s*['\"]user_behavior['\"]",
-              "message": "Periksa: targetType === 'user_behavior'"
+              "message": "Bandingkan `targetType` dengan teks `'user_behavior'` memakai pembanding tiga karakter (`===`). Pemakaian `==` di sini bekerja untuk string, tapi kebiasaan memakai `===` mencegah perbandingan lintas tipe yang menipu (`0 == \"\"` bernilai true)."
             }
           ],
           "solution": "function shouldTestItem(targetType) {\n  return targetType === 'user_behavior';\n}"
@@ -2725,20 +2807,24 @@ export const reactTrack: Track = {
           "title": "Struktur Folder: Feature-based vs Type-based",
           "explanation": "Struktur folder berbasis fitur (*Feature-Based Architecture*) mengelompokkan kode berdasarkan domain fitur bisnis (seperti `features/auth`, `features/cart`, `features/checkout`) alih-alih mengelompokkan berdasarkan tipe berkas (`components`, `hooks`, `services`). Dalam arsitektur ini, seluruh komponen, custom hooks, tipe TypeScript, dan panggilan API yang berhubungan dengan fitur autentikasi disimpan di dalam satu folder fitur terisolasi. Arsitektur ini sangat terukur untuk aplikasi skala besar dengan puluhan pengembang. Jebakan pemula adalah mencampur 100 komponen fitur berbeda ke dalam folder `src/components/` utama.",
           "example": {
-            "code": "function getFeaturePath(featureName) {\n  return `src/features/${featureName}`;\n}\nconsole.log(getFeaturePath('auth'));",
-            "output": "src/features/auth",
-            "note": "Memudahkan pembagian tugas dan isolasi kode antar tim."
+            "code": "// struktur by-type (bawaan tutorial)      struktur by-feature (dipakai tim besar)\n// src/components/LoginForm.tsx            src/features/auth/components/LoginForm.tsx\n// src/components/CartItem.tsx             src/features/cart/components/CartItem.tsx\n// src/hooks/useAuth.ts                    src/features/auth/hooks/useAuth.ts\n// src/api/authApi.ts                      src/features/auth/api/authApi.ts\n\n// impor dari dalam fitur cart ke komponen bersama:\nimport Button from '../../../components/ui/Button';",
+            "output": "Menghapus fitur cart pada struktur by-type:\n  menyentuh 4 folder berbeda, mudah meninggalkan berkas yatim\n\nPada struktur by-feature:\n  hapus satu folder src/features/cart — selesai",
+            "note": "Ciri struktur by-type yang mulai menyakitkan: `import` berisi `../../../`. Itu tanda berkas yang saling berkaitan tersebar jauh. Banyak tim lalu memasang alias path di `vite.config.ts` supaya bisa menulis `@/components/ui/Button`. Catatan jujur: potongan sebaris seperti ini bukan komponen utuh, jadi panel preview tidak menampilkan hasil visual — yang diperiksa kodenya, dan tesnya tetap bisa lulus."
           },
-          "instruction": "Buat fungsi `getFeaturePath(featureName)` yang mengembalikan string path `\"src/features/${featureName}\"`.",
-          "starterCode": "// Tulis fungsi getFeaturePath di bawah ini\n",
+          "instruction": "Kamu sedang menulis `src/features/cart/components/CartItem.tsx` pada struktur by-feature, dan butuh dua hal: custom hook `useAuth` milik fitur auth (di `src/features/auth/hooks/useAuth.ts`) serta komponen bersama `Button` (di `src/components/ui/Button.tsx`). Tulis kedua baris impornya memakai jalur relatif yang benar dari posisi berkas itu — hitung tingkat foldernya dengan teliti.",
+          "starterCode": "// Berkas ini: src/features/cart/components/CartItem.tsx\n//\n// src/\n// ├─ components/ui/Button.tsx\n// └─ features/\n//    ├─ auth/hooks/useAuth.ts\n//    └─ cart/components/CartItem.tsx   ← kamu di sini\n\n// Tulis dua baris impor di bawah ini\n",
           "language": "jsx",
           "tests": [
             {
-              "pattern": "`src/features/\\$\\{featureName\\}`|['\"]src/features/['\"]\\s*\\+\\s*featureName",
-              "message": "Format path: `src/features/${featureName}`"
+              "pattern": "import\\s*\\{?\\s*useAuth\\s*\\}?\\s*from\\s*['\"]\\.\\./\\.\\./auth/hooks/useAuth(\\.ts)?['\"]",
+              "message": "Dari `features/cart/components/`, naik dua tingkat (`../../`) sampai ke `features/`, lalu masuk ke `auth/hooks/useAuth`. Salah hitung satu tingkat membuat build gagal dengan pesan `Failed to resolve import` — dan inilah alasan banyak tim memasang alias path."
+            },
+            {
+              "pattern": "import\\s+Button\\s+from\\s*['\"]\\.\\./\\.\\./\\.\\./components/ui/Button(\\.tsx)?['\"]",
+              "message": "Komponen bersama ada di luar folder fitur, jadi jalurnya naik TIGA tingkat sampai `src/`, lalu masuk `components/ui/Button`. Perhatikan huruf besar-kecilnya harus persis: macOS memaafkan, server Linux tempat aplikasimu di-deploy tidak."
             }
           ],
-          "solution": "function getFeaturePath(featureName) {\n  return `src/features/${featureName}`;\n}"
+          "solution": "import { useAuth } from '../../auth/hooks/useAuth';\nimport Button from '../../../components/ui/Button';"
         },
         {
           "kind": "step",
@@ -2746,20 +2832,33 @@ export const reactTrack: Track = {
           "title": "Container vs Presentational Pattern",
           "explanation": "Pola pemisahan komponen Container (Smart) dan Presentational (Dumb) membantu memisahkan tanggung jawab antara pengelolaan logika data dan tampilan UI. Komponen Container menangani pengambilan data, pengelolaan state, dan logika bisnis, lalu meneruskan datanya ke komponen Presentational yang hanya fokus merender elemen JSX dan gaya tampilan. Pola ini membuat komponen tampilan menjadi sangat bersih dan mudah dites. Jebakan umum adalah memasukkan panggilan API kompleks di dalam komponen tombol tampilan kecil.",
           "example": {
-            "code": "function classifyComponent(hasState) {\n  return hasState ? 'container' : 'presentational';\n}\nconsole.log(classifyComponent(false));",
-            "output": "presentational",
-            "note": "Pola ini berevolusi dengan hadirnya Custom Hooks untuk ekstraksi logika."
+            "code": "// CONTAINER — tahu dari mana data datang\nfunction DaftarUserContainer() {\n  const { data, isLoading } = useSWR('/api/users', fetcher);\n  if (isLoading) return <p>Memuat...</p>;\n  return <DaftarUser users={data} />;\n}\n\n// PRESENTATIONAL — tidak tahu apa pun soal jaringan\nfunction DaftarUser({ users }) {\n  return (\n    <ul>\n      {users.map((u) => (\n        <li key={u.id}>{u.name}</li>\n      ))}\n    </ul>\n  );\n}",
+            "output": "Di aplikasi: <DaftarUserContainer />\n  → <p>Memuat...</p> lalu daftar nama\n\nDi test/Storybook: <DaftarUser users={[{ id: 1, name: \"Bimo\" }]} />\n  → <ul><li>Bimo</li></ul>   (tanpa server, tanpa mock)",
+            "note": "Keuntungan yang paling terasa ada di baris kedua output: komponen presentational bisa diuji dan ditampilkan tanpa API sama sekali. Sejak ada custom hook, pemisahannya jarang lagi memakai nama \"Container\" — logikanya dipindah ke hook, tapi prinsipnya sama. Catatan jujur soal panel preview: paket `@tanstack/react-query` tidak terpasang di sana, jadi potongan ini tidak dijalankan — yang diperiksa kodenya, dan tesnya tetap bisa lulus."
           },
-          "instruction": "Buat fungsi `classifyComponent(hasState)` yang mengembalikan `'container'` jika `hasState` bernilai `true` dan `'presentational'` jika `false`.",
-          "starterCode": "// Tulis fungsi classifyComponent di bawah ini\n",
+          "instruction": "Komponen `KartuProduk` sekarang memanggil API sendiri, sehingga tidak bisa diuji tanpa server. Tulis versi presentational-nya: komponen `KartuProduk` yang menerima props `produk` dan hanya menampilkan `produk.nama` di dalam `<h3>` serta `produk.harga` di dalam `<p>`. Jangan ada pemanggilan data di dalamnya.",
+          "starterCode": "// Versi lama (container + tampilan tercampur):\n// function KartuProduk({ id }) {\n//   const { data } = useSWR(`/api/produk/${id}`, fetcher);\n//   return <h3>{data.nama}</h3>;\n// }\n\n// Tulis versi presentational-nya di bawah ini\n",
           "language": "jsx",
           "tests": [
             {
-              "pattern": "hasState\\s*\\?\\s*['\"]container['\"]\\s*:\\s*['\"]presentational['\"]",
-              "message": "Gunakan: hasState ? 'container' : 'presentational'"
+              "pattern": "(function\\s+KartuProduk\\s*\\(\\s*\\{\\s*produk|const\\s+KartuProduk\\s*=\\s*\\(?\\s*\\{\\s*produk)",
+              "message": "Komponen presentational menerima datanya lewat props — bongkar `produk` di parameternya. Selama ia masih menerima `id` lalu mencari datanya sendiri, ia tetap container."
+            },
+            {
+              "pattern": "<h3>\\s*\\{\\s*produk\\.nama\\s*\\}\\s*</h3>",
+              "message": "Tampilkan nama produk di dalam `<h3>` memakai kurung kurawal. Menulis `{produk}` langsung akan gagal: React tidak bisa merender object mentah dan melempar \"Objects are not valid as a React child\"."
+            },
+            {
+              "pattern": "<p>\\s*\\{\\s*produk\\.harga\\s*\\}\\s*</p>",
+              "message": "Harganya ditampilkan di dalam `<p>`. Angka boleh langsung dirender React; yang tidak boleh adalah object dan array of object."
+            },
+            {
+              "pattern": "(useSWR|fetch\\(|useQuery|useEffect)",
+              "mustNotMatch": true,
+              "message": "Komponen presentational tidak boleh mengambil data sendiri — hapus `useSWR`/`fetch`/`useEffect`. Justru ketiadaan itulah yang membuatnya bisa dites tanpa server dan dipakai ulang untuk data dari sumber mana pun."
             }
           ],
-          "solution": "function classifyComponent(hasState) {\n  return hasState ? 'container' : 'presentational';\n}"
+          "solution": "function KartuProduk({ produk }) {\n  return (\n    <div>\n      <h3>{produk.nama}</h3>\n      <p>{produk.harga}</p>\n    </div>\n  );\n}"
         },
         {
           "kind": "step",
@@ -2768,16 +2867,24 @@ export const reactTrack: Track = {
           "explanation": "Error Boundary adalah komponen kelas React khusus yang menangkap kesalahan JavaScript tak tertangani (*unhandled error*) di mana saja di dalam pohon komponen anaknya, mencatat kesalahan tersebut, dan menampilkan UI cadangan (*fallback UI*) yang ramah pengguna. Tanpa Error Boundary, satu kesalahan kecil pada komponen anak akan membuat seluruh tampilan aplikasi React menghapus dirinya dan menjadi layar putih kosong (*White Screen of Death*). Mengimplementasikan Error Boundary adalah standar wajib pada aplikasi tingkat produksi. Jebakan pemula adalah mengira `try/catch` biasa di event handler dapat menangkap error render komponen.",
           "example": {
             "code": "<ErrorBoundary fallback={<p>Terjadi kesalahan</p>}><Dashboard /></ErrorBoundary>",
-            "output": "Menyelamatkan bagian aplikasi lain jika salah satu widget error.",
-            "note": "Wajib dipasang di sekitar modul-modul penting."
+            "output": "Dashboard melempar error saat render:\n\nTanpa ErrorBoundary:\n(seluruh halaman kosong — putih; hanya konsol yang berisi pesan error)\n\nDengan ErrorBoundary:\n<p>Terjadi kesalahan</p>       ← hanya bagian dashboard yang diganti\nNavbar dan Sidebar tetap tampil dan tetap bisa dipakai",
+            "note": "Error Boundary hanya menangkap error yang terjadi SAAT RENDER (dan di lifecycle). Error di dalam event handler dan promise yang gagal TIDAK tertangkap — itu tetap urusan `try/catch`. Salah paham ini sering membuat orang mengira boundary-nya tidak bekerja. Catatan jujur soal panel preview: `ErrorBoundary` di sini komponen milik proyek/library yang tidak ada di editor, jadi panel tidak menampilkan hasilnya — tesnya tetap bisa lulus."
           },
           "instruction": "Lindungi komponen `<Profile />` dari kecelakaan render dengan membungkusnya di dalam komponen pelindung error (`ErrorBoundary`) yang menampilkan teks `<p>Error</p>` saat terjadi masalah.",
           "starterCode": "// Tulis ErrorBoundary di bawah ini\n",
           "language": "jsx",
           "tests": [
             {
-              "pattern": "<ErrorBoundary\\s+fallback=\\{<p>Error</p>\\}>\\s*<Profile\\s*/>\\s*</ErrorBoundary>",
-              "message": "Bungkus <Profile /> dengan ErrorBoundary"
+              "pattern": "<ErrorBoundary\\b",
+              "message": "Bagian yang ingin dilindungi dibungkus komponen `ErrorBoundary`. Letakkan sedekat mungkin dengan bagian yang berisiko — satu boundary di root memang mencegah layar putih, tapi seluruh aplikasi tetap terganti pesan error."
+            },
+            {
+              "pattern": "fallback\\s*=\\s*\\{\\s*<p>\\s*Error\\s*</p>\\s*\\}",
+              "message": "Isi props `fallback` dengan elemen `<p>Error</p>` di dalam kurung kurawal. Nilainya JSX, bukan teks biasa — `fallback=\"Error\"` diterima TypeScript pada beberapa implementasi tapi tidak menampilkan elemen apa pun."
+            },
+            {
+              "pattern": "<Profile\\s*/>[\\s\\S]*</ErrorBoundary>",
+              "message": "`<Profile />` harus berada DI DALAM boundary-nya. Komponen di luar boundary tidak terlindungi — dan error di dalam boundary itu sendiri (bukan anaknya) juga tidak tertangkap."
             }
           ],
           "solution": "<ErrorBoundary fallback={<p>Error</p>}><Profile /></ErrorBoundary>"
@@ -2790,7 +2897,7 @@ export const reactTrack: Track = {
           "example": {
             "code": "const apiUrl = import.meta.env.VITE_API_URL;",
             "output": "Mengakses URL backend tanpa hardcode di berkas kode.",
-            "note": "Jangan simpan API Key rahasia backend di environment frontend!"
+            "note": "Jangan simpan API Key rahasia backend di environment frontend! Catatan jujur: potongan sebaris seperti ini bukan komponen utuh, jadi panel preview tidak menampilkan hasil visual — yang diperiksa kodenya, dan tesnya tetap bisa lulus."
           },
           "instruction": "Deklarasikan konstanta `url` yang membaca nilai environment variable `import.meta.env.VITE_API_URL`.",
           "starterCode": "// Tulis variabel url di sini\n",
@@ -2815,43 +2922,59 @@ export const reactTrack: Track = {
           "kind": "step",
           "id": "react-11-5",
           "title": "Strategi Orientasi Codebase Baru",
-          "explanation": "Saat masuk ke proyek React baru: 1. Baca `package.json`, 2. Buka entry point (`main.tsx` / `App.tsx`), 3. Periksa router aplikasi untuk memahami alur halaman.",
+          "explanation": "Pekerjaan pertamamu sebagai developer React hampir pasti bukan menulis proyek dari nol, melainkan masuk ke codebase yang sudah berjalan bertahun-tahun dan ditulis orang lain. Urutan orientasi yang terbukti hemat waktu: baca `package.json` dulu (library apa yang dipakai, skrip apa yang tersedia, versi React dan router-nya berapa), lalu buka titik masuk aplikasinya (`main.tsx` → `App.tsx`) untuk melihat provider dan pembungkus apa saja yang aktif, lalu baca berkas router-nya — daftar route adalah peta fitur yang paling jujur, karena setiap halaman yang benar-benar ada pasti terdaftar di situ. Kapan urutan ini dipakai? Hari pertama onboarding, dan setiap kali kamu ditugasi memperbaiki bug di bagian yang belum pernah kamu buka. Jebakan yang paling banyak memakan waktu pemula adalah membaca berkas satu per satu dari atas ke bawah folder `src/`, atau langsung menyalakan debugger sebelum tahu bentuk aplikasinya. Jebakan kedua: mengubah gaya penulisan kode mengikuti selera sendiri — di codebase tim, konsistensi dengan yang sudah ada lebih dihargai daripada versi \"yang lebih rapi menurutmu\".",
           "example": {
-            "code": "function getOnboardingSteps() {\n  return ['package.json', 'entrypoint', 'router'];\n}\nconsole.log(getOnboardingSteps());",
-            "output": "[\"package.json\", \"entrypoint\", \"router\"]",
-            "note": "Membaca file router adalah cara tercepat memahami keseluruhan fitur aplikasi."
+            "code": "# 1. apa yang dipakai proyek ini?\ncat package.json\n\n# 2. seberapa besar dan bagaimana isinya ditata?\nls src\n\n# 3. siapa yang paling sering menyentuhnya belakangan ini?\ngit log --oneline -10",
+            "output": "$ cat package.json\n{\n  \"scripts\": { \"dev\": \"vite\", \"test\": \"vitest\" },\n  \"dependencies\": {\n    \"react\": \"^19.0.0\",\n    \"react-router-dom\": \"^7.1.0\",\n    \"zustand\": \"^5.0.2\"\n  }\n}\n\n$ ls src\nApp.tsx  main.tsx  components  features  hooks  routes.tsx\n\n$ git log --oneline -10\n9c1f2ab fix(cart): harga diskon salah dibulatkan\n3ab77e1 feat(auth): halaman lupa password",
+            "note": "Tiga perintah itu sudah menjawab banyak hal: state global memakai Zustand (bukan Redux), routing memakai react-router v7, test memakai Vitest, dan pekerjaan terbaru ada di fitur cart dan auth. Membaca 20 berkas acak tidak akan memberi gambaran sebesar ini. Catatan jujur soal panel preview: paket `zustand` tidak terpasang di sana, jadi store ini tidak dijalankan — tesnya tetap bisa lulus."
           },
-          "instruction": "Buat fungsi `getOnboardingSteps()` yang mengembalikan array string `['package.json', 'entrypoint', 'router']`.",
-          "starterCode": "// Tulis fungsi getOnboardingSteps di bawah ini\n",
-          "language": "jsx",
+          "instruction": "Hari pertamamu di proyek React yang belum pernah kamu buka. Tulis tiga perintah terminal orientasi, satu per baris, dengan urutan ini: (1) tampilkan isi berkas manifest proyek untuk tahu library dan skripnya, (2) daftar isi folder `src`, (3) tampilkan 10 commit terakhir dalam bentuk satu baris per commit.",
+          "starterCode": "# Tulis tiga perintah orientasi di bawah ini, satu per baris\n",
+          "language": "text",
           "tests": [
             {
-              "pattern": "\\[\\s*['\"]package\\.json['\"]\\s*,\\s*['\"]entrypoint['\"]\\s*,\\s*['\"]router['\"]\\s*\\]",
-              "message": "Kembalikan ['package.json', 'entrypoint', 'router']"
+              "pattern": "(cat|less|bat|head)\\s+package\\.json",
+              "message": "Berkas pertama yang dibaca adalah manifest proyeknya (`package.json`) — di situ ada daftar library, versinya, dan skrip yang bisa dijalankan. Perintah apa pun yang menampilkan isi berkas diterima (`cat`, `less`, `head`)."
+            },
+            {
+              "pattern": "ls\\s+(-\\w+\\s+)*src",
+              "message": "Langkah kedua: lihat isi folder `src` untuk mengenali penataannya — by-type atau by-feature. Ini menentukan cara kamu mencari berkas selama berbulan-bulan berikutnya."
+            },
+            {
+              "pattern": "git\\s+log[^\\n]*--oneline",
+              "message": "Langkah ketiga memakai `git log --oneline` (boleh dengan `-10`) supaya satu commit tampil satu baris. Riwayat terbaru memberi tahu bagian mana yang sedang aktif dikerjakan tim — dan biasanya di situlah bug yang kamu tangani berada."
             }
           ],
-          "solution": "function getOnboardingSteps() {\n  return ['package.json', 'entrypoint', 'router'];\n}"
+          "solution": "cat package.json\nls src\ngit log --oneline -10"
         },
         {
           "kind": "step",
           "id": "react-11-6",
           "title": "Checklist Code Review untuk PR React",
-          "explanation": "Checklist PR React: Apakah key di-map dengan benar? Apakah ada useEffect tanpa cleanup? Apakah ada state redundan? Apakah accessibility terjaga?",
+          "explanation": "Code review adalah tempat sebagian besar pengetahuan React berpindah di dalam tim, dan reviewer yang baik memeriksa hal yang sama setiap kali — bukan mengandalkan ingatan. Empat hal yang paling sering menjadi temuan pada PR React: `key` pada daftar (memakai index untuk daftar yang bisa dihapus atau diurutkan), effect tanpa fungsi cleanup (timer, listener, dan request yang menumpuk), state turunan yang seharusnya cukup dihitung saat render, dan aksesibilitas (tombol tanpa label, `div` ber-`onClick` tanpa peran dan tabIndex). Kapan checklist ini kamu pakai? Dua kali: sebelum membuka PR sendiri — itu yang paling menghemat waktu tim — dan saat mereview PR orang lain. Jebakan yang membuat review terasa menyakitkan bagi penerimanya adalah komentar yang hanya menyatakan sesuatu salah tanpa menyebutkan GEJALANYA; \"pakai id untuk key\" jauh kurang meyakinkan daripada \"kalau baris dihapus, isi input bisa berpindah ke baris lain karena React mencocokkan berdasarkan posisi\". Jebakan kedua: menghabiskan seluruh review pada gaya penulisan (kutip, koma, urutan impor) — hal-hal itu tugas linter dan formatter, bukan manusia.",
           "example": {
-            "code": "function validatePRChecklist(hasKeys, hasCleanups) {\n  return Boolean(hasKeys && hasCleanups);\n}\nconsole.log(validatePRChecklist(true, true));",
-            "output": "true",
-            "note": "Terapkan checklist ini pada diri sendiri sebelum membuka PR."
+            "code": "// Potongan dari sebuah PR:\n// <input value={q} onChange={(e) => setQ(e.target.value)} />\n// <button onClick={cari}><IconSearch /></button>\n\n// ❌ komentar yang tidak menolong\n// \"Tombolnya kurang aksesibel.\"\n\n// ✅ komentar yang menyebut gejala + perbaikannya\n// \"Tombol ini isinya cuma ikon, jadi pembaca layar membacanya sebagai\n//  \"button\" tanpa keterangan apa pun. Tambahkan aria-label=\"Cari\".\"",
+            "output": "Hasil review yang bisa langsung dikerjakan:\n\n- baris 2: tombol hanya berisi ikon → tambahkan aria-label=\"Cari\"\n- baris 1: input tanpa label → tambahkan <label htmlFor> atau aria-label",
+            "note": "Pola komentar review yang dipakai reviewer senior: sebut LOKASI, sebut GEJALA yang akan dialami pengguna, lalu sebut perbaikan konkretnya. Komentar tanpa gejala mudah dibalas \"di laptop saya jalan\", dan diskusinya berhenti di selera. Catatan jujur: yang kamu tulis di sini adalah komentar review berbentuk teks, jadi panel preview tidak menjalankan apa pun — tesnya memeriksa isi temuanmu, dan tetap bisa lulus."
           },
-          "instruction": "Buat fungsi `validatePRChecklist(hasKeys, hasCleanups)` yang mengembalikan `true` hanya jika `hasKeys` DAN `hasCleanups` keduanya bernilai `true`.",
-          "starterCode": "// Tulis fungsi validatePRChecklist di bawah ini\n",
-          "language": "jsx",
+          "instruction": "Baca potongan PR di editor. Ada DUA masalah nyata di sana — satu soal `key` pada daftar yang bisa dihapus, satu soal effect yang memasang sesuatu tanpa membersihkannya. Tulis komentar review dalam bentuk daftar (satu baris per temuan): sebut kata kunci masalahnya dan perbaikannya. Kamu harus menemukannya sendiri, bukan menyalin.",
+          "starterCode": "# PR #128 - feat: daftar tugas bisa dihapus\n#\n# function DaftarTugas({ tugas, onHapus }) {\n#   useEffect(() => {\n#     const id = setInterval(() => refresh(), 5000);\n#   }, []);\n#\n#   return (\n#     <ul>\n#       {tugas.map((t, index) => (\n#         <li key={index}>\n#           {t.judul}\n#           <button onClick={() => onHapus(t.id)}>hapus</button>\n#         </li>\n#       ))}\n#     </ul>\n#   );\n# }\n\n# Tulis komentar review-mu di bawah ini (satu baris per temuan)\n",
+          "language": "text",
           "tests": [
             {
-              "pattern": "Boolean\\s*\\(\\s*hasKeys\\s*&&\\s*hasCleanups\\s*\\)|hasKeys\\s*&&\\s*hasCleanups",
-              "message": "Periksa: hasKeys && hasCleanups"
+              "pattern": "\\bkey\\b[\\s\\S]{0,240}\\bt\\.id\\b",
+              "message": "Temuan pertama ada pada daftarnya: `key={index}` dipakai padahal setiap baris punya tombol hapus. Sebut `key` dalam komentarmu DAN perbaikannya (`t.id`) — review yang cuma menyebut masalah tanpa jalan keluar biasanya berbalas pertanyaan, dan satu putaran review terbuang."
+            },
+            {
+              "pattern": "\\b(cleanup|clearInterval|dibersihkan)\\b",
+              "message": "Temuan kedua ada di dalam effect: `setInterval` dipasang tanpa pernah dihentikan, jadi setiap kali komponen dipasang ulang timer baru menumpuk dan `refresh()` berjalan berkali-kali. Sebut cleanup-nya (`return () => clearInterval(id)`)."
+            },
+            {
+              "pattern": "\\bindex\\b",
+              "message": "Sebutkan gejalanya, bukan cuma aturannya: karena key memakai `index`, React mencocokkan baris berdasarkan POSISI — menghapus baris ke-2 bisa membuat isi baris ke-3 terlihat pindah. Komentar yang menyebut gejala jauh lebih mudah disetujui penulis PR-nya."
             }
           ],
-          "solution": "function validatePRChecklist(hasKeys, hasCleanups) {\n  return Boolean(hasKeys && hasCleanups);\n}"
+          "solution": "- key={index} pada daftar yang punya tombol hapus: ganti ke key={t.id}. Dengan index, React mencocokkan baris berdasarkan posisi, jadi setelah satu baris dihapus isi baris lain bisa terlihat berpindah.\n- useEffect memasang setInterval tanpa cleanup: tambahkan return () => clearInterval(id) supaya timer lama dihentikan; tanpa itu timer menumpuk setiap komponen dipasang ulang dan refresh() jalan berkali-kali."
         },
         {
           "kind": "step",
@@ -2860,10 +2983,10 @@ export const reactTrack: Track = {
           "explanation": "Aksesibilitas web (*a11y*) di React memastikan bahwa aplikasi yang kamu bangun dapat digunakan dengan nyaman oleh semua orang, termasuk pengguna penyandang disabilitas yang menggunakan pembaca layar (*screen reader*) atau navigasi papan ketik (*keyboard navigation*). Praktik utamanya meliputi penggunaan elemen HTML semantik (`<button>`, `<main>`, `<nav>`), menyertakan atribut `aria-label` pada tombol berbasis ikon tanpa teks, serta mengelola urutan fokus keyboard saat modal dialog terbuka. Memperhatikan aksesibilitas adalah standar kualitas pengembang profesional. Jebakan umum adalah menggunakan tag `<div>` dengan event `onClick` tanpa atribut `role='button'` dan `tabIndex`.",
           "example": {
             "code": "<label htmlFor=\"email\">Email</label>\n<input id=\"email\" type=\"email\" />",
-            "output": "Elemen label terhubung dengan input untuk screen reader.",
-            "note": "htmlFor adalah versi JSX untuk atribut 'for' pada elemen label HTML."
+            "output": "Yang dibacakan pembaca layar saat kursor masuk ke input:\n\"Email, edit teks\"\n\nKalau htmlFor dihapus (tampilannya sama persis):\n\"edit teks\"        ← pengguna tidak tahu kotak ini untuk apa\n\nBonus: dengan label terhubung, mengklik tulisan \"Email\" ikut memfokuskan input.",
+            "note": "Ini jebakan aksesibilitas yang paling sulit dilihat: tampilannya identik, tidak ada error, dan satu-satunya cara mengetahuinya adalah mencoba klik pada tulisan labelnya atau membuka tab Accessibility di DevTools. Catatan jujur: potongan sebaris seperti ini bukan komponen utuh, jadi panel preview tidak menampilkan hasil visual — yang diperiksa kodenya, dan tesnya tetap bisa lulus."
           },
-          "instruction": "Tuliskan elemen JSX `<label>` yang terhubung ke input berpembeda ID `'username'` menggunakan atribut `htmlFor` berisi teks `'Username'`.",
+          "instruction": "Sebuah input dengan `id=\"username\"` sekarang hanya punya tulisan biasa di sebelahnya, jadi pembaca layar tidak tahu kotak itu untuk apa. Tulis elemen label yang benar-benar TERHUBUNG ke input itu, dengan tulisan `Username` — ingat atribut penghubungnya ditulis berbeda di JSX dibanding HTML.",
           "starterCode": "// Tulis elemen label di bawah ini\n",
           "language": "jsx",
           "tests": [
