@@ -267,10 +267,10 @@ export const htmlTrack: Track = {
               "Karena elemen `<head>` hanya memuat metadata dan keterangan dokumen, bukan isi yang terlihat",
               "Karena tag `<h1>` membutuhkan atribut `visible=\"true\"` agar dapat ditampilkan oleh browser",
               "Karena browser mengalami error saat membaca tag heading di luar tag `<body>`",
-              "Karena teks di dalam `<head>` harus ditulis menggunakan huruf kapital semua",
+              "Karena isi `<head>` baru ditampilkan setelah seluruh halaman selesai dimuat",
             ],
             answerIndex: 0,
-            explanation: "Browser hanya menampilkan konten yang berada di dalam elemen `<body>` ke layar penjelajah. Konten di dalam `<head>` khusus untuk metadata dan konfigurasi dokumen. Pilihan mengenai atribut `visible` sering keliru dianggap sebagai solusi oleh pemula, padahal HTML tidak memiliki atribut seperti itu. Pilihan bahwa browser mengalami error juga menggoda karena halaman tampak kosong, padahal browser tidak pernah melempar error melainkan hanya mengabaikan tampilannya.",
+            explanation: "Browser hanya menampilkan konten yang berada di dalam elemen `<body>` ke layar penjelajah. Konten di dalam `<head>` khusus untuk metadata dan konfigurasi dokumen. Pilihan mengenai atribut `visible` sering keliru dianggap sebagai solusi oleh pemula, padahal HTML tidak memiliki atribut seperti itu. Pilihan bahwa browser mengalami error juga menggoda karena halaman tampak kosong, padahal browser tidak pernah melempar error melainkan hanya mengabaikan tampilannya. Pilihan tentang menunggu halaman selesai dimuat terdengar masuk akal bagi yang pernah melihat halaman tampil bertahap, padahal lamanya menunggu tidak akan mengubah apa pun: isi `<head>` memang tidak pernah dirender.",
           },
         },
         {
@@ -340,13 +340,13 @@ export const htmlTrack: Track = {
           pilihanGanda: {
             question: "Bagaimana cara menyajikan potongan kode HTML di editor latihan BiLearn saat kamu ingin menyimpannya sebagai berkas `index.html` utuh di komputermu sendiri?",
             choices: [
-              "Langsung menyimpan potongan kode tersebut tanpa menambahkan elemen lain",
+              "Langsung menyimpannya apa adanya sebagai `index.html`, karena browser toh otomatis menambahkan kerangka dokumennya",
               "Membungkus potongan kode tersebut di dalam kerangka dokumen `<!DOCTYPE html>`, `<html>`, `<head>`, dan `<body>`",
-              "Mengubah semua tag HTML menjadi entitas teks agar tidak dieksekusi browser",
-              "Menambahkan atribut `standalone=\"true\"` di tag pembuka elemen utama",
+              "Menambahkan `<!DOCTYPE html>` saja di baris pertama, karena hanya bagian itu yang wajib ada di berkas",
+              "Menambahkan atribut `standalone=\"true\"` pada elemen terluar supaya browser tahu berkas itu berdiri sendiri",
             ],
             answerIndex: 1,
-            explanation: "Di editor BiLearn kamu cukup menulis potongan isi `<body>`, namun di komputer lokal kamu wajib membungkusnya dengan kerangka HTML utuh lengkap dengan doctype, html, head, dan body. Menyimpan potongan langsung tanpa kerangka sering keliru dilakukan pemula karena di BiLearn terlihat berjalan lancar, padahal di komputer lokal dokumen menjadi tidak standar dan dapat memicu mode kompatibilitas lama (quirks mode) di browser.",
+            explanation: "Di editor BiLearn kamu cukup menulis potongan isi `<body>`, namun di komputer lokal kamu wajib membungkusnya dengan kerangka HTML utuh lengkap dengan doctype, html, head, dan body. Pilihan pertama adalah yang paling menggoda, dan alasannya justru karena separuhnya benar: browser memang diam-diam menyisipkan `<html>`, `<head>`, dan `<body>` ke dalam DOM saat berkasmu tidak punya itu — sehingga halaman tetap tampil dan kamu mengira semuanya beres. Yang tidak ikut disisipkan adalah `<!DOCTYPE html>`, dan tanpa doctype browser jatuh ke mode kompatibilitas lama (quirks mode) yang menghitung ukuran elemen dengan aturan berbeda, jadi tata letakmu bergeser tanpa sebab yang jelas. Pilihan menambahkan doctype saja keliru karena kerangka itu satu paket, bukan satu baris.",
           },
         },
         {
@@ -547,10 +547,10 @@ export const htmlTrack: Track = {
           pilihanGanda: {
             question: "Mana bentuk penulisan elemen heading utama (`h1`) yang benar sesuai tata bahasa HTML?",
             choices: [
-              "`<h1>Halo Dunia<h1>` (tag penutup tanpa garis miring)",
-              "`<h1>Halo Dunia</h1>` (tag pembuka, isi teks, dan tag penutup bergaris miring)",
-              "`<h1 text=\"Halo Dunia\">` (menggunakan atribut teks tanpa tag penutup)",
-              "`<heading1>Halo Dunia</heading1>` (menggunakan nama elemen lengkap)",
+              "`<h1>Halo Dunia<h1>`",
+              "`<h1>Halo Dunia</h1>`",
+              "`<h1 text=\"Halo Dunia\">`",
+              "`<heading1>Halo Dunia</heading1>`",
             ],
             answerIndex: 1,
             explanation: "Elemen `h1` adalah elemen berpasangan yang memerlukan tag pembuka `<h1>` dan tag penutup `</h1>` dengan garis miring. Pilihan tanpa garis miring (`<h1>...<h1>`) sering keliru ditulis pemula dan merupakan jebakan klasik yang membuat browser bingung menentukan akhir elemen. Pilihan `<heading1>` juga menggoda karena namanya terkesan lebih jelas, padahal nama tag resminya disingkat menjadi `h1`.",
@@ -589,12 +589,12 @@ export const htmlTrack: Track = {
             question: "Mengapa kamu harus membungkus teks deskripsi panjang ke dalam tag `<p>` alih-alih membiarkannya tanpa tag?",
             choices: [
               "Agar browser memberikan jarak antar-paragraf secara otomatis dan menandai blok teks secara semantik",
-              "Agar teks secara otomatis berubah menjadi tebal dan berukuran lebih besar",
-              "Karena teks tanpa tag `<p>` tidak akan dibaca oleh browser sama sekali",
-              "Untuk mengaktifkan fitur pemeriksaan ejaan bahasa Indonesia di browser",
+              "Agar teks otomatis berubah menjadi tebal dan berukuran lebih besar daripada teks di sekitarnya",
+              "Karena teks yang tidak dibungkus tag apa pun akan diabaikan browser dan tidak ditampilkan sama sekali",
+              "Supaya setiap baris baru yang kamu tekan di editor ikut tampil sebagai baris baru di halaman",
             ],
             answerIndex: 0,
-            explanation: "Tag `<p>` menyatakan paragraf secara semantik dan memberi jarak vertikal alami antar blok teks. Pilihan bahwa teks tanpa tag tidak dibaca browser sering keliru dipercayai, padahal browser tetap menampilkannya namun menggabungkan semua teks menjadi satu baris beruntun. Pilihan bahwa teks berubah menjadi tebal juga menggoda karena pemula sering tertukar antara fungsi paragraf dan heading.",
+            explanation: "Tag `<p>` menyatakan paragraf secara semantik dan memberi jarak vertikal alami antar blok teks. Pilihan bahwa teks tanpa tag tidak ditampilkan sering keliru dipercayai, padahal browser tetap menampilkannya — hanya saja semua teks menempel menjadi satu baris beruntun. Pilihan tentang baris baru adalah jebakan yang paling sering menjerat: di editor kamu menekan Enter dan melihat baris terpisah, tetapi HTML memampatkan semua spasi dan pergantian baris menjadi satu spasi, sehingga hasilnya tetap menyambung. Pilihan bahwa teks berubah menjadi tebal juga menggoda karena pemula sering tertukar antara fungsi paragraf dan heading.",
           },
         },
         {
@@ -629,10 +629,10 @@ export const htmlTrack: Track = {
               "Pilih heading berdasarkan ukuran huruf yang kamu inginkan di layar",
               "Gunakan `<h1>` untuk topik utama halaman, lalu `<h2>` dan `<h3>` sesuai hierarki isi dokumen",
               "Gunakan beberapa `<h1>` dalam satu paragraf agar teks terasa penting",
-              "Urutkan heading secara berurutan mulai dari tingkat `<h6>` hingga `<h1>` agar ukuran teks bertambah besar secara bertahap dari atas ke bawah",
+              "Lewati `<h2>` dan langsung pakai `<h3>` kalau ukurannya sudah pas di layar",
             ],
             answerIndex: 1,
-            explanation: "Heading berfungsi membangun struktur dan daftar isi dokumen (hierarki semantik), bukan untuk mengatur estetika ukuran huruf. Memilih heading berdasarkan ukuran tampilan adalah kesalahan yang sering terjadi pada pemula; jika ingin merubah ukuran teks, gunakanlah CSS. Menggunakan banyak `<h1>` dalam satu halaman juga merupakan jebakan yang membingungkan mesin pencari dan pengguna screen reader.",
+            explanation: "Heading berfungsi membangun struktur dan daftar isi dokumen (hierarki semantik), bukan untuk mengatur estetika ukuran huruf. Memilih heading berdasarkan ukuran tampilan adalah kesalahan yang sering terjadi pada pemula; kalau yang kamu inginkan hanya ukuran teks berbeda, itu pekerjaan CSS. Menggunakan banyak `<h1>` dalam satu halaman juga merupakan jebakan yang membingungkan mesin pencari dan pengguna screen reader. Pilihan melewati `<h2>` langsung ke `<h3>` adalah yang paling menggoda karena hasilnya di layar terlihat rapi; tetapi screen reader membacakan daftar heading sebagai kerangka isi, dan tingkat yang bolong membuat pendengarnya mengira ada bagian yang terlewat.",
           },
         },
         {
@@ -710,13 +710,13 @@ export const htmlTrack: Track = {
           pilihanGanda: {
             question: "Manakah pernyataan yang BENAR mengenai penulisan elemen gambar (`<img>`) di HTML?",
             choices: [
-              "Elemen `<img>` wajib selalu memiliki tag penutup `</img>` di bagian akhir untuk menandai batas gambar",
+              "Elemen `<img>` wajib selalu ditutup dengan `</img>`, persis seperti elemen `<p>` dan `<h1>` yang sudah kamu pelajari sebelumnya",
               "`<img>` adalah tag tunggal (self-closing), menggunakan atribut `src` untuk lokasi berkas dan `alt` untuk teks alternatif",
               "Atribut `alt` digunakan khusus untuk mengatur dan menentukan ukuran tinggi serta lebar gambar dalam satuan piksel",
-              "Gambar hanya bisa ditampilkan jika dibungkus di dalam tag `<a>`",
+              "Lokasi berkas gambar ditunjuk dengan atribut `href`, sama seperti cara elemen tautan `<a>` menunjuk alamat tujuannya",
             ],
             answerIndex: 1,
-            explanation: "Elemen `<img>` merupakan elemen void/tunggal tanpa penutup `</img>`. Atribut `src` menentukan lokasi berkas dan `alt` menyediakan teks pengganti bagi screen reader saat gambar gagal dimuat. Menulis tag penutup `</img>` sering keliru dilakukan pemula yang terbiasa dengan elemen berpasangan. Menganggap `alt` sebagai pengatur ukuran juga merupakan jebakan umum akibat kurang memahami arti alternatif teks.",
+            explanation: "Elemen `<img>` merupakan elemen void/tunggal tanpa penutup `</img>`. Atribut `src` menentukan lokasi berkas dan `alt` menyediakan teks pengganti bagi screen reader maupun saat gambar gagal dimuat. Menulis tag penutup `</img>` sering keliru dilakukan pemula yang terbiasa dengan elemen berpasangan. Pilihan `href` adalah pengecoh yang paling menggoda karena keduanya sama-sama berisi alamat, dan tertukarnya `href` dengan `src` termasuk kesalahan yang paling sering muncul di minggu-minggu pertama: browser tidak memberi pesan error, gambarnya hanya tidak muncul. Menganggap `alt` sebagai pengatur ukuran juga jebakan umum akibat kurang memahami arti teks alternatif.",
           },
         },
         {
@@ -807,10 +807,10 @@ export const htmlTrack: Track = {
               "Di antara dua tag `<li>`, sebagai saudara langsung dari item daftar utama",
               "Di dalam elemen `<li>` induk sebelum tag penutup `</li>`-nya",
               "Di luar elemen `<ul>` utama pada baris terpisah",
-              "Di dalam tag `<head>` dokumen HTML",
+              "Di dalam elemen `<li>` induk, tetapi ditulis setelah tag penutup `</li>`-nya",
             ],
             answerIndex: 1,
-            explanation: "Dalam daftar bersarang, sub-daftar `<ul>` atau `<ol>` wajib diletakkan DI DALAM elemen `<li>` milik induknya. Menaruh `<ul>` anak sebagai saudara langsung dari `<li>` di bawah induk sering keliru terjadi karena tampilannya di layar tampak mirip, padahal struktur HTML tersebut tidak valid dan membuat hubungan hierarki induk-anak menjadi terputus bagi screen reader.",
+            explanation: "Dalam daftar bersarang, sub-daftar `<ul>` atau `<ol>` wajib diletakkan DI DALAM elemen `<li>` milik induknya, yaitu sebelum `</li>` ditutup. Menaruh `<ul>` anak sebagai saudara langsung dari `<li>` sering keliru terjadi karena tampilannya di layar tampak mirip, padahal struktur HTML tersebut tidak valid dan membuat hubungan hierarki induk-anak menjadi terputus bagi screen reader. Pilihan yang menaruhnya setelah `</li>` adalah jebakan yang paling halus: kalimatnya menyebut \"di dalam `<li>` induk\", tetapi begitu `</li>` sudah ditutup, elemen itu justru berada di luar — dan browser diam saja, tidak ada pesan error apa pun yang memberitahumu.",
           },
         },
         {
@@ -933,13 +933,13 @@ export const htmlTrack: Track = {
           pilihanGanda: {
             question: "Manakah penggunaan elemen `<br>` yang TEPAT sesuai standar penulisan HTML?",
             choices: [
-              "Digunakan untuk memberi jarak ruang antar-paragraf yang lebar di dalam artikel tanpa perlu menambahkan gaya CSS tambahan",
+              "Ditulis berulang kali untuk memberi jarak lebar antar-paragraf tanpa perlu CSS",
               "Digunakan untuk memotong baris di dalam satu blok teks alamat atau bait puisi",
-              "Digunakan sebagai garis pemisah horizontal antar bab",
-              "Digunakan untuk menyembunyikan teks agar tidak terbaca oleh pengunjung",
+              "Digunakan sebagai garis pemisah horizontal antar bagian artikel",
+              "Ditulis berpasangan dengan `</br>` untuk membungkus teks yang pindah baris",
             ],
             answerIndex: 1,
-            explanation: "Tag `<br>` berfungsi untuk memutus baris (line break) di dalam satu blok kalimat seperti bait puisi atau baris alamat. Menggunakan beberapa `<br>` berturut-turut untuk memberi jarak antar paragraf adalah kebiasaan keliru yang sering ditemui; memberi jarak antar paragraf harus menggunakan margin CSS. Untuk garis pemisah horizontal digunakan `<hr>`, dan untuk komentar digunakan `<!-- -->`.",
+            explanation: "Tag `<br>` berfungsi untuk memutus baris (line break) di dalam satu blok kalimat seperti bait puisi atau baris alamat. Menggunakan beberapa `<br>` berturut-turut untuk memberi jarak antar paragraf adalah kebiasaan keliru yang sering ditemui; memberi jarak antar paragraf harus menggunakan margin CSS. Untuk garis pemisah horizontal digunakan `<hr>`. Pilihan `</br>` adalah jebakan yang paling menggoda karena hampir semua tag yang sudah kamu pelajari memang berpasangan; `<br>` termasuk elemen void yang tidak punya isi, sehingga tidak ada yang perlu ditutup.",
           },
         },
         {

@@ -39,6 +39,21 @@ export default function StepChoiceView({ step, onPassed }: Props) {
     setCorrect(false);
   }
 
+  /**
+   * Mengganti pilihan setelah jawaban salah otomatis mengembalikan soal ke
+   * keadaan belum dijawab. Tanpa ini, radio terlihat aktif tapi tidak
+   * bereaksi — dan pada keyboard, tombol panah memindahkan fokus sementara
+   * tampilan tidak ikut berubah.
+   */
+  function handleSelect(i: number) {
+    if (submitted && correct) return;
+    setSelected(i);
+    if (submitted) {
+      setSubmitted(false);
+      setCorrect(false);
+    }
+  }
+
   return (
     <div className="space-y-6">
       {/* Penjelasan step */}
@@ -66,12 +81,23 @@ export default function StepChoiceView({ step, onPassed }: Props) {
       </div>
 
       {/* Radio Group Soal Pilihan Ganda */}
-      <fieldset className="rounded-xl border border-neutral-200 bg-white p-5 space-y-4">
-        <legend className="px-2 font-semibold text-neutral-900 text-base">
+      {/*
+        Nama aksesibel fieldset diambil dari legend + teks pertanyaan, supaya
+        pengguna screen reader mendengar pertanyaannya — bukan cuma "Pertanyaan
+        Pilihan Ganda" — saat fokus berpindah ke setiap radio.
+      */}
+      <fieldset
+        aria-labelledby={`legend-${step.id} soal-${step.id}`}
+        className="rounded-xl border border-neutral-200 bg-white p-5 space-y-4"
+      >
+        <legend
+          id={`legend-${step.id}`}
+          className="px-2 font-semibold text-neutral-900 text-base"
+        >
           ❓ Pertanyaan Pilihan Ganda
         </legend>
 
-        <p className="text-neutral-800 font-medium">
+        <p id={`soal-${step.id}`} className="text-neutral-800 font-medium">
           <InlineMarkdown text={questionText} />
         </p>
 
@@ -82,12 +108,16 @@ export default function StepChoiceView({ step, onPassed }: Props) {
             let containerCls =
               "flex items-start gap-3 rounded-lg border p-3.5 transition cursor-pointer hover:bg-gold-50 hover:border-gold-300";
 
-            if (submitted) {
+            // Saat jawaban salah, kunci jawaban TIDAK diperlihatkan — kalau
+            // diperlihatkan, "coba lagi" kehilangan artinya dan user tidak
+            // pernah dipaksa membaca ulang contohnya.
+            if (submitted && correct) {
               if (i === choiceData.answerIndex) {
                 containerCls = "flex items-start gap-3 rounded-lg border border-green-500 bg-green-50 p-3.5";
-              } else if (isSelected && !correct) {
-                containerCls = "flex items-start gap-3 rounded-lg border border-red-400 bg-red-50 p-3.5";
               }
+            } else if (submitted && isSelected) {
+              containerCls =
+                "flex items-start gap-3 rounded-lg border border-red-400 bg-red-50 p-3.5 cursor-pointer";
             } else if (isSelected) {
               containerCls = "flex items-start gap-3 rounded-lg border border-gold-500 bg-gold-50 p-3.5 ring-2 ring-gold-400";
             }
@@ -100,12 +130,17 @@ export default function StepChoiceView({ step, onPassed }: Props) {
                   name={`choice-${step.id}`}
                   value={i}
                   checked={isSelected}
-                  onChange={() => !submitted && setSelected(i)}
+                  onChange={() => handleSelect(i)}
                   disabled={submitted && correct}
                   className="mt-1 h-4 w-4 shrink-0 text-gold-600 focus:ring-2 focus:ring-gold-400 focus:outline-none"
                 />
+                {/*
+                  Pilihan banyak memuat potongan kode dalam backtick. Tanpa
+                  InlineMarkdown, backtick-nya bocor mentah ke layar pemula —
+                  persis alasan MarkdownRenderer dibuat.
+                */}
                 <span className="text-sm leading-relaxed text-neutral-800 font-normal">
-                  {choice}
+                  <InlineMarkdown text={choice} />
                 </span>
               </label>
             );
@@ -128,6 +163,8 @@ export default function StepChoiceView({ step, onPassed }: Props) {
         {/* Umpan Balik Jawaban */}
         {submitted && (
           <div
+            role="status"
+            aria-live="polite"
             className={`rounded-lg p-4 space-y-2 ${
               correct ? "bg-green-50 border border-green-200 text-green-900" : "bg-amber-50 border border-amber-200 text-amber-900"
             }`}
@@ -138,12 +175,16 @@ export default function StepChoiceView({ step, onPassed }: Props) {
             {correct ? (
               <div className="text-sm text-neutral-800 space-y-1">
                 <p className="font-medium text-green-950">Penjelasan:</p>
-                <p className="leading-relaxed">{choiceData.explanation}</p>
+                <p className="leading-relaxed">
+                  <InlineMarkdown text={choiceData.explanation} />
+                </p>
               </div>
             ) : (
               <div>
                 <p className="text-sm text-amber-900">
-                  Pilihan yang kamu pilih belum tepat. Coba baca kembali contoh dan penjelasannya.
+                  Pilihan itu belum tepat. Baca ulang bagian contoh di atas —
+                  jawabannya bisa kamu simpulkan dari sana. Pilih opsi lain,
+                  lalu jawab lagi.
                 </p>
                 <button
                   type="button"
