@@ -3,7 +3,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Step } from "@/lib/types";
 import { gabungPotongan, jalankanTes, type HasilTes } from "@/lib/tes";
+import { usePintasanCtrlEnter } from "@/lib/pintasan";
 import { InlineMarkdown } from "./MarkdownRenderer";
+import Tuts from "./Tuts";
 
 interface Props {
   step: Step;
@@ -61,6 +63,30 @@ export default function StepSusunKodeView({ step, onPassed }: Props) {
     return [...semua].sort((a, b) => sidik(a.teks) - sidik(b.teks));
   }, [data]);
 
+  /**
+   * Didefinisikan sebelum `if (!data)` di bawah karena pintasan keyboard-nya
+   * adalah hook — hook tidak boleh dilewati oleh early return.
+   */
+  function periksa() {
+    if (!data || lulus || !step.tests.length || tersusun.length === 0) return;
+    const res = jalankanTes(
+      step.tests,
+      gabungPotongan(
+        tersusun.map((k) => k.teks),
+        data.pemisah ?? " "
+      )
+    );
+    setHasil(res);
+    if (res.every((r) => r.pass)) {
+      setLulus(true);
+      onPassed();
+    }
+  }
+
+  // Ctrl+Enter memeriksa susunan. Setelah lulus pintasannya dilepas, supaya
+  // penekanan berikutnya dipakai halaman untuk pindah materi.
+  usePintasanCtrlEnter(!lulus, periksa);
+
   if (!data) return null;
 
   const pemisah = data.pemisah ?? " ";
@@ -114,16 +140,6 @@ export default function StepSusunKodeView({ step, onPassed }: Props) {
     } else if (e.key === "Delete" || e.key === "Backspace") {
       e.preventDefault();
       hapus(i);
-    }
-  }
-
-  function periksa() {
-    if (!step.tests.length || tersusun.length === 0) return;
-    const res = jalankanTes(step.tests, kodeTersusun);
-    setHasil(res);
-    if (res.every((r) => r.pass)) {
-      setLulus(true);
-      onPassed();
     }
   }
 
@@ -274,7 +290,8 @@ export default function StepSusunKodeView({ step, onPassed }: Props) {
             disabled={lulus || tersusun.length === 0}
             className="rounded-lg bg-gold-500 px-5 py-2.5 font-medium text-neutral-900 transition hover:bg-gold-400 disabled:opacity-50"
           >
-            Periksa susunan
+            Periksa susunan{" "}
+            <span className="text-neutral-900/60">(Ctrl + Enter)</span>
           </button>
           {tersusun.length > 0 && !lulus && (
             <button
@@ -309,9 +326,15 @@ export default function StepSusunKodeView({ step, onPassed }: Props) {
               {lulus ? "🎉 Susunanmu benar!" : "❌ Belum tepat"}
             </p>
             {lulus ? (
-              <p className="text-sm leading-relaxed text-neutral-800">
-                <InlineMarkdown text={data.explanation} />
-              </p>
+              <>
+                <p className="text-sm leading-relaxed text-neutral-800">
+                  <InlineMarkdown text={data.explanation} />
+                </p>
+                <p className="text-sm text-green-900">
+                  Tekan <Tuts>Ctrl</Tuts> + <Tuts>Enter</Tuts> sekali lagi untuk
+                  lanjut ke materi berikutnya.
+                </p>
+              </>
             ) : (
               <ul className="space-y-1.5 text-sm text-amber-900">
                 {gagal.map((r, i) => (

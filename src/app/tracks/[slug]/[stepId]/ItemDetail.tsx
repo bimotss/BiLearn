@@ -1,13 +1,15 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, useRouter } from "next/navigation";
 import StepView from "@/components/StepView";
 import StepSusunKodeView from "@/components/StepSusunKodeView";
 import QuizView from "@/components/QuizView";
 import MateriView from "@/components/MateriView";
 import { getTrack, getTrackItems } from "@/data/tracks";
 import { useProgress } from "@/lib/progress";
+import { usePintasanCtrlEnter } from "@/lib/pintasan";
 
 export default function ItemDetail({
   slug,
@@ -18,6 +20,19 @@ export default function ItemDetail({
 }) {
   const track = getTrack(slug);
   const { ready, mode, isDone, isDoneDi, markDone } = useProgress();
+  const router = useRouter();
+
+  /**
+   * Lolos di sesi ini — bukan sekadar "pernah selesai". Pintasan Ctrl+Enter
+   * untuk pindah materi hanya hidup setelah user benar-benar lolos di layar
+   * ini. Kalau patokannya progres tersimpan, membuka ulang materi yang sudah
+   * selesai membuat Ctrl+Enter langsung melompat tanpa menjalankan tes.
+   */
+  const kunciItem = `${slug}/${stepId}`;
+  const [sesi, setSesi] = useState({ kunci: kunciItem, lolos: false });
+  // Kunci ikut disimpan supaya status lolos hangus sendiri saat pindah materi
+  // — tanpa useEffect yang memanggil setState dan memicu render beruntun.
+  const lolosSesi = sesi.kunci === kunciItem && sesi.lolos;
 
   if (!track) notFound();
 
@@ -40,6 +55,22 @@ export default function ItemDetail({
     (diLuarMode
       ? isDoneDi(track.slug, item.id, "koding")
       : isDone(track.slug, item.id));
+
+  const tautanLanjut = next
+    ? `/tracks/${track.slug}/${next.id}`
+    : `/tracks/${track.slug}`;
+
+  /**
+   * Ctrl+Enter kedua. Penekanan pertama dipakai komponen latihan untuk
+   * menjalankan tes; komponen itu melepas pintasannya begitu lolos, jadi
+   * penekanan berikutnya sampai ke sini.
+   */
+  function selesaikan(dunia: Parameters<typeof markDone>[2]) {
+    markDone(track!.slug, item.id, dunia);
+    setSesi({ kunci: kunciItem, lolos: true });
+  }
+
+  usePintasanCtrlEnter(lolosSesi, () => router.push(tautanLanjut));
 
   return (
     <div className="space-y-6">
@@ -80,7 +111,7 @@ export default function ItemDetail({
         <MateriView
           key={item.id}
           materi={item}
-          onPassed={() => markDone(track.slug, item.id, "keduanya")}
+          onPassed={() => selesaikan("keduanya")}
         />
       ) : item.kind === "step" ? (
         mode === "pilihan-ganda" ? (
@@ -88,7 +119,7 @@ export default function ItemDetail({
             <StepSusunKodeView
               key={item.id}
               step={item}
-              onPassed={() => markDone(track.slug, item.id, "pilihan-ganda")}
+              onPassed={() => selesaikan("pilihan-ganda")}
             />
           ) : (
             <div className="space-y-6">
@@ -101,7 +132,7 @@ export default function ItemDetail({
               <StepView
                 key={item.id}
                 step={item}
-                onPassed={() => markDone(track.slug, item.id, "koding")}
+                onPassed={() => selesaikan("koding")}
               />
             </div>
           )
@@ -109,14 +140,14 @@ export default function ItemDetail({
           <StepView
             key={item.id}
             step={item}
-            onPassed={() => markDone(track.slug, item.id, "koding")}
+            onPassed={() => selesaikan("koding")}
           />
         )
       ) : (
         <QuizView
           key={item.id}
           quiz={item}
-          onPassed={() => markDone(track.slug, item.id, "keduanya")}
+          onPassed={() => selesaikan("keduanya")}
         />
       )}
 
@@ -141,6 +172,9 @@ export default function ItemDetail({
             }`}
           >
             Berikutnya →
+            {lolosSesi && (
+              <span className="ml-2 font-normal opacity-70">Ctrl + Enter</span>
+            )}
           </Link>
         ) : (
           <Link

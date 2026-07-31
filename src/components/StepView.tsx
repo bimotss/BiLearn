@@ -3,7 +3,9 @@
 import { useMemo, useState } from "react";
 import type { Step } from "@/lib/types";
 import { jalankanTes } from "@/lib/tes";
+import { usePintasanCtrlEnter } from "@/lib/pintasan";
 import { InlineMarkdown } from "./MarkdownRenderer";
+import Tuts from "./Tuts";
 
 interface Props {
   step: Step;
@@ -182,6 +184,10 @@ export default function StepView({ step, onPassed }: Props) {
     }
   }
 
+  // Ctrl+Enter menjalankan tes. Setelah lolos, pintasannya sengaja dilepas
+  // supaya penekanan berikutnya ditangani halaman untuk pindah materi.
+  usePintasanCtrlEnter(!passed, runTests);
+
   return (
     <div className="grid gap-6 lg:grid-cols-2">
       {/* Kiri: penjelasan + instruksi */}
@@ -237,7 +243,8 @@ export default function StepView({ step, onPassed }: Props) {
 
         {passed && (
           <div className="rounded-lg bg-green-100 p-4 font-medium text-green-900">
-            🎉 Semua tes lolos! Lanjut ke materi berikutnya.
+            🎉 Semua tes lolos! Tekan <Tuts>Ctrl</Tuts> + <Tuts>Enter</Tuts>{" "}
+            sekali lagi untuk lanjut ke materi berikutnya.
           </div>
         )}
 
@@ -246,7 +253,8 @@ export default function StepView({ step, onPassed }: Props) {
             onClick={runTests}
             className="rounded-lg bg-gold-500 px-5 py-2.5 font-medium text-neutral-900 hover:bg-gold-400"
           >
-            Jalankan Tes
+            Jalankan Tes{" "}
+            <span className="text-neutral-900/60">(Ctrl + Enter)</span>
           </button>
           <button
             onClick={() => setShowSolution((s) => !s)}
