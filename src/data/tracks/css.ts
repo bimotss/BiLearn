@@ -118,17 +118,15 @@ export const cssTrack: Track = {
             question:
               "Susun bagian `<head>` yang menautkan berkas gaya `style.css` ke halaman ini.",
             potongan: [
-              "<head>",
-              "  <title>Profil</title>",
-              "  <link rel=\"stylesheet\" href=\"style.css\">",
-              "</head>",
-            ],
+          "<head>\n  <title>Profil</title>\n  ",
+          "<link rel=\"stylesheet\" ",
+          "href=\"style.css\">\n</head>"
+],
             pengecoh: [
-              "  <link rel=\"style\" href=\"style.css\">",
-              "  <link rel=\"stylesheet\" src=\"style.css\">",
-              "  <link href=\"style.css\">",
-            ],
-            pemisah: "\n",
+          "<meta name=\"title\">\n  ",
+          "<script src=\"style.js\"></script>\n"
+],
+            pemisah: "",
             explanation:
               "Berkas CSS eksternal ditautkan dengan `<link>` di dalam `<head>`: `rel=\"stylesheet\"` memberi tahu browser peran berkasnya, `href` menunjuk lokasinya. Keping `rel=\"style\"` menggoda karena terdengar masuk akal, tapi browser hanya mengenali nilai `stylesheet` dan diam saja kalau salah — gayamu tidak pernah dimuat tanpa satu pun pesan error. Keping `src` adalah kekeliruan yang paling sering terjadi karena terbawa kebiasaan dari `<img>` dan `<script>`; pada `<link>`, alamat berkas selalu memakai `href`. Keping tanpa `rel` juga menjebak: alamatnya sudah benar, tapi tanpa keterangan peran browser tidak tahu berkas itu harus diperlakukan sebagai gaya.",
           },
@@ -2766,14 +2764,16 @@ export const cssTrack: Track = {
             question:
               "Susun ukuran judul yang mengalir mengikuti lebar layar, tapi tidak pernah lebih kecil dari 1.5rem atau lebih besar dari 3rem.",
             potongan: [
-              "h1 {\n  color: #1e293b;",
-              "  font-size: clamp(1.5rem, 5vw, 3rem);",
-              "}",
-            ],
+              "h1 {",
+              "\n  color: #1e293b;",
+              "\n  font-size: ",
+              "clamp(1.5rem, 5vw, 3rem);",
+              "\n}"
+],
             pengecoh: [
-              "  font-size: clamp(3rem, 5vw, 1.5rem);",
-              "  font-size: min(1.5rem, 5vw, 3rem);",
-            ],
+              "h2 {",
+              "clamp(3rem, 5vw, 1.5rem);"
+],
             pemisah: "\n",
             explanation:
               "`clamp()` menerima tiga nilai dengan urutan yang tidak boleh tertukar: minimum, nilai yang diinginkan, lalu maksimum. Nilai tengah biasanya memakai satuan viewport supaya ukurannya mengalir mengikuti lebar layar. Keping yang membalik minimum dan maksimum adalah kekeliruan yang sering terjadi dan hasilnya aneh: ketika minimum lebih besar dari maksimum, batas bawahnya yang menang sehingga ukurannya terkunci. Keping `min()` menggoda karena nama fungsinya mirip dan sama-sama menerima beberapa nilai, tapi ia hanya memilih yang terkecil — tidak ada batas bawah, jadi judulmu bisa mengecil sampai tidak terbaca di ponsel.",
@@ -3058,15 +3058,14 @@ export const cssTrack: Track = {
             question:
               "Susun font stack yang mencoba Helvetica Neue lebih dulu, lalu Arial, lalu font sans-serif bawaan sistem.",
             potongan: [
-              "body {\n  color: #1e293b;",
-              "  font-family: \"Helvetica Neue\", Arial, sans-serif;",
-              "}",
-            ],
+          "body {\n  color: #1e293b;\n  font-family: ",
+          "\"Helvetica Neue\", Arial, sans-serif;\n}"
+],
             pengecoh: [
-              "  font-family: Helvetica Neue, Arial, sans-serif;",
-              "  font: \"Helvetica Neue\", Arial, sans-serif;",
-            ],
-            pemisah: "\n",
+          "body {\n  color: #1e293b;\n  font-style: ",
+          "\"Times New Roman\", serif;\n}"
+],
+            pemisah: "",
             explanation:
               "Font stack dibaca browser dari kiri ke kanan: ia memakai yang pertama tersedia, dan nama generik seperti `sans-serif` di ujung adalah jaring pengaman yang tidak boleh dilupakan — tanpa itu, perangkat yang tidak punya satu pun font di daftarmu akan jatuh ke font serif bawaan yang mungkin sangat berbeda. Nama font yang mengandung spasi WAJIB diapit tanda kutip; keping tanpa kutip adalah kekeliruan yang sering terjadi dan membuat seluruh deklarasinya ditolak. Keping `font` menggoda karena namanya lebih pendek, tapi itu properti ringkas yang menuntut ukuran huruf ikut ditulis.",
           },

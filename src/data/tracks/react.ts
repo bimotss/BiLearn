@@ -56,14 +56,16 @@ export const reactTrack: Track = {
             question:
               "Ketik perintah terminal untuk memeriksa versi Node.js.",
             potongan: [
-              "node",
-              "-v",
-            ],
+          "no",
+          "de",
+          " -v"
+],
             pengecoh: [
-              "npm",
-              "--check",
-            ],
-            pemisah: " ",
+          "np",
+          "m",
+          " -check"
+],
+            pemisah: "",
             explanation:
               "Perintah `node -v` memeriksa versi Node.js yang terpasang di terminal. Pengecoh `npm` menggoda pemula yang keliru membedakan runtime Node.js dengan manajer paket npm, padahal keduanya memiliki CLI berbeda. Pengecoh `--check` juga merupakan jebakan opsi yang tidak valid untuk memeriksa versi di Node.js.",
           },
@@ -444,15 +446,15 @@ export const reactTrack: Track = {
           "solution": "function Button() {\n  return <button className=\"btn\">Klik Saya</button>;\n}",
           susunKode: {
             potongan: [
-              "function Button() {",
-              "  return <button className=\"btn\">Klik Saya</button>;",
-              "}",
-            ],
+          "function Button() {\n  ",
+          "return <button ",
+          "className=\"btn\">Klik Saya</button>;\n}"
+],
             pengecoh: [
-              "  return <button class=\"btn\">Klik Saya</button>;",
-              "  console.log('<button>Klik Saya</button>');",
-            ],
-            pemisah: "\n",
+          "const Btn = () => {\n  ",
+          "class=\"btn\">Klik Saya</button>;\n}"
+],
+            pemisah: "",
             explanation:
               "Di JSX, atribut kelas CSS ditulis `className` karena `class` adalah kata kunci reserved JavaScript. Pengecoh `class=\"btn\"` sangat menggoda pengembang dari HTML murni tetapi keliru di React. Pengecoh `console.log` juga jebakan fungsi yang tidak menggunakan perintah return JSX.",
           },
@@ -1181,12 +1183,14 @@ export const reactTrack: Track = {
           susunKode: {
             potongan: [
               "e.",
-              "preventDefault();",
-            ],
+              "prevent",
+              "Default()",
+              ";"
+],
             pengecoh: [
-              "stopPropagate();",
-              "return false;",
-            ],
+              "event.",
+              "stopPropagate();"
+],
             pemisah: "",
             explanation:
               "Mencegah perilaku bawaan form submit di React dilakukan dengan memanggil `e.preventDefault()`. Pengecoh `return false` menggoda pengembang jQuery tetapi tidak bekerja di event handler React. Pengecoh `stopPropagate` adalah jebakan metode penghentian gelembung event.",
@@ -1647,13 +1651,14 @@ export const reactTrack: Track = {
           "solution": "const filtered = items.filter(i => i.name.includes(query));",
           susunKode: {
             potongan: [
-              "const filtered =",
-              "items.filter(i => i.name.includes(query));",
-            ],
+              "const filtered = ",
+              "items.filter(",
+              "i => i.name.includes(query));"
+],
             pengecoh: [
-              "items.filter(i => i.name === query);",
-              "items.find(i => i.name.includes(query));",
-            ],
+              "const result = ",
+              "items.find("
+],
             pemisah: " ",
             explanation:
               "Pencarian kata kunci menggunakan `items.filter(i => i.name.includes(query))`. Pengecoh `.find()` menggoda tetapi hanya mengembalikan satu elemen pertama saja, bukan seluruh array daftar yang cocok dengan kata pencarian.",
@@ -1820,14 +1825,13 @@ export const reactTrack: Track = {
           "solution": "document.title = 'BiLearn';",
           susunKode: {
             potongan: [
-              "document.title ",
-              "= ",
-              "'BiLearn';",
-            ],
+          "document.title",
+          " = 'BiLearn';"
+],
             pengecoh: [
-              "document.title = 'Halo';",
-              "document.heading = 'BiLearn';",
-            ],
+          "document.name",
+          " = 'Main';"
+],
             pemisah: "",
             explanation:
               "Mengubah judul halaman di browser dilakukan via `document.title = 'BiLearn'`. Pengecoh `heading` menggoda tetapi merupakan nama properti fiktif yang tidak ada di objek DOM `document` browser. Hal ini sering keliru dilakukan oleh pengembang yang baru belajar manipulasi DOM di React.",
@@ -1930,13 +1934,13 @@ export const reactTrack: Track = {
           "solution": "controller.abort();",
           susunKode: {
             potongan: [
-              "const controller = new AbortController();\n",
-              "controller.abort();",
-            ],
+          "controller",
+          ".abort();"
+],
             pengecoh: [
-              "controller.cancel();",
-              "controller.stop();",
-            ],
+          "myCtrl",
+          ".stop();"
+],
             pemisah: "",
             explanation:
               "Membatalkan `AbortController` dilakukan dengan memanggil `controller.abort()`. Pengecoh `.cancel()` dan `.stop()` menggoda pemula yang menebak nama fungsi, tetapi bukan nama metode resmi dari API AbortController Web standard di browser.",
@@ -2241,12 +2245,12 @@ export const reactTrack: Track = {
             potongan: [
               "const ",
               "inputRef = ",
-              "useRef(null);",
-            ],
+              "useRef(null);"
+],
             pengecoh: [
-              "const inputRef = createRef(null);",
-              "const inputRef = useState(null);",
-            ],
+              "const myRef = ",
+              "useState(null);"
+],
             pemisah: "",
             explanation:
               "Membuat referensi DOM di komponen fungsi menggunakan `useRef(null)`. Pengecoh `createRef` menggoda tetapi akan membuat objek ref baru di setiap re-render alih-alih mempertahankan referensi yang sama secara konsisten.",
@@ -2284,14 +2288,14 @@ export const reactTrack: Track = {
             question:
               "Memoize hasil perhitungan berat dengan useMemo.",
             potongan: [
-              "useMemo(() =",
-              "> hitung(",
-              "data), [data]);",
-            ],
+          "useMemo(",
+          "() => hitung(data), ",
+          "[data]);"
+],
             pengecoh: [
-              "useCallback(() => hitung(data), [data]);",
-              "useMemo(() => hitung(data), []);",
-            ],
+          "useCallback(",
+          "[; "
+],
             pemisah: "",
             explanation:
               "Menyimpan hasil kalkulasi berat menggunakan `useMemo(() => hitung(data), [data])`. Pengecoh `useCallback` menggoda tetapi digunakan untuk menyimpan instansi fungsi, bukan nilai hasil kalkulasi eksekusinya. Pengecoh yang diberikan sengaja dirancang dari kesalahan nyata agar latihan ini melatih pemahaman mendalam tentang React.",
@@ -2502,14 +2506,13 @@ export const reactTrack: Track = {
           "solution": "<ThemeContext.Provider value=\"dark\"><Card /></ThemeContext.Provider>",
           susunKode: {
             potongan: [
-              "<ThemeContext.Provider ",
-              "value=\"dark\"><Card />",
-              "</ThemeContext.Provider>",
-            ],
+          "<ThemeContext.Provider ",
+          "value=\"dark\"><Card /></ThemeContext.Provider>"
+],
             pengecoh: [
-              "<ThemeContext value=\"dark\"><Card /></ThemeContext>;",
-              "<ThemeContext.Consumer value=\"dark\"><Card /></ThemeContext.Consumer>;",
-            ],
+          "<ThemeContext.Consumer ",
+          "value=\"light\"><Card /></ThemeContext.Provider>"
+],
             pemisah: "",
             explanation:
               "Penyedia Context menggunakan komponen `<ThemeContext.Provider value=\"dark\">`. Pengecoh `<ThemeContext>` tanpa `.Provider` menggoda tetapi keliru di API resmi React Context yang berlaku di komponen. Pengecoh yang diberikan sengaja dirancang dari kesalahan nyata agar latihan ini melatih pemahaman mendalam tentang React.",
@@ -2680,14 +2683,14 @@ export const reactTrack: Track = {
           "solution": "const useStore = create((set) => ({ count: 0 }));",
           susunKode: {
             potongan: [
-              "const useStore =",
-              " create((set) => ",
-              "({ count: 0 }));",
-            ],
+              "const useStore = ",
+              "create(",
+              "(set) => ({ count: 0 }));"
+],
             pengecoh: [
-              "const useStore = createStore({ count: 0 });",
-              "const useStore = createState({ count: 0 });",
-            ],
+              "const myStore = ",
+              "createStore("
+],
             pemisah: "",
             explanation:
               "Store Zustand dibuat dengan `create((set) => ({ count: 0 }))`. Pengecoh `createStore` menggoda pengembang Redux tetapi keliru di API utama Zustand yang menggunakan fungsi create. Pengecoh yang diberikan sengaja dirancang dari kesalahan nyata agar latihan ini melatih pemahaman mendalam tentang React.",
@@ -2857,14 +2860,14 @@ export const reactTrack: Track = {
             question:
               "Jalankan request paralel dengan Promise.all.",
             potongan: [
-              "Promise.all(",
-              "[usersPromise, ",
-              "postsPromise])",
-            ],
+          "Promise.all([",
+          "usersPromise, ",
+          "postsPromise])"
+],
             pengecoh: [
-              "Promise.race([usersPromise, postsPromise]);",
-              "Promise.any([usersPromise, postsPromise]);",
-            ],
+          "Promise.race([",
+          "usersPromise.then()"
+],
             pemisah: "",
             explanation:
               "Menunggu banyak request selesai bersamaan menggunakan `Promise.all([usersPromise, postsPromise])`. Pengecoh `Promise.race` menggoda tetapi hanya mengembalikan hasil satu promise yang paling cepat selesai. Pengecoh yang diberikan sengaja dirancang dari kesalahan nyata agar latihan ini melatih pemahaman mendalam tentang React.",
@@ -2943,14 +2946,14 @@ export const reactTrack: Track = {
             question:
               "Tambahkan item baru secara optimistic ke state todos.",
             potongan: [
-              "setTodos(",
-              "[...todos,",
-              " newTodo])",
-            ],
+          "setTodos([",
+          "...todos, ",
+          "newTodo])"
+],
             pengecoh: [
-              "setTodos(todos.push(newTodo));",
-              "setTodos(todos.concat(newTodo));",
-            ],
+          "updateTodos([",
+          "todos.push()"
+],
             pemisah: "",
             explanation:
               "Pembaruan state array imutabel menggunakan spread operator `[...todos, newTodo]`. Pengecoh `todos.push` menggoda tetapi memutasi array lama secara langsung yang dilarang keras di React. Pengecoh yang diberikan sengaja dirancang dari kesalahan nyata agar latihan ini melatih pemahaman mendalam tentang React.",
@@ -2985,13 +2988,13 @@ export const reactTrack: Track = {
               "Sertakan page di queryKey untuk pagination.",
             potongan: [
               "queryKey: ",
-              "['items',",
-              " page]",
-            ],
+              "['items', ",
+              "page]"
+],
             pengecoh: [
-              "queryKey: ['items']",
-              "queryKey: 'items-' + page",
-            ],
+              "queryName: ",
+              "['items']"
+],
             pemisah: "",
             explanation:
               "QueryKey pagination ditulis sebagai elemen array terpisah `['items', page]` agar React Query me-refetch otomatis saat nilai page berubah. Pengecoh string gabungan keliru secara struktur queryKey di TanStack Query.",
@@ -3031,12 +3034,12 @@ export const reactTrack: Track = {
             potongan: [
               "headers: { ",
               "Authorization: ",
-              "`Bearer ${token}` }",
-            ],
+              "`Bearer ${token}` }"
+],
             pengecoh: [
-              "headers: { Auth: `Bearer ${token}` } };",
-              "headers: { Authorization: token } };",
-            ],
+              "headerList: { ",
+              "Auth: "
+],
             pemisah: "",
             explanation:
               "Header otentikasi HTTP menggunakan nama standar `Authorization: `Bearer ${token}``. Pengecoh `Auth` menggoda tetapi bukan nama header HTTP standar yang diterima oleh API server pada umumnya. Pengecoh yang diberikan sengaja dirancang dari kesalahan nyata agar latihan ini melatih pemahaman mendalam tentang React.",
@@ -3165,14 +3168,14 @@ export const reactTrack: Track = {
           "solution": "<Link to=\"/profil\">Profil</Link>",
           susunKode: {
             potongan: [
-              "<Link to=",
-              "\"/profil\">",
-              "Profil</Link>",
-            ],
+              "<Link ",
+              "to=\"/profil\">",
+              "Profil</Link>"
+],
             pengecoh: [
-              "<a href=\"/profil\">Profil</a>;",
-              "<Link href=\"/profil\">Profil</Link>;",
-            ],
+              "<a ",
+              "href=\"/profil\">"
+],
             pemisah: "",
             explanation:
               "Navigasi SPA tanpa reload halaman menggunakan `<Link to=\"/profil\">Profil</Link>`. Pengecoh `<a href=\"...\">` menggoda pengembang HTML murni tetapi menyebabkan reload halaman penuh di browser yang merusak performa SPA.",
@@ -3242,13 +3245,15 @@ export const reactTrack: Track = {
             question:
               "Render outlet anak di layout dengan <Outlet />.",
             potongan: [
-              "const layout =",
-              "<Outlet />;",
-            ],
+          "<Out",
+          "let",
+          " />"
+],
             pengecoh: [
-              "<Children />;",
-              "<RouteOutlet />;",
-            ],
+          "<Child",
+          "ren",
+          "></Children>"
+],
             pemisah: "",
             explanation:
               "Komponen penampung nested route React Router bernama `<Outlet />`. Pengecoh `<Children />` menggoda tetapi bukan nama komponen resmi dari pustaka React Router yang digunakan untuk layout. Pengecoh yang diberikan sengaja dirancang dari kesalahan nyata agar latihan ini melatih pemahaman mendalam tentang React.",
@@ -3280,13 +3285,13 @@ export const reactTrack: Track = {
           "solution": "navigate(\"/login\");",
           susunKode: {
             potongan: [
-              "const nav =",
-              "navigate(\"/login\");",
-            ],
+          "navigate(",
+          "\"/login\");"
+],
             pengecoh: [
-              "router.push(\"/login\");",
-              "redirect(\"/login\");",
-            ],
+          "router.push(",
+          "\"/sign-in\");"
+],
             pemisah: "",
             explanation:
               "Navigasi programatis di React Router v6 menggunakan fungsi `navigate('/login')`. Pengecoh `router.push` menggoda pengembang Next.js tetapi keliru di React Router yang menggunakan hook useNavigate. Pengecoh yang diberikan sengaja dirancang dari kesalahan nyata agar latihan ini melatih pemahaman mendalam tentang React.",
@@ -3320,14 +3325,14 @@ export const reactTrack: Track = {
             question:
               "Buat route fallback wildcard path=\"*\".",
             potongan: [
-              "<Route path=",
-              "\"*\" element=",
-              "{<NotFound />} />",
-            ],
+              "<Route ",
+              "path=\"*\" ",
+              "element={<NotFound />} />"
+],
             pengecoh: [
-              "<Route path=\"404\" element={<NotFound />} />;",
-              "<Route path=\"/*\" element={<NotFound />} />;",
-            ],
+              "<Path ",
+              "path=\"404\" "
+],
             pemisah: "",
             explanation:
               "Route 404 catch-all menggunakan `path=\"*\"`. Pengecoh `path=\"404\"` menggoda tetapi hanya mencocokkan URL `/404` secara spesifik, bukan seluruh jalur yang tidak cocok di aplikasi. Pengecoh yang diberikan sengaja dirancang dari kesalahan nyata agar latihan ini melatih pemahaman mendalam tentang React.",
@@ -3365,14 +3370,14 @@ export const reactTrack: Track = {
             question:
               "Bungkus komponen lazy dengan Suspense fallback.",
             potongan: [
-              "<Suspense fallback=",
-              "{<p>Memuat...</p>}>",
-              "<Home /></Suspense>",
-            ],
+          "<Suspense ",
+          "fallback={<p>Memuat...</p>}>",
+          "<Home /></Suspense>"
+],
             pengecoh: [
-              "<React.Lazy fallback={<p>Memuat...</p>}><Home /></React.Lazy>;",
-              "<Suspense loading={<p>Memuat...</p>}><Home /></Suspense>;",
-            ],
+          "<div ",
+          "fallback=\"<p>Memuat...</p>\">"
+],
             pemisah: "",
             explanation:
               "Komponen yang di-load secara lazy wajib dibungkus `<Suspense fallback={...}>`. Pengecoh `<React.Lazy>` menggoda tetapi bukan nama komponen pembungkus di React yang digunakan untuk penanganan async rendering. Pengecoh yang diberikan sengaja dirancang dari kesalahan nyata agar latihan ini melatih pemahaman mendalam tentang React.",
@@ -3540,14 +3545,13 @@ export const reactTrack: Track = {
           "solution": "expect(element).toBeInTheDocument();",
           susunKode: {
             potongan: [
-              "expect(",
-              "element).toBeInTheDocument(",
-              ");",
-            ],
+          "expect(element)",
+          ".toBeInTheDocument();"
+],
             pengecoh: [
-              "expect(element).toBeTruthy();",
-              "expect(element).toBeDefined();",
-            ],
+          "expect(target)",
+          ".toBeVisible();"
+],
             pemisah: "",
             explanation:
               "Matcher `jest-dom` untuk memeriksa keberadaan elemen di DOM adalah `toBeInTheDocument()`. Pengecoh `toBeTruthy()` menggoda tetapi kurang spesifik untuk pengujian elemen DOM pada React Testing Library. Pengecoh yang diberikan sengaja dirancang dari kesalahan nyata agar latihan ini melatih pemahaman mendalam tentang React.",
@@ -3579,14 +3583,13 @@ export const reactTrack: Track = {
           "solution": "await userEvent.click(button);",
           susunKode: {
             potongan: [
-              "await ",
-              "userEvent.click(",
-              "button);",
-            ],
+          "await ",
+          "userEvent.click(button);"
+],
             pengecoh: [
-              "fireEvent.click(button);",
-              "userEvent.hover(button);",
-            ],
+          "yield ",
+          "fireEvent.click(button);"
+],
             pemisah: "",
             explanation:
               "Simulasi interaksi pengguna modern menggunakan `await userEvent.click(button)`. Pengecoh `fireEvent` menggoda cara lama tetapi tidak menembakkan seluruh rangkaian event browser secara lengkap. Jebakan ini sering membuat test tidak realistis.",
@@ -3667,14 +3670,13 @@ export const reactTrack: Track = {
             question:
               "Mock endpoint HTTP GET dengan MSW http.get.",
             potongan: [
-              "http.get('/api/users', () => {",
-              "\n  return HttpResponse.json(",
-              "[{ id: 1, name: 'Bimo' }]);\n});",
-            ],
+              "http.get('/api/users', () => {\n  return HttpResponse.json(",
+              "[{ id: 1, name: 'Bimo' }]);\n});"
+],
             pengecoh: [
-              "rest.get('/api/users', (req, res, ctx) => { return res(ctx.json([{ id: 1, name: 'Bimo' }])); });",
-              "http.get('/api/users', () => { return Response.json([{ id: 1, name: 'Bimo' }]); });",
-            ],
+              "rest.get('/api/users', () => {\n  return Response.json(",
+              "[{ id: 2, name: 'Bimo' }]);\n});"
+],
             pemisah: "",
             explanation:
               "Mock API versi MSW v2 menggunakan `http.get` dan `HttpResponse.json`. Pengecoh `rest.get` menggoda pengembang MSW v1 tetapi API lama tersebut sudah deprecated di versi terbaru. Pengecoh yang diberikan sengaja dirancang dari kesalahan nyata agar latihan ini melatih pemahaman mendalam tentang React.",
@@ -3936,14 +3938,16 @@ export const reactTrack: Track = {
             question:
               "Bungkus komponen <Profile /> dengan ErrorBoundary.",
             potongan: [
-              "<ErrorBoundary fallback=",
-              "{<p>Error</p>}><Profile ",
-              "/></ErrorBoundary>",
-            ],
+              "<ErrorBoundary ",
+              "fallback=",
+              "{<p>Error</p>}>",
+              "<Profile />",
+              "</ErrorBoundary>"
+],
             pengecoh: [
-              "<TryCatch fallback={<p>Error</p>}><Profile /></TryCatch>;",
-              "<ErrorBoundary error={<p>Error</p>}><Profile /></ErrorBoundary>;",
-            ],
+              "<TryCatch ",
+              "error="
+],
             pemisah: "",
             explanation:
               "Menangani crash komponen menggunakan pembungkus `<ErrorBoundary fallback={<p>Error</p>}>`. Pengecoh `<TryCatch>` menggoda tetapi try/catch biasa tidak bekerja untuk menangani crash pada JSX di dalam render. Pengecoh yang diberikan sengaja dirancang dari kesalahan nyata agar latihan ini melatih pemahaman mendalam tentang React.",
@@ -3981,14 +3985,14 @@ export const reactTrack: Track = {
             question:
               "Baca environment variable import.meta.env.VITE_API_URL.",
             potongan: [
-              "const envUrl =",
-              "const url =",
-              "import.meta.env.VITE_API_URL;",
-            ],
+              "const url = ",
+              "import.meta.env.",
+              "VITE_API_URL;"
+],
             pengecoh: [
-              "const url = process.env.VITE_API_URL;",
-              "const url = window.env.VITE_API_URL;",
-            ],
+              "const api = ",
+              "process.env."
+],
             pemisah: "",
             explanation:
               "Akses variabel lingkungan di Vite menggunakan `import.meta.env.VITE_API_URL`. Pengecoh `process.env` menggoda pengembang Webpack/CRA tetapi tidak tersedia di browser pada proyek Vite yang menggunakan import.meta.",
@@ -4112,14 +4116,14 @@ export const reactTrack: Track = {
           "solution": "<label htmlFor=\"username\">Username</label>",
           susunKode: {
             potongan: [
-              "<label htmlFor=",
-              "\"username\">",
-              "Username</label>",
-            ],
+              "<label ",
+              "htmlFor=\"username\">",
+              "Username</label>"
+],
             pengecoh: [
-              "<label for=\"username\">Username</label>;",
-              "<label name=\"username\">Username</label>;",
-            ],
+              "<input ",
+              "for=\"username\">"
+],
             pemisah: "",
             explanation:
               "Atribut penunjuk input pada label JSX ditulis `htmlFor=\"username\"` karena `for` adalah kata kunci reserved JavaScript. Pengecoh `for` menggoda pengembang HTML murni tetapi merupakan kesalahan sintaks di JSX. Pengecoh yang diberikan sengaja dirancang dari kesalahan nyata agar latihan ini melatih pemahaman mendalam tentang React.",

@@ -2033,15 +2033,13 @@ export const gitTrack: Track = {
             question:
               "Susun komentar review untuk potongan kode di panel kanan. Sebutkan **dua** masalah seriusnya secara spesifik, bukan penilaian umum.",
             potongan: [
-              "// Komentar review:\n// 1. API_KEY tertulis langsung di kode (hardcoded secret). Kalau repo ini\n//    ter-push publik, key aktif ini bocor. ",
-              "Pindahkan ke variabel\n//    lingkungan lewat .env dan jangan pernah di-commit.\n// 2. Kegagalan fetch tidak ditangani: kalau server balas 500, res.json(",
-              ")\n//    bisa melempar error dan data.items jadi undefined. Periksa res.ok\n//    lalu bungkus dengan try/catch dan kembalikan pesan yang jelas.",
-            ],
+              "// Komentar review:\n// 1. API_KEY tertulis langsung di kode (hardcoded secret). Kalau repo ini\n//    ter-push publik, key aktif ini bocor. Pindahkan ke variabel\n//    lingkungan lewat .env dan jangan pernah di-commit.",
+              "\n// 2. Kegagalan fetch tidak ditangani: kalau server balas 500, res.json()\n//    bisa melempar error dan data.items jadi undefined. Periksa res.ok\n//    lalu bungkus dengan try/catch dan kembalikan pesan yang jelas."
+],
             pengecoh: [
-              "// 1. Ada yang agak aneh di bagian atas fungsi ini, tolong dicek dan dirapikan lagi ya sebelum di-merge.",
-              "//    Pindahkan saja ke tempat lain yang lebih aman sebelum di-push.",
-              "//    Periksa saja apakah tampilannya sudah benar di browser sebelum merge.",
-            ],
+              "// Komentar review:\n// 1. Kode sudah rapi dan siap diproduksi.",
+              "\n// 2. Tidak ada yang perlu diperbaiki."
+],
             pemisah: "",
             explanation:
               "Review yang berguna menyebut **masalahnya, akibatnya, dan langkah perbaikannya** — itulah bedanya dengan komentar yang hanya menambah pekerjaan bagi penulis kode. Ketiga keping pengecoh menggoda karena terdengar sopan dan tetap terasa seperti review sungguhan, tapi tak satu pun menyebut apa yang salah: \"ada yang aneh\" tidak menunjukkan kredensial yang tertulis di kode, \"tempat yang lebih aman\" tidak menyebut variabel lingkungan, dan \"periksa tampilannya\" melewatkan kegagalan `fetch` sama sekali. Inilah kekeliruan yang paling sering membuat proses review berputar dua tiga ronde tanpa satu pun masalah nyata terselesaikan.",

@@ -2401,14 +2401,13 @@ export const typescriptTrack: Track = {
           solution: "interface Wrapper<T = number> {\n  content: T;\n}",
           susunKode: {
             potongan: [
-              "interface Wrapper<T = number> {",
-              "  content: T;",
-              "}",
-            ],
+          "interface Wrapper<T = number> {\n",
+          "  content: T;\n}"
+],
             pengecoh: [
-              "interface Wrapper<T : number> {",
-              "interface Wrapper<T == number> {",
-            ],
+          "type Wrapper<T = number> = {\n",
+          "  value: T;\n}"
+],
             pemisah: "\n",
             explanation:
               "Default type parameter ditulis dengan tanda sama dengan `T = number` pada deklarasi generic. Pengecoh `T : number` menggoda bagi yang tertukar sintaks anotasi titik dua. Pengecoh `T == number` keliru karena mempergunakan operator perbandingan.",
