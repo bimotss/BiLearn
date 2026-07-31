@@ -94,6 +94,22 @@ export const typescriptTrack: Track = {
             },
           ],
           solution: "npm install -D typescript",
+          susunKode: {
+            question:
+              "Tulis perintah npm untuk memasang TypeScript sebagai devDependency.",
+            potongan: [
+              "npm install",
+              "-D",
+              "typescript",
+            ],
+            pengecoh: [
+              "npm add",
+              "--save",
+            ],
+            pemisah: " ",
+            explanation:
+              "Saat memasang TypeScript di proyek, kesalahan yang sering terjadi adalah memasangnya sebagai dependency biasa (`--save`) atau secara global (`-g`), padahal compiler TypeScript hanya dibutuhkan saat pengembangan. Pengecoh `--save` dan `npm add` menggoda pemula yang belum terbiasa dengan flag `-D` (`--save-dev`) untuk membedakan devDependency.",
+          },
         },
         {
           kind: "step",
@@ -118,6 +134,21 @@ export const typescriptTrack: Track = {
             },
           ],
           solution: "npx tsc --init",
+          susunKode: {
+            question:
+              "Jalankan compiler dengan flag yang membuatkan tsconfig.json otomatis.",
+            potongan: [
+              "npx tsc",
+              "--init",
+            ],
+            pengecoh: [
+              "npx tsconfig",
+              "--generate",
+            ],
+            pemisah: " ",
+            explanation:
+              "Perintah untuk membuat `tsconfig.json` adalah `npx tsc --init`. Pengecoh `npx tsconfig` menggoda karena nama berkas konfigurasinya adalah `tsconfig.json`, sehingga keliru dikira sebagai perintah CLI. Begitu pula `--generate` sering dikira flag pembuat berkas, padahal TypeScript menggunakan flag `--init`.",
+          },
         },
         {
           kind: "step",
@@ -146,6 +177,21 @@ export const typescriptTrack: Track = {
             },
           ],
           solution: "npx tsc hitung.ts",
+          susunKode: {
+            question:
+              "Tulis perintah untuk mengompilasi hitung.ts saja.",
+            potongan: [
+              "npx tsc",
+              "hitung.ts",
+            ],
+            pengecoh: [
+              "npx build",
+              "hitung.js",
+            ],
+            pemisah: " ",
+            explanation:
+              "Untuk mengompilasi file TypeScript secara spesifik, kita memanggil `npx tsc hitung.ts`. Pengecoh `npx build` menggoda pengguna yang terbiasa dengan perintah build framework, padahal CLI TypeScript menggunakan `tsc`. Pengecoh `hitung.js` juga sering jadi jebakan karena pengguna keliru memasukkan nama file hasil kompilasi.",
+          },
         },
         {
           kind: "step",
@@ -178,6 +224,21 @@ export const typescriptTrack: Track = {
             },
           ],
           solution: "node hitung.js",
+          susunKode: {
+            question:
+              "Tulis perintah Node.js untuk menjalankan berkas hitung.js hasil kompilasi.",
+            potongan: [
+              "node",
+              "hitung.js",
+            ],
+            pengecoh: [
+              "tsc",
+              "hitung.ts",
+            ],
+            pemisah: " ",
+            explanation:
+              "Hasil kompilasi TypeScript adalah file JavaScript (.js) murni yang dieksekusi menggunakan runtime Node.js via `node hitung.js`. Pengecoh `hitung.ts` menggoda karena merupakan nama file sumber asal, padahal Node.js tidak bisa langsung menjalankan file TS tanpa runner khusus. Pengecoh `tsc` keliru digunakan jika menyangka kompilator yang me-run kode.",
+          },
         },
         {
           kind: "step",
@@ -227,6 +288,23 @@ export const typescriptTrack: Track = {
             "  return sisi * sisi;\n" +
             "}\n" +
             "console.log(luasPersegi(5));",
+          susunKode: {
+            question:
+              "Perbaiki pemanggilan fungsi agar argumen yang dikirim berjenis angka.",
+            potongan: [
+              "function luasPersegi(sisi: number): number {",
+              "  return sisi * sisi;",
+              "}",
+              "console.log(luasPersegi(5));",
+            ],
+            pengecoh: [
+              "console.log(luasPersegi(\"5\"));",
+              "function luasPersegi(sisi: string): number {",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Pesan error TypeScript memberi tahu bahwa argumen tipe `string` tidak dapat diberikan ke parameter tipe `number`. Perbaikan yang benar adalah mengubah argumen pemanggilan fungsi menjadi angka `luasPersegi(5)`. Pengecoh dengan string \"5\" menggoda tetapi tetap menyebabkan error tipe, dan mengubah anotasi tipe parameter menjadi `string` adalah jebakan yang melanggar instruksi.",
+          },
         },
         {
           kind: "step",
@@ -253,6 +331,21 @@ export const typescriptTrack: Track = {
             },
           ],
           solution: "npx tsx src/index.ts",
+          susunKode: {
+            question:
+              "Tulis perintah untuk menjalankan src/index.ts langsung menggunakan tsx.",
+            potongan: [
+              "npx tsx",
+              "src/index.ts",
+            ],
+            pengecoh: [
+              "npx node",
+              "src/index.js",
+            ],
+            pemisah: " ",
+            explanation:
+              "Perintah `npx tsx src/index.ts` langsung mengeksekusi file TypeScript tanpa membuat file JS perantara di disk. Pengecoh `npx node` menggoda karena Node.js adalah runtime dasar, tetapi `node` standar tidak mendukung pengesetan loader TS secara langsung tanpa flag tambahan. Pengecoh `src/index.js` adalah keliru karena file yang ingin dijalankan ber-ekstensi `.ts`.",
+          },
         },
         {
           kind: "quiz",
@@ -432,6 +525,22 @@ export const typescriptTrack: Track = {
             "const hargaTotal: number = 50000;\n" +
             "const ongkir = 1000;\n" +
             "console.log(hargaTotal + ongkir);",
+          susunKode: {
+            question:
+              "Deklarasikan hargaTotal sebagai angka 50000.",
+            potongan: [
+              "const hargaTotal: number = 50000;",
+              "const ongkir = 1000;",
+              "console.log(hargaTotal + ongkir);",
+            ],
+            pengecoh: [
+              "const hargaTotal: string = \"50000\";",
+              "const hargaTotal: any = \"50000\";",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Memastikan variabel bernilai angka sangat penting agar operasi aritmatika tidak berubah menjadi penyambungan string. Pengecoh `string = \"50000\"` menggoda pemula yang belum paham dampak pengetikan teks pada angka, dan sering keliru membuat hasil `500001000`. Pengecoh type assertion juga jebakan yang menyimpang dari anotasi angka.",
+          },
         },
         {
           kind: "step",
@@ -461,6 +570,21 @@ export const typescriptTrack: Track = {
             },
           ],
           solution: "const nilai: number[] = [85, 90, 95];",
+          susunKode: {
+            question:
+              "Buat array angka bernamanya nilai berisi [85, 90, 95].",
+            potongan: [
+              "const nilai: number[] =",
+              "[85, 90, 95];",
+            ],
+            pengecoh: [
+              "const nilai: string[] =",
+              "[\"85\", \"90\", \"95\"];",
+            ],
+            pemisah: " ",
+            explanation:
+              "Anotasi array angka ditulis sebagai `number[]` atau `Array<number>`. Pengecoh `string[]` menggoda bagi yang keliru menganggap array nilai sebagai kumpulan teks. Pengecoh elemen string `[\"85\", \"90\", \"95\"]` juga sering menjadi jebakan karena menyisipkan tanda kutip pada angka.",
+          },
         },
         {
           kind: "step",
@@ -495,6 +619,21 @@ export const typescriptTrack: Track = {
             },
           ],
           solution: "let skor = 100;",
+          susunKode: {
+            question:
+              "Buat let skor = 100 tanpa anotasi tipe.",
+            potongan: [
+              "let skor",
+              "= 100;",
+            ],
+            pengecoh: [
+              "let skor: number",
+              "= \"100\";",
+            ],
+            pemisah: " ",
+            explanation:
+              "Dalam TypeScript, Type Inference akan otomatis menyimpulkan tipe `number` dari nilai awal 100. Pengecoh `let skor: number` menggoda tetapi melanggar instruksi untuk tidak menulis anotasi tipe sama sekali. Pengecoh `= \"100\";` sering keliru dipakai jika salah mengetik nilai awal sebagai string.",
+          },
         },
         {
           kind: "step",
@@ -538,6 +677,23 @@ export const typescriptTrack: Track = {
             "if (typeof dataMentah === \"string\") {\n" +
             "  console.log(dataMentah.toUpperCase());\n" +
             "}",
+          susunKode: {
+            question:
+              "Gunakan tipe unknown untuk dataMentah dan periksa typeof sebelum memakainya.",
+            potongan: [
+              "const dataMentah: unknown = \"Halo dari API\";",
+              "if (typeof dataMentah === \"string\") {",
+              "  console.log(dataMentah.toUpperCase());",
+              "}",
+            ],
+            pengecoh: [
+              "const dataMentah: any = \"Halo dari API\";",
+              "if (dataMentah.type === \"string\") {",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Tipe `unknown` adalah tipe teraman untuk data luar karena memaksa tipe diperiksa sebelum digunakan. Pengecoh `any` menggoda karena mudah ditulis tetapi mematikan pemeriksaan kompilator, yang merupakan jebakan umum dalam TypeScript. Pengecoh `dataMentah.type` sering keliru menguji properti alih-alih operator `typeof`.",
+          },
         },
         {
           kind: "step",
@@ -577,6 +733,22 @@ export const typescriptTrack: Track = {
             },
           ],
           solution: "let token: string | null = null;",
+          susunKode: {
+            question:
+              "Buat variabel token bertipe string | null diawali null.",
+            potongan: [
+              "let token:",
+              "string | null",
+              "= null;",
+            ],
+            pengecoh: [
+              "string | undefined",
+              "= undefined;",
+            ],
+            pemisah: " ",
+            explanation:
+              "Union type `string | null` mengizinkan variabel berisi teks atau nilai `null` secara eksplisit. Pengecoh `string | undefined` menggoda karena `undefined` juga menyatakan ketiadaan nilai, namun keliru karena instruksi meminta keadaan `null`. Pengecoh `= undefined;` sering jadi jebakan saat salah memilih nilai inisialisasi.",
+          },
         },
         {
           kind: "step",
@@ -620,6 +792,23 @@ export const typescriptTrack: Track = {
             "  return a + b;\n" +
             "}\n" +
             "console.log(tambah(4, 5));",
+          susunKode: {
+            question:
+              "Buat fungsi tambah dengan anotasi parameter dan kembalian number.",
+            potongan: [
+              "function tambah(a: number, b: number): number {",
+              "  return a + b;",
+              "}",
+              "console.log(tambah(4, 5));",
+            ],
+            pengecoh: [
+              "function tambah(a, b): number {",
+              "  return a * b;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Anotasi tipe parameter `a: number, b: number` wajib ada pada fungsi agar TypeScript bisa memverifikasi argumen. Pengecoh tanpa tipe parameter menggoda pengembang JS yang keliru melupakan anotasi TS. Pengecoh perkalian `a * b` juga jebakan logika yang menyimpang dari penjumlahan.",
+          },
         },
         {
           kind: "step",
@@ -674,6 +863,24 @@ export const typescriptTrack: Track = {
             "    \"strict\": true\n" +
             "  }\n" +
             "}",
+          susunKode: {
+            question:
+              "Tambahkan opsi strict: true di tsconfig.json.",
+            potongan: [
+              "{\n  \"compilerOptions\": {",
+              "    \"target\": \"ES2022\",",
+              "    \"outDir\": \"dist\",",
+              "    \"strict\": true",
+              "  }\n}",
+            ],
+            pengecoh: [
+              "    \"strictMode\": true,",
+              "    \"strictChecks\": true,",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Opsi `\"strict\": true` di `tsconfig.json` menyalakan seluruh aturan pemeriksaan ketat TypeScript. Pengecoh `\"strictMode\"` dan `\"strictChecks\"` menggoda karena terdengar mirip dengan konsep JavaScript, tetapi keliru karena nama properti resmi TypeScript hanyalah `strict`.",
+          },
         },
         {
           kind: "quiz",
@@ -840,6 +1047,19 @@ export const typescriptTrack: Track = {
             },
           ],
           solution: "type UserID = string | number;",
+          susunKode: {
+            potongan: [
+              "type UserID =",
+              "string | number;",
+            ],
+            pengecoh: [
+              "interface UserID =",
+              "string & number;",
+            ],
+            pemisah: " ",
+            explanation:
+              "Type Alias (`type`) sanggup membuat union type `string | number`. Pengecoh `interface UserID` menggoda karena interface sering dipakai untuk objek, tetapi keliru karena interface tidak bisa digunakan untuk tipe union primitif. Pengecoh `string & number` juga jebakan logika intersection yang tak mungkin terwujud.",
+          },
         },
         {
           kind: "step",
@@ -890,6 +1110,24 @@ export const typescriptTrack: Track = {
             "  name: string;\n" +
             "  age?: number;\n" +
             "}",
+          susunKode: {
+            question:
+              "Buat interface Student dengan readonly id, name, dan age opsional.",
+            potongan: [
+              "interface Student {",
+              "  readonly id: number;",
+              "  name: string;",
+              "  age?: number;",
+              "}",
+            ],
+            pengecoh: [
+              "  private id: number;",
+              "  age: number | null;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Properti imutabel diberi kata kunci `readonly`, sedangkan properti opsional menggunakan tanda tanya `age?: number`. Pengecoh `private id` menggoda bagi programmer berbasis class tetapi keliru dalam interface. Pengecoh `age: number | null` sering jadi jebakan karena mengharuskan properti ditulis walau bernilai null.",
+          },
         },
         {
           kind: "step",
@@ -946,6 +1184,23 @@ export const typescriptTrack: Track = {
             "interface Team {\n" +
             "  members: User[];\n" +
             "}",
+          susunKode: {
+            question:
+              "Buat interface Team dengan members bertipe User[].",
+            potongan: [
+              "interface User {\n  id: number;\n  name: string;\n  email: string;\n}",
+              "interface Team {",
+              "  members: User[];",
+              "}",
+            ],
+            pengecoh: [
+              "  members: User;",
+              "  members: Array<object>;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Array of Object didefinisikan dengan menyandingkan nama interface objek dan tanda siku `User[]`. Pengecoh `members: User` menggoda jika lupa bahwa tim berisi banyak pengguna. Pengecoh `Array<object>` keliru karena kehilangan detail struktur `User` yang sudah ditentukan.",
+          },
         },
         {
           kind: "step",
@@ -980,6 +1235,20 @@ export const typescriptTrack: Track = {
             },
           ],
           solution: "interface StringMap {\n  [key: string]: string;\n}",
+          susunKode: {
+            potongan: [
+              "interface StringMap {",
+              "  [key: string]: string;",
+              "}",
+            ],
+            pengecoh: [
+              "  [key: number]: string;",
+              "  key: string = string;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Index Signature `[key: string]: string` mengizinkan objek memiliki key dinamis berupa teks dengan nilai teks. Pengecoh `[key: number]` menggoda jika keliru mengira key objek bertipe angka. Pengecoh `key: string = string` sering jadi jebakan karena mencoba menulis sintaks assign nilai di interface.",
+          },
         },
         {
           kind: "step",
@@ -1037,6 +1306,23 @@ export const typescriptTrack: Track = {
             "interface Admin extends User {\n" +
             "  role: string;\n" +
             "}",
+          susunKode: {
+            question:
+              "Buat interface Admin yang meng-extends User.",
+            potongan: [
+              "interface User {\n  id: number;\n  name: string;\n  email: string;\n}",
+              "interface Admin extends User {",
+              "  role: string;",
+              "}",
+            ],
+            pengecoh: [
+              "interface Admin implements User {",
+              "  role: string;\n  name: string;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Mewarisi interface dilakukan dengan kata kunci `extends User` tanpa menulis ulang properti lama. Pengecoh `implements` menggoda karena istilah tersebut ada di class, tetapi keliru untuk pewarisan interface. Pengecoh menyalin `name: string` juga jebakan yang melanggar instruksi.",
+          },
         },
         {
           kind: "step",
@@ -1081,6 +1367,23 @@ export const typescriptTrack: Track = {
           ],
           solution:
             "interface ApiResponse {\n  code: number;\n  message: string;\n}",
+          susunKode: {
+            question:
+              "Buat interface ApiResponse dengan code: number dan message: string.",
+            potongan: [
+              "interface ApiResponse {",
+              "  code: number;",
+              "  message: string;",
+              "}",
+            ],
+            pengecoh: [
+              "  code: string;",
+              "  message: text;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Pemodelan respons API membutuhkan kejelasan tipe data seperti `code: number` dan `message: string`. Pengecoh `code: string` menggoda jika biasa menerima kode HTTP dalam string. Pengecoh `text` adalah keliru karena tipe bawaan TypeScript untuk teks adalah `string`.",
+          },
         },
         {
           kind: "quiz",
@@ -1264,6 +1567,19 @@ export const typescriptTrack: Track = {
             },
           ],
           solution: 'type Role = "admin" | "user" | "guest";',
+          susunKode: {
+            potongan: [
+              "type Role =",
+              "\"admin\" | \"user\" | \"guest\";",
+            ],
+            pengecoh: [
+              "type Role = string;",
+              "\"admin\" & \"user\" & \"guest\";",
+            ],
+            pemisah: " ",
+            explanation:
+              "Union literal type `\"admin\" | \"user\" | \"guest\"` membatasi nilai variabel hanya ke opsi yang valid. Pengecoh `string` menggoda karena cepat ditulis tetapi keliru karena menerima teks apa pun (termasuk typo). Pengecoh operator `&` juga jebakan karena tak mungkin sebuah nilai bertipe tiga string sekaligus.",
+          },
         },
         {
           kind: "step",
@@ -1311,6 +1627,23 @@ export const typescriptTrack: Track = {
             "  }\n" +
             "}\n" +
             "cetakHarga(1500);",
+          susunKode: {
+            potongan: [
+              "function cetakHarga(val: string | number) {",
+              "  if (typeof val === \"number\") {",
+              "    console.log(val.toFixed(2));",
+              "  }",
+              "}",
+              "cetakHarga(1500);",
+            ],
+            pengecoh: [
+              "  if (typeof val === \"string\") {",
+              "    console.log(val.toUpperCase());",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Pemeriksaan `typeof val === \"number\"` mempersempit tipe union sehingga method `.toFixed(2)` aman dipanggil. Pengecoh `typeof val === \"string\"` menggoda jika terkecoh oleh tipe pertama di union, tetapi keliru karena method `.toFixed(2)` tidak ada di string. Pengecoh `toUpperCase()` juga jebakan fungsi string.",
+          },
         },
         {
           kind: "step",
@@ -1360,6 +1693,25 @@ export const typescriptTrack: Track = {
             "  }\n" +
             "}\n" +
             "tahunDari(new Date(\"2026-07-28\"));",
+          susunKode: {
+            question:
+              "Gunakan instanceof Date untuk narrowing objek Date.",
+            potongan: [
+              "function tahunDari(nilai: Date | string) {",
+              "  if (nilai instanceof Date) {",
+              "    console.log(nilai.getFullYear());",
+              "  }",
+              "}",
+              "tahunDari(new Date(\"2026-07-28\"));",
+            ],
+            pengecoh: [
+              "  if (typeof nilai === \"Date\") {",
+              "  if (nilai in Date) {",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Operator `instanceof Date` digunakan untuk mengecek apakah objek merupakan instansi dari kelas `Date`. Pengecoh `typeof nilai === \"Date\"` menggoda tetapi keliru karena `typeof` untuk objek hanya mengembalikan `\"object\"`. Pengecoh `nilai in Date` juga jebakan penggunaan operator `in` pada class.",
+          },
         },
         {
           kind: "step",
@@ -1412,6 +1764,22 @@ export const typescriptTrack: Track = {
             "type State =\n" +
             "  | { status: \"success\"; data: string }\n" +
             "  | { status: \"error\"; message: string };",
+          susunKode: {
+            question:
+              "Buat Discriminated Union untuk State success dan error.",
+            potongan: [
+              "type State =",
+              "  | { status: \"success\"; data: string }",
+              "  | { status: \"error\"; message: string };",
+            ],
+            pengecoh: [
+              "  | { status: string; data: string }",
+              "  & { status: \"error\"; message: string };",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Discriminated union membedakan varian state menggunakan properti literal `status: \"success\"` dan `status: \"error\"`. Pengecoh `status: string` menggoda tetapi keliru karena membuat TypeScript tidak bisa membedakan kedua varian state. Pengecoh operator `&` juga jebakan yang menggabungkan tipe alih-alih membuat pilihan.",
+          },
         },
         {
           kind: "step",
@@ -1454,6 +1822,23 @@ export const typescriptTrack: Track = {
             "  return typeof val === \"number\";\n" +
             "}\n" +
             "console.log(isNumber(42), isNumber(\"42\"));",
+          susunKode: {
+            question:
+              "Buat custom type guard function isNumber dengan return val is number.",
+            potongan: [
+              "function isNumber(val: unknown): val is number {",
+              "  return typeof val === \"number\";",
+              "}",
+              "console.log(isNumber(42), isNumber(\"42\"));",
+            ],
+            pengecoh: [
+              "function isNumber(val: unknown): boolean {",
+              "  return typeof val == number;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Custom type guard membutuhkan sintaks `val is number` pada tipe return agar kompilator tahu tipe telah dipersempit. Pengecoh `: boolean` menggoda karena fungsi memang mengembalikan boolean, tetapi keliru karena tidak menginformasikan Narrowing ke TypeScript. Pengecoh `== number` juga jebakan sintaks.",
+          },
         },
         {
           kind: "step",
@@ -1498,6 +1883,19 @@ export const typescriptTrack: Track = {
             },
           ],
           solution: 'type Direction = "UP" | "DOWN" | "LEFT" | "RIGHT";',
+          susunKode: {
+            potongan: [
+              "type Direction =",
+              "\"UP\" | \"DOWN\" | \"LEFT\" | \"RIGHT\";",
+            ],
+            pengecoh: [
+              "enum Direction {",
+              "  UP, DOWN, LEFT, RIGHT\n}",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Union literal `\"UP\" | \"DOWN\" | \"LEFT\" | \"RIGHT\"` hilang sepenuhnya setelah kompilasi tanpa menyisa kode JS. Pengecoh `enum Direction` menggoda bagi yang biasa menggunakan enum, namun keliru karena instruksi meminta pendekatan tanpa sisa kode JS. Pengecoh enum membuat objek tambahan di JavaScript.",
+          },
         },
         {
           kind: "step",
@@ -1532,6 +1930,22 @@ export const typescriptTrack: Track = {
             },
           ],
           solution: "const colors = { red: '#ff0000' } as const;\nconsole.log(colors.red);",
+          susunKode: {
+            question:
+              "Gunakan as const pada objek colors.",
+            potongan: [
+              "const colors = { red: '#ff0000' }",
+              "as const;",
+              "console.log(colors.red);",
+            ],
+            pengecoh: [
+              "as readonly;",
+              "as string;",
+            ],
+            pemisah: " ",
+            explanation:
+              "Penegasan `as const` mengunci nilai objek menjadi literal yang bersifat `readonly`. Pengecoh `as readonly` menggoda karena istilahnya relevan, tetapi keliru karena `readonly` bukan keyword penegasan konstanta di TS. Pengecoh `as string` juga jebakan yang justru melebarkan tipe nilai.",
+          },
         },
         {
           kind: "step",
@@ -1579,6 +1993,25 @@ export const typescriptTrack: Track = {
             "  host: \"localhost\",\n" +
             "} satisfies Konfigurasi;\n" +
             "console.log(appConfig.port);",
+          susunKode: {
+            question:
+              "Gunakan satisfies Konfigurasi pada appConfig.",
+            potongan: [
+              "type Konfigurasi = { [key: string]: string | number };\n",
+              "const appConfig = {",
+              "  port: 3000,",
+              "  host: \"localhost\",",
+              "} satisfies Konfigurasi;",
+              "console.log(appConfig.port);",
+            ],
+            pengecoh: [
+              ": Konfigurasi = {",
+              "} as Konfigurasi;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Operator `satisfies Konfigurasi` memvalidasi struktur objek tanpa memperlebar tipe inferensi propertinya. Pengecoh `: Konfigurasi` menggoda tetapi keliru karena melebarkan tipe `port` menjadi `string | number`. Pengecoh `as Konfigurasi` juga jebakan type assertion yang mengabaikan validasi ketat.",
+          },
         },
         {
           kind: "quiz",
@@ -1792,6 +2225,21 @@ export const typescriptTrack: Track = {
             "  return arg;\n" +
             "}\n" +
             "console.log(identity(\"halo\"), identity(7));",
+          susunKode: {
+            potongan: [
+              "function identity<T>(arg: T): T {",
+              "  return arg;",
+              "}",
+              "console.log(identity(\"halo\"), identity(7));",
+            ],
+            pengecoh: [
+              "function identity(arg: any): any {",
+              "function identity<T>(arg: any): T {",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Fungsi generic `identity<T>(arg: T): T` mempertahankan tipe nilai yang dikembalikan sesuai tipe inputnya. Pengecoh `any` menggoda karena sederhana, namun keliru karena merusak keamanan tipe. Pengecoh `arg: any` juga jebakan yang mematikan kejelasan tipe parameter.",
+          },
         },
         {
           kind: "step",
@@ -1836,6 +2284,21 @@ export const typescriptTrack: Track = {
             "  return item.name;\n" +
             "}\n" +
             "console.log(getName({ name: \"Siti\", umur: 30 }));",
+          susunKode: {
+            potongan: [
+              "function getName<T extends { name: string }>(item: T): string {",
+              "  return item.name;",
+              "}",
+              "console.log(getName({ name: \"Siti\", umur: 30 }));",
+            ],
+            pengecoh: [
+              "function getName<T extends object>(item: T): string {",
+              "  return (item as any).name;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Batasan generic `T extends { name: string }` memastikan hanya objek yang memiliki properti `name` bertipe teks yang diterima. Pengecoh `T extends object` menggoda tetapi keliru karena objek umum belum tentu memiliki properti `name`. Pengecoh `as any` adalah jebakan pemaksaan tipe.",
+          },
         },
         {
           kind: "step",
@@ -1885,6 +2348,21 @@ export const typescriptTrack: Track = {
           ],
           solution:
             "interface ResponseBox<T> {\n  data: T;\n  success: boolean;\n}",
+          susunKode: {
+            potongan: [
+              "interface ResponseBox<T> {",
+              "  data: T;",
+              "  success: boolean;",
+              "}",
+            ],
+            pengecoh: [
+              "  data: any;",
+              "  data: string;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Interface generic `ResponseBox<T>` memungkinkan muatan `data` memiliki tipe `T` yang fleksibel. Pengecoh `data: any` menggoda tetapi keliru karena menghilangkan type safety. Pengecoh `data: string` juga jebakan kaku yang membatasi muatan hanya pada teks.",
+          },
         },
         {
           kind: "step",
@@ -1921,6 +2399,20 @@ export const typescriptTrack: Track = {
             },
           ],
           solution: "interface Wrapper<T = number> {\n  content: T;\n}",
+          susunKode: {
+            potongan: [
+              "interface Wrapper<T = number> {",
+              "  content: T;",
+              "}",
+            ],
+            pengecoh: [
+              "interface Wrapper<T : number> {",
+              "interface Wrapper<T == number> {",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Default type parameter ditulis dengan tanda sama dengan `T = number` pada deklarasi generic. Pengecoh `T : number` menggoda bagi yang tertukar sintaks anotasi titik dua. Pengecoh `T == number` keliru karena mempergunakan operator perbandingan.",
+          },
         },
         {
           kind: "step",
@@ -1967,6 +2459,22 @@ export const typescriptTrack: Track = {
             "  const [count, setCount] = useState<number>(0);\n\n" +
             "  return <p>Nilai sekarang: {count}</p>;\n" +
             "}",
+          susunKode: {
+            potongan: [
+              "import { useState } from \"react\";\n",
+              "function Penghitung() {",
+              "  const [count, setCount] = useState<number>(0);",
+              "  return <p>Nilai sekarang: {count}</p>;",
+              "}",
+            ],
+            pengecoh: [
+              "  const [count, setCount] = useState(0 as number);",
+              "  const [count, setCount] = useState: number(0);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Penggunaan generic pada hook `useState<number>(0)` secara eksplisit menentukan tipe state. Pengecoh `0 as number` menggoda tetapi keliru tempat penulisan generic-nya. Pengecoh `useState: number(0)` juga jebakan kesalahan sintaks anotasi.",
+          },
         },
         {
           kind: "step",
@@ -2012,6 +2520,23 @@ export const typescriptTrack: Track = {
             "  const res = await fetch(url);\n" +
             "  return res.json() as Promise<T>;\n" +
             "}",
+          susunKode: {
+            question:
+              "Buat fetcher generic mengembalikan Promise<T>.",
+            potongan: [
+              "async function fetcher<T>(url: string): Promise<T> {",
+              "  const res = await fetch(url);",
+              "  return res.json() as Promise<T>;",
+              "}",
+            ],
+            pengecoh: [
+              "async function fetcher(url: string): Promise<T> {",
+              "async function fetcher<T>(url: number): Promise<T> {",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Fungsi async wajib mengembalikan `Promise<T>` sebagai bungkus nilai masa depan yang dihasilkan. Pengecoh tanpa `<T>` menggoda jika lupa mendeklarasikan parameter tipe. Pengecoh `url: number` keliru karena url selalu berupa string.",
+          },
         },
         {
           kind: "quiz",
@@ -2204,6 +2729,19 @@ export const typescriptTrack: Track = {
             "  email: string;\n" +
             "}\n\n" +
             "type DraftUser = Partial<User>;",
+          susunKode: {
+            potongan: [
+              "interface User {\n  id: number;\n  name: string;\n  email: string;\n}",
+              "type DraftUser = Partial<User>;",
+            ],
+            pengecoh: [
+              "type DraftUser = Required<User>;",
+              "type DraftUser = Omit<User, any>;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Utility type `Partial<User>` mengubah seluruh properti interface `User` menjadi opsional. Pengecoh `Required<User>` menggoda karena namanya mirip tetapi keliru karena justru membuat semua properti wajib. Pengecoh `Omit` juga jebakan utility yang salah sasaran.",
+          },
         },
         {
           kind: "step",
@@ -2257,6 +2795,19 @@ export const typescriptTrack: Track = {
             "  email: string;\n" +
             "}\n\n" +
             'type UserPreview = Pick<User, "name" | "email">;',
+          susunKode: {
+            potongan: [
+              "interface User {\n  id: number;\n  name: string;\n  email: string;\n}",
+              "type UserPreview = Pick<User, \"name\" | \"email\">;",
+            ],
+            pengecoh: [
+              "type UserPreview = Omit<User, \"id\">;",
+              "type UserPreview = Pick<User, \"name\", \"email\">;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Utility `Pick<User, \"name\" | \"email\">` mengambil properti secara daftar putih (whitelist). Pengecoh `Omit<User, \"id\">` menggoda karena hasil bidangnya sama, tetapi keliru karena `Omit` adalah pendekatan daftar hitam (blacklist) yang melanggar instruksi. Pengecoh koma `,` juga jebakan sintaks.",
+          },
         },
         {
           kind: "step",
@@ -2287,6 +2838,19 @@ export const typescriptTrack: Track = {
             },
           ],
           solution: "type PageStatus = Record<string, boolean>;",
+          susunKode: {
+            potongan: [
+              "type PageStatus =",
+              "Record<string, boolean>;",
+            ],
+            pengecoh: [
+              "interface PageStatus =",
+              "Map<string, boolean>;",
+            ],
+            pemisah: " ",
+            explanation:
+              "Utility `Record<string, boolean>` mendefinisikan tipe objek pemetaan dengan key string dan value boolean. Pengecoh `interface PageStatus` menggoda tetapi keliru karena interface tidak menerima assignment via sama dengan `=`. Pengecoh `Map<string, boolean>` adalah jebakan tipe kelas JS.",
+          },
         },
         {
           kind: "step",
@@ -2328,6 +2892,19 @@ export const typescriptTrack: Track = {
             "  return { id: 1, nama: \"Kopi Gayo\", harga: 85000 };\n" +
             "}\n\n" +
             "type Result = ReturnType<typeof getData>;",
+          susunKode: {
+            potongan: [
+              "function getData() {\n  return { id: 1, nama: \"Kopi Gayo\", harga: 85000 };\n}",
+              "type Result = ReturnType<typeof getData>;",
+            ],
+            pengecoh: [
+              "type Result = ReturnType<getData>;",
+              "type Result = typeof getData;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Utility `ReturnType<typeof getData>` mendapatkan tipe kembalian dari fungsi yang tersimpan di variabel. Pengecoh `ReturnType<getData>` menggoda tetapi keliru karena `getData` adalah nilai (value), bukan tipe — sehingga butuh `typeof`. Pengecoh `typeof getData` adalah jebakan tipe fungsi penuh.",
+          },
         },
         {
           kind: "step",
@@ -2371,6 +2948,19 @@ export const typescriptTrack: Track = {
             "  debug: false,\n" +
             "};\n\n" +
             "type ConfigKeys = keyof typeof config;",
+          susunKode: {
+            potongan: [
+              "const config = {\n  apiUrl: \"https://api.bilearn.id\",\n  timeout: 5000,\n  debug: false,\n};",
+              "type ConfigKeys = keyof typeof config;",
+            ],
+            pengecoh: [
+              "type ConfigKeys = keyof config;",
+              "type ConfigKeys = typeof keyof config;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Kombinasi `keyof typeof config` mengambil union key dari variabel objek JS. Pengecoh `keyof config` menggoda tetapi keliru karena `config` adalah variabel nilai, bukan nama tipe. Pengecoh urutan `typeof keyof` juga jebakan sintaks.",
+          },
         },
         {
           kind: "step",
@@ -2421,6 +3011,19 @@ export const typescriptTrack: Track = {
             "  harga: number;\n" +
             "}\n\n" +
             "type Opsional<T> = { [K in keyof T]?: T[K] };",
+          susunKode: {
+            potongan: [
+              "interface Produk {\n  nama: string;\n  harga: number;\n}",
+              "type Opsional<T> = { [K in keyof T]?: T[K] };",
+            ],
+            pengecoh: [
+              "type Opsional<T> = Partial<T>;",
+              "type Opsional<T> = { [K of keyof T]?: T[K] };",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Mapped type `{ [K in keyof T]?: T[K] }` melakukan iterasi key untuk membuat properti opsional secara manual. Pengecoh `Partial<T>` menggoda tetapi keliru karena melanggar instruksi untuk tidak menggunakan Partial bawaan. Pengecoh `K of keyof` juga jebakan sintaks keyword.",
+          },
         },
         {
           kind: "step",
@@ -2451,6 +3054,19 @@ export const typescriptTrack: Track = {
             },
           ],
           solution: "type EventGetter = `get${Capitalize<string>}`;",
+          susunKode: {
+            potongan: [
+              "type EventGetter = `get${",
+              "Capitalize<string>}`;",
+            ],
+            pengecoh: [
+              "Uppercase<string>}`;",
+              "Lower<string>}`;",
+            ],
+            pemisah: "",
+            explanation:
+              "Template literal type ``get${Capitalize<string>}`` memastikan teks diawali `get` dan diikuti kata berkapitallisasi awal. Pengecoh `Uppercase` menggoda tetapi keliru karena mengubah seluruh huruf menjadi kapital. Pengecoh `Lower` juga jebakan yang tidak mengubah huruf awal menjadi kapital.",
+          },
         },
         {
           kind: "quiz",
@@ -2674,6 +3290,26 @@ export const typescriptTrack: Track = {
             "const dariForm = { id: 1, harga: 50000 };\n" +
             "const p: Produk = dariForm;\n" +
             "console.log(p.harga);",
+          susunKode: {
+            question:
+              "Perbaiki interface Produk agar harga bertipe number.",
+            potongan: [
+              "interface Produk {",
+              "  id: number;",
+              "  harga: number;",
+              "}",
+              "const dariForm = { id: 1, harga: 50000 };",
+              "const p: Produk = dariForm;",
+              "console.log(p.harga);",
+            ],
+            pengecoh: [
+              "  harga: string;",
+              "const dariForm = { id: 1, harga: \"50000\" };",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Interface `Produk` harus disesuaikan agar `harga` bertipe `number` sesuai data asli yang masuk. Pengecoh `harga: string` menggoda jika keliru mengikuti error awal, tetapi merusak kecocokan data. Pengecoh data string `\"50000\"` juga jebakan yang bertentangan dengan tipe angka.",
+          },
         },
         {
           kind: "step",
@@ -2729,6 +3365,26 @@ export const typescriptTrack: Track = {
             "  },\n" +
             "  \"include\": [\"src\"]\n" +
             "}",
+          susunKode: {
+            question:
+              "Tambahkan \"allowJs\": true di compilerOptions.",
+            potongan: [
+              "{\n  \"compilerOptions\": {",
+              "    \"strict\": true,",
+              "    \"outDir\": \"dist\",",
+              "    \"allowJs\": true",
+              "  },",
+              "  \"include\": [\"src\"]",
+              "}",
+            ],
+            pengecoh: [
+              "    \"allowJs\": false,",
+              "    \"enableJs\": true,",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Opsi `\"allowJs\": true` di `compilerOptions` mengizinkan berkas JavaScript disertakan dalam proses kompilasi TypeScript. Pengecoh `\"allowJs\": false` menggoda jika salah memasukkan nilai boolean. Pengecoh `\"enableJs\"` juga keliru karena nama opsi resmi TypeScript adalah `allowJs`.",
+          },
         },
         {
           kind: "step",
@@ -2781,6 +3437,23 @@ export const typescriptTrack: Track = {
             "  }\n" +
             "  return <input onChange={handleChange} placeholder=\"Cari...\" />;\n" +
             "}",
+          susunKode: {
+            potongan: [
+              "function KotakCari() {",
+              "  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {",
+              "    console.log(e.target.value);",
+              "  }",
+              "  return <input onChange={handleChange} placeholder=\"Cari...\" />;",
+              "}",
+            ],
+            pengecoh: [
+              "  function handleChange(e: any) {",
+              "  function handleChange(e: React.FormEvent<HTMLInputElement>) {",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Anotasi event handler input di React menggunakan `React.ChangeEvent<HTMLInputElement>`. Pengecoh `e: any` menggoda karena mudah tetapi melanggar keamanan tipe dan tes `mustNotMatch`. Pengecoh `FormEvent` juga jebakan event umum yang tidak presisi untuk perubahan nilai input.",
+          },
         },
         {
           kind: "step",
@@ -2808,6 +3481,23 @@ export const typescriptTrack: Track = {
             },
           ],
           solution: "npm install -D @types/node",
+          susunKode: {
+            question:
+              "Pasang tipe Node.js dengan npm install -D @types/node.",
+            potongan: [
+              "npm install",
+              "-D",
+              "@types/node",
+            ],
+            pengecoh: [
+              "npm add",
+              "--save",
+              "types-node",
+            ],
+            pemisah: " ",
+            explanation:
+              "Paket tipe bawaan Node.js dipasang via `npm install -D @types/node` sebagai devDependency. Pengecoh `--save` menggoda tetapi keliru karena tipe hanya dibutuhkan saat pengembangan. Pengecoh `types-node` juga jebakan nama paket tanpa namespace `@types/`.",
+          },
         },
         {
           kind: "step",
@@ -2859,6 +3549,22 @@ export const typescriptTrack: Track = {
             "// aman: elemen #username dipastikan ada dan berupa <input> di halaman ini\n" +
             "const input = elem as HTMLInputElement;\n" +
             "console.log(input.value);",
+          susunKode: {
+            question:
+              "Tegaskan elem sebagai HTMLInputElement dengan as.",
+            potongan: [
+              "const elem = document.getElementById(\"username\");",
+              "const input = elem as HTMLInputElement;",
+              "console.log(input.value);",
+            ],
+            pengecoh: [
+              "const input = elem as any;",
+              "const input = (elem as HTMLElement);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Type assertion `elem as HTMLInputElement` menegaskan tipe elemen DOM secara spesifik agar properti `.value` bisa diakses. Pengecoh `as any` menggoda tetapi melanggar tes `mustNotMatch`. Pengecoh `HTMLElement` juga keliru karena elemen umum belum tentu memiliki properti `.value`.",
+          },
         },
         {
           kind: "step",
@@ -2911,6 +3617,25 @@ export const typescriptTrack: Track = {
             "  title: z.string(),\n" +
             "});\n\n" +
             "type Product = z.infer<typeof ProductSchema>;",
+          susunKode: {
+            question:
+              "Turunkan tipe Product dari ProductSchema Zod.",
+            potongan: [
+              "import { z } from \"zod\";\n",
+              "const ProductSchema = z.object({",
+              "  id: z.number(),",
+              "  title: z.string(),",
+              "});\n",
+              "type Product = z.infer<typeof ProductSchema>;",
+            ],
+            pengecoh: [
+              "type Product = typeof ProductSchema;",
+              "const ProductSchema = z.struct({",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Inferensi tipe dari skema Zod menggunakan `z.infer<typeof ProductSchema>`. Pengecoh `typeof ProductSchema` menggoda tetapi keliru karena hanya menghasilkan tipe objek skema Zod itu sendiri. Pengecoh `z.struct` adalah jebakan metode yang tidak ada pada pustaka Zod.",
+          },
         },
         {
           kind: "quiz",

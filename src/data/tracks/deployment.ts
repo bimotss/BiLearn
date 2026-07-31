@@ -106,7 +106,22 @@ export const deploymentTrack: Track = {
                       }
                     ],
           solution: "cd /var/www/html",
-        },
+                    susunKode: {
+                      question:
+                        "Susun perintah cd untuk berpindah ke direktori /var/www/html.",
+                      potongan: [
+                        "cd",
+                        "/var/www/html",
+                      ],
+                      pengecoh: [
+                        "goto",
+                        "/usr/share/nginx",
+                      ],
+                      pemisah: " ",
+                      explanation:
+                        "Perintah navigasi direktori di Linux/Unix menggunakan katakunci `cd` diikuti direktori target `/var/www/html`. Penggunaan kata 'goto' atau jalur lain seperti '/usr/share/nginx' adalah kesalahan perintah shell yang sering menggoda pembelajar.",
+                    },
+                  },
         {
           kind: "step",
           id: "deploy-1-2",
@@ -133,7 +148,22 @@ export const deploymentTrack: Track = {
                       }
                     ],
           solution: "mkdir project",
-        },
+                    susunKode: {
+                      question:
+                        "Susun perintah mkdir untuk membuat folder project baru.",
+                      potongan: [
+                        "mkdir",
+                        "project",
+                      ],
+                      pengecoh: [
+                        "makedir",
+                        "folder_project",
+                      ],
+                      pemisah: " ",
+                      explanation:
+                        "Perintah pembuatan direktori baru di lingkungan Linux/Unix adalah `mkdir nama_folder`. Sintaks 'makedir' atau mengganti nama direktori menjadi 'folder_project' adalah kekeliruan istilah shell CLI yang jebakan.",
+                    },
+                  },
         {
           kind: "step",
           id: "deploy-1-3",
@@ -161,7 +191,22 @@ export const deploymentTrack: Track = {
                       }
                     ],
           solution: "chmod 755 script.sh",
-        },
+                    susunKode: {
+                      question:
+                        "Susun perintah chmod 755 untuk memberikan izin eksekusi berkas script.sh.",
+                      potongan: [
+                        "chmod 755",
+                        "script.sh",
+                      ],
+                      pengecoh: [
+                        "chown 755",
+                        "script.py",
+                      ],
+                      pemisah: " ",
+                      explanation:
+                        "Pengubahan hak akses berkas di Linux menggunakan `chmod 755 script.sh` agar berkas dapat dieksekusi. Penggunaan perintah `chown` (yang bertugas mengubah pemilih/owner) atau berkas `.py` adalah kekeliruan umum.",
+                    },
+                  },
         {
           kind: "step",
           id: "deploy-1-4",
@@ -189,7 +234,22 @@ export const deploymentTrack: Track = {
                       }
                     ],
           solution: "grep 'ERROR' app.log",
-        },
+                    susunKode: {
+                      question:
+                        "Susun perintah grep untuk mencari teks ERROR di berkas app.log.",
+                      potongan: [
+                        "grep 'ERROR'",
+                        "app.log",
+                      ],
+                      pengecoh: [
+                        "search 'ERROR'",
+                        "syslog.log",
+                      ],
+                      pemisah: " ",
+                      explanation:
+                        "Pencarian pola teks di dalam berkas log Linux menggunakan utilitas `grep 'TEKS' nama_file`. Perintah fiktif 'search' atau menggunakan berkas `syslog.log` merupakan kekeliruan yang sering terjadi saat debugging.",
+                    },
+                  },
         {
           kind: "step",
           id: "deploy-1-5",
@@ -217,7 +277,22 @@ export const deploymentTrack: Track = {
                       }
                     ],
           solution: "kill -9 5678",
-        },
+                    susunKode: {
+                      question:
+                        "Susun perintah kill -9 untuk menghentikan proses PID 5678 secara paksa.",
+                      potongan: [
+                        "kill -9",
+                        "5678",
+                      ],
+                      pengecoh: [
+                        "stop -9",
+                        "9999",
+                      ],
+                      pemisah: " ",
+                      explanation:
+                        "Perintah menghentikan proses secara paksa (SIGKILL) di Linux adalah `kill -9 PID`. Penggunaan kata 'stop' (bukan perintah pembunuh proses) atau nomor PID yang salah adalah kesalahan CLI yang sering keliru dan jebakan.",
+                    },
+                  },
         {
           kind: "step",
           id: "deploy-1-6",
@@ -243,7 +318,22 @@ export const deploymentTrack: Track = {
                       }
                     ],
           solution: "ssh root@192.168.1.1",
-        },
+                    susunKode: {
+                      question:
+                        "Susun perintah SSH untuk masuk ke server remote root@192.168.1.1.",
+                      potongan: [
+                        "ssh",
+                        "root@192.168.1.1",
+                      ],
+                      pengecoh: [
+                        "connect",
+                        "admin@10.0.0.1",
+                      ],
+                      pemisah: " ",
+                      explanation:
+                        "Koneksi remote shell aman menggunakan protokol `ssh user@ip_address`. Kata 'connect' (bukan perintah CLI SSH) atau nama user 'admin'/'10.0.0.1' adalah bentuk kesalahan sintaksis yang sering membingungkan.",
+                    },
+                  },
         {
           kind: "step",
           id: "deploy-1-7",
@@ -273,7 +363,22 @@ export const deploymentTrack: Track = {
                       }
                     ],
           solution: "sudo systemctl status nginx",
-        },
+                    susunKode: {
+                      question:
+                        "Susun perintah systemctl untuk mengecek status service nginx.",
+                      potongan: [
+                        "sudo systemctl",
+                        "status nginx",
+                      ],
+                      pengecoh: [
+                        "sudo service",
+                        "check nginx",
+                      ],
+                      pemisah: " ",
+                      explanation:
+                        "Pemeriksaan status layanan sistem pada Linux berbasis systemd menggunakan `sudo systemctl status nginx`. Penggunaan klausa fiktif 'check nginx' atau sintaks lama 'service' adalah kekeliruan manajemen layanan.",
+                    },
+                  },
         {
           kind: "quiz",
           id: "deploy-1-kuis",
@@ -453,7 +558,22 @@ export const deploymentTrack: Track = {
                       }
                     ],
           solution: "docker pull nginx:alpine",
-        },
+                    susunKode: {
+                      question:
+                        "Susun perintah docker pull untuk mengunduh image nginx:alpine.",
+                      potongan: [
+                        "docker pull",
+                        "nginx:alpine",
+                      ],
+                      pengecoh: [
+                        "docker fetch",
+                        "nginx:latest_ver",
+                      ],
+                      pemisah: " ",
+                      explanation:
+                        "Pengunduhan image Docker dari registri menggunakan perintah `docker pull nama_image:tag`. Penggunaan kata 'fetch' atau tag fiktif 'latest_ver' adalah bentuk kekeliruan CLI Docker yang sering mengelirukan.",
+                    },
+                  },
         {
           kind: "step",
           id: "deploy-2-2",
@@ -480,7 +600,22 @@ export const deploymentTrack: Track = {
                       }
                     ],
           solution: "docker ps",
-        },
+                    susunKode: {
+                      question:
+                        "Susun perintah docker ps untuk melihat kontainer yang aktif.",
+                      potongan: [
+                        "docker",
+                        "ps",
+                      ],
+                      pengecoh: [
+                        "docker-cli",
+                        "list",
+                      ],
+                      pemisah: " ",
+                      explanation:
+                        "Perintah untuk menampilkan daftar kontainer Docker yang sedang aktif berjalan adalah `docker ps`. Penggunaan kata 'list' atau CLI 'docker-cli' adalah bentuk istilah fiktif yang jebakan bagi pembelajar baru.",
+                    },
+                  },
         {
           kind: "step",
           id: "deploy-2-3",
@@ -512,7 +647,22 @@ export const deploymentTrack: Track = {
                       }
                     ],
           solution: "FROM node:20-alpine",
-        },
+                    susunKode: {
+                      question:
+                        "Susun instruksi FROM node:20-alpine pada Dockerfile.",
+                      potongan: [
+                        "FROM",
+                        "node:20-alpine",
+                      ],
+                      pengecoh: [
+                        "IMPORT",
+                        "node:ubuntu-slim",
+                      ],
+                      pemisah: " ",
+                      explanation:
+                        "Instruksi awal Dockerfile untuk menentukan base image menggunakan katakunci `FROM`. Penggunaan kata 'IMPORT' atau varian image 'node:ubuntu-slim' yang bukan alpine adalah kesalahan sintaksis Dockerfile yang jebakan.",
+                    },
+                  },
         {
           kind: "step",
           id: "deploy-2-4",
@@ -545,7 +695,22 @@ export const deploymentTrack: Track = {
                       }
                     ],
           solution: "COPY package*.json ./",
-        },
+                    susunKode: {
+                      question:
+                        "Susun instruksi COPY package*.json ./ pada Dockerfile.",
+                      potongan: [
+                        "COPY package*.json",
+                        "./",
+                      ],
+                      pengecoh: [
+                        "ADD package.json",
+                        "/tmp/",
+                      ],
+                      pemisah: " ",
+                      explanation:
+                        "Menyalin file konfigurasi dependensi ke direktori kerja kontainer menggunakan `COPY package*.json ./`. Menyalin ke lokasi acak `/tmp/` atau melupakan wildcard `*` adalah kesalahan Dockerfile yang sering membingungkan.",
+                    },
+                  },
         {
           kind: "step",
           id: "deploy-2-5",
@@ -582,7 +747,22 @@ export const deploymentTrack: Track = {
                       }
                     ],
           solution: "COPY --from=builder /app/dist ./dist",
-        },
+                    susunKode: {
+                      question:
+                        "Susun instruksi COPY dari stage builder ke direktori dist pada Dockerfile multi-stage.",
+                      potongan: [
+                        "COPY --from=builder",
+                        "/app/dist ./dist",
+                      ],
+                      pengecoh: [
+                        "COPY --stage=builder",
+                        "/build/output ./dist",
+                      ],
+                      pemisah: " ",
+                      explanation:
+                        "Penyalinan artefak hasil kompilasi dari stage sebelumnya pada multi-stage build Docker menggunakan `COPY --from=nama_stage path_asal path_tujuan`. Bendera `--stage` atau path fiktif adalah jebakan sintaks.",
+                    },
+                  },
         {
           kind: "step",
           id: "deploy-2-6",
@@ -611,7 +791,22 @@ export const deploymentTrack: Track = {
                       }
                     ],
           solution: "docker run -d -v db_data:/var/lib/mysql mysql",
-        },
+                                                                                susunKode: {
+                                                                                  question:
+                                                                                    "Susun perintah docker run dengan volume db_data:/var/lib/mysql.",
+                                                                                  potongan: [
+                                                                                    "docker run -d -v",
+                                                                                    "db_data:/var/lib/mysql mysql",
+                                                                                  ],
+                                                                                  pengecoh: [
+                                                                                    "docker exec -d -v",
+                                                                                    "db_data:/var/db/mysql mysql",
+                                                                                  ],
+                                                                                  pemisah: " ",
+                                                                                  explanation:
+                                                                                    "Menjalankan kontainer baru dengan mounting volume persisten menggunakan `docker run -d -v nama_volume:path_tujuan nama_image`. Penggunaan `docker exec` (khusus perintah dalam kontainer aktif) atau path `/var/db/mysql` adalah kekeliruan fatal.",
+                                                                                },
+                                                                              },
         {
           kind: "step",
           id: "deploy-2-7",
@@ -635,7 +830,22 @@ export const deploymentTrack: Track = {
                       }
                     ],
           solution: "node_modules",
-        },
+                    susunKode: {
+                      question:
+                        "Susun penulisan node_modules untuk berkas .dockerignore.",
+                      potongan: [
+                        "node_",
+                        "modules",
+                      ],
+                      pengecoh: [
+                        "vendor_",
+                        "packages",
+                      ],
+                      pemisah: "",
+                      explanation:
+                        "Folder dependensi lokal Node.js yang wajib dikecualikan agar tidak terikut dalam build context Docker adalah `node_modules` di berkas `.dockerignore`. Menulis 'vendor_packages' (istilah PHP) adalah jebakan.",
+                    },
+                  },
         {
           kind: "step",
           id: "deploy-2-8",
@@ -664,7 +874,22 @@ export const deploymentTrack: Track = {
                       }
                     ],
           solution: "USER node",
-        },
+                    susunKode: {
+                      question:
+                        "Susun instruksi USER node pada Dockerfile untuk keamanan non-root.",
+                      potongan: [
+                        "USER",
+                        "node",
+                      ],
+                      pengecoh: [
+                        "SWITCH",
+                        "app_user",
+                      ],
+                      pemisah: " ",
+                      explanation:
+                        "Mengubah konteks pengguna eksekusi di dalam Dockerfile demi keamanan non-root menggunakan instruksi `USER node`. Perintah fiktif 'SWITCH' atau nama pengguna 'app_user' mengelirukan pembelajar secara jebakan.",
+                    },
+                  },
         {
           kind: "quiz",
           id: "deploy-2-kuis",
@@ -868,7 +1093,22 @@ export const deploymentTrack: Track = {
                       }
                     ],
           solution: "docker compose up -d",
-        },
+                    susunKode: {
+                      question:
+                        "Susun perintah docker compose up -d untuk menjalankan layanan di background.",
+                      potongan: [
+                        "docker compose",
+                        "up -d",
+                      ],
+                      pengecoh: [
+                        "docker-stack",
+                        "start -d",
+                      ],
+                      pemisah: " ",
+                      explanation:
+                        "Menjalankan seluruh layanan pada berkas docker-compose.yml secara detached di background menggunakan `docker compose up -d`. Perintah `start` atau `docker-stack` tidak melakukan build atau penyiapan kontainer baru dan jebakan.",
+                    },
+                  },
         {
           kind: "step",
           id: "deploy-3-2",
@@ -899,7 +1139,24 @@ export const deploymentTrack: Track = {
                       }
                     ],
           solution: "${DATABASE_URL}",
-        },
+                    susunKode: {
+                      question:
+                        "Susun interpolasi variabel lingkungan DATABASE_URL di Docker Compose.",
+                      potongan: [
+                        "${",
+                        "DATABASE_URL",
+                        "}",
+                      ],
+                      pengecoh: [
+                        "$(",
+                        "DB_CONN_STR",
+                        ")",
+                      ],
+                      pemisah: "",
+                      explanation:
+                        "Interpolasi variabel lingkungan pada file Docker Compose menggunakan sintaks `${NAMA_VARIABEL}`. Penggunaan tanda kurung biasa `$()` (sintaks subshell command execution) adalah kekeliruan sintaksis YAML/Compose.",
+                    },
+                  },
         {
           kind: "step",
           id: "deploy-3-3",
@@ -931,7 +1188,22 @@ export const deploymentTrack: Track = {
             },
           ],
           solution: "file: ./db_password.txt",
-        },
+                    susunKode: {
+                      question:
+                        "Susun pengkonfigurasian secrets file: ./db_password.txt di Docker Compose.",
+                      potongan: [
+                        "file:",
+                        "./db_password.txt",
+                      ],
+                      pengecoh: [
+                        "path:",
+                        "/etc/secrets/db_password.txt",
+                      ],
+                      pemisah: " ",
+                      explanation:
+                        "Mendefinisikan lokasi berkas rahasia di Docker Compose secrets menggunakan properti `file: ./path_file`. Penggunaan properti fiktif `path:` atau lokasi absolut luar adalah kesalahan konfigurasi yang keliru.",
+                    },
+                  },
         {
           kind: "step",
           id: "deploy-3-4",
@@ -962,7 +1234,22 @@ export const deploymentTrack: Track = {
                       }
                     ],
           solution: "restart: unless-stopped",
-        },
+                                        susunKode: {
+                                          question:
+                                            "Susun kebijakan restart: unless-stopped pada Docker Compose.",
+                                          potongan: [
+                                            "restart:",
+                                            "unless-stopped",
+                                          ],
+                                          pengecoh: [
+                                            "restart_policy:",
+                                            "always-except-stop",
+                                          ],
+                                          pemisah: " ",
+                                          explanation:
+                                            "Kebijakan restart kontainer di Docker Compose menggunakan `restart: unless-stopped` agar kontainer otomatis menyala kembali kecuali dihentikan manual. Nama opsi 'always-except-stop' adalah kesalahan atribut yang jebakan.",
+                                        },
+                                      },
         {
           kind: "step",
           id: "deploy-3-5",
@@ -996,7 +1283,22 @@ export const deploymentTrack: Track = {
                       }
                     ],
           solution: "image: redis:alpine",
-        },
+                                                                                                                                                                susunKode: {
+                                                                                                                                                                  question:
+                                                                                                                                                                    "Susun pendefinisian image: redis:alpine di Docker Compose.",
+                                                                                                                                                                  potongan: [
+                                                                                                                                                                    "image:",
+                                                                                                                                                                    "redis:alpine",
+                                                                                                                                                                  ],
+                                                                                                                                                                  pengecoh: [
+                                                                                                                                                                    "container:",
+                                                                                                                                                                    "redis:latest-build",
+                                                                                                                                                                  ],
+                                                                                                                                                                  pemisah: " ",
+                                                                                                                                                                  explanation:
+                                                                                                                                                                    "Penetapan image yang digunakan oleh suatu service di Docker Compose menggunakan sintaks `image: nama:tag`. Atribut fiktif 'container' atau tag 'latest-build' adalah bentuk kekeliruan YAML Compose yang jebakan.",
+                                                                                                                                                                },
+                                                                                                                                                              },
         {
           kind: "step",
           id: "deploy-3-6",
@@ -1025,7 +1327,22 @@ export const deploymentTrack: Track = {
                       }
                     ],
           solution: "docker compose down",
-        },
+                    susunKode: {
+                      question:
+                        "Susun perintah docker compose down untuk menghentikan seluruh layanan.",
+                      potongan: [
+                        "docker compose",
+                        "down",
+                      ],
+                      pengecoh: [
+                        "docker-down",
+                        "stop_all",
+                      ],
+                      pemisah: " ",
+                      explanation:
+                        "Menghentikan dan menghapus kontainer, network, serta volume sementara yang dibuat Docker Compose dilakukan dengan perintah `docker compose down`. Sintaks 'stop_all' atau 'docker-down' adalah istilah fiktif yang keliru.",
+                    },
+                  },
         {
           kind: "quiz",
           id: "deploy-3-kuis",
@@ -1219,7 +1536,22 @@ export const deploymentTrack: Track = {
                       }
                     ],
           solution: "sudo ufw allow 80/tcp",
-        },
+                                        susunKode: {
+                                          question:
+                                            "Susun perintah ufw allow 80/tcp untuk membuka port HTTP.",
+                                          potongan: [
+                                            "sudo ufw allow",
+                                            "80/tcp",
+                                          ],
+                                          pengecoh: [
+                                            "sudo firewall-cmd allow",
+                                            "9090/tcp",
+                                          ],
+                                          pemisah: " ",
+                                          explanation:
+                                            "Membuka port lalu lintas masuk pada firewall Uncomplicated Firewall (UFW) Ubuntu menggunakan `sudo ufw allow 80/tcp`. Penggunaan CLI 'firewall-cmd' atau port '9090/tcp' adalah kekeliruan istilah CLI firewall yang jebakan.",
+                                        },
+                                      },
         {
           kind: "step",
           id: "deploy-4-2",
@@ -1254,7 +1586,22 @@ export const deploymentTrack: Track = {
                       }
                     ],
           solution: "git clone https://github.com/user/app.git",
-        },
+                    susunKode: {
+                      question:
+                        "Susun perintah git clone repositori aplikasi ke VPS.",
+                      potongan: [
+                        "git clone",
+                        "https://github.com/user/app.git",
+                      ],
+                      pengecoh: [
+                        "git pull-repo",
+                        "https://github.com/user/repository.git",
+                      ],
+                      pemisah: " ",
+                      explanation:
+                        "Mengunduh salinan repositori Git awal ke server VPS menggunakan `git clone URL`. Penggunaan perintah fiktif 'git pull-repo' atau pergantian nama repositori adalah jebakan istilah Git CLI yang sering mengelirukan.",
+                    },
+                  },
         {
           kind: "step",
           id: "deploy-4-3",
@@ -1287,7 +1634,22 @@ export const deploymentTrack: Track = {
                       }
                     ],
           solution: "proxy_pass http://127.0.0.1:3000;",
-        },
+                    susunKode: {
+                      question:
+                        "Susun arahan proxy_pass Nginx ke server lokal port 3000.",
+                      potongan: [
+                        "proxy_pass",
+                        "http://127.0.0.1:3000;",
+                      ],
+                      pengecoh: [
+                        "reverse_proxy",
+                        "tcp://127.0.0.1:3000;",
+                      ],
+                      pemisah: " ",
+                      explanation:
+                        "Pengarahan lalu lintas HTTP reverse proxy Nginx ke aplikasi lokal menggunakan arahan `proxy_pass http://127.0.0.1:3000;`. Penggunaan 'reverse_proxy' (sintaks server Caddy) atau 'tcp://' adalah kesalahan Nginx yang jebakan.",
+                    },
+                  },
         {
           kind: "step",
           id: "deploy-4-4",
@@ -1316,7 +1678,24 @@ export const deploymentTrack: Track = {
                       }
                     ],
           solution: "example.com. IN A 203.0.113.195",
-        },
+                    susunKode: {
+                      question:
+                        "Susun rekaman DNS A Record untuk memetakan domain ke IP server.",
+                      potongan: [
+                        "example.com.",
+                        "IN A",
+                        "203.0.113.195",
+                      ],
+                      pengecoh: [
+                        "site.org.",
+                        "TYPE A",
+                        "127.0.0.1",
+                      ],
+                      pemisah: " ",
+                      explanation:
+                        "Penulisan DNS record tipe A untuk mengarahkan nama domain ke IP publik VPS menggunakan format `domain. IN A IP_Address`. Kata 'TYPE A' atau IP loopback '127.0.0.1' adalah kekeliruan konfigurasi DNS yang jebakan.",
+                    },
+                  },
         {
           kind: "step",
           id: "deploy-4-5",
@@ -1347,7 +1726,22 @@ export const deploymentTrack: Track = {
                       }
                     ],
           solution: "sudo certbot --nginx -d myapp.com",
-        },
+                    susunKode: {
+                      question:
+                        "Susun perintah certbot --nginx untuk mengkonfigurasi SSL.",
+                      potongan: [
+                        "sudo certbot --nginx",
+                        "-d myapp.com",
+                      ],
+                      pengecoh: [
+                        "sudo letsencrypt-cli",
+                        "--domain myapp.com",
+                      ],
+                      pemisah: " ",
+                      explanation:
+                        "Pemasangan sertifikat SSL Let's Encrypt secara otomatis untuk Nginx menggunakan client `sudo certbot --nginx -d domain`. Nama CLI 'letsencrypt-cli' atau bendera `--domain` adalah kekeliruan perintah yang sering membingungkan.",
+                    },
+                  },
         {
           kind: "step",
           id: "deploy-4-6",
@@ -1375,7 +1769,22 @@ export const deploymentTrack: Track = {
                       }
                     ],
           solution: "sudo systemctl reload nginx",
-        },
+                    susunKode: {
+                      question:
+                        "Susun perintah systemctl reload nginx untuk memuat ulang konfigurasi Nginx.",
+                      potongan: [
+                        "sudo systemctl",
+                        "reload nginx",
+                      ],
+                      pengecoh: [
+                        "sudo service",
+                        "refresh nginx",
+                      ],
+                      pemisah: " ",
+                      explanation:
+                        "Menerapkan perubahan file konfigurasi Nginx tanpa memutuskan koneksi pengguna yang sedang aktif menggunakan `sudo systemctl reload nginx`. Penggunaan kata 'refresh' adalah kekeliruan istilah yang sering keliru.",
+                    },
+                  },
         {
           kind: "quiz",
           id: "deploy-4-kuis",
@@ -1560,7 +1969,22 @@ export const deploymentTrack: Track = {
                       }
                     ],
           solution: "vercel --prod",
-        },
+                    susunKode: {
+                      question:
+                        "Susun perintah Vercel CLI vercel --prod untuk rilis produksi.",
+                      potongan: [
+                        "vercel",
+                        "--prod",
+                      ],
+                      pengecoh: [
+                        "vercel-deploy",
+                        "--production",
+                      ],
+                      pemisah: " ",
+                      explanation:
+                        "Mempublikasikan aplikasi web langsung ke lingkungan produksi pada Vercel CLI menggunakan perintah `vercel --prod`. Penggunaan bendera panjang `--production` atau CLI 'vercel-deploy' adalah kesalahan yang keliru.",
+                    },
+                  },
         {
           kind: "step",
           id: "deploy-5-2",
@@ -1596,7 +2020,22 @@ export const deploymentTrack: Track = {
                       }
                     ],
           solution: "on: [push, pull_request]",
-        },
+                                        susunKode: {
+                                          question:
+                                            "Susun event pemicu push dan pull_request di GitHub Actions.",
+                                          potongan: [
+                                            "on:",
+                                            "[push, pull_request]",
+                                          ],
+                                          pengecoh: [
+                                            "trigger:",
+                                            "[commit, merge_request]",
+                                          ],
+                                          pemisah: " ",
+                                          explanation:
+                                            "Penentu event pemicu eksekusi workflow GitHub Actions menggunakan blok `on: [push, pull_request]`. Penggunaan nama event 'commit' atau 'merge_request' (istilah GitLab CI) adalah jebakan antar-CI yang sering keliru.",
+                                        },
+                                      },
         {
           kind: "step",
           id: "deploy-5-3",
@@ -1633,7 +2072,22 @@ export const deploymentTrack: Track = {
                       }
                     ],
           solution: "- run: npm test",
-        },
+                    susunKode: {
+                      question:
+                        "Susun step workflow - run: npm test di GitHub Actions.",
+                      potongan: [
+                        "- run:",
+                        "npm test",
+                      ],
+                      pengecoh: [
+                        "- exec:",
+                        "npm run testing",
+                      ],
+                      pemisah: " ",
+                      explanation:
+                        "Menjalankan perintah terminal di dalam step GitHub Actions workflow menggunakan instruksi `- run: perintah`. Menggantikan kata `run` dengan `exec` adalah kesalahan sintaksis YAML workflow yang sering keliru.",
+                    },
+                  },
         {
           kind: "step",
           id: "deploy-5-4",
@@ -1668,7 +2122,22 @@ export const deploymentTrack: Track = {
                       }
                     ],
           solution: "if: github.ref == 'refs/heads/main'",
-        },
+                                        susunKode: {
+                                          question:
+                                            "Susun kondisi filter cabang utama refs/heads/main di GitHub Actions.",
+                                          potongan: [
+                                            "if: github.ref ==",
+                                            "'refs/heads/main'",
+                                          ],
+                                          pengecoh: [
+                                            "when: branch ==",
+                                            "'main_branch'",
+                                          ],
+                                          pemisah: " ",
+                                          explanation:
+                                            "Kondisi eksekusi job GitHub Actions membatasi branch utama menggunakan `if: github.ref == 'refs/heads/main'`. Kata 'when:' atau nama branch 'main_branch' adalah jebakan istilah CI lain yang sering membingungkan pembelajar.",
+                                        },
+                                      },
         {
           kind: "step",
           id: "deploy-5-5",
@@ -1698,7 +2167,24 @@ export const deploymentTrack: Track = {
                       }
                     ],
           solution: "${{ secrets.DEPLOY_KEY }}",
-        },
+                    susunKode: {
+                      question:
+                        "Susun interpolasi rahasia DEPLOY_KEY di GitHub Actions.",
+                      potongan: [
+                        "${{",
+                        "secrets.DEPLOY_KEY",
+                        "}}",
+                      ],
+                      pengecoh: [
+                        "${",
+                        "env.DEPLOY_KEY",
+                        "}$",
+                      ],
+                      pemisah: "",
+                      explanation:
+                        "Membaca variabel rahasia (repository secrets) pada GitHub Actions menggunakan ekspresi interpolasi `${{ secrets.NAMA_SECRET }}`. Penggunaan tanda `${` tanpa kurawal ganda adalah kekeliruan sintaks yang sering keliru.",
+                    },
+                  },
         {
           kind: "step",
           id: "deploy-5-6",
@@ -1724,7 +2210,22 @@ export const deploymentTrack: Track = {
                       }
                     ],
           solution: "vercel --preview",
-        },
+                    susunKode: {
+                      question:
+                        "Susun perintah Vercel CLI vercel --preview untuk lingkungan pratinjau.",
+                      potongan: [
+                        "vercel",
+                        "--preview",
+                      ],
+                      pengecoh: [
+                        "vercel-cli",
+                        "--staging",
+                      ],
+                      pemisah: " ",
+                      explanation:
+                        "Mempublikasikan aplikasi ke lingkungan pratinjau (preview environment) menggunakan perintah `vercel --preview`. Penggunaan bendera `--staging` atau nama CLI 'vercel-cli' adalah kekeliruan yang keliru.",
+                    },
+                  },
         {
           kind: "quiz",
           id: "deploy-5-kuis",
@@ -1924,7 +2425,22 @@ export const deploymentTrack: Track = {
                       }
                     ],
           solution: "docker logs --tail 100 app",
-        },
+                    susunKode: {
+                      question:
+                        "Susun perintah docker logs --tail 100 app untuk membaca log kontainer.",
+                      potongan: [
+                        "docker logs",
+                        "--tail 100 app",
+                      ],
+                      pengecoh: [
+                        "docker read-log",
+                        "--last 100 app",
+                      ],
+                      pemisah: " ",
+                      explanation:
+                        "Membaca cuplikan riwayat log kontainer Docker terbatas pada sekian baris terakhir menggunakan `docker logs --tail N nama_container`. Penggunaan bendera '--last' atau CLI 'read-log' adalah kekeliruan yang keliru.",
+                    },
+                  },
         {
           kind: "step",
           id: "deploy-6-2",
@@ -1958,7 +2474,22 @@ export const deploymentTrack: Track = {
                       }
                     ],
           solution: "curl -f http://localhost:3000/health",
-        },
+                                        susunKode: {
+                                          question:
+                                            "Susun perintah curl -f untuk health check endpoint /health.",
+                                          potongan: [
+                                            "curl -f",
+                                            "http://localhost:3000/health",
+                                          ],
+                                          pengecoh: [
+                                            "ping-url -f",
+                                            "http://localhost:3000/status",
+                                          ],
+                                          pemisah: " ",
+                                          explanation:
+                                            "Pengujian endpoint kesehatan HTTP yang mengembalikan fail-code jika HTTP status >= 400 menggunakan `curl -f URL`. CLI 'ping-url' atau endpoint `/status` adalah bentuk kesalahan testing yang jebakan dalam operasional.",
+                                        },
+                                      },
         {
           kind: "step",
           id: "deploy-6-3",
@@ -1991,7 +2522,23 @@ export const deploymentTrack: Track = {
                       }
                     ],
           solution: "Sentry.init({ dsn: 'my-dsn' });",
-        },
+                                                                                                                                                                susunKode: {
+                                                                                                                                                                  question:
+                                                                                                                                                                    "Susun inisialisasi SDK Sentry dengan DSN key my-dsn.",
+                                                                                                                                                                  potongan: [
+                                                                                                                                                                    "Sentry.init({",
+                                                                                                                                                                    "dsn: 'my-dsn'",
+                                                                                                                                                                    "});",
+                                                                                                                                                                  ],
+                                                                                                                                                                  pengecoh: [
+                                                                                                                                                                    "Sentry.connect({",
+                                                                                                                                                                    "dsn_key: 'my-dsn'",
+                                                                                                                                                                  ],
+                                                                                                                                                                  pemisah: " ",
+                                                                                                                                                                  explanation:
+                                                                                                                                                                    "Inisialisasi SDK pelacakan eror Sentry pada aplikasi menggunakan metode `Sentry.init({ dsn: 'DSN_KEY' })`. Metode 'Sentry.connect' atau properti 'dsn_key' adalah kesalahan API SDK Sentry yang keliru dan jebakan.",
+                                                                                                                                                                },
+                                                                                                                                                              },
         {
           kind: "step",
           id: "deploy-6-4",
@@ -2018,7 +2565,22 @@ export const deploymentTrack: Track = {
             },
           ],
           solution: "df -h",
-        },
+                    susunKode: {
+                      question:
+                        "Susun perintah df -h untuk mengecek sisa kapasitas disk.",
+                      potongan: [
+                        "df",
+                        "-h",
+                      ],
+                      pengecoh: [
+                        "disk-free",
+                        "-human",
+                      ],
+                      pemisah: " ",
+                      explanation:
+                        "Pemeriksaan sisa kapasitas penyimpanan disk pada Linux dalam format yang mudah dibaca manusia (human-readable) menggunakan perintah `df -h`. Perintah fiktif 'disk-free' mengelirukan pemula secara jebakan.",
+                    },
+                  },
         {
           kind: "step",
           id: "deploy-6-5",
@@ -2047,7 +2609,22 @@ export const deploymentTrack: Track = {
                       }
                     ],
           solution: "pg_dump -U postgres mydb > backup.sql",
-        },
+                                        susunKode: {
+                                          question:
+                                            "Susun perintah pg_dump untuk membuat backup database PostgreSQL.",
+                                          potongan: [
+                                            "pg_dump -U postgres",
+                                            "mydb > backup.sql",
+                                          ],
+                                          pengecoh: [
+                                            "postgres_dump -u postgres",
+                                            "mydb < backup.sql",
+                                          ],
+                                          pemisah: " ",
+                                          explanation:
+                                            "Membuat cadangan (backup) database PostgreSQL ke dalam berkas teks SQL menggunakan utilitas CLI `pg_dump -U user dbname > output.sql`. Menggunakan pengarah `<` adalah kesalahan fatal yang jebakan dalam backup.",
+                                        },
+                                      },
         {
           kind: "step",
           id: "deploy-6-6",
@@ -2075,7 +2652,22 @@ export const deploymentTrack: Track = {
                       }
                     ],
           solution: "cat postmortem.md",
-        },
+                    susunKode: {
+                      question:
+                        "Susun perintah cat postmortem.md untuk membaca laporan insiden.",
+                      potongan: [
+                        "cat",
+                        "postmortem.md",
+                      ],
+                      pengecoh: [
+                        "read-file",
+                        "incident_report.md",
+                      ],
+                      pemisah: " ",
+                      explanation:
+                        "Membaca isi berkas teks laporan evaluasi pasca-insiden di terminal Linux menggunakan utilitas standar `cat nama_file.md`. Penggunaan perintah fiktif 'read-file' adalah jebakan istilah CLI yang keliru.",
+                    },
+                  },
         {
           kind: "quiz",
           id: "deploy-6-kuis",

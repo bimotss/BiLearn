@@ -31,7 +31,7 @@ export const nextjsTrack: Track = {
           "kind": "materi",
           "id": "next-1-m0",
           "title": "Persiapan: Membuat Proyek Next.js dan Menjalankan Dev Server",
-          "body": "# Pengertian\n\n**Next.js** adalah framework yang dibangun di atas React. Kalau di track React kamu membuat proyek dengan Vite dan mengurus routing sendiri lewat library, di Next.js keduanya sudah menjadi bagian framework — beserta rendering di server, optimasi gambar, dan API route.\n\nSebelum menyentuh konsep App Router, satu hal harus jalan lebih dulu: **proyeknya ada di komputermu dan dev server-nya menyala.**\n\n## Prasyarat dan Cara Membuat Proyek\n\n| Kebutuhan | Perintah pemeriksa | Catatan |\n|---|---|---|\n| Node.js versi LTS | `node -v` | Next.js modern menolak Node yang terlalu tua; pakai LTS |\n| npm | `npm -v` | ikut terpasang bersama Node |\n| Proyek baru | `npx create-next-app@latest nama-proyek` | scaffolding resmi, bukan salin folder orang |\n\n```text\n$ npx create-next-app@latest toko-online\n\n√ Would you like to use TypeScript?          » Yes\n√ Would you like to use ESLint?              » Yes\n√ Would you like to use Tailwind CSS?        » Yes\n√ Would you like your code inside a `src/` directory?  » Yes\n√ Would you like to use App Router? (recommended)     » Yes\n\n$ cd toko-online\n$ npm run dev\n  ▲ Next.js 16.2.12\n  - Local:   http://localhost:3000\n  ✓ Ready in 1.4s\n```\n\nJawaban yang dipakai di seluruh track ini: **TypeScript ya, App Router ya**. Kalau kamu memilih *Pages Router*, sebagian besar materi track ini tidak akan cocok — itu sistem routing generasi sebelumnya yang masih didukung tapi tidak lagi dianjurkan untuk proyek baru.\n\n## Isi Folder yang Baru Dibuat\n\n```text\ntoko-online/\n├── src/app/\n│   ├── layout.tsx      <-- kerangka yang membungkus SEMUA halaman\n│   ├── page.tsx        <-- halaman untuk URL \"/\"\n│   └── globals.css\n├── public/             <-- berkas statis; /logo.png berarti public/logo.png\n├── next.config.ts\n├── package.json        <-- di sini ada scripts: dev, build, start, lint\n└── tsconfig.json\n```\n\nAturan yang membedakan Next.js dari React biasa: **nama berkas menentukan perilaku**. `page.tsx` membuat sebuah URL bisa diakses, `layout.tsx` membungkusnya, `loading.tsx` tampil saat menunggu. Folder tanpa `page.tsx` di dalamnya tidak menghasilkan URL apa pun.\n\n## Empat Perintah yang Akan Kamu Pakai Terus\n\n| Perintah | Fungsinya | Kapan dipakai |\n|---|---|---|\n| `npm run dev` | menyalakan dev server + hot reload | sehari-hari saat mengembangkan |\n| `npm run build` | membangun versi produksi | sebelum deploy, dan untuk menemukan error yang tidak muncul di dev |\n| `npm start` | menjalankan hasil build | menguji perilaku produksi di lokal |\n| `npm run lint` | memeriksa gaya & kesalahan umum | sebelum membuat Pull Request |\n\n`npm run build` layak dijalankan sesekali meskipun dev server-mu lancar: sebagian error tipe dan kesalahan pemakaian Server Component **hanya** muncul saat build.\n\n## Analogi Dunia Nyata\n\nReact itu seperti **mesin dan roda**: kuat, tapi kamu masih harus merakit rangka, lampu, dan sistem kemudinya sendiri (routing, rendering, optimasi). Next.js adalah **mobil jadi** dari bengkel yang sama: komponennya sama, tapi susunannya sudah ditentukan.\n\nKonsekuensinya dua arah. Kamu tidak perlu memutuskan struktur folder — tapi kamu **wajib** mengikuti konvensinya. `page.tsx` yang salah nama tidak akan pernah muncul sebagai halaman, dan tidak ada pesan error yang menjelaskan kenapa.\n\n## Jebakan yang Menjatuhkan Hampir Semua Pemula\n\n1. **Memilih Pages Router lalu mengikuti materi App Router.** Semua contoh gagal. Kalau ragu, periksa: ada folder `app/` berarti App Router, ada folder `pages/` berarti Pages Router.\n2. **Menamai berkas `Page.tsx` atau `index.tsx`.** Konvensinya huruf kecil semua: `page.tsx`. Berkas dengan nama lain di dalam folder route tidak menghasilkan URL.\n3. **Menjalankan `npm run dev` di folder induk.** Terminal harus berada di dalam folder proyek — periksa `package.json` ada di situ.\n4. **Menyalin folder proyek orang lain lengkap dengan `node_modules`.** Jauh lebih rapuh daripada `npm install` sendiri, dan sering menghasilkan error versi yang sulit dilacak.\n5. **Port 3000 sudah dipakai.** Next.js akan pindah ke 3001 dan menyebutkannya di baris `Local:` — bacalah alamat itu, jangan berasumsi selalu 3000.\n6. **Mengira dev server perlu dimatikan-nyalakan setiap kali menyimpan.** Hot reload sudah menanganinya; yang perlu restart hanya perubahan pada `next.config.ts` atau `.env`.\n\n## Kaitan ke Dunia Kerja\n\n- `create-next-app` adalah cara resmi memulai, dan di **interview** kamu bisa ditanya mengapa memilih Next.js dibanding React murni — jawabannya menyebut SEO, rendering di server, dan routing bawaan, bukan \"lebih modern\".\n- Di tim, **CI menjalankan `npm run build` dan `npm run lint`** pada setiap Pull Request. Kalau keduanya belum pernah kamu jalankan di lokal, PR-mu akan merah lebih dulu sebelum satu orang pun membacanya.\n- Struktur `app/` yang konsisten adalah alasan orang baru bisa langsung membaca proyek Next.js orang lain — itu nilai jual framework ini di perusahaan dengan pergantian anggota tim.\n\n> **Kapan dipakai:** sekali di awal setiap proyek. Setelah `npm run dev` menampilkan `✓ Ready`, buka `http://localhost:3000` dan pastikan halaman bawaan muncul **sebelum** kamu menghapus isinya — supaya kalau nanti ada yang rusak, kamu tahu penyebabnya kodemu, bukan pemasangannya.\n\n> **Catatan tentang latihan di BiLearn:** panel latihan track ini **tidak menjalankan Next.js** (butuh server sendiri, dan sebagian berkas hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus. Keluaran nyata ditampilkan di bagian **Contoh** setiap latihan."
+          "body": "# Pengertian\n\n**Next.js** adalah framework yang dibangun di atas React. Kalau di track React kamu membuat proyek dengan Vite dan mengurus routing sendiri lewat library, di Next.js keduanya sudah menjadi bagian framework — beserta rendering di server, optimasi gambar, dan API route.\n\nSebelum menyentuh konsep App Router, satu hal harus jalan lebih dulu: **proyeknya ada di komputermu dan dev server-nya menyala.**\n\n## Prasyarat dan Cara Membuat Proyek\n\n| Kebutuhan | Perintah pemeriksa | Catatan |\n|---|---|---|\n| Node.js versi LTS | `node -v` | Next.js modern menolak Node yang terlalu tua; pakai LTS |\n| npm | `npm -v` | ikut terpasang bersama Node |\n| Proyek baru | `npx create-next-app@latest nama-proyek` | scaffolding resmi, bukan salin folder orang |\n\n```text\n$ npx create-next-app@latest toko-online\n\n? Would you like to use the recommended Next.js defaults?\n> Yes, use recommended defaults - TypeScript, ESLint, Tailwind CSS, App Router, AGENTS.md\n  No, reuse previous settings\n  No, customize settings - Choose your own preferences\n\n$ cd toko-online\n$ npm run dev\n  ▲ Next.js 16.2.12\n  - Local:   http://localhost:3000\n  ✓ Ready in 1.4s\n```\n\nPilih **Yes, use recommended defaults** — itu yang dipakai di seluruh track ini: TypeScript, ESLint, Tailwind, dan **App Router**. Kalau kamu memilih *customize settings* lalu menjawab *No* pada pertanyaan App Router, kamu mendapat *Pages Router* dan sebagian besar materi track ini tidak akan cocok — itu sistem routing generasi sebelumnya yang masih didukung tapi tidak lagi dianjurkan untuk proyek baru.\n\nCatatan: kalau kamu ingin melewati semua pertanyaan sekaligus, tambahkan `--yes` (`npx create-next-app@latest toko-online --yes`).\n\n## Isi Folder yang Baru Dibuat\n\n```text\ntoko-online/\n├── src/app/\n│   ├── layout.tsx      <-- kerangka yang membungkus SEMUA halaman\n│   ├── page.tsx        <-- halaman untuk URL \"/\"\n│   └── globals.css\n├── public/             <-- berkas statis; /logo.png berarti public/logo.png\n├── next.config.ts\n├── package.json        <-- di sini ada scripts: dev, build, start, lint\n└── tsconfig.json\n```\n\nAturan yang membedakan Next.js dari React biasa: **nama berkas menentukan perilaku**. `page.tsx` membuat sebuah URL bisa diakses, `layout.tsx` membungkusnya, `loading.tsx` tampil saat menunggu. Folder tanpa `page.tsx` di dalamnya tidak menghasilkan URL apa pun.\n\n## Empat Perintah yang Akan Kamu Pakai Terus\n\n| Perintah | Fungsinya | Kapan dipakai |\n|---|---|---|\n| `npm run dev` | menyalakan dev server + hot reload | sehari-hari saat mengembangkan |\n| `npm run build` | membangun versi produksi | sebelum deploy, dan untuk menemukan error yang tidak muncul di dev |\n| `npm start` | menjalankan hasil build | menguji perilaku produksi di lokal |\n| `npm run lint` | memeriksa gaya & kesalahan umum | sebelum membuat Pull Request |\n\n`npm run build` layak dijalankan sesekali meskipun dev server-mu lancar: sebagian error tipe dan kesalahan pemakaian Server Component **hanya** muncul saat build.\n\n## Analogi Dunia Nyata\n\nReact itu seperti **mesin dan roda**: kuat, tapi kamu masih harus merakit rangka, lampu, dan sistem kemudinya sendiri (routing, rendering, optimasi). Next.js adalah **mobil jadi** dari bengkel yang sama: komponennya sama, tapi susunannya sudah ditentukan.\n\nKonsekuensinya dua arah. Kamu tidak perlu memutuskan struktur folder — tapi kamu **wajib** mengikuti konvensinya. `page.tsx` yang salah nama tidak akan pernah muncul sebagai halaman, dan tidak ada pesan error yang menjelaskan kenapa.\n\n## Jebakan yang Menjatuhkan Hampir Semua Pemula\n\n1. **Memilih Pages Router lalu mengikuti materi App Router.** Semua contoh gagal. Kalau ragu, periksa: ada folder `app/` berarti App Router, ada folder `pages/` berarti Pages Router.\n2. **Menamai berkas `Page.tsx` atau `index.tsx`.** Konvensinya huruf kecil semua: `page.tsx`. Berkas dengan nama lain di dalam folder route tidak menghasilkan URL.\n3. **Menjalankan `npm run dev` di folder induk.** Terminal harus berada di dalam folder proyek — periksa `package.json` ada di situ.\n4. **Menyalin folder proyek orang lain lengkap dengan `node_modules`.** Jauh lebih rapuh daripada `npm install` sendiri, dan sering menghasilkan error versi yang sulit dilacak.\n5. **Port 3000 sudah dipakai.** Next.js akan pindah ke 3001 dan menyebutkannya di baris `Local:` — bacalah alamat itu, jangan berasumsi selalu 3000.\n6. **Mengira dev server perlu dimatikan-nyalakan setiap kali menyimpan.** Hot reload sudah menanganinya; yang perlu restart hanya perubahan pada `next.config.ts` atau `.env`.\n\n## Kaitan ke Dunia Kerja\n\n- `create-next-app` adalah cara resmi memulai, dan di **interview** kamu bisa ditanya mengapa memilih Next.js dibanding React murni — jawabannya menyebut SEO, rendering di server, dan routing bawaan, bukan \"lebih modern\".\n- Di tim, **CI menjalankan `npm run build` dan `npm run lint`** pada setiap Pull Request. Kalau keduanya belum pernah kamu jalankan di lokal, PR-mu akan merah lebih dulu sebelum satu orang pun membacanya.\n- Struktur `app/` yang konsisten adalah alasan orang baru bisa langsung membaca proyek Next.js orang lain — itu nilai jual framework ini di perusahaan dengan pergantian anggota tim.\n\n> **Kapan dipakai:** sekali di awal setiap proyek. Setelah `npm run dev` menampilkan `✓ Ready`, buka `http://localhost:3000` dan pastikan halaman bawaan muncul **sebelum** kamu menghapus isinya — supaya kalau nanti ada yang rusak, kamu tahu penyebabnya kodemu, bukan pemasangannya.\n\n> **Catatan tentang latihan di BiLearn:** panel latihan track ini **tidak menjalankan Next.js** (butuh server sendiri, dan sebagian berkas hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus. Keluaran nyata ditampilkan di bagian **Contoh** setiap latihan."
         },
         {
           "kind": "step",
@@ -56,7 +56,24 @@ export const nextjsTrack: Track = {
               "message": "Sebutkan nama proyeknya sebagai argumen terakhir, tepat setelah nama paket. Nama itu akan jadi nama folder, jadi tulis persis seperti yang diminta (huruf kecil dan tanda hubung)."
             }
           ],
-          "solution": "npx create-next-app@latest toko-online"
+          "solution": "npx create-next-app@latest toko-online",
+          susunKode: {
+            question:
+              "Rangkai perintah terminal untuk membuat proyek Next.js baru bernama toko-online dengan generator resmi versi terbaru.",
+            potongan: [
+              "npx",
+              "create-next-app@latest",
+              "toko-online",
+            ],
+            pengecoh: [
+              "npm run",
+              "init-next-app",
+              "toko_online",
+            ],
+            pemisah: " ",
+            explanation:
+              "Perintah create-next-app dijalankan melalui npx agar menggunakan versi generator paling baru. Keping npm run adalah jebakan karena npm run hanya dipakai untuk menjalankan script lokal package.json. Keping init-next-app sering keliru digunakan karena terdengar seperti npm init, padahal nama paket resminya adalah create-next-app@latest. Keping toko_online menggoda bagi pengguna yang terbiasa dengan snake_case, padahal instruksi mewajibkan penamaan folder kebab-case toko-online.",
+          },
         },
         {
           "kind": "materi",
@@ -87,7 +104,23 @@ export const nextjsTrack: Track = {
               "message": "Judul tab diambil dari properti `title` di dalam objek itu. Tulis nilainya persis seperti yang diminta, karena nilai inilah yang tampil di tab browser dan di hasil pencarian."
             }
           ],
-          "solution": "export const metadata = {\n  title: 'Beranda',\n};"
+          "solution": "export const metadata = {\n  title: 'Beranda',\n};",
+          susunKode: {
+            question:
+              "Susun ekspor objek metadata sederhana untuk menetapkan judul halaman sebagai Beranda.",
+            potongan: [
+              "export const metadata = {",
+              "  title: 'Beranda',",
+              "};",
+            ],
+            pengecoh: [
+              "export const meta = {",
+              "  headline: 'Beranda',",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Next.js secara khusus mencari named export bernama metadata untuk membaca informasi title halaman. Keping export const meta = { sangat menggoda karena singkat, tetapi Next.js mengabaikan nama ekspor selain metadata. Keping headline: 'Beranda', adalah jebakan properti keliru dari kerangka kerja lain, karena Next.js hanya mengenali kunci title untuk judul dokumen.",
+          },
         },
         {
           "kind": "step",
@@ -112,7 +145,23 @@ export const nextjsTrack: Track = {
               "message": "Kembalikan JSX yang diminta. Nama fungsinya sendiri bebas karena yang dibaca Next.js adalah default export-nya, tapi menamainya `Page` adalah konvensi dokumentasi resmi."
             }
           ],
-          "solution": "export default function Page() {\n  return <h1>Home</h1>;\n}"
+          "solution": "export default function Page() {\n  return <h1>Home</h1>;\n}",
+          susunKode: {
+            question:
+              "Rangkai halaman utama page.tsx yang mengekspor komponen default Page.",
+            potongan: [
+              "export default function Page() {",
+              "  return <h1>Home</h1>;",
+              "}",
+            ],
+            pengecoh: [
+              "export function Page() {",
+              "  return <h2>Home</h2>;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Next.js mewajibkan komponen halaman diekspor sebagai default export agar router dapat merendernya. Keping export function Page() { sering keliru karena lupa kata kunci default, yang berakibat rute mengembalikan tampilan 404. Keping return <h2>Home</h2>; menggoda tetapi menyalahi spesifikasi instruksi yang meminta elemen heading h1.",
+          },
         },
         {
           "kind": "step",
@@ -137,7 +186,24 @@ export const nextjsTrack: Track = {
               "message": "Setelah ditunggu, ambil properti `id` dari hasilnya — boleh dengan destructuring, boleh lewat variabel perantara lalu titik `id`. Namanya harus `id` karena itu nama folder `[id]`; folder `[userId]` berarti propertinya `userId`."
             }
           ],
-          "solution": "export default async function UserPage({ params }) {\n  const { id } = await params;\n  return <h1>User: {id}</h1>;\n}"
+          "solution": "export default async function UserPage({ params }) {\n  const { id } = await params;\n  return <h1>User: {id}</h1>;\n}",
+          susunKode: {
+            question:
+              "Susun komponen halaman dinamis yang menunggu Promise params lalu menampilkan parameter id.",
+            potongan: [
+              "export default async function UserPage({ params }) {",
+              "  const { id } = await params;",
+              "  return <h1>User: {id}</h1>;",
+              "}",
+            ],
+            pengecoh: [
+              "  const { id } = params;",
+              "  const { userId } = await params;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Pada App Router versi terbaru, properti params berupa Promise yang wajib di-await sebelum propertinya diakses. Keping const { id } = params; sering keliru dipakai pengembang yang terbiasa dengan Next.js lama, yang berakibat nilai [object Promise] muncul di antarmuka. Keping const { userId } = await params; menggoda karena tampak lebih deskriptif, tetapi nama variabel harus sesuai persis dengan nama segmen folder [id].",
+          },
         },
         {
           "kind": "step",
@@ -166,7 +232,23 @@ export const nextjsTrack: Track = {
               "message": "Pembungkusnya harus benar-benar merender `{children}` di dalamnya. Kalau `children` tidak ikut dirender, halaman anak tidak akan pernah muncul — dan tidak ada error yang memberitahumu."
             }
           ],
-          "solution": "export default function Layout({ children }: { children: React.ReactNode }) {\n  return <div>{children}</div>;\n}"
+          "solution": "export default function Layout({ children }: { children: React.ReactNode }) {\n  return <div>{children}</div>;\n}",
+          susunKode: {
+            question:
+              "Susun komponen layout root sederhana yang merender prop children di dalam pembungkus div.",
+            potongan: [
+              "export default function Layout({ children }: { children: React.ReactNode }) {",
+              "  return <div>{children}</div>;",
+              "}",
+            ],
+            pengecoh: [
+              "export function Layout({ children }: { children: React.ReactNode }) {",
+              "  return <div>children</div>;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Layout Next.js harus diekspor secara default dan merender ekspresi {children} di dalam antarmukanya. Keping export function Layout sering keliru karena tidak menyertakan default export. Keping return <div>children</div>; menggoda tetapi merupakan jebakan sintaks JSX, karena tanpa kurung kurawal teks literal 'children' yang tampil di layar dan bukannya komponen anak.",
+          },
         },
         {
           "kind": "step",
@@ -191,7 +273,23 @@ export const nextjsTrack: Track = {
               "message": "Isi fallback-nya harus elemen `p` bertuliskan `Loading...`. Boleh dibungkus tanda kurung setelah `return`, boleh juga langsung — keduanya diterima."
             }
           ],
-          "solution": "export default function Loading() {\n  return <p>Loading...</p>;\n}"
+          "solution": "export default function Loading() {\n  return <p>Loading...</p>;\n}",
+          susunKode: {
+            question:
+              "Rangkai komponen status muat loading.tsx yang menampilkan paragraf Loading...",
+            potongan: [
+              "export default function Loading() {",
+              "  return <p>Loading...</p>;",
+              "}",
+            ],
+            pengecoh: [
+              "export function Loading() {",
+              "  return <span>Loading...</span>;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Berkas loading.tsx menggunakan batas Suspense otomatis yang membutuhkan default export. Keping export function Loading() { sering keliru karena lupa penanda default export. Keping return <span>Loading...</span>; menggoda tetapi menyalahi tipe elemen HTML paragraf <p> yang dipersyaratkan oleh pengujian.",
+          },
         },
         {
           "kind": "step",
@@ -221,7 +319,28 @@ export const nextjsTrack: Track = {
               "message": "Untuk navigasi INTERNAL, `<a href=\"/...\">` memicu muat ulang penuh: seluruh JavaScript diunduh lagi dan state aplikasi (isi keranjang, form yang setengah terisi) hilang. Simpan `<a>` untuk tautan ke situs luar."
             }
           ],
-          "solution": "import Link from \"next/link\";\n\nexport default function Navigation() {\n  return (\n    <nav>\n      <Link href=\"/about\">Tentang Kami</Link>\n    </nav>\n  );\n}"
+          "solution": "import Link from \"next/link\";\n\nexport default function Navigation() {\n  return (\n    <nav>\n      <Link href=\"/about\">Tentang Kami</Link>\n    </nav>\n  );\n}",
+          susunKode: {
+            question:
+              "Rangkai komponen navigasi yang mengimpor Link dari next/link untuk menuju rute /about.",
+            potongan: [
+              "import Link from \"next/link\";",
+              "export default function Navigation() {",
+              "  return (",
+              "    <nav>",
+              "      <Link href=\"/about\">Tentang Kami</Link>",
+              "    </nav>",
+              "  );",
+              "}",
+            ],
+            pengecoh: [
+              "      <a href=\"/about\">Tentang Kami</a>",
+              "      <Link to=\"/about\">Tentang Kami</Link>",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Modul next/link diekspor sebagai default export untuk mendukung navigasi client-side yang efisien. Keping <a href=\"/about\"> sangat menggoda bagi pengguna HTML biasa, tetapi dilarang untuk rute internal Next.js karena memicu muat ulang halaman penuh dan menghilangkan state aplikasi. Keping <Link to=\"/about\"> sering keliru dipakai oleh developer React Router yang terbiasa dengan prop to.",
+          },
         },
         {
           "kind": "step",
@@ -246,7 +365,23 @@ export const nextjsTrack: Track = {
               "message": "Bungkus `{children}` dengan `<main>`. Tanpa `{children}` di dalamnya, halaman login dan register di kelompok ini akan tampil kosong."
             }
           ],
-          "solution": "export default function AuthLayout({ children }) {\n  return <main>{children}</main>;\n}"
+          "solution": "export default function AuthLayout({ children }) {\n  return <main>{children}</main>;\n}",
+          susunKode: {
+            question:
+              "Rangkai komponen AuthLayout untuk route group yang merender elemen main.",
+            potongan: [
+              "export default function AuthLayout({ children }) {",
+              "  return <main>{children}</main>;",
+              "}",
+            ],
+            pengecoh: [
+              "export function AuthLayout({ children }) {",
+              "  return <div>{children}</div>;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Layout pada kelompok rute tetap harus berupa default export yang merender elemen semantik yang diminta. Keping export function AuthLayout sering keliru karena lupa kata kunci default. Keping return <div>{children}</div>; menggoda tetapi salah elemen semantik, karena pengujian mewajibkan penggunaan tag <main>.",
+          },
         },
         {
           "kind": "quiz",
@@ -365,7 +500,7 @@ export const nextjsTrack: Track = {
           "kind": "materi",
           "id": "next-2-m1",
           "title": "Model Mental Server vs Client Components di Next.js",
-          "body": "# Model Mental Server vs Client Components\n\nDi aplikasi React tradisional, seluruh komponen dijalankan di browser (Client). Ini berarti setiap pustaka atau komponen yang kamu gunakan akan dikemas ke dalam JavaScript bundle dan dikirimkan melalui jaringan ke pengguna.\n\nNext.js App Router memperkenalkan paradigma baru bernama **React Server Components (RSC)**. Di Next.js, seluruh komponen di dalam direktori `app/` secara default adalah **Server Component**!\n\n## Perbandingan Server vs Client Components\n\n| Fitur / Kemampuan | Server Component (Default) | Client Component (`'use client'`) |\n|---|---|---|\n| **Lokasi Eksekusi** | Hanya di Server saat build/request | Di Server (pre-render) & di Browser (hydration) |\n| **Ukuran Bundle JS** | **0 KB** (Hasil render berupa HTML/RSC Payload) | Terhitung masuk ke dalam JS bundle client |\n| **Akses Resource** | Database, File System (`fs`), Secret Keys | LocalStorage, Geolocation, Browser DOM API |\n| **React State & Hooks** | ❌ Tidak Bisa (`useState`, `useEffect`) | ✅ Bisa (`useState`, `useEffect`, `useContext`) |\n| **Event Listener** | ❌ Tidak Bisa (`onClick`, `onChange`) | ✅ Bisa (`onClick`, `onChange`, `onSubmit`) |\n| **Kecepatan Data Fetching** | Sangat Cepat (Dekat dengan Database/API) | Bergantung pada Latensi Jaringan Client |\n\n## Direktif 'use client' & Boundary Architecture\n\nKetika kamu membutuhkan interaktivitas (seperti tombol pencarian, modal pop-up, atau form input), kamu harus menambahkan direktif `'use client';` di **baris paling atas berkas, sebelum import apa pun**.\n\n```text\n┌────────────────────────────────────────────────────────┐\n│ Server Component (RootLayout / Page)                   │\n│  ├── Mengambil data dari Database                      │\n│  ├── Mengamankan API Key rahasia                       │\n│  └── Client Component Boundary ('use client')           │\n│       └── TombolSuka (State, onClick, Event Listener)   │\n└────────────────────────────────────────────────────────┘\n```\n\n### Aturan Keras Boundary (Batas Komponen):\n1. **Server Component dapat meng-import Client Component**.\n2. **Client Component TIDAK BISA meng-import Server Component secara langsung**! Jika Client Component meng-import berkas Server Component, berkas server tersebut akan ikut terkonversi menjadi Client Component.\n3. **Solusi (Pola Children)**: Jika kamu ingin menempatkan Server Component di dalam Client Component, oper Server Component tersebut sebagai prop `children`!\n\n```tsx\n// ✅ POLA YANG BENAR\n// ClientModal.tsx ('use client')\nexport default function ClientModal({ children }: { children: React.ReactNode }) {\n  const [open, setOpen] = useState(false);\n  return <div>{open && children}</div>;\n}\n\n// Page.tsx (Server Component)\nimport ClientModal from './ClientModal';\nimport ServerDataList from './ServerDataList'; // Tetap Server Component!\n\nexport default function Page() {\n  return (\n    <ClientModal>\n      <ServerDataList />\n    </ClientModal>\n  );\n}\n```\n\n## Mengoper Props Menembus Boundary\n\nProps yang dikirim dari Server Component ke Client Component wajib bersifat **serializable** (dapat diubah menjadi string JSON). String, number, boolean, array, dan plain object diperbolehkan. Fungsi, Date object, atau kelas kustom **tidak dapat dikirimkan** langsung via props.\n\n## Mengamankan Server Code dengan `server-only`\n\nAgar kode backend sensitif (seperti query database atau API token) tidak pernah tidak sengaja terimport ke Client Component, pasang package official `server-only`:\n\n```typescript\nimport 'server-only';\n// Kode di bawah ini dijamin tidak akan pernah bocor ke bundle browser\n```\n\n## Analogi Dunia Nyata\n\nBayangkan restoran bintang lima. Server Component adalah **Dapur Utama**. Di sana terdapat kompor gas besar, pisau tajam, dan resep rahasia koki (`database/secrets`). Pelanggan tidak boleh masuk ke dapur. Client Component adalah **Meja Makan Pelanggan**. Di sana ada tombol pemanggil pelayan dan garam/merica (`interaktivitas/state`). Makanan dimasak di dapur (Server), lalu disajikan dalam bentuk piring matang (HTML) ke meja pelanggan.\n\n## Jebakan & Kesalahan Umum\n\n1. **Menaruh `'use client'` di Root Layout**: Menaruh `'use client'` di `app/layout.tsx` mematikan seluruh manfaat React Server Components di aplikasi kamu!\n2. **Error Hydration Mismatch**: Menampilkan data yang berbeda di Server dan Client (misalnya `new Date()` atau `Math.random()`) menyebabkan React merah di konsol browser.\n3. **Mengoper Fungsi via Props**: Mencoba mengoper fungsi handler server ke Client Component tanpa menggunakan Server Actions.\n\n## Kaitan ke Dunia Kerja\n\nPemahaman mendalam tentang boundary Server vs Client adalah pertanyaan paling krusial dalam wawancara kerja Next.js senior saat ini. Perusahaan mengadopsi Next.js untuk menekan biaya bandwidth CDN dan mempercepat nilai LCP (Largest Contentful Paint) aplikasi mereka."
+          "body": "# Model Mental Server vs Client Components\n\nDi aplikasi React tradisional, seluruh komponen dijalankan di browser (Client). Ini berarti setiap pustaka atau komponen yang kamu gunakan akan dikemas ke dalam JavaScript bundle dan dikirimkan melalui jaringan ke pengguna.\n\nNext.js App Router memperkenalkan paradigma baru bernama **React Server Components (RSC)**. Di Next.js, seluruh komponen di dalam direktori `app/` secara default adalah **Server Component**!\n\n## Perbandingan Server vs Client Components\n\n| Fitur / Kemampuan | Server Component (Default) | Client Component (`'use client'`) |\n|---|---|---|\n| **Lokasi Eksekusi** | Hanya di Server saat build/request | Di Server (pre-render) & di Browser (hydration) |\n| **Ukuran Bundle JS** | **0 KB** (Hasil render berupa HTML/RSC Payload) | Terhitung masuk ke dalam JS bundle client |\n| **Akses Resource** | Database, File System (`fs`), Secret Keys | LocalStorage, Geolocation, Browser DOM API |\n| **React State & Hooks** | ❌ Tidak Bisa (`useState`, `useEffect`) | ✅ Bisa (`useState`, `useEffect`, `useContext`) |\n| **Event Listener** | ❌ Tidak Bisa (`onClick`, `onChange`) | ✅ Bisa (`onClick`, `onChange`, `onSubmit`) |\n| **Kecepatan Data Fetching** | Sangat Cepat (Dekat dengan Database/API) | Bergantung pada Latensi Jaringan Client |\n\n## Direktif 'use client' & Boundary Architecture\n\nKetika kamu membutuhkan interaktivitas (seperti tombol pencarian, modal pop-up, atau form input), kamu harus menambahkan direktif `'use client';` di **baris paling atas berkas, sebelum import apa pun**.\n\n```text\n┌────────────────────────────────────────────────────────┐\n│ Server Component (RootLayout / Page)                   │\n│  ├── Mengambil data dari Database                      │\n│  ├── Mengamankan API Key rahasia                       │\n│  └── Client Component Boundary ('use client')           │\n│       └── TombolSuka (State, onClick, Event Listener)   │\n└────────────────────────────────────────────────────────┘\n```\n\n### Aturan Keras Boundary (Batas Komponen):\n1. **Server Component dapat meng-import Client Component**.\n2. **Client Component TIDAK BISA meng-import Server Component secara langsung**! Jika Client Component meng-import berkas Server Component, berkas server tersebut akan ikut terkonversi menjadi Client Component.\n3. **Solusi (Pola Children)**: Jika kamu ingin menempatkan Server Component di dalam Client Component, oper Server Component tersebut sebagai prop `children`!\n\n```tsx\n// ✅ POLA YANG BENAR\n// ClientModal.tsx ('use client')\nexport default function ClientModal({ children }: { children: React.ReactNode }) {\n  const [open, setOpen] = useState(false);\n  return <div>{open && children}</div>;\n}\n\n// Page.tsx (Server Component)\nimport ClientModal from './ClientModal';\nimport ServerDataList from './ServerDataList'; // Tetap Server Component!\n\nexport default function Page() {\n  return (\n    <ClientModal>\n      <ServerDataList />\n    </ClientModal>\n  );\n}\n```\n\n## Mengoper Props Menembus Boundary\n\nProps yang dikirim dari Server Component ke Client Component wajib bersifat **serializable** (dapat diubah menjadi string JSON). String, number, boolean, array, plain object, `Date`, `Map`, dan `Set` diperbolehkan — format RSC React mampu memindahkan semuanya. Yang **tidak dapat dikirimkan** langsung via props hanya: fungsi, instance kelas kustom, dan `Symbol`. Jangan menghafalnya sebagai *harus JSON murni*: `Date` sering dikira terlarang padahal aman, sedangkan fungsi sering dikira aman padahal itu justru yang ditolak.\n\n## Mengamankan Server Code dengan `server-only`\n\nAgar kode backend sensitif (seperti query database atau API token) tidak pernah tidak sengaja terimport ke Client Component, pasang package official `server-only`:\n\n```typescript\nimport 'server-only';\n// Kode di bawah ini dijamin tidak akan pernah bocor ke bundle browser\n```\n\n## Analogi Dunia Nyata\n\nBayangkan restoran bintang lima. Server Component adalah **Dapur Utama**. Di sana terdapat kompor gas besar, pisau tajam, dan resep rahasia koki (`database/secrets`). Pelanggan tidak boleh masuk ke dapur. Client Component adalah **Meja Makan Pelanggan**. Di sana ada tombol pemanggil pelayan dan garam/merica (`interaktivitas/state`). Makanan dimasak di dapur (Server), lalu disajikan dalam bentuk piring matang (HTML) ke meja pelanggan.\n\n## Jebakan & Kesalahan Umum\n\n1. **Menaruh `'use client'` di Root Layout**: Menaruh `'use client'` di `app/layout.tsx` mematikan seluruh manfaat React Server Components di aplikasi kamu!\n2. **Error Hydration Mismatch**: Menampilkan data yang berbeda di Server dan Client (misalnya `new Date()` atau `Math.random()`) menyebabkan React merah di konsol browser.\n3. **Mengoper Fungsi via Props**: Mencoba mengoper fungsi handler server ke Client Component tanpa menggunakan Server Actions.\n\n## Kaitan ke Dunia Kerja\n\nPemahaman mendalam tentang boundary Server vs Client adalah pertanyaan paling krusial dalam wawancara kerja Next.js senior saat ini. Perusahaan mengadopsi Next.js untuk menekan biaya bandwidth CDN dan mempercepat nilai LCP (Largest Contentful Paint) aplikasi mereka."
         },
         {
           "kind": "step",
@@ -386,7 +521,24 @@ export const nextjsTrack: Track = {
               "message": "Impor modul file system Node secara DEFAULT (tanpa kurawal), boleh dengan awalan `node:`. Kalau berkas ini diberi `'use client'`, impor yang sama langsung gagal di build — itulah buktinya komponen ini hidup di server."
             }
           ],
-          "solution": "import fs from 'fs';\n\nexport default function Page() {\n  return <h1>Server Component</h1>;\n}"
+          "solution": "import fs from 'fs';\n\nexport default function Page() {\n  return <h1>Server Component</h1>;\n}",
+          susunKode: {
+            question:
+              "Rangkai impor modul file system Node secara default pada komponen Server Page.",
+            potongan: [
+              "import fs from 'fs';",
+              "export default function Page() {",
+              "  return <h1>Server Component</h1>;",
+              "}",
+            ],
+            pengecoh: [
+              "import { fs } from 'fs';",
+              "import fs from 'file-system';",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Impor modul bawaan fs dilakukan secara default dari paket node fs. Keping import { fs } keliru karena modul fs tidak menggunakan named export untuk instans dasarnya. Keping import fs from 'file-system' menggoda bagi pemula, padahal nama modul standar Node.js adalah 'fs' atau 'node:fs'.",
+          },
         },
         {
           "kind": "step",
@@ -408,7 +560,26 @@ export const nextjsTrack: Track = {
               "message": "Direktifnya harus berada di ATAS berkas — sebelum semua `import` (komentar pembuka masih boleh mendahuluinya). Ditaruh di dalam fungsi atau setelah import, direktif itu diabaikan tanpa pesan apa pun, dan error `useState` tadi tetap muncul."
             }
           ],
-          "solution": "'use client';\nimport { useState } from 'react';\n\nexport default function Counter() {\n  const [count, setCount] = useState(0);\n  return <button onClick={() => setCount(count + 1)}>{count}</button>;\n}"
+          "solution": "'use client';\nimport { useState } from 'react';\n\nexport default function Counter() {\n  const [count, setCount] = useState(0);\n  return <button onClick={() => setCount(count + 1)}>{count}</button>;\n}",
+          susunKode: {
+            question:
+              "Susun Client Component dengan arahan 'use client' yang menggunakan hook useState.",
+            potongan: [
+              "'use client';",
+              "import { useState } from 'react';",
+              "export default function Counter() {",
+              "  const [count, setCount] = useState(0);",
+              "  return <button onClick={() => setCount(count + 1)}>{count}</button>;",
+              "}",
+            ],
+            pengecoh: [
+              "'use server';",
+              "'use strict';",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Arahan 'use client' di baris paling awal memberi tahu pembangun Next.js bahwa komponen ini menggunakan fitur interaktif browser seperti useState. Keping 'use server' sangat sering keliru dipakai oleh pemula yang tertukar antara Client Directive dan Server Action. Keping 'use strict' keliru karena itu adalah arahan standar JavaScript untuk mode ketat, bukan arahan komponen Next.js.",
+          },
         },
         {
           "kind": "step",
@@ -433,7 +604,28 @@ export const nextjsTrack: Track = {
               "message": "Render komponennya DI DALAM `<main>`. Bentuk `<Carousel />` maupun `<Carousel></Carousel>` sama-sama diterima; yang diperiksa posisinya."
             }
           ],
-          "solution": "import Carousel from './carousel';\n\nexport default function HomePage() {\n  return (\n    <main>\n      <Carousel />\n    </main>\n  );\n}"
+          "solution": "import Carousel from './carousel';\n\nexport default function HomePage() {\n  return (\n    <main>\n      <Carousel />\n    </main>\n  );\n}",
+          susunKode: {
+            question:
+              "Susun komponen HomePage yang mengimpor Carousel dan merendernya di dalam elemen main.",
+            potongan: [
+              "import Carousel from './carousel';",
+              "export default function HomePage() {",
+              "  return (",
+              "    <main>",
+              "      <Carousel />",
+              "    </main>",
+              "  );",
+              "}",
+            ],
+            pengecoh: [
+              "import { Carousel } from './carousel';",
+              "    <section>",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Komponen Carousel diimpor secara default dari modul lokal dan dibungkus di dalam tag semantik main. Keping import { Carousel } keliru karena modul komponen tersebut diekspor secara default. Keping tag section menggoda tetapi menyalahi struktur elemen main yang diminta.",
+          },
         },
         {
           "kind": "step",
@@ -459,7 +651,27 @@ export const nextjsTrack: Track = {
               "message": "Jangan ikut menghapus datanya. String, number, boolean, array, dan plain object aman menembus boundary — hanya fungsi (dan class instance) yang tidak."
             }
           ],
-          "solution": "const userData = {\n  name: 'Budi',\n  age: 25,\n};\n\nexport default function ServerPage() {\n  return <Profile data={userData} />;\n}"
+          "solution": "const userData = {\n  name: 'Budi',\n  age: 25,\n};\n\nexport default function ServerPage() {\n  return <Profile data={userData} />;\n}",
+          susunKode: {
+            question:
+              "Perbaiki objek userData agar aman dikirimkan melalui props ke Client Component tanpa memicu error serialisasi.",
+            potongan: [
+              "const userData = {",
+              "  name: 'Budi',",
+              "  age: 25,",
+              "};",
+              "export default function ServerPage() {",
+              "  return <Profile data={userData} />;",
+              "}",
+            ],
+            pengecoh: [
+              "  sayHello: () => 'Halo',",
+              "  nama: 'Budi',",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Properti berupa fungsi seperti sayHello tidak dapat diserialisasi ke JSON oleh React ketika dikirim dari Server Component ke Client Component. Keping sayHello menggoda karena tampak seperti fungsi helper biasa, namun kehadirannya akan memicu error serialisasi pada Server Component boundary. Keping nama: 'Budi' keliru karena instruksi meminta nama properti name tetap dipertahankan.",
+          },
         },
         {
           "kind": "step",
@@ -489,7 +701,24 @@ export const nextjsTrack: Track = {
               "message": "Jangan menambahkan direktif client di berkas layout. Kalau layout root menjadi client, seluruh halaman di bawahnya ikut menjadi client — dan manfaat Server Components hilang di satu aplikasi penuh."
             }
           ],
-          "solution": "import ThemeToggle from './ThemeToggle';\n\nexport default function RootLayout({ children }) {\n  return (\n    <body>\n      <ThemeToggle />\n      {children}\n    </body>\n  );\n}"
+          "solution": "import ThemeToggle from './ThemeToggle';\n\nexport default function RootLayout({ children }) {\n  return (\n    <body>\n      <ThemeToggle />\n      {children}\n    </body>\n  );\n}",
+          susunKode: {
+            question:
+              "Rangkai pola komposisi yang menyisipkan Client Component ThemeToggle ke dalam RootLayout.",
+            potongan: [
+              "import ThemeToggle from './ThemeToggle';",
+              "export default function RootLayout({ children }) {",
+              "  return (\n    <body>\n      <ThemeToggle />\n      {children}\n    </body>\n  );",
+              "}",
+            ],
+            pengecoh: [
+              "'use client';",
+              "import { ThemeToggle } from './ThemeToggle';",
+            ],
+            pemisah: "\n",
+            explanation:
+              "RootLayout tetap menjadi Server Component; komponen interaktif ThemeToggle diimpor dan disisipkan di dalamnya tanpa mengubah seluruh layout menjadi client-side. Keping 'use client' menggoda bagi yang ingin cepat menyelesaikan masalah interaktivitas, tetapi berdampak buruk karena mengubah seluruh hirarki layout menjadi Client Component. Keping import { ThemeToggle } keliru karena modul komponen tersebut mengekspor secara default.",
+          },
         },
         {
           "kind": "step",
@@ -510,7 +739,24 @@ export const nextjsTrack: Track = {
               "message": "Penjaganya diimpor sebagai efek samping — tanpa `{ }` dan tanpa nama variabel, cukup nama paketnya. Paket ini tidak mengekspor apa pun; tugasnya hanya membuat bundler client menolak berkas ini."
             }
           ],
-          "solution": "import 'server-only';\n\nexport async function getSecretData() {\n  return db.query('SELECT * FROM passwords');\n}"
+          "solution": "import 'server-only';\n\nexport async function getSecretData() {\n  return db.query('SELECT * FROM passwords');\n}",
+          susunKode: {
+            question:
+              "Gunakan modul 'server-only' untuk memastikan fungsi kueri rahasia tidak pernah terikut ke bundle client.",
+            potongan: [
+              "import 'server-only';",
+              "export async function getSecretData() {",
+              "  return db.query('SELECT * FROM passwords');",
+              "}",
+            ],
+            pengecoh: [
+              "import 'client-only';",
+              "import 'server-side';",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Mengimpor 'server-only' di baris awal akan menyebabkan build gagal jika berkas ini tak sengaja diimpor oleh Client Component. Keping import 'client-only' adalah jebakan nama modul yang berlawanan fungsi. Keping import 'server-side' menggoda bagi yang mengira nama modulnya adalah server-side.",
+          },
         },
         {
           "kind": "quiz",
@@ -616,7 +862,7 @@ export const nextjsTrack: Track = {
           "kind": "materi",
           "id": "next-3-m1",
           "title": "Data Fetching, Caching, & Streaming di Next.js",
-          "body": "# Data Fetching, Caching, & Streaming\n\nDi React tradisional, data fetching dilakukan di browser menggunakan `useEffect` + `fetch` setelah komponen selesai dimuat (Waterfall Request). Ini menyebabkan loading spinner yang mengganggu UX.\n\nDi Next.js App Router, **Server Components dapat berbentuk fungsi `async`**. Kamu dapat memanggil `await fetch()` atau query database secara langsung di dalam komponen!\n\n## 4 Lapisan Caching di Next.js\n\nNext.js memiliki arsitektur caching bertingkat untuk memaksimalkan kecepatan respon server:\n\n```text\n┌────────────────────────────────────────────────────────┐\n│ 1. Request Memoization (React cache / fetch dedup)     │ -> Menggabungkan request identik dalam 1 render tree\n├────────────────────────────────────────────────────────┤\n│ 2. Data Cache (Persisted fetch cache di Server)        │ -> Menyimpan hasil fetch lintas request user\n├────────────────────────────────────────────────────────┤\n│ 3. Full Route Cache (HTML & RSC Payload di Server)     │ -> Menyimpan hasil kompilasi halaman statis\n├────────────────────────────────────────────────────────┤\n│ 4. Router Cache (In-memory Client Session Cache)       │ -> Menyimpan segmen halaman di browser user\n└────────────────────────────────────────────────────────┘\n```\n\n## Static Rendering vs Dynamic Rendering\n\n- **Static Rendering (Default)**: Halaman di-render satu kali pada saat build time (atau di background via ISR). Sangat cepat dan hemat resource server.\n- **Dynamic Rendering**: Halaman di-render ulang pada **setiap HTTP request** yang masuk. Terjadi otomatis jika komponen membaca fungsi dinamis seperti `cookies()`, `headers()`, atau menggunakan `searchParams`.\n\n```typescript\n// Memaksa halaman menjadi Dynamic Rendering\nexport const dynamic = 'force-dynamic';\n```\n\n## Incremental Static Regeneration (ISR) & On-Demand Revalidation\n\nISR memungkinkan kamu meng-cache halaman statis, tetapi memperbaruinya secara berkala tanpa perlu melakukan build ulang seluruh situs web!\n\n1. **Time-based Revalidation**: Memperbarui data setiap N detik.\n   `fetch('https://api.com/data', { next: { revalidate: 60 } });`\n2. **On-Demand Revalidation**: Memperbarui cache saat ada event mutasi data (misalnya artikel baru disimpan).\n   `revalidatePath('/blog');` atau `revalidateTag('posts');`\n\n## Request Deduplication dengan React `cache()`\n\nPemanggilan `fetch()` dengan URL & opsi yang sama di dalam satu pohon render akan otomatis di-deduplikasi oleh Next.js. Namun, jika kamu memanggil fungsi database kustom (seperti Prisma/ORM), bungkus fungsi tersebut dengan `cache()` dari React:\n\n```typescript\nimport { cache } from 'react';\nexport const getUser = cache(async (id: string) => {\n  return await db.user.findUnique({ where: { id } });\n});\n```\n\n## Streaming UI dengan React Suspense\n\nDaripada menunggu seluruh data halaman selesai di-fetch (termasuk query yang lambat), gunakan **Streaming**. Komponen statis/cepat langsung dikirimkan ke browser, sedangkan komponen lambat dibungkus `<Suspense>` dengan fallback UI (skeleton loading).\n\n## Pra-render Rute Dinamis dengan `generateStaticParams`\n\nUntuk rute dinamis seperti `app/blog/[slug]/page.tsx`, ekspor fungsi `generateStaticParams()` untuk memberitahu Next.js daftar slug mana saja yang harus dibuatkan halaman statisnya pada saat build time.\n\n## Analogi Dunia Nyata\n\nBayangkan percetakan koran. **Static Rendering (SSG)** seperti mencetak koran pagi; cetak sekali di subuh, dibaca jutaan orang seharian. **ISR** seperti papan pengumuman digital toko yang diperbarui tiap 10 menit. **Dynamic Rendering (SSR)** seperti kasir minimarket yang mencetak struk belanja khusus saat kamu berdiri di depan mesin kasir.\n\n## Jebakan & Kesalahan Umum\n\n1. **Terjebak Caching Berlebihan**: Menganggap `fetch()` selalu mengambil data terbaru dari server padahal Next.js meng-cache hasilnya. Gunakan `cache: 'no-store'` untuk data real-time.\n2. **Waterfall Requests**: Melakukan `await fetch1()` lalu `await fetch2()` secara berurutan padahal keduanya independen. Gunakan `Promise.all([fetch1(), fetch2()])`!\n3. **Lupa Deduplikasi Query Database**: Memanggil query database yang sama di `layout.tsx` dan `page.tsx` tanpa membungkusnya dengan React `cache()`.\n\n## Kaitan ke Dunia Kerja\n\nTeknik Caching dan ISR adalah senjata utama arsitek sistem di media berita besar dan toko online untuk menangani lonjakan jutaan pengunjung (traffic spike) saat promo tanggal kembar tanpa membuat server database tumbang."
+          "body": "# Data Fetching, Caching, & Streaming\n\nDi React tradisional, data fetching dilakukan di browser menggunakan `useEffect` + `fetch` setelah komponen selesai dimuat (Waterfall Request). Ini menyebabkan loading spinner yang mengganggu UX.\n\nDi Next.js App Router, **Server Components dapat berbentuk fungsi `async`**. Kamu dapat memanggil `await fetch()` atau query database secara langsung di dalam komponen!\n\n## 4 Lapisan Caching di Next.js\n\nNext.js memiliki arsitektur caching bertingkat untuk memaksimalkan kecepatan respon server:\n\n```text\n┌────────────────────────────────────────────────────────┐\n│ 1. Request Memoization (React cache / fetch dedup)     │ -> Menggabungkan request identik dalam 1 render tree\n├────────────────────────────────────────────────────────┤\n│ 2. Data Cache (fetch cache di Server — opt-in)         │ -> Menyimpan hasil fetch lintas request user, TAPI harus diminta (lihat di bawah)\n├────────────────────────────────────────────────────────┤\n│ 3. Full Route Cache (HTML & RSC Payload di Server)     │ -> Menyimpan hasil kompilasi halaman statis\n├────────────────────────────────────────────────────────┤\n│ 4. Router Cache (In-memory Client Session Cache)       │ -> Menyimpan segmen halaman di browser user\n└────────────────────────────────────────────────────────┘\n```\n\n## Static Rendering vs Dynamic Rendering\n\n- **Static Rendering (Default)**: Halaman di-render satu kali pada saat build time (atau di background via ISR). Sangat cepat dan hemat resource server.\n- **Dynamic Rendering**: Halaman di-render ulang pada **setiap HTTP request** yang masuk. Terjadi otomatis jika komponen membaca fungsi dinamis seperti `cookies()`, `headers()`, atau menggunakan `searchParams`.\n\n```typescript\n// Memaksa halaman menjadi Dynamic Rendering\nexport const dynamic = 'force-dynamic';\n```\n\n## Default Cache `fetch`: Berubah Sejak Next.js 15\n\nIni bagian yang paling banyak salah di tutorial lama, jadi hafalkan aturan versinya:\n\n| Versi Next.js | Perilaku `fetch()` tanpa opsi | Cara mengubahnya |\n|---|---|---|\n| 13–14 | **di-cache** selamanya (`force-cache`) | `cache: 'no-store'` untuk data segar |\n| 15–16 (yang kamu pakai) | **TIDAK di-cache**, setiap request menembak API lagi | `cache: 'force-cache'` atau `next: { revalidate: N }` untuk menyimpan |\n\nJadi di Next.js 16 kamu tidak perlu menulis `cache: 'no-store'` untuk mendapat data terbaru — itu sudah perilaku bawaan. Yang perlu diminta secara eksplisit justru sebaliknya: **caching**.\n\n## Incremental Static Regeneration (ISR) & On-Demand Revalidation\n\nISR memungkinkan kamu meng-cache halaman statis, tetapi memperbaruinya secara berkala tanpa perlu melakukan build ulang seluruh situs web!\n\n1. **Time-based Revalidation**: Memperbarui data setiap N detik.\n   `fetch('https://api.com/data', { next: { revalidate: 60 } });`\n2. **On-Demand Revalidation**: Memperbarui cache saat ada event mutasi data (misalnya artikel baru disimpan).\n   `revalidatePath('/blog');` atau `revalidateTag('posts', 'max');` — sejak Next.js 16 `revalidateTag` **wajib** menerima argumen kedua berupa profil `cacheLife` (mis. `'max'`); bentuk satu argumen sudah deprecated dan ditandai error oleh TypeScript.\n\n## Request Deduplication dengan React `cache()`\n\nPemanggilan `fetch()` dengan URL & opsi yang sama di dalam satu pohon render akan otomatis di-deduplikasi oleh Next.js. Namun, jika kamu memanggil fungsi database kustom (seperti Prisma/ORM), bungkus fungsi tersebut dengan `cache()` dari React:\n\n```typescript\nimport { cache } from 'react';\nexport const getUser = cache(async (id: string) => {\n  return await db.user.findUnique({ where: { id } });\n});\n```\n\n## Streaming UI dengan React Suspense\n\nDaripada menunggu seluruh data halaman selesai di-fetch (termasuk query yang lambat), gunakan **Streaming**. Komponen statis/cepat langsung dikirimkan ke browser, sedangkan komponen lambat dibungkus `<Suspense>` dengan fallback UI (skeleton loading).\n\n## Pra-render Rute Dinamis dengan `generateStaticParams`\n\nUntuk rute dinamis seperti `app/blog/[slug]/page.tsx`, ekspor fungsi `generateStaticParams()` untuk memberitahu Next.js daftar slug mana saja yang harus dibuatkan halaman statisnya pada saat build time.\n\n## Analogi Dunia Nyata\n\nBayangkan percetakan koran. **Static Rendering (SSG)** seperti mencetak koran pagi; cetak sekali di subuh, dibaca jutaan orang seharian. **ISR** seperti papan pengumuman digital toko yang diperbarui tiap 10 menit. **Dynamic Rendering (SSR)** seperti kasir minimarket yang mencetak struk belanja khusus saat kamu berdiri di depan mesin kasir.\n\n## Jebakan & Kesalahan Umum\n\n1. **Menyalin aturan cache dari tutorial Next.js 13–14**: menganggap `fetch()` meng-cache hasilnya secara default, lalu menaburkan `cache: 'no-store'` di mana-mana. Di Next.js 15–16 kebalikannya yang benar: `fetch()` **tidak** di-cache kecuali kamu meminta, jadi yang perlu ditulis adalah `cache: 'force-cache'` atau `next: { revalidate: N }`. Gejalanya halus — halaman tetap benar, hanya jauh lebih lambat dan API-nya ditembak terus.\n2. **Waterfall Requests**: Melakukan `await fetch1()` lalu `await fetch2()` secara berurutan padahal keduanya independen. Gunakan `Promise.all([fetch1(), fetch2()])`!\n3. **Lupa Deduplikasi Query Database**: Memanggil query database yang sama di `layout.tsx` dan `page.tsx` tanpa membungkusnya dengan React `cache()`.\n\n## Kaitan ke Dunia Kerja\n\nTeknik Caching dan ISR adalah senjata utama arsitek sistem di media berita besar dan toko online untuk menangani lonjakan jutaan pengunjung (traffic spike) saat promo tanggal kembar tanpa membuat server database tumbang."
         },
         {
           "kind": "step",
@@ -645,7 +891,26 @@ export const nextjsTrack: Track = {
               "message": "Respons HTTP belum berisi data siap pakai: badan responsnya harus dibaca dulu dengan `.json()`, dan itu juga menghasilkan Promise — jadi butuh `await` yang KEDUA."
             }
           ],
-          "solution": "const URL_API = 'https://api.example.com/produk/1';\n\nexport default async function Page() {\n  const res = await fetch(URL_API);\n  const produk = await res.json();\n  return <h1>{produk.nama}</h1>;\n}"
+          "solution": "const URL_API = 'https://api.example.com/produk/1';\n\nexport default async function Page() {\n  const res = await fetch(URL_API);\n  const produk = await res.json();\n  return <h1>{produk.nama}</h1>;\n}",
+          susunKode: {
+            question:
+              "Susun Server Component async yang mengambil data produk secara asinkron menggunakan fetch.",
+            potongan: [
+              "const URL_API = 'https://api.example.com/produk/1';",
+              "export default async function Page() {",
+              "  const res = await fetch(URL_API);",
+              "  const produk = await res.json();",
+              "  return <h1>{produk.nama}</h1>;",
+              "}",
+            ],
+            pengecoh: [
+              "export default function Page() {",
+              "  const res = fetch(URL_API);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Pengambilan data di Server Component dilakukan langsung dengan await fetch tanpa butuh useEffect. Keping export default function Page() { sering keliru karena lupa kata kunci async pada komponen pengambil data. Keping const res = fetch(URL_API); menggoda tetapi merupakan kesalahan penanganan Promise yang berakibat metode .json() gagal dijalankan.",
+          },
         },
         {
           "kind": "step",
@@ -654,7 +919,7 @@ export const nextjsTrack: Track = {
           "explanation": "Next.js secara otomatis mengategorikan proses rendering halaman menjadi dua mode: **Static Rendering** (default) dan **Dynamic Rendering**. Pada Static Rendering, halaman di-pre-render satu kali pada saat pembentukan build produksi sehingga dapat di-cache secara agresif untuk kecepatan maksimal. Namun, jika halaman membaca fungsi yang bersifat dinamis saat runtime (seperti `cookies()`, `headers()`, atau `searchParams`), Next.js akan secara otomatis beralih ke mode Dynamic Rendering di mana halaman di-render ulang pada setiap request HTTP yang masuk. Kamu juga dapat memaksa halaman menjadi dynamic dengan mengekspor konstanta `export const dynamic = 'force-dynamic';`. Gunakan mode dynamic ini pada halaman dashboard pribadi atau keranjang belanja real-time.",
           "example": {
             "code": "// app/harga/page.tsx — statis (default)\nexport default function Harga() {\n  return <h1>Rp85.000</h1>;\n}\n\n// app/keranjang/page.tsx — dinamis karena membaca cookie\nimport { cookies } from 'next/headers';\nexport default async function Keranjang() {\n  const sesi = (await cookies()).get('sesi');\n  return <h1>Keranjang {sesi?.value}</h1>;\n}",
-            "output": "$ npm run build\n\nRoute (app)                    Size     First Load JS\n┌ ○ /harga                     1.1 kB          94 kB\n└ f /keranjang                 1.3 kB          96 kB\n\n○  (Static)   prerendered as static content\nf  (Dynamic)  server-rendered on demand",
+            "output": "$ npm run build\n\nRoute (app)                    Size     First Load JS\n┌ ○ /harga                     1.1 kB          94 kB\n└ ƒ /keranjang                 1.3 kB          96 kB\n\n○  (Static)   prerendered as static content\nƒ  (Dynamic)  server-rendered on demand",
             "note": "Tabel inilah cara memastikan mode rendering halamanmu: lambang bulat berarti statis, lambang f berarti dirender ulang setiap request. Cek di sini dulu sebelum menuduh cache bermasalah. Catatan jujur: berkas ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
           "instruction": "Dashboard ini menampilkan angka penjualan yang berubah setiap menit, tapi `npm run build` melaporkannya sebagai halaman statis sehingga isinya membeku sejak build. Paksa Next.js merendernya ulang pada setiap request lewat konstanta konfigurasi yang dibaca dari berkas halaman.",
@@ -666,7 +931,24 @@ export const nextjsTrack: Track = {
               "message": "Konfigurasi per-halaman dibaca dari named export bernama `dynamic`, dan nilainya salah satu string yang dikenali Next.js — yang berarti \"selalu render di server saat diminta\". Tanpa `export`, konstanta itu diabaikan."
             }
           ],
-          "solution": "export const dynamic = 'force-dynamic';\n\nexport default function Dashboard() {\n  return <h1>Live Dashboard</h1>;\n}"
+          "solution": "export const dynamic = 'force-dynamic';\n\nexport default function Dashboard() {\n  return <h1>Live Dashboard</h1>;\n}",
+          susunKode: {
+            question:
+              "Susun konfigurasi halaman untuk memaksa rendering dinamis pada setiap permintaan.",
+            potongan: [
+              "export const dynamic = 'force-dynamic';",
+              "export default function Dashboard() {",
+              "  return <h1>Live Dashboard</h1>;",
+              "}",
+            ],
+            pengecoh: [
+              "export const dynamic = 'force-static';",
+              "export const revalidate = 'force-dynamic';",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Properti ekspor dynamic = 'force-dynamic' memberitahu Next.js untuk selalu merender halaman ini pada runtime tanpa menyimpan cache statis. Keping export const dynamic = 'force-static'; menggoda bagi yang ingin membuat halaman statis, tetapi berlawanan dengan kebutuhan data langsung. Keping export const revalidate = 'force-dynamic'; adalah keliru karena opsi revalidate menerima nilai angka detik, bukan string.",
+          },
         },
         {
           "kind": "step",
@@ -695,7 +977,25 @@ export const nextjsTrack: Track = {
               "message": "Opsinya menjadi ARGUMEN KEDUA `fetch`, tepat setelah URL-nya, bukan pernyataan terpisah di bawahnya."
             }
           ],
-          "solution": "export default async function Blog() {\n  const res = await fetch('https://api.example.com/posts', { next: { revalidate: 30 } });\n  return <div>Blog</div>;\n}"
+          "solution": "export default async function Blog() {\n  const res = await fetch('https://api.example.com/posts', { next: { revalidate: 30 } });\n  return <div>Blog</div>;\n}",
+          susunKode: {
+            question:
+              "Rangkai pemanggilan fetch daftar artikel yang hasilnya boleh tertinggal paling lama setengah menit.",
+            potongan: [
+              "export default async function Blog() {",
+              "  const res = await fetch('https://api.example.com/posts',",
+              "    { next: { revalidate: 30 } });",
+              "  return <div>Blog</div>;",
+              "}",
+            ],
+            pengecoh: [
+              "  const res = await fetch('https://api.example.com/posts');",
+              "    { cache: { revalidate: 30 } });",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Opsi cache Next.js menjadi argumen KEDUA fetch, dan angka revalidate ditulis dalam satuan detik sehingga setengah menit berarti 30. Keping tanpa argumen kedua sangat sering keliru dipakai karena kodenya terlihat wajar dan tetap berjalan — halamannya hanya membeku tanpa satu pun peringatan. Keping { cache: { revalidate: 30 } } adalah jebakan klasik: pembungkusnya tertukar dengan opsi cache bawaan Fetch API, padahal Next.js membaca revalidate dari properti next.",
+          },
         },
         {
           "kind": "step",
@@ -720,7 +1020,24 @@ export const nextjsTrack: Track = {
               "message": "Fungsi yang dibungkus tetap `async` — jangan hilangkan kata itu, karena isinya menunggu database."
             }
           ],
-          "solution": "import { cache } from 'react';\n\nconst getUser = cache(async (id) => {\n  return { id, name: 'Budi' };\n});"
+          "solution": "import { cache } from 'react';\n\nconst getUser = cache(async (id) => {\n  return { id, name: 'Budi' };\n});",
+          susunKode: {
+            question:
+              "Susun fungsi penarik data yang diduplikasi permintaannya menggunakan fungsi cache dari React.",
+            potongan: [
+              "import { cache } from 'react';",
+              "const getUser = cache(async (id) => {",
+              "  return { id, name: 'Budi' };",
+              "});",
+            ],
+            pengecoh: [
+              "const getUser = memo(async (id) => {",
+              "const getUser = async (id) => {",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Fungsi cache untuk deduplikasi request per siklus render diimpor dari paket 'react' dan membungkus fungsi asinkronus. Keping const getUser = memo(...) menggoda bagi pengembang React yang terbiasa dengan React.memo untuk komponen UI. Keping const getUser = async (id) => { keliru karena mengabaikan pembungkus cache(), sehingga fungsi akan dipanggil berulang kali.",
+          },
         },
         {
           "kind": "step",
@@ -745,7 +1062,30 @@ export const nextjsTrack: Track = {
               "message": "Komponen lambatnya harus berada DI DALAM `<Suspense>`. Kalau ia di luar, fallback-nya tidak pernah dipakai dan halaman tetap menunggu."
             }
           ],
-          "solution": "import { Suspense } from 'react';\nimport HeavyChart from './HeavyChart';\n\nexport default function Dashboard() {\n  return (\n    <section>\n      <Suspense fallback={<p>Memuat grafik...</p>}>\n        <HeavyChart />\n      </Suspense>\n    </section>\n  );\n}"
+          "solution": "import { Suspense } from 'react';\nimport HeavyChart from './HeavyChart';\n\nexport default function Dashboard() {\n  return (\n    <section>\n      <Suspense fallback={<p>Memuat grafik...</p>}>\n        <HeavyChart />\n      </Suspense>\n    </section>\n  );\n}",
+          susunKode: {
+            question:
+              "Susun komponen Dashboard yang membungkus komponen berat HeavyChart dengan batas Suspense.",
+            potongan: [
+              "import { Suspense } from 'react';\nimport HeavyChart from './HeavyChart';",
+              "export default function Dashboard() {",
+              "  return (",
+              "    <section>",
+              "      <Suspense fallback={<p>Memuat grafik...</p>}>",
+              "        <HeavyChart />",
+              "      </Suspense>",
+              "    </section>",
+              "  );",
+              "}",
+            ],
+            pengecoh: [
+              "      <Suspense loading={<p>Memuat grafik...</p>}>",
+              "      <Suspense fallback={<p>Loading...</p>}>",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Komponen Suspense diimpor dari paket React dan menggunakan prop bernama fallback untuk menerima komponen placeholder saat proses muat data. Keping prop loading= menggoda bagi pemula yang keliru mengingat nama prop Suspense. Keping fallback={<p>Loading...</p>} keliru teks fallback karena pengujian memeriksa kalimat 'Memuat grafik...'.",
+          },
         },
         {
           "kind": "step",
@@ -754,7 +1094,7 @@ export const nextjsTrack: Track = {
           "explanation": "Secara default, rute dinamis dengan parameter kurung siku `[slug]` akan di-render secara dinamis pada saat pengguna meminta halaman tersebut. Namun, jika kamu sudah mengetahui daftar parameter yang tersedia (misalnya 100 ID artikel blog teratas), kamu dapat mengekspor fungsi khusus bernama `generateStaticParams()` di dalam berkas `page.tsx`. Fungsi ini mengembalikan daftar array objek parameter yang akan di-pre-render secara statis menjadi HTML pada saat proses build produksi. Hasilnya, ketika pengunjung mengklik artikel tersebut, halaman akan terbuka dalam hitungan milidetik karena sudah berbentuk HTML statis di CDN server. Gunakan fitur ini untuk rute artikel blog, dokumentasi, atau produk terpopuler.",
           "example": {
             "code": "// app/dokumen/[kode]/page.tsx\nexport async function generateStaticParams() {\n  const daftar = await fetch('https://api.example.com/dokumen').then((r) => r.json());\n  return daftar.map((d) => ({ kode: d.kode }));\n}",
-            "output": "$ npm run build\n\nRoute (app)                       Size\n┌ * /dokumen/[kode]               1.4 kB\n├   /dokumen/panduan-mutu\n├   /dokumen/sop-gudang\n└   /dokumen/formulir-cuti\n\n* (SSG) prerendered as static HTML",
+            "output": "$ npm run build\n\nRoute (app)                       Size\n┌ ● /dokumen/[kode]               1.4 kB\n├   /dokumen/panduan-mutu\n├   /dokumen/sop-gudang\n└   /dokumen/formulir-cuti\n\n●  (SSG)  prerendered as static HTML (uses generateStaticParams)",
             "note": "Nama properti pada objek yang dikembalikan WAJIB sama dengan nama folder dinamisnya: folder `[kode]` berarti `{ kode: ... }`. Salah nama tidak menghasilkan error, hanya membuat halamannya tidak ikut di-prerender. Catatan jujur: berkas ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
           "instruction": "Tiga slug pada konstanta `SLUG_POPULER` seharusnya sudah menjadi HTML statis sejak proses build, bukan dirender saat pengunjung pertama datang. Ekspor fungsi konvensi Next.js yang menyebutkan daftar parameter mana yang perlu di-prerender, dan kembalikan satu objek per slug dengan nama properti yang cocok dengan folder `[slug]`.",
@@ -775,7 +1115,24 @@ export const nextjsTrack: Track = {
               "message": "Array kosong berarti \"tidak ada halaman yang perlu dibuat\" — build-nya sukses, tapi tidak satu pun artikel jadi statis. Isi array-nya dengan parameter yang sebenarnya."
             }
           ],
-          "solution": "const SLUG_POPULER = ['belajar-nextjs', 'server-component', 'caching'];\n\nexport async function generateStaticParams() {\n  return SLUG_POPULER.map((slug) => ({ slug }));\n}"
+          "solution": "const SLUG_POPULER = ['belajar-nextjs', 'server-component', 'caching'];\n\nexport async function generateStaticParams() {\n  return SLUG_POPULER.map((slug) => ({ slug }));\n}",
+          susunKode: {
+            question:
+              "Rangkai fungsi generateStaticParams untuk membuat rute statis dari daftar slug populer.",
+            potongan: [
+              "const SLUG_POPULER = ['belajar-nextjs', 'server-component', 'caching'];",
+              "export async function generateStaticParams() {",
+              "  return SLUG_POPULER.map((slug) => ({ slug }));",
+              "}",
+            ],
+            pengecoh: [
+              "export async function generateDynamicParams() {",
+              "  return SLUG_POPULER.forEach((slug) => ({ slug }));",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Fungsi generateStaticParams mengekspor array objek dengan kunci yang sesuai nama parameter rute. Keping export async function generateDynamicParams() keliru nama fungsi konvensi Next.js. Keping .forEach((slug) => ({ slug })) menggoda tetapi salah metode array karena forEach tidak mengembalikan array baru.",
+          },
         },
         {
           "kind": "quiz",
@@ -824,15 +1181,15 @@ export const nextjsTrack: Track = {
             {
               "id": "q4",
               "type": "pilihan-ganda",
-              "question": "Kamu memanggil API eksternal di Server Component menggunakan fungsi 'fetch'. Jika kamu ingin data tersebut selalu diambil baru setiap permintaan (tanpa cache), konfigurasi apa yang harus ditambahkan?",
+              "question": "Di Next.js 16, `fetch()` tanpa opsi apa pun TIDAK di-cache — setiap request menembak API lagi. Kalau kamu justru ingin hasil sebuah `fetch()` disimpan dan dipakai ulang lintas request, opsi apa yang perlu ditambahkan?",
               "choices": [
-                "{ cache: 'force-cache' }",
-                "{ revalidate: 60 }",
                 "{ cache: 'no-store' }",
-                "{ method: 'POST' }"
+                "{ cache: 'force-cache' }",
+                "{ method: 'GET' }",
+                "Tidak perlu apa-apa — Next.js selalu meng-cache fetch secara default"
               ],
-              "answerIndex": 2,
-              "explanation": "`{ cache: 'no-store' }` mematikan Data Cache sehingga setiap request mengambil data baru. `{ revalidate: 60 }` menggoda karena juga soal kebaruan data, tapi ia masih menyajikan cache selama 60 detik — tidak cocok untuk harga atau stok yang harus akurat detik itu."
+              "answerIndex": 1,
+              "explanation": "Sejak Next.js 15 arah defaultnya berbalik: `fetch()` tidak di-cache, dan caching harus diminta dengan `cache: 'force-cache'` (atau `next: { revalidate: N }` kalau kamu mau ISR). Pilihan `{ cache: 'no-store' }` menggoda karena itulah jawaban benar di seluruh tutorial Next.js 13–14 — di versi ini ia hanya menuliskan ulang perilaku bawaan, jadi tidak mengubah apa pun. Pilihan terakhir adalah keyakinan lama yang paling sering dibawa orang dari materi usang."
             },
             {
               "id": "q5",
@@ -897,7 +1254,22 @@ export const nextjsTrack: Track = {
               "message": "Isi badan responsnya sesuai yang diminta monitoring. Jangan tertukar dengan status HTTP: itu diatur lewat argumen kedua, `NextResponse.json(data, { status: 201 })`."
             }
           ],
-          "solution": "import { NextResponse } from 'next/server';\n\nexport async function GET() {\n  return NextResponse.json({ status: 'ok' });\n}"
+          "solution": "import { NextResponse } from 'next/server';\n\nexport async function GET() {\n  return NextResponse.json({ status: 'ok' });\n}",
+          susunKode: {
+            potongan: [
+              "import { NextResponse } from 'next/server';",
+              "export async function GET() {",
+              "  return NextResponse.json({ status: 'ok' });",
+              "}",
+            ],
+            pengecoh: [
+              "export default async function GET() {",
+              "  return Response.json({ status: 'ok' });",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Route Handler Next.js menggunakan named export bernama kata kunci metode HTTP seperti GET. Keping export default async function GET() keliru karena Route Handler tidak membaca default export. Keping Response.json menggoda tetapi NextResponse.json menyediakan fitur tambahan khas Next.js yang disarankan untuk digunakan.",
+          },
         },
         {
           "kind": "step",
@@ -922,7 +1294,25 @@ export const nextjsTrack: Track = {
               "message": "Tanpa `await`, `data` berisi Promise dan respons yang terkirim menjadi `{}` — tidak error, tapi datanya hilang. Ini bug yang mahal karena tampak berhasil."
             }
           ],
-          "solution": "import { NextResponse } from 'next/server';\n\nexport async function POST(request) {\n  const data = await request.json();\n  return NextResponse.json(data);\n}"
+          "solution": "import { NextResponse } from 'next/server';\n\nexport async function POST(request) {\n  const data = await request.json();\n  return NextResponse.json(data);\n}",
+          susunKode: {
+            question:
+              "Rangkai Route Handler POST yang membaca body permintaan JSON lalu mengembalikannya.",
+            potongan: [
+              "import { NextResponse } from 'next/server';",
+              "export async function POST(request) {",
+              "  const data = await request.json();",
+              "  return NextResponse.json(data);",
+              "}",
+            ],
+            pengecoh: [
+              "  const data = request.json();",
+              "  const data = await request.body();",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Metode request.json() mengembalikan Promise yang wajib di-await saat menguraikan body permintaan. Keping const data = request.json(); sangat sering keliru ditulis tanpa await, berakibat variabel data berisi objek Promise yang belum selesai. Keping request.body() menggoda bagi pemula, padahal penguraian JSON pada Request API menggunakan metode .json().",
+          },
         },
         {
           "kind": "step",
@@ -947,7 +1337,25 @@ export const nextjsTrack: Track = {
               "message": "Query dibaca lewat `searchParams.get('nama')`. Dua jalan sama-sama benar: `request.nextUrl.searchParams` (khas Next.js) atau `new URL(request.url).searchParams` (Web API standar). Yang tidak ada: `request.query` — itu gaya Express."
             }
           ],
-          "solution": "import { NextResponse } from 'next/server';\n\nexport async function GET(request) {\n  const searchQuery = request.nextUrl.searchParams.get('search');\n  return NextResponse.json({ searchQuery });\n}"
+          "solution": "import { NextResponse } from 'next/server';\n\nexport async function GET(request) {\n  const searchQuery = request.nextUrl.searchParams.get('search');\n  return NextResponse.json({ searchQuery });\n}",
+          susunKode: {
+            question:
+              "Susun Route Handler GET yang mengambil parameter query 'search' dari URL permintaan.",
+            potongan: [
+              "import { NextResponse } from 'next/server';",
+              "export async function GET(request) {",
+              "  const searchQuery = request.nextUrl.searchParams.get('search');",
+              "  return NextResponse.json({ searchQuery });",
+              "}",
+            ],
+            pengecoh: [
+              "  const searchQuery = request.query.get('search');",
+              "  const searchQuery = request.params.search;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "NextRequest pada Route Handler menyediakan properti khusus request.nextUrl.searchParams untuk membaca query string. Keping request.query.get('search') menggoda bagi developer yang terbiasa dengan Express JS, namun properti .query tidak tersedia di Next.js. Keping request.params.search keliru karena params digunakan untuk dynamic route segment, bukan query parameter.",
+          },
         },
         {
           "kind": "step",
@@ -980,7 +1388,30 @@ export const nextjsTrack: Track = {
               "message": "Pakai `return` agar fungsi benar-benar berhenti. Tanpa `return`, eksekusi berlanjut ke baris penyimpanan dan data tidak sah tetap masuk database — bug keamanan yang tidak terlihat dari luar."
             }
           ],
-          "solution": "import { NextResponse } from 'next/server';\nimport { z } from 'zod';\n\nconst SkemaUser = z.object({ email: z.string().email() });\n\nexport async function POST(request) {\n  const body = await request.json();\n  const result = SkemaUser.safeParse(body);\n\n  if (!result.success) {\n    return NextResponse.json({ error: 'Invalid' }, { status: 400 });\n  }\n\n  return NextResponse.json({ tersimpan: result.data }, { status: 201 });\n}"
+          "solution": "import { NextResponse } from 'next/server';\nimport { z } from 'zod';\n\nconst SkemaUser = z.object({ email: z.string().email() });\n\nexport async function POST(request) {\n  const body = await request.json();\n  const result = SkemaUser.safeParse(body);\n\n  if (!result.success) {\n    return NextResponse.json({ error: 'Invalid' }, { status: 400 });\n  }\n\n  return NextResponse.json({ tersimpan: result.data }, { status: 201 });\n}",
+          susunKode: {
+            question:
+              "Susun validasi input Zod pada Route Handler POST untuk memeriksa format email.",
+            potongan: [
+              "import { NextResponse } from 'next/server';\nimport { z } from 'zod';",
+              "const SkemaUser = z.object({ email: z.string().email() });",
+              "export async function POST(request) {",
+              "  const body = await request.json();",
+              "  const result = SkemaUser.safeParse(body);",
+              "  if (!result.success) {",
+              "    return NextResponse.json({ error: 'Invalid' }, { status: 400 });",
+              "  }",
+              "  return NextResponse.json({ tersimpan: result.data }, { status: 201 });",
+              "}",
+            ],
+            pengecoh: [
+              "  if (result.failed) {",
+              "    return NextResponse.json({ error: 'Invalid' }, { status: 500 });",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Metode safeParse dari Zod mengembalikan objek hasil yang memiliki flag boolean success. Keping if (result.failed) keliru karena Zod tidak menyediakan properti failed pada hasil safeParse. Keping status: 500 menggoda tetapi salah status code, karena kesalahan masukan klien harus menggunakan status 400 Bad Request.",
+          },
         },
         {
           "kind": "step",
@@ -1009,7 +1440,25 @@ export const nextjsTrack: Track = {
               "message": "Balasan dikirim dengan `return NextResponse.json(...)`. Tanpa `return`, fungsi lanjut berjalan dan data rahasianya tetap terkirim."
             }
           ],
-          "solution": "export async function GET() {\n  return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });\n}"
+          "solution": "export async function GET() {\n  return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });\n}",
+          susunKode: {
+            question:
+              "Rangkai balasan Route Handler untuk permintaan yang belum terautentikasi, memakai bentuk JSON yang sama dengan endpoint lain di modul ini.",
+            potongan: [
+              "export async function GET() {",
+              "  return NextResponse.json(",
+              "    { error: 'Unauthorized' },",
+              "    { status: 401 });",
+              "}",
+            ],
+            pengecoh: [
+              "    { err: 'Unauthorized' },",
+              "    { status: 400 });",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Badan respons dan opsi status adalah dua argumen berbeda: yang pertama isi JSON-nya, yang kedua status HTTP-nya. Keping err: 'Unauthorized' sering keliru ditulis karena singkatannya terasa wajar, padahal kontrak seluruh endpoint di modul ini memakai kunci error — klien yang membaca satu properti akan gagal menangkap pesannya. Keping status: 400 adalah jebakan paling umum di code review: 400 berarti bentuk masukannya salah, sedangkan belum terautentikasi adalah 401.",
+          },
         },
         {
           "kind": "step",
@@ -1038,7 +1487,25 @@ export const nextjsTrack: Track = {
               "message": "Header ditulis sebagai properti di dalam objek `headers`. Nama headernya butuh tanda kutip karena mengandung tanda hubung, dan nilainya yang berarti \"jangan simpan sama sekali\"."
             }
           ],
-          "solution": "export async function GET() {\n  return NextResponse.json({ success: true }, { status: 200, headers: { 'Cache-Control': 'no-store' } });\n}"
+          "solution": "export async function GET() {\n  return NextResponse.json({ success: true }, { status: 200, headers: { 'Cache-Control': 'no-store' } });\n}",
+          susunKode: {
+            question:
+              "Susun balasan endpoint saldo real-time: badan JSON penanda sukses, status sukses yang eksplisit, dan header yang melarang siapa pun menyimpan responsnya.",
+            potongan: [
+              "export async function GET() {",
+              "  return NextResponse.json({ success: true },",
+              "    { status: 200,",
+              "      headers: { 'Cache-Control': 'no-store' } });",
+              "}",
+            ],
+            pengecoh: [
+              "  return NextResponse.json({ success: false },",
+              "      headers: { 'Cache-Control': 'no-cache' } });",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Badan JSON adalah argumen pertama, sedangkan status dan headers dikumpulkan di argumen kedua. Keping success: false keliru nilai booleannya — endpoint yang membalas status 200 sambil menyatakan gagal adalah kontrak yang membingungkan klien. Keping 'no-cache' sangat menggoda karena namanya terdengar paling melarang, padahal 'no-cache' masih mengizinkan respons DISIMPAN (hanya wajib divalidasi ulang); yang benar-benar melarang penyimpanan adalah 'no-store'.",
+          },
         },
         {
           "kind": "quiz",
@@ -1144,7 +1611,7 @@ export const nextjsTrack: Track = {
           "kind": "materi",
           "id": "next-5-m1",
           "title": "Server Actions & Mutasi Data di Next.js",
-          "body": "# Server Actions & Mutasi Data\n\nDi aplikasi web tradisional, untuk menyimpan data dari Form, kamu harus: membuat Form -> menulis event listener `onSubmit` -> panggil `fetch('/api/submit')` -> buat Route Handler API -> mutasi DB -> kembalikan JSON -> update state React. Alur ini sangat panjang dan melelahkan.\n\n**Server Actions** menyederhanakan alur ini secara drastis! Server Actions adalah **fungsi async yang dieksekusi di server**, tetapi dapat dipanggil secara langsung dari komponen client atau atribut `action` pada elemen `<form>`.\n\n## Model Keamanan & Direktif 'use server'\n\nKamu menandai sebuah fungsi sebagai Server Action dengan menambahkan direktif `'use server';` di baris pertama fungsi atau di baris pertama berkas khusus (misal `app/actions.ts`).\n\n```typescript\n// app/actions.ts\n'use server';\n\nimport { revalidatePath } from 'next/cache';\nimport { db } from '@/lib/db';\n\nexport async function createPost(formData: FormData) {\n  const title = formData.get('title') as string;\n  await db.post.create({ data: { title } });\n  \n  // Otomatis memperbarui cache halaman /blog di server\n  revalidatePath('/blog');\n}\n```\n\n> **Keamanan Krusial:** Di balik layar, Next.js membuatkan endpoint POST rahasia bermuatan hash khusus. Selalu lakukan **validasi input** dan **pengecekan autentikasi session** di dalam setiap Server Action!\n\n## Integrasi React 19: `useActionState` & `useFormStatus`\n\nDi Next.js modern (React 19), penanganan status loading dan error dari Server Action dipandu oleh dua hook bawaan:\n\n1. **`useActionState`**: Membungkus Server Action untuk mengelola respon `state` (seperti pesan sukses/error) dan status `isPending` (apakah action sedang berjalan).\n2. **`useFormStatus`**: Hook yang dipanggil di dalam komponen anak `<form>` untuk mengetahui apakah form tersebut sedang dalam proses pengiriman (`pending === true`). Sangat berguna untuk mendisable tombol submit!\n\n```tsx\n// ClientForm.tsx ('use client')\nimport { useActionState } from 'react';\nimport { createPost } from '@/app/actions';\n\nexport default function AddPostForm() {\n  const [state, formAction, isPending] = useActionState(createPost, null);\n\n  return (\n    <form action={formAction}>\n      <input name=\"title\" required />\n      <button disabled={isPending}>\n        {isPending ? 'Saving...' : 'Submit'}\n      </button>\n      {state?.error && <p>{state.error}</p>}\n    </form>\n  );\n}\n```\n\n## Mutasi & Revalidasi Cache: `revalidatePath` vs `revalidateTag`\n\nSetelah Server Action selesai mengubah data di database, tampilan UI di browser tidak akan berubah sampai cache server diperbarui. Panggil:\n- **`revalidatePath('/blog')`**: Membuang cache seluruh halaman pada path tersebut.\n- **`revalidateTag('posts')`**: Membuang cache data spesifik yang ditandai tag `fetch(..., { next: { tags: ['posts'] } })`.\n\n## Optimistic UI dengan `useOptimistic`\n\nUntuk memberikan respon UI instan tanpa menunggu Server Action selesai di server (seperti tombol Like yang langsung merah), gunakan hook `useOptimistic`. UI diupdate secara hipotetis seketika, dan jika server gagal, React akan mengembalikan UI ke state semula secara otomatis.\n\n## Analogi Dunia Nyata\n\nServer Action seperti **Tombol Bel Pintu Cerdas**. Ketika kamu menekan tombol bel di pagar rumah (Client Form), sinyal listrik langsung membunyikan lonceng di dalam dapur rumah (Server). Kamu tidak perlu mengirim surat pos melalui kantor pos (REST API fetch) hanya untuk memberitahu tuan rumah bahwa ada tamu di depan pagar.\n\n## Jebakan & Kesalahan Umum\n\n1. **Mengabaikan Pengecekan Autentikasi**: Menganggap Server Action aman karena dipanggil dari UI internal. Ingat, endpoint di balik Server Action tetap bisa ditembak oleh penyerang jika tidak ada pengecekan `auth()`!\n2. **Mengoper Objek Non-Serializable**: Mengirimkan objek kompleks ke Server Action yang tidak bisa di-serialize.\n3. **Lupa Revalidasi**: Data di database sudah berubah, tetapi UI pengguna tidak berganti karena developer lupa memanggil `revalidatePath()`.\n\n## Kaitan ke Dunia Kerja\n\nServer Actions adalah standar utama dalam pembangunan aplikasi Next.js modern. Penguasaan Server Actions bersama React 19 hooks mempercepat kecepatan pengembangan fitur (development velocity) hingga 2x lipat dibanding pola REST API lama."
+          "body": "# Server Actions & Mutasi Data\n\nDi aplikasi web tradisional, untuk menyimpan data dari Form, kamu harus: membuat Form -> menulis event listener `onSubmit` -> panggil `fetch('/api/submit')` -> buat Route Handler API -> mutasi DB -> kembalikan JSON -> update state React. Alur ini sangat panjang dan melelahkan.\n\n**Server Actions** menyederhanakan alur ini secara drastis! Server Actions adalah **fungsi async yang dieksekusi di server**, tetapi dapat dipanggil secara langsung dari komponen client atau atribut `action` pada elemen `<form>`.\n\n## Model Keamanan & Direktif 'use server'\n\nKamu menandai sebuah fungsi sebagai Server Action dengan menambahkan direktif `'use server';` di baris pertama fungsi atau di baris pertama berkas khusus (misal `app/actions.ts`).\n\n```typescript\n// app/actions.ts\n'use server';\n\nimport { revalidatePath } from 'next/cache';\nimport { db } from '@/lib/db';\n\nexport async function createPost(formData: FormData) {\n  const title = formData.get('title') as string;\n  await db.post.create({ data: { title } });\n  \n  // Otomatis memperbarui cache halaman /blog di server\n  revalidatePath('/blog');\n}\n```\n\n> **Keamanan Krusial:** Di balik layar, Next.js membuatkan endpoint POST rahasia bermuatan hash khusus. Selalu lakukan **validasi input** dan **pengecekan autentikasi session** di dalam setiap Server Action!\n\n## Integrasi React 19: `useActionState` & `useFormStatus`\n\nDi Next.js modern (React 19), penanganan status loading dan error dari Server Action dipandu oleh dua hook bawaan:\n\n1. **`useActionState`**: Membungkus Server Action untuk mengelola respon `state` (seperti pesan sukses/error) dan status `isPending` (apakah action sedang berjalan).\n2. **`useFormStatus`**: Hook yang dipanggil di dalam komponen anak `<form>` untuk mengetahui apakah form tersebut sedang dalam proses pengiriman (`pending === true`). Sangat berguna untuk mendisable tombol submit!\n\n```tsx\n// ClientForm.tsx ('use client')\nimport { useActionState } from 'react';\nimport { createPost } from '@/app/actions';\n\nexport default function AddPostForm() {\n  const [state, formAction, isPending] = useActionState(createPost, null);\n\n  return (\n    <form action={formAction}>\n      <input name=\"title\" required />\n      <button disabled={isPending}>\n        {isPending ? 'Saving...' : 'Submit'}\n      </button>\n      {state?.error && <p>{state.error}</p>}\n    </form>\n  );\n}\n```\n\n## Mutasi & Revalidasi Cache: `revalidatePath` vs `revalidateTag`\n\nSetelah Server Action selesai mengubah data di database, tampilan UI di browser tidak akan berubah sampai cache server diperbarui. Panggil:\n- **`revalidatePath('/blog')`**: Membuang cache seluruh halaman pada path tersebut.\n- **`revalidateTag('posts', 'max')`**: Membuang cache data spesifik yang ditandai tag `fetch(..., { next: { tags: ['posts'] } })`. Sejak Next.js 16 argumen kedua (profil `cacheLife`, mis. `'max'`) wajib ada — bentuk satu argumen sudah deprecated dan ditandai error oleh TypeScript. Kalau kamu butuh pengguna langsung melihat hasil perubahannya sendiri (read-your-writes), pakai `updateTag()` di dalam Server Action, bukan `revalidateTag()`.\n\n## Optimistic UI dengan `useOptimistic`\n\nUntuk memberikan respon UI instan tanpa menunggu Server Action selesai di server (seperti tombol Like yang langsung merah), gunakan hook `useOptimistic`. UI diupdate secara hipotetis seketika, dan jika server gagal, React akan mengembalikan UI ke state semula secara otomatis.\n\n## Analogi Dunia Nyata\n\nServer Action seperti **Tombol Bel Pintu Cerdas**. Ketika kamu menekan tombol bel di pagar rumah (Client Form), sinyal listrik langsung membunyikan lonceng di dalam dapur rumah (Server). Kamu tidak perlu mengirim surat pos melalui kantor pos (REST API fetch) hanya untuk memberitahu tuan rumah bahwa ada tamu di depan pagar.\n\n## Jebakan & Kesalahan Umum\n\n1. **Mengabaikan Pengecekan Autentikasi**: Menganggap Server Action aman karena dipanggil dari UI internal. Ingat, endpoint di balik Server Action tetap bisa ditembak oleh penyerang jika tidak ada pengecekan `auth()`!\n2. **Mengoper Objek Non-Serializable**: Mengirimkan objek kompleks ke Server Action yang tidak bisa di-serialize.\n3. **Lupa Revalidasi**: Data di database sudah berubah, tetapi UI pengguna tidak berganti karena developer lupa memanggil `revalidatePath()`.\n\n## Kaitan ke Dunia Kerja\n\nServer Actions adalah standar utama dalam pembangunan aplikasi Next.js modern. Penguasaan Server Actions bersama React 19 hooks mempercepat kecepatan pengembangan fitur (development velocity) hingga 2x lipat dibanding pola REST API lama."
         },
         {
           "kind": "step",
@@ -1166,7 +1633,25 @@ export const nextjsTrack: Track = {
               "message": "Direktifnya harus berada di ATAS berkas, sebelum semua import (komentar pembuka masih boleh). Ditulis di posisi lain, direktif itu diabaikan dan pemanggilan dari client gagal dengan pesan tentang fungsi yang tidak bisa di-serialize."
             }
           ],
-          "solution": "'use server';\nexport async function addComment(formData) {\n  const text = formData.get('text');\n  return { success: true };\n}"
+          "solution": "'use server';\nexport async function addComment(formData) {\n  const text = formData.get('text');\n  return { success: true };\n}",
+          susunKode: {
+            question:
+              "Susun Server Action sederhana dengan arahan 'use server' untuk membaca masukan form.",
+            potongan: [
+              "'use server';",
+              "export async function addComment(formData) {",
+              "  const text = formData.get('text');",
+              "  return { success: true };",
+              "}",
+            ],
+            pengecoh: [
+              "'use client';",
+              "'use action';",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Arahan 'use server' menandai fungsi agar dieksekusi di server ketika dipanggil oleh elemen form. Keping 'use client' adalah jebakan directive yang berlawanan fungsi. Keping 'use action' menggoda bagi pemula yang mengira nama arahan sesuai dengan nama fitur Server Action.",
+          },
         },
         {
           "kind": "step",
@@ -1195,7 +1680,25 @@ export const nextjsTrack: Track = {
               "message": "Argumen kedua adalah nilai awal `state` sebelum form pernah dikirim. Di sini `null`, sehingga `state?.error` aman dipakai di JSX."
             }
           ],
-          "solution": "'use client';\nimport { useActionState } from 'react';\nimport { createItem } from './actions';\n\nexport default function Form() {\n  const [state, formAction, isPending] = useActionState(createItem, null);\n\n  return (\n    <form action={formAction}>\n      <input name=\"nama\" />\n      <button disabled={isPending}>Simpan</button>\n      {state?.error && <p>{state.error}</p>}\n    </form>\n  );\n}"
+          "solution": "'use client';\nimport { useActionState } from 'react';\nimport { createItem } from './actions';\n\nexport default function Form() {\n  const [state, formAction, isPending] = useActionState(createItem, null);\n\n  return (\n    <form action={formAction}>\n      <input name=\"nama\" />\n      <button disabled={isPending}>Simpan</button>\n      {state?.error && <p>{state.error}</p>}\n    </form>\n  );\n}",
+          susunKode: {
+            question:
+              "Rangkai penggunaan hook useActionState untuk mengelola status form interaktif.",
+            potongan: [
+              "'use client';\nimport { useActionState } from 'react';\nimport { createItem } from './actions';",
+              "export default function Form() {",
+              "  const [state, formAction, isPending] = useActionState(createItem, null);",
+              "  return (\n    <form action={formAction}>\n      <input name=\"nama\" />\n      <button disabled={isPending}>Simpan</button>\n      {state?.error && <p>{state.error}</p>}\n    </form>\n  );",
+              "}",
+            ],
+            pengecoh: [
+              "  const [state, formAction, isPending] = useFormState(createItem, null);",
+              "  const [state, formAction] = useActionState(createItem, null);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Hook useActionState dari React mengembalikan tuple [state, formAction, isPending] untuk mengontrol eksekusi Server Action. Keping useFormState adalah nama hook lama yang sudah digantikan oleh useActionState pada React 19. Keping tanpa isPending menggoda tetapi mengabaikan penanganan status penundaan (pending status).",
+          },
         },
         {
           "kind": "step",
@@ -1207,8 +1710,8 @@ export const nextjsTrack: Track = {
             "output": "DOM sebelum diklik:\n<button type=\"submit\">Kirim</button>\n\nDOM selama action berjalan:\n<button type=\"submit\" disabled>Mengirim...</button>\n\nDOM setelah selesai:\n<button type=\"submit\">Kirim</button>",
             "note": "Atribut `disabled` benar-benar muncul di DOM — itu cara memastikan hook-nya terpasang di tempat yang benar lewat tab Elements. Catatan jujur: berkas ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
-          "instruction": "Komponen `SubmitButton` di bawah dipakai di dalam sebuah `<form>` dan sudah memakai variabel `pending` di JSX-nya. Panggil hook dari `react-dom` yang membaca status pengiriman form induk, lalu ambil properti boolean-nya sehingga tombol benar-benar nonaktif saat pengiriman berjalan.",
-          "starterCode": "import { useFormStatus } from 'react-dom';\n\nexport function SubmitButton() {\n  // Panggil useFormStatus di sini\n  \n  return <button disabled={pending}>{pending ? 'Loading...' : 'Simpan'}</button>;\n}",
+          "instruction": "Komponen `SubmitButton` di bawah dipakai di dalam sebuah `<form>` dan sudah memakai variabel `pending` di JSX-nya — perhatikan berkasnya sudah berdirektif `'use client'`, karena hook mana pun hanya hidup di Client Component. Panggil hook dari `react-dom` yang membaca status pengiriman form induk, lalu ambil properti boolean-nya sehingga tombol benar-benar nonaktif saat pengiriman berjalan.",
+          "starterCode": "'use client';\nimport { useFormStatus } from 'react-dom';\n\nexport function SubmitButton() {\n  // Panggil useFormStatus di sini\n  \n  return <button disabled={pending}>{pending ? 'Loading...' : 'Simpan'}</button>;\n}",
           "language": "text",
           "tests": [
             {
@@ -1220,7 +1723,26 @@ export const nextjsTrack: Track = {
               "message": "`useFormStatus()` dipanggil tanpa argumen — ia menemukan form induknya sendiri lewat context. Kalau komponen ini bukan anak `<form>`, nilainya selalu `false`."
             }
           ],
-          "solution": "import { useFormStatus } from 'react-dom';\n\nexport function SubmitButton() {\n  const { pending } = useFormStatus();\n  return <button disabled={pending}>{pending ? 'Loading...' : 'Simpan'}</button>;\n}"
+          "solution": "'use client';\nimport { useFormStatus } from 'react-dom';\n\nexport function SubmitButton() {\n  const { pending } = useFormStatus();\n  return <button disabled={pending}>{pending ? 'Loading...' : 'Simpan'}</button>;\n}",
+          susunKode: {
+            question:
+              "Rangkai komponen tombol kirim yang membaca status pengiriman form induknya, lengkap dengan penanda berkas yang dibutuhkan hook React.",
+            potongan: [
+              "'use client';",
+              "import { useFormStatus } from 'react-dom';",
+              "export function SubmitButton() {",
+              "  const { pending } = useFormStatus();",
+              "  return <button disabled={pending}>{pending ? 'Loading...' : 'Simpan'}</button>;",
+              "}",
+            ],
+            pengecoh: [
+              "  const { loading } = useFormStatus();",
+              "  const { pending } = useFormStatus(formAction);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Hook useFormStatus diimpor dari 'react-dom' dan dipanggil tanpa argumen di dalam komponen anak elemen form. Keping const { loading } menggoda bagi yang mengira nama propertinya loading, padahal nama properti resminya adalah pending. Keping useFormStatus(formAction) keliru karena hook ini membaca status form induk secara otomatis.",
+          },
         },
         {
           "kind": "step",
@@ -1245,7 +1767,24 @@ export const nextjsTrack: Track = {
               "message": "Panggilan ini diletakkan setelah mutasi datanya selesai, di dalam fungsi action — bukan di komponen dan bukan sebelum data berubah, karena yang disegarkan harus versi terbaru."
             }
           ],
-          "solution": "import { revalidatePath } from 'next/cache';\n\nexport async function updateData() {\n  revalidatePath('/dashboard');\n}"
+          "solution": "import { revalidatePath } from 'next/cache';\n\nexport async function updateData() {\n  revalidatePath('/dashboard');\n}",
+          susunKode: {
+            question:
+              "Susun Server Action yang memanggil revalidatePath untuk memperbarui cache rute /dashboard.",
+            potongan: [
+              "import { revalidatePath } from 'next/cache';",
+              "export async function updateData() {",
+              "  revalidatePath('/dashboard');",
+              "}",
+            ],
+            pengecoh: [
+              "  revalidatePath('/home');",
+              "  revalidateTag('/dashboard');",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Fungsi revalidatePath diimpor dari paket 'next/cache' untuk membersihkan cache data halaman setelah mutasi pada path rute yang ditentukan. Keping '/home' keliru path target yang diminta. Keping revalidateTag('/dashboard') menggoda tetapi revalidateTag digunakan untuk tag cache data fetch, bukan path rute.",
+          },
         },
         {
           "kind": "step",
@@ -1274,7 +1813,28 @@ export const nextjsTrack: Track = {
               "message": "Fungsi penggabungnya menerima DUA parameter (nilai sekarang, nilai yang dikirim pemicu) dan menjumlahkan keduanya. Nama parameter bebas, tapi jangan mengabaikan parameter kedua dengan menulis `state + 1` — kalau nanti pemicunya dipanggil dengan 5, tampilan optimistikmu akan salah."
             }
           ],
-          "solution": "'use client';\nimport { useOptimistic } from 'react';\n\nexport function LikeButton({ likes, sukai }) {\n  const [optimisticLikes, addOptimisticLike] = useOptimistic(\n    likes,\n    (state, tambahan) => state + tambahan,\n  );\n\n  return (\n    <button onClick={() => { addOptimisticLike(1); sukai(); }}>\n      {optimisticLikes} suka\n    </button>\n  );\n}"
+          "solution": "'use client';\nimport { useOptimistic } from 'react';\n\nexport function LikeButton({ likes, sukai }) {\n  const [optimisticLikes, addOptimisticLike] = useOptimistic(\n    likes,\n    (state, tambahan) => state + tambahan,\n  );\n\n  return (\n    <button onClick={() => { addOptimisticLike(1); sukai(); }}>\n      {optimisticLikes} suka\n    </button>\n  );\n}",
+          susunKode: {
+            question:
+              "Susun komponen LikeButton yang menerapkan Optimistic UI menggunakan useOptimistic.",
+            potongan: [
+              "'use client';\nimport { useOptimistic } from 'react';",
+              "export function LikeButton({ likes, sukai }) {",
+              "  const [optimisticLikes, addOptimisticLike] = useOptimistic(",
+              "    likes,",
+              "    (state, tambahan) => state + tambahan,",
+              "  );",
+              "  return (\n    <button onClick={() => { addOptimisticLike(1); sukai(); }}>\n      {optimisticLikes} suka\n    </button>\n  );",
+              "}",
+            ],
+            pengecoh: [
+              "  const [optimisticLikes, addOptimisticLike] = useFormState(",
+              "    (state, tambahan) => state * tambahan,",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Hook useOptimistic diimpor dari paket 'react' untuk memperbarui tampilan UI secara langsung sebelum Server Action selesai. Keping useFormState adalah nama hook lain yang tidak cocok untuk pembaharuan optimistik. Keping state * tambahan keliru operasi matematika penambahan.",
+          },
         },
         {
           "kind": "step",
@@ -1304,7 +1864,29 @@ export const nextjsTrack: Track = {
               "message": "Jangan `throw` untuk kesalahan masukan pengguna: exception memicu `error.tsx` dan mengganti seluruh halaman, sehingga isi form yang sudah diketik hilang. Simpan `throw` untuk kondisi yang benar-benar tidak terduga."
             }
           ],
-          "solution": "'use server';\n\nexport async function submitForm(prevState, formData) {\n  const email = String(formData.get('email') ?? '');\n  const isValid = email.includes('@');\n\n  if (!isValid) {\n    return { error: 'Email tidak valid' };\n  }\n\n  return { sukses: true };\n}"
+          "solution": "'use server';\n\nexport async function submitForm(prevState, formData) {\n  const email = String(formData.get('email') ?? '');\n  const isValid = email.includes('@');\n\n  if (!isValid) {\n    return { error: 'Email tidak valid' };\n  }\n\n  return { sukses: true };\n}",
+          susunKode: {
+            question:
+              "Rangkai penanganan validasi email sederhana pada Server Action submitForm.",
+            potongan: [
+              "'use server';",
+              "export async function submitForm(prevState, formData) {",
+              "  const email = String(formData.get('email') ?? '');",
+              "  const isValid = email.includes('@');",
+              "  if (!isValid) {",
+              "    return { error: 'Email tidak valid' };",
+              "  }",
+              "  return { sukses: true };",
+              "}",
+            ],
+            pengecoh: [
+              "  if (isValid) {",
+              "    return { error: 'Email valid' };",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Pemeriksaan validasi memeriksa kebalikan kondisi !isValid untuk mengembalikan pesan error dalam bentuk objek data. Keping if (isValid) keliru karena akan menolak email yang justru valid. Keping { error: 'Email valid' } menggoda tetapi salah teks status pesan error.",
+          },
         },
         {
           "kind": "quiz",
@@ -1396,12 +1978,12 @@ export const nextjsTrack: Track = {
     {
       "slug": "auth",
       "title": "Autentikasi",
-      "description": "Login yang benar: session, proteksi route, dan middleware.",
+      "description": "Login yang benar: session, proteksi route, dan proxy (dulu middleware).",
       "topics": [
         "Konsep session vs token",
         "Auth.js (NextAuth): setup & provider",
         "Proteksi halaman di server component",
-        "Middleware untuk guard route",
+        "proxy.ts (dulu middleware) untuk guard route",
         "Role & otorisasi sederhana",
         "Menyimpan user di database"
       ],
@@ -1410,7 +1992,7 @@ export const nextjsTrack: Track = {
           "kind": "materi",
           "id": "next-6-m1",
           "title": "Autentikasi & Route Protection di Next.js",
-          "body": "# Autentikasi & Otorisasi di Next.js\n\nAutentikasi adalah proses memverifikasi **siapa pengguna tersebut** (Login), sedangkan Otorisasi adalah proses mengecek **apa saja hak akses pengguna** (Role/Permission).\n\nDi aplikasi Next.js modern, keamanan autentikasi bertumpu pada **Cookie Session berbasis HttpOnly** atau **JWT (JSON Web Token)**.\n\n## Cookie Session vs JWT Token\n\n| Fitur | Session Cookie (HttpOnly) | JWT Token |\n|---|---|---|\n| **Penyimpanan Data** | Terenkripsi di Cookie, data lengkap di DB/Redis | Memuat seluruh data user di dalam token terenkripsi |\n| **Akses JavaScript Client** | ❌ **TIDAK BISA** (Disembunyikan oleh browser dari XSS) | ⚠️ Bisa jika disimpan di LocalStorage |\n| **Keamanan dari XSS** | **Sangat Tinggi** | Rentan dicuri jika skrip jahat berjalan di client |\n| **Pencabutan Akses (Revoke)**| Sangat mudah (Hapus session dari DB) | Sulit sampai token kadaluarsa (atau butuh blacklist) |\n\n## Integrasi Auth.js (NextAuth v5)\n\n**Auth.js** (sebelumnya NextAuth) adalah solusi autentikasi standar industri untuk Next.js App Router. Auth.js mendukung login via OAuth (Google, GitHub), Magic Link, maupun Credentials (Email/Password).\n\n```typescript\n// app/api/auth/[...nextauth]/route.ts\nimport { handlers } from '@/auth';\nexport const { GET, POST } = handlers;\n```\n\n## 3 Lapisan Proteksi Route di Next.js\n\nUntuk mengamankan halaman terproteksi (seperti `/dashboard` atau `/admin`), gunakan strategi pertahanan berlapis (Defense in Depth):\n\n```text\n┌────────────────────────────────────────────────────────┐\n│ Layer 1: Middleware Guard (middleware.ts)             │ -> Memeriksa cookie session di Edge sebelum rute diproses\n├────────────────────────────────────────────────────────┤\n│ Layer 2: Server Component Check (await auth())         │ -> Memeriksa session di level halaman sebelum render HTML\n├────────────────────────────────────────────────────────┤\n│ Layer 3: Database & Action Otorisasi (RBAC Check)      │ -> Memeriksa role === 'admin' saat mutasi dilakukan\n└────────────────────────────────────────────────────────┘\n```\n\n### 1. Proteksi Halaman di Server Component\n\n```typescript\nimport { auth } from '@/auth';\nimport { redirect } from 'next/navigation';\n\nexport default async function DashboardPage() {\n  const session = await auth();\n  if (!session) {\n    redirect('/login');\n  }\n  return <h1>Selamat datang, {session.user.name}</h1>;\n}\n```\n\n### 2. Middleware Route Guard Global\n\nGunakan berkas `middleware.ts` di root proyek untuk memblokir akses ke rute terproteksi secara terpusat tanpa perlu mengulang kode pengecekan di setiap halaman:\n\n```typescript\nimport { auth } from '@/auth';\nimport { NextResponse } from 'next/server';\n\nexport default auth((req) => {\n  const isLoggedIn = !!req.auth;\n  const isAuthRoute = req.nextUrl.pathname.startsWith('/dashboard');\n  \n  if (isAuthRoute && !isLoggedIn) {\n    return NextResponse.redirect(new URL('/login', req.url));\n  }\n});\n\nexport const config = {\n  matcher: ['/dashboard/:path*'],\n};\n```\n\n## Role-Based Access Control (RBAC)\n\nSelalu simpan informasi peran (`'admin'` vs `'user'`) di dalam objek session. Sebelum merender antarmuka rahasia atau menjalankan tindakan admin, pastikan kamu mengecek kondisi `session?.user?.role === 'admin'`.\n\n## Analogi Dunia Nyata\n\nSistem autentikasi Next.js seperti **Kartu Kunci Kamar Hotel (Keycard)**. **HttpOnly Cookie** adalah chip RFID terenkripsi di dalam kartu kunci plastik yang discan di pintu masuk gedung (Middleware) dan pintu kamar (Server Component). Kamu tidak perlu menghafal sandi rumit setiap kali membuka pintu kamar.\n\n## Jebakan & Kesalahan Umum\n\n1. **Menyimpan Token di LocalStorage**: Menyimpan token JWT di LocalStorage membuka celah keamanan besar terhadap serangan pencurian token via skrip XSS!\n2. **Hanya Melindungi UI Client**: Menyembunyikan link admin di navbar client tetapi lupa mengunci Server Action / Route Handler di server.\n3. **Lupa Config Matcher Middleware**: Mengizinkan Middleware berjalan pada berkas statis (seperti gambar `.png` atau `favicon.ico`), membuat aplikasi terasa sangat lambat.\n\n## Kaitan ke Dunia Kerja\n\nKeamanan autentikasi dan kepatuhan standar cookie (HttpOnly, SameSite, Secure) adalah syarat wajib dalam Audit Penetration Testing (PenTest) di aplikasi perbankan, finansial, dan e-commerce."
+          "body": "# Autentikasi & Otorisasi di Next.js\n\nAutentikasi adalah proses memverifikasi **siapa pengguna tersebut** (Login), sedangkan Otorisasi adalah proses mengecek **apa saja hak akses pengguna** (Role/Permission).\n\nDi aplikasi Next.js modern, keamanan autentikasi bertumpu pada **Cookie Session berbasis HttpOnly** atau **JWT (JSON Web Token)**.\n\n## Cookie Session vs JWT Token\n\n| Fitur | Session Cookie (HttpOnly) | JWT Token |\n|---|---|---|\n| **Penyimpanan Data** | Terenkripsi di Cookie, data lengkap di DB/Redis | Memuat seluruh data user di dalam token terenkripsi |\n| **Akses JavaScript Client** | ❌ **TIDAK BISA** (Disembunyikan oleh browser dari XSS) | ⚠️ Bisa jika disimpan di LocalStorage |\n| **Keamanan dari XSS** | **Sangat Tinggi** | Rentan dicuri jika skrip jahat berjalan di client |\n| **Pencabutan Akses (Revoke)**| Sangat mudah (Hapus session dari DB) | Sulit sampai token kadaluarsa (atau butuh blacklist) |\n\n## Integrasi Auth.js (NextAuth v5)\n\n**Auth.js** (sebelumnya NextAuth) adalah solusi autentikasi standar industri untuk Next.js App Router. Auth.js mendukung login via OAuth (Google, GitHub), Magic Link, maupun Credentials (Email/Password).\n\n```typescript\n// app/api/auth/[...nextauth]/route.ts\nimport { handlers } from '@/auth';\nexport const { GET, POST } = handlers;\n```\n\n## 3 Lapisan Proteksi Route di Next.js\n\nUntuk mengamankan halaman terproteksi (seperti `/dashboard` atau `/admin`), gunakan strategi pertahanan berlapis (Defense in Depth):\n\n```text\n┌────────────────────────────────────────────────────────┐\n│ Layer 1: Proxy Guard (proxy.ts, eks middleware.ts)     │ -> Memeriksa cookie session sebelum rute diproses\n├────────────────────────────────────────────────────────┤\n│ Layer 2: Server Component Check (await auth())         │ -> Memeriksa session di level halaman sebelum render HTML\n├────────────────────────────────────────────────────────┤\n│ Layer 3: Database & Action Otorisasi (RBAC Check)      │ -> Memeriksa role === 'admin' saat mutasi dilakukan\n└────────────────────────────────────────────────────────┘\n```\n\n### 1. Proteksi Halaman di Server Component\n\n```typescript\nimport { auth } from '@/auth';\nimport { redirect } from 'next/navigation';\n\nexport default async function DashboardPage() {\n  const session = await auth();\n  if (!session) {\n    redirect('/login');\n  }\n  return <h1>Selamat datang, {session.user.name}</h1>;\n}\n```\n\n### 2. Proxy Route Guard Global (dulu bernama Middleware)\n\nGunakan berkas `proxy.ts` di root proyek untuk memblokir akses ke rute terproteksi secara terpusat tanpa perlu mengulang kode pengecekan di setiap halaman.\n\n> **Penting soal nama (Next.js 16):** berkas ini dulu bernama `middleware.ts` dengan fungsi bernama `middleware`. Sejak Next.js 16 namanya menjadi `proxy.ts` dengan fungsi `proxy`; nama lama masih jalan tapi sudah **deprecated**. Perbedaan lain: `proxy` berjalan di runtime **Node.js**, bukan Edge, dan opsi `runtime` tidak bisa diatur di berkas ini. Hampir semua tutorial yang kamu temukan di internet masih memakai nama lama.\n\n```typescript\n// proxy.ts\nimport { auth } from '@/auth';\nimport { NextResponse } from 'next/server';\n\nexport default auth((req) => {\n  const isLoggedIn = !!req.auth;\n  const isAuthRoute = req.nextUrl.pathname.startsWith('/dashboard');\n  \n  if (isAuthRoute && !isLoggedIn) {\n    return NextResponse.redirect(new URL('/login', req.url));\n  }\n});\n\nexport const config = {\n  matcher: ['/dashboard/:path*'],\n};\n```\n\n## Role-Based Access Control (RBAC)\n\nSelalu simpan informasi peran (`'admin'` vs `'user'`) di dalam objek session. Sebelum merender antarmuka rahasia atau menjalankan tindakan admin, pastikan kamu mengecek kondisi `session?.user?.role === 'admin'`.\n\n## Analogi Dunia Nyata\n\nSistem autentikasi Next.js seperti **Kartu Kunci Kamar Hotel (Keycard)**. **HttpOnly Cookie** adalah chip RFID terenkripsi di dalam kartu kunci plastik yang discan di pintu masuk gedung (Proxy) dan pintu kamar (Server Component). Kamu tidak perlu menghafal sandi rumit setiap kali membuka pintu kamar.\n\n## Jebakan & Kesalahan Umum\n\n1. **Menyimpan Token di LocalStorage**: Menyimpan token JWT di LocalStorage membuka celah keamanan besar terhadap serangan pencurian token via skrip XSS!\n2. **Hanya Melindungi UI Client**: Menyembunyikan link admin di navbar client tetapi lupa mengunci Server Action / Route Handler di server.\n3. **Lupa `config.matcher` di Proxy**: tanpa matcher, `proxy.ts` berjalan pada SETIAP request — termasuk `_next/static`, `_next/image`, dan berkas di `public/`. Selain memperlambat semuanya, logika auth di dalamnya bisa ikut memblokir CSS, JS, dan gambar sehingga halaman tampil rusak.\n4. **Mengikuti tutorial yang masih memakai `middleware.ts`**: nama itu deprecated sejak Next.js 16. Berkasnya masih jalan, jadi tidak ada error yang memberitahumu — kamu hanya menulis konvensi yang sedang dihapus.\n\n## Kaitan ke Dunia Kerja\n\nKeamanan autentikasi dan kepatuhan standar cookie (HttpOnly, SameSite, Secure) adalah syarat wajib dalam Audit Penetration Testing (PenTest) di aplikasi perbankan, finansial, dan e-commerce."
         },
         {
           "kind": "step",
@@ -1440,7 +2022,26 @@ export const nextjsTrack: Track = {
               "message": "Pertahankan `secure: true` — tanpa itu cookie ikut terkirim lewat HTTP biasa dan bisa dibaca di jaringan publik."
             }
           ],
-          "solution": "// Konfigurasi cookie sesi — ada satu flag yang salah nilai\nconst cookieOptions = {\n  httpOnly: true,\n  secure: true,\n  sameSite: 'lax',\n};"
+          "solution": "// Konfigurasi cookie sesi — ada satu flag yang salah nilai\nconst cookieOptions = {\n  httpOnly: true,\n  secure: true,\n  sameSite: 'lax',\n};",
+          susunKode: {
+            question:
+              "Perbaiki konfigurasi cookieOptions agar flag httpOnly bernilai true demi keamanan sesi.",
+            potongan: [
+              "// Konfigurasi cookie sesi — ada satu flag yang salah nilai",
+              "const cookieOptions = {",
+              "  httpOnly: true,",
+              "  secure: true,",
+              "  sameSite: 'lax',",
+              "};",
+            ],
+            pengecoh: [
+              "  httpOnly: false,",
+              "  secure: false,",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Flag httpOnly: true mencegah skrip JavaScript di client membaca cookie sesi sehingga terlindung dari serangan XSS. Keping httpOnly: false sangat berbahaya karena membiarkan cookie dapat diakses oleh skrip berbahaya. Keping secure: false juga merupakan jebakan keamanan yang membiarkan cookie dikirim melalui koneksi HTTP tidak terenkripsi.",
+          },
         },
         {
           "kind": "step",
@@ -1469,7 +2070,25 @@ export const nextjsTrack: Track = {
               "message": "Isi `providers` dengan modul provider yang sudah diimpor. Konfigurasi tanpa provider tetap lolos build, tapi halaman login tidak menampilkan cara masuk apa pun."
             }
           ],
-          "solution": "import NextAuth from 'next-auth';\nimport GitHub from 'next-auth/providers/github';\n\nexport const { handlers, auth, signIn, signOut } = NextAuth({\n  providers: [GitHub],\n});"
+          "solution": "import NextAuth from 'next-auth';\nimport GitHub from 'next-auth/providers/github';\n\nexport const { handlers, auth, signIn, signOut } = NextAuth({\n  providers: [GitHub],\n});",
+          susunKode: {
+            question:
+              "Rangkai inisialisasi Auth.js v5 dengan provider GitHub.",
+            potongan: [
+              "import NextAuth from 'next-auth';",
+              "import GitHub from 'next-auth/providers/github';",
+              "export const { handlers, auth, signIn, signOut } = NextAuth({",
+              "  providers: [GitHub],",
+              "});",
+            ],
+            pengecoh: [
+              "export const { authHandler, auth } = NextAuth({",
+              "  providers: { GitHub },",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Auth.js v5 mengembalikan objek yang didestrukturisasi menjadi helper handlers, auth, signIn, dan signOut. Keping authHandler keliru nama properti ekspor resmi handlers. Keping providers: { GitHub } keliru sintaks karena daftar provider harus dibungkus dalam array.",
+          },
         },
         {
           "kind": "step",
@@ -1494,32 +2113,79 @@ export const nextjsTrack: Track = {
               "message": "Pakai `redirect()` dari `next/navigation` (sudah diimpor) dengan tujuan `/login`. Boleh ditulis satu baris maupun di dalam blok kurawal. Jangan pakai `useRouter` — hook itu hanya hidup di Client Component."
             }
           ],
-          "solution": "import { redirect } from 'next/navigation';\n\nexport default async function Dashboard() {\n  const session = await auth();\n  if (!session) redirect('/login');\n  return <h1>Rahasia</h1>;\n}"
+          "solution": "import { redirect } from 'next/navigation';\n\nexport default async function Dashboard() {\n  const session = await auth();\n  if (!session) redirect('/login');\n  return <h1>Rahasia</h1>;\n}",
+          susunKode: {
+            question:
+              "Susun proteksi halaman rute rahasia yang mengalihkan pengguna ke /login jika belum ada sesi.",
+            potongan: [
+              "import { redirect } from 'next/navigation';",
+              "export default async function Dashboard() {",
+              "  const session = await auth();",
+              "  if (!session) redirect('/login');",
+              "  return <h1>Rahasia</h1>;",
+              "}",
+            ],
+            pengecoh: [
+              "  if (session) redirect('/login');",
+              "  if (!session) redirect('/dashboard');",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Fungsi redirect dipanggil saat pengondisian !session bernilai true untuk mengamankan halaman dari akses anonim. Keping if (session) redirect menggoda tetapi salah logika karena justru mengalihkan pengguna yang sudah berhasil login. Keping redirect('/dashboard') keliru target rute pengalihan.",
+          },
         },
         {
           "kind": "step",
           "id": "next-6-4",
-          "title": "Middleware untuk Route Guard Global",
-          "explanation": "Selain melakukan pengecekan sesi di setiap komponen halaman, Next.js menyediakan berkas khusus bernama `middleware.ts` di direktori root proyek untuk melakukan penjagaan rute secara terpusat (Global Guard). Middleware dieksekusi di lapisan Edge sebelum HTTP request mencapai komponen halaman mana pun. Dengan mendefinisikan objek `config` bernilai `matcher: ['/dashboard/:path*']`, kamu memberitahu Next.js untuk menjalankan middleware hanya pada rute yang diawali dengan `/dashboard`. Teknik ini mencegah kode halaman diunduh sama sekali jika pengguna tidak memiliki kredensial yang valid.",
+          "title": "proxy.ts (dulu middleware.ts) untuk Route Guard Global",
+          "explanation": "Selain mengecek sesi di setiap komponen halaman, Next.js punya satu berkas khusus di root proyek yang berjalan SEBELUM rute mana pun diproses — cocok untuk penjagaan terpusat. **Namanya berubah di Next.js 16:** dulu `middleware.ts` dengan fungsi `middleware`, sekarang `proxy.ts` dengan fungsi `proxy`; nama lama masih bekerja tapi sudah deprecated, jadi hampir semua tutorial yang kamu temukan memakai istilah yang sedang dihapus. Perbedaan penting lainnya: `proxy` berjalan di runtime **Node.js** (bukan Edge seperti middleware dulu), dan opsi `runtime` tidak bisa diatur di berkas ini. Jangkauannya diatur lewat named export `config` berisi `matcher` — tanpa itu berkas ini jalan untuk SETIAP permintaan, termasuk `_next/static`, `_next/image`, dan isi folder `public/`, sehingga logika auth-mu bisa ikut memblokir CSS dan gambar sendiri. Jebakan terakhir: ini lapisan pertama, bukan satu-satunya — ia hanya melihat ada-tidaknya cookie, jadi verifikasi isi sesi tetap wajib di Server Component atau Server Action.",
           "example": {
-            "code": "// middleware.ts (di root proyek, sejajar package.json)\nimport { NextResponse } from 'next/server';\nimport type { NextRequest } from 'next/server';\n\nexport function middleware(request: NextRequest) {\n  const punyaSesi = request.cookies.has('authjs.session-token');\n  if (!punyaSesi) {\n    return NextResponse.redirect(new URL('/login', request.url));\n  }\n  return NextResponse.next();\n}\n\nexport const config = { matcher: ['/admin/:path*'] };",
-            "output": "$ curl -i http://localhost:3000/admin/pengguna\nHTTP/1.1 307 Temporary Redirect\nlocation: http://localhost:3000/login\n\n$ curl -i http://localhost:3000/            <-- di luar matcher\nHTTP/1.1 200 OK\n\nTanpa config.matcher, middleware juga jalan untuk /favicon.ico dan /_next/static/*.",
-            "note": "Middleware adalah lapisan pertama, bukan satu-satunya: ia hanya melihat ada-tidaknya cookie. Verifikasi isi sesi tetap perlu dilakukan di Server Component atau Server Action. Catatan jujur: berkas ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
+            "code": "// proxy.ts (di root proyek, sejajar package.json)\nimport { NextResponse } from 'next/server';\nimport type { NextRequest } from 'next/server';\n\nexport function proxy(request: NextRequest) {\n  const punyaSesi = request.cookies.has('authjs.session-token');\n  if (!punyaSesi) {\n    return NextResponse.redirect(new URL('/login', request.url));\n  }\n  return NextResponse.next();\n}\n\nexport const config = { matcher: ['/admin/:path*'] };",
+            "output": "$ curl -i http://localhost:3000/admin/pengguna\nHTTP/1.1 307 Temporary Redirect\nlocation: http://localhost:3000/login\n\n$ curl -i http://localhost:3000/            <-- di luar matcher\nHTTP/1.1 200 OK\n\nTanpa config.matcher, proxy juga jalan untuk /favicon.ico dan /_next/static/*.",
+            "note": "Kalau kamu masih memakai `middleware.ts`, berkasnya tetap berjalan — tidak ada error yang memberitahu bahwa namanya sudah deprecated. Ganti nama berkas dan nama fungsinya menjadi `proxy` sekarang, sebelum nama lama benar-benar dihapus. Catatan jujur: berkas ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
-          "instruction": "Middleware di bawah saat ini berjalan untuk SETIAP permintaan, termasuk gambar dan berkas statis, sehingga aplikasi terasa lambat. Batasi jangkauannya hanya ke `/dashboard` beserta seluruh sub-path-nya lewat konstanta konfigurasi yang dibaca Next.js.",
-          "starterCode": "import { NextResponse } from 'next/server';\n\nexport function middleware(request) {\n  return NextResponse.next();\n}\n\n// Batasi jangkauan middleware di bawah ini\n",
+          "instruction": "Berkas penjaga rute global di bawah masih memakai nama fungsi generasi lama, dan saat ini berjalan untuk SETIAP permintaan — termasuk gambar dan berkas statis. Perbaiki dua hal: pakai nama fungsi yang berlaku di Next.js 16, lalu batasi jangkauannya hanya ke `/dashboard` beserta seluruh sub-path-nya lewat konstanta konfigurasi yang dibaca Next.js.",
+          "starterCode": "// proxy.ts\nimport { NextResponse } from 'next/server';\n\n// nama fungsi ini konvensi lama — perbaiki\nexport function middleware(request) {\n  return NextResponse.next();\n}\n\n// Batasi jangkauannya di bawah ini\n",
           "language": "text",
           "tests": [
             {
+              "pattern": "export\\s+(default\\s+)?(async\\s+)?function\\s+proxy\\s*\\(",
+              "message": "Sejak Next.js 16 fungsinya bernama `proxy`, bukan `middleware`. Berkas `proxy.ts` yang mengekspor fungsi bernama `middleware` tidak dikenali — dan nama lama sendiri sudah deprecated."
+            },
+            {
               "pattern": "export\\s+const\\s+config\\s*=",
-              "message": "Next.js membaca jangkauan middleware dari named export bernama tepat `config`. Tanpa `export`, objeknya diabaikan dan middleware tetap jalan untuk semua path."
+              "message": "Next.js membaca jangkauannya dari named export bernama tepat `config`. Tanpa `export`, objeknya diabaikan dan berkas ini tetap jalan untuk semua path."
             },
             {
               "pattern": "matcher\\s*:\\s*\\[[^\\]]*['\"]/dashboard/:path\\*['\"]",
-              "message": "Isi `matcher` dengan array pola path. `'/dashboard/:path*'` mencakup `/dashboard/laporan` dan seterusnya; menuliskannya hanya sebagai `'/dashboard'` membuat sub-halamannya lolos tanpa penjagaan."
+              "message": "Isi `matcher` dengan array pola path. `'/dashboard/:path*'` mencakup `/dashboard` beserta `/dashboard/laporan` dan seterusnya; menuliskannya hanya sebagai `'/dashboard'` membuat sub-halamannya lolos tanpa penjagaan."
+            },
+            {
+              "pattern": "export\\s+(default\\s+)?(async\\s+)?function\\s+middleware",
+              "mustNotMatch": true,
+              "message": "Masih ada `export function middleware` di kode. Konvensi itu deprecated sejak Next.js 16 — ganti namanya menjadi `proxy`, jangan menambahkan fungsi baru di sebelahnya."
             }
           ],
-          "solution": "import { NextResponse } from 'next/server';\n\nexport function middleware(request) {\n  return NextResponse.next();\n}\n\nexport const config = { matcher: ['/dashboard/:path*'] };"
+          "solution": "// proxy.ts\nimport { NextResponse } from 'next/server';\n\nexport function proxy(request) {\n  return NextResponse.next();\n}\n\nexport const config = { matcher: ['/dashboard/:path*'] };",
+          susunKode: {
+            question:
+              "Rangkai berkas penjaga rute global Next.js 16 yang hanya berjalan pada /dashboard beserta seluruh sub-rutenya.",
+            potongan: [
+              "// proxy.ts",
+              "import { NextResponse } from 'next/server';",
+              "export function proxy(request) {",
+              "  return NextResponse.next();",
+              "}",
+              "export const config = { matcher: ['/dashboard/:path*'] };",
+            ],
+            pengecoh: [
+              "export function middleware(request) {",
+              "export const config = { pattern: ['/dashboard/:path*'] };",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Berkas penjaga rute di Next.js 16 bernama proxy.ts dan fungsinya bernama proxy, dilengkapi named export config berisi properti matcher. Keping export function middleware(request) sangat menggoda karena hampir semua tutorial dan jawaban Stack Overflow masih memakai nama itu, padahal konvensi tersebut sudah deprecated sejak Next.js 16. Keping pattern: [...] sering keliru dipakai karena terdengar seperti istilah pencocokan pola, padahal nama kunci konfigurasi yang dibaca Next.js adalah matcher.",
+          },
         },
         {
           "kind": "step",
@@ -1548,7 +2214,25 @@ export const nextjsTrack: Track = {
               "message": "Kembalikan elemen `p` bertuliskan `Forbidden` dan hentikan fungsi di situ dengan `return`. Boleh dibungkus tanda kurung atau blok kurawal — yang penting baris di bawahnya tidak ikut dijalankan."
             }
           ],
-          "solution": "export default async function AdminPanel() {\n  const session = await auth();\n  if (session?.user?.role !== 'admin') return <p>Forbidden</p>;\n  return <h1>Data Rahasia Admin</h1>;\n}"
+          "solution": "export default async function AdminPanel() {\n  const session = await auth();\n  if (session?.user?.role !== 'admin') return <p>Forbidden</p>;\n  return <h1>Data Rahasia Admin</h1>;\n}",
+          susunKode: {
+            question:
+              "Rangkai otorisasi berbasis peran (RBAC) yang menolak akses jika peran pengguna bukan admin.",
+            potongan: [
+              "export default async function AdminPanel() {",
+              "  const session = await auth();",
+              "  if (session?.user?.role !== 'admin') return <p>Forbidden</p>;",
+              "  return <h1>Data Rahasia Admin</h1>;",
+              "}",
+            ],
+            pengecoh: [
+              "  if (session?.user?.role === 'guest') return <p>Forbidden</p>;",
+              "  if (session?.user?.role !== 'admin') return <span>Forbidden</span>;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Pengondisian memasang pemeriksaan !== 'admin' dengan optional chaining agar aman dari TypeError ketika objek user tidak ada. Keping === 'guest' menggoda tetapi salah logika karena hanya memblokir tamu padahal role lain juga bukan admin. Keping return <span>Forbidden</span> keliru tag HTML yang dipersyaratkan.",
+          },
         },
         {
           "kind": "step",
@@ -1561,7 +2245,7 @@ export const nextjsTrack: Track = {
             "note": "Adapter menuntut skema tabel tertentu (User, Account, Session, VerificationToken). Menambahkannya tanpa menjalankan migrasi menghasilkan error \"table does not exist\" pada percobaan login pertama. Catatan jujur: berkas ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
           "instruction": "Konfigurasi Auth.js di bawah masih menyimpan sesi hanya di dalam token, sehingga kamu tidak punya tabel pengguna sendiri untuk menambahkan kolom seperti `role` atau `saldo`. Sambungkan konfigurasi itu ke database lewat adapter Prisma yang sudah diimpor, memakai instansi `prisma` yang tersedia.",
-          "starterCode": "import { PrismaAdapter } from '@auth/prisma-adapter';\nimport prisma from './db';\n\nexport const authOptions = {\n  providers: [],\n  // Tambahkan properti adapter di bawah ini\n  \n};",
+          "starterCode": "import NextAuth from 'next-auth';\nimport { PrismaAdapter } from '@auth/prisma-adapter';\nimport prisma from './db';\n\nexport const { handlers, auth } = NextAuth({\n  providers: [],\n  // Tambahkan properti adapter di bawah ini\n  \n});",
           "language": "text",
           "tests": [
             {
@@ -1569,7 +2253,27 @@ export const nextjsTrack: Track = {
               "message": "Properti `adapter` menerima HASIL pemanggilan `PrismaAdapter(prisma)` — jadi ada tanda kurung dan instansi client-nya dioper masuk. Menulis `adapter: PrismaAdapter` (tanpa memanggil) membuat Auth.js gagal saat login pertama."
             }
           ],
-          "solution": "import { PrismaAdapter } from '@auth/prisma-adapter';\nimport prisma from './db';\n\nexport const authOptions = {\n  providers: [],\n  adapter: PrismaAdapter(prisma),\n};"
+          "solution": "import NextAuth from 'next-auth';\nimport { PrismaAdapter } from '@auth/prisma-adapter';\nimport prisma from './db';\n\nexport const { handlers, auth } = NextAuth({\n  providers: [],\n  adapter: PrismaAdapter(prisma),\n});",
+          susunKode: {
+            question:
+              "Susun konfigurasi adapter Prisma pada Auth.js.",
+            potongan: [
+              "import NextAuth from 'next-auth';",
+              "import { PrismaAdapter } from '@auth/prisma-adapter';",
+              "import prisma from './db';",
+              "export const { handlers, auth } = NextAuth({",
+              "  providers: [],",
+              "  adapter: PrismaAdapter(prisma),",
+              "});",
+            ],
+            pengecoh: [
+              "  adapter: PrismaAdapter,",
+              "  adapter: new PrismaAdapter(prisma),",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Properti adapter diisi dengan hasil pemanggilan fungsi PrismaAdapter(prisma). Keping adapter: PrismaAdapter keliru karena mengoper referensi fungsi tanpa memanggil instansinya dengan argumen prisma. Keping new PrismaAdapter(prisma) menggoda tetapi PrismaAdapter adalah fungsi pabrik (factory function), bukan kelas konstruktor.",
+          },
         },
         {
           "kind": "quiz",
@@ -1605,7 +2309,7 @@ export const nextjsTrack: Track = {
             {
               "id": "q3",
               "type": "pilihan-ganda",
-              "question": "Apa fungsi fitur Middleware pada aplikasi Next.js, khususnya terkait autentikasi?",
+              "question": "Apa fungsi berkas `proxy.ts` (yang sebelum Next.js 16 bernama `middleware.ts`) pada aplikasi Next.js, khususnya terkait autentikasi?",
               "choices": [
                 "Menampilkan loading spinner animasi saat perpindahan halaman",
                 "Menggantikan fungsi database untuk menyimpan data user",
@@ -1613,7 +2317,7 @@ export const nextjsTrack: Track = {
                 "Menerjemahkan bahasa (i18n) teks di dalam HTML"
               ],
               "answerIndex": 2,
-              "explanation": "Middleware berjalan di Edge sebelum rute diproses, jadi ia cocok memblokir akses ke sekelompok rute tanpa mengulang kode di setiap halaman. Perlu diingat ia hanya lapisan pertama: tanpa `config.matcher`, ia juga berjalan untuk berkas statis dan memperlambat semuanya."
+              "explanation": "`proxy.ts` berjalan sebelum rute diproses, jadi ia cocok memblokir akses ke sekelompok rute tanpa mengulang kode di setiap halaman. Dua hal yang perlu diingat: sejak Next.js 16 ia berjalan di runtime Node.js (bukan Edge seperti `middleware.ts` dulu), dan tanpa `config.matcher` ia juga berjalan untuk berkas statis — memperlambat semuanya dan berpotensi memblokir CSS serta gambar sendiri. Ia juga hanya lapisan pertama; verifikasi sesi tetap wajib di Server Component."
             },
             {
               "id": "q4",
@@ -1695,7 +2399,28 @@ export const nextjsTrack: Track = {
               "message": "Sertakan `width={800}` dan `height={400}` (angka di dalam kurawal, bukan string). Tanpa keduanya Next.js melempar error karena rasio aspek tidak diketahui. Urutan atribut bebas."
             }
           ],
-          "solution": "import Image from 'next/image';\n\nexport default function Header() {\n  return (\n    <header>\n      <Image src=\"/banner.png\" alt=\"Banner\" width={800} height={400} />\n    </header>\n  );\n}"
+          "solution": "import Image from 'next/image';\n\nexport default function Header() {\n  return (\n    <header>\n      <Image src=\"/banner.png\" alt=\"Banner\" width={800} height={400} />\n    </header>\n  );\n}",
+          susunKode: {
+            question:
+              "Rangkai pemakaian komponen Image dari next/image dengan properti dimensi lengkap.",
+            potongan: [
+              "import Image from 'next/image';",
+              "export default function Header() {",
+              "  return (",
+              "    <header>",
+              "      <Image src=\"/banner.png\" alt=\"Banner\" width={800} height={400} />",
+              "    </header>",
+              "  );",
+              "}",
+            ],
+            pengecoh: [
+              "      <img src=\"/banner.png\" alt=\"Banner\" width={800} height={400} />",
+              "      <Image src=\"/banner.png\" alt=\"Banner\" width=\"800\" height=\"400\" />",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Komponen Image diimpor secara default dari 'next/image' untuk melakukan optimasi otomatis seperti pemformatan WebP dan pencegahan CLS. Keping tag HTML biasa <img> menggoda tetapi tidak mendapat keunggulan optimasi otomatis Next.js. Keping width=\"800\" keliru tipe data karena width dan height pada komponen Image menerima angka (number).",
+          },
         },
         {
           "kind": "step",
@@ -1720,7 +2445,25 @@ export const nextjsTrack: Track = {
               "message": "Sertakan `subsets: ['latin']` di objek opsinya. Tanpa `subsets`, `next/font` menolak dengan pesan bahwa subset wajib diisi — ini penjagaan supaya kamu tidak diam-diam mengunduh seluruh alfabet dunia. Opsi tambahan seperti `weight` atau `display` boleh ada."
             }
           ],
-          "solution": "import { Inter } from 'next/font/google';\n\nconst inter = Inter({ subsets: ['latin'] });\n\nexport default function RootLayout({ children }) {\n  return <html lang=\"en\"><body className={inter.className}>{children}</body></html>;\n}"
+          "solution": "import { Inter } from 'next/font/google';\n\nconst inter = Inter({ subsets: ['latin'] });\n\nexport default function RootLayout({ children }) {\n  return <html lang=\"en\"><body className={inter.className}>{children}</body></html>;\n}",
+          susunKode: {
+            question:
+              "Susun pengimporan font Google Inter dari next/font/google untuk mencegah layout shift.",
+            potongan: [
+              "import { Inter } from 'next/font/google';",
+              "const inter = Inter({ subsets: ['latin'] });",
+              "export default function RootLayout({ children }) {",
+              "  return <html lang=\"en\"><body className={inter.className}>{children}</body></html>;",
+              "}",
+            ],
+            pengecoh: [
+              "const inter = GoogleFont({ subsets: ['latin'] });",
+              "const inter = Inter({ subsets: 'latin' });",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Font dari next/font/google diimpor sebagai named export dan diinisialisasi dengan objek opsi subsets berisi array string. Keping GoogleFont(...) keliru nama fungsi pemanggil font. Keping subsets: 'latin' menggoda tetapi salah tipe data karena opsi subsets mewajibkan format array ['latin'].",
+          },
         },
         {
           "kind": "step",
@@ -1745,7 +2488,25 @@ export const nextjsTrack: Track = {
               "message": "Isi properti `title` dengan nilai yang diminta — inilah teks yang muncul di tab browser, di hasil pencarian, dan sebagai judul bawaan pratinjau tautan."
             }
           ],
-          "solution": "import { Metadata } from 'next';\n\nexport const metadata: Metadata = { title: 'BiLearn' };\n\nexport default function HomePage() {\n  return <h1>Selamat Datang di BiLearn</h1>;\n}"
+          "solution": "import { Metadata } from 'next';\n\nexport const metadata: Metadata = { title: 'BiLearn' };\n\nexport default function HomePage() {\n  return <h1>Selamat Datang di BiLearn</h1>;\n}",
+          susunKode: {
+            question:
+              "Rangkai penulisan ekspor metadata berketikan tipe Metadata dari paket next.",
+            potongan: [
+              "import { Metadata } from 'next';",
+              "export const metadata: Metadata = { title: 'BiLearn' };",
+              "export default function HomePage() {",
+              "  return <h1>Selamat Datang di BiLearn</h1>;",
+              "}",
+            ],
+            pengecoh: [
+              "export const metadata = { headline: 'BiLearn' };",
+              "export default const metadata = { title: 'BiLearn' };",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Properti metadata diekspor sebagai named const yang menyertakan penanda tipe Metadata. Keping headline: 'BiLearn' menggoda tetapi salah nama properti untuk judul halaman. Keping export default const metadata keliru karena metadata bukan default export.",
+          },
         },
         {
           "kind": "step",
@@ -1779,7 +2540,27 @@ export const nextjsTrack: Track = {
               "message": "Array kosong berarti sitemap tanpa satu pun URL: build sukses, berkasnya ada, dan tidak berguna sama sekali. Isi dengan entri dari `HALAMAN`."
             }
           ],
-          "solution": "// app/sitemap.ts\nimport type { MetadataRoute } from 'next';\n\nconst HALAMAN = ['', 'tentang', 'kontak'];\n\nexport default function sitemap(): MetadataRoute.Sitemap {\n  return HALAMAN.map((path) => ({\n    url: `https://bilearn.id/${path}`,\n    lastModified: new Date(),\n  }));\n}"
+          "solution": "// app/sitemap.ts\nimport type { MetadataRoute } from 'next';\n\nconst HALAMAN = ['', 'tentang', 'kontak'];\n\nexport default function sitemap(): MetadataRoute.Sitemap {\n  return HALAMAN.map((path) => ({\n    url: `https://bilearn.id/${path}`,\n    lastModified: new Date(),\n  }));\n}",
+          susunKode: {
+            question:
+              "Susun fungsi sitemap konvensi yang memetakan array HALAMAN ke entri sitemap.",
+            potongan: [
+              "// app/sitemap.ts\nimport type { MetadataRoute } from 'next';",
+              "const HALAMAN = ['', 'tentang', 'kontak'];",
+              "export default function sitemap(): MetadataRoute.Sitemap {",
+              "  return HALAMAN.map((path) => ({",
+              "    url: `https://bilearn.id/${path}`,",
+              "    lastModified: new Date(),\n  }));",
+              "}",
+            ],
+            pengecoh: [
+              "export function sitemap(): MetadataRoute.Sitemap {",
+              "    url: `http://bilearn.id/${path}`,",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Fungsi sitemap diekspor secara default dan mengembalikan array objek entri sitemap yang memiliki URL absolut HTTPS. Keping export function sitemap keliru karena Next.js membutuhkan default export untuk sitemap.ts. Keping protokol http:// menggoda tetapi salah spesifikasi karena URL sitemap wajib menggunakan protokol aman https://.",
+          },
         },
         {
           "kind": "step",
@@ -1818,17 +2599,38 @@ export const nextjsTrack: Track = {
               "message": "`export function reportWebVitals` adalah cara Pages Router (`pages/_app.js`). Di App Router fungsi itu tidak pernah dipanggil: tidak ada error, tidak ada peringatan, dan tidak ada satu pun metrik yang terkirim."
             }
           ],
-          "solution": "// app/_komponen/WebVitals.tsx\n'use client';\nimport { useReportWebVitals } from 'next/web-vitals';\n\nexport function WebVitals() {\n  useReportWebVitals((metric) => {\n    console.log(metric);\n  });\n  return null;\n}"
+          "solution": "// app/_komponen/WebVitals.tsx\n'use client';\nimport { useReportWebVitals } from 'next/web-vitals';\n\nexport function WebVitals() {\n  useReportWebVitals((metric) => {\n    console.log(metric);\n  });\n  return null;\n}",
+          susunKode: {
+            question:
+              "Susun komponen WebVitals yang memanggil useReportWebVitals untuk mencetak metrik ke konsol.",
+            potongan: [
+              "'use client';",
+              "import { useReportWebVitals } from 'next/web-vitals';",
+              "export function WebVitals() {",
+              "  useReportWebVitals((metric) => {",
+              "    console.log(metric);",
+              "  });",
+              "  return null;",
+              "}",
+            ],
+            pengecoh: [
+              "export function reportWebVitals() {",
+              "    alert(metric);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Hook useReportWebVitals digunakan di Client Component untuk mencatat data performa Web Vitals pengguna. Keping export function reportWebVitals keliru karena itu adalah nama konvensi lama di Pages Router. Keping alert(metric) menggoda tetapi salah instruksi karena pengujian memeriksa pencetakan console.log(metric).",
+          },
         },
         {
           "kind": "step",
           "id": "next-7-6",
           "title": "Bundle Analysis & dynamic() Import",
-          "explanation": "Semua yang diimpor secara statis masuk ke bundel utama, ikut diunduh pengguna meski komponennya baru terlihat setelah tombol tertentu diklik. `dynamic()` dari `next/dynamic` memecah komponen berat menjadi berkas JavaScript terpisah yang baru diunduh saat komponennya benar-benar dipasang. Dipakai untuk editor rich text, library grafik, pemutar video, dan peta — kandidatnya biasanya terlihat jelas di laporan `@next/bundle-analyzer`. Opsi `{ ssr: false }` berguna kalau komponennya menyentuh `window` atau `document`, karena di server dua objek itu tidak ada. Jebakan yang sering: memberi `dynamic()` sebuah komponen yang tampil di layar pertama — pengguna justru menunggu dua kali (bundel utama, lalu chunk tambahan), sehingga LCP memburuk. Jebakan lain: memanggil `dynamic()` di dalam badan komponen, sehingga chunk-nya dibuat ulang setiap render.",
+          "explanation": "Semua yang diimpor secara statis masuk ke bundel utama, ikut diunduh pengguna meski komponennya baru terlihat setelah tombol tertentu diklik. `dynamic()` dari `next/dynamic` memecah komponen berat menjadi berkas JavaScript terpisah yang baru diunduh saat komponennya benar-benar dipasang. Dipakai untuk editor rich text, library grafik, pemutar video, dan peta — kandidatnya biasanya terlihat jelas di laporan `@next/bundle-analyzer`. Opsi `{ ssr: false }` berguna kalau komponennya menyentuh `window` atau `document`, karena di server dua objek itu tidak ada — tetapi opsi itu **hanya boleh dipakai di dalam berkas berdirektif `'use client'`**; menuliskannya di Server Component langsung ditolak dengan pesan `ssr: false is not allowed with next/dynamic in Server Components`. Jebakan yang sering: memberi `dynamic()` sebuah komponen yang tampil di layar pertama — pengguna justru menunggu dua kali (bundel utama, lalu chunk tambahan), sehingga LCP memburuk. Jebakan lain: memanggil `dynamic()` di dalam badan komponen, sehingga chunk-nya dibuat ulang setiap render.",
           "example": {
-            "code": "import dynamic from 'next/dynamic';\n\nconst PetaLokasi = dynamic(() => import('./PetaLokasi'), {\n  ssr: false,                              // komponennya memakai window\n  loading: () => <p>Memuat peta...</p>,\n});",
-            "output": "$ npm run build\n\nRoute (app)                     Size     First Load JS\n┌ o /kontak                     1.8 kB          96 kB\n+ chunk chunks/peta-4f1c.js    182 kB          (diunduh saat dibutuhkan)\n\nSebelum dynamic(): First Load JS /kontak = 278 kB",
-            "note": "Angka `First Load JS` di tabel build itulah cara membuktikan pemisahannya berhasil — bukan perasaan bahwa halaman \"terasa\" lebih cepat. Catatan jujur: berkas ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
+            "code": "// app/kontak/PanelPeta.tsx — WAJIB Client Component karena memakai ssr: false\n'use client';\nimport dynamic from 'next/dynamic';\n\nconst PetaLokasi = dynamic(() => import('./PetaLokasi'), {\n  ssr: false,                              // komponennya memakai window\n  loading: () => <p>Memuat peta...</p>,\n});\n\nexport default function PanelPeta() {\n  return <PetaLokasi />;\n}",
+            "output": "$ npm run build\n\nRoute (app)                     Size     First Load JS\n┌ ○ /kontak                     1.8 kB          96 kB\n+ chunk chunks/peta-4f1c.js    182 kB          (diunduh saat dibutuhkan)\n\nSebelum dynamic(): First Load JS /kontak = 278 kB",
+            "note": "Perhatikan `'use client'` di baris pertama: contoh ini memakai `ssr: false`, dan opsi itu hanya sah di Client Component. Angka `First Load JS` di tabel build itulah cara membuktikan pemisahannya berhasil — bukan perasaan bahwa halaman \"terasa\" lebih cepat. Catatan jujur: berkas ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
           "instruction": "Komponen berat di `./Heavy` hanya muncul setelah pengguna menggulir ke bawah, tapi sekarang ikut diunduh sejak halaman dibuka. Muat komponen itu secara terpisah memakai pembantu dari `next/dynamic` yang sudah diimpor, dan simpan hasilnya ke konstanta `HeavyComponent` yang sudah dipakai di JSX.",
           "starterCode": "import dynamic from 'next/dynamic';\n\n// Lakukan dynamic import komponen Heavy di bawah ini\n\n\nexport default function Page() {\n  return <HeavyComponent />;\n}",
@@ -1843,7 +2645,25 @@ export const nextjsTrack: Track = {
               "message": "Argumennya bukan komponen langsung, melainkan FUNGSI yang mengembalikan `import()`. Bentuk fungsi inilah yang menunda pengunduhan sampai komponennya dibutuhkan; menulis `dynamic(import('./Heavy'))` menjalankan impornya seketika."
             }
           ],
-          "solution": "import dynamic from 'next/dynamic';\n\nconst HeavyComponent = dynamic(() => import('./Heavy'));\n\nexport default function Page() {\n  return <HeavyComponent />;\n}"
+          "solution": "import dynamic from 'next/dynamic';\n\nconst HeavyComponent = dynamic(() => import('./Heavy'));\n\nexport default function Page() {\n  return <HeavyComponent />;\n}",
+          susunKode: {
+            question:
+              "Susun pengimporan dinamis komponen berat dengan fungsi dynamic dari next/dynamic.",
+            potongan: [
+              "import dynamic from 'next/dynamic';",
+              "const HeavyComponent = dynamic(() => import('./Heavy'));",
+              "export default function Page() {",
+              "  return <HeavyComponent />;",
+              "}",
+            ],
+            pengecoh: [
+              "const HeavyComponent = lazy(() => import('./Heavy'));",
+              "const HeavyComponent = dynamic(() => require('./Heavy'));",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Fungsi pembantu dynamic dari 'next/dynamic' dipanggil dengan mengoper fungsi arrow pengimpor modul. Keping lazy(...) menggoda bagi pengembang React biasa, tetapi Next.js merekomendasikan helper dynamic() untuk penanganan SSR yang lebih baik. Keping require('./Heavy') keliru karena impor dinamis menggunakan sintaks import().",
+          },
         },
         {
           "kind": "quiz",
@@ -1978,7 +2798,25 @@ export const nextjsTrack: Track = {
               "message": "Bungkus penyimpanan baliknya dengan syarat bukan produksi. Menyimpan ke objek global di produksi tidak dibutuhkan (tidak ada hot reload) dan menahan koneksi lebih lama daripada seharusnya."
             }
           ],
-          "solution": "// lib/prisma.ts\nimport { PrismaClient } from '@prisma/client';\n\nconst globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };\n\nexport const prisma = globalForPrisma.prisma ?? new PrismaClient();\n\nif (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;\n"
+          "solution": "// lib/prisma.ts\nimport { PrismaClient } from '@prisma/client';\n\nconst globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };\n\nexport const prisma = globalForPrisma.prisma ?? new PrismaClient();\n\nif (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;\n",
+          susunKode: {
+            question:
+              "Rangkai pola Singleton Prisma Client pada lib/prisma.ts untuk mencegah tumpukan koneksi di lingkungan pengembangan.",
+            potongan: [
+              "// lib/prisma.ts",
+              "import { PrismaClient } from '@prisma/client';",
+              "const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };",
+              "export const prisma = globalForPrisma.prisma ?? new PrismaClient();",
+              "if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;",
+            ],
+            pengecoh: [
+              "export const prisma = globalForPrisma.prisma || null;",
+              "if (process.env.NODE_ENV === 'production') globalForPrisma.prisma = prisma;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Pola singleton memeriksa keberadaan objek prisma di globalThis dan hanya menyimpannya kembali jika berada di luar produksi (development). Keping || null keliru karena jika belum ada instansi maka harus membuat instansiasi new PrismaClient(). Keping === 'production' menggoda tetapi salah logika karena penyimpan ke global justru dibutuhkan di fase pengembangan.",
+          },
         },
         {
           "kind": "step",
@@ -2003,7 +2841,23 @@ export const nextjsTrack: Track = {
               "message": "Setelah awalannya, lanjutkan dengan nama variabel yang diminta, tanda sama dengan, lalu nilainya. Ingat: apa pun yang berawalan `NEXT_PUBLIC_` bisa dibaca siapa saja di DevTools — jangan menaruh kunci rahasia di sana."
             }
           ],
-          "solution": "NEXT_PUBLIC_API_URL=\"https://api.com\""
+          "solution": "NEXT_PUBLIC_API_URL=\"https://api.com\"",
+          susunKode: {
+            question:
+              "Rangkai satu baris .env.local yang mendeklarasikan variabel API_URL bernilai https://api.com dan boleh dibaca dari Client Component.",
+            potongan: [
+              "NEXT_PUBLIC_",
+              "API_URL=",
+              "\"https://api.com\"",
+            ],
+            pengecoh: [
+              "NEXT_PRIVATE_",
+              "API_URL:",
+            ],
+            pemisah: "",
+            explanation:
+              "Next.js hanya menyisipkan variabel berawalan NEXT_PUBLIC_ ke bundel browser, jadi awalan itulah yang menentukan variabel bisa dibaca Client Component atau tidak. Keping NEXT_PRIVATE_ menggoda karena terdengar sebagai pasangan resmi dari NEXT_PUBLIC_, padahal awalan itu tidak pernah ada di Next.js — variabel tanpa awalan memang sudah privat secara bawaan. Keping API_URL: keliru pemisahnya dan sering ditulis oleh orang yang terbiasa dengan YAML atau JSON, sedangkan berkas .env memakai tanda sama dengan.",
+          },
         },
         {
           "kind": "step",
@@ -2028,7 +2882,24 @@ export const nextjsTrack: Track = {
               "message": "Variabel yang membedakan lingkungan di Vercel adalah `VERCEL_ENV`, nilainya salah satu dari `production`, `preview`, atau `development`. Jangan tertukar dengan `NODE_ENV` — di build pratinjau, `NODE_ENV` juga bernilai `production`."
             }
           ],
-          "solution": "const isPreview = process.env.VERCEL_ENV === 'preview';"
+          "solution": "const isPreview = process.env.VERCEL_ENV === 'preview';",
+          susunKode: {
+            question:
+              "Susun deteksi lingkungan build Vercel: satu konstanta boolean bernama isPreview yang bernilai benar hanya pada build pratinjau.",
+            potongan: [
+              "const isPreview",
+              "=",
+              "process.env.VERCEL_ENV",
+              "=== 'preview';",
+            ],
+            pengecoh: [
+              "process.env.NODE_ENV",
+              "=== 'production';",
+            ],
+            pemisah: " ",
+            explanation:
+              "Vercel menyuntikkan variabel VERCEL_ENV yang bernilai 'preview' khusus pada build pratinjau, dan perbandingannya memakai pembanding ketat. Keping process.env.NODE_ENV sangat sering keliru dipakai karena namanya paling familier, padahal NODE_ENV hanya pernah bernilai 'development', 'production', atau 'test' — di build pratinjau ia bernilai 'production', sehingga penjagaannya justru tidak pernah aktif. Keping === 'production'; menggoda karena produksi memang yang sedang dibicarakan di soal, tetapi yang perlu dideteksi adalah kebalikannya.",
+          },
         },
         {
           "kind": "step",
@@ -2053,7 +2924,24 @@ export const nextjsTrack: Track = {
               "message": "Sub-domain seperti `www` justru memakai CNAME yang menunjuk ke nama host (bukan IP), supaya kalau Vercel mengganti IP-nya kamu tidak perlu mengubah apa pun."
             }
           ],
-          "solution": "# Panel DNS proyekku.com\n# Tipe    Nama    Nilai\nA         @       76.76.21.21\nCNAME     www     cname.vercel-dns.com\n"
+          "solution": "# Panel DNS proyekku.com\n# Tipe    Nama    Nilai\nA         @       76.76.21.21\nCNAME     www     cname.vercel-dns.com\n",
+          susunKode: {
+            question:
+              "Rangkai baris catatan DNS untuk mengarahkan apex domain A dan sub-domain CNAME ke Vercel.",
+            potongan: [
+              "# Panel DNS proyekku.com",
+              "# Tipe    Nama    Nilai",
+              "A         @       76.76.21.21",
+              "CNAME     www     cname.vercel-dns.com",
+            ],
+            pengecoh: [
+              "CNAME     @       76.76.21.21",
+              "A         www     cname.vercel-dns.com",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Apex domain (@) menggunakan record A yang menunjuk ke alamat IP, sedangkan subdomain (www) menggunakan record CNAME yang menunjuk ke nama host DNS Vercel. Keping CNAME @ 76.76.21.21 keliru karena CNAME hanya menerima nama domain alias, bukan alamat IP. Keping A www ... keliru karena subdomain dialihkan lewat CNAME.",
+          },
         },
         {
           "kind": "step",
@@ -2083,7 +2971,25 @@ export const nextjsTrack: Track = {
               "message": "Jangan campur dengan `module.exports`: berkas ini sudah memakai `import`, dan mencampur dua gaya modul membuat Node menolak berkasnya (`Cannot use import statement outside a module`)."
             }
           ],
-          "solution": "// next.config.ts\nimport type { NextConfig } from 'next';\nimport { withSentryConfig } from '@sentry/nextjs';\n\nconst nextConfig: NextConfig = { reactStrictMode: true };\n\nexport default withSentryConfig(nextConfig);\n"
+          "solution": "// next.config.ts\nimport type { NextConfig } from 'next';\nimport { withSentryConfig } from '@sentry/nextjs';\n\nconst nextConfig: NextConfig = { reactStrictMode: true };\n\nexport default withSentryConfig(nextConfig);\n",
+          susunKode: {
+            question:
+              "Rangkai pembungkusan konfigurasi Next.js dengan helper withSentryConfig pada next.config.ts.",
+            potongan: [
+              "// next.config.ts",
+              "import type { NextConfig } from 'next';",
+              "import { withSentryConfig } from '@sentry/nextjs';",
+              "const nextConfig: NextConfig = { reactStrictMode: true };",
+              "export default withSentryConfig(nextConfig);",
+            ],
+            pengecoh: [
+              "module.exports = withSentryConfig(nextConfig);",
+              "import withSentryConfig from '@sentry/nextjs';",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Pembungkus Sentry diimpor sebagai named import { withSentryConfig } dari paket '@sentry/nextjs' dan diekspor menggunakan sintaks ES module. Keping module.exports keliru karena berkas next.config.ts menggunakan standar ekspor ES module (export default). Keping import default without brackets juga keliru nama impornya.",
+          },
         },
         {
           "kind": "step",
@@ -2113,7 +3019,26 @@ export const nextjsTrack: Track = {
               "message": "`package.json` adalah JSON murni: satu komentar `//` di dalamnya membuat npm menolak seluruh berkas dengan `Unexpected token / in JSON`. Hapus komentarnya sebelum menyimpan."
             }
           ],
-          "solution": "{\n  \"scripts\": {\n    \"dev\": \"next dev\",\n    \"build\": \"next build\",\n    \"predeploy\": \"npm run build\",\n    \"deploy\": \"vercel --prod\"\n  }\n}\n"
+          "solution": "{\n  \"scripts\": {\n    \"dev\": \"next dev\",\n    \"build\": \"next build\",\n    \"predeploy\": \"npm run build\",\n    \"deploy\": \"vercel --prod\"\n  }\n}\n",
+          susunKode: {
+            question:
+              "Rangkai skrip package.json yang menambahkan skrip predeploy untuk otomatis menjalankan build sebelum deploy.",
+            potongan: [
+              "{\n  \"scripts\": {",
+              "    \"dev\": \"next dev\",",
+              "    \"build\": \"next build\",",
+              "    \"predeploy\": \"npm run build\",",
+              "    \"deploy\": \"vercel --prod\"",
+              "  }\n}",
+            ],
+            pengecoh: [
+              "    \"postdeploy\": \"npm run build\",",
+              "    \"deploy\": \"vercel dev\"",
+            ],
+            pemisah: "\n",
+            explanation:
+              "NPM secara otomatis menjalankan skrip dengan awalan pre- sebelum skrip utamanya dieksekusi, sehingga predeploy akan berjalan tepat sebelum deploy. Keping postdeploy keliru karena skrip tersebut baru berjalan setelah proses deploy selesai yang sudah terlambat. Keping vercel dev keliru karena vercel dev digunakan untuk server lokal, bukan rilis produksi (--prod).",
+          },
         },
         {
           "kind": "quiz",

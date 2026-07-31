@@ -123,6 +123,22 @@ export const nodeExpressTrack: Track = {
             },
           ],
           solution: "npm init -y",
+          susunKode: {
+            question:
+              "Rangkai perintah terminal npm untuk menginisialisasi proyek Node.js secara otomatis tanpa prompt interaktif.",
+            potongan: [
+              "npm",
+              "init",
+              "-y",
+            ],
+            pengecoh: [
+              "npm create",
+              "--force",
+            ],
+            pemisah: " ",
+            explanation:
+              "Perintah npm init dengan flag -y (yes) menghasilkan file package.json dengan nilai default. Keping npm create keliru karena create digunakan untuk generator boilerplate seperti create-react-app. Keping --force menggoda tetapi bukan flag penyiapan cepat package.json.",
+          },
         },
         {
           kind: "materi",
@@ -191,6 +207,22 @@ export const nodeExpressTrack: Track = {
                       }
                     ],
           solution: "console.log(process.version);",
+          susunKode: {
+            question:
+              "Rangkai perintah Node.js untuk mencetak informasi versi Node yang sedang berjalan di runtime.",
+            potongan: [
+              "console.log(",
+              "process.version",
+              ");",
+            ],
+            pengecoh: [
+              "process.nodeVersion",
+              "console.print(",
+            ],
+            pemisah: "",
+            explanation:
+              "Properti global process.version menyimpan string versi runtime Node.js saat ini. Keping process.nodeVersion keliru karena nama properti global resminya adalah process.version. Keping console.print keliru karena metode pencetakan konsol di JavaScript/Node adalah console.log.",
+          },
         },
         {
           kind: "step",
@@ -222,6 +254,22 @@ export const nodeExpressTrack: Track = {
                       }
                     ],
           solution: "export const multiply = (a, b) => a * b;",
+          susunKode: {
+            question:
+              "Rangkai ekspor variabel multiply berupa arrow function yang mengalikan variabel a dan b.",
+            potongan: [
+              "export const multiply =",
+              "(a, b) =>",
+              "a * b;",
+            ],
+            pengecoh: [
+              "(a, b) ->",
+              "a x b;",
+            ],
+            pemisah: " ",
+            explanation:
+              "Penggunaan ES Module menggunakan kata kunci export const dan sintaks arrow function =>. Keping panah tunggal -> menggoda bagi pengembang PHP/C++, tetapi sintaksisnya tidak sah di JS. Keping a x b keliru karena operator perkalian menggunakan karakter bintang *.",
+          },
         },
         {
           kind: "step",
@@ -245,6 +293,22 @@ export const nodeExpressTrack: Track = {
                       }
                     ],
           solution: "npm install zod",
+          susunKode: {
+            question:
+              "Rangkai perintah npm untuk memasang pustaka validasi skema zod ke dalam dependensi.",
+            potongan: [
+              "npm",
+              "install",
+              "zod",
+            ],
+            pengecoh: [
+              "npm add-pkg",
+              "yup",
+            ],
+            pemisah: " ",
+            explanation:
+              "Penginstalan paket di Node.js menggunakan npm install nama-paket. Keping npm add-pkg keliru nama sub-perintah npm CLI. Keping yup menggoda pengembang yang terbiasa dengan Yup, tetapi pustaka yang dipersyaratkan pada instruksi adalah zod.",
+          },
         },
         {
           kind: "step",
@@ -276,6 +340,23 @@ export const nodeExpressTrack: Track = {
                       }
                     ],
           solution: 'await fs.writeFile("file.txt", "Halo");',
+          susunKode: {
+            question:
+              "Rangkai penggunaan fs.writeFile asinkron berbasis Promise untuk menulis string 'Halo' ke file.txt.",
+            potongan: [
+              "await",
+              "fs.writeFile(",
+              "\"file.txt\", \"Halo\"",
+              ");",
+            ],
+            pengecoh: [
+              "fs.writeTextFile(",
+              "\"file.txt\", \"Hi\"",
+            ],
+            pemisah: " ",
+            explanation:
+              "Modul fs/promises menyediakan metode writeFile yang mengembalikan Promise sehingga wajib dipanggil dengan await. Keping fs.writeTextFile keliru karena nama metodenya adalah writeFile. Keping \"file.txt\", \"Hi\" keliru string teks yang ditulis.",
+          },
         },
         {
           kind: "step",
@@ -303,6 +384,23 @@ export const nodeExpressTrack: Track = {
                       }
                     ],
           solution: "const dbUrl = process.env.DATABASE_URL;",
+          susunKode: {
+            question:
+              "Rangkai pembacaan nilai variabel lingkungan DATABASE_URL dari properti global process.env.",
+            potongan: [
+              "const dbUrl = ",
+              "process.env",
+              ".DATABASE_URL;",
+            ],
+            pengecoh: [
+              "let dbUrl = ",
+              "process.environment",
+              ".DB_URL;",
+            ],
+            pemisah: "",
+            explanation:
+              "Variabel lingkungan pada Node.js dibaca dari objek bawaan process.env, lalu disimpan ke konstanta agar nilainya tidak berubah di tengah jalan. Keping let menggoda karena keduanya sama-sama sah secara sintaksis, tetapi konfigurasi tidak seharusnya bisa ditimpa. Keping process.environment keliru nama objek global — Node hanya mengenal process.env. Keping .DB_URL keliru karena nama kuncinya harus sama persis dengan yang tertulis di berkas .env, dan salah satu huruf saja membuat nilainya undefined tanpa pesan error.",
+          },
         },
         {
           kind: "step",
@@ -330,20 +428,36 @@ export const nodeExpressTrack: Track = {
                       }
                     ],
           solution: 'emitter.emit("login", data);',
+          susunKode: {
+            question:
+              "Rangkai pemancaran kejadian (event emission) bernama 'login' dengan membawa objek data.",
+            potongan: [
+              "emitter.emit(",
+              "\"login\", data",
+              ");",
+            ],
+            pengecoh: [
+              "emitter.dispatch(",
+              "\"login\" => data",
+            ],
+            pemisah: "",
+            explanation:
+              "Instansiasi EventEmitter memancarkan kejadian menggunakan metode .emit('namaEvent', payload). Keping .dispatch keliru nama metode (biasa di Redux/DOM). Keping sintaks panah => di dalam argumen keliru secara sintaksis.",
+          },
         },
         {
           kind: "step",
           id: "node-1-7",
           title: "Development Runner: tsx & watch mode",
           explanation:
-            "Selama proses pengembangan backend, mengeksekusi ulang server secara manual setiap kali mengubah baris kode sangat tidak efisien. Pustaka seperti `tsx` menyediakan pembaca TypeScript super cepat yang dilengkapi opsi `--watch` untuk memantau perubahan berkas dan me-restart server secara instan. Dibandingkan perkakas lama seperti `nodemone` atau `ts-node`, `tsx` memanfaatkan kompilator esbuild berbasis Go sehingga proses eksekusi kode terasa sangat cepat. Menggunakan penguji otomatis ini meningkatkan produktivitas alur kerja harian pengembang backend secara signifikan. Jebakan utama adalah menjalankan runner pengembang seperti `tsx --watch` di server produksi asli.",
+            "Selama proses pengembangan backend, mengeksekusi ulang server secara manual setiap kali mengubah baris kode sangat tidak efisien. Pustaka seperti `tsx` adalah *runner* TypeScript super cepat yang dilengkapi opsi `--watch` untuk memantau perubahan berkas dan me-restart server secara instan. Dibandingkan perkakas lama seperti `nodemon` atau `ts-node`, `tsx` memanfaatkan kompilator esbuild berbasis Go sehingga proses eksekusi kode terasa sangat cepat. Menggunakan runner otomatis ini meningkatkan produktivitas alur kerja harian pengembang backend secara signifikan. Jebakan utama adalah menjalankan runner pengembangan seperti `tsx --watch` di server produksi asli — di sana yang dipakai adalah hasil build yang sudah dikompilasi, bukan pemantau berkas.",
           example: {
             code: "npx tsx --watch src/index.ts",
             output: "[tsx] Watching for changes in src/index.ts...",
             note: "tsx adalah pengganti ts-node/nodemon modern yang sangat cepat.",
           },
           instruction:
-            "Tuliskan perintah CLI npx untuk menjalankan berkas `src/server.ts` menggunakan pembaca `tsx` dengan opsi pemantau berkas otomatis (`--watch`).",
+            "Tuliskan perintah CLI npx untuk menjalankan berkas `src/server.ts` menggunakan runner `tsx` dengan opsi pemantau berkas otomatis (`--watch`).",
           starterCode: "# Tulis perintah npx tsx di sini\n",
           language: "text",
           tests: [
@@ -357,6 +471,22 @@ export const nodeExpressTrack: Track = {
                       }
                     ],
           solution: "npx tsx --watch src/server.ts",
+          susunKode: {
+            question:
+              "Rangkai perintah npx untuk menjalankan berkas TypeScript src/server.ts dengan mode pengawasan tsx --watch.",
+            potongan: [
+              "npx",
+              "tsx",
+              "--watch src/server.ts",
+            ],
+            pengecoh: [
+              "npx ts-node-dev",
+              "--nodemon src/server.ts",
+            ],
+            pemisah: " ",
+            explanation:
+              "Eksekutor tsx dijalankan dengan npx tsx --watch untuk memantau perubahan berkas TypeScript secara otomatis. Keping ts-node-dev menggoda tetapi instruksi meminta npx tsx. Keping --nodemon keliru nama flag.",
+          },
         },
         {
           kind: "quiz",
@@ -455,7 +585,7 @@ export const nodeExpressTrack: Track = {
             "## Tiga Komponen Utama Handler Express\n\n" +
             "Setiap handler rute di Express menerima tiga parameter penting secara berurutan:\n" +
             "1. **`req` (Request):** Objek yang memuat seluruh informasi dari klien (URL path, HTTP method, query string `req.query`, URL parameter `req.params`, dan isi body `req.body`).\n" +
-            "2. **`res` (Response):** Objek yang digunakan untuk menyusun balasan balasan server ke klien (`res.status()`, `res.json()`, `res.send()`).\n" +
+            "2. **`res` (Response):** Objek yang digunakan untuk menyusun balasan server ke klien (`res.status()`, `res.json()`, `res.send()`).\n" +
             "3. **`next` (Next Function):** Fungsi pemicu yang memberitahu Express untuk meneruskan eksekusi ke middleware berikutnya di dalam rantai.\n\n" +
             "| Properti `req` | Fungsi Utama | Contoh Penggunaan |\n" +
             "|---|---|---|\n" +
@@ -501,6 +631,21 @@ export const nodeExpressTrack: Track = {
                       }
                     ],
           solution: "const app = express();",
+          susunKode: {
+            question:
+              "Susun inisialisasi aplikasi Express baru dan menyimpannya ke variabel konstanta app.",
+            potongan: [
+              "const app =",
+              "express();",
+            ],
+            pengecoh: [
+              "expressApp();",
+              "createExpressApp();",
+            ],
+            pemisah: " ",
+            explanation:
+              "Modul Express mengekspor fungsi pabrik (top-level function) yang dipanggil secara langsung express() tanpa kata kunci new. Keping expressApp() keliru karena fungsi resminya bernama express(). Keping createExpressApp() menggoda tetapi tidak ada metode tersebut bawaan modul Express.",
+          },
         },
         {
           kind: "step",
@@ -509,9 +654,9 @@ export const nodeExpressTrack: Track = {
           explanation:
             "Rute Express mencocokkan kata kerja HTTP (GET, POST, PUT, DELETE) dan jalur URL path dengan fungsi penangan (*route handler*). Penangan rute ini menerima dua parameter utama `(req, res)` tempat kamu membaca data masuk dan mengembalikan respons HTTP. Menggunakan method yang sesuai secara semantik membantu klien (seperti aplikasi Frontend React) memahami tujuan dari setiap endpoint API. Metode `res.send()` atau `res.json()` otomatis menetapkan header respon dan menutup siklus komunikasi HTTP. Jebakan utama pemula adalah lupa menyertakan karakter garing awal `/` pada definisi jalur path URL.",
           example: {
-            code: "import express from 'express';\nconst app = express();\napp.get('/health', (req, res) => res.send('OK'));",
+            code: "const app = { get(path, handler) { console.log(handler({}, { send: (body) => body })); } };\napp.get('/health', (req, res) => res.send('OK'));",
             output: "OK",
-            note: "res.json() otomatis mengatur Content-Type ke application/json. Catatan jujur: panel preview tidak menjalankan Node.js (kode ini butuh server dan modul bawaan Node), jadi tidak ada keluaran yang muncul di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus.",
+            note: "Di sini `app` sengaja dipalsukan supaya handler-nya benar-benar dipanggil dan hasil `res.send` terlihat sebagai keluaran. Pada Express sungguhan, nilai itu dikirim sebagai body respons HTTP, bukan dicetak ke terminal — dan `res.json()` juga otomatis mengatur Content-Type ke application/json. Catatan jujur: panel preview BiLearn tidak menjalankan Node.js, jadi latihanmu hanya diperiksa lewat tes, bukan dieksekusi.",
           },
           instruction:
             "Buat rute GET pada path `\"/ping\"` yang merespon dengan mengirimkan string `'pong'` menggunakan `res.send`.",
@@ -519,11 +664,37 @@ export const nodeExpressTrack: Track = {
           language: "text",
           tests: [
             {
-              pattern: "app\\.get\\(\\s*['\"]/ping['\"]\\s*,\\s*\\(\\s*req\\s*,\\s*res\\s*\\)\\s*=>\\s*res\\.send\\(\\s*['\"]pong['\"]\\s*\\)\\s*\\)\\s*;?",
-              message: "Definisikan route ping sesuai instruksi",
+              pattern: "app\\.get\\(\\s*['\"]/ping['\"]\\s*,",
+              message:
+                "Rute GET didaftarkan dengan `app.get(<path>, <handler>)`. Jalurnya diawali garis miring — `\"ping\"` tanpa `/` tidak akan pernah cocok dengan permintaan apa pun.",
+            },
+            {
+              pattern: "\\(\\s*_?req\\s*,\\s*res\\s*\\)\\s*=>",
+              message:
+                "Argumen keduanya fungsi handler dengan dua parameter `(req, res)`. Boleh ditulis ringkas satu ekspresi maupun memakai blok `{ ... }`.",
+            },
+            {
+              pattern: "res\\.send\\(\\s*['\"]pong['\"]\\s*\\)",
+              message:
+                "Balas dengan `res.send(...)` berisi teksnya. `res.send` sekaligus menutup siklus respons — memanggilnya dua kali menghasilkan error `ERR_HTTP_HEADERS_SENT`.",
             },
           ],
           solution: 'app.get("/ping", (req, res) => res.send("pong"));',
+          susunKode: {
+            question:
+              "Rangkai pendaftaran rute HTTP GET /ping pada aplikasi Express yang merespons string 'pong'.",
+            potongan: [
+              "app.get(\"/ping\",",
+              "(req, res) => res.send(\"pong\"));",
+            ],
+            pengecoh: [
+              "app.route(\"/ping\",",
+              "(req, res) => res.write(\"pong\"));",
+            ],
+            pemisah: " ",
+            explanation:
+              "Rute Express menggunakan metode app.get(path, handler) di mana handler memanggil res.send() untuk mengirim respons. Keping app.route keliru metode pemanggilan rute tunggal. Keping res.write keliru karena tidak mengakhiri siklus respons HTTP secara otomatis.",
+          },
         },
         {
           kind: "step",
@@ -551,6 +722,21 @@ export const nodeExpressTrack: Track = {
                       }
                     ],
           solution: "const { id } = req.params;",
+          susunKode: {
+            question:
+              "Rangkai pembacaan destrukturisasi properti id dari objek req.params.",
+            potongan: [
+              "const { id } =",
+              "req.params;",
+            ],
+            pengecoh: [
+              "req.parameter;",
+              "const { userId } =",
+            ],
+            pemisah: " ",
+            explanation:
+              "Parameter dinamis URL disimpan oleh Express di dalam objek req.params. Keping req.parameter sangat keliru karena nama properti objek Request yang resmi adalah req.params. Keping userId keliru nama kunci properti destrukturisasi yang dipersyaratkan.",
+          },
         },
         {
           kind: "step",
@@ -582,6 +768,23 @@ export const nodeExpressTrack: Track = {
                       }
                     ],
           solution: 'res.status(404).json({ error: "Not Found" });',
+          susunKode: {
+            question:
+              "Rangkai pengiriman respons kesalahan HTTP 404 Not Found berformat JSON dari Express handler.",
+            potongan: [
+              "res.status(404)",
+              ".json({",
+              "error: \"Not Found\"",
+              "});",
+            ],
+            pengecoh: [
+              "res.statusCode(404)",
+              "message: \"Not Found\"",
+            ],
+            pemisah: "",
+            explanation:
+              "Pengaturan status HTTP pada Express dilakukan dengan metode berantai res.status(404).json(...). Keping res.statusCode() keliru karena statusCode adalah properti angka bawaan Node native, bukan fungsi fluent Express. Keping message: menggoda tetapi menyalahi spesifikasi kunci error.",
+          },
         },
         {
           kind: "step",
@@ -605,6 +808,21 @@ export const nodeExpressTrack: Track = {
             },
           ],
           solution: "next();",
+          susunKode: {
+            question:
+              "Rangkai pemanggilan fungsi next() untuk meneruskan eksekusi ke middleware berikutnya.",
+            potongan: [
+              "next(",
+              ");",
+            ],
+            pengecoh: [
+              "nextMiddleware(",
+              ";",
+            ],
+            pemisah: "",
+            explanation:
+              "Middleware Express menerima argumen ketiga berupa callback bernama next yang wajib DIPANGGIL — menyebut namanya saja tidak melakukan apa pun. Keping nextMiddleware( menggoda karena terdengar lebih deskriptif, padahal Express memanggil parameter ketiga itu apa adanya dan namanya sudah ditentukan oleh posisi, bukan oleh ejaan. Keping ; sendirian adalah jebakan yang sering terjadi sungguhan: pemanggilan ditutup tanpa kurung penutup, sehingga berkasnya bahkan tidak bisa di-parse. Kalau next() tidak pernah dipanggil dan respons juga tidak dikirim, permintaan klien menggantung sampai timeout.",
+          },
         },
         {
           kind: "step",
@@ -632,6 +850,21 @@ export const nodeExpressTrack: Track = {
                       }
                     ],
           solution: "const router = Router();",
+          susunKode: {
+            question:
+              "Rangkai pembentukan instans pemisah rute menggunakan fungsi Router() dari Express.",
+            potongan: [
+              "const router =",
+              "Router();",
+            ],
+            pengecoh: [
+              "createRouterInstance();",
+              "newRouterInstance();",
+            ],
+            pemisah: " ",
+            explanation:
+              "Pemisahan rute menggunakan helper Router() yang diimpor dari modul express. Keping createRouterInstance() keliru nama fungsi impor. Keping newRouterInstance() menggoda tetapi nama fungsi pembentuk rute resmi adalah Router().",
+          },
         },
         {
           kind: "step",
@@ -650,11 +883,38 @@ export const nodeExpressTrack: Track = {
           language: "text",
           tests: [
             {
-              pattern: "app\\.use\\(\\s*\\(\\s*req\\s*,\\s*res\\s*\\)\\s*=>\\s*\\{\\s*res\\.status\\(\\s*404\\s*\\)",
-              message: "Definisikan handler 404 di akhir middleware chain",
+              pattern: "app\\.use\\(\\s*\\(\\s*_?req\\s*,\\s*res\\s*\\)\\s*=>",
+              message:
+                "Penangkap rute tak dikenal dipasang lewat `app.use(<handler>)` TANPA jalur, supaya ia mencocokkan apa pun yang belum tertangani rute di atasnya.",
+            },
+            {
+              pattern: "res\\.status\\(\\s*404\\s*\\)",
+              message:
+                "Setel status 404 sebelum mengirim body. Tanpa itu Express mengirim 200, dan klien akan mengira permintaannya berhasil.",
+            },
+            {
+              pattern: "error\\s*:\\s*['\"]404['\"]",
+              message:
+                "Kirim body JSON berisi properti `error`. Mengembalikan JSON yang seragam membuat frontend tidak perlu menebak apakah respons berupa HTML bawaan Express atau bukan.",
             },
           ],
           solution: 'app.use((req, res) => { res.status(404).json({ error: "404" }); });',
+          susunKode: {
+            question:
+              "Susun middleware penangan 404 fallback yang merespons status code 404 dan JSON { error: '404' }.",
+            potongan: [
+              "app.use((req, res) => {",
+              "  res.status(404).json({ error: \"404\" });",
+              "});",
+            ],
+            pengecoh: [
+              "app.all((req, res) => {",
+              "  res.status(200).json({ error: \"404\" });",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Middleware fallback dipasang dengan app.use((req, res) => ...) di baris paling akhir rute untuk menangkap semua HTTP request yang tak cocok. Keping app.all keliru sintaks tanpa path pattern. Keping status(200) keliru status code HTTP penanganan Not Found.",
+          },
         },
         {
           kind: "quiz",
@@ -803,6 +1063,22 @@ export const nodeExpressTrack: Track = {
           ],
           solution:
             "function getEndpoint(resourceName) {\n  return `/api/v1/${resourceName}`;\n}",
+          susunKode: {
+            question:
+              "Susun fungsi helper yang mengembalikan string URL endpoint versi 1 berawalan /api/v1/.",
+            potongan: [
+              "function getEndpoint(resourceName) {",
+              "  return `/api/v1/${resourceName}`;",
+              "}",
+            ],
+            pengecoh: [
+              "  return `/api/v2/${resourceName}`;",
+              "  return `/v1/api/${resourceName}`;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Konvensi URL REST API menggunakan skema /api/v1/ diawali kata api kemudian versi. Keping /api/v2/ keliru nomor versi yang dipersyaratkan. Keping /v1/api/ menggoda tetapi menyalahi penulisan urutan segmen prefiks URL standar.",
+          },
         },
         {
           kind: "step",
@@ -827,6 +1103,22 @@ export const nodeExpressTrack: Track = {
           ],
           solution:
             "function getUpdateMethod(isPartial) {\n  return isPartial ? 'PATCH' : 'PUT';\n}",
+          susunKode: {
+            question:
+              "Susun fungsi penentu metode HTTP yang mengembalikan 'PATCH' untuk pembaruan parsial dan 'PUT' untuk pembaruan menyeluruh.",
+            potongan: [
+              "function getUpdateMethod(isPartial) {",
+              "  return isPartial ? 'PATCH' : 'PUT';",
+              "}",
+            ],
+            pengecoh: [
+              "  return isPartial ? 'POST' : 'PUT';",
+              "  return isPartial ? 'PUT' : 'PATCH';",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Dalam spesifikasi REST HTTP, PATCH digunakan khusus untuk perubahan parsial sedangkan PUT untuk penggantian dokumen utuh. Keping POST keliru metode. Keping penukaran urutan ternary keliru logika pemetaan kondisi isPartial.",
+          },
         },
         {
           kind: "step",
@@ -840,7 +1132,7 @@ export const nodeExpressTrack: Track = {
             note: "Jangan pernah mengembalikan status 200 OK jika terjadi error di API!",
           },
           instruction:
-            "Tuliskan perintah balasan Express untuk mengembalikan HTTP status 204 No Content tanpa payload body (`res.status(204).send()`).",
+            "Operasi DELETE-mu berhasil dan tidak punya apa pun untuk dikembalikan. Tuliskan balasan Express yang menyetel status HTTP No Content lalu menutup respons tanpa membawa body sama sekali.",
           starterCode: "// Tulis res.status(204) di sini\n",
           language: "text",
           tests: [
@@ -854,6 +1146,21 @@ export const nodeExpressTrack: Track = {
                       }
                     ],
           solution: "res.status(204).send();",
+          susunKode: {
+            question:
+              "Rangkai pengembalian respons status 204 No Content untuk operasi penghapusan REST API.",
+            potongan: [
+              "res.status(204)",
+              ".send();",
+            ],
+            pengecoh: [
+              "res.status(200)",
+              ".json(null);",
+            ],
+            pemisah: "",
+            explanation:
+              "Status HTTP 204 No Content menandakan operasi sukses tanpa mengembalikan body konten. Keping status 200 keliru status code untuk No Content. Keping .json(null) keliru karena 204 tidak boleh mengirim body respons.",
+          },
         },
         {
           kind: "step",
@@ -885,6 +1192,23 @@ export const nodeExpressTrack: Track = {
                       }
                     ],
           solution: "res.json({ success: true, data: users });",
+          susunKode: {
+            question:
+              "Kirim variabel users di dalam pembungkus respons JSON standar: satu penanda keberhasilan, satu muatan datanya.",
+            potongan: [
+              "res.json({",
+              "success: true,",
+              "data: users",
+              "});",
+            ],
+            pengecoh: [
+              "status: 'success',",
+              "payload: users",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Struktur respons API konsisten menggunakan flag boolean success: true dan wadah data: users. Keping status: 'success' keliru tipe data boolean. Keping payload: menggoda tetapi menyalahi spesifikasi nama kunci data.",
+          },
         },
         {
           kind: "step",
@@ -916,6 +1240,23 @@ export const nodeExpressTrack: Track = {
                       }
                     ],
           solution: "app.use('/api/v1/posts', postRouter);",
+          susunKode: {
+            question:
+              "Rangkai pendaftaran router rute postRouter ke prefix path /api/v1/posts.",
+            potongan: [
+              "app.use(",
+              "'/api/v1/posts',",
+              "postRouter",
+              ");",
+            ],
+            pengecoh: [
+              "'/posts/v1',",
+              "postController",
+            ],
+            pemisah: " ",
+            explanation:
+              "Prefiks rute REST dipasang lewat app.use('/api/v1/posts', router). Keping '/posts/v1' keliru format versioning. Keping postController keliru karena middleware pengelompokan rute menerima instansiasi Router.",
+          },
         },
         {
           kind: "step",
@@ -947,6 +1288,22 @@ export const nodeExpressTrack: Track = {
                       }
                     ],
           solution: "const limit = Number(req.query.limit) || 10;",
+          susunKode: {
+            question:
+              "Rangkai pembacaan parameter query string limit dengan penanganan nilai default angka 10.",
+            potongan: [
+              "const limit =",
+              "Number(req.query.limit)",
+              "|| 10;",
+            ],
+            pengecoh: [
+              "parseInt(req.params.limit)",
+              "?? '10'",
+            ],
+            pemisah: " ",
+            explanation:
+              "Query string dibaca dari req.query.limit dan dikonversi ke tipe data angka dengan Number() serta diberi batas fallback || 10. Keping req.params keliru lokasi parameter URL. Keping string '10' keliru tipe data angka.",
+          },
         },
         {
           kind: "step",
@@ -960,7 +1317,7 @@ export const nodeExpressTrack: Track = {
             note: "POST tidak idempotent karena 10x POST akan membuat 10 data baru. Catatan jujur: panel preview tidak menjalankan Node.js (kode ini butuh server dan modul bawaan Node), jadi tidak ada keluaran yang muncul di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus.",
           },
           instruction:
-            "Buat fungsi `isIdempotentMethod(httpMethod)` yang mengembalikan `true` jika metode HTTP adalah `'GET'`, `'PUT'`, atau `'DELETE'`. Gunakan `['GET', 'PUT', 'DELETE'].includes(httpMethod)`.",
+            "Buat fungsi `isIdempotentMethod(httpMethod)` yang mengembalikan `true` bila metode yang diterima termasuk salah satu dari `'GET'`, `'PUT'`, atau `'DELETE'`. Susun ketiganya sebagai array literal, lalu periksa keanggotaannya dengan metode array `.includes()`.",
           starterCode: "// Tulis fungsi isIdempotentMethod di bawah ini\n",
           language: "text",
           tests: [
@@ -971,6 +1328,25 @@ export const nodeExpressTrack: Track = {
           ],
           solution:
             "function isIdempotentMethod(httpMethod) {\n  return ['GET', 'PUT', 'DELETE'].includes(httpMethod);\n}",
+          susunKode: {
+            question:
+              "Susun fungsi pemeriksaan metode idempotensi HTTP yang mengembalikan true untuk GET, PUT, dan DELETE.",
+            potongan: [
+              "function isIdempotentMethod(httpMethod) {\n",
+              "  return ",
+              "['GET', 'PUT', 'DELETE']",
+              ".includes(httpMethod);",
+              "\n}",
+            ],
+            pengecoh: [
+              "['POST', 'PUT', 'DELETE']",
+              "['GET', 'POST', 'DELETE']",
+              ".contains(httpMethod);",
+            ],
+            pemisah: "",
+            explanation:
+              "Metode HTTP yang idempotent (GET, PUT, DELETE) menjamin bahwa eksekusi berulang meninggalkan keadaan akhir yang sama di server. Keping berisi POST sangat keliru karena POST justru membuat data baru setiap dipanggil, sehingga sepuluh kali retry menghasilkan sepuluh baris duplikat. Keping yang membuang PUT juga keliru: PUT mengganti dokumen secara utuh, jadi mengirimnya berulang menghasilkan isi yang sama persis. Keping .contains( menggoda bagi pendatang dari Java atau Python, tetapi metode pencarian anggota array di JavaScript bernama .includes( — .contains( menghasilkan TypeError saat dijalankan.",
+          },
         },
         {
           kind: "quiz",
@@ -1107,6 +1483,22 @@ export const nodeExpressTrack: Track = {
                       }
                     ],
           solution: "npx prisma migrate dev",
+          susunKode: {
+            question:
+              "Rangkai perintah npx untuk menjalankan eksekusi migrasi Prisma di lingkungan pengembangan.",
+            potongan: [
+              "npx",
+              "prisma",
+              "migrate dev",
+            ],
+            pengecoh: [
+              "npx prisma-cli",
+              "db push --dev",
+            ],
+            pemisah: " ",
+            explanation:
+              "Perintah npx prisma migrate dev membuat dan menerapkan skema migrasi baru ke database development. Keping prisma-cli keliru nama perintah CLI. Keping db push keliru karena db push tidak mencatat riwayat berkas migrasi.",
+          },
         },
         {
           kind: "step",
@@ -1138,6 +1530,23 @@ export const nodeExpressTrack: Track = {
                       }
                     ],
           solution: "await prisma.user.findUnique({ where: { id } });",
+          susunKode: {
+            question:
+              "Rangkai pencarian data user secara spesifik berdasarkan kriteria pencarian unik id menggunakan Prisma Client.",
+            potongan: [
+              "await",
+              "prisma.user.findUnique({",
+              "where: { id }",
+              "});",
+            ],
+            pengecoh: [
+              "prisma.user.findOne({",
+              "filter: { id }",
+            ],
+            pemisah: " ",
+            explanation:
+              "Metode findUnique pada Prisma Client mengambil satu baris data berdasarkan kriteria klausa where. Keping findOne keliru nama metode (findOne adalah sintaks Mongoose). Keping filter keliru nama klausa Prisma.",
+          },
         },
         {
           kind: "step",
@@ -1161,6 +1570,22 @@ export const nodeExpressTrack: Track = {
             },
           ],
           solution: "await prisma.user.findMany({ include: { profile: true } });",
+          susunKode: {
+            question:
+              "Rangkai kueri Prisma findMany dengan sertaan Eager Loading relasi profile (include).",
+            potongan: [
+              "await prisma.user.findMany({",
+              "include: { profile: true }",
+              "});",
+            ],
+            pengecoh: [
+              "with: { profile: true }",
+              "join: { profile: true }",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Pengambilan data beserta relasinya pada Prisma menggunakan opsi include: { namaRelasi: true }. Keping with keliru opsi (with adalah sintaks ORM Laravel). Keping join keliru nama klausa Prisma untuk eager loading relasi.",
+          },
         },
         {
           kind: "step",
@@ -1192,6 +1617,25 @@ export const nodeExpressTrack: Track = {
                       }
                     ],
           solution: "await prisma.$transaction([]);",
+          susunKode: {
+            question:
+              "Rangkai pemanggilan transaksi berurutan Prisma Client menggunakan metode $transaction.",
+            potongan: [
+              "await ",
+              "prisma",
+              ".$transaction(",
+              "[]",
+              ");",
+            ],
+            pengecoh: [
+              ".transaction(",
+              ".startTransaction(",
+              "{}",
+            ],
+            pemisah: "",
+            explanation:
+              "Transaksi atomik pada Prisma dijalankan lewat metode bawaan yang namanya sengaja diawali tanda dollar untuk membedakan API tingkat klien dari nama modelmu. Keping .transaction( sangat menggoda karena tanda dollar mudah terlewat saat mengetik, padahal tanpa tanda itu Prisma melempar TypeError karena propertinya tidak ada. Keping .startTransaction( keliru — itu gaya penamaan driver database lain, bukan Prisma. Keping {} keliru karena bentuk berurutan menerima ARRAY operasi yang dijalankan satu per satu, sedangkan objek kosong bukan daftar dan langsung ditolak.",
+          },
         },
         {
           kind: "step",
@@ -1215,6 +1659,22 @@ export const nodeExpressTrack: Track = {
                       }
                     ],
           solution: "npx prisma studio",
+          susunKode: {
+            question:
+              "Rangkai perintah npx untuk membuka antarmuka visual pengelolaan basis data Prisma Studio.",
+            potongan: [
+              "npx",
+              "prisma",
+              "studio",
+            ],
+            pengecoh: [
+              "npx prisma-gui",
+              "open-studio",
+            ],
+            pemisah: " ",
+            explanation:
+              "Prisma Studio dibuka melalui CLI dengan perintah npx prisma studio. Keping prisma-gui keliru nama paket CLI Prisma. Keping open-studio keliru nama sub-perintah resmi penjelajah database visual Prisma.",
+          },
         },
         {
           kind: "step",
@@ -1238,6 +1698,23 @@ export const nodeExpressTrack: Track = {
             },
           ],
           solution: "findById: (id) => prisma.user.findUnique({ where: { id } });",
+          susunKode: {
+            question:
+              "Susun metode Repository findById yang memanggil prisma.user.findUnique berdasarkan ID.",
+            potongan: [
+              "findById: (id) => ",
+              "prisma.user.findUnique({",
+              "where: { id }",
+              "});",
+            ],
+            pengecoh: [
+              "findUserById: (id) => ",
+              "prisma.user.findFirst({",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Pola Repository mengisolasi akses data dengan membungkus kueri ORM prisma.user.findUnique({ where: { id } }). Keping findUserById keliru nama metode repository. Keping findFirst keliru metode kueri kriteria unik.",
+          },
         },
         {
           kind: "quiz",
@@ -1318,7 +1795,7 @@ export const nodeExpressTrack: Track = {
             "Hash Tersimpan: \"$2b$10$e8.Z...K3Q.u6Xn7Y...\" (Satu Arah - Tidak Bisa Di-decode)\n" +
             "```\n\n" +
             "## Arsitektur Autentikasi JWT (Stateless Token)\n\n" +
-            "JSON Web Token (JWT) terdiri dari 3 bagian yang dipisahkan titik: `Header.Payload.Signature`. Server menandatangani token menggunakan kunci rahasia (*secret key*). Klien menyimpan token ini dan mengembangkannya di header `Authorization: Bearer <token>` pada setiap request.\n\n" +
+            "JSON Web Token (JWT) terdiri dari 3 bagian yang dipisahkan titik: `Header.Payload.Signature`. Server menandatangani token menggunakan kunci rahasia (*secret key*). Klien menyimpan token ini dan mengirimkannya kembali di header `Authorization: Bearer <token>` pada setiap request.\n\n" +
             "```text\n" +
             "Client (Browser / Mobile)                 Server Backend (Express)\n" +
             "        |\n" +
@@ -1380,6 +1857,24 @@ export const nodeExpressTrack: Track = {
                       }
                     ],
           solution: "const isValid = await bcrypt.compare(input, hash);",
+          susunKode: {
+            question:
+              "Rangkai verifikasi pencocokan kata sandi mentah masukan pengguna terhadap nilai hash menggunakan bcrypt.compare.",
+            potongan: [
+              "const isValid =",
+              "await",
+              "bcrypt.compare(",
+              "input, hash",
+              ");",
+            ],
+            pengecoh: [
+              "bcrypt.compareSync(",
+              "input, secret",
+            ],
+            pemisah: " ",
+            explanation:
+              "Fungsi asinkron bcrypt.compare(plainText, hash) mengembalikan Promise boolean hasil pencocokan. Keping bcrypt.compareSync keliru metode sinkronus yang memblokir Event Loop. Keping secret keliru nama variabel hash target.",
+          },
         },
         {
           kind: "step",
@@ -1411,6 +1906,23 @@ export const nodeExpressTrack: Track = {
                       }
                     ],
           solution: "const token = jwt.sign({ id: user.id }, secret, { expiresIn: '1h' });",
+          susunKode: {
+            question:
+              "Rangkai pembuatan JSON Web Token (JWT) yang memuat klaim id pengguna dan masa berlaku 1 jam.",
+            potongan: [
+              "const token =",
+              "jwt.sign({ id: user.id },",
+              "secret,",
+              "{ expiresIn: '1h' });",
+            ],
+            pengecoh: [
+              "jwt.create({ id: user.id },",
+              "{ maxAge: '1h' }",
+            ],
+            pemisah: " ",
+            explanation:
+              "Penandatanganan JWT dilakukan dengan jwt.sign(payload, secret, { expiresIn: '1h' }). Keping jwt.create keliru nama metode pustaka jsonwebtoken. Keping maxAge keliru nama opsi properti pembuat token jsonwebtoken.",
+          },
         },
         {
           kind: "step",
@@ -1438,6 +1950,21 @@ export const nodeExpressTrack: Track = {
                       }
                     ],
           solution: "req.session.userId = user.id;",
+          susunKode: {
+            question:
+              "Rangkai penugasan identifier pengguna ke objek sesi Express req.session.userId.",
+            potongan: [
+              "req.session.userId =",
+              "user.id;",
+            ],
+            pengecoh: [
+              "req.session.setUser(",
+              "user.userId;",
+            ],
+            pemisah: " ",
+            explanation:
+              "Objek sesi express-session dapat ditambahi properti secara langsung seperti req.session.userId = user.id. Keping setUser() keliru karena session bukan objek kelas dengan setter. Keping user.userId keliru nama properti ID model User.",
+          },
         },
         {
           kind: "step",
@@ -1451,7 +1978,7 @@ export const nodeExpressTrack: Track = {
             note: "Simpan payload terbongkar di req.user untuk dipakai di route handler.",
           },
           instruction:
-            "Periksa keberadaan token. Jika variabel `token` tidak ada (falsy), hentikan proses dengan mengembalikan status code 401 (`res.sendStatus(401)`).",
+            "Periksa keberadaan token di awal middleware. Jika variabel `token` bernilai falsy, hentikan alur saat itu juga (`return`) dengan mengirim status \"belum terautentikasi\" memakai metode Express yang mengirim kode sekaligus teks standarnya.",
           starterCode: "// Tulis pengecekan token di sini\n",
           language: "text",
           tests: [
@@ -1469,6 +1996,21 @@ export const nodeExpressTrack: Track = {
                       }
                     ],
           solution: "if (!token) return res.sendStatus(401);",
+          susunKode: {
+            question:
+              "Susun pengondisian penolakan middleware autentikasi yang mengembalikan status HTTP 401 jika token tidak ada.",
+            potongan: [
+              "if (!token)",
+              "return res.sendStatus(401);",
+            ],
+            pengecoh: [
+              "if (token == null)",
+              "return res.send(401);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Pemeriksaan !token mendeteksi ketiadaan header/cookie token dan menghentikan alur dengan return res.sendStatus(401). Keping res.send(401) keliru karena send(401) mengirim angka 401 sebagai body teks, bukan HTTP status code.",
+          },
         },
         {
           kind: "step",
@@ -1500,6 +2042,22 @@ export const nodeExpressTrack: Track = {
                       }
                     ],
           solution: "res.cookie('token', token, { httpOnly: true });",
+          susunKode: {
+            question:
+              "Rangkai pengiriman cookie aman 'token' dari Express dengan mengaktifkan opsi keamanan httpOnly: true.",
+            potongan: [
+              "res.cookie('token',",
+              "token,",
+              "{ httpOnly: true });",
+            ],
+            pengecoh: [
+              "res.sendCookie('token',",
+              "{ httpOnly: false });",
+            ],
+            pemisah: " ",
+            explanation:
+              "Metode res.cookie(nama, nilai, opsi) memasang cookie di mana httpOnly: true mencegah JavaScript client membaca cookie tersebut. Keping res.sendCookie keliru nama metode Express. Keping httpOnly: false sangat berbahaya karena membiarkan skrip klien membaca cookie sesi.",
+          },
         },
         {
           kind: "step",
@@ -1527,6 +2085,22 @@ export const nodeExpressTrack: Track = {
                       }
                     ],
           solution: "res.clearCookie('token');",
+          susunKode: {
+            question:
+              "Rangkai penghapusan cookie sesi 'token' pada proses logout menggunakan res.clearCookie.",
+            potongan: [
+              "res.clearCookie(",
+              "'token'",
+              ");",
+            ],
+            pengecoh: [
+              "res.unsetCookie(",
+              "'user_session'",
+            ],
+            pemisah: "",
+            explanation:
+              "Metode bawaan res.clearCookie('namaCookie') di Express menghapus cookie dari browser klien secara instan. Keping res.unsetCookie keliru nama metode Express. Keping 'user_session' keliru nama kunci cookie yang dipersyaratkan.",
+          },
         },
         {
           kind: "quiz",
@@ -1668,6 +2242,23 @@ export const nodeExpressTrack: Track = {
                       }
                     ],
           solution: "const data = UserSchema.parse(req.body);",
+          susunKode: {
+            question:
+              "Rangkai validasi dan ekstraksi data aman dari req.body menggunakan skema Zod UserSchema.parse.",
+            potongan: [
+              "const data =",
+              "UserSchema.parse(",
+              "req.body",
+              ");",
+            ],
+            pengecoh: [
+              "UserSchema.validate(",
+              "req.payload",
+            ],
+            pemisah: " ",
+            explanation:
+              "Zod menguraikan dan memvalidasi objek dengan metode UserSchema.parse(data) yang akan melempar ZodError jika data tidak sesuai. Keping .validate keliru nama metode (validate adalah metode pustaka Joi). Keping req.payload keliru lokasi data body Express.",
+          },
         },
         {
           kind: "step",
@@ -1691,6 +2282,22 @@ export const nodeExpressTrack: Track = {
             },
           ],
           solution: "app.use((err, req, res, next) => {\n  res.status(500).json({ error: 'Server Error' });\n});",
+          susunKode: {
+            question:
+              "Daftarkan penangan error terpusat Express. Perhatikan jumlah parameternya — justru itu yang membedakannya dari middleware biasa.",
+            potongan: [
+              "app.use((err, req, res, next) => {",
+              "  res.status(500).json({ error: 'Server Error' });",
+              "});",
+            ],
+            pengecoh: [
+              "app.use((req, res, next) => {",
+              "app.use((err, req, res) => {",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Express hanya mengenali middleware penangan error jika fungsi callback memiliki tepat 4 argumen (err, req, res, next). Keping 3 argumen (req, res, next) akan dianggap sebagai middleware biasa. Keping tanpa next keliru jumlah argumen handler.",
+          },
         },
         {
           kind: "step",
@@ -1718,6 +2325,23 @@ export const nodeExpressTrack: Track = {
                       }
                     ],
           solution: "throw new AppError('Unauthorized', 401);",
+          susunKode: {
+            question:
+              "Rangkai instruksi pelemparan error kustom AppError dengan pesan 'Unauthorized' dan status code 401.",
+            potongan: [
+              "throw new AppError(",
+              "'Unauthorized',",
+              "401",
+              ");",
+            ],
+            pengecoh: [
+              "return AppError(",
+              "'Unauthorized', 400",
+            ],
+            pemisah: " ",
+            explanation:
+              "Penghentian eksekusi akibat error dilakukan dengan kata kunci throw new namaKelas(...). Keping return AppError keliru karena tanpa kata kunci throw error tidak akan ditangkap oleh middleware error handler. Keping status 400 keliru status code otentikasi.",
+          },
         },
         {
           kind: "step",
@@ -1741,6 +2365,22 @@ export const nodeExpressTrack: Track = {
             },
           ],
           solution: "Promise.resolve(fn(req, res, next)).catch(next);",
+          susunKode: {
+            question:
+              "Bungkus pemanggilan handler async supaya penolakannya diteruskan ke penangan error Express, tanpa menulis try/catch di setiap rute.",
+            potongan: [
+              "Promise.resolve(",
+              "fn(req, res, next)",
+              ").catch(next);",
+            ],
+            pengecoh: [
+              "Promise.reject(",
+              ").then(next);",
+            ],
+            pemisah: "",
+            explanation:
+              "Async error wrapper membungkus return handler async dengan Promise.resolve(...) dan mengoper penanganan penolakan ke .catch(next). Keping Promise.reject keliru karena akan memicu reject buatan. Keping .then(next) keliru handler error.",
+          },
         },
         {
           kind: "step",
@@ -1768,6 +2408,22 @@ export const nodeExpressTrack: Track = {
                       }
                     ],
           solution: 'logger.info("Server started");',
+          susunKode: {
+            question:
+              "Rangkai pencatatan log informasi 'Server started' menggunakan logger Pino.",
+            potongan: [
+              "logger.info(",
+              "\"Server started\"",
+              ");",
+            ],
+            pengecoh: [
+              "logger.log(",
+              "\"Server running\"",
+            ],
+            pemisah: "",
+            explanation:
+              "Pustaka logging Pino menggunakan metode spesifik sesuai tingkatan log seperti logger.info(...). Keping logger.log menggoda bagi pengguna console.log, tetapi nama metode log umum di Pino adalah logger.info.",
+          },
         },
         {
           kind: "step",
@@ -1799,6 +2455,22 @@ export const nodeExpressTrack: Track = {
                       }
                     ],
           solution: "const isProd = process.env.NODE_ENV === 'production';",
+          susunKode: {
+            question:
+              "Susun pemeriksaan apakah aplikasi sedang berjalan di lingkungan produksi, lalu simpan hasilnya sebagai boolean yang bisa dipakai berulang.",
+            potongan: [
+              "const isProd =",
+              "process.env.NODE_ENV",
+              "=== 'production';",
+            ],
+            pengecoh: [
+              "process.env.ENV",
+              "=== 'prod';",
+            ],
+            pemisah: " ",
+            explanation:
+              "Konvensi standar Node.js menyimpan status lingkungan pada process.env.NODE_ENV yang bernilai string 'production'. Keping process.env.ENV keliru nama kunci environment. Keping string 'prod' keliru penulisan konvensi resmi.",
+          },
         },
         {
           kind: "quiz",
@@ -1928,6 +2600,24 @@ export const nodeExpressTrack: Track = {
                       }
                     ],
           solution: "upload.single('avatar')",
+          susunKode: {
+            question:
+              "Rangkai middleware Multer untuk mengunggah berkas tunggal dengan nama field 'avatar'.",
+            potongan: [
+              "upload",
+              ".single(",
+              "'avatar'",
+              ")",
+            ],
+            pengecoh: [
+              ".file(",
+              ".array(",
+              "'profile_photo'",
+            ],
+            pemisah: "",
+            explanation:
+              "Multer memproses payload multipart/form-data dan menaruh hasilnya di req.file. Keping .file( keliru nama metode — yang ada .single(), .array(), dan .fields(). Keping .array( menggoda karena sama-sama metode Multer yang sah, tetapi ia dipakai untuk BANYAK berkas dan mengisi req.files (jamak), sehingga kode yang membaca req.file akan mendapat undefined. Keping 'profile_photo' keliru karena argumennya adalah nama atribut name pada input form, bukan nama berkas atau nama kolom database — begitu namanya tidak cocok, Multer diam saja tanpa error.",
+          },
         },
         {
           kind: "step",
@@ -1955,6 +2645,22 @@ export const nodeExpressTrack: Track = {
                       }
                     ],
           solution: "new PutObjectCommand({ Bucket, Key, Body });",
+          susunKode: {
+            question:
+              "Rangkai instansiasi objek PutObjectCommand dari AWS SDK v3 dengan properti Bucket, Key, dan Body.",
+            potongan: [
+              "new PutObjectCommand({",
+              "Bucket, Key, Body",
+              "});",
+            ],
+            pengecoh: [
+              "new UploadS3Command({",
+              "BucketName, KeyName",
+            ],
+            pemisah: " ",
+            explanation:
+              "Pengunggahan berkas ke Amazon S3 pada AWS SDK v3 menggunakan kelas perintah PutObjectCommand dengan opsi Bucket, Key, dan Body. Keping UploadS3Command keliru nama kelas SDK. Keping BucketName keliru nama kunci properti.",
+          },
         },
         {
           kind: "step",
@@ -1986,6 +2692,23 @@ export const nodeExpressTrack: Track = {
                       }
                     ],
           solution: "await transporter.sendMail({ from, to, subject, html });",
+          susunKode: {
+            question:
+              "Rangkai pengiriman surel asinkronus menggunakan transporter.sendMail dengan parameter from, to, subject, dan html.",
+            potongan: [
+              "await",
+              "transporter.sendMail({",
+              "from, to, subject, html",
+              "});",
+            ],
+            pengecoh: [
+              "transporter.postMail({",
+              "sender, receiver",
+            ],
+            pemisah: " ",
+            explanation:
+              "Nodemailer mengoperasikan pengiriman email via metode asinkron transporter.sendMail({ from, to, subject, html }). Keping postMail keliru nama metode. Keping sender/receiver menggoda tetapi nama kunci resminya adalah from/to.",
+          },
         },
         {
           kind: "step",
@@ -2017,6 +2740,23 @@ export const nodeExpressTrack: Track = {
                       }
                     ],
           solution: "await emailQueue.add('sendEmail', data);",
+          susunKode: {
+            question:
+              "Rangkai penambahan tugas pengiriman email 'sendEmail' ke antrean BullMQ emailQueue.add.",
+            potongan: [
+              "await",
+              "emailQueue.add(",
+              "'sendEmail', data",
+              ");",
+            ],
+            pengecoh: [
+              "emailQueue.push(",
+              "'sendEmail' => data",
+            ],
+            pemisah: " ",
+            explanation:
+              "Antrean BullMQ menambahkan job asinkron dengan metode await queue.add('namaJob', payloadData). Keping queue.push keliru nama metode antrean BullMQ. Keping panah => keliru secara sintaksis di dalam pemanggilan fungsi.",
+          },
         },
         {
           kind: "step",
@@ -2025,9 +2765,9 @@ export const nodeExpressTrack: Track = {
           explanation:
             "Menyajikan berkas media publik seperti gambar atau berkas CSS dari direktori lokal dilakukan menggunakan middleware bawaan `express.static('public')`. Dengan mendaftarkannya pada jalur `app.use('/static', express.static('public'))`, peramban dapat mengunduh berkas di dalam folder `public` secara langsung melalui URL. Pastikan kamu selalu membatasi direktori yang disajikan hanya pada folder khusus publik untuk mencegah akses tanpa izin ke berkas kode sumber. Penggunaan jalur terisolasi ini menjaga keamanan aplikasi backend secara menyeluruh. Jebakan fatal adalah membuka folder root server sebagai direktori statis yang dapat membeberkan berkas `.env`.",
           example: {
-            code: "import express from 'express';\nconst app = express();\napp.use('/static', express.static('public'));",
-            output: "Serving static files at /static",
-            note: "Jangan pernah menyajikan root folder server sebagai static directory!",
+            code: "const app = { use(prefix, handler) { console.log(prefix); } };\napp.use('/assets', () => {});",
+            output: "/assets",
+            note: "Yang tercetak hanyalah prefix tempat berkas dipasang — Express sendiri tidak mencetak apa pun saat middleware statis didaftarkan. Jangan pernah menyajikan folder root server sebagai direktori statis: `.env` dan seluruh kode sumbermu ikut terbuka ke internet.",
           },
           instruction:
             "Pasang middleware statis Express `express.static('public')` pada awalan jalur URL `\"/static\"` menggunakan `app.use`.",
@@ -2048,6 +2788,22 @@ export const nodeExpressTrack: Track = {
                       }
                     ],
           solution: "app.use('/static', express.static('public'));",
+          susunKode: {
+            question:
+              "Rangkai penyajian berkas statis dari direktori 'public' ke dalam prefiks URL '/static' di Express.",
+            potongan: [
+              "app.use('/static',",
+              "express.static('public')",
+              ");",
+            ],
+            pengecoh: [
+              "app.serve('/static',",
+              "express.public('static')",
+            ],
+            pemisah: " ",
+            explanation:
+              "Penyajian berkas statis di Express menggunakan built-in middleware express.static('folderLocal') yang dipasang pada path rute app.use('/static', ...). Keping app.serve keliru nama metode. Keping express.public keliru nama helper Express.",
+          },
         },
         {
           kind: "quiz",
@@ -2180,6 +2936,25 @@ export const nodeExpressTrack: Track = {
           ],
           solution:
             "function getTestType(isFullFlow) {\n  return isFullFlow ? 'integration' : 'unit';\n}",
+          susunKode: {
+            question:
+              "Susun fungsi penentu tipe pengujian yang mengembalikan string 'integration' jika flows utuh dan 'unit' jika komponen terisolasi.",
+            potongan: [
+              "function getTestType(isFullFlow) {\n",
+              "  return isFullFlow",
+              " ? 'integration'",
+              " : 'unit';",
+              "\n}",
+            ],
+            pengecoh: [
+              " ? 'e2e'",
+              " ? 'unit'",
+              " : 'e2e';",
+            ],
+            pemisah: "",
+            explanation:
+              "Integration test menguji alur gabungan antar komponen backend, sedangkan unit test menguji satu fungsi secara terisolasi. Keping 'e2e' menggoda karena istilahnya memang ada di dunia nyata, tetapi end-to-end test menjalankan aplikasi lengkap beserta antarmukanya — bukan yang sedang dibedakan di sini. Keping ? 'unit' keliru karena menukar cabang ternary: kondisi isFullFlow yang bernilai true justru menandakan alur penuh, jadi cabang pertama harus integration. Jebakan ini sering lolos dari mata karena kodenya tetap berjalan tanpa error, hanya hasilnya terbalik.",
+          },
         },
         {
           kind: "step",
@@ -2211,6 +2986,22 @@ export const nodeExpressTrack: Track = {
                       }
                     ],
           solution: 'const res = await request(app).get("/ping");',
+          susunKode: {
+            question:
+              "Rangkai pengujian HTTP GET /ping pada aplikasi Express menggunakan pustaka Supertest (request).",
+            potongan: [
+              "const res =",
+              "await request(app)",
+              ".get(\"/ping\");",
+            ],
+            pengecoh: [
+              "request(app).fetch(\"/ping\");",
+              "supertest(app).getRoute(\"/ping\");",
+            ],
+            pemisah: " ",
+            explanation:
+              "Supertest menguji server Express tanpa perlu menyalakan port HTTP asli dengan pemanggilan await request(app).get('/ping'). Keping .fetch keliru nama metode Supertest. Keping .getRoute keliru nama metode.",
+          },
         },
         {
           kind: "step",
@@ -2238,6 +3029,24 @@ export const nodeExpressTrack: Track = {
                       }
                     ],
           solution: "await prisma.user.deleteMany();",
+          susunKode: {
+            question:
+              "Susun pembersihan seluruh baris tabel pengguna di basis data penguji, supaya tiap skenario tes dimulai dari keadaan kosong yang sama.",
+            potongan: [
+              "await ",
+              "prisma.user",
+              ".deleteMany(",
+              ");",
+            ],
+            pengecoh: [
+              ".truncate(",
+              ".removeAll(",
+              "prisma.users",
+            ],
+            pemisah: "",
+            explanation:
+              "Pembersihan tabel di kait beforeEach memakai metode penghapusan massal Prisma yang dipanggil tanpa klausa where, sehingga seluruh baris ikut terhapus. Keping .truncate( menggoda karena istilah TRUNCATE memang ada di SQL, tetapi Prisma Client tidak menyediakan metode itu. Keping .removeAll( keliru nama metode dan tidak ada di API mana pun. Keping prisma.users adalah jebakan yang sering terjadi sungguhan: nama model di Prisma ditulis TUNGGAL sesuai schema.prisma, dan menambah huruf s membuat properti itu undefined.",
+          },
         },
         {
           kind: "step",
@@ -2251,7 +3060,7 @@ export const nodeExpressTrack: Track = {
             note: "Uji juga kondisi jika token kadaluarsa / tidak sah.",
           },
           instruction:
-            "Suntikkan header otorisasi Bearer token pada pembuka rute Supertest menggunakan `.set('Authorization', `Bearer ${token}`)`.",
+            "Suntikkan header otorisasi pada permintaan Supertest: pakai metode pemasang header-nya, dengan nama header standar HTTP untuk otorisasi dan nilai berpola skema Bearer diikuti isi variabel `token`.",
           starterCode: "// Tulis set Authorization di sini\n",
           language: "text",
           tests: [
@@ -2269,6 +3078,21 @@ export const nodeExpressTrack: Track = {
                       }
                     ],
           solution: ".set('Authorization', `Bearer ${token}`);",
+          susunKode: {
+            question:
+              "Sisipkan header otorisasi Bearer pada permintaan Supertest.",
+            potongan: [
+              ".set('Authorization',",
+              "`Bearer ${token}`);",
+            ],
+            pengecoh: [
+              ".setHeader('Auth',",
+              "`Token ${token}`);",
+            ],
+            pemisah: " ",
+            explanation:
+              "Header HTTP pada Supertest dipasang dengan metode .set('Authorization', `Bearer ${token}`). Keping .setHeader keliru nama metode Supertest (setHeader adalah metode ServerResponse Node native). Keping nama header 'Auth' keliru header standar RFC.",
+          },
         },
         {
           kind: "step",
@@ -2296,6 +3120,22 @@ export const nodeExpressTrack: Track = {
                       }
                     ],
           solution: "npx vitest run --coverage",
+          susunKode: {
+            question:
+              "Rangkai perintah CLI untuk menjalankan tes Vitest sekaligus menghitung persentase cakupan kode (coverage).",
+            potongan: [
+              "npx",
+              "vitest run",
+              "--coverage",
+            ],
+            pengecoh: [
+              "vitest test",
+              "--with-coverage",
+            ],
+            pemisah: " ",
+            explanation:
+              "Vitest menjalankan suite tes satu kali (ci mode) dan menghitung coverage dengan npx vitest run --coverage. Keping vitest test keliru nama sub-perintah mode run. Keping --with-coverage adalah nama flag fiktif.",
+          },
         },
         {
           kind: "quiz",
@@ -2444,13 +3284,29 @@ export const nodeExpressTrack: Track = {
           ],
           solution:
             "function isSafeQuery(usesORM) {\n  return Boolean(usesORM);\n}",
+          susunKode: {
+            question:
+              "Susun fungsi validator keamanan kueri yang mengembalikan boolean keberadaan pengunaan ORM.",
+            potongan: [
+              "function isSafeQuery(usesORM) {",
+              "  return Boolean(usesORM);",
+              "}",
+            ],
+            pengecoh: [
+              "  return String(usesORM);",
+              "  return Number(usesORM);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Penggunaan ORM seperti Prisma secara otomatis melakukan parameterisasi kueri SQL sehingga aman dari SQL Injection. Keping String(usesORM) keliru karena mengembalikan tipe data string bukan boolean. Keping Number(usesORM) keliru tipe data angka.",
+          },
         },
         {
           kind: "step",
           id: "node-9-2",
           title: "Mencegah XSS (Cross-Site Scripting)",
           explanation:
-            "Cross-Site Scripting (XSS) terjadi saat penyerang berhasil menyuntikkan skrip HTML/JavaScript berbahaya (`<script>`) ke dalam masukan aplikasi yang kemudian dirender oleh peramban pengguna lain. Melakukan sanitasi teks masukan menggunakan ekspresi reguler atau pustaka pembersih HTML mencegah skrip eksekusi tersebut berjalan di sisi peramban. Kerangka kerja modern seperti React secara otomatis melakukan *escaping* pada string, namun sanitasi tetap wajib diterapkan di sisi backend. Menjaga kebersihan data terisi melindungi sesi pengguna lain dari ancaman pencurian cookie. Jebakan fatal adalah merender teks dari masukan pengguna secara mentah menggunakan `innerHTML`.",
+            "Cross-Site Scripting (XSS) terjadi saat penyerang berhasil menyuntikkan skrip HTML/JavaScript berbahaya (`<script>`) ke dalam masukan aplikasi yang kemudian dirender oleh peramban pengguna lain. Melakukan sanitasi teks masukan menggunakan ekspresi reguler atau pustaka pembersih HTML mencegah skrip eksekusi tersebut berjalan di sisi peramban. Kerangka kerja modern seperti React secara otomatis melakukan *escaping* pada string, namun sanitasi tetap wajib diterapkan di sisi backend. Menjaga kebersihan data tersimpan melindungi sesi pengguna lain dari ancaman pencurian cookie. Jebakan fatal adalah merender teks dari masukan pengguna secara mentah menggunakan `innerHTML`. Satu peringatan penting: latihan ini memakai regex agar mekanismenya terlihat jelas, tetapi **regex bukan sanitasi yang layak produksi** — varian seperti `<scr<script>ipt>` atau `<img onerror=...>` tetap lolos. Di proyek nyata, pakai pustaka teruji seperti `sanitize-html` atau DOMPurify.",
           example: {
             code: "function sanitizeHtmlInput(str) {\n  return str.replace(/<script.*?>.*?<\\/script>/gi, '');\n}\nconsole.log(sanitizeHtmlInput('<script>bad()</script>Hi'));",
             output: "Hi",
@@ -2468,6 +3324,26 @@ export const nodeExpressTrack: Track = {
           ],
           solution:
             "function sanitizeHtmlInput(inputString) {\n  return inputString.replace(/<script.*?>.*?<\\/script>/gi, '');\n}",
+          susunKode: {
+            question:
+              "Susun fungsi pembersihan sanitasi tag skrip berbahaya untuk mencegah serangan Cross-Site Scripting (XSS).",
+            potongan: [
+              "function sanitizeHtmlInput(inputString) {\n",
+              "  return inputString",
+              ".replace(",
+              "/<script.*?>.*?<\\/script>/gi",
+              ", '');",
+              "\n}",
+            ],
+            pengecoh: [
+              ".replaceAll(",
+              "/<script>/gi",
+              "/<script.*?>/gi",
+            ],
+            pemisah: "",
+            explanation:
+              "Sanitasi masukan membuang pasangan tag skrip beserta isinya, dengan flag g agar semua kemunculan kena dan i agar SCRIPT huruf besar ikut tertangkap. Keping .replaceAll( menggoda karena namanya terdengar lebih menyeluruh, padahal dengan regex ber-flag g hasilnya sama — dan replaceAll justru melempar TypeError bila regexnya TIDAK ber-flag g. Keping /<script>/gi keliru karena hanya cocok pada tag polos, sehingga <script src=x> lolos. Keping /<script.*?>/gi keliru karena membuang tag pembuka saja dan meninggalkan isi skrip beserta penutupnya di dalam teks.",
+          },
         },
         {
           kind: "step",
@@ -2499,6 +3375,22 @@ export const nodeExpressTrack: Track = {
                       }
                     ],
           solution: "app.use(cors({ origin: 'https://myapp.com' }));",
+          susunKode: {
+            question:
+              "Rangkai konfigurasi middleware CORS pada Express yang membatasi asal domain domain https://myapp.com.",
+            potongan: [
+              "app.use(cors({",
+              "origin: 'https://myapp.com'",
+              "}));",
+            ],
+            pengecoh: [
+              "app.use(corsConfig({",
+              "domain: 'https://myapp.com'",
+            ],
+            pemisah: " ",
+            explanation:
+              "Middleware cors diisi dengan opsi origin: 'https://myapp.com' untuk mengizinkan hanya domain tertentu mengakses API. Keping corsConfig keliru nama middleware. Keping domain keliru nama kunci properti opsi.",
+          },
         },
         {
           kind: "step",
@@ -2530,6 +3422,23 @@ export const nodeExpressTrack: Track = {
                       }
                     ],
           solution: "app.use('/api/v1/login', limiter);",
+          susunKode: {
+            question:
+              "Rangkai pendaftaran limiter pembatas laju akses express-rate-limit khusus pada rute POST login /api/v1/login.",
+            potongan: [
+              "app.use(",
+              "'/api/v1/login',",
+              "limiter",
+              ");",
+            ],
+            pengecoh: [
+              "'/login/v1',",
+              "rateLimiterMiddleware",
+            ],
+            pemisah: " ",
+            explanation:
+              "Rate limiter dipasang pada rute sensitif login dengan app.use('/api/v1/login', limiter) untuk memblokir serangan Brute Force. Keping '/login/v1' keliru prefiks rute. Keping rateLimiterMiddleware keliru nama variabel limiter yang dipersyaratkan.",
+          },
         },
         {
           kind: "step",
@@ -2557,6 +3466,22 @@ export const nodeExpressTrack: Track = {
                       }
                     ],
           solution: "app.use(helmet());",
+          susunKode: {
+            question:
+              "Rangkai pengamanan HTTP Security Headers pada aplikasi Express menggunakan middleware Helmet.",
+            potongan: [
+              "app.use(",
+              "helmet()",
+              ");",
+            ],
+            pengecoh: [
+              "app.security(",
+              "helmetHeaders()",
+            ],
+            pemisah: "",
+            explanation:
+              "Pustaka Helmet memasang berbagai header keamanan HTTP secara otomatis lewat middleware app.use(helmet()). Keping app.security keliru nama metode Express. Keping helmetHeaders() keliru nama fungsi pemanggil Helmet.",
+          },
         },
         {
           kind: "step",
@@ -2580,6 +3505,21 @@ export const nodeExpressTrack: Track = {
             },
           ],
           solution: ".env",
+          susunKode: {
+            question:
+              "Susun entri berkas .gitignore untuk memastikan file kredensial rahasia .env tidak terikut ke repository Git.",
+            potongan: [
+              ".",
+              "env",
+            ],
+            pengecoh: [
+              "_",
+              "config",
+            ],
+            pemisah: "",
+            explanation:
+              "Mencantumkan nama file .env di dalam .gitignore adalah aturan krusial agar kunci rahasia API dan kata sandi database tidak terpublikasi ke repository VCS. Keping garis bawah _ dan config keliru nama berkas kredensial.",
+          },
         },
         {
           kind: "step",
@@ -2593,17 +3533,39 @@ export const nodeExpressTrack: Track = {
             note: "Jalankan pengujian keamanan secara berkala. Catatan jujur: panel preview tidak menjalankan Node.js (kode ini butuh server dan modul bawaan Node), jadi tidak ada keluaran yang muncul di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus.",
           },
           instruction:
-            "Buat fungsi `checkSecurityReadiness(checksArray)` yang mengembalikan `true` jika seluruh elemen boolean dalam `checksArray` bernilai `true` menggunakan `checksArray.every(c => c === true)`.",
+            "Buat fungsi `checkSecurityReadiness(checksArray)` yang mengembalikan `true` hanya bila SELURUH elemen boolean di dalam `checksArray` bernilai `true`. Pakai metode array yang menguji semua elemen sekaligus, lalu kembalikan hasilnya.",
           starterCode: "// Tulis fungsi checkSecurityReadiness di bawah ini\n",
           language: "text",
           tests: [
             {
-              pattern: "checksArray\\.every\\(\\s*c\\s*=>\\s*c\\s*===\\s*true\\s*\\)",
-              message: "Gunakan: checksArray.every(c => c === true)",
+              pattern: "checksArray\\.every\\(",
+              message:
+                "Metode array yang menuntut SEMUA elemen memenuhi syarat adalah `.every()`. Jangan tertukar dengan `.some()`, yang cukup satu elemen lolos — untuk checklist keamanan, itu artinya rilis dianggap siap padahal empat dari lima syarat belum terpenuhi.",
+            },
+            {
+              pattern: "return\\s+checksArray\\.every\\(",
+              message:
+                "Kembalikan hasilnya dengan `return`. `.every()` sudah menghasilkan boolean, jadi tidak perlu dibungkus `if` lagi.",
             },
           ],
           solution:
             "function checkSecurityReadiness(checksArray) {\n  return checksArray.every(c => c === true);\n}",
+          susunKode: {
+            question:
+              "Susun fungsi verifikasi kesiapan checklist keamanan pre-deploy yang memastikan seluruh pemeriksaan bernilai true.",
+            potongan: [
+              "function checkSecurityReadiness(checksArray) {",
+              "  return checksArray.every(c => c === true);",
+              "}",
+            ],
+            pengecoh: [
+              "  return checksArray.some(c => c === true);",
+              "  return checksArray.filter(c => c === true);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Metode .every() memastikan SEMUA item dalam array memenuhi kriteria keamanan (semua bernilai true). Keping .some keliru karena .some mengembalikan true meskipun hanya satu elemen yang lulus. Keping .filter keliru karena mengembalikan array, bukan boolean.",
+          },
         },
         {
           kind: "quiz",

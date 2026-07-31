@@ -87,6 +87,21 @@ export const spreadsheetTrack: Track = {
             },
           ],
           solution: "=A1 + B1",
+          susunKode: {
+            question:
+              "Susun formula penjumlahan sel A1 dan B1.",
+            potongan: [
+              "=A1 +",
+              " B1",
+            ],
+            pengecoh: [
+              "=A1 *",
+              " C1",
+            ],
+            pemisah: "",
+            explanation:
+              "Formula penjumlahan dua sel sederhana diawali tanda sama dengan `=A1 + B1`. Pengecoh operator perkalian `*` atau sel `C1` adalah kesalahan menggoda yang sering keliru dipakai pemula saat menyusun kalkulasi dasar.",
+          },
         },
         {
           kind: "step",
@@ -114,6 +129,21 @@ export const spreadsheetTrack: Track = {
                       }
                     ],
           solution: "=AVERAGE(B1:B10)",
+          susunKode: {
+            question:
+              "Susun formula AVERAGE untuk menghitung rata-rata sel B1 sampai B10.",
+            potongan: [
+              "=AVERAGE(",
+              "B1:B10)",
+            ],
+            pengecoh: [
+              "=RATA2(",
+              "C1..C10)",
+            ],
+            pemisah: "",
+            explanation:
+              "Perhitungan nilai rata-rata menggunakan fungsi `=AVERAGE(B1:B10)`. Pengecoh `=RATA2()` adalah nama fiktif bahasa Indonesia yang sering keliru dikira valid, dan titik dua ganda `..` menjebak pengguna dari bahasa pemrograman lain.",
+          },
         },
         {
           kind: "step",
@@ -141,6 +171,21 @@ export const spreadsheetTrack: Track = {
                       }
                     ],
           solution: "=A2 * $C$1",
+          susunKode: {
+            question:
+              "Susun formula perkalian A2 dengan referensi absolut sel C1 ($C$1).",
+            potongan: [
+              "=A2 *",
+              " $C$1",
+            ],
+            pengecoh: [
+              "=A2 /",
+              " C1",
+            ],
+            pemisah: "",
+            explanation:
+              "Membekukan sel C1 menggunakan tanda dolar `=$C$1` agar nilainya tidak bergeser saat formula ditarik ke bawah. Pengecoh tanpa tanda dolar `C1` adalah jebakan klasik yang sering keliru membuat hasil kalkulasi baris berikutnya bernilai nol.",
+          },
         },
         {
           kind: "step",
@@ -168,6 +213,21 @@ export const spreadsheetTrack: Track = {
                       }
                     ],
           solution: '=TEXT(A1, "dddd")',
+          susunKode: {
+            question:
+              "Susun fungsi TEXT untuk mengonversi tanggal di A1 menjadi nama hari dddd.",
+            potongan: [
+              "=TEXT(A1, ",
+              "\"dddd\")",
+            ],
+            pengecoh: [
+              "=FORMAT(B1, ",
+              "\"hari\")",
+            ],
+            pemisah: "",
+            explanation:
+              "Pengubahan tanggal menjadi nama hari menggunakan `=TEXT(A1, \"dddd\")`. Pengecoh `=FORMAT()` adalah nama fungsi fiktif yang keliru dan jebakan umum pengembang yang terbiasa dengan pustaka pemrograman lain.",
+          },
         },
         {
           kind: "step",
@@ -192,6 +252,21 @@ export const spreadsheetTrack: Track = {
             },
           ],
           solution: "=A2 / B2",
+          susunKode: {
+            question:
+              "Susun formula pembagian nilai sel A2 dengan B2.",
+            potongan: [
+              "=A2 /",
+              " B2",
+            ],
+            pengecoh: [
+              "=A2 :",
+              " C2",
+            ],
+            pemisah: "",
+            explanation:
+              "Perhitungan persentase pencapaian diawali `=A2 / B2`. Penggunaan tanda titik dua `:` sebagai pembagi adalah kekeliruan sintaks yang sering menjebak karena titik dua khusus untuk penentuan rentang sel pada spreadsheet.",
+          },
         },
         {
           kind: "step",
@@ -219,6 +294,21 @@ export const spreadsheetTrack: Track = {
                       }
                     ],
           solution: "=FILTER(A2:B20, B2:B20 > 100)",
+          susunKode: {
+            question:
+              "Susun fungsi FILTER dinamis untuk rentang A2:B20 dengan syarat B2:B20 > 100.",
+            potongan: [
+              "=FILTER(",
+              "A2:B20, B2:B20 > 100)",
+            ],
+            pengecoh: [
+              "=QUERY(",
+              "A2:B20 WHERE B > 100)",
+            ],
+            pemisah: "",
+            explanation:
+              "Fungsi penyaringan rentang dinamis menggunakan `=FILTER(A2:B20, B2:B20 > 100)`. Pengecoh `=QUERY` dengan klausa SQL adalah sintaks pustaka eksternal yang sering keliru dicampuradukkan oleh pengguna spreadsheet.",
+          },
         },
         {
           kind: "step",
@@ -246,6 +336,21 @@ export const spreadsheetTrack: Track = {
                       }
                     ],
           solution: "=COUNTA(A2:A100)",
+          susunKode: {
+            question:
+              "Susun fungsi COUNTA untuk menghitung sel terisi pada rentang A2:A100.",
+            potongan: [
+              "=COUNTA(",
+              "A2:A100)",
+            ],
+            pengecoh: [
+              "=COUNT(",
+              "B2:B100)",
+            ],
+            pemisah: "",
+            explanation:
+              "Fungsi `=COUNTA()` menghitung sel berisi teks maupun angka. Pengecoh `=COUNT()` hanya menghitung angka sehingga sel berisi teks akan menghasilkan 0, yang merupakan jebakan umum dalam pencatatan data laporan.",
+          },
         },
         {
           kind: "quiz",
@@ -395,6 +500,21 @@ export const spreadsheetTrack: Track = {
                       }
                     ],
           solution: '=IF(B2>1000, "Bonus", "Standar")',
+          susunKode: {
+            question:
+              "Susun fungsi IF untuk penjualan B2 di atas 1000 bernilai Bonus atau Standar.",
+            potongan: [
+              "=IF(B2>1000, ",
+              "\"Bonus\", \"Standar\")",
+            ],
+            pengecoh: [
+              "=JIKA(B2>1000, ",
+              "Bonus, Standar)",
+            ],
+            pemisah: "",
+            explanation:
+              "Fungsi `=IF()` membutuhkan tanda kutip untuk mengembalikan teks 'Bonus' atau 'Standar'. Tanpa tanda kutip adalah kesalahan menggoda yang menyebabkan error `#NAME?` karena dianggap nama variabel fiktif.",
+          },
         },
         {
           kind: "step",
@@ -422,6 +542,21 @@ export const spreadsheetTrack: Track = {
                       }
                     ],
           solution: '=SUMIFS(C:C, A:A, "Lunas")',
+          susunKode: {
+            question:
+              "Susun SUMIFS untuk menjumlahkan kolom C berdasarkan kolom A bernilai Lunas.",
+            potongan: [
+              "=SUMIFS(C:C, ",
+              "A:A, \"Lunas\")",
+            ],
+            pengecoh: [
+              "=SUMIF(C:C, ",
+              "\"Lunas\", A:A)",
+            ],
+            pemisah: "",
+            explanation:
+              "Pada `=SUMIFS()`, rentang yang dijumlahkan (`C:C`) ditaruh di awal. Pengecoh `=SUMIF()` menaruh rentang kriteria di awal yang keliru dan sering menjebak pengembang yang tertukar sintaks lama dan baru.",
+          },
         },
         {
           kind: "step",
@@ -453,6 +588,21 @@ export const spreadsheetTrack: Track = {
                       }
                     ],
           solution: "=VLOOKUP(A2, C1:D50, 2, FALSE)",
+          susunKode: {
+            question:
+              "Susun VLOOKUP pencocokan persis sel A2 pada rentang C1:D50 kolom ke-2.",
+            potongan: [
+              "=VLOOKUP(A2, C1:D50, ",
+              "2, FALSE)",
+            ],
+            pengecoh: [
+              "=LOOKUP_PERSIS(A2, C1:D50, ",
+              "2, TRUE)",
+            ],
+            pemisah: "",
+            explanation:
+              "Argumen ke-4 `=VLOOKUP` wajib bernilai `FALSE` untuk pencocokan persis. Pengecoh `TRUE` adalah jebakan berbahaya yang mengasumsikan data terurut dan sering mengembalikan angka yang keliru tanpa error.",
+          },
         },
         {
           kind: "step",
@@ -480,6 +630,21 @@ export const spreadsheetTrack: Track = {
                       }
                     ],
           solution: "=XLOOKUP(A2, B:B, C:C)",
+          susunKode: {
+            question:
+              "Susun XLOOKUP untuk mencari nilai A2 di kolom B:B dan mengambil hasil dari C:C.",
+            potongan: [
+              "=XLOOKUP(A2, ",
+              "B:B, C:C)",
+            ],
+            pengecoh: [
+              "=CARIDATA(A2, ",
+              "B:B..C:C)",
+            ],
+            pemisah: "",
+            explanation:
+              "Fungsi modern `=XLOOKUP(A2, B:B, C:C)` menerima rentang pencarian dan hasil secara terpisah. Pengecoh `=CARIDATA()` kuno memiliki batasan urutan data yang sering keliru dipakai pemula di lembar kerja spreadsheet interaktif.",
+          },
         },
         {
           kind: "step",
@@ -507,6 +672,21 @@ export const spreadsheetTrack: Track = {
                       }
                     ],
           solution: "=TRIM(A2)",
+          susunKode: {
+            question:
+              "Susun fungsi TRIM untuk membersihkan spasi di sel A2.",
+            potongan: [
+              "=TRIM(",
+              "A2)",
+            ],
+            pengecoh: [
+              "=BERSIHKAN(",
+              "B2)",
+            ],
+            pemisah: "",
+            explanation:
+              "Fungsi pembersih spasi liar pada sel spreadsheet adalah `=TRIM(A2)`. Pengecoh `=BERSIHKAN()` adalah nama fungsi fiktif yang sering menggoda pemula yang mengira nama fungsinya merupakan terjemahan literal bahasa Indonesia secara penuh.",
+          },
         },
         {
           kind: "step",
@@ -531,6 +711,21 @@ export const spreadsheetTrack: Track = {
             },
           ],
           solution: "=TODAY()",
+          susunKode: {
+            question:
+              "Susun fungsi TODAY untuk mendapatkan tanggal sistem hari ini.",
+            potongan: [
+              "=TODAY(",
+              ")",
+            ],
+            pengecoh: [
+              "=SEKARANG(",
+              " 'hari')",
+            ],
+            pemisah: "",
+            explanation:
+              "Fungsi tanggal hari ini tanpa argumen tambahan adalah `=TODAY()`. Pengecoh `=SEKARANG('hari')` adalah nama fiktif yang sering keliru digantikan oleh pengguna dari bahasa SQL atau lingkungan skrip pemrograman lain saat membuat formula.",
+          },
         },
         {
           kind: "step",
@@ -562,6 +757,21 @@ export const spreadsheetTrack: Track = {
                       }
                     ],
           solution: "=IFERROR(VLOOKUP(A2, B:C, 2, FALSE), 0)",
+          susunKode: {
+            question:
+              "Susun IFERROR untuk membungkus VLOOKUP dengan nilai pengganti 0.",
+            potongan: [
+              "=IFERROR(VLOOKUP(A2, B:C, 2, FALSE), ",
+              "0)",
+            ],
+            pengecoh: [
+              "=CEKERROR(VLOOKUP(A2, B:C, 2, FALSE), ",
+              "\"KOSONG\")",
+            ],
+            pemisah: "",
+            explanation:
+              "Penanganan kondisi error di spreadsheet menggunakan fungsi `=IFERROR()`. Pengecoh `=CEKERROR()` adalah sintaks fiktif yang sering keliru dipakai di lembar kerja oleh pengguna yang baru belajar fungsi logika secara mandiri.",
+          },
         },
         {
           kind: "quiz",
@@ -705,6 +915,21 @@ export const spreadsheetTrack: Track = {
                       }
                     ],
           solution: "=TRIM(A2)",
+          susunKode: {
+            question:
+              "Susun pembersihan spasi liar sel A2 dengan fungsi TRIM.",
+            potongan: [
+              "=TRIM(",
+              "A2)",
+            ],
+            pengecoh: [
+              "=POTONG_SPASI(",
+              "B2)",
+            ],
+            pemisah: "",
+            explanation:
+              "Fungsi `=TRIM(A2)` membuang spasi ganda dan spasi di ujung teks. Pengecoh `=POTONG_SPASI()` diadaptasi dari istilah Bahasa Indonesia dan keliru jika diterapkan pada rumus kalkulasi lembar kerja spreadsheet otomatis.",
+          },
         },
         {
           kind: "step",
@@ -732,6 +957,21 @@ export const spreadsheetTrack: Track = {
                       }
                     ],
           solution: "=UNIQUE(A1:A50)",
+          susunKode: {
+            question:
+              "Susun fungsi UNIQUE untuk mengambil daftar nilai unik dari rentang A1:A50.",
+            potongan: [
+              "=UNIQUE(",
+              "A1:A50)",
+            ],
+            pengecoh: [
+              "=DISTINCT(",
+              "B1:B50)",
+            ],
+            pemisah: "",
+            explanation:
+              "Fungsi mengambil data unik pada spreadsheet adalah `=UNIQUE()`. Pengecoh `=DISTINCT()` berasal dari kata kunci SQL yang sering keliru diketik oleh pengembang database saat mengolah lembar kerja spreadsheet dengan cepat.",
+          },
         },
         {
           kind: "step",
@@ -759,6 +999,21 @@ export const spreadsheetTrack: Track = {
                       }
                     ],
           solution: '=SPLIT(A2, ",")',
+          susunKode: {
+            question:
+              "Susun fungsi SPLIT untuk memecah teks sel A2 berdasarkan koma.",
+            potongan: [
+              "=SPLIT(A2, ",
+              "\",\")",
+            ],
+            pengecoh: [
+              "=PECAH_TEKS(A2, ",
+              "\";\")",
+            ],
+            pemisah: "",
+            explanation:
+              "Fungsi `=SPLIT(A2, \",\")` memecah string berdasarkan delimiter koma. Pengecoh `=PECAH_TEKS()` adalah nama fiktif yang sering menggoda tetapi keliru karena bukan merupakan nama fungsi resmi pada spreadsheet modern.",
+          },
         },
         {
           kind: "step",
@@ -786,6 +1041,21 @@ export const spreadsheetTrack: Track = {
                       }
                     ],
           solution: '=SUBSTITUTE(A2, "-", "")',
+          susunKode: {
+            question:
+              "Susun fungsi SUBSTITUTE untuk mengganti tanda strip '-' dengan string kosong di A2.",
+            potongan: [
+              "=SUBSTITUTE(A2, ",
+              "\"-\", \"\")",
+            ],
+            pengecoh: [
+              "=GANTI_TEKS(A2, ",
+              "\"-\", \" \")",
+            ],
+            pemisah: "",
+            explanation:
+              "Penggantian karakter dalam teks spreadsheet menggunakan `=SUBSTITUTE()`. Pengecoh `=GANTI_TEKS()` adalah fungsi fiktif yang sering menjebak pemula yang mengira nama fungsi dapat diterjemahkan secara bebas tanpa aturan.",
+          },
         },
         {
           kind: "step",
@@ -817,6 +1087,21 @@ export const spreadsheetTrack: Track = {
                       }
                     ],
           solution: '=IF(OR(A2="Lunas", A2="Pending"), A2, "Invalid")',
+          susunKode: {
+            question:
+              "Susun validasi status A2 berisikan 'Lunas' atau 'Pending' menggunakan IF dan OR.",
+            potongan: [
+              "=IF(OR(A2=\"Lunas\", A2=\"Pending\"), ",
+              "A2, \"Invalid\")",
+            ],
+            pengecoh: [
+              "=IF(A2=\"Lunas\" OR \"Pending\", ",
+              "A2, \"Salah\")",
+            ],
+            pemisah: "",
+            explanation:
+              "Logika OR harus dibungkus `=IF(OR(A2=\"Lunas\", A2=\"Pending\"), ...)`. Pengecoh `A2=\"Lunas\" OR \"Pending\"` adalah kesalahan sintaks umum yang sering keliru ditulis oleh pemula saat membuat lembar kerja secara manual.",
+          },
         },
         {
           kind: "step",
@@ -844,6 +1129,21 @@ export const spreadsheetTrack: Track = {
                       }
                     ],
           solution: "=PROPER(A2)",
+          susunKode: {
+            question:
+              "Susun fungsi PROPER untuk mengubah sel A2 menjadi huruf kapital tiap kata.",
+            potongan: [
+              "=PROPER(",
+              "A2)",
+            ],
+            pengecoh: [
+              "=KAPITAL_KATA(",
+              "B2)",
+            ],
+            pemisah: "",
+            explanation:
+              "Fungsi kapitalisasi huruf pertama tiap kata adalah `=PROPER(A2)`. Pengecoh `=KAPITAL_KATA()` adalah nama fiktif yang sering menggoda pemula yang belum menghafal fungsi teks standar pada spreadsheet saat ini.",
+          },
         },
         {
           kind: "step",
@@ -871,6 +1171,21 @@ export const spreadsheetTrack: Track = {
                       }
                     ],
           solution: "=COUNTA(A1:A50) - COUNTA(UNIQUE(A1:A50))",
+          susunKode: {
+            question:
+              "Susun formula penghitungan selisih total baris dengan total unik rentang A1:A50.",
+            potongan: [
+              "=COUNTA(A1:A50) - ",
+              "COUNTA(UNIQUE(A1:A50))",
+            ],
+            pengecoh: [
+              "=COUNT(A1:A50) - ",
+              "COUNT(DISTINCT(A1:A50))",
+            ],
+            pemisah: "",
+            explanation:
+              "Selisih baris duplikat dihitung dari `=COUNTA(A1:A50) - COUNTA(UNIQUE(A1:A50))`. Pengecoh `=COUNT()` dan `=DISTINCT()` adalah kombinasi kesalahan umum yang keliru dipakai untuk sel berisi data teks pada spreadsheet.",
+          },
         },
         {
           kind: "quiz",
@@ -1024,6 +1339,21 @@ export const spreadsheetTrack: Track = {
             },
           ],
           solution: "Insert > Pivot table\nSumber data: Sheet1!A1:D5000",
+          susunKode: {
+            question:
+              "Susun langkah pembuatan Pivot Table dengan sumber Sheet1!A1:D5000.",
+            potongan: [
+              "Insert > Pivot table\n",
+              "Sumber data: Sheet1!A1:D5000",
+            ],
+            pengecoh: [
+              "Menu > Tabel Pivot\n",
+              "Sumber data: Sheet1!A1..D5000",
+            ],
+            pemisah: "",
+            explanation:
+              "Jalur menu pembuatan pivot table diawali `Insert > Pivot table` dan menyertakan rentang data `Sheet1!A1:D5000`. Pengecoh `Menu > Tabel Pivot` keliru dan menjebak penamaan menu visual pada spreadsheet.",
+          },
         },
         {
           kind: "step",
@@ -1054,6 +1384,21 @@ export const spreadsheetTrack: Track = {
             },
           ],
           solution: "Rows: Kategori\nValues: SUM of Penjualan",
+          susunKode: {
+            question:
+              "Susun penempatan field Kategori di Rows dan SUM Penjualan di Values.",
+            potongan: [
+              "Rows: Kategori\n",
+              "Values: SUM of Penjualan",
+            ],
+            pengecoh: [
+              "Baris: Kategori\n",
+              "Values: HITUNG of Penjualan",
+            ],
+            pemisah: "",
+            explanation:
+              "Untuk menjumlahkan total nominal penjualan, agregasi yang digunakan adalah `SUM of Penjualan`. Pengecoh `HITUNG of Penjualan` keliru karena hanya menghitung jumlah baris transaksi pada laporan spreadsheet.",
+          },
         },
         {
           kind: "step",
@@ -1090,6 +1435,21 @@ export const spreadsheetTrack: Track = {
             },
           ],
           solution: "Rows: Wilayah\nValues: Penjualan\nSummarize by: AVERAGE",
+          susunKode: {
+            question:
+              "Susun konfigurasi Pivot Table untuk rata-rata penjualan per Wilayah.",
+            potongan: [
+              "Rows: Wilayah\nValues: Penjualan\n",
+              "Summarize by: AVERAGE",
+            ],
+            pengecoh: [
+              "Baris: Wilayah\nValues: Penjualan\n",
+              "Summarize by: RATA_RATA",
+            ],
+            pemisah: "",
+            explanation:
+              "Jenis agregasi rata-rata pada Pivot Table dinamakan `AVERAGE`. Pengecoh `RATA_RATA` tidak ada pada opsi bawaan tabel pivot dan sering keliru dipilih oleh pemula dalam mengolah data laporan spreadsheet secara interaktif.",
+          },
         },
         {
           kind: "step",
@@ -1120,6 +1480,21 @@ export const spreadsheetTrack: Track = {
             },
           ],
           solution: "Values: Penjualan\nShow as: % of Grand Total",
+          susunKode: {
+            question:
+              "Susun konfigurasi proporsi penjualan sebagai persentase total.",
+            potongan: [
+              "Values: Penjualan\n",
+              "Show as: % of Grand Total",
+            ],
+            pengecoh: [
+              "Nilai: Penjualan\n",
+              "Show as: Persen Total",
+            ],
+            pemisah: "",
+            explanation:
+              "Opsi persentase total di Pivot Table bernama `Show as: % of Grand Total`. Pengecoh `Persen Total` adalah istilah buatan yang keliru dan tidak dikenali oleh sistem spreadsheet untuk analisis data laporan.",
+          },
         },
         {
           kind: "step",
@@ -1150,6 +1525,21 @@ export const spreadsheetTrack: Track = {
             },
           ],
           solution: "Calculated field\nNama: Margin\nFormula: =Profit / Penjualan",
+          susunKode: {
+            question:
+              "Susun Calculated Field Margin dengan formula Profit dibagi Penjualan.",
+            potongan: [
+              "Calculated field\nNama: Margin\n",
+              "Formula: =Profit / Penjualan",
+            ],
+            pengecoh: [
+              "Opsi Hitung\nNama: ProfitMargin\n",
+              "Formula: =Profit - Penjualan",
+            ],
+            pemisah: "",
+            explanation:
+              "Margin dihitung dari pembagian `=Profit / Penjualan`. Operator pengurangan `-` adalah kesalahan logika rumus yang keliru dan sering menjebak dalam analisis keuangan lembar kerja spreadsheet interaktif modern.",
+          },
         },
         {
           kind: "step",
@@ -1180,6 +1570,21 @@ export const spreadsheetTrack: Track = {
             },
           ],
           solution: "Insert > Slicer\nField: Bulan",
+          susunKode: {
+            question:
+              "Susun penambahan Slicer dengan field Bulan untuk filter interaktif.",
+            potongan: [
+              "Insert > Slicer\n",
+              "Field: Bulan",
+            ],
+            pengecoh: [
+              "Menu > Pemotong Data\n",
+              "Pilih: Bulan_Tahun",
+            ],
+            pemisah: "",
+            explanation:
+              "Fitur tombol filter interaktif dibuat melalui `Insert > Slicer`. Pengecoh `Menu > Pemotong Data` adalah istilah fiktif yang keliru dan bukan merupakan perintah menu standar pada lembar kerja spreadsheet.",
+          },
         },
         {
           kind: "step",
@@ -1203,6 +1608,21 @@ export const spreadsheetTrack: Track = {
                       }
                     ],
           solution: "PivotTable Analyze > Refresh",
+          susunKode: {
+            question:
+              "Susun penyegaran data Pivot Table dari menu kontekstual.",
+            potongan: [
+              "PivotTable Analyze >",
+              " Refresh",
+            ],
+            pengecoh: [
+              "Menu Utama >",
+              " Muat Ulang",
+            ],
+            pemisah: " ",
+            explanation:
+              "Memperbarui cache data pivot table dilakukan lewat `PivotTable Analyze > Refresh`. Pengecoh `Muat Ulang` adalah nama perintah fiktif yang sering keliru dicari saat data baru ditambahkan ke spreadsheet.",
+          },
         },
         {
           kind: "quiz",
@@ -1344,6 +1764,21 @@ export const spreadsheetTrack: Track = {
             },
           ],
           solution: "Insert > Chart\nChart type: Line chart",
+          susunKode: {
+            question:
+              "Susun pembuatan Line chart untuk tren data sepanjang waktu.",
+            potongan: [
+              "Insert > Chart\n",
+              "Chart type: Line chart",
+            ],
+            pengecoh: [
+              "Grafik > Buat Diagram\n",
+              "Chart type: Bar chart",
+            ],
+            pemisah: "",
+            explanation:
+              "Visualisasi tren sepanjang waktu paling tepat menggunakan `Line chart`. Visualisasi Bar chart keliru untuk menampilkan kontinuitas waktu dan sering menjebak pemula pada pembuatan dashboard spreadsheet interaktif.",
+          },
         },
         {
           kind: "step",
@@ -1372,6 +1807,21 @@ export const spreadsheetTrack: Track = {
             },
           ],
           solution: "Chart editor > Vertical axis > Min: 0",
+          susunKode: {
+            question:
+              "Susun pengaturan sumbu vertikal agar dimulai dari nol.",
+            potongan: [
+              "Chart editor > Vertical axis >",
+              " Min: 0",
+            ],
+            pengecoh: [
+              "Pengatur Grafik > Sumbu Y >",
+              " Mulai: Otomatis",
+            ],
+            pemisah: "",
+            explanation:
+              "Menjaga kejujuran grafik dilakukan dengan mengatur nilai minimum sumbu ke `Min: 0`. Pengaturan otomatis sering memotong skala sumbu secara keliru dan menyesatkan pembaca laporan spreadsheet secara signifikan.",
+          },
         },
         {
           kind: "step",
@@ -1400,6 +1850,21 @@ export const spreadsheetTrack: Track = {
             },
           ],
           solution: "Chart editor > Gridlines > Hapus centang Major gridlines",
+          susunKode: {
+            question:
+              "Susun pembersihan garis kisi pada grafik untuk decluttering.",
+            potongan: [
+              "Chart editor > Gridlines >",
+              " Hapus centang Major gridlines",
+            ],
+            pengecoh: [
+              "Pengatur Grafik > Garis Kisi >",
+              " Tampilkan Minor gridlines",
+            ],
+            pemisah: "",
+            explanation:
+              "Prinsip decluttering menyarankan `Hapus centang Major gridlines` untuk mengurangi tinta yang tidak perlu pada grafik dan menghindari visual keliru yang mengganggu pemahaman data laporan keuangan proyek.",
+          },
         },
         {
           kind: "step",
@@ -1433,6 +1898,21 @@ export const spreadsheetTrack: Track = {
             },
           ],
           solution: "Format > Conditional formatting\nRentang: D2:D200\nAturan: Less than 0 (latar merah)",
+          susunKode: {
+            question:
+              "Susun aturan Conditional Formatting untuk memberi warna sel kurang dari 0.",
+            potongan: [
+              "Format > Conditional formatting\nRentang: D2:D200\n",
+              "Aturan: Less than 0 (latar merah)",
+            ],
+            pengecoh: [
+              "Format > Pewarnaan Otomatis\nRentang: D2:D200\n",
+              "Aturan: Greater than 0 (latar merah)",
+            ],
+            pemisah: "",
+            explanation:
+              "Pewarnaan otomatis angka negatif memakai syarat `Less than 0`. Menggunakan `Greater than 0` untuk latar merah adalah logika keliru yang menjebak pencermatan laporan keuangan spreadsheet secara menyeluruh.",
+          },
         },
         {
           kind: "step",
@@ -1461,6 +1941,21 @@ export const spreadsheetTrack: Track = {
             },
           ],
           solution: "=SPARKLINE(C2:N2)",
+          susunKode: {
+            question:
+              "Susun grafik mini Sparkline dalam sel untuk rentang C2:N2.",
+            potongan: [
+              "=SPARKLINE(",
+              "C2:N2)",
+            ],
+            pengecoh: [
+              "=GRAFIK_MINI(",
+              "D2:O2)",
+            ],
+            pemisah: "",
+            explanation:
+              "Grafik mini dalam satu sel menggunakan fungsi `=SPARKLINE()`. Pengecoh `=GRAFIK_MINI()` adalah fungsi fiktif yang sering keliru dianggap sebagai nama resmi Bahasa Indonesia dalam lembar kerja spreadsheet.",
+          },
         },
         {
           kind: "step",
@@ -1487,6 +1982,21 @@ export const spreadsheetTrack: Track = {
                       }
                     ],
           solution: "=SUM(E2:E5000)",
+          susunKode: {
+            question:
+              "Susun agregasi SUM pada kartu KPI untuk rentang E2:E5000.",
+            potongan: [
+              "=SUM(",
+              "E2:E5000)",
+            ],
+            pengecoh: [
+              "=JUMLAH_TOTAL(",
+              "F2:F5000)",
+            ],
+            pemisah: "",
+            explanation:
+              "Agregasi kartu KPI memakai `=SUM(E2:E5000)`. Menggunakan nama fiktif `=JUMLAH_TOTAL()` adalah kesalahan yang keliru dan membuat rumus memicu error `#NAME?` pada lembar kerja spreadsheet interaktif secara langsung.",
+          },
         },
         {
           kind: "quiz",
@@ -1640,6 +2150,21 @@ export const spreadsheetTrack: Track = {
                       }
                     ],
           solution: "=TRIM(PROPER(A2))",
+          susunKode: {
+            question:
+              "Susun penggabungan fungsi TRIM dan PROPER untuk pembersihan teks di sel A2.",
+            potongan: [
+              "=TRIM(PROPER(",
+              "A2))",
+            ],
+            pengecoh: [
+              "=BERSIH_KAPITAL(",
+              "B2))",
+            ],
+            pemisah: "",
+            explanation:
+              "Penggabungan fungsi `=TRIM(PROPER(A2))` merapikan kapitalisasi sekaligus membuang spasi liar. Pengecoh `=BERSIH_KAPITAL()` adalah nama fungsi fiktif yang keliru disarankan oleh pemula di lembar kerja.",
+          },
         },
         {
           kind: "step",
@@ -1667,6 +2192,21 @@ export const spreadsheetTrack: Track = {
                       }
                     ],
           solution: "=(C2 - D2) / C2",
+          susunKode: {
+            question:
+              "Susun formula persentase margin dari pendapatan (C2) dan beban (D2).",
+            potongan: [
+              "=(C2 - D2) /",
+              " C2",
+            ],
+            pengecoh: [
+              "=C2 - D2 /",
+              " D2",
+            ],
+            pemisah: "",
+            explanation:
+              "Perhitungan margin membutuhkan tanda kurung `=(C2 - D2) / C2` agar pengurangan dihitung lebih dulu sebelum pembagian. Tanpa kurung adalah jebakan hirarki operator yang keliru dalam spreadsheet saat ini.",
+          },
         },
         {
           kind: "step",
@@ -1694,6 +2234,21 @@ export const spreadsheetTrack: Track = {
                       }
                     ],
           solution: '=COUNTIF(A1:A100, "Resign")',
+          susunKode: {
+            question:
+              "Susun fungsi COUNTIF untuk menghitung jumlah karyawan bernilai Resign di A1:A100.",
+            potongan: [
+              "=COUNTIF(A1:A100, ",
+              "\"Resign\")",
+            ],
+            pengecoh: [
+              "=HITUNGIF(A1:A100, ",
+              "Resign)",
+            ],
+            pemisah: "",
+            explanation:
+              "Kriteria teks pada `=COUNTIF()` wajib dibungkus tanda kutip `\"Resign\"`. Menulis tanpa kutip adalah kesalahan sintaks yang keliru dan membuat pencarian data pada lembar kerja spreadsheet gagal secara berulang.",
+          },
         },
         {
           kind: "step",
@@ -1717,6 +2272,21 @@ export const spreadsheetTrack: Track = {
                       }
                     ],
           solution: "Executive Summary",
+          susunKode: {
+            question:
+              "Susun penamaan bagian ringkasan eksekutif pada laporan analitis.",
+            potongan: [
+              "Executive ",
+              "Summary",
+            ],
+            pengecoh: [
+              "Ringkasan ",
+              "Akhir",
+            ],
+            pemisah: "",
+            explanation:
+              "Istilah baku dua kata Bahasa Inggris untuk bagian ringkasan laporan atas adalah `Executive Summary`. Istilah `Ringkasan Akhir` keliru karena posisinya ditaruh di atas laporan lembar kerja spreadsheet.",
+          },
         },
         {
           kind: "step",
@@ -1740,6 +2310,21 @@ export const spreadsheetTrack: Track = {
                       }
                     ],
           solution: "Protect Sheet",
+          susunKode: {
+            question:
+              "Susun fitur proteksi lembar kerja untuk mengunci sel formula.",
+            potongan: [
+              "Protect ",
+              "Sheet",
+            ],
+            pengecoh: [
+              "Kunci ",
+              "Lembar",
+            ],
+            pemisah: "",
+            explanation:
+              "Fitur untuk mengunci sel dan melindungi formula lembar kerja dinamakan `Protect Sheet`. Pengecoh `Kunci Lembar` adalah nama buatan yang keliru dan tidak ada di lembar kerja spreadsheet modern mana pun.",
+          },
         },
         {
           kind: "quiz",

@@ -43,6 +43,22 @@ function jarakEdit(a: string, b: string): number {
   return baris[b.length];
 }
 
+/** Substring bersama terpanjang — dipakai mendeteksi jawaban yang bocor di soal. */
+function substringTerpanjang(a: string, b: string): string {
+  let terbaik = "";
+  const dp = new Array(b.length + 1).fill(0);
+  for (let i = 1; i <= a.length; i++) {
+    let sebelumnya = 0;
+    for (let j = 1; j <= b.length; j++) {
+      const simpan = dp[j];
+      dp[j] = a[i - 1] === b[j - 1] ? sebelumnya + 1 : 0;
+      if (dp[j] > terbaik.length) terbaik = a.slice(i - dp[j], i);
+      sebelumnya = simpan;
+    }
+  }
+  return terbaik;
+}
+
 function lapor(pesan: string) {
   console.log(`❌ ${pesan}`);
   masalah++;
@@ -410,6 +426,80 @@ for (const track of tracks) {
               );
             }
           }
+
+          // i. ATURAN INTI: kepingan harus DIPOTONG dari kode yang nyata.
+          //
+          //    Setiap potongan wajib benar-benar ada di `solution` (atau di
+          //    `starterCode` untuk keping konteks). Tanpa aturan ini, penulis
+          //    bisa menambahkan awalan karangan supaya soalnya terlihat punya
+          //    banyak keping — dan user merangkai kode yang bahkan tidak sah,
+          //    seperti `const ref = const inputRef = useRef(null);`.
+          {
+            const rapat = (t: string) => t.replace(/\s+/g, "");
+            const konteks = rapat((s.solution ?? "") + (s.starterCode ?? ""));
+            for (const p of potongan) {
+              const r = rapat(p);
+              if (r.length >= 3 && !konteks.includes(r)) {
+                lapor(
+                  `potongan susunKode "${norm(p)}" tidak ada di solution maupun starterCode (keping karangan): ${s.id}`
+                );
+              }
+            }
+          }
+
+          // f. ATURAN INTI: pertanyaan tidak boleh membocorkan sintaks jawaban.
+          //
+          //    Kalau jawabannya sudah tercetak di soal, merangkai kepingan
+          //    berubah jadi menyalin huruf — anti-pattern #1 di panduan_isi.md
+          //    yang dulu kena 461 step. Menyebut teks literal yang WAJIB muncul
+          //    (judul, nama berkas, URL) tetap boleh; yang dilarang adalah
+          //    potongan yang memuat operator sintaks.
+          {
+            const buangSpasi = (t: string) => t.replace(/\s+/g, "");
+            const tanya = buangSpasi(sk.question || s.instruction);
+            const jawab = buangSpasi(potongan.join(pemisah));
+            const sama = substringTerpanjang(tanya, jawab);
+            if (sama.length >= 12 && /[={}()<>[\]]/.test(sama)) {
+              lapor(
+                `pertanyaan susunKode membocorkan sintaks jawaban ("${sama}"): ${s.id}`
+              );
+            }
+          }
+
+          // g. ATURAN INTI: soal tidak boleh merosot jadi pilihan ganda.
+          //
+          //    Kalau SEMUA pengecoh menyasar keping yang sama dan keping itu
+          //    memuat sebagian besar jawaban, user tidak merangkai apa pun —
+          //    ia memilih satu chip dari beberapa. Itu bentuk yang justru
+          //    ditinggalkan saat mode ini dirancang.
+          if (pengecoh.length > 0 && potongan.length > 0) {
+            const sasaran = pengecoh.map((p) => {
+              let idx = 0;
+              let min = Infinity;
+              potongan.forEach((q, i) => {
+                const d = jarakEdit(norm(q), norm(p));
+                if (d < min) {
+                  min = d;
+                  idx = i;
+                }
+              });
+              return idx;
+            });
+            const kode = norm(potongan.join(pemisah));
+            const porsi = norm(potongan[sasaran[0]]).length / Math.max(kode.length, 1);
+            if (new Set(sasaran).size === 1 && porsi >= 0.5) {
+              lapor(
+                `susunKode merosot jadi pilihan ganda — semua pengecoh menyasar satu keping yang memuat ${Math.round(porsi * 100)}% jawaban: ${s.id}`
+              );
+            }
+          }
+
+          // h. SENGAJA TIDAK ADA aturan "susunan minimal sekian persen dari
+          //    solution". Sempat dicoba, lalu dicabut: banyak step hanya
+          //    meminta MENAMBAH sesuatu ke kode yang sudah ada di editor,
+          //    sehingga `solution` memuat konteks sebelumnya dan susunan yang
+          //    benar memang cuma sebagian kecil darinya. Aturan (i) di atas
+          //    sudah menutup kasus yang sebenarnya berbahaya — keping karangan.
 
           // e. ATURAN INTI: pengecoh harus benar-benar merusak jawaban.
           //

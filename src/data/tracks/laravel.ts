@@ -270,6 +270,22 @@ export const laravelTrack: Track = {
             },
           ],
           solution: "<?php\n$name = 'Bimo';\necho 'Halo ' . $name;",
+          susunKode: {
+            question:
+              "Rangkai kode PHP sederhana untuk mendeklarasikan variabel $name dan mencetak salam Halo.",
+            potongan: [
+              "<?php",
+              "$name = 'Bimo';",
+              "echo 'Halo ' . $name;",
+            ],
+            pengecoh: [
+              "$name = Bimo;",
+              "print 'Halo ' . name;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Variabel di PHP dideklarasikan dengan tanda dollar $ dan string 'Bimo' wajib dibungkus tanda kutip. Keping $name = Bimo; sangat keliru karena tanpa tanda kutip Bimo dianggap sebagai konstanta yang belum didefinisikan. Keping print 'Halo ' . name; menggoda tetapi salah karena variabel name lupa menggunakan karakter $.",
+          },
         },
         {
           kind: "step",
@@ -312,6 +328,22 @@ export const laravelTrack: Track = {
             },
           ],
           solution: "<?php\n$user = ['name' => 'Bimo'];\necho $user['name'];",
+          susunKode: {
+            question:
+              "Susun array asosiatif $user dengan kunci 'name' dan tampilkan nilainya dengan echo.",
+            potongan: [
+              "<?php",
+              "$user = ['name' => 'Bimo'];",
+              "echo $user['name'];",
+            ],
+            pengecoh: [
+              "$user = ['name' = 'Bimo'];",
+              "echo $user->name;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Array asosiatif PHP menggunakan operator panah ganda => untuk memetakan kunci ke nilai, dan diakses menggunakan tanda kurung siku. Keping = 'Bimo' keliru karena menggunakan operator penugasan tunggal. Keping $user->name menggoda bagi pengembang Object Oriented, tetapi ini adalah array biasa bukan objek.",
+          },
         },
         {
           kind: "step",
@@ -353,6 +385,24 @@ export const laravelTrack: Track = {
             },
           ],
           solution: "<?php\n$items = ['Kopi', 'Teh', 'Susu'];\n\nforeach ($items as $item) {\n    echo $item . \"\\n\";\n}",
+          susunKode: {
+            question:
+              "Rangkai perulangan foreach untuk iterasi array $items dan mencetak setiap elemen.",
+            potongan: [
+              "<?php",
+              "$items = ['Kopi', 'Teh', 'Susu'];",
+              "foreach ($items as $item) {",
+              "    echo $item . \"\\n\";",
+              "}",
+            ],
+            pengecoh: [
+              "foreach ($items : $item) {",
+              "    echo item . \"\\n\";",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Sintaks perulangan foreach di PHP menggunakan kata kunci as untuk memisahkan array sumber dan variabel iterasi. Keping titik dua : menggoda bagi pemula yang terbiasa dengan sintaks JavaScript for...of, tetapi salah di PHP. Keping echo item keliru karena variabel iterasi wajib memakai tanda dollar $item.",
+          },
         },
         {
           kind: "step",
@@ -393,6 +443,23 @@ export const laravelTrack: Track = {
             },
           ],
           solution: "<?php\n$cat = $_GET['category'];",
+          susunKode: {
+            question:
+              "Susun kode yang membaca parameter query string bernama category dari superglobal bawaan PHP, lalu menyimpannya ke variabel penampung.",
+            potongan: [
+              "<?php",
+              "$cat =",
+              "$_GET",
+              "['category'];",
+            ],
+            pengecoh: [
+              "$GET",
+              "['kategori'];",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Superglobal untuk query string ditulis dengan tanda dolar DAN garis bawah di depan namanya, lalu isinya dibaca memakai kurung siku berisi nama kunci. Keping $GET menggoda karena terlihat wajar sebagai nama variabel biasa, padahal garis bawah itu bagian dari nama resminya \u2014 tanpa garis bawah PHP membaca variabel kosong yang tidak pernah diisi siapa pun. Keping ['kategori'] keliru karena nama kunci harus sama persis dengan parameter di URL (?category=), dan salah satu huruf saja membuat nilainya kosong tanpa menghentikan program.",
+          },
         },
         {
           kind: "step",
@@ -414,7 +481,7 @@ export const laravelTrack: Track = {
               "echo ' selesai';",
             output:
               "db_laravel\n" +
-              "PHP Warning:  include(tidak-ada.php): Failed to open stream: No such file or directory in /app/index.php on line 9\n" +
+              "PHP Warning:  include(tidak-ada.php): Failed to open stream: No such file or directory in /app/index.php on line 6\n" +
               " selesai",
             note: "Kalau baris terakhir memakai `require` alih-alih `include`, kata ` selesai` TIDAK akan pernah tercetak — skrip berhenti di situ. Catatan jujur: panel latihan tidak menjalankan PHP, jadi keluaran ini tidak akan muncul di sini; yang diperiksa adalah kode yang kamu tulis.",
           },
@@ -436,6 +503,22 @@ export const laravelTrack: Track = {
             },
           ],
           solution: "<?php\nrequire_once 'helper.php';",
+          susunKode: {
+            question:
+              "Rangkai satu pernyataan yang menyisipkan berkas helper.php, menghentikan skrip bila berkasnya tidak ada, dan tidak memuatnya dua kali.",
+            potongan: [
+              "<?php",
+              "require_once",
+              "'helper.php';",
+            ],
+            pengecoh: [
+              "include_once",
+              "helper.php;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Dua syarat soal menentukan kata kuncinya: 'berhenti kalau berkasnya hilang' memilih require, dan 'tidak boleh dimuat dua kali' menambahkan akhiran _once. Keping include_once menggoda karena juga memuat sekali saja, tetapi ia hanya memberi warning saat berkasnya hilang sehingga skrip lanjut tanpa fungsi yang dibutuhkan dan meledak beberapa baris kemudian. Keping helper.php tanpa tanda kutip keliru karena nama berkas wajib berupa string; tanpa kutip PHP membacanya sebagai konstanta yang belum didefinisikan.",
+          },
         },
         {
           kind: "step",
@@ -482,6 +565,25 @@ export const laravelTrack: Track = {
             },
           ],
           solution: "<?php\n$status = 'active';\n$label = match ($status) {\n    'active' => 'Aktif',\n    default => 'Nonaktif',\n};",
+          susunKode: {
+            question:
+              "Susun ekspresi match modern PHP 8 untuk mencocokkan status 'active' menjadi 'Aktif'.",
+            potongan: [
+              "<?php",
+              "$status = 'active';",
+              "$label = match ($status) {",
+              "    'active' => 'Aktif',",
+              "    default => 'Nonaktif',",
+              "};",
+            ],
+            pengecoh: [
+              "$label = switch ($status) {",
+              "    default: 'Nonaktif',",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Ekspresi match di PHP 8 mengembalikan nilai langsung dan menggunakan sintaks panah => serta ditutup dengan titik koma. Keping switch keliru karena switch adalah struktur kontrol statement, bukan ekspresi yang bisa ditugaskan ke variabel. Keping default: keliru karena match menggunakan sintaks default =>, bukan titik dua.",
+          },
         },
         {
           kind: "step",
@@ -521,6 +623,21 @@ export const laravelTrack: Track = {
             },
           ],
           solution: "<?php\n$page = $_GET['page'] ?? 1;",
+          susunKode: {
+            potongan: [
+              "<?php",
+              "$page =",
+              "$_GET['page']",
+              "?? 1;",
+            ],
+            pengecoh: [
+              "?: 1;",
+              "$_POST['page']",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Operator ?? (null coalescing) memeriksa keberadaan kunci sekaligus nilainya, jadi ia memberi nilai cadangan tanpa memunculkan warning Undefined array key. Keping ?: menggoda karena hasil akhirnya terlihat sama, padahal Elvis operator membaca dulu nilainya sehingga kunci yang tidak dikirim tetap memicu warning. Keping $_POST['page'] keliru karena nomor halaman datang dari query string di URL, bukan dari badan permintaan formulir.",
+          },
         },
         {
           kind: "quiz",
@@ -696,6 +813,25 @@ export const laravelTrack: Track = {
             },
           ],
           solution: "<?php\nclass Product {\n    public function __construct(public string $title) {}\n}",
+          susunKode: {
+            question:
+              "Susun kelas Product memanfaatkan fitur Constructor Property Promotion PHP 8.",
+            potongan: [
+              "<?php",
+              "class Product {",
+              "    public function __construct(",
+              "public string $title",
+              ") {}",
+              "}",
+            ],
+            pengecoh: [
+              "public $title",
+              "    public function Product(",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Constructor property promotion menyatukan deklarasi properti dan parameter konstruktor: kata kunci visibilitas ditulis lebih dulu, lalu tipe datanya, baru nama variabelnya. Keping public $title keliru karena tipe string yang diminta soal hilang, dan tanpa tipe PHP menerima nilai apa pun termasuk angka. Keping public function Product( menggoda karena di PHP versi sangat lama konstruktor memang bernama sama dengan kelasnya, padahal sejak PHP 5 namanya wajib __construct \u2014 dengan nama lama, method itu tidak pernah dijalankan saat objek dibuat.",
+          },
         },
         {
           kind: "step",
@@ -743,6 +879,26 @@ export const laravelTrack: Track = {
             },
           ],
           solution: "<?php\nclass Service {\n    protected string $apiKey;\n\n    public function getApiKey(): string {\n        return $this->apiKey;\n    }\n}",
+          susunKode: {
+            question:
+              "Rangkai kelas Service dengan properti terproteksi $apiKey dan metode getter publik.",
+            potongan: [
+              "<?php",
+              "class Service {",
+              "    protected string $apiKey;",
+              "    public function getApiKey(): string {",
+              "        return $this->apiKey;",
+              "    }",
+              "}",
+            ],
+            pengecoh: [
+              "    private string $apiKey;",
+              "        return apiKey;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Properti protected hanya dapat diakses di dalam kelas tersebut dan turunan kelasnya. Keping private keliru visibilitas yang diminta. Keping return apiKey menggoda tetapi salah karena pengaksesan atribut kelas di dalam metode wajib menggunakan pseudo-variable $this->apiKey.",
+          },
         },
         {
           kind: "step",
@@ -787,6 +943,24 @@ export const laravelTrack: Track = {
             },
           ],
           solution: "<?php\nclass User {}\n\nclass Admin extends User {}",
+          susunKode: {
+            question:
+              "Susun kelas Admin yang mewarisi (extends) dari kelas induk User.",
+            potongan: [
+              "<?php",
+              "class User {}",
+              "class Admin",
+              "extends User",
+              "{}",
+            ],
+            pengecoh: [
+              "implements User",
+              "inherits User",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Pewarisan kelas di PHP memakai kata kunci extends yang ditulis di antara nama kelas anak dan nama kelas induknya. Keping implements keliru karena kata kunci itu hanya untuk antarmuka (interface), dan memakainya pada kelas biasa membuat PHP menolak berkasnya. Keping inherits menggoda bagi yang mengira kata kuncinya mengikuti istilah bahasa Inggris untuk pewarisan, tetapi inherits sama sekali bukan kata kunci PHP.",
+          },
         },
         {
           kind: "step",
@@ -805,14 +979,17 @@ export const laravelTrack: Track = {
               "}\n\n" +
               "$gateway = new Midtrans();\n" +
               "var_dump($gateway->pay(50000));\n" +
-              "var_dump($gateway instanceof PaymentInterface);\n\n" +
-              "// kelas yang mengaku ikut kontrak tapi tidak melengkapinya:\n" +
-              "class Xendit implements PaymentInterface {}",
+              "var_dump($gateway instanceof PaymentInterface);",
             output:
               "bool(true)\n" +
-              "bool(true)\n" +
-              "PHP Fatal error:  Class Xendit contains 1 abstract method and must therefore be declared abstract or implement the remaining method (PaymentInterface::pay) in /app/contoh.php on line 15",
-            note: "Baris terakhir adalah nilai jual interface: pelanggarannya ketahuan saat berkas dimuat, bukan saat pengguna menekan tombol bayar. `var_dump` dipakai di sini karena `echo true` hanya mencetak `1` dan `echo false` tidak mencetak apa-apa. Catatan jujur: panel latihan tidak menjalankan PHP, jadi keluaran ini tidak akan muncul di sini; yang diperiksa adalah kode yang kamu tulis.",
+              "bool(true)\n\n" +
+              "# berkas lain (xendit.php) yang mengaku ikut kontrak tapi tidak melengkapinya:\n" +
+              "#   <?php\n" +
+              "#   require 'kontrak.php';\n" +
+              "#   class Xendit implements PaymentInterface {}\n" +
+              "# berkasnya ditolak saat dimuat — belum satu baris pun dijalankan:\n" +
+              "PHP Fatal error:  Class Xendit contains 1 abstract method and must therefore be declared abstract or implement the remaining method (PaymentInterface::pay) in /app/xendit.php on line 3",
+            note: "Blok kedua adalah nilai jual interface: pelanggarannya ketahuan saat berkas dimuat, bukan saat pengguna menekan tombol bayar. `var_dump` dipakai di sini karena `echo true` hanya mencetak `1` dan `echo false` tidak mencetak apa-apa. Catatan jujur: panel latihan tidak menjalankan PHP, jadi keluaran ini tidak akan muncul di sini; yang diperiksa adalah kode yang kamu tulis.",
           },
           instruction:
             "Timmu ingin bisa menukar sumber data (MySQL hari ini, API pihak ketiga besok) tanpa mengubah Controller. Buat sebuah kontrak bernama `RepositoryInterface` yang mewajibkan setiap kelas pelaksananya menyediakan method publik `find` dengan satu parameter `$id` bertipe `int`. Kontrak ini hanya berisi tanda tangan method-nya, tanpa badan fungsi.",
@@ -838,6 +1015,23 @@ export const laravelTrack: Track = {
             },
           ],
           solution: "<?php\ninterface RepositoryInterface {\n    public function find(int $id);\n}",
+          susunKode: {
+            question:
+              "Rangkai antarmuka RepositoryInterface yang memuat kontrak metode find(int $id).",
+            potongan: [
+              "<?php",
+              "interface RepositoryInterface {",
+              "    public function find(int $id);",
+              "}",
+            ],
+            pengecoh: [
+              "class RepositoryInterface {",
+              "    public function find(int $id) {}",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Antarmuka dideklarasikan dengan kata kunci interface dan metodenya tidak boleh memiliki body fungsi {}. Keping class keliru karena antarmuka bukan kelas. Keping fungsi dengan body {} keliru karena metode dalam interface hanya berupa deklarasi tanda tangan (signature).",
+          },
         },
         {
           kind: "step",
@@ -880,6 +1074,24 @@ export const laravelTrack: Track = {
             },
           ],
           solution: "<?php\ntrait Timestampable {}\n\nclass Invoice {\n    use Timestampable;\n}",
+          susunKode: {
+            question:
+              "Rangkai trait Timestampable dan gunakan trait tersebut di dalam kelas Invoice.",
+            potongan: [
+              "<?php",
+              "trait Timestampable {}",
+              "class Invoice {",
+              "    use Timestampable;",
+              "}",
+            ],
+            pengecoh: [
+              "    use HasTimestamps;",
+              "    use TimestampableTrait;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Trait dideklarasikan dengan kata kunci trait dan diimpor di dalam tubuh kelas menggunakan kata kunci use. Keping use HasTimestamps keliru nama trait yang diminta. Keping use TimestampableTrait menggoda tetapi menyalahi nama trait Timestampable yang dipersyaratkan.",
+          },
         },
         {
           kind: "step",
@@ -927,6 +1139,22 @@ export const laravelTrack: Track = {
             },
           ],
           solution: "<?php\nnamespace App\\Controllers;\n\nclass HomeController {}",
+          susunKode: {
+            question:
+              "Susun deklarasi namespace App\\Controllers untuk kelas HomeController.",
+            potongan: [
+              "<?php",
+              "namespace App\\Controllers;",
+              "class HomeController {}",
+            ],
+            pengecoh: [
+              "package App\\Controllers;",
+              "namespace App/Controllers;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Deklarasi namespace diawali kata kunci namespace di awal berkas dengan pemisah garis miring terbalik (backslash \\). Keping package menggoda bagi pengembang Java. Keping garis miring biasa / keliru karena PHP hanya mengenali backslash untuk hierarki namespace.",
+          },
         },
         {
           kind: "step",
@@ -964,6 +1192,22 @@ export const laravelTrack: Track = {
                       }
                     ],
           solution: "composer require guzzlehttp/guzzle",
+          susunKode: {
+            question:
+              "Rangkai perintah terminal Composer untuk menginstal paket guzzlehttp/guzzle.",
+            potongan: [
+              "composer",
+              "require",
+              "guzzlehttp/guzzle",
+            ],
+            pengecoh: [
+              "composer install",
+              "guzzle/guzzle",
+            ],
+            pemisah: " ",
+            explanation:
+              "Perintah composer require digunakan untuk menambahkan dependency paket baru ke proyek PHP. Keping composer install keliru karena install digunakan untuk mengunduh dependensi dari lockfile yang sudah ada. Keping guzzle/guzzle menggoda tetapi nama vendor resmi di Packagist adalah guzzlehttp.",
+          },
         },
         {
           kind: "quiz",
@@ -1158,6 +1402,24 @@ export const laravelTrack: Track = {
             },
           ],
           solution: "<?php\nuse Illuminate\\Support\\Facades\\Route;\n\nRoute::get('/contact', function () {\n    return 'Kontak Kami';\n});",
+          susunKode: {
+            question:
+              "Susun penanganan rute GET /contact pada Laravel yang mengembalikan string 'Kontak Kami'.",
+            potongan: [
+              "<?php",
+              "use Illuminate\\Support\\Facades\\Route;",
+              "Route::get('/contact', function () {",
+              "    return 'Kontak Kami';",
+              "});",
+            ],
+            pengecoh: [
+              "Route::post('/contact', function () {",
+              "    echo 'Kontak Kami';",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Rute Laravel menggunakan Facade Route::get untuk menangani HTTP GET request dan mengembalikan nilai dengan return. Keping Route::post keliru metode HTTP yang dipersyaratkan. Keping echo menggoda bagi pengguna PHP native, tetapi handler rute Laravel wajib mengembalikan nilai (return).",
+          },
         },
         {
           kind: "step",
@@ -1205,6 +1467,22 @@ export const laravelTrack: Track = {
             },
           ],
           solution: "<?php\nuse Illuminate\\Support\\Facades\\Route;\n\nRoute::get('/post/{slug}', function ($slug) {\n    return $slug;\n})->name('post.show');",
+          susunKode: {
+            potongan: [
+              "<?php",
+              "use Illuminate\\Support\\Facades\\Route;",
+              "Route::get('/post/{slug}', function ($slug) {",
+              "    return $slug;",
+              "})->name('post.show');",
+            ],
+            pengecoh: [
+              "Route::get('/post/:slug', function ($slug) {",
+              "})->routeName('post.show');",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Parameter rute Laravel dibungkus dengan kurung kurawal {slug} dan penamaan rute menggunakan metode ->name(). Keping titik dua :slug menggoda pengembang Express/Vue Router tetapi salah di Laravel. Keping ->routeName() keliru nama metode Fluent Router.",
+          },
         },
         {
           kind: "step",
@@ -1235,6 +1513,23 @@ export const laravelTrack: Track = {
                       }
                     ],
           solution: "php artisan make:controller UserController",
+          susunKode: {
+            question:
+              "Rangkai perintah Artisan untuk membuat Controller bernama UserController.",
+            potongan: [
+              "php",
+              "artisan",
+              "make:controller",
+              "UserController",
+            ],
+            pengecoh: [
+              "create:controller",
+              "UsersController",
+            ],
+            pemisah: " ",
+            explanation:
+              "Perintah make:controller digunakan oleh Artisan CLI untuk menghasilkan berkas controller baru. Keping create:controller keliru nama sub-perintah Artisan. Keping UsersController menggoda tetapi konvensi penamaan controller tunggal Laravel menggunakan nama singular UserController.",
+          },
         },
         {
           kind: "step",
@@ -1278,6 +1573,23 @@ export const laravelTrack: Track = {
             },
           ],
           solution: "<?php\nuse App\\Http\\Controllers\\UserController;\nuse Illuminate\\Support\\Facades\\Route;\n\nRoute::get('/profile', [UserController::class, 'show']);",
+          susunKode: {
+            question:
+              "Hubungkan rute GET /profile ke metode 'show' milik UserController menggunakan sintaks array.",
+            potongan: [
+              "<?php",
+              "use App\\Http\\Controllers\\UserController;",
+              "use Illuminate\\Support\\Facades\\Route;",
+              "Route::get('/profile', [UserController::class, 'show']);",
+            ],
+            pengecoh: [
+              "Route::get('/profile', 'UserController@show');",
+              "Route::get('/profile', [UserController::class => 'show']);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Sintaks rute controller modern Laravel 8+ menggunakan array tuple [UserController::class, 'show']. Keping string 'UserController@show' adalah sintaks lama yang sudah tidak direkomendasikan. Keping panah asosiatif => keliru sintaks penulisan tuple.",
+          },
         },
         {
           kind: "step",
@@ -1315,6 +1627,22 @@ export const laravelTrack: Track = {
                       }
                     ],
           solution: "<h2>{{ $title }}</h2>",
+          susunKode: {
+            question:
+              "Rangkai sintaks Templating Blade {{ }} untuk menampilkan variabel $title di dalam elemen h2.",
+            potongan: [
+              "<h2>{{ ",
+              "$title",
+              " }}</h2>",
+            ],
+            pengecoh: [
+              "{$title}",
+              "<h3>{{ ",
+            ],
+            pemisah: "",
+            explanation:
+              "Mesin template Blade menggunakan kurung kurawal ganda {{ $title }} untuk mencetak data dengan sanitasi XSS otomatis. Keping kurung tunggal {$title} keliru sintaks Blade. Keping <h3>{{ menggoda tetapi menyalahi spesifikasi tag elemen <h2>.",
+          },
         },
         {
           kind: "step",
@@ -1362,6 +1690,22 @@ export const laravelTrack: Track = {
             },
           ],
           solution: "@foreach ($users as $user)\n    <span>{{ $user }}</span>\n@endforeach",
+          susunKode: {
+            question:
+              "Susun perulangan @foreach pada Blade untuk menampilkan array $users ke dalam tag span.",
+            potongan: [
+              "@foreach ($users as $user)",
+              "    <span>{{ $user }}</span>",
+              "@endforeach",
+            ],
+            pengecoh: [
+              "@foreach ($users in $user)",
+              "@endloop",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Direktif perulangan Blade diawali @foreach ($users as $user) dan ditutup wajib dengan @endforeach. Keping kata kunci in keliru sintaks PHP. Keping @endloop keliru karena nama direktif penutup perulangan foreach yang valid pada Blade adalah @endforeach.",
+          },
         },
         {
           kind: "step",
@@ -1409,6 +1753,24 @@ export const laravelTrack: Track = {
             },
           ],
           solution: "<?php\n$host = env('DB_HOST', '127.0.0.1');",
+          susunKode: {
+            question:
+              "Susun satu baris di berkas config yang membaca kunci DB_HOST dari berkas .env dan memakai 127.0.0.1 bila kunci itu belum diisi.",
+            potongan: [
+              "<?php",
+              "$host = env(",
+              "'DB_HOST',",
+              "'127.0.0.1'",
+              ");",
+            ],
+            pengecoh: [
+              "$host = getenv(",
+              "'DB_HOSTNAME',",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Helper env() membaca satu baris dari berkas .env dan menerima nilai cadangan sebagai argumen kedua. Keping getenv() menggoda karena fungsi bawaan PHP itu juga membaca environment, tetapi ia tidak menerima nilai cadangan di argumen kedua dan melewati lapisan konfigurasi Laravel. Keping 'DB_HOSTNAME' keliru karena nama kunci wajib sama persis dengan yang tertulis di .env \u2014 kunci yang tidak ditemukan membuat nilainya jatuh ke cadangan tanpa satu pun peringatan bahwa namanya salah ketik.",
+          },
         },
         {
           kind: "quiz",
@@ -1572,13 +1934,30 @@ export const laravelTrack: Track = {
                       }
                     ],
           solution: "php artisan make:migration create_categories_table",
+          susunKode: {
+            question:
+              "Rangkai perintah Artisan untuk membuat berkas migrasi tabel baru create_categories_table.",
+            potongan: [
+              "php",
+              "artisan",
+              "make:migration",
+              "create_categories_table",
+            ],
+            pengecoh: [
+              "create:migration",
+              "new_categories_table",
+            ],
+            pemisah: " ",
+            explanation:
+              "Artisan make:migration membuat skema migrasi tabel baru dengan konvensi nama create_nama-tabel_table. Keping create:migration keliru nama sub-perintah Artisan. Keping new_categories_table menggoda tetapi menyalahi konvensi penamaan migrasi Laravel.",
+          },
         },
         {
           kind: "step",
           id: "laravel-4-2",
           title: "Membuat Model Eloquent",
           explanation:
-            "Model adalah kelas PHP yang mewakili satu tabel, dan setiap objeknya mewakili satu baris di tabel itu. Kenapa terasa \"ajaib\"? Karena Laravel menyimpulkan nama tabelnya dari nama kelas lewat konvensi: kelas tunggal PascalCase `Product` dipetakan ke tabel jamak snake_case `products`, kunci utamanya diasumsikan `id`, dan kolom `created_at`/`updated_at` diisi otomatis. Kapan konvensinya perlu ditimpa: tabel warisan bernama `tbl_produk` ditangani dengan `protected $table = 'tbl_produk';` di dalam Model. Opsi `-m` membuat berkas migration-nya sekaligus, sehingga kelas dan skemanya lahir berpasangan dan tidak ada yang tertinggal — ada juga `-mcr` yang sekalian membuat controller resource-nya. Jebakan penamaan yang paling sering: menamai Model dalam bentuk jamak (`Categories`) membuat Laravel mencari tabel `categories_s` dan gagal dengan `Base table or view not found`; kata Inggris tidak beraturan pun ditangani (`Person` → `people`), tetapi kata Indonesia tidak — `Barang` akan dicari sebagai tabel `barangs`.",
+            "Model adalah kelas PHP yang mewakili satu tabel, dan setiap objeknya mewakili satu baris di tabel itu. Kenapa terasa \"ajaib\"? Karena Laravel menyimpulkan nama tabelnya dari nama kelas lewat konvensi: kelas tunggal PascalCase `Product` dipetakan ke tabel jamak snake_case `products`, kunci utamanya diasumsikan `id`, dan kolom `created_at`/`updated_at` diisi otomatis. Kapan konvensinya perlu ditimpa: tabel warisan bernama `tbl_produk` ditangani dengan `protected $table = 'tbl_produk';` di dalam Model. Opsi `-m` membuat berkas migration-nya sekaligus, sehingga kelas dan skemanya lahir berpasangan dan tidak ada yang tertinggal — ada juga `-mcr` yang sekalian membuat controller resource-nya. Jebakan penamaan yang paling sering: menamai Model dalam bentuk jamak (`Categories`) melanggar konvensi ini — begitu tebakan Laravel tidak lagi bisa kamu duga dari nama kelasnya, kamu bertemu `Base table or view not found` yang tidak menyebut nama Model sama sekali. Kata Inggris tidak beraturan memang ikut ditangani (`Person` → `people`), tetapi kata Indonesia tidak — `Barang` akan dicari sebagai tabel `barangs`.",
           example: {
             code: "# Di terminal, di akar proyek Laravel:\nphp artisan make:model Product -m",
             output:
@@ -1605,7 +1984,7 @@ export const laravelTrack: Track = {
                       },
                       {
                         "pattern": "make:model\\s+Category\\b",
-                        "message": "Nama model ditulis TUNGGAL dan PascalCase, sementara tabelnya jamak — Eloquent menghubungkan keduanya otomatis. Menamainya `Categories` membuat Eloquent mencari tabel `categories_s`."
+                        "message": "Nama model ditulis TUNGGAL dan PascalCase, sementara tabelnya jamak — Eloquent menghubungkan keduanya otomatis. Menamainya `Categories` melanggar konvensi itu, dan nama tabel yang ditebak Eloquent tidak lagi bisa kamu duga dari nama kelasnya."
                       },
                       {
                         "pattern": "(^|\\s)-m(\\s|$)|--migration",
@@ -1613,6 +1992,24 @@ export const laravelTrack: Track = {
                       }
                     ],
           solution: "php artisan make:model Category -m",
+          susunKode: {
+            question:
+              "Rangkai perintah Artisan untuk membuat Model Category beserta berkas migrasinya sekaligus (-m).",
+            potongan: [
+              "php",
+              "artisan",
+              "make:model",
+              "Category",
+              "-m",
+            ],
+            pengecoh: [
+              "make:model-migration",
+              "--with-migration",
+            ],
+            pemisah: " ",
+            explanation:
+              "Opsi singkat -m atau --migration pada make:model memerintahkan Artisan untuk membuat berkas migrasi tabel terkait secara otomatis. Keping make:model-migration keliru perintah. Keping --with-migration adalah nama flag fiktif.",
+          },
         },
         {
           kind: "step",
@@ -1656,6 +2053,22 @@ export const laravelTrack: Track = {
             },
           ],
           solution: "<?php\nuse App\\Models\\User;\n\n$user = User::find(5);",
+          susunKode: {
+            question:
+              "Susun kueri Eloquent untuk mencari data User berdasarkan kunci utama ID 5 menggunakan metode find().",
+            potongan: [
+              "<?php",
+              "use App\\Models\\User;",
+              "$user = User::find(5);",
+            ],
+            pengecoh: [
+              "$user = User::get(5);",
+              "$user = User::whereId(5);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Metode find($id) pada Eloquent secara instan mengambil satu model berdasarkan primary key. Keping get(5) keliru karena get() mengambil koleksi dan tidak menerima id langsung. Keping whereId(5) menggoda tetapi memerlukan pemanggilan ->first() untuk mendapatkan instans tunggal.",
+          },
         },
         {
           kind: "step",
@@ -1702,6 +2115,22 @@ export const laravelTrack: Track = {
             },
           ],
           solution: "<?php\nuse App\\Models\\Product;\n\n$products = Product::where('status', 'active')->paginate(15);",
+          susunKode: {
+            potongan: [
+              "<?php",
+              "use App\\Models\\Product;",
+              "$products =",
+              "Product::where('status', 'active')",
+              "->paginate(15);",
+            ],
+            pengecoh: [
+              "Product::filter('status', 'active')",
+              "->limit(15);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Penyaringan baris memakai where(), dan query baru benar-benar dijalankan oleh method penutupnya \u2014 di sini paginate(15) yang sekaligus memecah hasilnya per halaman. Keping filter() keliru karena filter adalah method Collection yang bekerja pada data yang sudah ditarik ke memori, bukan klausa SQL. Keping ->limit(15) menggoda karena juga membatasi jumlah baris, tetapi ia tidak menghasilkan objek Paginator sehingga navigasi halaman lewat links() tidak pernah muncul.",
+          },
         },
         {
           kind: "step",
@@ -1745,6 +2174,25 @@ export const laravelTrack: Track = {
             },
           ],
           solution: "<?php\nclass Post extends Model {\n    public function user() {\n        return $this->belongsTo(User::class);\n    }\n}",
+          susunKode: {
+            question:
+              "Susun relasi Eloquent belongsTo pada kelas Post yang menghubungkan artikel ke pemiliknya (User).",
+            potongan: [
+              "<?php",
+              "class Post extends Model {",
+              "    public function user() {",
+              "        return $this->belongsTo(User::class);",
+              "    }",
+              "}",
+            ],
+            pengecoh: [
+              "        return $this->hasOne(User::class);",
+              "        return $this->belongsTo('User');",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Relasi belongsTo digunakan pada model anak yang menyimpan foreign key untuk merujuk ke induk (User). Keping hasOne keliru karena mendefinisikan relasi dari sisi induk ke anak. Keping string 'User' menggoda tetapi menyalahi rekomendasi penggunaan User::class.",
+          },
         },
         {
           kind: "step",
@@ -1796,6 +2244,22 @@ export const laravelTrack: Track = {
             },
           ],
           solution: "<?php\nuse App\\Models\\Product;\n\n$products = Product::with('category')->get();",
+          susunKode: {
+            potongan: [
+              "<?php",
+              "use App\\Models\\Product;",
+              "$products =",
+              "Product::with('category')",
+              "->get();",
+            ],
+            pengecoh: [
+              "Product::load('category')",
+              "->all();",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Eager loading dipasang dengan with() sebelum query dijalankan, lalu get() yang benar-benar mengeksekusinya. Keping load() keliru karena load() dipakai pada model atau koleksi yang sudah diambil dari database, bukan sebagai method statis pada kelas Model. Keping ->all() menggoda karena Product::all() memang ada dan terasa serupa, tetapi all() bukan method Builder \u2014 merantaikannya setelah with() membuat PHP melempar error method tidak ditemukan.",
+          },
         },
         {
           kind: "step",
@@ -1839,6 +2303,23 @@ export const laravelTrack: Track = {
             },
           ],
           solution: "<?php\nuse App\\Models\\Product;\n\nProduct::factory(100)->create();",
+          susunKode: {
+            question:
+              "Rangkai eksekusi Factory untuk menghasilkan dan menyimpan 100 data dummy Product ke basis data.",
+            potongan: [
+              "<?php",
+              "use App\\Models\\Product;",
+              "Product::factory(100)",
+              "->create();",
+            ],
+            pengecoh: [
+              "Product::generate(100)",
+              "->make();",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Cetakan data palsu dipanggil sebagai method statis factory() pada Model-nya, lalu create() yang menuliskan barisnya ke database. Keping generate() keliru nama method \u2014 Eloquent tidak punya method itu, dan pesan errornya tidak menyinggung factory sama sekali. Keping ->make() sangat menggoda karena kodenya berjalan tanpa error apa pun, tetapi ia hanya membentuk objek di memori: databasenya tetap kosong dan paginasi yang ingin kamu uji tidak pernah punya data.",
+          },
         },
         {
           kind: "quiz",
@@ -1857,7 +2338,7 @@ export const laravelTrack: Track = {
               ],
               answerIndex: 1,
               explanation:
-                "Eloquent menebak nama tabel dengan mengubah nama Model tunggal PascalCase menjadi jamak snake_case: `Article` → `articles`. Pilihan `article_table` dan `tbl_article` menggoda karena banyak proyek warisan memang memakai awalan atau akhiran seperti itu — dan untuk kasus tersebut kamu memang harus menimpanya dengan `protected $table`. Jebakan penamaan yang sering: Model yang sudah jamak (`Categories`) membuat Eloquent mencari tabel `categories_s`.",
+                "Eloquent menebak nama tabel dengan mengubah nama Model tunggal PascalCase menjadi jamak snake_case: `Article` → `articles`. Pilihan `article_table` dan `tbl_article` menggoda karena banyak proyek warisan memang memakai awalan atau akhiran seperti itu — dan untuk kasus tersebut kamu memang harus menimpanya dengan `protected $table`. Jebakan penamaan yang sering: memberi nama Model dalam bentuk jamak (`Categories`) — tebakan nama tabelnya tidak lagi bisa kamu duga dari nama kelas, dan itulah asal `Base table or view not found` yang tidak menyebut Model sama sekali.",
             },
             {
               id: "l4-q2",
@@ -2011,6 +2492,24 @@ export const laravelTrack: Track = {
           ],
           solution:
             "<form action=\"/login\" method=\"POST\">\n    @csrf\n    <input type=\"email\" name=\"email\">\n    <button type=\"submit\">Masuk</button>\n</form>",
+          susunKode: {
+            question:
+              "Susun formulir login POST yang membawa token pengaman antar-situs sehingga permintaannya tidak lagi dijawab 419.",
+            potongan: [
+              "<form action=\"/login\" method=\"POST\">",
+              "    @csrf",
+              "    <input type=\"email\" name=\"email\">",
+              "    <button type=\"submit\">Masuk</button>",
+              "</form>",
+            ],
+            pengecoh: [
+              "    @crsf",
+              "    @token",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Direktif @csrf menyuntikkan input tersembunyi bernama _token ke dalam formulir, dan tanpa input itu middleware menolak permintaannya dengan 419 Page Expired. Keping @crsf adalah salah ketik yang sangat sering terjadi dan sulit terlihat mata; Blade tidak mengenalinya sebagai direktif sehingga teksnya tercetak apa adanya ke halaman tanpa satu pun pesan error. Keping @token menggoda karena namanya terdengar masuk akal, padahal direktif itu tidak ada di Blade.",
+          },
         },
         {
           kind: "step",
@@ -2068,6 +2567,24 @@ export const laravelTrack: Track = {
           ],
           solution:
             "<?php\n$validated = $request->validate([\n    'name' => 'required',\n    'age' => 'required|numeric',\n]);",
+          susunKode: {
+            question:
+              "Rangkai validasi masukan request wajib (required) untuk name dan numeric untuk age.",
+            potongan: [
+              "<?php",
+              "$request->validate([",
+              "    'name' => 'required',",
+              "    'age' => 'required|numeric',",
+              "]);",
+            ],
+            pengecoh: [
+              "$request->check([",
+              "    'age' => 'required|integer',",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Metode $request->validate() menerima array aturan di mana beberapa aturan dipisahkan dengan garis tegak (pipe |). Keping $request->check() keliru nama metode. Keping 'required|integer' menggoda tetapi menyalahi spesifikasi aturan numeric.",
+          },
         },
         {
           kind: "step",
@@ -2106,6 +2623,23 @@ export const laravelTrack: Track = {
                       }
                     ],
           solution: "php artisan make:request StoreUserRequest",
+          susunKode: {
+            question:
+              "Rangkai perintah Artisan untuk membuat kelas Form Request bernama StoreUserRequest.",
+            potongan: [
+              "php",
+              "artisan",
+              "make:request",
+              "StoreUserRequest",
+            ],
+            pengecoh: [
+              "make:form-request",
+              "CreateUserRequest",
+            ],
+            pemisah: " ",
+            explanation:
+              "Perintah make:request membuat kelas Form Request terspesialisasi di folder app/Http/Requests. Keping make:form-request keliru sub-perintah Artisan. Keping CreateUserRequest menggoda tetapi instruksi meminta nama StoreUserRequest.",
+          },
         },
         {
           kind: "step",
@@ -2148,6 +2682,22 @@ export const laravelTrack: Track = {
             },
           ],
           solution: "<?php\n$path = $request->file('document')->store('docs', 'public');",
+          susunKode: {
+            question:
+              "Rangkai kode pengunggahan berkas 'document' dari request dan menyimpannya ke disk 'public' folder 'docs'.",
+            potongan: [
+              "<?php",
+              "$path = $request->file('document')",
+              "->store('docs', 'public');",
+            ],
+            pengecoh: [
+              "$path = $request->input('document')",
+              "->save('docs', 'public');",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Berkas unggahan diambil dengan file() yang mengembalikan objek UploadedFile, lalu store() menyimpannya dan mengembalikan jalur relatifnya. Keping input() keliru karena input() membaca data teks; untuk berkas ia mengembalikan nilai yang tidak punya method penyimpanan sehingga programnya mati. Keping ->save() menggoda karena namanya paling terdengar seperti 'simpan', padahal method penyimpanan pada UploadedFile bernama store() atau storeAs().",
+          },
         },
         {
           kind: "step",
@@ -2190,6 +2740,21 @@ export const laravelTrack: Track = {
             },
           ],
           solution: "<h1>403 Akses Ditolak</h1>\n<p>Kamu tidak punya izin untuk membuka halaman ini.</p>",
+          susunKode: {
+            question:
+              "Susun tampilan pesan error kustom untuk HTTP status code 403 Akses Ditolak.",
+            potongan: [
+              "<h1>403 Akses Ditolak</h1>",
+              "<p>Kamu tidak punya izin untuk membuka halaman ini.</p>",
+            ],
+            pengecoh: [
+              "<h1>404 Halaman Tidak Ditemukan</h1>",
+              "<h2>403 Akses Ditolak</h2>",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Tampilan error 403 menampilkan heading h1 yang memuat status code 403 Akses Ditolak. Keping 404 keliru status code karena 404 adalah Not Found. Keping h2 menggoda tetapi menyalahi spesifikasi tag elemen h1.",
+          },
         },
         {
           kind: "step",
@@ -2234,6 +2799,25 @@ export const laravelTrack: Track = {
             },
           ],
           solution: "<?php\nclass Article extends Model {\n    protected $fillable = ['title', 'content'];\n}",
+          susunKode: {
+            question:
+              "Susun properti terproteksi $fillable pada model Article untuk mengizinkan mass assignment pada kolom title dan content.",
+            potongan: [
+              "<?php",
+              "class Article extends Model {",
+              "    protected $fillable = [",
+              "'title', 'content'",
+              "];",
+              "}",
+            ],
+            pengecoh: [
+              "    public $fillable = [",
+              "'title', 'is_admin'",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Daftar putih kolom yang boleh diisi massal dideklarasikan sebagai properti protected bernama $fillable berisi array nama kolom. Keping public menggoda karena kodenya tetap berjalan, tetapi konvensi Eloquent memakai protected dan properti publik membuka isi daftar itu untuk diubah dari luar model. Keping 'title', 'is_admin' keliru dan justru berbahaya: memasukkan kolom sensitif ke daftar putih membuka kembali pintu yang sedang kita tutup, sehingga siapa pun bisa menyisipkan is_admin=1 lewat formulir.",
+          },
         },
         {
           kind: "quiz",
@@ -2380,8 +2964,9 @@ export const laravelTrack: Track = {
               "   INFO  Installing and building Node dependencies.\n" +
               "   INFO  Breeze scaffolding installed successfully.\n\n" +
               "$ php artisan migrate\n" +
-              "  2014_10_12_000000_create_users_table ................. 31ms DONE\n" +
-              "  2014_10_12_100000_create_password_reset_tokens_table . 18ms DONE\n\n" +
+              "  0001_01_01_000000_create_users_table ................. 31ms DONE\n" +
+              "  0001_01_01_000001_create_cache_table ................. 18ms DONE\n" +
+              "  0001_01_01_000002_create_jobs_table .................. 14ms DONE\n\n" +
               "$ php artisan route:list --path=login\n" +
               "  GET|HEAD   login .......... login › AuthenticatedSessionController@create\n" +
               "  POST       login ................. AuthenticatedSessionController@store",
@@ -2402,6 +2987,23 @@ export const laravelTrack: Track = {
                       }
                     ],
           solution: "composer require laravel/breeze --dev",
+          susunKode: {
+            question:
+              "Rangkai perintah Composer untuk menginstal paket scaffolding otentikasi laravel/breeze pada lingkungan dev.",
+            potongan: [
+              "composer",
+              "require",
+              "laravel/breeze",
+              "--dev",
+            ],
+            pengecoh: [
+              "composer install",
+              "--save-dev",
+            ],
+            pemisah: " ",
+            explanation:
+              "Paket Laravel Breeze diinstal menggunakan composer require dengan flag --dev. Keping composer install keliru perintah penambahan paket baru. Keping --save-dev menggoda pengembang NPM/Node.js, padahal flag Composer adalah --dev.",
+          },
         },
         {
           kind: "step",
@@ -2452,6 +3054,25 @@ export const laravelTrack: Track = {
           ],
           solution:
             "<?php\nuse Illuminate\\Support\\Facades\\Auth;\n\n$credentials = $request->validate([\n    'email' => 'required|email',\n    'password' => 'required',\n]);\n\nif (Auth::attempt($credentials)) {\n    $request->session()->regenerate();\n    return redirect()->intended('dashboard');\n}",
+          susunKode: {
+            question:
+              "Susun proses autentikasi manual menggunakan Facade Auth::attempt dan regenerasi sesi.",
+            potongan: [
+              "<?php",
+              "use Illuminate\\Support\\Facades\\Auth;",
+              "if (Auth::attempt($credentials)) {",
+              "    $request->session()->regenerate();",
+              "    return redirect()->intended('dashboard');",
+              "}",
+            ],
+            pengecoh: [
+              "if (Auth::login($credentials)) {",
+              "    $request->session()->reset();",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Fungsi Auth::attempt($credentials) memverifikasi kredensial pengguna dan $request->session()->regenerate() mencegah serangan Session Fixation. Keping Auth::login keliru karena login() menerima instansiasi Model User, bukan array kredensial. Keping session()->reset() keliru nama metode.",
+          },
         },
         {
           kind: "step",
@@ -2500,13 +3121,31 @@ export const laravelTrack: Track = {
           ],
           solution:
             "<?php\nuse Illuminate\\Support\\Facades\\Route;\n\nRoute::middleware(['auth'])->group(function () {\n    Route::get('/profile', [ProfileController::class, 'show']);\n});",
+          susunKode: {
+            question:
+              "Susun proteksi grup rute menggunakan middleware 'auth' untuk rute GET /profile.",
+            potongan: [
+              "<?php",
+              "use Illuminate\\Support\\Facades\\Route;",
+              "Route::middleware(['auth'])->group(function () {",
+              "    Route::get('/profile', [ProfileController::class, 'show']);",
+              "});",
+            ],
+            pengecoh: [
+              "Route::guard(['auth'])->group(function () {",
+              "    Route::route('/profile', [ProfileController::class, 'show']);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Middleware dibungkus dengan Route::middleware(['auth'])->group(...) untuk mengamankan seluruh rute di dalamnya. Keping Route::guard keliru karena guard adalah mekanisme penyimpan status auth, bukan metode pendaftaran rute. Keping Route::route keliru nama metode rute.",
+          },
         },
         {
           kind: "step",
           id: "laravel-6-4",
           title: "Otorisasi Hak Akses dengan Policy",
           explanation:
-            "Policy adalah kelas berisi aturan \"siapa boleh melakukan apa\" terhadap **satu Model**, dengan satu method per aksi: `view`, `update`, `delete`, dan seterusnya. Setiap method menerima pengguna yang sedang login beserta objek yang disentuh, lalu mengembalikan `true` atau `false` — misalnya `return $user->id === $post->user_id;` yang berarti \"hanya penulisnya yang boleh menyunting\". Kenapa dipisahkan dari Controller: aturan yang sama dibutuhkan di banyak tempat — Controller, tampilan Blade (`@can('update', $post)`), dan API Resource — dan menuliskannya berulang berarti suatu hari satu tempat lupa diperbarui. Beda dengan Gate: Gate untuk izin yang tidak terikat objek (\"boleh membuka dashboard admin\"), Policy untuk izin yang bergantung pada baris data tertentu. Laravel menemukan Policy-nya secara otomatis lewat konvensi nama `<Model>Policy`, itulah sebabnya flag `--model` saat membuatnya penting. Jebakan yang selalu muncul: menyembunyikan tombol Edit di Blade **bukan** otorisasi — tanpa `$this->authorize('update', $post)` di Controller, siapa pun masih bisa mengirim permintaan `PUT` langsung dan menyunting milik orang lain.",
+            "Policy adalah kelas berisi aturan \"siapa boleh melakukan apa\" terhadap **satu Model**, dengan satu method per aksi: `view`, `update`, `delete`, dan seterusnya. Setiap method menerima pengguna yang sedang login beserta objek yang disentuh, lalu mengembalikan `true` atau `false` — misalnya `return $user->id === $post->user_id;` yang berarti \"hanya penulisnya yang boleh menyunting\". Kenapa dipisahkan dari Controller: aturan yang sama dibutuhkan di banyak tempat — Controller, tampilan Blade (`@can('update', $post)`), dan API Resource — dan menuliskannya berulang berarti suatu hari satu tempat lupa diperbarui. Beda dengan Gate: Gate untuk izin yang tidak terikat objek (\"boleh membuka dashboard admin\"), Policy untuk izin yang bergantung pada baris data tertentu. Laravel menemukan Policy-nya secara otomatis lewat konvensi nama `<Model>Policy`, itulah sebabnya flag `--model` saat membuatnya penting. Jebakan yang selalu muncul: menyembunyikan tombol Edit di Blade **bukan** otorisasi — tanpa `Gate::authorize('update', $post)` di Controller, siapa pun masih bisa mengirim permintaan `PUT` langsung dan menyunting milik orang lain. Catatan versi yang menyelamatkanmu dari tutorial lama: sejak Laravel 11, kelas `Controller` bawaan tidak lagi menyertakan trait `AuthorizesRequests`, sehingga `$this->authorize(...)` melempar `Call to undefined method` — pakai `Gate::authorize(...)`, `$request->user()->can(...)`, atau middleware `->can('update', 'post')`.",
           example: {
             code:
               "// app/Policies/PostPolicy.php\n" +
@@ -2516,8 +3155,9 @@ export const laravelTrack: Track = {
               "    }\n" +
               "}\n\n" +
               "// app/Http/Controllers/PostController.php\n" +
+              "use Illuminate\\Support\\Facades\\Gate;\n\n" +
               "public function update(Request $request, Post $post) {\n" +
-              "    $this->authorize('update', $post);   // 403 kalau Policy menolak\n" +
+              "    Gate::authorize('update', $post);   // 403 kalau Policy menolak\n" +
               "    $post->update($request->validated());\n" +
               "}",
             output:
@@ -2529,7 +3169,7 @@ export const laravelTrack: Track = {
               "# di Blade:\n" +
               "@can('update', $post)  ->  tombol Edit dirender\n" +
               "@endcan                    (untuk user lain, tombolnya tidak ada sama sekali)",
-            note: "Dua lapisan itu saling melengkapi: `@can` mengatur apa yang TERLIHAT, `$this->authorize()` mengatur apa yang BOLEH TERJADI. Yang kedua tidak boleh ditinggalkan, karena permintaan HTTP bisa dikirim tanpa membuka halamannya. Catatan jujur: panel latihan tidak menjalankan Laravel, jadi keluaran ini tidak akan muncul di sini; yang diperiksa adalah kode yang kamu tulis.",
+            note: "Dua lapisan itu saling melengkapi: `@can` mengatur apa yang TERLIHAT, `Gate::authorize()` mengatur apa yang BOLEH TERJADI. Yang kedua tidak boleh ditinggalkan, karena permintaan HTTP bisa dikirim tanpa membuka halamannya. Catatan jujur: panel latihan tidak menjalankan Laravel, jadi keluaran ini tidak akan muncul di sini; yang diperiksa adalah kode yang kamu tulis.",
           },
           instruction:
             "Tuliskan perintah Artisan terminal untuk membuat Policy `ProductPolicy` yang terikat ke Model `Product`.",
@@ -2550,13 +3190,31 @@ export const laravelTrack: Track = {
                       }
                     ],
           solution: "php artisan make:policy ProductPolicy --model=Product",
+          susunKode: {
+            question:
+              "Rangkai perintah Artisan untuk membuat kelas Policy ProductPolicy yang terhubung ke model Product.",
+            potongan: [
+              "php",
+              "artisan",
+              "make:policy",
+              "ProductPolicy",
+              "--model=Product",
+            ],
+            pengecoh: [
+              "make:gate",
+              "--for-model=Product",
+            ],
+            pemisah: " ",
+            explanation:
+              "Perintah make:policy membuat kelas otorisasi dengan opsi --model=Product untuk menggenerasi metode CRUD Policy bawaan. Keping make:gate keliru karena Gate didefinisikan di service provider, bukan berkas kelas tersendiri. Keping --for-model adalah nama flag fiktif.",
+          },
         },
         {
           kind: "step",
           id: "laravel-6-5",
           title: "Role Sederhana dengan Gate",
           explanation:
-            "Gate adalah izin bernama yang tidak terikat pada satu baris data: kamu mendaftarkannya sekali di `AppServiceProvider` dengan `Gate::define('nama-izin', fn (User $user) => ...)`, lalu memakainya di mana pun lewat `Gate::allows('nama-izin')`, `$this->authorize('nama-izin')`, atau `@can('nama-izin')` di Blade. Kenapa dipusatkan, bukan ditulis `if ($user->role === 'admin')` di setiap tempat? Karena definisi \"admin\" berubah — nanti ada peran `super-admin`, atau perannya pindah ke tabel terpisah — dan pemeriksaan yang tersebar di lima puluh berkas harus dicari satu per satu. Dengan Gate, aturannya diubah di satu baris. Kapan pilih Gate dan kapan Policy: Gate untuk izin tanpa objek (\"boleh melihat laporan keuangan\"), Policy begitu izinnya bergantung pada baris tertentu (\"boleh menyunting **artikel ini**\"). Jebakan yang perlu kamu hindari: menumpuk puluhan Gate hingga `AppServiceProvider` menjadi berkas raksasa — itu tanda sebagian di antaranya seharusnya Policy. Dan ingat, fungsi Gate menerima objek pengguna yang sedang login secara otomatis; ia tidak pernah dipanggil untuk pengunjung anonim kecuali parameternya kamu tandai boleh `null`.",
+            "Gate adalah izin bernama yang tidak terikat pada satu baris data: kamu mendaftarkannya sekali di `AppServiceProvider` dengan `Gate::define('nama-izin', fn (User $user) => ...)`, lalu memakainya di mana pun lewat `Gate::allows('nama-izin')`, `Gate::authorize('nama-izin')`, atau `@can('nama-izin')` di Blade. Kenapa dipusatkan, bukan ditulis `if ($user->role === 'admin')` di setiap tempat? Karena definisi \"admin\" berubah — nanti ada peran `super-admin`, atau perannya pindah ke tabel terpisah — dan pemeriksaan yang tersebar di lima puluh berkas harus dicari satu per satu. Dengan Gate, aturannya diubah di satu baris. Kapan pilih Gate dan kapan Policy: Gate untuk izin tanpa objek (\"boleh melihat laporan keuangan\"), Policy begitu izinnya bergantung pada baris tertentu (\"boleh menyunting **artikel ini**\"). Jebakan yang perlu kamu hindari: menumpuk puluhan Gate hingga `AppServiceProvider` menjadi berkas raksasa — itu tanda sebagian di antaranya seharusnya Policy. Dan ingat, fungsi Gate menerima objek pengguna yang sedang login secara otomatis; ia tidak pernah dipanggil untuk pengunjung anonim kecuali parameternya kamu tandai boleh `null`.",
           example: {
             code:
               "// app/Providers/AppServiceProvider.php — di dalam method boot()\n" +
@@ -2600,6 +3258,22 @@ export const laravelTrack: Track = {
           ],
           solution:
             "<?php\nuse Illuminate\\Support\\Facades\\Gate;\n\nGate::define('is-admin', function (User $user) {\n    return $user->is_admin;\n});",
+          susunKode: {
+            potongan: [
+              "<?php",
+              "use Illuminate\\Support\\Facades\\Gate;",
+              "Gate::define('is-admin', function (User $user) {",
+              "    return $user->is_admin;",
+              "});",
+            ],
+            pengecoh: [
+              "Gate::create('is-admin', function (User $user) {",
+              "    return $user->role == 'admin';",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Gate didefinisikan dengan Gate::define('nama-gate', callback) dan mengembalikan nilai boolean. Keping Gate::create keliru nama metode. Keping $user->role == 'admin' menggoda tetapi menyalahi spesifikasi atribut boolean $user->is_admin.",
+          },
         },
         {
           kind: "step",
@@ -2651,6 +3325,24 @@ export const laravelTrack: Track = {
           ],
           solution:
             "<?php\nuse Illuminate\\Contracts\\Auth\\MustVerifyEmail;\n\nclass User extends Authenticatable implements MustVerifyEmail {}",
+          susunKode: {
+            question:
+              "Rangkai deklarasi kelas User yang mengimplementasikan antarmuka MustVerifyEmail.",
+            potongan: [
+              "<?php",
+              "use Illuminate\\Contracts\\Auth\\MustVerifyEmail;",
+              "class User extends Authenticatable",
+              "implements MustVerifyEmail",
+              "{}",
+            ],
+            pengecoh: [
+              "extends MustVerifyEmail",
+              "implements VerifyEmailContract",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Verifikasi email dinyalakan dengan memasang kontrak MustVerifyEmail memakai kata kunci implements, tanpa membuang pewarisan Authenticatable yang membawa seluruh kemampuan login. Keping extends MustVerifyEmail keliru karena MustVerifyEmail adalah interface, dan PHP hanya mengizinkan satu kelas induk sehingga berkasnya langsung ditolak. Keping implements VerifyEmailContract menggoda karena banyak kontrak Laravel memang berakhiran Contract, padahal nama antarmuka ini tidak memakai akhiran itu.",
+          },
         },
         {
           kind: "quiz",
@@ -2711,7 +3403,7 @@ export const laravelTrack: Track = {
               ],
               answerIndex: 1,
               explanation:
-                "`@can('action', $model)` menjalankan Gate atau Policy yang sesuai dan hanya merender blok di dalamnya bila diizinkan. Pilihan `@role('admin')` sangat menggoda karena banyak paket pihak ketiga (seperti Spatie Permission) memang menyediakan direktif seperti itu — tetapi ia bukan bawaan Laravel. Yang wajib diingat: `@can` hanya mengatur apa yang TERLIHAT; tanpa `$this->authorize()` di Controller, permintaan tetap bisa dikirim langsung tanpa membuka halamannya.",
+                "`@can('action', $model)` menjalankan Gate atau Policy yang sesuai dan hanya merender blok di dalamnya bila diizinkan. Pilihan `@role('admin')` sangat menggoda karena banyak paket pihak ketiga (seperti Spatie Permission) memang menyediakan direktif seperti itu — tetapi ia bukan bawaan Laravel. Yang wajib diingat: `@can` hanya mengatur apa yang TERLIHAT; tanpa `Gate::authorize()` di Controller, permintaan tetap bisa dikirim langsung tanpa membuka halamannya.",
             },
             {
               id: "l6-q5",
@@ -2846,6 +3538,24 @@ export const laravelTrack: Track = {
           ],
           solution:
             "<?php\nuse Illuminate\\Support\\Facades\\Route;\n\nRoute::get('/users', function () {\n    return response()->json(['status' => 'ok']);\n});",
+          susunKode: {
+            question:
+              "Susun rute API GET /users di routes/api.php yang mengembalikan respons JSON status ok.",
+            potongan: [
+              "<?php",
+              "use Illuminate\\Support\\Facades\\Route;",
+              "Route::get('/users', function () {",
+              "    return response()->json(['status' => 'ok']);",
+              "});",
+            ],
+            pengecoh: [
+              "    return json_encode(['status' => 'ok']);",
+              "Route::api('/users', function () {",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Respons API standar pada Laravel dikembalikan menggunakan helper response()->json(...). Keping json_encode menggoda bagi pengguna PHP native, tetapi tidak memasang header Content-Type: application/json secara otomatis. Keping Route::api keliru nama metode HTTP.",
+          },
         },
         {
           kind: "step",
@@ -2888,6 +3598,23 @@ export const laravelTrack: Track = {
                       }
                     ],
           solution: "php artisan make:resource UserResource",
+          susunKode: {
+            question:
+              "Rangkai perintah Artisan untuk membuat kelas API Resource bernama UserResource.",
+            potongan: [
+              "php",
+              "artisan",
+              "make:resource",
+              "UserResource",
+            ],
+            pengecoh: [
+              "make:api-resource",
+              "UserTransformer",
+            ],
+            pemisah: " ",
+            explanation:
+              "Perintah make:resource membuat kelas transformasi JSON API di folder app/Http/Resources. Keping make:api-resource keliru sub-perintah Artisan. Keping UserTransformer menggoda bagi pengembang paket Fractal/Fractalizer.",
+          },
         },
         {
           kind: "step",
@@ -2934,6 +3661,23 @@ export const laravelTrack: Track = {
             },
           ],
           solution: "<?php\n$token = $user->createToken('mobile')->plainTextToken;",
+          susunKode: {
+            question:
+              "Rangkai kode pembentukan Sanctum API token bernama 'mobile' dan mengambil nilai plainTextToken.",
+            potongan: [
+              "<?php",
+              "$token = $user",
+              "->createToken('mobile')",
+              "->plainTextToken;",
+            ],
+            pengecoh: [
+              "->generateToken('mobile')",
+              "->accessToken;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Sanctum menerbitkan token lewat createToken() pada objek pengguna, dan nilai mentahnya hanya bisa dibaca sekali dari properti plainTextToken. Keping generateToken() keliru nama method sehingga PHP langsung berhenti dengan Call to undefined method. Keping ->accessToken menggoda karena Laravel Passport memang memakai nama itu, tetapi pada Sanctum properti accessToken berisi objek baris databasenya \u2014 yang terkirim ke klien menjadi representasi objek, bukan token yang bisa dipakai.",
+          },
         },
         {
           kind: "step",
@@ -2977,6 +3721,23 @@ export const laravelTrack: Track = {
             },
           ],
           solution: "<?php\nreturn response()->json(['message' => 'Created'], 201);",
+          susunKode: {
+            question:
+              "Rangkai pengembalian respons JSON dengan pesan 'Created' dan HTTP status code 201 Created.",
+            potongan: [
+              "<?php",
+              "return response()->json(",
+              "['message' => 'Created'],",
+              "201);",
+            ],
+            pengecoh: [
+              "return response()->created(",
+              "200);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Status code ditulis sebagai argumen kedua method json(), setelah array datanya. Keping 200 menggoda karena responsnya tetap dianggap berhasil dan tidak ada error apa pun yang muncul, padahal klien kehilangan informasi bahwa ada sumber daya baru terbentuk \u2014 cacat yang baru ketahuan saat integrasi dengan tim mobile. Keping response()->created( keliru karena helper response() tidak menyediakan method created(); yang ada hanya json(), view(), dan download().",
+          },
         },
         {
           kind: "step",
@@ -3024,6 +3785,23 @@ export const laravelTrack: Track = {
           ],
           solution:
             "<?php\nuse App\\Http\\Resources\\UserResource;\nuse App\\Models\\User;\n\nreturn UserResource::collection(User::paginate(15));",
+          susunKode: {
+            question:
+              "Rangkai pengembalian koleksi UserResource yang dipaginasi 15 data per halaman.",
+            potongan: [
+              "<?php",
+              "use App\\Http\\Resources\\UserResource;",
+              "use App\\Models\\User;",
+              "return UserResource::collection(User::paginate(15));",
+            ],
+            pengecoh: [
+              "return new UserResource(User::paginate(15));",
+              "return UserResource::paginate(User::all(), 15);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Metode static UserResource::collection(...) memformat daftar/koleksi model yang terpaginasi ke dalam struktur data API Resource. Keping new UserResource(...) keliru karena konstruktor tunggal diperuntukkan bagi satu instans model. Keping UserResource::paginate keliru nama metode.",
+          },
         },
         {
           kind: "step",
@@ -3067,6 +3845,24 @@ export const laravelTrack: Track = {
           ],
           solution:
             "<?php\nuse Illuminate\\Support\\Facades\\Route;\n\nRoute::middleware(['throttle:60,1'])->group(function () {\n    Route::get('/products', [ProductController::class, 'index']);\n});",
+          susunKode: {
+            question:
+              "Susun rute API dengan proteksi pembatasan laju akses Rate Limiting 60 kali per menit (throttle:60,1).",
+            potongan: [
+              "<?php",
+              "use Illuminate\\Support\\Facades\\Route;",
+              "Route::middleware(['throttle:60,1'])->group(function () {",
+              "    Route::get('/products', [ProductController::class, 'index']);",
+              "});",
+            ],
+            pengecoh: [
+              "Route::middleware(['rate_limit:60'])->group(function () {",
+              "Route::middleware(['throttle:60'])->group(function () {",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Middleware pembatas laju akses di Laravel ditulis dengan format 'throttle:maksimal_request,menit'. Keping rate_limit keliru nama middleware. Keping 'throttle:60' menggoda tetapi tanpa argumen kedua durasi menit tidak terspesifikasi dengan jelas.",
+          },
         },
         {
           kind: "step",
@@ -3109,6 +3905,22 @@ export const laravelTrack: Track = {
                       }
                     ],
           solution: "composer require dedoc/scramble",
+          susunKode: {
+            question:
+              "Rangkai perintah Composer untuk menginstal paket dokumentasi API dedoc/scramble.",
+            potongan: [
+              "composer",
+              "require",
+              "dedoc/scramble",
+            ],
+            pengecoh: [
+              "composer install",
+              "laravel/scramble",
+            ],
+            pemisah: " ",
+            explanation:
+              "Dokumentasi API otomatis Scramble diinstal melalui paket dedoc/scramble dengan perintah composer require. Keping composer install keliru perintah. Keping laravel/scramble menggoda tetapi vendor paket resminya adalah dedoc.",
+          },
         },
         {
           kind: "quiz",
@@ -3160,7 +3972,7 @@ export const laravelTrack: Track = {
             {
               id: "l7-q4",
               type: "pilihan-ganda",
-              question: "HTTP Status Code berapakah yang secara standar dikembalikan saat pembuataan data baru berhasil dilakukan melalui API?",
+              question: "HTTP Status Code berapakah yang secara standar dikembalikan saat pembuatan data baru berhasil dilakukan melalui API?",
               choices: [
                 "200 OK",
                 "201 Created",
@@ -3284,6 +4096,23 @@ export const laravelTrack: Track = {
                       }
                     ],
           solution: "php artisan make:job ProcessPodcast",
+          susunKode: {
+            question:
+              "Rangkai perintah Artisan untuk membuat kelas Queue Job bernama ProcessPodcast.",
+            potongan: [
+              "php",
+              "artisan",
+              "make:job",
+              "ProcessPodcast",
+            ],
+            pengecoh: [
+              "make:queue-job",
+              "HandlePodcast",
+            ],
+            pemisah: " ",
+            explanation:
+              "Perintah make:job membuat kelas antrean pekerjaan di folder app/Jobs. Keping make:queue-job keliru nama sub-perintah Artisan. Keping HandlePodcast menggoda tetapi instruksi meminta nama kelas ProcessPodcast.",
+          },
         },
         {
           kind: "step",
@@ -3329,6 +4158,22 @@ export const laravelTrack: Track = {
           ],
           solution:
             "<?php\nuse Illuminate\\Support\\Facades\\Schedule;\n\nSchedule::command('backup:run')->daily();",
+          susunKode: {
+            question:
+              "Susun penjadwalan perintah backup:run yang dijalankan otomatis setiap hari menggunakan Facade Schedule.",
+            potongan: [
+              "<?php",
+              "use Illuminate\\Support\\Facades\\Schedule;",
+              "Schedule::command('backup:run')->daily();",
+            ],
+            pengecoh: [
+              "Schedule::call('backup:run')->everyDay();",
+              "Schedule::run('backup:run')->daily();",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Schedule::command('backup:run')->daily() menjadwalkan perintah terminal Artisan untuk berjalan sekali sehari. Keping Schedule::call keliru karena call() digunakan untuk mengeksekusi closure PHP. Keping everyDay() keliru nama metode frekuensi.",
+          },
         },
         {
           kind: "step",
@@ -3369,6 +4214,22 @@ export const laravelTrack: Track = {
             },
           ],
           solution: "php artisan config:cache",
+          susunKode: {
+            question:
+              "Rangkai perintah Artisan untuk menggabungkan seluruh file konfigurasi ke dalam satu berkas cache produksi.",
+            potongan: [
+              "php",
+              "artisan",
+              "config:cache",
+            ],
+            pengecoh: [
+              "cache:config",
+              "config:clear-cache",
+            ],
+            pemisah: " ",
+            explanation:
+              "Perintah config:cache memuat seluruh opsi konfigurasi aplikasi ke dalam satu file terkompilasi demi kecepatan akses produksi. Keping cache:config keliru susunan kata perintah Artisan. Keping config:clear-cache keliru sub-perintah.",
+          },
         },
         {
           kind: "step",
@@ -3410,6 +4271,23 @@ export const laravelTrack: Track = {
                       }
                     ],
           solution: "php artisan make:mail InvoiceMail",
+          susunKode: {
+            question:
+              "Rangkai perintah Artisan untuk membuat kelas pengiriman surel Mailable bernama InvoiceMail.",
+            potongan: [
+              "php",
+              "artisan",
+              "make:mail",
+              "InvoiceMail",
+            ],
+            pengecoh: [
+              "make:email",
+              "SendInvoiceMail",
+            ],
+            pemisah: " ",
+            explanation:
+              "Perintah make:mail membuat kelas pengirim email baru di folder app/Mail. Keping make:email keliru nama sub-perintah Artisan. Keping SendInvoiceMail menggoda tetapi instruksi mewajibkan nama kelas InvoiceMail.",
+          },
         },
         {
           kind: "step",
@@ -3452,6 +4330,23 @@ export const laravelTrack: Track = {
                       }
                     ],
           solution: "php artisan make:event OrderProcessed",
+          susunKode: {
+            question:
+              "Rangkai perintah Artisan untuk membuat kelas Event bernama OrderProcessed.",
+            potongan: [
+              "php",
+              "artisan",
+              "make:event",
+              "OrderProcessed",
+            ],
+            pengecoh: [
+              "make:listener",
+              "OrderCreated",
+            ],
+            pemisah: " ",
+            explanation:
+              "Perintah make:event menghasilkan berkas Event di folder app/Events. Keping make:listener keliru karena listener adalah pendengar kejadian, bukan event-nya. Keping OrderCreated menggoda tetapi menyalahi nama kelas yang diminta.",
+          },
         },
         {
           kind: "step",
@@ -3491,6 +4386,23 @@ export const laravelTrack: Track = {
                       }
                     ],
           solution: "composer require laravel/telescope --dev",
+          susunKode: {
+            question:
+              "Rangkai perintah Composer untuk menginstal Laravel Telescope sebagai alat debugging produksi di lingkungan dev.",
+            potongan: [
+              "composer",
+              "require",
+              "laravel/telescope",
+              "--dev",
+            ],
+            pengecoh: [
+              "composer install",
+              "--save-dev",
+            ],
+            pemisah: " ",
+            explanation:
+              "Laravel Telescope diinstal sebagai dependensi pengembangan dengan composer require laravel/telescope --dev. Keping composer install keliru perintah. Keping --save-dev menggoda pengembang JS tetapi bukan flag resmi Composer.",
+          },
         },
         {
           kind: "quiz",
@@ -3634,7 +4546,7 @@ export const laravelTrack: Track = {
           id: "laravel-9-1",
           title: "Testing Modern dengan Pest PHP",
           explanation:
-            "Pest PHP adalah testing framework elegan ber-sintaks expressive yang menjadi standar baru pengujian di ekosistem Laravel modern. Berkas pengujian diletakkan di dalam folder terdedikasi sesuai jenis pengujiannya. Sintaksnya yang alami mempermudah penulisan skenario uji bagi pengembang pemula. Menuliskan test otomatis memberikan jaminan bahwa fitur baru tidak merusak kode lama yang sudah berjalan.",
+            "Pest menulis test sebagai pemanggilan fungsi biasa: `test('judulnya', function () { ... })` — tanpa kelas dan tanpa method, dengan judul berupa kalimat bahasa manusia. Kenapa gaya ini yang menang di ekosistem Laravel: laporan kegagalan yang berbunyi `halaman about ok` langsung memberi tahu perilaku apa yang rusak, sementara nama method `test_about_page_returns_200` harus diterjemahkan dulu di kepala. Kapan test pertama ditulis: sebelum sebuah fitur dianggap selesai — dan untuk aplikasi web, mulailah dari feature test yang membuka satu halaman, karena di situ route, middleware, dan Controller teruji sekaligus. Fungsi `it()` adalah alias resmi `test()`, jadi keduanya sah; yang menyulitkan justru mencampur gaya PHPUnit (`class ... extends TestCase`) di berkas yang sama. Jebakan yang paling sering: test tanpa satu pun assertion selalu \"lulus\" sehingga tidak menjaga apa pun — Pest menandainya *risky*, tetapi peringatan itu mudah terlewat.",
           example: {
             code: "test('halaman utama dapat diakses', function () {\n    $this->get('/')->assertStatus(200);\n});",
             output:
@@ -3645,18 +4557,18 @@ export const laravelTrack: Track = {
             note: "Jalankan perintah vendor/bin/pest atau php artisan test di terminal untuk mengeksekusi test. Catatan jujur: panel preview tidak menjalankan PHP, jadi kamu tidak akan melihat hasilnya di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus. Jalankan di proyek Laravel sungguhan untuk melihat keluarannya.",
           },
           instruction:
-            "Berkas `tests/Feature/AboutTest.php` masih kosong. Tulis satu test bergaya Pest berjudul `halaman about ok` yang membuka alamat `/about` lewat permintaan GET dan memastikan responsnya berstatus sukses. Cara memastikannya bebas — assertion khusus status 200 maupun `assertStatus(200)` sama-sama diterima.",
+            "Berkas `tests/Feature/AboutTest.php` masih kosong. Tulis satu test bergaya Pest berjudul `halaman about ok` yang membuka alamat `/about` lewat permintaan GET dan memastikan responsnya berstatus sukses. Cara memastikannya bebas — assertion khusus status 200 maupun `assertStatus(200)` sama-sama diterima, begitu pula fungsi `test()` dan aliasnya `it()`.",
           starterCode: "<?php\n// Tulis test pertamamu di sini\n",
           language: "text",
           tests: [
             {
-              pattern: "test\\s*\\(\\s*['\"]halaman about ok['\"]\\s*,",
+              pattern: "(?:test|it)\\s*\\(\\s*['\"]halaman about ok['\"]\\s*,",
               message:
-                "Test bergaya Pest ditulis sebagai pemanggilan fungsi `test()` — tanpa kelas dan tanpa method. Argumen pertamanya judul dalam bahasa manusia; judul inilah yang muncul di laporan runner saat test gagal, jadi tulislah kalimat yang menjelaskan perilakunya.",
+                "Test bergaya Pest ditulis sebagai pemanggilan fungsi `test()` — tanpa kelas dan tanpa method. Argumen pertamanya judul dalam bahasa manusia; judul inilah yang muncul di laporan runner saat test gagal, jadi tulislah kalimat yang menjelaskan perilakunya. Alias `it()` juga diterima, karena Pest menyediakan keduanya.",
             },
             {
               pattern:
-                "test\\s*\\([^,]*,\\s*function\\s*\\(\\s*\\)\\s*\\{[\\s\\S]*\\$this\\s*->\\s*get\\s*\\(\\s*['\"]/about['\"]\\s*\\)",
+                "(?:test|it)\\s*\\([^,]*,\\s*(?:function\\s*\\(\\s*\\)\\s*\\{|fn\\s*\\(\\s*\\)\\s*=>)[\\s\\S]*\\$this\\s*->\\s*get\\s*\\(\\s*['\"]/about['\"]\\s*\\)",
               message:
                 "Argumen keduanya fungsi berisi langkah pengujiannya. Permintaan HTTP disimulasikan dengan `$this->get('/alamat')` — tidak ada server sungguhan yang dijalankan, Laravel memproses permintaannya di dalam proses yang sama.",
             },
@@ -3667,6 +4579,23 @@ export const laravelTrack: Track = {
             },
           ],
           solution: "<?php\ntest('halaman about ok', function () {\n    $this->get('/about')->assertOk();\n});",
+          susunKode: {
+            question:
+              "Susun pengujian Pest PHP sederhana yang memastikan rute GET /about mengembalikan HTTP status 200 OK.",
+            potongan: [
+              "<?php",
+              "test('halaman about ok', function () {",
+              "    $this->get('/about')->assertOk();",
+              "});",
+            ],
+            pengecoh: [
+              "    $this->visit('/about')->assertOk();",
+              "    $this->get('/about')->assertIsOk();",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Pest menuliskan test sebagai pemanggilan fungsi test() berisi judul dan closure, lalu assertion dirantai pada hasil permintaannya. Keping $this->visit('/about') menggoda karena kata visit terdengar persis seperti membuka halaman, padahal method permintaan HTTP di test Laravel bernama get(), post(), put(), dan delete(). Keping assertIsOk() keliru nama assertion: yang tersedia assertOk() atau assertStatus(200), dan salah nama membuat test gagal dengan Call to undefined method — kegagalan yang tidak menjelaskan apa pun tentang halamannya. Catatan: it() adalah alias sah test() di Pest, jadi keduanya benar dan tes step ini menerima dua-duanya.",
+          },
         },
         {
           kind: "step",
@@ -3710,6 +4639,24 @@ export const laravelTrack: Track = {
                       }
                     ],
           solution: "php artisan make:test UserTest --pest",
+          susunKode: {
+            question:
+              "Rangkai perintah Artisan untuk membuat berkas pengujian Feature Test bernama UserTest dengan kerangka Pest.",
+            potongan: [
+              "php",
+              "artisan",
+              "make:test",
+              "UserTest",
+              "--pest",
+            ],
+            pengecoh: [
+              "make:pest-test",
+              "--unit",
+            ],
+            pemisah: " ",
+            explanation:
+              "Perintah make:test UserTest dengan opsi --pest menghasilkan file pengujian berformat Pest PHP. Keping make:pest-test keliru nama perintah. Keping --unit keliru karena secara bawaan make:test membuat Feature test.",
+          },
         },
         {
           kind: "step",
@@ -3758,6 +4705,29 @@ export const laravelTrack: Track = {
           ],
           solution:
             "<?php\nuses(Illuminate\\Foundation\\Testing\\RefreshDatabase::class);\n\ntest('user tersimpan setelah registrasi', function () {\n    $this->post('/register', [\n        'name' => 'Bimo',\n        'email' => 'bimo@test.com',\n        'password' => 'rahasia123',\n    ]);\n\n    $this->assertDatabaseHas('users', ['email' => 'bimo@test.com']);\n});",
+          susunKode: {
+            question:
+              "Susun pengujian registrasi pengguna yang memastikan data email 'bimo@test.com' tersimpan di tabel 'users'.",
+            potongan: [
+              "<?php",
+              "uses(Illuminate\\Foundation\\Testing\\RefreshDatabase::class);",
+              "test('user tersimpan setelah registrasi', function () {",
+              "    $this->post('/register', [",
+              "        'name' => 'Bimo',",
+              "        'email' => 'bimo@test.com',",
+              "        'password' => 'rahasia123',",
+              "    ]);",
+              "    $this->assertDatabaseHas('users', ['email' => 'bimo@test.com']);",
+              "});",
+            ],
+            pengecoh: [
+              "    $this->assertDatabaseMissing('users', ['email' => 'bimo@test.com']);",
+              "    $this->assertDatabaseSee('users', ['email' => 'bimo@test.com']);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Metode assertDatabaseHas('tabel', array) memastikan baris data yang cocok benar-benar tersimpan di basis data. Keping assertDatabaseMissing sangat keliru karena memeriksa ketidakadaannya data. Keping assertDatabaseSee keliru nama metode penegasan (assertion).",
+          },
         },
         {
           kind: "step",
@@ -3811,6 +4781,22 @@ export const laravelTrack: Track = {
           ],
           solution:
             "<?php\ntest('user bisa membuka halaman pengaturan', function () {\n    $user = User::factory()->create();\n\n    $this->actingAs($user)->get('/settings')->assertOk();\n});",
+          susunKode: {
+            potongan: [
+              "<?php",
+              "test('user bisa membuka halaman pengaturan', function () {",
+              "    $user = User::factory()->create();",
+              "    $this->actingAs($user)->get('/settings')->assertOk();",
+              "});",
+            ],
+            pengecoh: [
+              "    $this->loginAs($user)->get('/settings')->assertOk();",
+              "    $this->authUser($user)->get('/settings')->assertOk();",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Metode actingAs($user) mensimulasikan pengguna yang telah terautentikasi untuk sesi pengujian HTTP berikutnya. Keping loginAs dan authUser menggoda tetapi merupakan nama metode fiktif yang tidak ada di Laravel TestResponse.",
+          },
         },
         {
           kind: "step",
@@ -3864,6 +4850,24 @@ export const laravelTrack: Track = {
           ],
           solution:
             "<?php\nuse Illuminate\\Support\\Facades\\Http;\n\nHttp::fake([\n    'api.github.com/*' => Http::response([], 200),\n]);",
+          susunKode: {
+            question:
+              "Susun pemalsuan HTTP Client menggunakan Http::fake untuk rute GitHub API mengembalikan array kosong status 200.",
+            potongan: [
+              "<?php",
+              "use Illuminate\\Support\\Facades\\Http;",
+              "Http::fake([",
+              "    'api.github.com/*' => Http::response([], 200),",
+              "]);",
+            ],
+            pengecoh: [
+              "Http::mock([",
+              "    'api.github.com/*' => Http::json([], 200),",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Http::fake(...) mencegat permintaan HTTP ke luar dan mengembalikan respons buatan Http::response([], 200). Keping Http::mock keliru nama Facade helper. Keping Http::json keliru karena pembuatan respons tiruan menggunakan Http::response().",
+          },
         },
         {
           kind: "step",
@@ -3919,6 +4923,23 @@ export const laravelTrack: Track = {
                       }
                     ],
           solution: "php artisan test --coverage",
+          susunKode: {
+            question:
+              "Rangkai perintah Artisan untuk menjalankan seluruh suite pengujian sekaligus menghitung persentase cakupan kode (coverage).",
+            potongan: [
+              "php",
+              "artisan",
+              "test",
+              "--coverage",
+            ],
+            pengecoh: [
+              "test:coverage",
+              "--with-coverage",
+            ],
+            pemisah: " ",
+            explanation:
+              "Perintah php artisan test dengan opsi --coverage menjalankan seluruh pengujian dan menampilkan analisis cakupan kode. Keping test:coverage keliru sub-perintah Artisan. Keping --with-coverage adalah nama flag fiktif.",
+          },
         },
         {
           kind: "quiz",

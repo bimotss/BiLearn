@@ -1264,6 +1264,25 @@ export const htmlTrack: Track = {
           ],
           solution:
             '<header>\n  <nav>\n    <a href="/">Beranda</a>\n  </nav>\n</header>',
+          susunKode: {
+            question:
+              "Susun bagian kepala halaman: sebuah `header` yang di dalamnya ada `nav` berisi tautan ke Beranda.",
+            potongan: [
+              "<header>",
+              "  <nav>",
+              "    <a href=\"/\">Beranda</a>",
+              "  </nav>",
+              "</header>",
+            ],
+            pengecoh: [
+              "  <navigation>",
+              "  </navigation>",
+              "    <a href=\"#\">Beranda</a>",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`<header>` menandai kepala halaman dan `<nav>` menandai kumpulan tautan navigasi utama. Keduanya bukan sekadar kotak: screen reader menyediakan pintasan \"lompat ke navigasi\" yang hanya bekerja kalau kamu memakai elemen yang benar. Keping `<navigation>` menggoda karena namanya lebih jelas dan terasa lebih rapi, padahal nama elemennya memang disingkat `nav` — tag karangan sendiri diperlakukan browser sebagai elemen tak dikenal tanpa arti apa pun. Keping `href=\"#\"` adalah jebakan yang sering dipakai sebagai tautan sementara; ia menghasilkan tautan yang bisa diklik tapi tidak menuju ke mana-mana.",
+          },
         },
         {
           kind: "step",
@@ -1295,6 +1314,29 @@ export const htmlTrack: Track = {
           ],
           solution:
             '<header>\n  <nav><a href="/">Beranda</a></nav>\n</header>\n<main>\n  <h1>Artikel Terbaru</h1>\n</main>\n<footer>\n  <p>© 2026 BiLearn</p>\n</footer>',
+          susunKode: {
+            question:
+              "Susun kerangka halaman bertiga: kepala, isi utama berjudul `Artikel Terbaru`, dan kaki halaman.",
+            potongan: [
+              "<header>",
+              "  <nav><a href=\"/\">Beranda</a></nav>",
+              "</header>",
+              "<main>",
+              "  <h1>Artikel Terbaru</h1>",
+              "</main>",
+              "<footer>",
+              "  <p>© 2026 BiLearn</p>",
+              "</footer>",
+            ],
+            pengecoh: [
+              "<div class=\"main\">",
+              "  <h2>Artikel Terbaru</h2>",
+              "  <p></p>",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`<main>` menandai isi utama halaman dan hanya boleh ada SATU per halaman — itulah yang dipakai pintasan \"lompat ke konten\" pada screen reader. Keping `<div class=\"main\">` adalah jebakan yang paling sering terjadi di kode nyata: hasilnya di layar sama persis, tapi tidak ada satu pun alat bantu yang tahu bagian itu isi utama. Keping `<h2>` sebagai judul halaman keliru karena judul tertinggi sebuah halaman adalah `<h1>`. Keping paragraf kosong menggoda karena strukturnya terlihat lengkap, padahal kaki halaman yang tidak mengatakan apa-apa sama saja dengan tidak ada.",
+          },
         },
         {
           kind: "step",
@@ -1322,6 +1364,28 @@ export const htmlTrack: Track = {
           ],
           solution:
             "<main>\n  <h1>Artikel Terbaru</h1>\n  <article>\n    <h2>Belajar HTML</h2>\n    <p>HTML adalah fondasi web.</p>\n  </article>\n  <article>\n    <h2>Belajar CSS</h2>\n    <p>CSS mengatur tampilan.</p>\n  </article>\n</main>",
+          susunKode: {
+            question:
+              "Susun isi utama berisi dua artikel yang masing-masing berdiri sendiri, lengkap dengan judul dan paragrafnya.",
+            potongan: [
+              "<main>",
+              "  <h1>Artikel Terbaru</h1>",
+              "  <article>",
+              "    <h2>Belajar HTML</h2>",
+              "    <p>HTML adalah fondasi web.</p>",
+              "  </article>",
+              "  <article>\n    <h2>Belajar CSS</h2>\n    <p>CSS mengatur tampilan.</p>\n  </article>",
+              "</main>",
+            ],
+            pengecoh: [
+              "  <section>",
+              "  </section>",
+              "    <h3>Belajar HTML</h3>",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`<article>` dipakai untuk isi yang tetap masuk akal kalau dicabut dari halamannya — postingan blog, kartu produk, satu komentar. Patokan cepatnya: kalau bisa dipasang ulang di tempat lain tanpa kehilangan makna, itu `<article>`. Keping `<section>` menggoda karena sama-sama semantik dan sama-sama membungkus, tapi `<section>` menandai BAGIAN dari sesuatu yang lebih besar, bukan potongan yang berdiri sendiri. Keping `<h3>` melompati tingkat: judul artikel di bawah `<h1>` halaman seharusnya `<h2>`, dan tingkat yang bolong membuat kerangka isi yang dibacakan screen reader terasa ada bagian yang hilang.",
+          },
         },
         {
           kind: "step",
@@ -1353,6 +1417,24 @@ export const htmlTrack: Track = {
           ],
           solution:
             "<section>\n  <h2>Tentang Kami</h2>\n  <p>BiLearn membantu orang belajar coding.</p>\n</section>",
+          susunKode: {
+            question:
+              "Susun sebuah bagian bertema \"Tentang Kami\" yang berisi judul dan satu paragraf penjelasan.",
+            potongan: [
+              "<section>",
+              "  <h2>Tentang Kami</h2>",
+              "  <p>BiLearn membantu orang belajar coding.</p>",
+              "</section>",
+            ],
+            pengecoh: [
+              "<div>",
+              "</div>",
+              "  <h3>Tentang Kami</h3>",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`<section>` dipakai untuk bagian bertema yang punya judul; `<div>` dipakai kalau kamu hanya butuh pembungkus untuk keperluan tata letak. Aturan praktisnya: kalau bagian itu pantas muncul di daftar isi, pakai `<section>`. Keping `<div>` adalah pengecoh yang paling menggoda karena di layar hasilnya sama persis dan tidak ada yang error — bedanya hanya terasa oleh pengguna screen reader, yang kehilangan penanda bagian. Keping `<h3>` melompat dari tingkat yang seharusnya, kekeliruan yang sering terjadi saat penulis memilih heading berdasarkan ukuran hurufnya di layar.",
+          },
         },
         {
           kind: "step",
@@ -1388,6 +1470,24 @@ export const htmlTrack: Track = {
           ],
           solution:
             '<figure>\n  <img src="https://picsum.photos/300" alt="Pemandangan">\n  <figcaption>Foto pemandangan acak</figcaption>\n</figure>',
+          susunKode: {
+            question:
+              "Susun sebuah gambar berketerangan: gambar acak dengan teks alternatif `Pemandangan`, dan keterangan `Foto pemandangan acak`.",
+            potongan: [
+              "<figure>",
+              "  <img src=\"https://picsum.photos/300\" alt=\"Pemandangan\">",
+              "  <figcaption>Foto pemandangan acak</figcaption>",
+              "</figure>",
+            ],
+            pengecoh: [
+              "  <caption>Foto pemandangan acak</caption>",
+              "  <p>Foto pemandangan acak</p>",
+              "  <img src=\"https://picsum.photos/300\">",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`<figure>` mengikat gambar dengan keterangannya, dan `<figcaption>` adalah keterangan itu — hubungan keduanya dikenali screen reader, jadi keterangannya dibacakan bersama gambarnya. Keping `<caption>` menggoda karena namanya nyaris sama, padahal elemen itu khusus untuk judul `<table>` dan tidak sah di dalam `<figure>`. Keping `<p>` menghasilkan tampilan yang mirip tapi memutus hubungan gambar-keterangan. Keping `<img>` tanpa `alt` adalah kekeliruan yang paling sering ditemukan alat pemeriksa aksesibilitas: `figcaption` menerangkan konteks, sedangkan `alt` menerangkan isi gambarnya — keduanya dibutuhkan, bukan saling menggantikan.",
+          },
         },
         {
           kind: "step",
@@ -1418,6 +1518,25 @@ export const htmlTrack: Track = {
           ],
           solution:
             '<p>\n  <strong>Penting</strong>: acara dimulai <time datetime="2026-07-27">27 Juli 2026</time>.\n</p>',
+          susunKode: {
+            question:
+              "Susun paragraf pengumuman: kata `Penting` ditandai sebagai hal yang serius, dan tanggalnya ditandai sebagai waktu yang bisa dibaca mesin.",
+            potongan: [
+              "<p>",
+              "<strong>Penting</strong>",
+              ": acara dimulai",
+              "<time datetime=\"2026-07-27\">27 Juli 2026</time>",
+              "</p>",
+            ],
+            pengecoh: [
+              "<strong>Penting<strong>",
+              "<time>27 Juli 2026</time>",
+              "<time datetime=\"27-07-2026\">27 Juli 2026</time>",
+            ],
+            pemisah: " ",
+            explanation:
+              "`<strong>` berarti \"ini penting\", sedangkan `<b>` hanya berarti \"tebalkan hurufnya\"; di layar keduanya identik, tapi screen reader menekankan `<strong>` dan melewati `<b>` begitu saja. Keping `<strong>Penting<strong>` menggoda karena sekilas terlihat berpasangan, padahal penutupnya lupa garis miring sehingga penekanannya tidak pernah ditutup. `<time>` juga punya dua sisi: isi tag untuk dibaca manusia, atribut `datetime` untuk dibaca mesin. Keping `<time>` tanpa `datetime` menghilangkan sisi mesinnya, dan keping `27-07-2026` memakai urutan tanggal gaya Indonesia; `datetime` selalu memakai format tahun-bulan-hari, dan urutan yang keliru membuat mesin pencari salah membaca kapan acaramu berlangsung.",
+          },
         },
         {
           kind: "step",
@@ -1464,6 +1583,26 @@ export const htmlTrack: Track = {
             "  <cite>Tim Peters</cite>\n" +
             "</blockquote>\n\n" +
             "<pre><code>const nama = \"Bimo\";\nconsole.log(nama);</code></pre>",
+          susunKode: {
+            question:
+              "Susun sebuah kutipan lengkap dengan sumbernya, lalu sebuah blok kode dua baris di bawahnya.",
+            potongan: [
+              "<blockquote>",
+              "  <p>Sederhana lebih baik daripada rumit.</p>",
+              "  <cite>Tim Peters</cite>",
+              "</blockquote>",
+              "<pre><code>const nama = \"Bimo\";",
+              "console.log(nama);</code></pre>",
+            ],
+            pengecoh: [
+              "  <p>Sederhana lebih baik daripada rumit</p>",
+              "  <i>Tim Peters</i>",
+              "<pre>const nama = \"Bimo\";",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Kutipan panjang dibungkus `<blockquote>`, sumbernya ditandai `<cite>`, dan blok kode butuh DUA elemen: `<pre>` yang mempertahankan spasi serta pergantian baris, dan `<code>` yang menandai isinya sebagai kode. Keping `<i>` menggoda karena `<cite>` memang tampil miring secara bawaan, jadi hasilnya terlihat sama — tapi `<i>` tidak mengatakan apa pun tentang sumber kutipan. Keping `<pre>` tanpa `<code>` adalah jebakan yang paling sering terjadi: spasi dan pergantian barisnya memang terjaga, tapi tidak ada yang menandai isinya sebagai kode bagi alat bantu maupun mesin pencari. Keping kutipan tanpa titik menunjukkan bahwa tanda baca ikut menjadi bagian isi yang diperiksa.",
+          },
         },
         {
           kind: "quiz",
@@ -1630,6 +1769,29 @@ export const htmlTrack: Track = {
           ],
           solution:
             "<table>\n  <tr>\n    <th>Nama</th>\n    <th>Umur</th>\n  </tr>\n  <tr>\n    <td>Bimo</td>\n    <td>20</td>\n  </tr>\n</table>",
+          susunKode: {
+            question:
+              "Susun tabel dua kolom: baris kepala berisi `Nama` dan `Umur`, lalu satu baris data berisi `Bimo` dan `20`.",
+            potongan: [
+              "<table>",
+              "  <tr>",
+              "    <th>Nama</th>",
+              "    <th>Umur</th>",
+              "  </tr>",
+              "  <tr>",
+              "    <td>Bimo</td>",
+              "    <td>20</td>",
+              "  </tr>",
+              "</table>",
+            ],
+            pengecoh: [
+              "    <td>Nama</td>",
+              "    <th>Bimo</th>",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Tabel disusun per baris: `<tr>` membungkus satu baris, `<th>` untuk sel kepala, `<td>` untuk sel data. Karena itu di kolam ada dua `<tr>` dan dua `</tr>` — satu pasang untuk baris kepala, satu pasang untuk baris data. Menukar `<th>` dengan `<td>` adalah kekeliruan yang sering terjadi karena di layar bedanya cuma huruf tebal dan rata tengah, sehingga terasa seperti urusan tampilan belaka. Padahal `<th>` yang membuat screen reader menyebutkan nama kolomnya setiap kali membacakan sel — tanpa itu, pengguna mendengar deretan angka tanpa tahu angka apa.",
+          },
         },
         {
           kind: "step",
@@ -1664,6 +1826,29 @@ export const htmlTrack: Track = {
           ],
           solution:
             "<table>\n  <caption>Data Peserta</caption>\n  <thead>\n    <tr>\n      <th>Nama</th>\n      <th>Umur</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td>Bimo</td>\n      <td>20</td>\n    </tr>\n  </tbody>\n</table>",
+          susunKode: {
+            question:
+              "Susun tabel berjudul `Data Peserta` yang bagian kepala dan bagian isinya dipisahkan secara eksplisit.",
+            potongan: [
+              "<table>",
+              "  <caption>Data Peserta</caption>",
+              "  <thead>",
+              "    <tr><th>Nama</th><th>Umur</th></tr>",
+              "  </thead>",
+              "  <tbody>",
+              "    <tr><td>Bimo</td><td>20</td></tr>",
+              "  </tbody>",
+              "</table>",
+            ],
+            pengecoh: [
+              "  <title>Data Peserta</title>",
+              "  <tfoot>",
+              "  </tfoot>",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`<caption>` adalah judul tabel yang dibacakan screen reader sebelum isinya, sehingga pendengar tahu tabel ini tentang apa sebelum tersesat di dalam angka. `<thead>` dan `<tbody>` memisahkan baris kepala dari baris data — pemisahan ini yang membuat baris kepala bisa dibekukan saat tabel panjang di-scroll. Keping `<title>` menggoda karena kata itu memang berarti judul, padahal `<title>` milik `<head>` dokumen dan tidak sah di dalam tabel. Keping `<tfoot>` juga elemen tabel yang sah, tapi tempatnya untuk baris rangkuman di bawah — memakainya sebagai pengganti `<thead>` membuat baris kepala kehilangan perannya.",
+          },
         },
         {
           kind: "step",
@@ -1691,6 +1876,27 @@ export const htmlTrack: Track = {
           ],
           solution:
             '<table>\n  <tr>\n    <th>Nama</th>\n    <th>Umur</th>\n  </tr>\n  <tr>\n    <td>Bimo</td>\n    <td>20</td>\n  </tr>\n  <tr>\n    <td colspan="2">Total: 1 peserta</td>\n  </tr>\n</table>',
+          susunKode: {
+            question:
+              "Susun tabel yang baris terakhirnya berisi satu sel rangkuman membentang selebar dua kolom.",
+            potongan: [
+              "<table>",
+              "  <tr><th>Nama</th><th>Umur</th></tr>",
+              "  <tr><td>Bimo</td><td>20</td></tr>",
+              "  <tr>",
+              "    <td colspan=\"2\">Total: 1 peserta</td>",
+              "  </tr>",
+              "</table>",
+            ],
+            pengecoh: [
+              "    <td rowspan=\"2\">Total: 1 peserta</td>",
+              "    <td colspan=\"1\">Total: 1 peserta</td>",
+              "    <td>Total: 1 peserta</td>",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`colspan` membentangkan satu sel ke KANAN, menutupi beberapa kolom sekaligus. Keping `rowspan` adalah pengecoh yang paling sering menjerat karena namanya nyaris sama, padahal arahnya ke BAWAH — ia menggabungkan baris, bukan kolom. Keping `colspan=\"1\"` menggoda karena angkanya terasa seperti \"aktifkan\", padahal 1 adalah nilai bawaan yang berarti tidak membentang sama sekali. Keping tanpa `colspan` menghasilkan baris yang selnya kurang satu; browser diam saja dan tabel jadi pincang di sisi kanan — kesalahan yang baru kelihatan setelah datanya banyak.",
+          },
         },
         {
           kind: "step",
@@ -1720,6 +1926,24 @@ export const htmlTrack: Track = {
             },
           ],
           solution: '<video src="film.mp4" controls></video>',
+          susunKode: {
+            question:
+              "Rangkai elemen video yang memutar `film.mp4` dan menampilkan tombol kontrol pemutar.",
+            potongan: [
+              "<video",
+              "src=\"film.mp4\"",
+              "controls",
+              "></video>",
+            ],
+            pengecoh: [
+              "href=\"film.mp4\"",
+              "autoplay",
+              "<audio",
+            ],
+            pemisah: " ",
+            explanation:
+              "`<video>` memuat berkasnya lewat `src`, dan `controls` adalah atribut tanpa nilai yang memunculkan tombol putar, jeda, serta pengatur volume. Tanpa `controls`, videonya tampil sebagai kotak diam yang tidak bisa diapa-apakan — kekeliruan yang sering terjadi karena atribut ini mudah terlupa. Keping `href` menggoda karena sama-sama berisi alamat, tapi `href` milik tautan; media memuat berkas lewat `src`. Keping `autoplay` adalah jebakan yang lebih halus: ia memang atribut sah, tapi memutar video otomatis membuat pengunjung kaget dan diblokir kebanyakan browser kalau ada suaranya.",
+          },
         },
         {
           kind: "step",
@@ -1754,6 +1978,25 @@ export const htmlTrack: Track = {
           ],
           solution:
             '<iframe src="https://example.com" title="Contoh situs" loading="lazy"></iframe>',
+          susunKode: {
+            question:
+              "Rangkai iframe yang menampilkan `https://example.com`, punya nama untuk screen reader, dan baru dimuat saat dibutuhkan.",
+            potongan: [
+              "<iframe",
+              "src=\"https://example.com\"",
+              "title=\"Contoh situs\"",
+              "loading=\"lazy\"",
+              "></iframe>",
+            ],
+            pengecoh: [
+              "alt=\"Contoh situs\"",
+              "loading=\"auto\"",
+              "href=\"https://example.com\"",
+            ],
+            pemisah: " ",
+            explanation:
+              "Iframe adalah halaman di dalam halaman, jadi ia butuh `title` — itulah nama yang dibacakan screen reader saat pengguna menyusuri daftar frame. Keping `alt` sangat menggoda karena kamu baru saja belajar bahwa gambar butuh `alt`, padahal `alt` hanya berlaku untuk `<img>`; pada iframe atributnya `title`. Keping `loading=\"auto\"` terdengar seperti pilihan pintar, tapi nilai yang menunda pemuatan sampai frame mendekati layar adalah `lazy` — dan itu penting karena iframe memuat seluruh halaman lain, beban terberat di banyak situs. Keping `href` mengulang kekeliruan alamat yang sama seperti pada media.",
+          },
         },
         {
           kind: "step",
@@ -1788,6 +2031,24 @@ export const htmlTrack: Track = {
           ],
           solution:
             '<picture>\n  <source srcset="besar.jpg" media="(min-width: 800px)">\n  <img src="kecil.jpg" alt="Banner">\n</picture>',
+          susunKode: {
+            question:
+              "Susun gambar responsif: pakai `besar.jpg` bila layar minimal 800px, dan `kecil.jpg` sebagai gambar dasarnya.",
+            potongan: [
+              "<picture>",
+              "  <source srcset=\"besar.jpg\" media=\"(min-width: 800px)\">",
+              "  <img src=\"kecil.jpg\" alt=\"Banner\">",
+              "</picture>",
+            ],
+            pengecoh: [
+              "  <source src=\"besar.jpg\" media=\"(min-width: 800px)\">",
+              "  <source srcset=\"besar.jpg\" media=\"(max-width: 800px)\">",
+              "  <img srcset=\"kecil.jpg\" alt=\"Banner\">",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`<picture>` membiarkan browser memilih berkas gambar yang paling pas: `<source>` menawarkan pilihan beserta syaratnya, dan `<img>` di dalamnya adalah jaring pengaman yang selalu dipakai kalau tak ada syarat yang cocok. Karena itu `<img>` tidak boleh dihilangkan. Keping `src` pada `<source>` adalah kekeliruan yang sangat sering terjadi — di elemen itu atributnya `srcset`, dan browser mengabaikan sumber yang salah atribut tanpa berkata apa-apa. Keping `max-width` membalik logikanya: gambar besar justru dipakai di layar kecil, jebakan yang muncul karena terbiasa menulis media query gaya desktop-first.",
+          },
         },
         {
           kind: "quiz",
@@ -1971,6 +2232,25 @@ export const htmlTrack: Track = {
             },
           ],
           solution: '<form action="/daftar" method="post">\n  \n</form>',
+          susunKode: {
+            question:
+              "Rangkai elemen form kosong yang mengirim datanya ke `/daftar` dengan metode yang tidak menaruh data di alamat URL.",
+            potongan: [
+              "<form",
+              "action=\"/daftar\"",
+              "method=\"post\"",
+              ">",
+              "</form>",
+            ],
+            pengecoh: [
+              "href=\"/daftar\"",
+              "method=\"get\"",
+              "type=\"post\"",
+            ],
+            pemisah: " ",
+            explanation:
+              "`action` menentukan ke mana data dikirim dan `method` menentukan caranya. `post` menaruh data di badan permintaan, sedangkan `get` menempelkannya di alamat URL — itulah kenapa keping `method=\"get\"` berbahaya untuk formulir pendaftaran: kata sandi ikut tercetak di kolom alamat, tersimpan di riwayat browser, dan tercatat di log server. Keping `href` menggoda karena sama-sama alamat, tapi form memakai `action`. Keping `type=\"post\"` keliru pada nama atributnya; `type` milik `<input>` dan `<button>`, bukan `<form>`.",
+          },
         },
         {
           kind: "step",
@@ -2010,6 +2290,28 @@ export const htmlTrack: Track = {
           ],
           solution:
             '<form action="/daftar" method="post">\n  <label for="email">Email</label>\n  <input type="email" id="email" name="email">\n</form>',
+          susunKode: {
+            question:
+              "Rangkai satu isian email yang labelnya benar-benar terhubung ke kotak isiannya.",
+            potongan: [
+              "<form action=\"/daftar\" method=\"post\">",
+              "<label for=\"email\">Email</label>",
+              "<input",
+              "type=\"email\"",
+              "id=\"email\"",
+              "name=\"email\"",
+              ">",
+              "</form>",
+            ],
+            pengecoh: [
+              "id=\"e-mail\"",
+              "name=\"e-mail\"",
+              "type=\"text\"",
+            ],
+            pemisah: " ",
+            explanation:
+              "Label terhubung ke isiannya lewat pasangan `for` dan `id` yang nilainya sama persis. Hubungan itu bukan hiasan: ia membuat labelnya bisa diklik untuk memfokuskan isian — sangat membantu di layar sentuh — dan membuat screen reader menyebut \"Email\" saat kursor masuk ke kotaknya. Keping `id=\"e-mail\"` adalah jebakan paling halus di step ini: tidak ada error, tampilannya normal, hanya hubungannya diam-diam putus karena beda satu tanda hubung. Keping `name=\"e-mail\"` mengubah nama data yang diterima server, dan `type=\"text\"` menghilangkan papan ketik email di ponsel serta pemeriksaan format bawaan.",
+          },
         },
         {
           kind: "step",
@@ -2043,6 +2345,25 @@ export const htmlTrack: Track = {
           ],
           solution:
             '<form action="/daftar" method="post">\n  <input type="password" name="sandi">\n  <input type="tel" name="telepon">\n  <input type="date" name="lahir">\n</form>',
+          susunKode: {
+            question:
+              "Susun tiga isian dengan tipe yang tepat: kata sandi, nomor telepon, dan tanggal lahir.",
+            potongan: [
+              "<form action=\"/daftar\" method=\"post\">",
+              "  <input type=\"password\" name=\"sandi\">",
+              "  <input type=\"tel\" name=\"telepon\">",
+              "  <input type=\"date\" name=\"lahir\">",
+              "</form>",
+            ],
+            pengecoh: [
+              "  <input type=\"text\" name=\"sandi\">",
+              "  <input type=\"number\" name=\"telepon\">",
+              "  <input type=\"text\" name=\"lahir\">",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Tipe isian menentukan papan ketik yang muncul di ponsel, pemeriksaan bawaan, dan perilaku khusus seperti menyembunyikan karakter. Keping `type=\"text\"` untuk kata sandi menggoda karena \"toh sama-sama teks\", padahal sandinya akan tampil terbaca di layar. Keping `type=\"number\"` untuk telepon adalah kekeliruan yang sangat sering terjadi karena nomor telepon memang berisi angka — tapi tipe itu membuang angka nol di depan, menolak tanda plus untuk kode negara, dan memunculkan tombol naik-turun yang tidak masuk akal. Untuk nomor telepon, tipe yang benar adalah `tel`.",
+          },
         },
         {
           kind: "step",
@@ -2090,6 +2411,27 @@ export const htmlTrack: Track = {
           ],
           solution:
             '<form action="/kirim" method="post">\n  <textarea name="pesan"></textarea>\n  <select name="kota">\n    <option value="jkt">Jakarta</option>\n    <option value="bdg">Bandung</option>\n  </select>\n</form>',
+          susunKode: {
+            question:
+              "Susun formulir berisi kotak pesan panjang dan pilihan kota dengan dua opsi: Jakarta dan Bandung.",
+            potongan: [
+              "<form action=\"/kirim\" method=\"post\">",
+              "  <textarea name=\"pesan\"></textarea>",
+              "  <select name=\"kota\">",
+              "    <option value=\"jkt\">Jakarta</option>",
+              "    <option value=\"bdg\">Bandung</option>",
+              "  </select>",
+              "</form>",
+            ],
+            pengecoh: [
+              "  <input type=\"textarea\" name=\"pesan\">",
+              "    <option value=\"jakarta\">Jakarta</option>",
+              "    <option>Bandung</option>",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`<textarea>` adalah elemen berpasangan — isinya ditulis di antara tag buka dan tutup, bukan lewat atribut `value`. Keping `<input type=\"textarea\">` adalah jebakan klasik: tipe itu tidak ada, dan browser diam-diam memperlakukannya sebagai kotak teks satu baris biasa sehingga pengguna tidak bisa menulis panjang. Pada `<option>`, yang dikirim ke server adalah `value`, sedangkan teks di antara tagnya hanya untuk dilihat manusia. Keping tanpa `value` membuat server menerima teks tampilannya apa adanya — sering keliru dianggap sama saja, sampai teks tampilannya diganti dan data lama tidak cocok lagi.",
+          },
         },
         {
           kind: "step",
@@ -2126,6 +2468,24 @@ export const htmlTrack: Track = {
           ],
           solution:
             '<form action="/daftar" method="post">\n  <input type="radio" name="gender" value="L"> Laki-laki\n  <input type="radio" name="gender" value="P"> Perempuan\n</form>',
+          susunKode: {
+            question:
+              "Susun dua pilihan jenis kelamin yang benar-benar saling meniadakan — memilih satu membatalkan yang lain.",
+            potongan: [
+              "<form action=\"/daftar\" method=\"post\">",
+              "  <input type=\"radio\" name=\"gender\" value=\"L\"> Laki-laki",
+              "  <input type=\"radio\" name=\"gender\" value=\"P\"> Perempuan",
+              "</form>",
+            ],
+            pengecoh: [
+              "  <input type=\"radio\" name=\"gender-l\" value=\"L\"> Laki-laki",
+              "  <input type=\"checkbox\" name=\"gender\" value=\"P\"> Perempuan",
+              "  <input type=\"radio\" name=\"jenis\" value=\"P\"> Perempuan",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Yang membuat radio button saling meniadakan bukan tipenya, melainkan `name` yang SAMA. Dua radio dengan nama berbeda adalah dua kelompok terpisah, dan keduanya bisa terpilih sekaligus — inilah jebakan yang paling sering terjadi, dan gejalanya membingungkan karena tampilannya normal dan tidak ada error sama sekali. Dua keping ber-`name` berbeda menunjukkan persis kesalahan itu. Keping `checkbox` menggoda karena bentuknya mirip kotak pilihan, tapi checkbox memang dirancang untuk pilihan yang boleh lebih dari satu.",
+          },
         },
         {
           kind: "step",
@@ -2167,6 +2527,28 @@ export const htmlTrack: Track = {
           ],
           solution:
             '<form action="/daftar" method="post">\n  <input type="text" name="username" required minlength="3">\n</form>',
+          susunKode: {
+            question:
+              "Rangkai isian username yang wajib diisi dan minimal tiga karakter, memakai pemeriksaan bawaan browser.",
+            potongan: [
+              "<form action=\"/daftar\" method=\"post\">",
+              "<input",
+              "type=\"text\"",
+              "name=\"username\"",
+              "required",
+              "minlength=\"3\"",
+              ">",
+              "</form>",
+            ],
+            pengecoh: [
+              "minlength=\"0\"",
+              "maxlength=\"3\"",
+              "requred",
+            ],
+            pemisah: " ",
+            explanation:
+              "`required` dan `minlength` membuat browser menolak pengiriman beserta pesan kesalahannya sendiri, tanpa satu baris JavaScript pun. Keping `maxlength` adalah pengecoh yang paling menggoda karena namanya nyaris sama, padahal artinya kebalikan: ia membatasi panjang MAKSIMUM, sehingga username tiga huruf lebih pun ditolak. Keping `minlength=\"0\"` tidak membatasi apa pun. Keping `requred` yang tertukar hurufnya adalah salah ketik yang tidak menghasilkan error apa pun — atribut tak dikenal diabaikan, dan formulirmu diam-diam menerima isian kosong. Satu hal yang perlu diingat: pemeriksaan bawaan ini mudah dilewati, jadi server tetap wajib memeriksa ulang.",
+          },
         },
         {
           kind: "step",
@@ -2197,6 +2579,28 @@ export const htmlTrack: Track = {
           ],
           solution:
             '<form action="/daftar" method="post">\n  <fieldset>\n    <legend>Data Diri</legend>\n    <label for="nama">Nama</label>\n    <input type="text" id="nama" name="nama" required>\n  </fieldset>\n  <button type="submit">Kirim</button>\n</form>',
+          susunKode: {
+            question:
+              "Susun formulir yang isiannya dikelompokkan dengan judul kelompok `Data Diri`, dan diakhiri tombol kirim.",
+            potongan: [
+              "<form action=\"/daftar\" method=\"post\">",
+              "  <fieldset>",
+              "    <legend>Data Diri</legend>",
+              "    <label for=\"nama\">Nama</label>",
+              "    <input type=\"text\" id=\"nama\" name=\"nama\" required>",
+              "  </fieldset>",
+              "  <button type=\"submit\">Kirim</button>",
+              "</form>",
+            ],
+            pengecoh: [
+              "    <caption>Data Diri</caption>",
+              "  <button type=\"button\">Kirim</button>",
+              "  <div class=\"fieldset\">",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`<fieldset>` mengelompokkan isian yang berkaitan dan `<legend>` memberi nama kelompok itu — screen reader membacakan nama kelompoknya sebelum tiap isian, sehingga pengguna tahu ia sedang mengisi bagian apa. Keping `<caption>` menggoda karena sama-sama berarti judul, tapi elemen itu milik tabel. Keping `type=\"button\"` adalah jebakan yang paling sering menghabiskan waktu: tombolnya terlihat normal dan bisa diklik, tapi tidak mengirim apa pun karena hanya `submit` yang memicu pengiriman formulir. Keping `<div class=\"fieldset\">` meniru tampilannya tanpa membawa satu pun manfaat pengelompokannya.",
+          },
         },
         {
           kind: "step",
@@ -2247,6 +2651,29 @@ export const htmlTrack: Track = {
             '  <input type="text" id="hp" name="telepon"\n' +
             '         autocomplete="tel" inputmode="numeric">\n' +
             "</form>",
+          susunKode: {
+            question:
+              "Rangkai isian nomor HP yang memunculkan papan ketik angka di ponsel dan bisa diisi otomatis oleh browser.",
+            potongan: [
+              "<form action=\"/checkout\" method=\"post\">",
+              "<label for=\"hp\">Nomor HP</label>",
+              "<input",
+              "type=\"text\"",
+              "id=\"hp\"",
+              "name=\"telepon\"",
+              "autocomplete=\"tel\"",
+              "inputmode=\"numeric\"",
+              ">",
+              "</form>",
+            ],
+            pengecoh: [
+              "type=\"number\"",
+              "autocomplete=\"phone\"",
+            ],
+            pemisah: " ",
+            explanation:
+              "`inputmode=\"numeric\"` memunculkan papan ketik angka tanpa mengubah tipe isiannya, dan `autocomplete=\"tel\"` memberi tahu browser data apa yang diminta sehingga ia bisa menawarkan isian tersimpan. Keping `type=\"number\"` adalah jalan pintas yang paling menggoda karena juga memunculkan papan angka — tapi ia membuang angka nol di depan, menolak tanda plus, dan menambahkan tombol naik-turun; nomor `081...` bisa berubah jadi `81...` tanpa peringatan. Keping `autocomplete=\"phone\"` memakai kata yang salah: daftar nilainya sudah ditentukan standar, dan nilai di luar daftar diabaikan diam-diam.",
+          },
         },
         {
           kind: "quiz",
@@ -2423,6 +2850,22 @@ export const htmlTrack: Track = {
           ],
           solution:
             '<img src="grafik.png" alt="Grafik penjualan naik setiap bulan sepanjang 2026">\n<img src="hiasan.svg" alt="">',
+          susunKode: {
+            question:
+              "Susun dua gambar: satu grafik yang perlu diterangkan isinya, dan satu hiasan yang tidak perlu dibacakan.",
+            potongan: [
+              "<img src=\"grafik.png\" alt=\"Grafik penjualan naik setiap bulan sepanjang 2026\">",
+              "<img src=\"hiasan.svg\" alt=\"\">",
+            ],
+            pengecoh: [
+              "<img src=\"grafik.png\" alt=\"grafik\">",
+              "<img src=\"hiasan.svg\" alt=\"hiasan\">",
+              "<img src=\"hiasan.svg\">",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`alt` yang baik menyampaikan INFORMASI gambarnya, bukan menyebut jenis berkasnya. Keping `alt=\"grafik\"` menggoda karena terasa sudah mengisi kewajiban, padahal pendengar tetap tidak tahu grafik itu menunjukkan apa — dan justru grafik adalah gambar yang isinya paling perlu diterangkan. Untuk gambar hiasan, `alt=\"\"` yang kosong adalah jawaban yang benar: itu memberitahu screen reader agar melewatinya. Keping tanpa atribut `alt` sama sekali berbeda artinya — screen reader lalu membacakan nama berkasnya, sehingga pengguna mendengar \"hiasan titik es ve ge\" di tengah kalimat.",
+          },
         },
         {
           kind: "step",
@@ -2456,6 +2899,22 @@ export const htmlTrack: Track = {
           ],
           solution:
             "<h1>Panduan Belajar</h1>\n<h2>Bagian Pertama</h2>\n<h3>Sub-bagian</h3>",
+          susunKode: {
+            question:
+              "Susun kerangka judul yang turun bertahap tanpa melompati satu tingkat pun.",
+            potongan: [
+              "<h1>Panduan Belajar</h1>",
+              "<h2>Bagian Pertama</h2>",
+              "<h3>Sub-bagian</h3>",
+            ],
+            pengecoh: [
+              "<h4>Sub-bagian</h4>",
+              "<h5>Bagian Pertama</h5>",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Heading membentuk daftar isi halaman, dan screen reader punya pintasan untuk melompat antar heading — itulah cara banyak pengguna menjelajah halaman panjang. Karena itu tingkatnya harus turun satu per satu: `<h1>` lalu `<h2>` lalu `<h3>`. Keping `<h4>` dan `<h5>` sangat menggoda karena di layar hasilnya cuma sedikit lebih kecil dan sering justru terlihat lebih pas dengan desainnya. Masalahnya tidak terlihat mata: tingkat yang bolong membuat pendengar mengira ada bagian yang terlewat atau gagal dimuat. Kalau yang kamu inginkan hanya huruf lebih kecil, itu pekerjaan CSS, bukan alasan mengganti tingkat heading.",
+          },
         },
         {
           kind: "step",
@@ -2481,6 +2940,26 @@ export const htmlTrack: Track = {
             },
           ],
           solution: '<button aria-label="Tutup dialog">×</button>',
+          susunKode: {
+            question:
+              "Rangkai tombol tutup yang isinya hanya lambang silang, tapi tetap punya nama yang bisa dibacakan.",
+            potongan: [
+              "<button",
+              "aria-label=\"Tutup",
+              "dialog\"",
+              ">",
+              "×",
+              "</button>",
+            ],
+            pengecoh: [
+              "title=\"Tutup dialog\"",
+              "alt=\"Tutup dialog\"",
+              "aria-labelledby=\"Tutup dialog\"",
+            ],
+            pemisah: " ",
+            explanation:
+              "Tombol yang isinya hanya ikon tidak punya teks untuk dibacakan, jadi screen reader hanya menyebut \"tombol\" tanpa keterangan apa pun. `aria-label` mengisi kekosongan itu. Keping `title` menggoda karena memunculkan keterangan saat kursor didiamkan di atasnya sehingga terasa sudah menyelesaikan masalah — padahal ia tidak muncul di layar sentuh dan pembacaannya tidak dijamin. Keping `alt` hanya berlaku untuk `<img>`. Keping `aria-labelledby` adalah jebakan yang paling halus: atribut itu memang ada, tapi isinya harus berupa `id` elemen lain yang memuat teksnya — diisi teks langsung, ia menunjuk ke elemen yang tidak ada dan tombolmu tetap tanpa nama.",
+          },
         },
         {
           kind: "step",
@@ -2512,6 +2991,23 @@ export const htmlTrack: Track = {
             },
           ],
           solution: "<button>Simpan</button>",
+          susunKode: {
+            question:
+              "Rangkai sebuah tombol bertuliskan `Simpan` memakai elemen yang memang sudah berperilaku sebagai tombol.",
+            potongan: [
+              "<button>",
+              "Simpan",
+              "</button>",
+            ],
+            pengecoh: [
+              "<div role=\"button\">",
+              "</div>",
+              "<span>",
+            ],
+            pemisah: " ",
+            explanation:
+              "`<button>` sudah membawa semuanya secara gratis: bisa difokus dengan Tab, ditekan dengan Enter maupun Spasi, dan dikenali screen reader sebagai tombol. Keping `<div role=\"button\">` adalah jebakan yang sangat sering ditemukan di kode nyata, dan ia menggoda justru karena terlihat sudah memikirkan aksesibilitas. Kenyataannya `role` hanya mengumumkan peran; ia tidak menambahkan satu pun perilaku. Supaya setara, kamu masih harus menambahkan `tabindex` dan menangani tombol Enter serta Spasi sendiri — tiga pekerjaan tambahan untuk meniru sesuatu yang sudah tersedia. Memakai elemen bawaan hampir selalu jawaban yang benar.",
+          },
         },
         {
           kind: "step",
@@ -2546,6 +3042,25 @@ export const htmlTrack: Track = {
           ],
           solution:
             '<a href="#konten">Lewati ke konten</a>\n<nav><a href="/">Beranda</a></nav>\n<main id="konten">\n  <h1>Isi Halaman</h1>\n</main>',
+          susunKode: {
+            question:
+              "Susun halaman dengan tautan pintas di paling atas yang melompat langsung ke isi utama.",
+            potongan: [
+              "<a href=\"#konten\">Lewati ke konten</a>",
+              "<nav><a href=\"/\">Beranda</a></nav>",
+              "<main id=\"konten\">",
+              "  <h1>Isi Halaman</h1>",
+              "</main>",
+            ],
+            pengecoh: [
+              "<a href=\"konten\">Lewati ke konten</a>",
+              "<main class=\"konten\">",
+              "<div id=\"konten\">",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Pengguna keyboard menyusuri halaman dengan Tab, dan tanpa tautan pintas ia harus melewati seluruh menu navigasi di setiap halaman sebelum sampai ke isinya. Tautan ini bekerja karena dua hal yang harus cocok: `href` diawali pagar, dan elemen tujuannya punya `id` yang sama. Keping `href=\"konten\"` tanpa pagar adalah kekeliruan yang paling sering terjadi — tanpa pagar itu bukan lompatan di halaman yang sama, melainkan permintaan ke berkas bernama `konten`, dan pengguna terlempar ke halaman 404. Keping `class` alih-alih `id` juga menjebak: keduanya sama-sama penanda, tapi hanya `id` yang bisa dijadikan sasaran lompatan.",
+          },
         },
         {
           kind: "step",
@@ -2587,6 +3102,24 @@ export const htmlTrack: Track = {
           ],
           solution:
             '<button><span aria-hidden="true">→</span> Lanjut ke pembayaran</button>',
+          susunKode: {
+            question:
+              "Rangkai tombol berisi ikon panah yang tidak perlu dibacakan, diikuti teks tombolnya.",
+            potongan: [
+              "<button>",
+              "<span aria-hidden=\"true\">→</span>",
+              "Lanjut ke pembayaran",
+              "</button>",
+            ],
+            pengecoh: [
+              "<span aria-hidden=\"false\">→</span>",
+              "<button aria-hidden=\"true\">",
+              "<span>→</span>",
+            ],
+            pemisah: " ",
+            explanation:
+              "Ikon panah tidak menambah makna apa pun bagi yang mendengarkan — `aria-hidden=\"true\"` menyembunyikannya dari screen reader sambil tetap terlihat di layar. Keping `<span>` polos menggoda karena tampilannya sama persis; bedanya, pengguna screen reader mendengar nama karakter panahnya dibacakan di tengah kalimat. Keping `aria-hidden=\"false\"` justru menegaskan agar dibacakan. Keping yang menaruh `aria-hidden` pada `<button>` adalah jebakan paling berbahaya: seluruh tombol beserta teksnya hilang dari pembacaan, sehingga tombol itu praktis lenyap bagi penggunanya — kesalahan yang tidak terlihat sama sekali di layar.",
+          },
         },
         {
           kind: "quiz",
@@ -2777,6 +3310,25 @@ export const htmlTrack: Track = {
           ],
           solution:
             '<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n  <title>BiLearn</title>\n</head>',
+          susunKode: {
+            question:
+              "Susun bagian `<head>` dengan dua meta tag yang tidak boleh lupa: pengkodean karakter dan pengaturan lebar layar.",
+            potongan: [
+              "<head>",
+              "  <meta charset=\"UTF-8\">",
+              "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
+              "  <title>BiLearn</title>",
+              "</head>",
+            ],
+            pengecoh: [
+              "  <meta charset=\"ASCII\">",
+              "  <meta name=\"viewport\" content=\"width=1024\">",
+              "  <meta property=\"viewport\" content=\"width=device-width, initial-scale=1\">",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`charset=\"UTF-8\"` membuat huruf beraksen dan emoji tampil benar; tanpanya kata seperti \"café\" berubah jadi karakter aneh. Meta viewport memberi tahu ponsel agar memakai lebar layar sebenarnya — tanpa itu, halamanmu tampil seperti versi desktop yang dikecilkan dan hurufnya tidak terbaca. Keping `width=1024` adalah jebakan yang menghasilkan gejala persis sama seperti lupa memasang meta-nya: lebarnya dipatok, bukan mengikuti perangkat. Keping `property` alih-alih `name` sering keliru terbawa dari kebiasaan menulis tag Open Graph, dan meta yang salah atribut diabaikan tanpa peringatan.",
+          },
         },
         {
           kind: "step",
@@ -2807,6 +3359,25 @@ export const htmlTrack: Track = {
           ],
           solution:
             '<head>\n  <meta charset="UTF-8">\n  <title>Belajar HTML - BiLearn</title>\n  <meta name="description" content="Belajar HTML dari dasar sampai semantic HTML yang dipakai di dunia kerja.">\n</head>',
+          susunKode: {
+            question:
+              "Susun `<head>` dengan judul halaman yang deskriptif dan ringkasan untuk hasil pencarian.",
+            potongan: [
+              "<head>",
+              "  <meta charset=\"UTF-8\">",
+              "  <title>Belajar HTML - BiLearn</title>",
+              "  <meta name=\"description\" content=\"Belajar HTML dari dasar sampai semantic HTML yang dipakai di dunia kerja.\">",
+              "</head>",
+            ],
+            pengecoh: [
+              "  <title>Belajar HTML</title>",
+              "  <meta name=\"deskripsi\" content=\"Belajar HTML dari dasar sampai semantic HTML yang dipakai di dunia kerja.\">",
+              "  <meta name=\"keywords\" content=\"Belajar HTML dari dasar sampai semantic HTML yang dipakai di dunia kerja.\">",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`<title>` muncul di tab browser dan menjadi baris judul di hasil pencarian; `description` menjadi cuplikan di bawahnya. Keduanya yang menentukan apakah orang mengklik hasilmu atau melewatinya. Keping `name=\"deskripsi\"` menggoda karena isinya sudah benar dan bahasanya terasa konsisten dengan konten Indonesia, padahal nama meta tag sudah ditentukan standar — yang di luar daftar diabaikan diam-diam, dan cuplikanmu diganti potongan acak dari halaman. Keping `keywords` adalah peninggalan lama yang sering keliru dikira masih berguna — mesin pencari sudah lama mengabaikannya sepenuhnya karena dulu terlalu banyak disalahgunakan.",
+          },
         },
         {
           kind: "step",
@@ -2841,6 +3412,27 @@ export const htmlTrack: Track = {
           ],
           solution:
             '<head>\n  <meta charset="UTF-8">\n  <title>BiLearn</title>\n  <meta property="og:title" content="BiLearn - Belajar Coding">\n  <meta property="og:description" content="Kurikulum berbasis lowongan kerja nyata.">\n  <meta property="og:image" content="https://bilearn.id/preview.png">\n</head>',
+          susunKode: {
+            question:
+              "Susun `<head>` dengan tag Open Graph supaya tampilan tautannya rapi saat dibagikan ke WhatsApp atau media sosial.",
+            potongan: [
+              "<head>",
+              "  <meta charset=\"UTF-8\">",
+              "  <title>BiLearn</title>",
+              "  <meta property=\"og:title\" content=\"BiLearn - Belajar Coding\">",
+              "  <meta property=\"og:description\" content=\"Kurikulum berbasis lowongan kerja nyata.\">",
+              "  <meta property=\"og:image\" content=\"https://bilearn.id/preview.png\">",
+              "</head>",
+            ],
+            pengecoh: [
+              "  <meta name=\"og:title\" content=\"BiLearn - Belajar Coding\">",
+              "  <meta property=\"og:img\" content=\"https://bilearn.id/preview.png\">",
+              "  <meta property=\"og:image\" content=\"/preview.png\">",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Tag Open Graph memakai atribut `property`, bukan `name` — inilah kekeliruan yang paling sering terjadi karena semua meta tag lain yang kamu tulis memakai `name`, jadi tangan otomatis mengetiknya. Akibatnya tautan yang dibagikan tampil polos tanpa gambar. Keping `og:img` memakai singkatan yang wajar tapi bukan nama yang benar. Keping gambar dengan alamat relatif adalah jebakan yang paling membingungkan: di halamanmu sendiri alamat itu bekerja, tapi WhatsApp dan Facebook mengambilnya dari server mereka, sehingga alamat gambarnya harus lengkap dengan nama domain.",
+          },
         },
         {
           kind: "step",
@@ -2870,6 +3462,25 @@ export const htmlTrack: Track = {
           ],
           solution:
             '<head>\n  <meta charset="UTF-8">\n  <link rel="icon" href="/favicon.ico">\n  <link rel="stylesheet" href="/style.css">\n</head>',
+          susunKode: {
+            question:
+              "Susun `<head>` yang memuat ikon tab dan berkas gaya.",
+            potongan: [
+              "<head>",
+              "  <meta charset=\"UTF-8\">",
+              "  <link rel=\"icon\" href=\"/favicon.ico\">",
+              "  <link rel=\"stylesheet\" href=\"/style.css\">",
+              "</head>",
+            ],
+            pengecoh: [
+              "  <link rel=\"favicon\" href=\"/favicon.ico\">",
+              "  <link rel=\"stylesheet\" src=\"/style.css\">",
+              "  <link rel=\"icon\" src=\"/favicon.ico\">",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Elemen `<link>` dipakai untuk beberapa hal sekaligus, dan yang membedakannya adalah nilai `rel`: `icon` untuk gambar kecil di tab, `stylesheet` untuk berkas gaya. Keping `rel=\"favicon\"` sangat menggoda karena kata itulah yang dipakai semua orang saat membicarakannya, padahal nilai yang dikenali browser adalah `icon`. Dua keping ber-`src` mengulang kekeliruan yang paling sering terjadi pada `<link>`: alamat berkasnya selalu lewat `href`, sedangkan `src` milik `<img>`, `<script>`, dan media. Seperti biasa, browser tidak mengeluh — ikon atau gayanya hanya tidak pernah muncul.",
+          },
         },
         {
           kind: "step",
@@ -2903,6 +3514,26 @@ export const htmlTrack: Track = {
           ],
           solution:
             '<button data-product-id="42" data-price="50000">Beli</button>',
+          susunKode: {
+            question:
+              "Rangkai tombol beli yang menitipkan id produk 42 dan harga 50000 di dalam atributnya sendiri.",
+            potongan: [
+              "<button",
+              "data-product-id=\"42\"",
+              "data-price=\"50000\"",
+              ">",
+              "Beli",
+              "</button>",
+            ],
+            pengecoh: [
+              "produk-id=\"42\"",
+              "data-productId=\"42\"",
+              "dataprice=\"50000\"",
+            ],
+            pemisah: " ",
+            explanation:
+              "Atribut `data-*` adalah satu-satunya cara sah menitipkan data milikmu sendiri di elemen HTML, dan JavaScript bisa membacanya lewat `dataset`. Awalan `data-` bukan hiasan: tanpa awalan itu atributnya tidak sah, dan keping `produk-id` menunjukkan persis kekeliruan itu. Keping `data-productId` adalah jebakan yang paling halus di step ini — penamaan gaya camelCase terasa alami bagi yang terbiasa menulis JavaScript, padahal nama atribut HTML tidak peka huruf besar-kecil dan disepakati ditulis dengan tanda hubung. Keping tanpa tanda hubung setelah `data` juga tidak dikenali sebagai atribut data.",
+          },
         },
         {
           kind: "step",
@@ -2948,6 +3579,29 @@ export const htmlTrack: Track = {
           ],
           solution:
             '<!DOCTYPE html>\n<html lang="id">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n  <title>Profil Saya - BiLearn</title>\n</head>\n<body>\n  <header>\n    <nav><a href="/">Beranda</a></nav>\n  </header>\n  <main>\n    <h1>Halo, saya belajar HTML</h1>\n  </main>\n  <footer>\n    <p>© 2026</p>\n  </footer>\n</body>\n</html>',
+          susunKode: {
+            question:
+              "Susun satu halaman HTML utuh: kerangka dokumen, dua meta wajib, judul, lalu kepala, isi utama, dan kaki halaman.",
+            potongan: [
+              "<!DOCTYPE html>\n<html lang=\"id\">",
+              "<head>\n  <meta charset=\"UTF-8\">",
+              "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
+              "  <title>Profil Saya - BiLearn</title>",
+              "</head>",
+              "<body>",
+              "  <header>\n    <nav><a href=\"/\">Beranda</a></nav>\n  </header>",
+              "  <main>\n    <h1>Halo, saya belajar HTML</h1>\n  </main>",
+              "  <footer>\n    <p>© 2026</p>\n  </footer>",
+              "</body>\n</html>",
+            ],
+            pengecoh: [
+              "  <meta name=\"viewports\" content=\"width=device-width, initial-scale=1\">",
+              "  <title></title>",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Ini rangkuman seluruh track: doctype, elemen `<html>` berbahasa, `<head>` berisi keterangan, lalu `<body>` yang isinya dibagi menjadi kepala, isi utama, dan kaki halaman. Urutan itu yang dipakai hampir semua halaman di internet. Keping `viewports` berhuruf s adalah salah ketik yang sering terjadi dan sangat sulit ditemukan dengan mata: tidak ada error, halamannya tampil normal di komputermu, dan baru terasa rusak saat dibuka di ponsel. Keping `<title>` kosong juga menjebak — strukturnya lengkap, tapi tab browser dan hasil pencarian akan menampilkan alamat berkasnya, bukan judul yang berarti.",
+          },
         },
         {
           kind: "step",
@@ -3009,6 +3663,26 @@ export const htmlTrack: Track = {
             '  <span id="harga-teh">12.000</span>\n' +
             '  <img src="kopi.jpg" alt="Segelas kopi tubruk">\n' +
             "</section>",
+          susunKode: {
+            question:
+              "Susun ulang potongan ini supaya lolos validator: paragrafnya tertutup, tidak ada id kembar, dan gambarnya punya teks alternatif.",
+            potongan: [
+              "<section id=\"daftar\">",
+              "  <p>Kopi tubruk</p>",
+              "  <span id=\"harga\">18.000</span>",
+              "  <span id=\"harga-teh\">12.000</span>",
+              "  <img src=\"kopi.jpg\" alt=\"Segelas kopi tubruk\">",
+              "</section>",
+            ],
+            pengecoh: [
+              "  <p>Kopi tubruk<p>",
+              "  <span id=\"harga-kopi\">12.000</span>",
+              "  <img src=\"kopi.jpg\">",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Tiga kesalahan inilah yang paling sering ditemukan validator: tag yang tidak ditutup, `id` yang dipakai dua kali, dan gambar tanpa `alt`. Ketiganya punya gejala yang sama — browser tidak menampilkan error apa pun, jadi kamu baru tahu setelah ada yang rusak. Keping `<p>Kopi tubruk<p>` menggoda karena sekilas terlihat berpasangan, padahal itu dua paragraf yang dibuka dan tidak pernah ditutup. Keping `id=\"harga-kopi\"` menggoda karena namanya terasa lebih deskriptif, padahal `id` harus cocok persis dengan yang dirujuk di tempat lain. Soal `id` kembar: kalau dua elemen memakai `id` yang sama, tautan jangkar dan `getElementById` hanya menemukan yang pertama — bug yang bisa menghabiskan berjam-jam karena kodenya terlihat benar.",
+          },
         },
         {
           kind: "quiz",

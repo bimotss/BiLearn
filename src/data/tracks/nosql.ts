@@ -120,6 +120,21 @@ export const nosqlTrack: Track = {
             },
           ],
           solution: 'mongosh "mongodb://localhost:27017"',
+          susunKode: {
+            question:
+              "Susun perintah CLI mongosh untuk terhubung ke database MongoDB lokal.",
+            potongan: [
+              "mongosh",
+              "\"mongodb://localhost:27017\"",
+            ],
+            pengecoh: [
+              "mongo-cli",
+              "\"http://localhost:27017\"",
+            ],
+            pemisah: " ",
+            explanation:
+              "Koneksi ke instance MongoDB lokal menggunakan utilitas CLI `mongosh` dengan connection string berpola `mongodb://host:port`. Penggunaan nama CLI fiktif 'mongo-cli' atau skema URL 'http://' merupakan kekeliruan protokol yang sering menggoda pemula dan membuat koneksi gagal.",
+          },
         },
         {
           kind: "materi",
@@ -194,6 +209,21 @@ export const nosqlTrack: Track = {
             },
           ],
           solution: "db.artikel.insertOne({ judul: 'Belajar NoSQL', tags: ['db', 'nosql'] });",
+          susunKode: {
+            question:
+              "Susun perintah MongoDB insertOne dengan bidang array tags bersarang.",
+            potongan: [
+              "db.artikel.insertOne({ judul: 'Belajar NoSQL',",
+              "tags: ['db', 'nosql'] });",
+            ],
+            pengecoh: [
+              "db.artikel.addOne({ judul: 'Belajar NoSQL',",
+              "tags: 'db, nosql' });",
+            ],
+            pemisah: " ",
+            explanation:
+              "Penyisipan dokumen dengan array bersarang pada MongoDB shell menggunakan perintah `db.koleksi.insertOne({ ... })`. Penggunaan kata 'addOne' atau penulisan array sebagai string biasa 'db, nosql' adalah bentuk kesalahan sintaksis yang sering mengelirukan pembelajar.",
+          },
         },
         {
           kind: "step",
@@ -227,6 +257,21 @@ export const nosqlTrack: Track = {
             },
           ],
           solution: "db.aktivitas.insertOne({ tipe: 'login', meta: { ip: '10.0.0.1' } });",
+          susunKode: {
+            question:
+              "Susun perintah MongoDB insertOne dengan bidang sub-dokumen meta bersarang.",
+            potongan: [
+              "db.aktivitas.insertOne({ tipe: 'login',",
+              "meta: { ip: '10.0.0.1' } });",
+            ],
+            pengecoh: [
+              "db.aktivitas.insert({ tipe: 'logout',",
+              "meta: '10.0.0.1' });",
+            ],
+            pemisah: " ",
+            explanation:
+              "Operasi penyisipan dokumen dengan sub-dokumen/objek bersarang di MongoDB menggunakan `insertOne()` dan sintaks objek `{ meta: { ip: '...' } }`. Penggunaan string biasa pada meta atau kata 'logout' adalah kekeliruan umum dan jebakan sintaks.",
+          },
         },
         {
           kind: "step",
@@ -257,7 +302,22 @@ export const nosqlTrack: Track = {
             },
           ],
           solution: "db.katalog.find().readPref('secondary');",
-        },
+                    susunKode: {
+                      question:
+                        "Susun query MongoDB untuk mengambil dokumen dengan preferensi membaca dari replika sekunder.",
+                      potongan: [
+                        "db.katalog.find()",
+                        ".readPref('secondary');",
+                      ],
+                      pengecoh: [
+                        "db.katalog.query()",
+                        ".readMode('secondary');",
+                      ],
+                      pemisah: "",
+                      explanation:
+                        "Pengaturan preferensi baca dari replika sekunder pada MongoDB menggunakan metode `.readPref('secondary')` setelah `.find()`. Penggunaan kata '.query()' atau '.readMode()' adalah jebakan sintaks fiktif yang sering membingungkan.",
+                    },
+                  },
         {
           kind: "step",
           id: "nosql-1-4",
@@ -286,6 +346,21 @@ export const nosqlTrack: Track = {
             },
           ],
           solution: "session.startTransaction();\nsession.commitTransaction();",
+          susunKode: {
+            question:
+              "Susun blok transaksi MongoDB dari startTransaction hingga commitTransaction.",
+            potongan: [
+              "session.startTransaction();\n",
+              "session.commitTransaction();",
+            ],
+            pengecoh: [
+              "session.beginTransaction();\n",
+              "session.endTransaction();",
+            ],
+            pemisah: "",
+            explanation:
+              "Pengelolaan transaksi pada MongoDB session menggunakan pasangan perintah `session.startTransaction();` dan `session.commitTransaction();`. Penggunaan kata 'beginTransaction' (sintaks SQL/ORM) adalah kekeliruan API MongoDB yang jebakan.",
+          },
         },
         {
           kind: "step",
@@ -315,6 +390,21 @@ export const nosqlTrack: Track = {
             },
           ],
           solution: "SETEX sesi:u42 1800 'token-xyz'",
+          susunKode: {
+            question:
+              "Susun perintah Redis CLI SETEX untuk menyimpan sesi dengan TTL 1800 detik.",
+            potongan: [
+              "SETEX sesi:u42 1800",
+              "'token-xyz'",
+            ],
+            pengecoh: [
+              "SET_EXPIRE sesi:u42 1800",
+              "'session-expired'",
+            ],
+            pemisah: " ",
+            explanation:
+              "Perintah Redis untuk menyimpan string dengan waktu kadaluarsa (TTL) dalam detik adalah `SETEX key ttl nilai`. Sintaks 'SET_EXPIRE' atau mengganti nilai token dengan 'session-expired' adalah kesalahan istilah CLI yang sering menggoda.",
+          },
         },
         {
           kind: "quiz",
@@ -468,6 +558,21 @@ export const nosqlTrack: Track = {
             },
           ],
           solution: "db.products.insertOne({ title: 'Laptop', price: 1000 });",
+          susunKode: {
+            question:
+              "Susun perintah MongoDB insertOne untuk menambahkan produk baru.",
+            potongan: [
+              "db.products.insertOne({ title: 'Laptop',",
+              "price: 1000 });",
+            ],
+            pengecoh: [
+              "db.products.save({ title: 'Desktop',",
+              "cost: 1000 });",
+            ],
+            pemisah: " ",
+            explanation:
+              "Memasukkan satu dokumen ke koleksi MongoDB menggunakan `insertOne({ field: value })`. Penggunaan `save()` (metode lama yang sudah deprecated) atau nama field 'Desktop'/'cost' mengelirukan pembelajar secara jebakan.",
+          },
         },
         {
           kind: "step",
@@ -498,6 +603,21 @@ export const nosqlTrack: Track = {
             },
           ],
           solution: "db.users.find({ age: { $gt: 18 } });",
+          susunKode: {
+            question:
+              "Susun kueri MongoDB find dengan operator $gt untuk menyaring umur di atas 18.",
+            potongan: [
+              "db.users.find({",
+              "age: { $gt: 18 } });",
+            ],
+            pengecoh: [
+              "db.users.search({",
+              "age: { >: 18 } });",
+            ],
+            pemisah: " ",
+            explanation:
+              "Penyaringan nilai 'lebih besar dari' pada MongoDB kueri wajib menggunakan operator kueri `$gt`. Penggunaan simbol pembanding mentah `>: 18` atau kata `search()` adalah bentuk kekeliruan sintaksis kueri BSON yang jebakan.",
+          },
         },
         {
           kind: "step",
@@ -532,6 +652,21 @@ export const nosqlTrack: Track = {
             },
           ],
           solution: "db.users.updateOne({ _id }, { $set: { active: true } });",
+          susunKode: {
+            question:
+              "Susun perintah MongoDB updateOne dengan operator $set untuk mengedit bidang active.",
+            potongan: [
+              "db.users.updateOne({ _id },",
+              "{ $set: { active: true } });",
+            ],
+            pengecoh: [
+              "db.users.update({ _id },",
+              "{ $update: { active: true } });",
+            ],
+            pemisah: " ",
+            explanation:
+              "Pengubahan bidang dokumen di MongoDB tanpa menimpa seluruh dokumen wajib menggunakan operator `$set`. Penggunaan `$update` (operator fiktif) atau `update()` tanpa `$set` adalah kesalahan klasik yang keliru dan membingungkan.",
+          },
         },
         {
           kind: "step",
@@ -562,7 +697,22 @@ export const nosqlTrack: Track = {
             },
           ],
           solution: "db.users.deleteOne({ _id: userId });",
-        },
+                    susunKode: {
+                      question:
+                        "Susun perintah MongoDB deleteOne untuk menghapus dokumen berdasarkan _id.",
+                      potongan: [
+                        "db.users.deleteOne({",
+                        "_id: userId });",
+                      ],
+                      pengecoh: [
+                        "db.users.remove({",
+                        "identifier: userId });",
+                      ],
+                      pemisah: " ",
+                      explanation:
+                        "Penghapusan satu dokumen pada MongoDB shell menggunakan `deleteOne({ _id: ... })`. Metode `remove()` sudah deprecated, dan penulisan field identifier utama pada MongoDB selalu `_id`, bukan `identifier` secara jebakan.",
+                    },
+                  },
         {
           kind: "step",
           id: "nosql-2-5",
@@ -596,7 +746,24 @@ export const nosqlTrack: Track = {
             },
           ],
           solution: "db.products.find().sort({ price: 1 }).limit(5);",
-        },
+                    susunKode: {
+                      question:
+                        "Susun query MongoDB find yang diurutkan berdasar harga termurah dan dibatasi 5 dokumen.",
+                      potongan: [
+                        "db.products.find()",
+                        ".sort({ price: 1 })",
+                        ".limit(5);",
+                      ],
+                      pengecoh: [
+                        "db.products.select()",
+                        ".orderBy({ price: 'ASC' })",
+                        ".take(5);",
+                      ],
+                      pemisah: "",
+                      explanation:
+                        "Pengurutan dan pembatasan hasil kueri MongoDB menggunakan chaining method `.sort({ field: 1 })` untuk ascending (atau -1 untuk descending) dan `.limit(n)`. Penggunaan kata '.orderBy' atau '.take' adalah kekeliruan istilah ORM SQL.",
+                    },
+                  },
         {
           kind: "step",
           id: "nosql-2-6",
@@ -626,6 +793,21 @@ export const nosqlTrack: Track = {
             },
           ],
           solution: "db.orders.createIndex({ userId: 1 });",
+          susunKode: {
+            question:
+              "Susun perintah MongoDB createIndex untuk membuat indeks ascending pada userId.",
+            potongan: [
+              "db.orders.createIndex({",
+              "userId: 1 });",
+            ],
+            pengecoh: [
+              "db.orders.addIndex({",
+              "userId: 'ASC' });",
+            ],
+            pemisah: " ",
+            explanation:
+              "Pembuatan indeks pada koleksi MongoDB menggunakan `createIndex({ field: 1 })`. Arah indeks ditentukan dengan angka 1 (ascending) atau -1 (descending), bukan string 'ASC' yang sering keliru menggoda pembelajar.",
+          },
         },
         {
           kind: "step",
@@ -659,6 +841,23 @@ export const nosqlTrack: Track = {
             },
           ],
           solution: "const ProductSchema = new mongoose.Schema({\n  title: { type: String, required: true },\n  price: Number,\n});",
+          susunKode: {
+            question:
+              "Susun pendefinisian skema Mongoose ProductSchema.",
+            potongan: [
+              "const ProductSchema = new mongoose.Schema({\n",
+              "  title: { type: String, required: true },\n",
+              "  price: Number,\n});",
+            ],
+            pengecoh: [
+              "const ProductSchema = new mongoose.Model({\n",
+              "  title: { dataType: 'string', isRequired: true },\n",
+              "  price: 'number',\n});",
+            ],
+            pemisah: "",
+            explanation:
+              "Pendefinisian skema Mongoose menggunakan `new mongoose.Schema({ field: { type: Type, required: true } })`. Penggunaan `dataType` atau `isRequired` (istilah fiktif) merupakan kesalahan umum dalam skema ODM yang jebakan.",
+          },
         },
         {
           kind: "quiz",
@@ -806,6 +1005,21 @@ export const nosqlTrack: Track = {
             },
           ],
           solution: "db.komentar.insertOne({ artikelId: postId, isi: 'Bermanfaat!' });",
+          susunKode: {
+            question:
+              "Susun penyisipan dokumen komentar dengan pola referensi artikelId.",
+            potongan: [
+              "db.komentar.insertOne({ artikelId: postId,",
+              "isi: 'Bermanfaat!' });",
+            ],
+            pengecoh: [
+              "db.komentar.add({ artikel_id: postId,",
+              "content: 'Bermanfaat!' });",
+            ],
+            pemisah: " ",
+            explanation:
+              "Penerapan pola referensi antar-dokumen di MongoDB menyimpan ID dokumen induk sebagai bidang referensi `artikelId: postId`. Penggunaan metode `.add()` adalah kesalahan sintaksis shell yang sering menggoda pembelajar.",
+          },
         },
         {
           kind: "step",
@@ -840,6 +1054,21 @@ export const nosqlTrack: Track = {
             },
           ],
           solution: "db.produk.updateOne({ _id: produkId }, { $addToSet: { kategori: kategoriId } });",
+          susunKode: {
+            question:
+              "Susun perintah MongoDB updateOne dengan operator $addToSet untuk penambahan array unik.",
+            potongan: [
+              "db.produk.updateOne({ _id: produkId },",
+              "{ $addToSet: { kategori: kategoriId } });",
+            ],
+            pengecoh: [
+              "db.produk.update({ _id: produkId },",
+              "{ $append: { kategori: kategoriId } });",
+            ],
+            pemisah: " ",
+            explanation:
+              "Penambahan elemen unik ke dalam bidang bertipe array pada MongoDB menggunakan operator `$addToSet`. Operator `$append` tidak ada di MongoDB (sering keliru dikira dari bahasa lain) dan metode `update()` deprecated.",
+          },
         },
         {
           kind: "step",
@@ -875,6 +1104,21 @@ export const nosqlTrack: Track = {
             },
           ],
           solution: "db.orders.aggregate([{ $match: { status: 'paid' } }]);",
+          susunKode: {
+            question:
+              "Susun pipeline aggregation MongoDB dengan stage $match.",
+            potongan: [
+              "db.orders.aggregate([",
+              "{ $match: { status: 'paid' } } ]);",
+            ],
+            pengecoh: [
+              "db.orders.pipeline([",
+              "{ $where: { status: 'paid' } } ]);",
+            ],
+            pemisah: " ",
+            explanation:
+              "Aggregation pipeline MongoDB menerima array of stages `[{ ... }]` di mana penyaringan awal menggunakan stage `$match`. Menggantikan `$match` dengan `$where` atau kata `.pipeline()` adalah kekeliruan sintaks aggregation yang jebakan.",
+          },
         },
         {
           kind: "step",
@@ -925,6 +1169,21 @@ export const nosqlTrack: Track = {
             },
           ],
           solution: "{$lookup: { from: 'categories', localField: 'catId', foreignField: '_id', as: 'category' }}",
+          susunKode: {
+            question:
+              "Susun stage aggregation $lookup untuk mengombinasikan data antar koleksi.",
+            potongan: [
+              "{$lookup: { from: 'categories',",
+              "localField: 'catId', foreignField: '_id', as: 'category' }}",
+            ],
+            pengecoh: [
+              "{$join: { target: 'categories',",
+              "joinField: 'catId', foreignField: '_id', alias: 'category' }}",
+            ],
+            pemisah: " ",
+            explanation:
+              "Stage `$lookup` pada MongoDB aggregation pipeline digunakan untuk left outer join antar koleksi dengan parameter `from`, `localField`, `foreignField`, dan `as`. Penggunaan kata `$join` atau `target` adalah bentuk kekeliruan istilah fiktif.",
+          },
         },
         {
           kind: "step",
@@ -962,6 +1221,21 @@ export const nosqlTrack: Track = {
             },
           ],
           solution: "db.createCollection('pengguna', {\n  validator: { $jsonSchema: { required: ['email'] } },\n});",
+          susunKode: {
+            question:
+              "Susun pembuatan koleksi pengguna dengan validator $jsonSchema.",
+            potongan: [
+              "db.createCollection('pengguna', {\n",
+              "  validator: { $jsonSchema: { required: ['email'] } },\n});",
+            ],
+            pengecoh: [
+              "db.createTable('pengguna', {\n",
+              "  validation: { schema: { mustHave: ['email'] } },\n});",
+            ],
+            pemisah: "",
+            explanation:
+              "Pembuatan koleksi terkonfigurasi dengan validator skema JSON di MongoDB menggunakan `db.createCollection('nama', { validator: { $jsonSchema: { required: [...] } } })`. Istilah `createTable` atau `mustHave` adalah kesalahan sintaksis yang sering mengelirukan.",
+          },
         },
         {
           kind: "step",
@@ -999,6 +1273,21 @@ export const nosqlTrack: Track = {
             },
           ],
           solution: "db.user.updateOne(\n  { _id: userId },\n  { $push: { notifikasi: { $each: [pesanBaru], $slice: -10 } } }\n);",
+          susunKode: {
+            question:
+              "Susun pembatasan array notifikasi MongoDB dengan $push, $each, dan $slice.",
+            potongan: [
+              "db.user.updateOne(\n  { _id: userId },\n",
+              "  { $push: { notifikasi: { $each: [pesanBaru], $slice: -10 } } }\n);",
+            ],
+            pengecoh: [
+              "db.user.update(\n  { _id: userId },\n",
+              "  { $append: { notifikasi: { $values: [pesanBaru], $limit: -10 } } }\n);",
+            ],
+            pemisah: "",
+            explanation:
+              "Membatasi ukuran array dokumen di MongoDB menggunakan modifikator `$push` yang dikombinasikan dengan `$each` dan `$slice: -10` (mengambil 10 elemen terakhir). Penggunaan `$append` atau `$limit` adalah kekeliruan operator yang mengelirukan.",
+          },
         },
         {
           kind: "quiz",
@@ -1141,6 +1430,21 @@ export const nosqlTrack: Track = {
                       }
                     ],
           solution: "SET user:1 'Budi'",
+          susunKode: {
+            question:
+              "Susun perintah Redis CLI SET untuk menyimpan string key user:1.",
+            potongan: [
+              "SET user:1",
+              "'Budi'",
+            ],
+            pengecoh: [
+              "PUT user:100",
+              "'Andi'",
+            ],
+            pemisah: " ",
+            explanation:
+              "Perintah dasar Redis untuk menyimpan pasangan key-value string adalah `SET key value`. Kata 'PUT' (dari HTTP/REST) atau mengganti key `user:1` menjadi `user:100` merupakan kekeliruan perintah CLI Redis yang sering menggoda pembelajar.",
+          },
         },
         {
           kind: "step",
@@ -1171,6 +1475,21 @@ export const nosqlTrack: Track = {
                       }
                     ],
           solution: "HSET user:1 name 'Budi'",
+          susunKode: {
+            question:
+              "Susun perintah Redis CLI HSET untuk menetapkan atribut name pada hash user:1.",
+            potongan: [
+              "HSET user:1",
+              "name 'Budi'",
+            ],
+            pengecoh: [
+              "HASHSET user:2",
+              "field:name 'Budi'",
+            ],
+            pemisah: " ",
+            explanation:
+              "Perintah Redis untuk menetapkan nilai bidang pada data berstruktur Hash adalah `HSET key field value`. Penggunaan kata 'HASHSET' atau 'field:name' adalah kesalahan sintaksis CLI Redis yang sering mengelirukan.",
+          },
         },
         {
           kind: "step",
@@ -1201,6 +1520,21 @@ export const nosqlTrack: Track = {
                       }
                     ],
           solution: "SETEX otp:123 60 '998877'",
+          susunKode: {
+            question:
+              "Susun perintah Redis CLI SETEX untuk menyimpan key otp:123 selama 60 detik.",
+            potongan: [
+              "SETEX otp:123 60",
+              "'998877'",
+            ],
+            pengecoh: [
+              "SET_TTL otp:999 60s",
+              "'112233'",
+            ],
+            pemisah: " ",
+            explanation:
+              "Perintah Redis `SETEX` menerima durasi waktu kedaluwarsa dalam hitungan detik (angka murni tanpa akhiran 's'). Sintaks fiktif 'SET_TTL' atau menambah akhiran 's' mengelirukan pembelajar secara jebakan.",
+          },
         },
         {
           kind: "step",
@@ -1234,6 +1568,21 @@ export const nosqlTrack: Track = {
             },
           ],
           solution: "GET artikel:12\nSETEX artikel:12 600 '{\"judul\":\"NoSQL\"}'",
+          susunKode: {
+            question:
+              "Susun perintah Redis CLI GET dan SETEX untuk pola cache-aside.",
+            potongan: [
+              "GET artikel:12\n",
+              "SETEX artikel:12 600 '{\"judul\":\"NoSQL\"}'",
+            ],
+            pengecoh: [
+              "FETCH artikel:12\n",
+              "SET_EXPIRE artikel:12 600 '{\"judul\":\"NoSQL\"}'",
+            ],
+            pemisah: "",
+            explanation:
+              "Pola cache-aside diawali dengan membaca key memakai `GET key`, lalu jika tidak ada di-set ulang memakai `SETEX key ttl value`. Kata 'FETCH' atau 'SET_EXPIRE' adalah bentuk kesalahan istilah Redis yang jebakan.",
+          },
         },
         {
           kind: "step",
@@ -1263,6 +1612,21 @@ export const nosqlTrack: Track = {
             },
           ],
           solution: "INCR limit:u7\nEXPIRE limit:u7 60",
+          susunKode: {
+            question:
+              "Susun perintah Redis CLI INCR dan EXPIRE untuk rate limiting.",
+            potongan: [
+              "INCR limit:u7\n",
+              "EXPIRE limit:u7 60",
+            ],
+            pengecoh: [
+              "ADD limit:u7\n",
+              "TTL limit:u7 60",
+            ],
+            pemisah: "",
+            explanation:
+              "Pola rate limiting Redis menaikkan angka dengan `INCR key` lalu memasang durasi kadaluarsa menggunakan `EXPIRE key detik`. Perintah `TTL` digunakan untuk mengecek sisa waktu, bukan memasang masa berlaku secara keliru.",
+          },
         },
         {
           kind: "step",
@@ -1293,6 +1657,21 @@ export const nosqlTrack: Track = {
                       }
                     ],
           solution: "PUBLISH news 'Headline'",
+          susunKode: {
+            question:
+              "Susun perintah Redis CLI PUBLISH untuk mempublikasikan pesan ke channel Pub/Sub.",
+            potongan: [
+              "PUBLISH news",
+              "'Headline'",
+            ],
+            pengecoh: [
+              "EMIT channel_news",
+              "'Broadcasting'",
+            ],
+            pemisah: " ",
+            explanation:
+              "Mekanisme Pub/Sub pada Redis menggunakan perintah `PUBLISH channel message`. Penggunaan kata 'EMIT' (dari Socket.io/EventEmitters) atau nama channel fiktif adalah kekeliruan sintaks CLI Redis yang jebakan.",
+          },
         },
         {
           kind: "step",
@@ -1319,7 +1698,22 @@ export const nosqlTrack: Track = {
             },
           ],
           solution: "DEL produk:7",
-        },
+                    susunKode: {
+                      question:
+                        "Susun perintah Redis CLI DEL untuk menghapus key dari cache.",
+                      potongan: [
+                        "DEL",
+                        "produk:7",
+                      ],
+                      pengecoh: [
+                        "REMOVE",
+                        "produk:99",
+                      ],
+                      pemisah: " ",
+                      explanation:
+                        "Perintah menghapus key di Redis adalah `DEL` (atau `UNLINK` untuk penghapusan asinkron). Perintah fiktif 'REMOVE' atau mengganti nama key adalah jebakan kata yang sering terjadi dalam CLI Redis saat mengosongkan cache.",
+                    },
+                  },
         {
           kind: "quiz",
           id: "nosql-4-kuis",

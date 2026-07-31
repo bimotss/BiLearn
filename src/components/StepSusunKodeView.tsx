@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { Step } from "@/lib/types";
 import { gabungPotongan, jalankanTes, type HasilTes } from "@/lib/tes";
 import { InlineMarkdown } from "./MarkdownRenderer";
@@ -28,6 +28,23 @@ export default function StepSusunKodeView({ step, onPassed }: Props) {
   const [hasil, setHasil] = useState<HasilTes[] | null>(null);
   const [lulus, setLulus] = useState(false);
   const [lihatSolusi, setLihatSolusi] = useState(false);
+  const [diseret, setDiseret] = useState<number | null>(null);
+  const [sasaran, setSasaran] = useState<number | null>(null);
+  const refKeping = useRef<(HTMLButtonElement | null)[]>([]);
+  /**
+   * Indeks yang harus difokuskan ulang setelah keping dipindah. Disimpan di
+   * ref, bukan state: ini urusan DOM, dan menyimpannya sebagai state memicu
+   * render berantai.
+   */
+  const fokusKe = useRef<number | null>(null);
+
+  // Setelah keping berpindah, fokus keyboard ikut pindah bersamanya. Tanpa ini
+  // fokus melompat ke awal halaman dan pemindahan berturut-turut jadi mustahil.
+  useEffect(() => {
+    if (fokusKe.current === null) return;
+    refKeping.current[fokusKe.current]?.focus();
+    fokusKe.current = null;
+  }, [tersusun]);
 
   /**
    * Kolam kepingan diacak sekali dengan urutan yang TETAP (bukan Math.random),
@@ -65,6 +82,39 @@ export default function StepSusunKodeView({ step, onPassed }: Props) {
     if (lulus) return;
     setTersusun((t) => t.filter((_, i) => i !== index));
     setHasil(null);
+  }
+
+  /**
+   * Memindahkan keping dari satu posisi ke posisi lain.
+   *
+   * Ini yang membuat kesalahan di urutan kedua tidak memaksa user membongkar
+   * delapan keping berikutnya — cukup geser keping itu saja.
+   */
+  function pindah(dari: number, ke: number) {
+    if (lulus) return;
+    if (ke < 0 || ke >= tersusun.length || dari === ke) return;
+    setTersusun((t) => {
+      const salinan = [...t];
+      const [diambil] = salinan.splice(dari, 1);
+      salinan.splice(ke, 0, diambil);
+      return salinan;
+    });
+    setHasil(null);
+    fokusKe.current = ke;
+  }
+
+  function tombolKeping(e: React.KeyboardEvent, i: number) {
+    if (lulus) return;
+    if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      pindah(i, i - 1);
+    } else if (e.key === "ArrowRight") {
+      e.preventDefault();
+      pindah(i, i + 1);
+    } else if (e.key === "Delete" || e.key === "Backspace") {
+      e.preventDefault();
+      hapus(i);
+    }
   }
 
   function periksa() {
@@ -110,8 +160,11 @@ export default function StepSusunKodeView({ step, onPassed }: Props) {
         </p>
 
         {/* Papan susunan */}
-        <p className="mt-5 text-sm font-semibold text-neutral-700">
-          Susunanmu
+        <p className="mt-5 text-sm font-semibold text-neutral-700">Susunanmu</p>
+        <p className="text-xs text-neutral-500">
+          Urutannya bisa diperbaiki tanpa membongkar semuanya: seret kepingnya,
+          atau fokuskan dengan Tab lalu tekan panah kiri/kanan. Delete
+          mengeluarkan keping itu saja.
         </p>
         <ol
           aria-label="Susunan kode yang sudah kamu rangkai"
@@ -123,21 +176,53 @@ export default function StepSusunKodeView({ step, onPassed }: Props) {
             </li>
           )}
           {tersusun.map((k, i) => (
-            <li key={`${k.key}-${i}`}>
+            <li
+              key={`${k.key}-${i}`}
+              onDragOver={(e) => {
+                if (diseret === null) return;
+                e.preventDefault();
+                setSasaran(i);
+              }}
+              onDrop={(e) => {
+                e.preventDefault();
+                if (diseret !== null) pindah(diseret, i);
+                setDiseret(null);
+                setSasaran(null);
+              }}
+              className={`flex items-center rounded-md ${
+                sasaran === i && diseret !== null && diseret !== i
+                  ? "ring-2 ring-gold-500"
+                  : ""
+              } ${diseret === i ? "opacity-50" : ""}`}
+            >
               <button
                 type="button"
-                onClick={() => hapus(i)}
+                ref={(el) => {
+                  refKeping.current[i] = el;
+                }}
+                draggable={!lulus}
+                onDragStart={() => setDiseret(i)}
+                onDragEnd={() => {
+                  setDiseret(null);
+                  setSasaran(null);
+                }}
+                onKeyDown={(e) => tombolKeping(e, i)}
                 disabled={lulus}
-                aria-label={`Keluarkan ${k.teks} dari susunan, urutan ${i + 1}`}
-                className="rounded-md border border-gold-400 bg-gold-50 px-2.5 py-1.5 font-mono text-sm text-neutral-900 transition hover:border-red-400 hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-gold-400 disabled:opacity-70"
+                aria-label={`${k.teks} — urutan ${i + 1} dari ${tersusun.length}. Panah kiri dan kanan memindahkan, Delete mengeluarkannya.`}
+                className="cursor-grab rounded-l-md border border-r-0 border-gold-400 bg-gold-50 px-2.5 py-1.5 font-mono text-sm text-neutral-900 transition focus:outline-none focus:ring-2 focus:ring-gold-400 active:cursor-grabbing disabled:cursor-default disabled:opacity-70"
               >
                 {k.teks}
-                {!lulus && (
-                  <span className="ml-1.5 text-neutral-400" aria-hidden="true">
-                    ×
-                  </span>
-                )}
               </button>
+              {!lulus && (
+                <button
+                  type="button"
+                  onClick={() => hapus(i)}
+                  aria-label={`Keluarkan ${k.teks} dari susunan, urutan ${i + 1}`}
+                  className="rounded-r-md border border-gold-400 bg-gold-50 px-2 py-1.5 text-sm text-neutral-400 transition hover:border-red-400 hover:bg-red-50 hover:text-red-700 focus:outline-none focus:ring-2 focus:ring-gold-400"
+                >
+                  ×
+                </button>
+              )}
             </li>
           ))}
         </ol>

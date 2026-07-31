@@ -114,6 +114,24 @@ export const cssTrack: Track = {
           ],
           solution:
             "<head>\n  <title>Profil</title>\n  <link rel=\"stylesheet\" href=\"style.css\">\n</head>",
+          susunKode: {
+            question:
+              "Susun bagian `<head>` yang menautkan berkas gaya `style.css` ke halaman ini.",
+            potongan: [
+              "<head>",
+              "  <title>Profil</title>",
+              "  <link rel=\"stylesheet\" href=\"style.css\">",
+              "</head>",
+            ],
+            pengecoh: [
+              "  <link rel=\"style\" href=\"style.css\">",
+              "  <link rel=\"stylesheet\" src=\"style.css\">",
+              "  <link href=\"style.css\">",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Berkas CSS eksternal ditautkan dengan `<link>` di dalam `<head>`: `rel=\"stylesheet\"` memberi tahu browser peran berkasnya, `href` menunjuk lokasinya. Keping `rel=\"style\"` menggoda karena terdengar masuk akal, tapi browser hanya mengenali nilai `stylesheet` dan diam saja kalau salah — gayamu tidak pernah dimuat tanpa satu pun pesan error. Keping `src` adalah kekeliruan yang paling sering terjadi karena terbawa kebiasaan dari `<img>` dan `<script>`; pada `<link>`, alamat berkas selalu memakai `href`. Keping tanpa `rel` juga menjebak: alamatnya sudah benar, tapi tanpa keterangan peran browser tidak tahu berkas itu harus diperlakukan sebagai gaya.",
+          },
         },
         {
           kind: "step",
@@ -168,6 +186,26 @@ export const cssTrack: Track = {
             "  width: 240px;\n" +
             "  padding: 20px;\n" +
             "}",
+          susunKode: {
+            question:
+              "Susun aturan `.kotak` yang berlatar gelap, bertulisan putih, selebar 240px, dengan ruang dalam 20px.",
+            potongan: [
+              ".kotak {",
+              "  background: #334155;",
+              "  color: white;",
+              "  width: 240px;",
+              "  padding: 20px;",
+              "}",
+            ],
+            pengecoh: [
+              "  colour: white;",
+              "  width: 240;",
+              "  color: wite;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "CSS tidak pernah memberitahumu kalau kamu salah tulis — properti yang tidak dikenal diabaikan diam-diam, dan itulah kenapa \"CSS-ku tidak jalan\" begitu sering terjadi. Keping `colour` adalah jebakan ejaan Britania yang sangat sering menjerat; CSS hanya mengenal ejaan Amerika `color`. Keping `width: 240` tanpa satuan juga diabaikan seluruh barisnya — angka tanpa `px`, `rem`, atau `%` bukan nilai panjang yang sah, kecuali angka nol. Keping `wite` menunjukkan hal yang sama pada sisi nilai: nama warnanya salah ketik, barisnya dibuang, dan tulisan tetap hitam.",
+          },
         },
         {
           kind: "step",
@@ -217,6 +255,25 @@ export const cssTrack: Track = {
             "  border: 2px solid #16a34a;\n" +
             "  padding: 16px;\n" +
             "}",
+          susunKode: {
+            question:
+              "HTML-nya memakai `class=\"kartu-produk\"`. Susun aturan CSS yang benar-benar mengenai elemen itu.",
+            potongan: [
+              ".kartu-produk {",
+              "  background: #dcfce7;",
+              "  border: 2px solid #16a34a;",
+              "  padding: 16px;",
+              "}",
+            ],
+            pengecoh: [
+              ".kartu_produk {",
+              ".kartu produk {",
+              "#kartu-produk {",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Selector harus cocok persis dengan yang tertulis di HTML — termasuk tanda hubungnya. Keping `.kartu_produk` dengan garis bawah adalah kekeliruan yang sering terjadi karena kebiasaan menamai variabel di bahasa pemrograman lain, dan CSS tidak akan protes: aturannya sah, hanya saja tidak mengenai elemen mana pun. Keping `.kartu produk` dengan spasi berubah arti sama sekali — itu berarti \"elemen `produk` di dalam elemen berkelas `kartu`\". Keping `#kartu-produk` menargetkan `id`, bukan `class`; inilah jebakan yang di DevTools terlihat sebagai aturan yang tertulis rapi tapi tidak pernah muncul pada elemennya.",
+          },
         },
         {
           kind: "step",
@@ -273,6 +330,28 @@ export const cssTrack: Track = {
             "  list-style: none;\n" +
             "  padding: 0;\n" +
             "}",
+          susunKode: {
+            question:
+              "Susun aturan yang menghapus jarak bawaan browser pada `body` dan menghilangkan bulatan serta indentasi bawaan pada `.menu`.",
+            potongan: [
+              "body {",
+              "  margin: 0;",
+              "}",
+              ".menu {",
+              "  background: #f1f5f9;",
+              "  list-style: none;",
+              "  padding: 0;",
+              "}",
+            ],
+            pengecoh: [
+              "  list-style: 0;",
+              "  margin: auto;",
+              "  padding: 20px;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Browser sudah memasang gayanya sendiri sebelum CSS-mu jalan: `body` punya `margin` sekitar 8px, dan `<ul>` punya bulatan serta indentasi kiri. Menghapusnya adalah langkah pertama yang hampir selalu dilakukan. Keping `list-style: 0` menggoda karena pola \"nol berarti hilang\" baru saja kamu pakai untuk `margin`, padahal `list-style` bukan ukuran — nilainya `none`, dan angka nol membuat barisnya diabaikan. Keping `padding: 20px` justru menambah indentasi yang sedang kamu hapus, dan keping `margin: auto` sering keliru dipakai untuk \"mengosongkan\" jarak padahal artinya membagi sisa ruang.",
+          },
         },
         {
           kind: "quiz",
@@ -467,6 +546,23 @@ export const cssTrack: Track = {
             },
           ],
           solution: "p {\n  color: blue;\n}",
+          susunKode: {
+            question:
+              "Susun aturan CSS yang membuat semua paragraf berwarna biru.",
+            potongan: [
+              "p {",
+              "  color: blue;",
+              "}",
+            ],
+            pengecoh: [
+              "paragraf {",
+              "  color = blue;",
+              "  colour: blue;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Selector elemen memakai nama tag-nya apa adanya, tanpa titik dan tanpa pagar: `p` mengenai semua paragraf di halaman. Keping `paragraf` menggoda karena lebih terbaca, tapi CSS hanya mengenal nama elemen yang benar-benar ada di HTML. Keping `color = blue` adalah jebakan yang paling sering menjerat orang yang datang dari bahasa pemrograman: di CSS, pasangan properti dan nilai dipisahkan titik dua, bukan tanda sama dengan. Keping `colour` adalah ejaan Britania yang tidak dikenal CSS, dan seperti biasa barisnya dibuang tanpa peringatan.",
+          },
         },
         {
           kind: "step",
@@ -499,6 +595,24 @@ export const cssTrack: Track = {
           ],
           solution:
             ".sorotan {\n  background-color: yellow;\n  font-weight: bold;\n}",
+          susunKode: {
+            question:
+              "Susun aturan untuk kelas `sorotan` yang berlatar kuning dan bertulisan tebal.",
+            potongan: [
+              ".sorotan {",
+              "  background-color: yellow;",
+              "  font-weight: bold;",
+              "}",
+            ],
+            pengecoh: [
+              "  background-colour: yellow;",
+              "  font-weight: strong;",
+              "  font-style: bold;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Class ditulis dengan titik di depannya dan boleh dipakai berulang kali pada banyak elemen — inilah selector yang paling sering kamu pakai sehari-hari. Keping `background-colour` mengulang jebakan ejaan yang sama seperti `color`. Keping `font-weight: strong` menggoda karena `<strong>` memang elemen HTML untuk penekanan, tapi `font-weight` hanya menerima nilai seperti `bold`, `normal`, atau angka 100–900. Keping `font-style: bold` keliru pada sisi properti: `font-style` mengurusi miring (`italic`), sedangkan tebal-tipis adalah urusan `font-weight`.",
+          },
         },
         {
           kind: "step",
@@ -531,6 +645,26 @@ export const cssTrack: Track = {
             },
           ],
           solution: "h1 {\n  color: blue;\n}\n\n.besar {\n  color: green;\n}",
+          susunKode: {
+            question:
+              "Elemen `<h1 class=\"besar\">` harus tampil hijau, padahal ada aturan `h1` yang membuatnya biru. Susun CSS-nya tanpa memakai `id`.",
+            potongan: [
+              "h1 {",
+              "  color: blue;",
+              "}",
+              ".besar {",
+              "  color: green;",
+              "}",
+            ],
+            pengecoh: [
+              "#judul {",
+              "  color: grean;",
+              ".kecil {",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Saat dua aturan mengenai elemen yang sama, yang menang adalah yang specificity-nya lebih tinggi — bukan yang ditulis belakangan. Class (`.besar`) mengalahkan selector elemen (`h1`), jadi hijau menang tanpa perlu trik apa pun. Keping `#judul` sangat menggoda karena `id` specificity-nya lebih tinggi lagi dan \"pasti menang\"; justru itu jebakannya — begitu kamu biasa menaikkan specificity untuk memaksa gaya, kamu akan terjebak perlombaan yang berakhir di `!important` dan CSS yang tidak bisa dirawat. Keping `.kecil` tidak mengenai elemen mana pun, dan `grean` adalah salah ketik yang membuat barisnya diabaikan diam-diam.",
+          },
         },
         {
           kind: "step",
@@ -567,6 +701,26 @@ export const cssTrack: Track = {
           ],
           solution:
             ".kartu {\n  background-color: #e0f2fe;\n  padding: 20px;\n  border: 2px solid black;\n  margin: 10px;\n}",
+          susunKode: {
+            question:
+              "Susun aturan `.kartu` dengan ruang dalam 20px, garis tepi hitam setebal 2px, dan jarak luar 10px.",
+            potongan: [
+              ".kartu {",
+              "  background-color: #e0f2fe;",
+              "  padding: 20px;",
+              "  border: 2px solid black;",
+              "  margin: 10px;",
+              "}",
+            ],
+            pengecoh: [
+              "  padding: 20;",
+              "  margin: 10;",
+              "  border: 2px solid;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Box model punya tiga lapis dari dalam ke luar: `padding` ruang di dalam kotak, `border` garis tepinya, `margin` jarak ke elemen lain. Membedakan padding dan margin adalah salah satu hal yang paling sering tertukar di awal — patokannya, padding ikut berwarna latar, margin tidak. Keping `padding: 20` dan `margin: 10` tanpa satuan adalah jebakan klasik: keduanya diabaikan sepenuhnya, dan karena tidak ada pesan error orang mengira properti yang salah. Keping `border: 2px solid` tanpa warna memang sah secara sintaks, tapi warnanya jatuh ke nilai `currentColor` sehingga tidak sesuai yang diminta.",
+          },
         },
         {
           kind: "step",
@@ -595,6 +749,28 @@ export const cssTrack: Track = {
           ],
           solution:
             ".kotak {\n  width: 200px;\n  padding: 20px;\n  border: 2px solid navy;\n  background: #dbeafe;\n}\n\n* {\n  box-sizing: border-box;\n}",
+          susunKode: {
+            question:
+              "Kotak selebar 200px jadi meluber setelah diberi padding dan border. Susun CSS-nya supaya lebar total tetap 200px.",
+            potongan: [
+              ".kotak {",
+              "  width: 200px;",
+              "  padding: 20px;",
+              "  border: 2px solid navy;",
+              "  background: #dbeafe;",
+              "}",
+              "* {",
+              "  box-sizing: border-box;",
+              "}",
+            ],
+            pengecoh: [
+              "  box-sizing: content-box;",
+              "  box-sizing: border box;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Secara bawaan, `width` hanya mengukur isi kotak — padding dan border ditambahkan di luarnya, sehingga kotak 200px dengan padding 20px dan border 2px sebenarnya memakan 244px. `box-sizing: border-box` mengubah aturan itu: lebar yang kamu tulis sudah termasuk padding dan border. Keping `content-box` adalah nilai bawaan yang justru sedang kamu perbaiki, dan ia menggoda karena namanya terdengar seperti \"kotak isinya\". Keping `border box` tanpa tanda hubung adalah salah ketik yang sering terjadi; nilainya tidak dikenal, barisnya diabaikan, dan kotakmu tetap meluber seolah kamu tidak menulis apa-apa.",
+          },
         },
         {
           kind: "step",
@@ -625,6 +801,25 @@ export const cssTrack: Track = {
           ],
           solution:
             ".konten {\n  background: #f1f5f9;\n  font-size: 1.25rem;\n  padding: 2rem;\n}",
+          susunKode: {
+            question:
+              "Susun aturan `.konten` dengan ukuran huruf 1,25 rem dan ruang dalam 2 rem.",
+            potongan: [
+              ".konten {",
+              "  background: #f1f5f9;",
+              "  font-size: 1.25rem;",
+              "  padding: 2rem;",
+              "}",
+            ],
+            pengecoh: [
+              "  font-size: 1.25px;",
+              "  padding: 2px;",
+              "  font-size: 20px;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`rem` dihitung dari ukuran huruf dasar browser, jadi kalau pengguna memperbesar teks lewat pengaturan browser — hal yang lumrah bagi orang dengan penglihatan terbatas — seluruh tata letakmu ikut membesar dengan rapi. Keping `20px` menggoda karena secara bawaan `1.25rem` memang setara 20px, dan di layarmu hasilnya terlihat persis sama; bedanya baru muncul pada pengguna yang mengubah ukuran huruf, dan di situ versi `px` tidak bergeming. Dua keping sisanya menukar satuan pada nilai yang kecil: `1.25px` menghasilkan teks yang praktis tidak terbaca, jebakan yang datang dari mengganti satuan tanpa menghitung ulang nilainya.",
+          },
         },
         {
           kind: "step",
@@ -654,6 +849,26 @@ export const cssTrack: Track = {
             },
           ],
           solution: ".daftar {\n  padding-left: 20px;\n}\n\n.daftar > li {\n  color: #b91c1c;\n}",
+          susunKode: {
+            question:
+              "Susun CSS yang mewarnai HANYA `<li>` yang menjadi anak langsung dari `.daftar`.",
+            potongan: [
+              ".daftar {",
+              "  padding-left: 20px;",
+              "}",
+              ".daftar > li {",
+              "  color: #b91c1c;",
+              "}",
+            ],
+            pengecoh: [
+              ".daftar li {",
+              ".daftar + li {",
+              "  color: #b91c1;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Tanda `>` berarti anak LANGSUNG: hanya `<li>` yang induknya persis `.daftar` yang kena. Keping `.daftar li` tanpa tanda itu adalah pengecoh yang paling menggoda karena pada daftar sederhana hasilnya terlihat sama persis — bedanya baru muncul saat ada daftar bersarang, dan tiba-tiba semua sub-item ikut berwarna. Keping `.daftar + li` memakai combinator saudara: artinya `<li>` yang berada tepat SETELAH `.daftar`, bukan di dalamnya. Keping warna terakhir kurang satu karakter — hex yang tidak sah membuat barisnya diabaikan.",
+          },
         },
         {
           kind: "step",
@@ -683,6 +898,25 @@ export const cssTrack: Track = {
             },
           ],
           solution: ".kotak {\n  padding: 16px;\n  background: rgb(0 0 0 / 0.5);\n  color: white;\n}",
+          susunKode: {
+            question:
+              "Susun aturan `.kotak` berlatar hitam setengah tembus pandang, dengan tulisan putih.",
+            potongan: [
+              ".kotak {",
+              "  padding: 16px;",
+              "  background: rgb(0 0 0 / 0.5);",
+              "  color: white;",
+              "}",
+            ],
+            pengecoh: [
+              "  background: rgb(0 0 0 / 50);",
+              "  background: rgb(0 0 0);",
+              "  color: wite;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Sintaks warna modern menuliskan komponen merah-hijau-biru dipisah spasi, lalu garis miring sebelum nilai transparansi: `rgb(0 0 0 / 0.5)` berarti hitam dengan tembus pandang separuh. Keping `/ 50` menggoda karena angka 50 terasa seperti \"50 persen\", padahal di posisi itu nilainya berkisar 0 sampai 1 — kalau ingin memakai persen, tulis `50%`. Keping tanpa bagian garis miring menghasilkan hitam pekat, kekeliruan yang sering terjadi saat menyalin warna dari alat desain dan lupa membawa transparansinya. Keping `wite` adalah salah ketik nama warna yang membuat barisnya diabaikan.",
+          },
         },
         {
           kind: "quiz",
@@ -870,6 +1104,25 @@ export const cssTrack: Track = {
           ],
           solution:
             ".tombol {\n  background: #2563eb;\n  color: white;\n  display: inline-block;\n  width: 150px;\n  padding: 10px;\n}",
+          susunKode: {
+            question:
+              "Susun aturan `.tombol` yang bisa diberi lebar dan ruang dalam, tapi tetap berjajar dengan teks di sekitarnya.",
+            potongan: [
+              ".tombol {\n  background: #2563eb;\n  color: white;",
+              "  display: inline-block;",
+              "  width: 150px;",
+              "  padding: 10px;",
+              "}",
+            ],
+            pengecoh: [
+              "  display: inline;",
+              "  display: block;",
+              "  width: 150;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Elemen `inline` seperti `<span>` dan `<a>` menolak `width` dan `height`, sedangkan `block` selalu memakan satu baris penuh. `inline-block` mengambil yang terbaik dari keduanya: bisa diatur ukurannya, tapi tetap berjajar dengan teks di sebelahnya. Keping `display: inline` adalah jebakan yang paling membingungkan karena `width` yang kamu tulis diabaikan tanpa satu pun pesan error — tombolnya hanya selebar tulisannya. Keping `display: block` membuat tombol melompat ke baris sendiri, dan keping `width: 150` tanpa satuan mengulang kekeliruan yang sering terjadi: barisnya dibuang seluruhnya.",
+          },
         },
         {
           kind: "step",
@@ -911,6 +1164,28 @@ export const cssTrack: Track = {
           ],
           solution:
             ".wadah {\n  width: 200px;\n  height: 100px;\n  background: #e2e8f0;\n  position: relative;\n}\n.badge {\n  background: crimson;\n  color: white;\n  padding: 4px 8px;\n  position: absolute;\n  top: 0;\n  right: 0;\n}",
+          susunKode: {
+            question:
+              "Susun kartu bertanda: badge menempel di pojok kanan atas wadahnya, bukan di pojok halaman.",
+            potongan: [
+              ".wadah {\n  width: 200px;\n  height: 100px;\n  background: #e2e8f0;",
+              "  position: relative;",
+              "}",
+              ".badge {\n  background: crimson;\n  color: white;\n  padding: 4px 8px;",
+              "  position: absolute;",
+              "  top: 0;",
+              "  right: 0;",
+              "}",
+            ],
+            pengecoh: [
+              "  position: fixed;",
+              "  position: static;",
+              "  bottom: 0;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`position: absolute` menempatkan elemen relatif terhadap leluhur terdekat yang posisinya BUKAN `static`. Karena itu wadahnya harus diberi `position: relative` — tanpa itu, badge-nya lompat ke pojok halaman, dan inilah jebakan yang paling sering menjerat pemula: kodenya terlihat benar, badge-nya justru nyasar. Keping `position: fixed` menggoda karena juga mengeluarkan elemen dari alur normal, tapi ia menempel pada jendela browser sehingga badge-nya ikut terbawa saat halaman di-scroll. Keping `static` adalah nilai bawaan yang persis sedang kamu perbaiki, dan `bottom: 0` menaruh badge di pojok bawah.",
+          },
         },
         {
           kind: "step",
@@ -944,6 +1219,25 @@ export const cssTrack: Track = {
           ],
           solution:
             ".header {\n  background: #1e293b;\n  color: white;\n  padding: 12px;\n  position: sticky;\n  top: 0;\n}\n.isi {\n  height: 400px;\n  background: linear-gradient(#f8fafc, #cbd5e1);\n}",
+          susunKode: {
+            question:
+              "Susun header yang berperilaku normal sampai batas scroll tertentu, lalu menempel di atas layar.",
+            potongan: [
+              ".header {\n  background: #1e293b;\n  color: white;\n  padding: 12px;",
+              "  position: sticky;",
+              "  top: 0;",
+              "}",
+              ".isi {\n  height: 400px;\n  background: linear-gradient(#f8fafc, #cbd5e1);\n}",
+            ],
+            pengecoh: [
+              "  position: absolute;",
+              "  top: auto;",
+              "  position: relative;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`sticky` adalah hibrida: elemen berperilaku normal sampai batas scroll tertentu, lalu \"menempel\". Yang paling sering dilupakan adalah nilai offset — tanpa `top: 0`, `sticky` tidak melakukan apa pun sama sekali, dan tidak ada error apa pun yang memberitahumu. Keping `top: auto` menunjukkan persis jebakan itu: propertinya ada, nilainya sah, tapi tidak menetapkan batas tempel sehingga headernya ikut hilang saat di-scroll. Keping `absolute` menggoda karena sama-sama untuk menempatkan elemen, tapi ia langsung keluar dari alur dan tidak pernah ikut bergulir bersama halaman.",
+          },
         },
         {
           kind: "step",
@@ -977,6 +1271,25 @@ export const cssTrack: Track = {
           ],
           solution:
             ".belakang, .depan {\n  width: 120px;\n  height: 60px;\n  padding: 8px;\n}\n.belakang {\n  background: #fca5a5;\n  position: relative;\n  z-index: 5;\n}\n.depan {\n  background: #86efac;\n  margin-top: -30px;\n  position: relative;\n  z-index: 10;\n}",
+          susunKode: {
+            question:
+              "Susun dua kotak bertumpuk sehingga `.depan` benar-benar berada di atas `.belakang`.",
+            potongan: [
+              ".belakang, .depan {\n  width: 120px;\n  height: 60px;\n  padding: 8px;\n}",
+              ".belakang {\n  background: #fca5a5;\n  position: relative;\n  z-index: 5;\n}",
+              ".depan {\n  background: #86efac;\n  margin-top: -30px;",
+              "  position: relative;",
+              "  z-index: 10;",
+              "}",
+            ],
+            pengecoh: [
+              "  z-index: 1;",
+              "  position: static;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`z-index` hanya bekerja pada elemen yang posisinya BUKAN `static` — inilah alasan nomor satu kenapa \"z-index saya tidak ngefek\". Keping `position: static` menunjukkan persis jebakan itu: angkanya boleh setinggi apa pun, tapi tanpa `position` yang sesuai, nilainya diabaikan sepenuhnya. Keping `z-index: 1` menggoda karena angkanya positif dan terasa sudah \"di depan\", padahal yang menentukan adalah perbandingannya — 1 tetap kalah dari 5 yang dipakai `.belakang`. Kebiasaan yang membantu di proyek nyata: pakai loncatan angka seperti 10, 20, 30 supaya masih ada ruang menyisipkan lapisan baru.",
+          },
         },
         {
           kind: "step",
@@ -1009,6 +1322,24 @@ export const cssTrack: Track = {
           ],
           solution:
             ".wadah {\n  background: #ddd6fe;\n  padding: 16px;\n  max-width: 300px;\n  margin: 0 auto;\n}",
+          susunKode: {
+            question:
+              "Susun wadah yang lebarnya dibatasi 300px dan berada tepat di tengah halaman.",
+            potongan: [
+              ".wadah {\n  background: #ddd6fe;\n  padding: 16px;",
+              "  max-width: 300px;",
+              "  margin: 0 auto;",
+              "}",
+            ],
+            pengecoh: [
+              "  min-width: 300px;",
+              "  margin: auto 0;",
+              "  text-align: center;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Kombinasi `max-width` dan `margin: 0 auto` adalah cara klasik menengahkan blok: `auto` di sisi kiri dan kanan membagi sisa ruang sama rata. Keping `margin: auto 0` membalik urutannya — pada penulisan dua nilai, yang pertama untuk atas-bawah dan yang kedua untuk kiri-kanan, jadi versi ini justru meng-`auto`-kan sisi yang tidak berpengaruh. Keping `text-align: center` adalah kekeliruan yang sangat sering terjadi karena namanya paling terdengar seperti \"tengahkan\"; yang ia tengahkan adalah TEKS DI DALAM kotak, bukan kotaknya. Keping `width: 300px` menggoda dan hampir benar, tapi ia memaksa lebar itu bahkan di layar ponsel yang lebih sempit.",
+          },
         },
         {
           kind: "step",
@@ -1033,6 +1364,22 @@ export const cssTrack: Track = {
             },
           ],
           solution: ".log {\n  height: 80px;\n  border: 1px solid #94a3b8;\n  padding: 8px;\n  overflow: auto;\n}",
+          susunKode: {
+            question:
+              "Susun kotak log setinggi 80px yang isinya bisa digulir kalau kepanjangan.",
+            potongan: [
+              ".log {\n  height: 80px;\n  border: 1px solid #94a3b8;\n  padding: 8px;",
+              "  overflow: auto;",
+              "}",
+            ],
+            pengecoh: [
+              "  overflow: hidden;",
+              "  overflow: visible;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`overflow: auto` memunculkan batang gulir hanya kalau isinya memang melebihi kotaknya — pas untuk log yang panjangnya tidak bisa ditebak. Keping `overflow: hidden` adalah jebakan yang paling berbahaya di kode nyata: tampilannya jadi rapi karena isi yang meluber dipotong, dan justru karena rapi itulah orang mengira sudah selesai — padahal isinya benar-benar tidak bisa dijangkau pengguna, tanpa batang gulir dan tanpa tanda apa pun. Keping `visible` adalah nilai bawaan yang sedang kamu perbaiki: isinya tumpah keluar kotak dan menimpa elemen di bawahnya.",
+          },
         },
         {
           kind: "step",
@@ -1111,6 +1458,27 @@ export const cssTrack: Track = {
             "  display: block;\n" +
             "  clear: both;\n" +
             "}",
+          susunKode: {
+            question:
+              "Susun clearfix: pembungkus yang tingginya kembali normal walau isinya di-float.",
+            potongan: [
+              ".pembungkus {\n  border: 2px solid #0ea5e9;\n  background: #e0f2fe;\n}",
+              ".foto {\n  float: left;\n  width: 80px;\n  height: 60px;\n  background: #0369a1;\n}",
+              ".pembungkus::after {",
+              "  content: \"\";",
+              "  display: block;",
+              "  clear: both;",
+              "}",
+            ],
+            pengecoh: [
+              "  content: none;",
+              "  clear: left;",
+              ".pembungkus:after {",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Elemen yang di-`float` keluar dari alur normal, sehingga induknya menganggap dirinya kosong dan tingginya menyusut jadi nol — gejala khas kode lama yang tata letaknya tiba-tiba rusak. Clearfix mengatasinya dengan menyisipkan elemen semu di akhir yang membersihkan float. Keping `content: none` menggoda karena isinya memang tidak perlu terlihat, padahal tanpa `content` yang berisi string kosong, elemen semunya tidak pernah dibuat sama sekali. Keping `clear: left` hanya membersihkan float kiri; `both` lebih aman karena kode lama sering mencampur kiri dan kanan. Keping bertitik dua satu adalah penulisan lama yang masih jalan, tapi standar sekarang memakai dua titik dua untuk elemen semu.",
+          },
         },
         {
           kind: "quiz",
@@ -1313,6 +1681,25 @@ export const cssTrack: Track = {
           ],
           solution:
             ".baris {\n  background: #f1f5f9;\n  padding: 12px;\n  display: flex;\n  gap: 12px;\n}\n.item {\n  background: #60a5fa;\n  color: white;\n  padding: 16px;\n}",
+          susunKode: {
+            question:
+              "Susun baris flex yang menata anak-anaknya berjajar dengan jarak 12px.",
+            potongan: [
+              ".baris {\n  background: #f1f5f9;\n  padding: 12px;",
+              "  display: flex;",
+              "  gap: 12px;",
+              "}",
+              ".item {\n  background: #60a5fa;\n  color: white;\n  padding: 16px;\n}",
+            ],
+            pengecoh: [
+              "  display: block;",
+              "  gap: 12;",
+              "  display: inline-flex;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`display: flex` mengubah anak-anak langsung sebuah elemen menjadi berjajar, dan `gap` memberi jarak di antara mereka tanpa perlu mengatur margin satu per satu. Keping `flexbox` menggoda karena itulah nama yang dipakai semua orang saat membicarakannya — tapi nilai yang dikenali CSS adalah `flex`, dan nilai tak dikenal membuat barisnya diabaikan sehingga tata letaknya tidak berubah sedikit pun. Keping `gap: 12` tanpa satuan mengulang kekeliruan yang sama. Keping `inline-flex` bukan salah sintaks, tapi membuat wadahnya sendiri ikut berjajar dengan teks di sekitarnya dan tidak lagi memenuhi lebar induknya.",
+          },
         },
         {
           kind: "step",
@@ -1342,6 +1729,24 @@ export const cssTrack: Track = {
           ],
           solution:
             ".navbar {\n  display: flex;\n  background: #1e293b;\n  padding: 12px;\n  justify-content: space-between;\n}\n.logo, .menu {\n  color: white;\n}",
+          susunKode: {
+            question:
+              "Susun navbar flex yang logonya di kiri dan menunya terdorong ke kanan.",
+            potongan: [
+              ".navbar {\n  display: flex;\n  background: #1e293b;\n  padding: 12px;",
+              "  justify-content: space-between;",
+              "}",
+              ".logo, .menu {\n  color: white;\n}",
+            ],
+            pengecoh: [
+              "  align-items: space-between;",
+              "  justify-content: center;",
+              "  justify-content: space-around;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`justify-content` mengatur penyebaran anak di sepanjang sumbu utama, dan `space-between` menempelkan yang pertama ke ujung awal serta yang terakhir ke ujung akhir — pola navbar yang paling sering dipakai. Keping `align-items: space-between` adalah jebakan yang sangat sering terjadi: kedua properti ini mudah tertukar, dan `align-items` mengurusi sumbu yang menyilang, sehingga nilai `space-between` di sana tidak dikenali dan diabaikan. Keping `justify-content: center` menumpuk semuanya di tengah, dan `text-align: right` hanya menggeser teks di dalam masing-masing anak, bukan posisi anaknya.",
+          },
         },
         {
           kind: "step",
@@ -1373,6 +1778,25 @@ export const cssTrack: Track = {
           ],
           solution:
             ".kotak {\n  display: flex;\n  height: 150px;\n  background: #fef3c7;\n  justify-content: center;\n  align-items: center;\n}\n.isi {\n  background: #f59e0b;\n  color: white;\n  padding: 12px;\n}",
+          susunKode: {
+            question:
+              "Susun kotak setinggi 150px yang isinya benar-benar di tengah, mendatar maupun menurun.",
+            potongan: [
+              ".kotak {\n  display: flex;\n  height: 150px;\n  background: #fef3c7;",
+              "  justify-content: center;",
+              "  align-items: center;",
+              "}",
+              ".isi {\n  background: #f59e0b;\n  color: white;\n  padding: 12px;\n}",
+            ],
+            pengecoh: [
+              "  align-content: center;",
+              "  vertical-align: middle;",
+              "  justify-items: center;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Menengahkan dua arah butuh dua properti: `justify-content` untuk sumbu utama dan `align-items` untuk sumbu silang. Keping `vertical-align: middle` adalah pengecoh paling menggoda dalam seluruh CSS — namanya persis menggambarkan yang kamu inginkan, tapi ia hanya bekerja pada elemen inline dan sel tabel, dan di dalam flex container ia diabaikan total. Keping `align-content` baru berpengaruh kalau isinya terbagi ke beberapa baris, jadi pada satu baris ia tidak melakukan apa-apa. Keping `justify-items` memang ada, tapi itu milik Grid, bukan Flex.",
+          },
         },
         {
           kind: "step",
@@ -1406,6 +1830,25 @@ export const cssTrack: Track = {
           ],
           solution:
             ".kolom {\n  display: flex;\n  gap: 8px;\n  background: #ecfdf5;\n  padding: 12px;\n  flex-direction: column;\n  align-items: center;\n}\n.item {\n  background: #10b981;\n  color: white;\n  padding: 10px;\n}",
+          susunKode: {
+            question:
+              "Susun kolom flex yang menumpuk anaknya ke bawah dan menengahkannya mendatar.",
+            potongan: [
+              ".kolom {\n  display: flex;\n  gap: 8px;\n  background: #ecfdf5;\n  padding: 12px;",
+              "  flex-direction: column;",
+              "  align-items: center;",
+              "}",
+              ".item {\n  background: #10b981;\n  color: white;\n  padding: 10px;\n}",
+            ],
+            pengecoh: [
+              "  flex-direction: vertical;",
+              "  justify-content: center;",
+              "  flex-wrap: column;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`flex-direction: column` memutar sumbu utama menjadi menurun — dan begitu ia diputar, arti dua properti penataannya ikut bertukar: `justify-content` sekarang mengurusi atas-bawah, `align-items` mengurusi kiri-kanan. Karena itu untuk menengahkan mendatar kamu memakai `align-items`, dan keping `justify-content: center` adalah jebakan yang paling sering terjadi justru karena di mode baris ia yang benar. Keping `vertical` menggoda karena kata itu jelas artinya, tapi nilai yang dikenali adalah `column`. Keping `flex-wrap: column` menukar nama propertinya; `flex-wrap` mengurusi pindah baris, bukan arah.",
+          },
         },
         {
           kind: "step",
@@ -1434,6 +1877,25 @@ export const cssTrack: Track = {
           ],
           solution:
             ".layout {\n  display: flex;\n  gap: 8px;\n}\n.sidebar {\n  width: 100px;\n  background: #cbd5e1;\n  padding: 12px;\n}\n.konten {\n  background: #93c5fd;\n  padding: 12px;\n  flex: 1;\n}",
+          susunKode: {
+            question:
+              "Susun tata letak dua kolom: sidebar tetap 100px, konten memakan seluruh sisa ruang.",
+            potongan: [
+              ".layout {\n  display: flex;\n  gap: 8px;\n}",
+              ".sidebar {\n  width: 100px;\n  background: #cbd5e1;\n  padding: 12px;\n}",
+              ".konten {\n  background: #93c5fd;\n  padding: 12px;",
+              "  flex: 1;",
+              "}",
+            ],
+            pengecoh: [
+              "  width: 100%;",
+              "  flex: auto 1;",
+              "  flex-grow: 0;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`flex: 1` memberi tahu elemen untuk memakan seluruh sisa ruang setelah saudara-saudaranya mendapat bagian — pola dua kolom yang paling sering dipakai, dan ia menyesuaikan diri sendiri saat lebar layar berubah. Keping `width: 100%` menggoda karena terdengar seperti \"pakai semua ruang\", padahal 100% dihitung dari lebar induk, bukan sisa ruang; hasilnya konten mendorong sidebar keluar atau memicu batang gulir mendatar. Keping `flex-grow: 0` justru melarangnya tumbuh sama sekali, dan keping `flex: auto 1` membalik urutan nilainya sehingga tidak sah.",
+          },
         },
         {
           kind: "step",
@@ -1466,6 +1928,26 @@ export const cssTrack: Track = {
           ],
           solution:
             ".galeri {\n  display: flex;\n  gap: 8px;\n  background: #f8fafc;\n  padding: 8px;\n  flex-wrap: wrap;\n}\n.kartu {\n  background: #a78bfa;\n  color: white;\n  padding: 20px;\n  flex: 1 1 120px;\n}",
+          susunKode: {
+            question:
+              "Susun galeri yang kartunya turun ke baris berikutnya saat layar menyempit, dengan lebar dasar 120px.",
+            potongan: [
+              ".galeri {\n  display: flex;\n  gap: 8px;\n  background: #f8fafc;\n  padding: 8px;",
+              "  flex-wrap: wrap;",
+              "}",
+              ".kartu {\n  background: #a78bfa;\n  color: white;\n  padding: 20px;",
+              "  flex: 1 1 120px;",
+              "}",
+            ],
+            pengecoh: [
+              "  flex-wrap: nowrap;",
+              "  flex: 1 1 120;",
+              "  white-space: wrap;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Secara bawaan flex memaksa semua anaknya tetap di satu baris, dan itulah kenapa kartu-kartu jadi gepeng di layar sempit. `flex-wrap: wrap` mengizinkan mereka turun ke baris berikutnya, sementara `flex: 1 1 120px` menetapkan lebar dasar 120px yang boleh melar maupun menyusut. Keping `nowrap` adalah nilai bawaan yang sedang kamu perbaiki — memilihnya membuat semuanya tampak tidak berubah dan mudah dikira propertinya yang salah. Keping tanpa satuan mengulang jebakan lama, dan keping `white-space: wrap` menukar properti: itu mengurusi pergantian baris TEKS, bukan pergantian baris item flex.",
+          },
         },
         {
           kind: "step",
@@ -1548,6 +2030,27 @@ export const cssTrack: Track = {
             ".penting {\n" +
             "  order: -1;\n" +
             "}",
+          susunKode: {
+            question:
+              "Susun baris flex yang semua isinya rata tengah, KECUALI `.tanggal` yang turun ke bawah, dan `.penting` yang dipindah ke urutan pertama.",
+            potongan: [
+              ".baris {\n  display: flex;\n  align-items: center;\n  gap: 12px;\n  height: 120px;\n  background: #f1f5f9;\n  padding: 8px;\n}",
+              ".baris > div {\n  background: #6366f1;\n  color: white;\n  padding: 8px;\n}",
+              ".tanggal {",
+              "  align-self: flex-end;",
+              "}",
+              ".penting {",
+              "  order: -1;",
+              "}",
+            ],
+            pengecoh: [
+              "  align-items: flex-end;",
+              "  order: 1;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`align-self` menimpa `align-items` untuk SATU item saja, dan `order` memindahkan urutan tampil satu item tanpa menyentuh urutan di HTML. Keping `align-items: flex-end` adalah jebakan yang paling sering terjadi: kalau dipasang di `.tanggal` ia diabaikan karena itu properti untuk wadah, dan kalau dipasang di wadah ia menurunkan SEMUA item, bukan satu. Keping `order: 1` menggoda karena angka positif terasa seperti \"paling depan\", padahal urutan bawaan semua item adalah 0 — hanya angka negatif yang menaruhnya lebih awal. Satu catatan penting: `order` tidak mengubah urutan pembacaan screen reader maupun urutan Tab, jadi jangan dipakai untuk mengubah urutan yang benar-benar bermakna.",
+          },
         },
         {
           kind: "quiz",
@@ -1745,6 +2248,26 @@ export const cssTrack: Track = {
           ],
           solution:
             ".grid {\n  background: #f1f5f9;\n  padding: 10px;\n  display: grid;\n  grid-template-columns: 1fr 1fr 1fr;\n  gap: 10px;\n}\n.sel {\n  background: #818cf8;\n  color: white;\n  padding: 16px;\n}",
+          susunKode: {
+            question:
+              "Susun grid tiga kolom sama lebar dengan jarak 10px.",
+            potongan: [
+              ".grid {\n  background: #f1f5f9;\n  padding: 10px;",
+              "  display: grid;",
+              "  grid-template-columns: 1fr 1fr 1fr;",
+              "  gap: 10px;",
+              "}",
+              ".sel {\n  background: #818cf8;\n  color: white;\n  padding: 16px;\n}",
+            ],
+            pengecoh: [
+              "  grid-template-columns: 1fr;",
+              "  grid-template-rows: 1fr 1fr 1fr;",
+              "  display: block;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Satuan `fr` berarti \"satu bagian dari sisa ruang\", jadi `1fr 1fr 1fr` membagi lebar menjadi tiga bagian sama rata dan ikut menyesuaikan saat layar berubah — sesuatu yang tidak bisa dilakukan persentase karena `gap` ikut memakan ruang. Keping `grid-template-rows` adalah pengecoh yang paling sering menjerat: namanya nyaris sama, tapi ia menetapkan tinggi BARIS, sehingga selnya tetap menumpuk satu kolom ke bawah. Keping satu `1fr` hanya membuat satu kolom, dan keping `display: grids` berhuruf s adalah salah ketik yang diabaikan diam-diam.",
+          },
         },
         {
           kind: "step",
@@ -1775,6 +2298,23 @@ export const cssTrack: Track = {
           ],
           solution:
             ".grid {\n  display: grid;\n  gap: 8px;\n  background: #fafaf9;\n  padding: 8px;\n  grid-template-columns: repeat(2, minmax(100px, 1fr));\n}\n.sel {\n  background: #f472b6;\n  color: white;\n  padding: 14px;\n}",
+          susunKode: {
+            question:
+              "Susun grid dua kolom yang tiap kolomnya tidak pernah lebih sempit dari 100px.",
+            potongan: [
+              ".grid {\n  display: grid;\n  gap: 8px;\n  background: #fafaf9;\n  padding: 8px;",
+              "  grid-template-columns: repeat(2, minmax(100px, 1fr));",
+              "}",
+              ".sel {\n  background: #f472b6;\n  color: white;\n  padding: 14px;\n}",
+            ],
+            pengecoh: [
+              "  grid-template-columns: repeat(2, minmax(1fr, 100px));",
+              "  grid-template-columns: repeat(2, 100px);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`repeat()` menghindari pengulangan menulis nilai kolom, dan `minmax()` menetapkan batas bawah serta batas atas sekaligus. Urutannya penting: nilai pertama minimum, kedua maksimum. Keping yang membalik urutan menjadi `minmax(1fr, 100px)` adalah kekeliruan yang sering terjadi dan hasilnya membingungkan — minimum yang lebih besar dari maksimum membuat batas atasnya diabaikan. Keping `repeat(2, 100px)` menggoda karena terlihat lebih sederhana, tapi kolomnya dipatok mati 100px sehingga tidak pernah melar mengisi ruang yang tersedia.",
+          },
         },
         {
           kind: "step",
@@ -1805,6 +2345,23 @@ export const cssTrack: Track = {
           ],
           solution:
             ".galeri {\n  display: grid;\n  gap: 10px;\n  background: #f8fafc;\n  padding: 10px;\n  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));\n}\n.kartu {\n  background: #22d3ee;\n  padding: 20px;\n}",
+          susunKode: {
+            question:
+              "Susun galeri yang jumlah kolomnya menyesuaikan sendiri dengan lebar layar, tanpa satu pun media query.",
+            potongan: [
+              ".galeri {\n  display: grid;\n  gap: 10px;\n  background: #f8fafc;\n  padding: 10px;",
+              "  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));",
+              "}",
+              ".kartu {\n  background: #22d3ee;\n  padding: 20px;\n}",
+            ],
+            pengecoh: [
+              "  grid-template-columns: repeat(auto, minmax(150px, 1fr));",
+              "  grid-template-columns: repeat(auto-fit, 150px);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`auto-fit` membiarkan browser menghitung sendiri berapa kolom yang muat, dan `minmax` menjaga agar tak ada kolom yang lebih sempit dari 150px — satu baris ini menggantikan beberapa media query sekaligus, dan inilah salah satu alasan Grid layak dipelajari. Keping `auto` menggoda karena kata itu dipakai di banyak properti CSS lain, tapi di sini nilainya harus `auto-fit` atau `auto-fill`; nilai lain membuat seluruh barisnya diabaikan. Keping `repeat(auto-fit, 150px)` menghasilkan kolom yang lebarnya dipatok, sehingga ada ruang kosong menganggur di sisi kanan pada hampir setiap lebar layar.",
+          },
         },
         {
           kind: "step",
@@ -1835,6 +2392,25 @@ export const cssTrack: Track = {
           ],
           solution:
             ".grid {\n  display: grid;\n  grid-template-columns: repeat(3, 1fr);\n  gap: 8px;\n}\n.sel {\n  background: #cbd5e1;\n  padding: 14px;\n}\n.lebar {\n  background: #ef4444;\n  color: white;\n  padding: 14px;\n  grid-column: span 2;\n}",
+          susunKode: {
+            question:
+              "Susun grid tiga kolom yang salah satu selnya membentang selebar dua kolom.",
+            potongan: [
+              ".grid {\n  display: grid;\n  grid-template-columns: repeat(3, 1fr);\n  gap: 8px;\n}",
+              ".sel {\n  background: #cbd5e1;\n  padding: 14px;\n}",
+              ".lebar {\n  background: #ef4444;\n  color: white;\n  padding: 14px;",
+              "  grid-column: span 2;",
+              "}",
+            ],
+            pengecoh: [
+              "  grid-row: span 2;",
+              "  grid-column: span 1;",
+              "  colspan: 2;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`grid-column: span 2` membentangkan sel ke kanan menutupi dua kolom. Keping `grid-row` adalah pengecoh yang paling sering menjerat karena namanya nyaris sama, padahal arahnya ke bawah — selnya jadi tinggi, bukan lebar. Keping `span 1` menggoda karena angkanya terasa seperti \"aktif\", padahal itu nilai bawaan yang berarti tidak membentang sama sekali. Keping `colspan` adalah kekeliruan yang wajar terjadi kalau kamu baru belajar tabel HTML: di sana memang `colspan`, tapi di CSS Grid propertinya `grid-column`, dan atribut tabel tidak berlaku di dalam berkas gaya.",
+          },
         },
         {
           kind: "step",
@@ -1871,6 +2447,25 @@ export const cssTrack: Track = {
           ],
           solution:
             '.layout {\n  display: grid;\n  grid-template-columns: 120px 1fr;\n  grid-template-areas:\n    "header header"\n    "sidebar main";\n  gap: 8px;\n}\n.header { background: #1e293b; color: white; padding: 12px; grid-area: header; }\n.sidebar { background: #94a3b8; padding: 12px; grid-area: sidebar; }\n.main { background: #e2e8f0; padding: 12px; grid-area: main; }',
+          susunKode: {
+            question:
+              "Susun layout bernama: header membentang penuh di atas, sidebar dan main berdampingan di bawahnya.",
+            potongan: [
+              ".layout {\n  display: grid;\n  grid-template-columns: 120px 1fr;",
+              "  grid-template-areas:\n    \"header header\"\n    \"sidebar main\";",
+              "  gap: 8px;\n}",
+              ".header { background: #1e293b; color: white; padding: 12px; grid-area: header; }",
+              ".sidebar { background: #94a3b8; padding: 12px; grid-area: sidebar; }",
+              ".main { background: #e2e8f0; padding: 12px; grid-area: main; }",
+            ],
+            pengecoh: [
+              ".header { background: #1e293b; color: white; padding: 12px; grid-area: kepala; }",
+              ".sidebar { background: #94a3b8; padding: 12px; grid-area: samping; }",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`grid-template-areas` menggambar denah tata letak langsung di dalam CSS — kamu bisa membacanya seperti peta, dan itulah kelebihan terbesarnya saat kode dibaca ulang enam bulan kemudian. Aturan kerasnya: setiap baris denah harus punya jumlah nama yang SAMA, karena itulah yang menentukan bentuk gridnya. Keping dengan baris pertama berisi satu nama saja adalah kekeliruan yang paling sering terjadi, dan seluruh deklarasi denahnya dibuang begitu jumlahnya tidak seragam. Keping `grid-areas` menghilangkan kata `template`; nama properti yang salah diabaikan diam-diam seperti biasa.",
+          },
         },
         {
           kind: "quiz",
@@ -2072,6 +2667,25 @@ export const cssTrack: Track = {
           ],
           solution:
             ".kotak {\n  background: crimson;\n  color: white;\n  padding: 20px;\n}\n\n@media (min-width: 600px) {\n  .kotak {\n    background: green;\n  }\n}",
+          susunKode: {
+            question:
+              "Susun CSS mobile-first: kotak merah secara bawaan, berubah hijau mulai layar 600px ke atas.",
+            potongan: [
+              ".kotak {\n  background: crimson;\n  color: white;\n  padding: 20px;\n}",
+              "@media (min-width: 600px) {",
+              "  .kotak {",
+              "    background: green;",
+              "  }",
+              "}",
+            ],
+            pengecoh: [
+              "@media (max-width: 600px) {",
+              "@media screen and (width: 600px) {",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Mobile-first berarti gaya dasarnya ditulis untuk layar kecil, lalu media query MENAMBAHKAN perubahan untuk layar yang lebih lebar — karena itu syaratnya `min-width`. Keping `max-width` adalah pengecoh yang paling sering menjerat karena membalik seluruh logikanya: yang berubah justru layar kecil, sehingga ponsel mendapat versi yang seharusnya untuk desktop. Gejalanya membingungkan karena di layar komputermu semuanya terlihat benar. Keping `width: 600px` menuntut lebar persis 600 piksel — praktis tidak pernah terpenuhi, dan aturannya seolah tidak pernah jalan.",
+          },
         },
         {
           kind: "step",
@@ -2102,6 +2716,26 @@ export const cssTrack: Track = {
           ],
           solution:
             ".grid {\n  display: grid;\n  grid-template-columns: 1fr;\n  gap: 8px;\n}\n.sel {\n  background: #7dd3fc;\n  padding: 16px;\n}\n\n@media (min-width: 700px) {\n  .grid {\n    grid-template-columns: 1fr 1fr;\n  }\n}",
+          susunKode: {
+            question:
+              "Susun grid yang satu kolom di ponsel dan menjadi dua kolom mulai layar 700px.",
+            potongan: [
+              ".grid {\n  display: grid;\n  grid-template-columns: 1fr;\n  gap: 8px;\n}",
+              ".sel {\n  background: #7dd3fc;\n  padding: 16px;\n}",
+              "@media (min-width: 700px) {",
+              "  .grid {",
+              "    grid-template-columns: 1fr 1fr;",
+              "  }",
+              "}",
+            ],
+            pengecoh: [
+              "@media (min-width: 700) {",
+              "@media (min-height: 700px) {",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Inilah pola responsif yang paling sering dipakai: satu kolom sebagai dasar, lalu ditambah kolom saat ruangnya cukup. Perhatikan bahwa aturan di dalam media query tetap butuh selector lengkapnya — `@media` bukan pembungkus yang mewarisi apa pun. Keping `min-width: 700` tanpa satuan adalah kekeliruan yang sering terjadi dan sangat sulit dilihat: seluruh blok media query-nya diabaikan, jadi gejalanya persis seperti lupa menulisnya sama sekali. Keping `min-height` menggoda karena hanya beda satu kata, padahal ia memeriksa tinggi jendela — sesuatu yang jarang jadi patokan tata letak.",
+          },
         },
         {
           kind: "step",
@@ -2128,6 +2762,22 @@ export const cssTrack: Track = {
             },
           ],
           solution: "h1 {\n  color: #1e293b;\n  font-size: clamp(1.5rem, 5vw, 3rem);\n}",
+          susunKode: {
+            question:
+              "Susun ukuran judul yang mengalir mengikuti lebar layar, tapi tidak pernah lebih kecil dari 1.5rem atau lebih besar dari 3rem.",
+            potongan: [
+              "h1 {\n  color: #1e293b;",
+              "  font-size: clamp(1.5rem, 5vw, 3rem);",
+              "}",
+            ],
+            pengecoh: [
+              "  font-size: clamp(3rem, 5vw, 1.5rem);",
+              "  font-size: min(1.5rem, 5vw, 3rem);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`clamp()` menerima tiga nilai dengan urutan yang tidak boleh tertukar: minimum, nilai yang diinginkan, lalu maksimum. Nilai tengah biasanya memakai satuan viewport supaya ukurannya mengalir mengikuti lebar layar. Keping yang membalik minimum dan maksimum adalah kekeliruan yang sering terjadi dan hasilnya aneh: ketika minimum lebih besar dari maksimum, batas bawahnya yang menang sehingga ukurannya terkunci. Keping `min()` menggoda karena nama fungsinya mirip dan sama-sama menerima beberapa nilai, tapi ia hanya memilih yang terkecil — tidak ada batas bawah, jadi judulmu bisa mengecil sampai tidak terbaca di ponsel.",
+          },
         },
         {
           kind: "step",
@@ -2160,6 +2810,24 @@ export const cssTrack: Track = {
           ],
           solution:
             "img {\n  border: 2px solid #334155;\n  max-width: 100%;\n  height: auto;\n}",
+          susunKode: {
+            question:
+              "Susun aturan supaya gambar tidak pernah meluber melewati lebar wadahnya, dan perbandingan sisinya tetap terjaga.",
+            potongan: [
+              "img {\n  border: 2px solid #334155;",
+              "  max-width: 100%;",
+              "  height: auto;",
+              "}",
+            ],
+            pengecoh: [
+              "  min-width: 100%;",
+              "  height: 100%;",
+              "  max-height: 100%;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`max-width: 100%` membuat gambar menyusut kalau wadahnya sempit, tapi tidak memaksanya melar melebihi ukuran aslinya. `height: auto` menjaga perbandingan sisi supaya gambarnya tidak gepeng. Keping `width: 100%` menggoda karena hasilnya mirip di layar sempit, tapi ia MEMAKSA gambar selebar wadah — foto kecil ikut dibesarkan sampai pecah. Keping `height: 100%` bersama lebar yang menyesuaikan adalah jebakan yang paling merusak: perbandingan sisinya hilang dan wajah orang di foto jadi melar. Ini kekeliruan yang paling sering ditemukan saat memeriksa situs di ponsel.",
+          },
         },
         {
           kind: "quiz",
@@ -2386,6 +3054,22 @@ export const cssTrack: Track = {
           ],
           solution:
             'body {\n  color: #1e293b;\n  font-family: "Helvetica Neue", Arial, sans-serif;\n}',
+          susunKode: {
+            question:
+              "Susun font stack yang mencoba Helvetica Neue lebih dulu, lalu Arial, lalu font sans-serif bawaan sistem.",
+            potongan: [
+              "body {\n  color: #1e293b;",
+              "  font-family: \"Helvetica Neue\", Arial, sans-serif;",
+              "}",
+            ],
+            pengecoh: [
+              "  font-family: Helvetica Neue, Arial, sans-serif;",
+              "  font: \"Helvetica Neue\", Arial, sans-serif;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Font stack dibaca browser dari kiri ke kanan: ia memakai yang pertama tersedia, dan nama generik seperti `sans-serif` di ujung adalah jaring pengaman yang tidak boleh dilupakan — tanpa itu, perangkat yang tidak punya satu pun font di daftarmu akan jatuh ke font serif bawaan yang mungkin sangat berbeda. Nama font yang mengandung spasi WAJIB diapit tanda kutip; keping tanpa kutip adalah kekeliruan yang sering terjadi dan membuat seluruh deklarasinya ditolak. Keping `font` menggoda karena namanya lebih pendek, tapi itu properti ringkas yang menuntut ukuran huruf ikut ditulis.",
+          },
         },
         {
           kind: "step",
@@ -2418,6 +3102,24 @@ export const cssTrack: Track = {
           ],
           solution:
             ".artikel {\n  font-size: 1rem;\n  line-height: 1.6;\n  max-width: 65ch;\n}",
+          susunKode: {
+            question:
+              "Susun aturan artikel yang nyaman dibaca: tinggi baris 1.6 dan lebar teks dibatasi 65 karakter.",
+            potongan: [
+              ".artikel {\n  font-size: 1rem;",
+              "  line-height: 1.6;",
+              "  max-width: 65ch;",
+              "}",
+            ],
+            pengecoh: [
+              "  line-height: 1.6px;",
+              "  max-width: 65px;",
+              "  line-height: 160;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`line-height` tanpa satuan adalah pengali dari ukuran huruf elemen itu sendiri, jadi anak-anak yang ukurannya berbeda tetap mendapat tinggi baris yang proporsional. Keping `1.6px` adalah jebakan yang hasilnya langsung terlihat rusak: baris-baris teks saling menimpa karena tinggi barisnya jadi hampir nol. Keping `160` tanpa titik desimal membuat tinggi baris 160 kali ukuran huruf — teksnya terpencar sangat jauh. Satuan `ch` berpatokan pada lebar karakter, sehingga `65ch` kira-kira 65 huruf per baris, panjang yang paling nyaman dibaca; keping `65px` menghasilkan kolom selebar beberapa huruf saja.",
+          },
         },
         {
           kind: "step",
@@ -2455,6 +3157,25 @@ export const cssTrack: Track = {
           ],
           solution:
             ".judul {\n  width: 200px;\n  border: 1px solid #cbd5e1;\n  padding: 6px;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}",
+          susunKode: {
+            question:
+              "Susun aturan judul yang memotong teks kepanjangan menjadi satu baris berakhir titik tiga.",
+            potongan: [
+              ".judul {\n  width: 200px;\n  border: 1px solid #cbd5e1;\n  padding: 6px;",
+              "  white-space: nowrap;",
+              "  overflow: hidden;",
+              "  text-overflow: ellipsis;",
+              "}",
+            ],
+            pengecoh: [
+              "  white-space: normal;",
+              "  overflow: auto;",
+              "  text-overflow: clip;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Memotong teks dengan titik tiga butuh TIGA properti yang bekerja bersama, dan itulah kenapa ia sering gagal: `nowrap` supaya teks tidak turun ke baris baru, `overflow: hidden` supaya kelebihannya disembunyikan, dan `text-overflow: ellipsis` supaya penyembunyian itu ditandai titik tiga. Menghilangkan satu saja membuat seluruh efeknya batal tanpa pesan apa pun. Keping `overflow: auto` menggoda karena sama-sama menangani isi yang meluber, tapi ia memunculkan batang gulir dan membuat `ellipsis` tidak pernah muncul. Keping `clip` memotong tanpa tanda, sehingga pembaca tidak tahu ada teks yang terpotong.",
+          },
         },
         {
           kind: "step",
@@ -2488,6 +3209,25 @@ export const cssTrack: Track = {
           ],
           solution:
             ".kartu {\n  background: white;\n  padding: 20px;\n  width: 200px;\n  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);\n  border-radius: 8px;\n}\nbody { background: #f1f5f9; }",
+          susunKode: {
+            question:
+              "Susun kartu dengan bayangan halus dan sudut membulat 8px.",
+            potongan: [
+              ".kartu {\n  background: white;\n  padding: 20px;\n  width: 200px;",
+              "  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);",
+              "  border-radius: 8px;",
+              "}",
+              "body { background: #f1f5f9; }",
+            ],
+            pengecoh: [
+              "  box-shadow: 0 4px 12px rgba(0, 0, 0, 1);",
+              "  border-radius: 8;",
+              "  border: 8px;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Nilai `box-shadow` dibaca berurutan: geser mendatar, geser menurun, tingkat kekaburan, lalu warnanya. Kunci bayangan yang terlihat mahal ada di transparansinya — nilai alfa yang rendah membuat bayangan terasa seperti cahaya alami. Keping beralfa 1 adalah kekeliruan yang sering terjadi saat menyalin warna tanpa memperhatikan komponen terakhirnya: hasilnya bayangan hitam pekat yang membuat kartunya terlihat murahan. Keping `border-radius: 8` tanpa satuan diabaikan seluruhnya, dan keping `border: 8px` menukar properti — itu menggambar garis tepi, bukan membulatkan sudut.",
+          },
         },
         {
           kind: "step",
@@ -2523,6 +3263,26 @@ export const cssTrack: Track = {
           ],
           solution:
             ".tombol {\n  background-color: #3b82f6;\n  color: white;\n  padding: 12px 20px;\n  border: none;\n  cursor: pointer;\n  transition: background-color 0.3s ease;\n}\n\n.tombol:hover {\n  background-color: #1e40af;\n}",
+          susunKode: {
+            question:
+              "Susun tombol yang warnanya berubah halus selama 0,3 detik saat kursor menyentuhnya.",
+            potongan: [
+              ".tombol {\n  background-color: #3b82f6;\n  color: white;\n  padding: 12px 20px;\n  border: none;\n  cursor: pointer;",
+              "  transition: background-color 0.3s ease;",
+              "}",
+              ".tombol:hover {",
+              "  background-color: #1e40af;",
+              "}",
+            ],
+            pengecoh: [
+              "  transition: background-color 0.3s;",
+              "  animation: background-color 0.3s ease;",
+              ".tombol :hover {",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`transition` memerlukan tiga keterangan: properti apa yang dianimasikan, berapa lama, dan kurva percepatannya. Ia dipasang pada keadaan NORMAL, bukan di dalam `:hover` — kalau dipasang di `:hover`, perubahannya halus saat masuk tapi menghentak saat keluar. Keping `animation` menukar properti: `animation` butuh `@keyframes` dan dipakai untuk gerakan yang berulang, sedangkan perpindahan antar dua keadaan adalah pekerjaan `transition`. Keping `.tombol :hover` dengan spasi adalah jebakan yang sangat sulit terlihat: spasi mengubahnya menjadi \"elemen apa pun DI DALAM tombol yang sedang disentuh\", bukan tombolnya sendiri.",
+          },
         },
         {
           kind: "step",
@@ -2558,6 +3318,27 @@ export const cssTrack: Track = {
           ],
           solution:
             ".kartu {\n  background: white;\n  padding: 20px;\n  width: 180px;\n  box-shadow: 0 2px 8px rgba(0,0,0,.1);\n  transition: transform 0.2s ease;\n}\nbody { background: #f1f5f9; }\n\n.kartu:hover {\n  transform: translateY(-4px) scale(1.02);\n}",
+          susunKode: {
+            question:
+              "Susun kartu yang terangkat halus saat kursor menyentuhnya.",
+            potongan: [
+              ".kartu {\n  background: white;\n  padding: 20px;\n  width: 180px;\n  box-shadow: 0 2px 8px rgba(0,0,0,.1);",
+              "  transition: transform 0.2s ease;",
+              "}",
+              "body { background: #f1f5f9; }",
+              ".kartu:hover {",
+              "  transform: translateY(-4px) scale(1.02);",
+              "}",
+            ],
+            pengecoh: [
+              "  transform: translateY(4px) scale(1.02);",
+              "  transform: translateY(-4px);",
+              ".kartu:focus {",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`transform` menggeser, memutar, atau menskalakan elemen tanpa mengganggu tata letak di sekitarnya — itulah kenapa ia jauh lebih murah bagi browser daripada mengubah `top` atau `margin`. Beberapa fungsi boleh ditulis berurutan dipisah spasi. Sumbu Y di layar mengarah ke BAWAH, jadi nilai negatiflah yang mengangkat kartu; keping `translateY(4px)` adalah kekeliruan yang sering terjadi karena tanda minus terasa berlawanan dengan kata naik. Keping tanpa `scale` menghilangkan pembesaran halusnya. Keping `.kartu:focus` menggoda karena terasa lebih ramah keyboard, tapi di sini yang diminta reaksi terhadap kursor — idealnya keduanya ditulis bersama supaya pengguna keyboard mendapat umpan balik yang sama.",
+          },
         },
         {
           kind: "step",
@@ -2598,6 +3379,29 @@ export const cssTrack: Track = {
           ],
           solution:
             "@keyframes muncul {\n  from { opacity: 0; }\n  to { opacity: 1; }\n}\n\n.pesan {\n  background: #dcfce7;\n  padding: 16px;\n  animation: muncul 0.5s ease;\n}\n\n@media (prefers-reduced-motion: reduce) {\n  .pesan {\n    animation: none;\n  }\n}",
+          susunKode: {
+            question:
+              "Susun animasi kemunculan yang otomatis mati bagi pengguna yang meminta pengurangan gerakan.",
+            potongan: [
+              "@keyframes muncul {",
+              "  from { opacity: 0; }",
+              "  to { opacity: 1; }",
+              "}",
+              ".pesan {\n  background: #dcfce7;\n  padding: 16px;",
+              "  animation: muncul 0.5s ease;",
+              "}",
+              "@media (prefers-reduced-motion: reduce) {",
+              "  .pesan {\n    animation: none;\n  }\n}",
+            ],
+            pengecoh: [
+              "@media (prefers-reduced-motion: no-preference) {",
+              "  animation: muncul 0.5s;",
+              "  to { opacity: 0.5; }",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Sebagian orang mengalami pusing, mual, atau migrain karena gerakan di layar, dan sistem operasinya menyediakan pengaturan untuk memintanya dikurangi. `prefers-reduced-motion: reduce` adalah cara CSS mendengarkan permintaan itu, dan mematikan animasi bagi mereka hanya butuh beberapa baris. Keping `no-preference` adalah kekeliruan yang membalik maknanya: ia justru menyala untuk pengguna yang TIDAK meminta pengurangan, sehingga orang yang membutuhkannya tetap mendapat animasi penuh — dan di komputermu sendiri hasilnya terlihat sama saja selama pengaturan itu tidak kamu nyalakan. Keping tanpa `ease` mengubah kurva percepatannya, dan keping `opacity: 0.5` membuat pesannya tidak pernah tampil penuh.",
+          },
         },
         {
           kind: "step",
@@ -2651,6 +3455,23 @@ export const cssTrack: Track = {
             "  background: linear-gradient(to right, #7c3aed, #db2777);\n" +
             "  color: white;\n" +
             "}",
+          susunKode: {
+            question:
+              "Susun spanduk berlatar gradasi mendatar dari ungu ke merah muda, dengan tulisan putih.",
+            potongan: [
+              ".spanduk {\n  padding: 32px 16px;\n  font-size: 1.25rem;\n  font-weight: bold;",
+              "  background: linear-gradient(to right, #7c3aed, #db2777);",
+              "  color: white;",
+              "}",
+            ],
+            pengecoh: [
+              "  background: linear-gradient(#7c3aed, #db2777);",
+              "  background-color: linear-gradient(to right, #7c3aed, #db2777);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Gradasi adalah gambar, bukan warna — itulah sebabnya ia dipasang lewat `background` atau `background-image`, bukan `background-color`. Keping `background-color` adalah kekeliruan yang sangat sering terjadi karena namanya terasa lebih tepat untuk \"mengatur warna\"; hasilnya deklarasi itu diabaikan seluruhnya dan spandukmu tampil polos. Keping tanpa arah menggoda karena hasilnya tetap gradasi yang terlihat bagus, tapi arah bawaannya dari atas ke bawah — bukan mendatar seperti yang diminta. Menyebutkan arah secara eksplisit membuat maksudmu jelas bagi siapa pun yang membaca kode ini nanti.",
+          },
         },
         {
           kind: "quiz",
@@ -2856,6 +3677,26 @@ export const cssTrack: Track = {
           ],
           solution:
             ":root {\n  --warna-utama: #2563eb;\n}\n\n.tombol {\n  color: white;\n  padding: 12px 20px;\n  border: none;\n  background: var(--warna-utama);\n}",
+          susunKode: {
+            question:
+              "Susun variabel warna utama di `:root`, lalu pakai variabel itu sebagai latar tombol.",
+            potongan: [
+              ":root {",
+              "  --warna-utama: #2563eb;",
+              "}",
+              ".tombol {\n  color: white;\n  padding: 12px 20px;\n  border: none;",
+              "  background: var(--warna-utama);",
+              "}",
+            ],
+            pengecoh: [
+              "  var-warna-utama: #2563eb;",
+              "  background: --warna-utama;",
+              "  background: var(warna-utama);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Custom property wajib diawali dua tanda hubung saat dideklarasikan, dan dibaca lewat fungsi `var()` saat dipakai. Dideklarasikan di `:root` berarti berlaku untuk seluruh dokumen. Keping tanpa dua tanda hubung adalah kekeliruan yang paling sering terjadi: tanpa awalan itu, CSS menganggapnya properti biasa yang tidak dikenal dan membuangnya. Keping `background: --warna-utama` menggoda karena nama variabelnya sudah benar, tapi nilainya harus dibungkus `var()` — tanpa itu CSS membacanya sebagai kata biasa. Keping `var(warna-utama)` kehilangan dua tanda hubung di dalam kurung, dan hasilnya sama saja: tombolnya tidak berwarna.",
+          },
         },
         {
           kind: "step",
@@ -2883,6 +3724,22 @@ export const cssTrack: Track = {
           ],
           solution:
             ".kartu {\n  background: #e0e7ff;\n  padding: var(--pad, 16px);\n}",
+          susunKode: {
+            question:
+              "Susun aturan kartu yang memakai variabel `--pad`, tapi tetap punya nilai cadangan 16px kalau variabelnya belum ada.",
+            potongan: [
+              ".kartu {\n  background: #e0e7ff;",
+              "  padding: var(--pad, 16px);",
+              "}",
+            ],
+            pengecoh: [
+              "  padding: var(--pad 16px);",
+              "  padding: var(--pad) 16px;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Argumen kedua di dalam `var()` adalah nilai cadangan yang dipakai kalau variabelnya belum pernah didefinisikan — pengaman yang membuat komponenmu tetap tampil wajar walau dipasang di halaman yang belum menyiapkan variabelnya. Pemisahnya wajib koma. Keping tanpa koma membuat seluruh nilainya tidak sah sehingga `padding`-nya hilang sama sekali. Keping `var(--pad) 16px` adalah jebakan yang paling halus: sintaksnya sah, tapi artinya berubah total menjadi dua nilai padding sekaligus — atas-bawah dari variabel, kiri-kanan 16px — dan kalau variabelnya kosong, seluruh deklarasinya batal.",
+          },
         },
         {
           kind: "step",
@@ -2913,6 +3770,24 @@ export const cssTrack: Track = {
           ],
           solution:
             ".kartu {\n  border: 3px solid #cbd5e1;\n  padding: 12px;\n  margin-bottom: 8px;\n}\nimg { width: 60px; }\n\n.kartu:has(img) {\n  border: 3px solid #16a34a;\n}",
+          susunKode: {
+            question:
+              "Susun aturan yang memberi garis tepi hijau HANYA pada kartu yang di dalamnya ada gambar.",
+            potongan: [
+              ".kartu {\n  border: 3px solid #cbd5e1;\n  padding: 12px;\n  margin-bottom: 8px;\n}",
+              "img { width: 60px; }",
+              ".kartu:has(img) {",
+              "  border: 3px solid #16a34a;",
+              "}",
+            ],
+            pengecoh: [
+              ".kartu img {",
+              ".kartu:has(> img) img {",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`:has()` akhirnya menjawab kebutuhan yang lama tidak bisa dipenuhi CSS: memilih elemen berdasarkan APA YANG ADA DI DALAMNYA. Sebelum ini, satu-satunya cara adalah menambahkan class lewat JavaScript. Keping `.kartu img` adalah pengecoh yang paling menggoda karena bentuknya sangat mirip, tapi artinya kebalikan arah: ia memilih gambar di dalam kartu, bukan kartu yang berisi gambar — jadi yang berubah garis tepinya adalah gambarnya. Keping kedua menutup rangkaiannya dengan `img` di ujung sehingga sasarannya kembali ke gambar; ingat bahwa sasaran sebuah selector selalu bagian TERAKHIR, dan `:has()` hanya menambahkan syarat.",
+          },
         },
         {
           kind: "step",
@@ -2950,6 +3825,25 @@ export const cssTrack: Track = {
           ],
           solution:
             ".thumb {\n  border: 2px solid #334155;\n  aspect-ratio: 16 / 9;\n  width: 240px;\n  object-fit: cover;\n}",
+          susunKode: {
+            question:
+              "Susun thumbnail selebar 240px dengan perbandingan sisi 16:9, dan gambarnya dipotong rapi tanpa gepeng.",
+            potongan: [
+              ".thumb {\n  border: 2px solid #334155;",
+              "  aspect-ratio: 16 / 9;",
+              "  width: 240px;",
+              "  object-fit: cover;",
+              "}",
+            ],
+            pengecoh: [
+              "  aspect-ratio: 16:9;",
+              "  object-fit: fill;",
+              "  aspect-ratio: 9 / 16;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`aspect-ratio` menjaga perbandingan sisi tanpa perlu menghitung tinggi secara manual, dan `object-fit: cover` membuat gambar mengisi kotak itu dengan memotong kelebihannya alih-alih meregangkannya. Keping `16:9` memakai titik dua seperti kebiasaan menulis rasio di luar CSS; di CSS pemisahnya garis miring, dan nilai yang salah membuat barisnya diabaikan. Keping `object-fit: fill` adalah nilai bawaan yang justru sedang kamu perbaiki — ia meregangkan gambar sampai gepeng, kekeliruan yang paling sering terlihat pada daftar produk. Keping `9 / 16` membalik rasionya menjadi potret.",
+          },
         },
         {
           kind: "step",
@@ -2985,6 +3879,27 @@ export const cssTrack: Track = {
           ],
           solution:
             ":root {\n  --bg: #ffffff;\n  --fg: #0f172a;\n}\n\nbody {\n  background: var(--bg);\n  color: var(--fg);\n  padding: 20px;\n}\n\n@media (prefers-color-scheme: dark) {\n  :root {\n    --bg: #0f172a;\n    --fg: #f8fafc;\n  }\n}",
+          susunKode: {
+            question:
+              "Susun dark mode berbasis variabel: warna terang sebagai dasar, lalu ditimpa saat sistem pengguna memakai tema gelap.",
+            potongan: [
+              ":root {\n  --bg: #ffffff;\n  --fg: #0f172a;\n}",
+              "body {\n  background: var(--bg);\n  color: var(--fg);\n  padding: 20px;\n}",
+              "@media (prefers-color-scheme: dark) {",
+              "  :root {",
+              "    --bg: #0f172a;",
+              "    --fg: #f8fafc;",
+              "  }",
+              "}",
+            ],
+            pengecoh: [
+              "@media (prefers-color-scheme: light) {",
+              "    --bg: #f8fafc;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Menyatukan warna ke dalam variabel membuat dark mode cukup menimpa beberapa nilai, bukan menulis ulang seluruh aturan — inilah alasan paling praktis untuk memakai custom property. Keping `light` membalik maknanya sehingga tema gelap tidak pernah aktif. Keping `body` sebagai pengganti `:root` menggoda karena di situlah warnanya dipakai, tapi menimpa variabel di `body` membuat komponen di luar `body` — dan elemen yang membaca variabel dari `:root` — tidak ikut berubah. Kebiasaan yang aman: deklarasikan variabel di `:root`, timpa juga di `:root`.",
+          },
         },
         {
           kind: "step",
@@ -3015,6 +3930,22 @@ export const cssTrack: Track = {
             },
           ],
           solution: ":is(h1, h2, h3) {\n  color: #1d4ed8;\n}",
+          susunKode: {
+            question:
+              "Susun satu aturan ringkas yang mewarnai h1, h2, dan h3 sekaligus.",
+            potongan: [
+              ":is(h1, h2, h3) {",
+              "  color: #1d4ed8;",
+              "}",
+            ],
+            pengecoh: [
+              ":has(h1, h2, h3) {",
+              ":not(h1, h2, h3) {",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`:is()` menerima daftar selector dan cocok kalau salah satunya cocok, jadi ia memendekkan penulisan yang berulang tanpa mengubah artinya. Keping `:has()` adalah pengecoh yang paling menggoda karena bentuknya nyaris identik, tapi artinya jauh berbeda: ia memilih elemen yang MENGANDUNG salah satu dari daftar itu, sehingga yang berwarna justru pembungkusnya. Keping `:not()` membalik maknanya menjadi \"semua kecuali ketiganya\", dan hasilnya seluruh halaman berubah warna kecuali judul-judulnya. Satu catatan yang sering menjebak: specificity `:is()` mengikuti selector terkuat di dalam daftarnya.",
+          },
         },
         {
           kind: "step",
@@ -3076,6 +4007,27 @@ export const cssTrack: Track = {
             "    background: #eef2ff;\n" +
             "  }\n" +
             "}",
+          susunKode: {
+            question:
+              "Susun aturan bersarang tanpa Sass: judul di dalam kartu, dan keadaan hover kartunya.",
+            potongan: [
+              ".kartu {\n  border: 1px solid #cbd5e1;\n  padding: 16px;",
+              "  h3 {",
+              "    color: #1e293b;",
+              "  }",
+              "  &:hover {",
+              "    background: #eef2ff;",
+              "  }",
+              "}",
+            ],
+            pengecoh: [
+              "  &:focus {",
+              "  h4 {",
+            ],
+            pemisah: "\n",
+            explanation:
+              "CSS sekarang mendukung penulisan bersarang tanpa alat bantu apa pun. Tanda `&` berarti \"elemen ini sendiri\", dan ia WAJIB dipakai saat menempelkan pseudo-class seperti `:hover`. Keping `:hover` tanpa `&` adalah jebakan yang paling sering terjadi karena di Sass penulisan itu pun salah, tapi kesalahannya tidak kelihatan: tanpa `&`, artinya berubah menjadi \"elemen keturunan apa pun yang sedang disentuh\", bukan kartunya. Sebaliknya, keping `&h3` menempelkan `&` pada nama elemen sehingga ia mencari elemen yang sekaligus `.kartu` dan `h3` — sesuatu yang tidak pernah ada.",
+          },
         },
         {
           kind: "quiz",
@@ -3314,6 +4266,26 @@ export const cssTrack: Track = {
           ],
           solution:
             '<div class="bg-blue-500 text-white p-4">Kotak Tailwind</div>',
+          susunKode: {
+            question:
+              "Rangkai satu div Tailwind berlatar biru 500, bertulisan putih, dengan padding 4.",
+            potongan: [
+              "<div",
+              "class=\"bg-blue-500",
+              "text-white p-4\"",
+              ">",
+              "Kotak Tailwind",
+              "</div>",
+            ],
+            pengecoh: [
+              "class=\"bg-blue text-white p-4\"",
+              "class=\"background-blue-500 text-white p-4\"",
+              "style=\"bg-blue-500 text-white p-4\"",
+            ],
+            pemisah: " ",
+            explanation:
+              "Tailwind bekerja dengan kelas siap pakai yang masing-masing melakukan satu hal, dan namanya mengikuti pola tetap: properti, lalu skala. Keping `bg-blue` tanpa angka menggoda karena terasa cukup, padahal setiap warna punya tingkat 50 sampai 950 dan kelas tanpa angka tidak ada — Tailwind tidak menghasilkan CSS apa pun untuknya, jadi kotakmu tampil tanpa warna dan tanpa satu pun peringatan. Keping `background-blue-500` memakai nama properti CSS lengkap, kekeliruan yang wajar terjadi di hari pertama. Keping `style` menaruh kelas di atribut yang salah; kelas utility tetap ditulis di `class`.",
+          },
         },
         {
           kind: "step",
@@ -3352,6 +4324,26 @@ export const cssTrack: Track = {
           ],
           solution:
             '<div class="bg-white p-6 mb-4 rounded-lg shadow-md">Kartu</div>',
+          susunKode: {
+            question:
+              "Rangkai kartu Tailwind: padding 6, jarak bawah 4, sudut membulat besar, dan bayangan sedang.",
+            potongan: [
+              "<div",
+              "class=\"bg-white p-6 mb-4",
+              "rounded-lg shadow-md\"",
+              ">",
+              "Kartu",
+              "</div>",
+            ],
+            pengecoh: [
+              "class=\"bg-white p-6 mt-4 rounded-lg shadow-md\"",
+              "class=\"bg-white p-6 m-4 rounded-lg shadow-md\"",
+              "class=\"bg-white padding-6 mb-4 rounded-lg shadow-md\"",
+            ],
+            pemisah: " ",
+            explanation:
+              "Skala spacing Tailwind memakai kelipatan 4 piksel, jadi `p-6` berarti padding 24px dan `mb-4` berarti margin bawah 16px. Huruf kedua menentukan sisinya: `t` atas, `b` bawah, `l` kiri, `r` kanan, `x` mendatar, `y` menurun, dan tanpa huruf berarti keempat sisi. Keping `mt-4` memasang jaraknya di sisi atas — kekeliruan yang sangat sering terjadi karena `t` dan `b` mudah tertukar saat mengetik cepat, dan tampilannya tetap terlihat \"ada jaraknya\" sehingga sulit disadari. Keping `m-4` memberi jarak ke semua sisi, dan `padding-6` memakai nama properti CSS yang tidak dikenal Tailwind.",
+          },
         },
         {
           kind: "step",
@@ -3391,6 +4383,25 @@ export const cssTrack: Track = {
           ],
           solution:
             '<nav class="bg-slate-800 text-white flex justify-between items-center p-4">\n  <span>BiLearn</span>\n  <button class="bg-blue-500 px-3 py-1 rounded">Masuk</button>\n</nav>',
+          susunKode: {
+            question:
+              "Rangkai navbar Tailwind: berjajar, isinya terdorong ke ujung berlawanan, rata tengah menurun, padding 4.",
+            potongan: [
+              "<nav",
+              "class=\"bg-slate-800 text-white flex justify-between items-center p-4\"",
+              ">",
+              "\n  <span>BiLearn</span>\n  <button class=\"bg-blue-500 px-3 py-1 rounded\">Masuk</button>\n",
+              "</nav>",
+            ],
+            pengecoh: [
+              "class=\"bg-slate-800 text-white flex justify-center items-center p-4\"",
+              "class=\"bg-slate-800 text-white block justify-between items-center p-4\"",
+              "class=\"bg-slate-800 text-white flex justify-between align-center p-4\"",
+            ],
+            pemisah: " ",
+            explanation:
+              "Kelas Tailwind memetakan properti CSS satu per satu: `flex` menjadi `display: flex`, `justify-between` menjadi `justify-content: space-between`, `items-center` menjadi `align-items: center`. Kalau kamu sudah paham Flexbox murni, di sini kamu hanya belajar namanya — itulah alasan CSS murni diajarkan lebih dulu. Keping `block` menghilangkan flex-nya, sehingga kelas penataan lain ikut tidak berpengaruh — kekeliruan yang sering sulit dilacak karena daftar kelasnya terlihat lengkap. Keping `align-center` memakai nama yang terasa masuk akal tapi tidak ada di Tailwind, dan `justify-center` menumpuk isinya di tengah.",
+          },
         },
         {
           kind: "step",
@@ -3431,6 +4442,25 @@ export const cssTrack: Track = {
           ],
           solution:
             '<div class="grid grid-cols-1 md:grid-cols-3 gap-4">\n  <div class="bg-purple-400 p-4">1</div>\n  <div class="bg-purple-400 p-4">2</div>\n  <div class="bg-purple-400 p-4">3</div>\n</div>',
+          susunKode: {
+            question:
+              "Rangkai grid Tailwind: satu kolom di ponsel, tiga kolom mulai ukuran md, jarak 4.",
+            potongan: [
+              "<div",
+              "class=\"grid grid-cols-1 md:grid-cols-3 gap-4\"",
+              ">",
+              "\n  <div class=\"bg-purple-400 p-4\">1</div>\n  <div class=\"bg-purple-400 p-4\">2</div>\n  <div class=\"bg-purple-400 p-4\">3</div>\n",
+              "</div>",
+            ],
+            pengecoh: [
+              "class=\"grid grid-cols-1 grid-cols-3 gap-4\"",
+              "class=\"grid grid-cols-1 sm:grid-cols-3 gap-4\"",
+              "class=\"grid grid-cols-1 md-grid-cols-3 gap-4\"",
+            ],
+            pemisah: " ",
+            explanation:
+              "Varian responsif Tailwind bersifat mobile-first: kelas tanpa awalan berlaku di semua ukuran, dan awalan seperti `md:` menambahkan perubahan MULAI ukuran itu ke atas. Keping tanpa awalan sama sekali adalah kekeliruan yang paling membingungkan: dua kelas kolom saling bertabrakan, dan yang menang ditentukan urutan di berkas CSS Tailwind, bukan urutan yang kamu tulis. Keping `md-grid-cols-3` memakai tanda hubung alih-alih titik dua sehingga bukan varian sama sekali — Tailwind tidak mengenalinya dan tidak menghasilkan CSS apa pun. Keping `sm:` sah, tapi titik ubahnya lebih awal dari yang diminta.",
+          },
         },
         {
           kind: "step",
@@ -3467,6 +4497,26 @@ export const cssTrack: Track = {
           ],
           solution:
             '<button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 focus:ring-2 transition">Kirim</button>',
+          susunKode: {
+            question:
+              "Rangkai tombol Tailwind yang menggelap saat disentuh, punya cincin fokus, dan perubahannya halus.",
+            potongan: [
+              "<button",
+              "class=\"bg-blue-500 text-white px-4 py-2 rounded",
+              "hover:bg-blue-700 focus:ring-2 transition\"",
+              ">",
+              "Kirim",
+              "</button>",
+            ],
+            pengecoh: [
+              "class=\"bg-blue-500 text-white px-4 py-2 rounded hover-bg-blue-700 focus:ring-2 transition\"",
+              "class=\"bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 focus:outline-none transition\"",
+              "class=\"bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 focus:ring-2\"",
+            ],
+            pemisah: " ",
+            explanation:
+              "Varian keadaan ditulis dengan titik dua: `hover:` untuk kursor menyentuh, `focus:` untuk elemen sedang difokus. Keping bertanda hubung bukan varian dan diabaikan Tailwind sepenuhnya. Keping `focus:outline-none` tanpa pengganti adalah kekeliruan yang paling merugikan di daftar ini: ia menghapus penanda fokus bawaan browser, dan pengguna keyboard langsung kehilangan jejak posisinya di halaman — kalau outline dihapus, WAJIB ada penggantinya seperti `ring`. Keping tanpa `transition` membuat perubahan warnanya menghentak, sah tapi terasa kasar.",
+          },
         },
         {
           kind: "step",
@@ -3522,6 +4572,24 @@ export const cssTrack: Track = {
           ],
           solution:
             '<div class="max-w-sm rounded-xl shadow-lg p-6 bg-white">\n  <h3 class="text-xl font-bold mb-2">Sepatu Lari</h3>\n  <p class="text-gray-600">Rp 450.000</p>\n</div>',
+          susunKode: {
+            question:
+              "Rangkai kartu produk Tailwind lengkap: lebar maksimum kecil, sudut membulat ekstra, bayangan besar, padding 6, latar putih.",
+            potongan: [
+              "<div",
+              "class=\"max-w-sm rounded-xl shadow-lg p-6 bg-white\"",
+              ">",
+              "\n  <h3 class=\"text-xl font-bold mb-2\">Sepatu Lari</h3>\n  <p class=\"text-gray-600\">Rp 450.000</p>\n",
+              "</div>",
+            ],
+            pengecoh: [
+              "class=\"max-width-sm rounded-xl shadow-lg p-6 bg-white\"",
+              "class=\"max-w-sm rounded-xl shadow-large p-6 bg-white\"",
+            ],
+            pemisah: " ",
+            explanation:
+              "Kartu ini menggabungkan semua yang sudah kamu pelajari: pembatas lebar, sudut, bayangan, padding, dan warna latar — semuanya lewat kelas siap pakai. Perhatikan bahwa ukuran di Tailwind memakai singkatan bertingkat (`sm`, `md`, `lg`, `xl`), bukan angka bebas, dan itulah yang menjaga tampilan tetap konsisten di seluruh proyek. Keping `max-width-sm` memakai nama properti CSS lengkap — kekeliruan yang sering terjadi di minggu pertama, dan seperti biasa kelasnya tidak ada sehingga tidak terjadi apa-apa. Keping `shadow-large` memakai kata yang wajar tapi Tailwind memakai singkatan `lg`.",
+          },
         },
         {
           kind: "quiz",
@@ -3748,6 +4816,25 @@ export const cssTrack: Track = {
           ],
           solution:
             ":root {\n  --primary: #4f46e5;\n  --text: #111827;\n  --radius: 12px;\n  --space: 8px;\n}",
+          susunKode: {
+            question:
+              "Susun design token dari spesifikasi desain: warna utama, warna teks, radius sudut, dan satuan jarak dasar.",
+            potongan: [
+              ":root {",
+              "  --primary: #4f46e5;",
+              "  --text: #111827;",
+              "  --radius: 12px;",
+              "  --space: 8px;",
+              "}",
+            ],
+            pengecoh: [
+              "  primary-color: #4f46e5;",
+              "  $radius: 12px;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Design token adalah nilai-nilai dari spesifikasi desain yang dituliskan satu kali di satu tempat, lalu dirujuk di seluruh berkas. Manfaatnya baru terasa saat desainer mengubah satu warna: kamu cukup mengganti satu baris, bukan mencari-cari nilai yang sama di puluhan tempat. Keping tanpa dua tanda hubung adalah kekeliruan yang paling sering terjadi dan diabaikan CSS diam-diam. Keping berawalan `$` datang dari kebiasaan menulis variabel Sass — di CSS murni tanda itu tidak berarti apa pun, dan ini jebakan yang sering muncul saat orang berpindah dari Sass ke custom property.",
+          },
         },
         {
           kind: "step",
@@ -3788,6 +4875,27 @@ export const cssTrack: Track = {
           ],
           solution:
             ".toolbar {\n  background: #eef2ff;\n  display: flex;\n  gap: 16px;\n  padding: 24px;\n  align-items: center;\n}\n.btn { background: #4f46e5; color: white; padding: 8px 12px; }",
+          susunKode: {
+            question:
+              "Susun toolbar sesuai Auto Layout Figma: berjajar, jarak antar item 16px, padding 24px, rata tengah.",
+            potongan: [
+              ".toolbar {\n  background: #eef2ff;",
+              "  display: flex;",
+              "  gap: 16px;",
+              "  padding: 24px;",
+              "  align-items: center;",
+              "}",
+              ".btn { background: #4f46e5; color: white; padding: 8px 12px; }",
+            ],
+            pengecoh: [
+              "  gap: 16;",
+              "  padding: 24;",
+              "  justify-items: center;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Auto Layout di Figma sebenarnya Flexbox dengan nama lain, dan padanannya nyaris satu lawan satu: arah menjadi `flex-direction`, jarak antar item menjadi `gap`, padding tetap `padding`, perataan menjadi `align-items`. Mengetahui padanan ini membuat kamu bisa membaca angka langsung dari panel Figma tanpa menebak. Dua keping tanpa satuan mengulang jebakan yang paling sering terjadi saat menyalin angka dari alat desain: di Figma angkanya memang ditulis polos, tapi CSS menolaknya. Keping `justify-items` adalah properti Grid yang tidak berpengaruh di dalam flex container.",
+          },
         },
         {
           kind: "step",
@@ -3832,6 +4940,26 @@ export const cssTrack: Track = {
           ],
           solution:
             ".btn {\n  background: #4f46e5;\n  color: white;\n  padding: 10px 16px;\n  border: none;\n  border-radius: 8px;\n}\n\n.btn:hover {\n  background: #4338ca;\n}\n\n.btn:focus-visible {\n  outline: 3px solid #a5b4fc;\n}\n\n.btn:disabled {\n  opacity: 0.5;\n  cursor: not-allowed;\n}",
+          susunKode: {
+            question:
+              "Susun tombol lengkap dengan tiga keadaan yang biasanya tidak digambar desainer: hover, fokus keyboard, dan nonaktif.",
+            potongan: [
+              ".btn {\n  background: #4f46e5;\n  color: white;\n  padding: 10px 16px;\n  border: none;\n  border-radius: 8px;\n}",
+              ".btn:hover {\n  background: #4338ca;\n}",
+              ".btn:focus-visible {\n  outline: 3px solid #a5b4fc;\n}",
+              ".btn:disabled {",
+              "  opacity: 0.5;",
+              "  cursor: not-allowed;",
+              "}",
+            ],
+            pengecoh: [
+              "  outline: none;",
+              "  cursor: pointer;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Desainer biasanya menggambar satu keadaan tombol, padahal di kode ada empat: normal, hover, fokus, dan nonaktif. `:focus-visible` khusus muncul untuk pengguna keyboard tanpa mengganggu pengguna tetikus, dan itulah keadaan yang paling sering terlupa. Keping `outline: none` adalah kekeliruan yang paling merugikan di seluruh track ini — ia dipakai luas karena outline bawaan dianggap jelek, dan akibatnya pengguna keyboard benar-benar kehilangan jejak posisinya. Kalau outline dihapus, wajib ada penggantinya. Keping `cursor: pointer` pada tombol nonaktif menggoda karena semua tombol lain memakainya, tapi ia memberi isyarat \"bisa diklik\" pada sesuatu yang justru tidak bisa.",
+          },
         },
         {
           kind: "step",
@@ -3878,6 +5006,28 @@ export const cssTrack: Track = {
           ],
           solution:
             ".kartu {\n  width: 200px;\n  border: 1px solid #e5e7eb;\n  padding: 12px;\n  min-height: 80px;\n}\n.judul {\n  font-weight: bold;\n  display: -webkit-box;\n  -webkit-line-clamp: 2;\n  -webkit-box-orient: vertical;\n  overflow: hidden;\n}",
+          susunKode: {
+            question:
+              "Susun kartu yang tidak rusak saat kontennya lebih panjang dari desain: tinggi minimum, dan judul dipotong maksimal dua baris.",
+            potongan: [
+              ".kartu {\n  width: 200px;\n  border: 1px solid #e5e7eb;\n  padding: 12px;",
+              "  min-height: 80px;",
+              "}",
+              ".judul {\n  font-weight: bold;",
+              "  display: -webkit-box;",
+              "  -webkit-line-clamp: 2;",
+              "  -webkit-box-orient: vertical;",
+              "  overflow: hidden;",
+              "}",
+            ],
+            pengecoh: [
+              "  max-height: 80px;",
+              "  -webkit-line-clamp: 1;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Konten nyata hampir selalu lebih panjang daripada contoh di desain — nama produk tiga kata di mockup bisa jadi dua belas kata di database. `min-height` menjaga bentuk kartu tanpa memenjara isinya, sedangkan `line-clamp` memotong judul di baris kedua dengan titik tiga. Keping `height: 80px` adalah jebakan yang paling sering terjadi karena angka itulah yang tertulis di Figma: tingginya dipatok, dan begitu teksnya panjang isinya tumpah keluar kartu. Keping `line-clamp: 2px` menambahkan satuan pada nilai yang seharusnya berupa jumlah baris, sehingga seluruh pemotongannya batal.",
+          },
         },
         {
           kind: "quiz",

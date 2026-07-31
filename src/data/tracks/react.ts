@@ -51,7 +51,22 @@ export const reactTrack: Track = {
               "message": "Perintah pemeriksa versi di dunia CLI hampir selalu berupa nama programnya diikuti opsi versi (`-v` atau `--version`). Kalau terminal menjawab `command not found`, Node.js memang belum terpasang — bukan perintahmu yang salah."
             }
           ],
-          "solution": "node -v"
+          "solution": "node -v",
+          susunKode: {
+            question:
+              "Ketik perintah terminal untuk memeriksa versi Node.js.",
+            potongan: [
+              "node",
+              "-v",
+            ],
+            pengecoh: [
+              "npm",
+              "--check",
+            ],
+            pemisah: " ",
+            explanation:
+              "Perintah `node -v` memeriksa versi Node.js yang terpasang di terminal. Pengecoh `npm` menggoda pemula yang keliru membedakan runtime Node.js dengan manajer paket npm, padahal keduanya memiliki CLI berbeda. Pengecoh `--check` juga merupakan jebakan opsi yang tidak valid untuk memeriksa versi di Node.js.",
+          },
         },
         {
           "kind": "step",
@@ -80,7 +95,23 @@ export const reactTrack: Track = {
               "message": "Opsi untuk create-vite (bukan untuk npm) harus dipisahkan dengan `--` kosong lebih dulu, baru `--template` diikuti nama template React+TypeScript. Tanpa pemisah itu, npm menganggap opsinya miliknya sendiri dan template diabaikan."
             }
           ],
-          "solution": "npm create vite@latest bipack-app -- --template react-ts"
+          "solution": "npm create vite@latest bipack-app -- --template react-ts",
+          susunKode: {
+            question:
+              "Inisialisasi proyek Vite bernama bipack-app dengan template react-ts.",
+            potongan: [
+              "npm create vite@latest",
+              "bipack-app",
+              "-- --template react-ts",
+            ],
+            pengecoh: [
+              "npx create-react-app",
+              "--template typescript",
+            ],
+            pemisah: " ",
+            explanation:
+              "Perintah `npm create vite@latest` menginisialisasi proyek baru dengan template Vite secara cepat. Pengecoh `npx create-react-app` menggoda pengembang yang terbiasa dengan perkakas lama CRA yang sudah tidak direkomendasikan. Pengecoh `--template typescript` juga keliru karena nama template resmi Vite untuk React TS adalah `react-ts`.",
+          },
         },
         {
           "kind": "step",
@@ -109,7 +140,23 @@ export const reactTrack: Track = {
               "message": "Setelah root dibuat, panggil `.render()` dengan elemen `<App />` di dalamnya. Perhatikan huruf A besar: nama berhuruf kecil dianggap tag HTML biasa oleh JSX."
             }
           ],
-          "solution": "ReactDOM.createRoot(document.getElementById('root')!).render(<App />);"
+          "solution": "ReactDOM.createRoot(document.getElementById('root')!).render(<App />);",
+          susunKode: {
+            question:
+              "Buat root dengan createRoot dan render <App />.",
+            potongan: [
+              "ReactDOM.createRoot(",
+              "document.getElementById('root')!",
+              ").render(<App />);",
+            ],
+            pengecoh: [
+              "ReactDOM.render(",
+              "document.querySelector('body')",
+            ],
+            pemisah: "",
+            explanation:
+              "Sejak React 18, pembuatan root dilakukan via `ReactDOM.createRoot` untuk mendukung fitur concurrent rendering. Pengecoh `ReactDOM.render` menggoda karena merupakan sintaks lama React 17 yang sudah deprecated. Pengecoh `querySelector('body')` juga jebakan karena kontainer utama React harus ditargetkan ke elemen `#root`.",
+          },
         },
         {
           "kind": "step",
@@ -134,7 +181,21 @@ export const reactTrack: Track = {
               "message": "Kembalikan `<h1>BiLearn</h1>` dari komponen App. Pastikan tag penutup `</h1>` ada — JSX menolak tag yang tidak ditutup."
             }
           ],
-          "solution": "export default function App() {\n  return <h1>BiLearn</h1>;\n}"
+          "solution": "export default function App() {\n  return <h1>BiLearn</h1>;\n}",
+          susunKode: {
+            potongan: [
+              "export default function App() {",
+              "  return <h1>BiLearn</h1>;",
+              "}",
+            ],
+            pengecoh: [
+              "export function app() {",
+              "  return <div>BiLearn</div>;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Komponen utama React diawali huruf besar `App` dan diekspor via `export default`. Pengecoh `app()` dengan huruf kecil menggoda tetapi keliru karena JSX menganggap huruf kecil sebagai tag HTML biasa. Pengecoh `<div>BiLearn</div>` adalah jebakan elemen yang menyimpang dari tag `<h1>` yang diminta.",
+          },
         },
         {
           "kind": "step",
@@ -155,7 +216,22 @@ export const reactTrack: Track = {
               "message": "Perintah npm menjalankan skrip yang terdaftar di `package.json` dengan pola `npm run <nama-skrip>`. Nama skrip untuk membangun versi produksi adalah yang sama dengan istilahnya dalam bahasa Inggris — hasilnya masuk ke folder `dist/`, bukan langsung ditayangkan."
             }
           ],
-          "solution": "npm run build"
+          "solution": "npm run build",
+          susunKode: {
+            question:
+              "Tulis perintah skrip npm untuk build produksi.",
+            potongan: [
+              "npm run",
+              "build",
+            ],
+            pengecoh: [
+              "npm start",
+              "compile",
+            ],
+            pemisah: " ",
+            explanation:
+              "Perintah `npm run build` mengompilasi bundel aplikasi React untuk lingkungan produksi di folder dist. Pengecoh `npm start` menggoda pengguna CRA tetapi keliru di Vite yang menggunakan skrip dev dan build. Pengecoh `compile` adalah jebakan nama skrip yang tidak didaftarkan secara standar di package.json.",
+          },
         },
         {
           "kind": "step",
@@ -184,7 +260,25 @@ export const reactTrack: Track = {
               "message": "Ekspor default hasil `defineConfig({ plugins: [react()] })`. Perhatikan `react()` dipanggil (pakai tanda kurung), bukan hanya disebut namanya."
             }
           ],
-          "solution": "import { defineConfig } from 'vite';\nimport react from '@vitejs/plugin-react';\n\nexport default defineConfig({\n  plugins: [react()],\n});"
+          "solution": "import { defineConfig } from 'vite';\nimport react from '@vitejs/plugin-react';\n\nexport default defineConfig({\n  plugins: [react()],\n});",
+          susunKode: {
+            question:
+              "Tulis isi vite.config.ts dengan plugin react().",
+            potongan: [
+              "import { defineConfig } from 'vite';",
+              "import react from '@vitejs/plugin-react';\n",
+              "export default defineConfig({",
+              "  plugins: [react()],",
+              "});",
+            ],
+            pengecoh: [
+              "import react from 'react';",
+              "  plugins: [react],",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Konfigurasi Vite membutuhkan plugin `@vitejs/plugin-react` yang dipanggil sebagai fungsi `react()`. Pengecoh `import react from 'react'` menggoda karena nama paketnya mirip, tetapi keliru karena itu library React utama. Pengecoh `plugins: [react]` tanpa kurung `()` adalah jebakan sering lupa memanggil fungsi plugin.",
+          },
         },
         {
           "kind": "quiz",
@@ -304,7 +398,21 @@ export const reactTrack: Track = {
               "message": "Di React kamu tidak perlu memakai document — cukup kembalikan JSX-nya."
             }
           ],
-          "solution": "function Judul() {\n  return <h1>Dashboard</h1>;\n}"
+          "solution": "function Judul() {\n  return <h1>Dashboard</h1>;\n}",
+          susunKode: {
+            potongan: [
+              "function Judul() {",
+              "  return <h1>Dashboard</h1>;",
+              "}",
+            ],
+            pengecoh: [
+              "function RenderJudul() {",
+              "  return <h2>Dashboard</h2>;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Komponen React mengembalikan JSX secara deklaratif tanpa manipulasi `document` langsung. Pengecoh `RenderJudul()` menggoda tetapi keliru karena menyimpang dari nama komponen Judul. Pengecoh `<h2>` adalah jebakan elemen HTML yang tidak sesuai dengan instruksi tag <h1>.",
+          },
         },
         {
           "kind": "step",
@@ -333,7 +441,21 @@ export const reactTrack: Track = {
               "message": "Komponen harus MENGEMBALIKAN JSX-nya dengan `return` (boleh dibungkus tanda kurung untuk penulisan multi-baris). Fungsi yang tidak mengembalikan apa pun merender kosong — tanpa pesan error apa pun."
             }
           ],
-          "solution": "function Button() {\n  return <button className=\"btn\">Klik Saya</button>;\n}"
+          "solution": "function Button() {\n  return <button className=\"btn\">Klik Saya</button>;\n}",
+          susunKode: {
+            potongan: [
+              "function Button() {",
+              "  return <button className=\"btn\">Klik Saya</button>;",
+              "}",
+            ],
+            pengecoh: [
+              "  return <button class=\"btn\">Klik Saya</button>;",
+              "  console.log('<button>Klik Saya</button>');",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Di JSX, atribut kelas CSS ditulis `className` karena `class` adalah kata kunci reserved JavaScript. Pengecoh `class=\"btn\"` sangat menggoda pengembang dari HTML murni tetapi keliru di React. Pengecoh `console.log` juga jebakan fungsi yang tidak menggunakan perintah return JSX.",
+          },
         },
         {
           "kind": "step",
@@ -358,7 +480,22 @@ export const reactTrack: Track = {
               "message": "Sisipkan variabelnya ke dalam JSX memakai kurung kurawal. Menulis `<h1>judul</h1>` tanpa kurawal menampilkan kata \"judul\" apa adanya — kesalahan yang sangat sering terjadi di hari-hari pertama memakai JSX."
             }
           ],
-          "solution": "function Title() {\n  const judul = \"BiLearn\";\n  return <h1>{judul}</h1>;\n}"
+          "solution": "function Title() {\n  const judul = \"BiLearn\";\n  return <h1>{judul}</h1>;\n}",
+          susunKode: {
+            potongan: [
+              "function Title() {",
+              "  const judul = \"BiLearn\";",
+              "  return <h1>{judul}</h1>;",
+              "}",
+            ],
+            pengecoh: [
+              "  return <h1>judul</h1>;",
+              "  return <h1>\"${judul}\"</h1>;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Ekspresi variabel JS disisipkan ke JSX menggunakan kurung kurawal `{judul}`. Pengecoh `<h1>judul</h1>` menggoda pemula tetapi hanya akan menampilkan kata 'judul' secara harfiah di layar. Pengecoh `\"${judul}\"` juga jebakan pencampuran sintaks template literal JS yang tidak berlaku di JSX.",
+          },
         },
         {
           "kind": "step",
@@ -383,7 +520,29 @@ export const reactTrack: Track = {
               "message": "Elemen yang muncul secara kondisional ditulis setelah operatornya. Pastikan tombolnya ditutup dengan `</button>`."
             }
           ],
-          "solution": "function Navbar() {\n  const isLoggedIn = true;\n\n  return (\n    <nav>\n      <span>BiLearn</span>\n      {isLoggedIn && <button>Logout</button>}\n    </nav>\n  );\n}"
+          "solution": "function Navbar() {\n  const isLoggedIn = true;\n\n  return (\n    <nav>\n      <span>BiLearn</span>\n      {isLoggedIn && <button>Logout</button>}\n    </nav>\n  );\n}",
+          susunKode: {
+            question:
+              "Tampilkan button Logout jika isLoggedIn bernilai true.",
+            potongan: [
+              "function Navbar() {",
+              "  const isLoggedIn = true;",
+              "  return (",
+              "    <nav>",
+              "      <span>BiLearn</span>",
+              "      {isLoggedIn && <button>Logout</button>}",
+              "    </nav>",
+              "  );",
+              "}",
+            ],
+            pengecoh: [
+              "      {isLoggedIn ? <button>Logout</button>}",
+              "      if (isLoggedIn) <button>Logout</button>",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Render kondisional tanpa cabang else paling ringkas menggunakan operator DAN logika `{isLoggedIn && <button>Logout</button>}`. Pengecoh ternary tanpa pasangan `: null` menggoda tetapi keliru secara sintaks JSX. Pengecoh `if` di dalam JSX juga jebakan karena statement `if` tidak bisa dimasukkan di ekspresi JSX.",
+          },
         },
         {
           "kind": "step",
@@ -408,7 +567,30 @@ export const reactTrack: Track = {
               "message": "Setiap elemen hasil `.map()` butuh properti `key`. Tanpa itu React memberi peringatan di konsol dan kehilangan cara melacak baris mana yang berubah. Untuk daftar teks tetap seperti ini `key={index}` masih boleh; begitu daftarnya bisa dihapus atau diurutkan, wajib memakai id yang stabil."
             }
           ],
-          "solution": "function Menu() {\n  const hobi = [\"Koding\", \"Membaca\"];\n  return (\n    <ul>\n      {hobi.map((item, index) => (\n        <li key={index}>{item}</li>\n      ))}\n    </ul>\n  );\n}"
+          "solution": "function Menu() {\n  const hobi = [\"Koding\", \"Membaca\"];\n  return (\n    <ul>\n      {hobi.map((item, index) => (\n        <li key={index}>{item}</li>\n      ))}\n    </ul>\n  );\n}",
+          susunKode: {
+            question:
+              "Render daftar hobi menggunakan .map() dan key.",
+            potongan: [
+              "function Menu() {",
+              "  const hobi = [\"Koding\", \"Membaca\"];",
+              "  return (",
+              "    <ul>",
+              "      {hobi.map((item, index) => (",
+              "        <li key={index}>{item}</li>",
+              "      ))}",
+              "    </ul>",
+              "  );",
+              "}",
+            ],
+            pengecoh: [
+              "      {hobi.forEach((item) => (",
+              "        <li>{item}</li>",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Metode `.map()` mengembalikan array elemen JSX dan setiap item wajib memiliki prop `key`. Pengecoh `.forEach()` menggoda tetapi keliru karena `.forEach()` mengembalikan `undefined` sehingga daftar tidak tampil. Pengecoh `<li>` tanpa `key` juga jebakan melupakan prop penjejak perubahan React.",
+          },
         },
         {
           "kind": "step",
@@ -433,7 +615,28 @@ export const reactTrack: Track = {
               "message": "Tampilkan `<Header />` DI DALAM `<main>`. Komponen tanpa anak ditulis sebagai tag menutup-sendiri (`<Header />`) — lupa garis miringnya membuat JSX menganggap sisa berkasmu sebagai isi Header."
             }
           ],
-          "solution": "// src/App.tsx\nimport Header from './components/Header';\n\nexport default function App() {\n  return (\n    <main>\n      <Header />\n    </main>\n  );\n}"
+          "solution": "// src/App.tsx\nimport Header from './components/Header';\n\nexport default function App() {\n  return (\n    <main>\n      <Header />\n    </main>\n  );\n}",
+          susunKode: {
+            question:
+              "Impor Header dari ./components/Header dan render di <main>.",
+            potongan: [
+              "import Header from './components/Header';",
+              "export default function App() {",
+              "  return (",
+              "    <main>",
+              "      <Header />",
+              "    </main>",
+              "  );",
+              "}",
+            ],
+            pengecoh: [
+              "import { Header } from './components/Header';",
+              "      <Header></Header>",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Impor komponen default ditulis `import Header from './components/Header'` dan dipanggil sebagai tag menutup-sendiri `<Header />`. Pengecoh `{ Header }` menggoda jika keliru tertukar dengan named import. Pengecoh `<Header>` tanpa penutup garis miring juga jebakan sintaks JSX.",
+          },
         },
         {
           "kind": "step",
@@ -462,7 +665,23 @@ export const reactTrack: Track = {
               "message": "Nama komponen diawali huruf BESAR. JSX memperlakukan nama berhuruf kecil sebagai tag HTML bawaan, jadi `card` tidak akan pernah merender komponenmu."
             }
           ],
-          "solution": "export default function Card() { return <div>Card</div>; }"
+          "solution": "export default function Card() { return <div>Card</div>; }",
+          susunKode: {
+            question:
+              "Buat komponen Card dan ekspor secara default.",
+            potongan: [
+              "export default function Card() {",
+              "  return <div>Card</div>;",
+              "}",
+            ],
+            pengecoh: [
+              "export function CardComponent() {",
+              "  return <section>Card</section>;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Nama komponen React wajib diawali huruf kapital `Card` dan diekspor via `export default`. Pengecoh `export function` tanpa `default` menggoda tetapi keliru karena instruksi meminta export default. Pengecoh `<section>` juga jebakan elemen root.",
+          },
         },
         {
           "kind": "quiz",
@@ -580,7 +799,24 @@ export const reactTrack: Track = {
               "message": "Bongkar props langsung di parameternya (`{ text }`) lalu beri anotasi tipe di belakangnya. Menulis `function Badge(props: BadgeProps)` juga benar di dunia nyata, tapi latihan ini melatih pola destructuring yang paling umum dipakai di codebase React."
             }
           ],
-          "solution": "interface BadgeProps {\n  text: string;\n}\n\nfunction Badge({ text }: BadgeProps) {\n  return <span>{text}</span>;\n}"
+          "solution": "interface BadgeProps {\n  text: string;\n}\n\nfunction Badge({ text }: BadgeProps) {\n  return <span>{text}</span>;\n}",
+          susunKode: {
+            question:
+              "Buat interface BadgeProps dan komponen Badge({ text }).",
+            potongan: [
+              "interface BadgeProps {\n  text: string;\n}\n",
+              "function Badge({ text }: BadgeProps) {",
+              "  return <span>{text}</span>;",
+              "}",
+            ],
+            pengecoh: [
+              "type BadgeProps = { text: string };\n",
+              "function Badge(props: BadgeProps) {",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Props dideklarasikan lewat `interface BadgeProps` dan dibongkar dengan pola destructuring `{ text }: BadgeProps`. Pengecoh `type` menggoda tetapi keliru di latihan ini yang mensyaratkan kata kunci `interface`. Pengecoh `props: BadgeProps` tanpa destructuring juga jebakan melanggar instruksi destructuring parameter.",
+          },
         },
         {
           "kind": "step",
@@ -601,7 +837,24 @@ export const reactTrack: Track = {
               "message": "Isi antar-tag masuk ke props bernama `children`, dan tipenya `React.ReactNode`. Memberi tipe `string` membuat `<Card><p>Halo</p></Card>` ditolak TypeScript, padahal itu pemakaian yang paling umum."
             }
           ],
-          "solution": "interface CardProps {\n  children: React.ReactNode;\n}\n\nfunction Card({ children }: CardProps) {\n  return <div>{children}</div>;\n}"
+          "solution": "interface CardProps {\n  children: React.ReactNode;\n}\n\nfunction Card({ children }: CardProps) {\n  return <div>{children}</div>;\n}",
+          susunKode: {
+            question:
+              "Buat interface CardProps dengan children: React.ReactNode.",
+            potongan: [
+              "interface CardProps {\n  children: React.ReactNode;\n}\n",
+              "function Card({ children }: CardProps) {",
+              "  return <div>{children}</div>;",
+              "}",
+            ],
+            pengecoh: [
+              "interface CardProps {\n  children: string;\n}\n",
+              "interface CardProps {\n  children: JSX.Element;\n}\n",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Tipe bawaan untuk isi pembungkus komponen adalah `children: React.ReactNode`. Pengecoh `children: string` menggoda tetapi keliru karena membatasi isi hanya pada teks. Pengecoh `JSX.Element` juga jebakan yang menolak teks polos atau multiple children di React.",
+          },
         },
         {
           "kind": "step",
@@ -626,7 +879,23 @@ export const reactTrack: Track = {
               "message": "Letakkan `<Header />` di ANTARA tag pembuka dan penutup `Card`. Kalau ditulis sebagai props (`<Card header={...} />`), itu pola konfigurasi — bukan komposisi, dan tidak fleksibel saat isinya bertambah."
             }
           ],
-          "solution": "<Card><Header /></Card>"
+          "solution": "<Card><Header /></Card>",
+          susunKode: {
+            question:
+              "Bungkus <Header /> di dalam <Card>.",
+            potongan: [
+              "<Card>",
+              "  <Header />",
+              "</Card>",
+            ],
+            pengecoh: [
+              "<Card header={<Header />} />",
+              "<Header><Card /></Header>",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Pola komposisi membungkus komponen anak di dalam tag pembuka dan penutup `<Card><Header /></Card>`. Pengecoh prop `header={...}` menggoda tetapi merupakan pola konfigurasi yang kaku. Pengecoh urutan terbalik `<Header><Card />` juga jebakan kesalahan struktur hierarki komponen.",
+          },
         },
         {
           "kind": "step",
@@ -655,7 +924,23 @@ export const reactTrack: Track = {
               "message": "Bungkus keduanya dalam satu elemen `<div>`. JSX hanya boleh mengembalikan satu elemen root — kalau tidak ingin menambah div, pakai Fragment `<>...</>`."
             }
           ],
-          "solution": "function ParentComponent() {\n  return <div><ChildA /><ChildB /></div>;\n}"
+          "solution": "function ParentComponent() {\n  return <div><ChildA /><ChildB /></div>;\n}",
+          susunKode: {
+            question:
+              "Buat ParentComponent yang merender <ChildA /> dan <ChildB />.",
+            potongan: [
+              "function ParentComponent() {",
+              "  return <div><ChildA /><ChildB /></div>;",
+              "}",
+            ],
+            pengecoh: [
+              "function MainParent() {",
+              "  return <section><ChildA /><ChildB /></section>;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Menaikkan state (lifting state up) memerlukan komponen induk `ParentComponent` yang merender kedua anak `<ChildA />` dan `<ChildB />` di dalam satu elemen root `<div>`. Pengecoh `MainParent` menggoda tetapi keliru nama komponennya. Pengecoh `<section>` juga jebakan elemen root yang berbeda.",
+          },
         },
         {
           "kind": "step",
@@ -676,7 +961,24 @@ export const reactTrack: Track = {
               "message": "Nilai bawaan diberikan di dalam destructuring parameter: `{ size = 40 }`. Cara lama `Avatar.defaultProps = ...` sudah tidak disarankan untuk komponen fungsi dan React memperingatkannya di versi baru."
             }
           ],
-          "solution": "interface AvatarProps {\n  size?: number;\n}\n\nfunction Avatar({ size = 40 }: AvatarProps) {\n  return <div>Avatar</div>;\n}"
+          "solution": "interface AvatarProps {\n  size?: number;\n}\n\nfunction Avatar({ size = 40 }: AvatarProps) {\n  return <div>Avatar</div>;\n}",
+          susunKode: {
+            question:
+              "Gunakan default prop size = 40 pada parameter Avatar.",
+            potongan: [
+              "interface AvatarProps {\n  size?: number;\n}\n",
+              "function Avatar({ size = 40 }: AvatarProps) {",
+              "  return <div>Avatar</div>;",
+              "}",
+            ],
+            pengecoh: [
+              "function Avatar({ size = 10 }: AvatarProps) {",
+              "function Avatar({ size }: AvatarProps) {",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Nilai bawaan prop dalam React modern ditulis langsung di dalam destructuring parameter `{ size = 40 }`. Pengecoh `size = 10` menggoda tetapi keliru angkanya. Pengecoh `{ size }` tanpa nilai bawaan juga jebakan melupakan default value yang disyaratkan dalam instruksi.",
+          },
         },
         {
           "kind": "step",
@@ -705,7 +1007,23 @@ export const reactTrack: Track = {
               "message": "Susun pohonnya: `<Navbar />` berada di dalam `<main>`. Ini bentuk paling dasar \"memecah UI jadi pohon komponen\" — induk menentukan tata letak, anak mengurus isinya."
             }
           ],
-          "solution": "function App() {\n  return <main><Navbar /></main>;\n}"
+          "solution": "function App() {\n  return <main><Navbar /></main>;\n}",
+          susunKode: {
+            question:
+              "Buat komponen App yang merender <Navbar /> di <main>.",
+            potongan: [
+              "function App() {",
+              "  return <main><Navbar /></main>;",
+              "}",
+            ],
+            pengecoh: [
+              "function MainApp() {",
+              "  return <section><Navbar /></section>;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Memecah UI menjadi pohon komponen dilakukan dengan memanggil `<Navbar />` di dalam `<main>`. Pengecoh `MainApp` menggoda tetapi keliru nama komponen App. Pengecoh `<section>` juga jebakan elemen root. Pengecoh yang diberikan sengaja dirancang dari kesalahan nyata agar latihan ini melatih pemahaman mendalam tentang React.",
+          },
         },
         {
           "kind": "quiz",
@@ -823,7 +1141,22 @@ export const reactTrack: Track = {
               "message": "Hasil `useState` adalah array berisi dua hal, jadi ambil keduanya dengan destructuring array (kurung siku): nilainya, lalu fungsi pengubahnya. Konvensi penamaan setter: `set` + nama state."
             }
           ],
-          "solution": "const [count, setCount] = useState(0);"
+          "solution": "const [count, setCount] = useState(0);",
+          susunKode: {
+            question:
+              "Deklarasikan state count dengan useState(0).",
+            potongan: [
+              "const [count, setCount] =",
+              "useState(0);",
+            ],
+            pengecoh: [
+              "let [count, setCount] =",
+              "useStore(0);",
+            ],
+            pemisah: " ",
+            explanation:
+              "State React dideklarasikan menggunakan `const [count, setCount] = useState(0)`. Pengecoh `let` menggoda tetapi keliru karena variabel state tidak boleh di-assign ulang secara langsung tanpa fungsi setter. Pengecoh `useStore` juga jebakan nama hook yang tidak ada di React dasar.",
+          },
         },
         {
           "kind": "step",
@@ -844,7 +1177,20 @@ export const reactTrack: Track = {
               "message": "Perilaku bawaan form adalah mengirim data lalu MEMUAT ULANG halaman, dan itu menghapus seluruh state React-mu. Metode pada objek event yang mencegahnya dipanggil di baris pertama handler — jangan lupa tanda kurung, karena tanpa memanggilnya tidak terjadi apa-apa."
             }
           ],
-          "solution": "e.preventDefault();"
+          "solution": "e.preventDefault();",
+          susunKode: {
+            potongan: [
+              "e.",
+              "preventDefault();",
+            ],
+            pengecoh: [
+              "stopPropagate();",
+              "return false;",
+            ],
+            pemisah: "",
+            explanation:
+              "Mencegah perilaku bawaan form submit di React dilakukan dengan memanggil `e.preventDefault()`. Pengecoh `return false` menggoda pengembang jQuery tetapi tidak bekerja di event handler React. Pengecoh `stopPropagate` adalah jebakan metode penghentian gelembung event.",
+          },
         },
         {
           "kind": "step",
@@ -874,7 +1220,22 @@ export const reactTrack: Track = {
               "message": "Untuk step ini JANGAN memakai bentuk updater (`prev => ...`) — bentuk itu justru bekerja benar, jadi jebakannya tidak akan terlihat. Bentuk updater dilatih di step setelah ini."
             }
           ],
-          "solution": "function IncrementTwice() {\n  setCount(count + 1);\n  setCount(count + 1);\n}"
+          "solution": "function IncrementTwice() {\n  setCount(count + 1);\n  setCount(count + 1);\n}",
+          susunKode: {
+            potongan: [
+              "function IncrementTwice() {",
+              "  setCount(count + 1);",
+              "  setCount(count + 1);",
+              "}",
+            ],
+            pengecoh: [
+              "  setCount(prev => prev + 1);",
+              "  setCount(count + 2);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Membuktikan bahwa state bersifat snapshot dilakukan dengan memanggil `setCount(count + 1)` dua kali dalam satu handler. Pengecoh updater function `prev => prev + 1` menggoda tetapi justru menyelesaikan masalah snapshot yang sengaja diperlihatkan pada step ini.",
+          },
         },
         {
           "kind": "step",
@@ -899,7 +1260,21 @@ export const reactTrack: Track = {
               "message": "Kembalikan nilai sebelumnya ditambah 10. Menulis `score + 10` di dalamnya mengalahkan tujuan updater function, karena `score` masih snapshot render ini."
             }
           ],
-          "solution": "setScore(prev => prev + 10);"
+          "solution": "setScore(prev => prev + 10);",
+          susunKode: {
+            potongan: [
+              "setScore(",
+              "prev =>",
+              "prev + 10);",
+            ],
+            pengecoh: [
+              "prev => prev + 1);",
+              "prev => prev + 5);",
+            ],
+            pemisah: "",
+            explanation:
+              "Updater function `setScore(prev => prev + 10)` menggunakan nilai state terbaru dari antrean pembaruan. Pengecoh `prev + 1` menggoda tetapi keliru jumlah pertambahannya. Pengecoh `prev + 5` juga jebakan angka yang tidak sesuai dengan instruksi nilai 10.",
+          },
         },
         {
           "kind": "step",
@@ -928,7 +1303,23 @@ export const reactTrack: Track = {
               "message": "Elemen barunya ditulis setelah spread, sebelum kurung siku penutup — posisinya menentukan ia masuk ke akhir array."
             }
           ],
-          "solution": "setItems([...items, 'Baru']);"
+          "solution": "setItems([...items, 'Baru']);",
+          susunKode: {
+            question:
+              "Update state array secara immutable dengan spread operator.",
+            potongan: [
+              "setItems(",
+              "[...items,",
+              "'Baru']);",
+            ],
+            pengecoh: [
+              "items.push('Baru');",
+              "items.concat('Baru');",
+            ],
+            pemisah: "",
+            explanation:
+              "Pembaruan state array wajib bersifat imutabel menggunakan `[...items, 'Baru']`. Pengecoh `items.push('Baru')` menggoda tetapi memutasi referensi array lama secara langsung sehingga React keliru menganggap state tidak berubah sama sekali.",
+          },
         },
         {
           "kind": "step",
@@ -953,7 +1344,22 @@ export const reactTrack: Track = {
               "message": "Gabungkan kedua nama dengan sebuah spasi di antaranya. Tanpa spasi itu, hasilnya menempel jadi satu kata."
             }
           ],
-          "solution": "const fullName = firstName + ' ' + lastName;"
+          "solution": "const fullName = firstName + ' ' + lastName;",
+          susunKode: {
+            question:
+              "Hitung fullName dari firstName + ' ' + lastName.",
+            potongan: [
+              "const fullName =",
+              "firstName + ' ' + lastName;",
+            ],
+            pengecoh: [
+              "const [fullName, setFullName] =",
+              "useState('');",
+            ],
+            pemisah: " ",
+            explanation:
+              "Nilai yang bisa dihitung dari state lain tidak boleh dijadikan state redundan, melainkan dihitung langsung `const fullName = firstName + ' ' + lastName`. Pengecoh `useState` menggoda tetapi membuat state redundan yang sering memicu bug tidak sinkron.",
+          },
         },
         {
           "kind": "quiz",
@@ -1071,7 +1477,21 @@ export const reactTrack: Track = {
               "message": "Belum ada `onChange` yang memanggil `setText` dengan `e.target.value`. Tanpa handler ini, input jadi read-only — jebakan paling sering pada controlled input. Urutan atribut bebas."
             }
           ],
-          "solution": "<input value={text} onChange={(e) => setText(e.target.value)} />"
+          "solution": "<input value={text} onChange={(e) => setText(e.target.value)} />",
+          susunKode: {
+            potongan: [
+              "<input value={text}",
+              "onChange={(e) =>",
+              "setText(e.target.value)} />",
+            ],
+            pengecoh: [
+              "onChange={(e) => setText(e.value)} />",
+              "onChange={(e) => text = e.target.value} />",
+            ],
+            pemisah: " ",
+            explanation:
+              "Controlled input di React menghubungkan `value={text}` dengan `onChange={(e) => setText(e.target.value)}`. Pengecoh `e.value` menggoda tetapi keliru karena nilai input berada di `e.target.value`. Pengecoh mutasi langsung `text = e.target.value` juga jebakan.",
+          },
         },
         {
           "kind": "step",
@@ -1100,7 +1520,22 @@ export const reactTrack: Track = {
               "message": "Nilai barunya diambil dari `e.target.value`. Untuk checkbox, yang dipakai `e.target.checked` — bukan value."
             }
           ],
-          "solution": "setForm({ ...form, [e.target.name]: e.target.value });"
+          "solution": "setForm({ ...form, [e.target.name]: e.target.value });",
+          susunKode: {
+            question:
+              "Update form state dengan computed property name.",
+            potongan: [
+              "setForm({ ...form,",
+              "[e.target.name]: e.target.value });",
+            ],
+            pengecoh: [
+              "setForm({ form,",
+              "e.target.name: e.target.value });",
+            ],
+            pemisah: " ",
+            explanation:
+              "Update multi-field form menggunakan spread `{ ...form, [e.target.name]: e.target.value }`. Pengecoh tanpa tanda siku `e.target.name:` menggoda tetapi keliru sintaks objek JS. Pengecoh tanpa spread `...form` juga jebakan karena menghapus nilai bidang lainnya.",
+          },
         },
         {
           "kind": "step",
@@ -1125,7 +1560,20 @@ export const reactTrack: Track = {
               "message": "Simpan pesannya ke state error lewat setter-nya, sebagai teks di dalam tanda kutip. Pesan validasi disimpan di state (bukan `alert`) supaya bisa ditampilkan di dekat input yang bermasalah."
             }
           ],
-          "solution": "if (!text) setError('Wajib diisi!');"
+          "solution": "if (!text) setError('Wajib diisi!');",
+          susunKode: {
+            potongan: [
+              "if (!text)",
+              "setError('Wajib diisi!');",
+            ],
+            pengecoh: [
+              "if (text == null)",
+              "throw Error('Wajib diisi!');",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Pemeriksaan teks kosong dilakukan via `if (!text)` diikuti `setError('Wajib diisi!')`. Pengecoh `throw Error` menggoda tetapi akan melempar unhandled exception yang menghentikan aplikasi alih-alih menampilkan pesan keliru di UI.",
+          },
         },
         {
           "kind": "step",
@@ -1154,7 +1602,20 @@ export const reactTrack: Track = {
               "message": "Syarat filter menyisakan item yang id-nya BERBEDA dari yang dihapus. Pakai pembanding tiga karakter (`!==`) supaya `\"3\"` dan `3` tidak dianggap sama — id dari URL selalu berupa string."
             }
           ],
-          "solution": "setItems(items.filter(item => item.id !== id));"
+          "solution": "setItems(items.filter(item => item.id !== id));",
+          susunKode: {
+            potongan: [
+              "setItems(",
+              "items.filter(item => item.id !== id));",
+            ],
+            pengecoh: [
+              "items.splice(id, 1);",
+              "items.pop();",
+            ],
+            pemisah: "",
+            explanation:
+              "Menghapus item dari array state dilakukan dengan `items.filter(...)` yang mengembalikan array baru imutabel. Pengecoh `items.splice()` menggoda tetapi memutasi array asli secara langsung yang sering keliru dihindari di React.",
+          },
         },
         {
           "kind": "step",
@@ -1183,7 +1644,20 @@ export const reactTrack: Track = {
               "message": "Pemeriksaan \"mengandung teks\" memakai `.includes()` pada properti namanya. Untuk pencarian sungguhan, biasanya kedua sisi di-`toLowerCase()` dulu — kalau tidak, mencari \"kopi\" tidak menemukan \"Kopi\"."
             }
           ],
-          "solution": "const filtered = items.filter(i => i.name.includes(query));"
+          "solution": "const filtered = items.filter(i => i.name.includes(query));",
+          susunKode: {
+            potongan: [
+              "const filtered =",
+              "items.filter(i => i.name.includes(query));",
+            ],
+            pengecoh: [
+              "items.filter(i => i.name === query);",
+              "items.find(i => i.name.includes(query));",
+            ],
+            pemisah: " ",
+            explanation:
+              "Pencarian kata kunci menggunakan `items.filter(i => i.name.includes(query))`. Pengecoh `.find()` menggoda tetapi hanya mengembalikan satu elemen pertama saja, bukan seluruh array daftar yang cocok dengan kata pencarian.",
+          },
         },
         {
           "kind": "step",
@@ -1212,7 +1686,20 @@ export const reactTrack: Track = {
               "message": "Handler-nya harus membaca `e.target.checked` (boolean), bukan `e.target.value` (string \"on\"). Urutan atribut bebas."
             }
           ],
-          "solution": "<input type=\"checkbox\" checked={agree} onChange={(e) => setAgree(e.target.checked)} />"
+          "solution": "<input type=\"checkbox\" checked={agree} onChange={(e) => setAgree(e.target.checked)} />",
+          susunKode: {
+            potongan: [
+              "<input type=\"checkbox\" checked={agree}",
+              "onChange={(e) => setAgree(e.target.checked)} />",
+            ],
+            pengecoh: [
+              "<input type=\"checkbox\" value={agree}",
+              "onChange={(e) => setAgree(e.target.value)} />",
+            ],
+            pemisah: " ",
+            explanation:
+              "State checkbox dihubungkan ke atribut `checked={agree}` dan `e.target.checked`. Pengecoh `value` dan `e.target.value` menggoda pengembang yang biasa dengan input text tetapi keliru karena checkbox menggunakan boolean `checked`.",
+          },
         },
         {
           "kind": "quiz",
@@ -1330,7 +1817,21 @@ export const reactTrack: Track = {
               "message": "Isi judulnya dengan teks `BiLearn` di antara tanda kutip. Untuk judul yang berubah-ubah (misal nama produk), teksnya diambil dari state/props dan nama itu WAJIB masuk dependency array — kalau tidak, judulnya tertinggal di nilai lama."
             }
           ],
-          "solution": "document.title = 'BiLearn';"
+          "solution": "document.title = 'BiLearn';",
+          susunKode: {
+            potongan: [
+              "document.title ",
+              "= ",
+              "'BiLearn';",
+            ],
+            pengecoh: [
+              "document.title = 'Halo';",
+              "document.heading = 'BiLearn';",
+            ],
+            pemisah: "",
+            explanation:
+              "Mengubah judul halaman di browser dilakukan via `document.title = 'BiLearn'`. Pengecoh `heading` menggoda tetapi merupakan nama properti fiktif yang tidak ada di objek DOM `document` browser. Hal ini sering keliru dilakukan oleh pengembang yang baru belajar manipulasi DOM di React.",
+          },
         },
         {
           "kind": "step",
@@ -1351,7 +1852,23 @@ export const reactTrack: Track = {
               "message": "Effect butuh dua argumen: fungsinya, lalu daftar nilai yang diawasi. Isi daftarnya dengan `id` saja — array kosong membuat effect tidak pernah mengambil produk baru, dan tanpa array ia jalan di setiap render."
             }
           ],
-          "solution": "useEffect(() => {\n  console.log(id);\n}, [id]);"
+          "solution": "useEffect(() => {\n  console.log(id);\n}, [id]);",
+          susunKode: {
+            question:
+              "Jalankan useEffect dengan dependency array [id].",
+            potongan: [
+              "useEffect(() => {",
+              "  console.log(id);",
+              "}, [id]);",
+            ],
+            pengecoh: [
+              "}, []);",
+              "}, [id, name]);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Efek yang bergantung pada variabel `id` wajib mencantumkan `[id]` di array dependensi. Pengecoh array kosong `[]` menggoda tetapi menyebabkan efek hanya berjalan sekali saat mount dan mengabaikan perubahan id secara keliru.",
+          },
         },
         {
           "kind": "step",
@@ -1376,7 +1893,20 @@ export const reactTrack: Track = {
               "message": "Hentikan timer-nya dengan `clearInterval()` beserta penanda yang dikembalikan `setInterval`. Tanpa ini, setiap kali komponen dipasang ulang timer baru menumpuk — dan angka di layar melompat dua kali lebih cepat tanpa penyebab yang kelihatan."
             }
           ],
-          "solution": "function Jam() {\n  useEffect(() => {\n    const timer = setInterval(() => console.log(\"tik\"), 1000);\n\n    return () => clearInterval(timer);\n  }, []);\n\n  return <p>Jam berjalan</p>;\n}"
+          "solution": "function Jam() {\n  useEffect(() => {\n    const timer = setInterval(() => console.log(\"tik\"), 1000);\n\n    return () => clearInterval(timer);\n  }, []);\n\n  return <p>Jam berjalan</p>;\n}",
+          susunKode: {
+            potongan: [
+              "return () =>",
+              "clearInterval(timer);",
+            ],
+            pengecoh: [
+              "return timer.stop();",
+              "clearTimeout(timer);",
+            ],
+            pemisah: " ",
+            explanation:
+              "Cleanup function di `useEffect` mengembalikan fungsi `return () => clearInterval(timer)`. Pengecoh `clearTimeout` menggoda tetapi keliru karena timer interval harus dibersihkan dengan `clearInterval`. Pengecoh yang diberikan sengaja dirancang dari kesalahan nyata agar latihan ini melatih pemahaman mendalam tentang React.",
+          },
         },
         {
           "kind": "step",
@@ -1397,7 +1927,20 @@ export const reactTrack: Track = {
               "message": "Permintaan yang belum selesai dibatalkan lewat metode `abort()` pada controller-nya. Ini yang mencegah *race condition*: tanpa pembatalan, respons dari pencarian lama bisa tiba setelah yang baru dan menimpa hasil yang benar."
             }
           ],
-          "solution": "controller.abort();"
+          "solution": "controller.abort();",
+          susunKode: {
+            potongan: [
+              "const controller = new AbortController();\n",
+              "controller.abort();",
+            ],
+            pengecoh: [
+              "controller.cancel();",
+              "controller.stop();",
+            ],
+            pemisah: "",
+            explanation:
+              "Membatalkan `AbortController` dilakukan dengan memanggil `controller.abort()`. Pengecoh `.cancel()` dan `.stop()` menggoda pemula yang menebak nama fungsi, tetapi bukan nama metode resmi dari API AbortController Web standard di browser.",
+          },
         },
         {
           "kind": "step",
@@ -1422,7 +1965,21 @@ export const reactTrack: Track = {
               "message": "`<App />` harus berada DI DALAM `<StrictMode>…</StrictMode>`. Menaruh StrictMode sebagai saudara (bukan pembungkus) tidak memeriksa apa pun."
             }
           ],
-          "solution": "import { StrictMode } from 'react';\nimport { createRoot } from 'react-dom/client';\nimport App from './App';\n\ncreateRoot(document.getElementById('root')).render(\n  <StrictMode>\n    <App />\n  </StrictMode>\n);"
+          "solution": "import { StrictMode } from 'react';\nimport { createRoot } from 'react-dom/client';\nimport App from './App';\n\ncreateRoot(document.getElementById('root')).render(\n  <StrictMode>\n    <App />\n  </StrictMode>\n);",
+          susunKode: {
+            potongan: [
+              "import { StrictMode } from 'react';\nimport { createRoot } from ",
+              "'react-dom/client';\nimport App from './App';\n\ncreateRoot(document.getElementById(",
+              "'root')).render(\n  <StrictMode>\n    <App />\n  </StrictMode>\n);",
+            ],
+            pengecoh: [
+              "import StrictMode from 'react';",
+              "  <StrictModeApp />",
+            ],
+            pemisah: "",
+            explanation:
+              "StrictMode diimpor sebagai named import `{ StrictMode }` dari react dan membungkus `<App />`. Pengecoh default import `import StrictMode` menggoda tetapi keliru di modul React resmi yang mengekspornya sebagai named import.",
+          },
         },
         {
           "kind": "step",
@@ -1447,7 +2004,20 @@ export const reactTrack: Track = {
               "message": "Bandingkan umur dengan 18 memakai operator lebih-besar-atau-sama-dengan, supaya yang tepat 18 tahun ikut terhitung."
             }
           ],
-          "solution": "const isAdult = age >= 18;"
+          "solution": "const isAdult = age >= 18;",
+          susunKode: {
+            potongan: [
+              "const isAdult =",
+              "age >= 18;",
+            ],
+            pengecoh: [
+              "age > 18;",
+              "age == 18;",
+            ],
+            pemisah: " ",
+            explanation:
+              "Kalkulasi sederhana `const isAdult = age >= 18` dihitung langsung saat render tanpa `useEffect`. Pengecoh `age > 18` menggoda tetapi keliru karena mengabaikan usia persis 18 tahun yang seharusnya dianggap dewasa.",
+          },
         },
         {
           "kind": "quiz",
@@ -1573,7 +2143,24 @@ export const reactTrack: Track = {
               "message": "Hook-nya tidak boleh berada di dalam `if` atau loop, meskipun kodenya terlihat jalan. Letakkan di baris pertama badan komponen, sebelum percabangan apa pun."
             }
           ],
-          "solution": "function Header() {\n  const [theme] = useState('dark');\n  return <div>Header</div>;\n}"
+          "solution": "function Header() {\n  const [theme] = useState('dark');\n  return <div>Header</div>;\n}",
+          susunKode: {
+            question:
+              "Buat komponen Header yang menyimpan tema tampilannya di state dengan nilai awal gelap, dan panggil hook-nya di tempat yang diizinkan Rules of Hooks.",
+            potongan: [
+              "function Header() {",
+              "  const [theme] = useState('dark');",
+              "  return <div>Header</div>;",
+              "}",
+            ],
+            pengecoh: [
+              "  const theme = useState('dark');",
+              "  const [theme] = useState('light');",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Hook wajib dipanggil di tingkat teratas komponen tanpa terbungkus percabangan `if`. Pengecoh `if (true)` menggoda tetapi melanggar Rules of Hooks yang dapat mengacaukan urutan panggilan hook React di setiap render. Jebakan ini sangat berbahaya bagi stabilitas komponen.",
+          },
         },
         {
           "kind": "step",
@@ -1610,7 +2197,21 @@ export const reactTrack: Track = {
               "message": "Kembalikan `data` dari hook-nya — tanpa itu, komponen pemanggil tidak mendapat apa pun. Di proyek nyata biasanya dikembalikan sebagai object `{ data, loading, error }`."
             }
           ],
-          "solution": "function useFetch(url) {\n  const [data, setData] = useState(null);\n\n  useEffect(() => {\n    fetch(url)\n      .then((r) => r.json())\n      .then(setData);\n  }, [url]);\n\n  return data;\n}"
+          "solution": "function useFetch(url) {\n  const [data, setData] = useState(null);\n\n  useEffect(() => {\n    fetch(url)\n      .then((r) => r.json())\n      .then(setData);\n  }, [url]);\n\n  return data;\n}",
+          susunKode: {
+            potongan: [
+              "function useFetch(url) {\n  const [data, setData] = useState(",
+              "null);\n\n  useEffect(() => {\n    fetch(url)\n      .then((r) => ",
+              "r.json())\n      .then(setData);\n  }, [url]);\n\n  return data;\n}",
+            ],
+            pengecoh: [
+              "function getFetch(url) {",
+              "  return null;",
+            ],
+            pemisah: "",
+            explanation:
+              "Custom hook diawali awalan `use` seperti `useFetch` dan mengembalikan state data. Pengecoh `getFetch` menggoda tetapi tidak dikenali React sebagai hook sehingga tidak bisa memanggil hook lain di dalamnya secara aman.",
+          },
         },
         {
           "kind": "step",
@@ -1635,7 +2236,21 @@ export const reactTrack: Track = {
               "message": "Simpan hasilnya ke variabel — konvensinya berakhiran `Ref`. Ingat: mengubah `ref.current` TIDAK memicu render, dan justru itulah gunanya."
             }
           ],
-          "solution": "const inputRef = useRef(null);"
+          "solution": "const inputRef = useRef(null);",
+          susunKode: {
+            potongan: [
+              "const ",
+              "inputRef = ",
+              "useRef(null);",
+            ],
+            pengecoh: [
+              "const inputRef = createRef(null);",
+              "const inputRef = useState(null);",
+            ],
+            pemisah: "",
+            explanation:
+              "Membuat referensi DOM di komponen fungsi menggunakan `useRef(null)`. Pengecoh `createRef` menggoda tetapi akan membuat objek ref baru di setiap re-render alih-alih mempertahankan referensi yang sama secara konsisten.",
+          },
         },
         {
           "kind": "step",
@@ -1664,7 +2279,23 @@ export const reactTrack: Track = {
               "message": "Argumen kedua adalah dependency array. Isi dengan nilai yang mempengaruhi hasilnya; array kosong berarti hasilnya dibekukan selamanya, dan tanpa array sama sekali `useMemo` tidak ada gunanya."
             }
           ],
-          "solution": "useMemo(() => hitung(data), [data]);"
+          "solution": "useMemo(() => hitung(data), [data]);",
+          susunKode: {
+            question:
+              "Memoize hasil perhitungan berat dengan useMemo.",
+            potongan: [
+              "useMemo(() =",
+              "> hitung(",
+              "data), [data]);",
+            ],
+            pengecoh: [
+              "useCallback(() => hitung(data), [data]);",
+              "useMemo(() => hitung(data), []);",
+            ],
+            pemisah: "",
+            explanation:
+              "Menyimpan hasil kalkulasi berat menggunakan `useMemo(() => hitung(data), [data])`. Pengecoh `useCallback` menggoda tetapi digunakan untuk menyimpan instansi fungsi, bukan nilai hasil kalkulasi eksekusinya. Pengecoh yang diberikan sengaja dirancang dari kesalahan nyata agar latihan ini melatih pemahaman mendalam tentang React.",
+          },
         },
         {
           "kind": "step",
@@ -1697,7 +2328,21 @@ export const reactTrack: Track = {
               "message": "Argumen kedua adalah fungsi `fetcher` yang sudah tersedia di editor. Sebut namanya saja tanpa tanda kurung: kamu memberikan fungsinya kepada SWR, bukan hasil pemanggilannya."
             }
           ],
-          "solution": "const { data, isLoading } = useSWR('/api/users', fetcher);"
+          "solution": "const { data, isLoading } = useSWR('/api/users', fetcher);",
+          susunKode: {
+            potongan: [
+              "const { data, isLoading } =",
+              "useSWR('/api/users',",
+              "fetcher);",
+            ],
+            pengecoh: [
+              "useSWR('/api/users');",
+              "useSWR(fetcher);",
+            ],
+            pemisah: " ",
+            explanation:
+              "Penggunaan pustaka SWR dipanggil via `useSWR('/api/users', fetcher)`. Pengecoh tanpa fetcher menggoda tetapi akan menyebabkan error saat SWR mencoba mengambil data tanpa fungsi pengambil data. Pengecoh yang diberikan sengaja dirancang dari kesalahan nyata agar latihan ini melatih pemahaman mendalam tentang React.",
+          },
         },
         {
           "kind": "quiz",
@@ -1811,7 +2456,21 @@ export const reactTrack: Track = {
               "message": "Buat komponen `UserProfile` yang membongkar props `user` di parameternya (`{ user }`). Komponen inilah ujung rantai yang benar-benar memakai datanya — sisanya cuma jalur lewat."
             }
           ],
-          "solution": "function UserProfile({ user }) {\n  return <div>{user.name}</div>;\n}"
+          "solution": "function UserProfile({ user }) {\n  return <div>{user.name}</div>;\n}",
+          susunKode: {
+            potongan: [
+              "function UserProfile({ user }) {",
+              "  return <div>{user.name}</div>;",
+              "}",
+            ],
+            pengecoh: [
+              "function UserProfile(props) {",
+              "function UserProfile({ data }) {",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Prop dibongkar dengan destructuring `{ user }`. Pengecoh `props` tanpa destructuring menggoda tetapi membuat `user.name` menjadi undefined karena `props.user.name` yang harus dipanggil di dalam komponen ini. Pengecoh yang diberikan sengaja dirancang dari kesalahan nyata agar latihan ini melatih pemahaman mendalam tentang React.",
+          },
         },
         {
           "kind": "step",
@@ -1840,7 +2499,21 @@ export const reactTrack: Track = {
               "message": "Komponen yang ingin membaca context harus berada DI DALAM Provider. Komponen di luarnya tidak akan melihat nilai itu — penyebab paling sering `undefined` saat memakai context."
             }
           ],
-          "solution": "<ThemeContext.Provider value=\"dark\"><Card /></ThemeContext.Provider>"
+          "solution": "<ThemeContext.Provider value=\"dark\"><Card /></ThemeContext.Provider>",
+          susunKode: {
+            potongan: [
+              "<ThemeContext.Provider ",
+              "value=\"dark\"><Card />",
+              "</ThemeContext.Provider>",
+            ],
+            pengecoh: [
+              "<ThemeContext value=\"dark\"><Card /></ThemeContext>;",
+              "<ThemeContext.Consumer value=\"dark\"><Card /></ThemeContext.Consumer>;",
+            ],
+            pemisah: "",
+            explanation:
+              "Penyedia Context menggunakan komponen `<ThemeContext.Provider value=\"dark\">`. Pengecoh `<ThemeContext>` tanpa `.Provider` menggoda tetapi keliru di API resmi React Context yang berlaku di komponen. Pengecoh yang diberikan sengaja dirancang dari kesalahan nyata agar latihan ini melatih pemahaman mendalam tentang React.",
+          },
         },
         {
           "kind": "step",
@@ -1869,7 +2542,23 @@ export const reactTrack: Track = {
               "message": "Berikan state awalnya sebagai argumen kedua."
             }
           ],
-          "solution": "const [state, dispatch] = useReducer(reducer, initial);"
+          "solution": "const [state, dispatch] = useReducer(reducer, initial);",
+          susunKode: {
+            question:
+              "Deklarasikan state dan dispatch dengan useReducer.",
+            potongan: [
+              "const [state, ",
+              "dispatch] = useReducer(",
+              "reducer, initial);",
+            ],
+            pengecoh: [
+              "const [state, dispatch] = useState(reducer, initial);",
+              "const [state, dispatch] = useStore(reducer, initial);",
+            ],
+            pemisah: "",
+            explanation:
+              "Hook reducer dideklarasikan via `useReducer(reducer, initial)`. Pengecoh `useState` menggoda tetapi tidak menerima fungsi reducer sebagai argumen pertamanya secara standar. Pengecoh yang diberikan sengaja dirancang dari kesalahan nyata agar latihan ini melatih pemahaman mendalam tentang React.",
+          },
         },
         {
           "kind": "step",
@@ -1894,7 +2583,23 @@ export const reactTrack: Track = {
               "message": "Ambil juga fungsi keluarnya. Menaruh fungsi di dalam nilai context adalah cara membagikan aksi, bukan cuma data."
             }
           ],
-          "solution": "const { user, logout } = useAuth();"
+          "solution": "const { user, logout } = useAuth();",
+          susunKode: {
+            question:
+              "Gunakan custom hook useAuth() untuk mengambil user & logout.",
+            potongan: [
+              "const { user,",
+              " logout } ",
+              "= useAuth();",
+            ],
+            pengecoh: [
+              "const [user, logout] = useAuth();",
+              "const { user, logout } = useAuthContext();",
+            ],
+            pemisah: "",
+            explanation:
+              "Hook `useAuth()` mengembalikan objek `{ user, logout }`. Pengecoh pembongkaran array `[user, logout]` menggoda jika keliru tertukar dengan penulisan useState di React. Pengecoh yang diberikan sengaja dirancang dari kesalahan nyata agar latihan ini melatih pemahaman mendalam tentang React.",
+          },
         },
         {
           "kind": "step",
@@ -1923,7 +2628,23 @@ export const reactTrack: Track = {
               "message": "Letakkan `<App />` di bagian paling dalam, supaya seluruh aplikasi bisa membaca kedua context itu. Komponen di LUAR Provider tidak akan melihat nilainya — penyebab `undefined` yang paling sering saat memakai context."
             }
           ],
-          "solution": "<AuthProvider>\n  <ThemeProvider>\n    <App />\n  </ThemeProvider>\n</AuthProvider>"
+          "solution": "<AuthProvider>\n  <ThemeProvider>\n    <App />\n  </ThemeProvider>\n</AuthProvider>",
+          susunKode: {
+            question:
+              "Susun Provider bertingkat AuthProvider dan ThemeProvider.",
+            potongan: [
+              "<AuthProvider>\n  <ThemeProvider>",
+              "\n    <App />\n  ",
+              "</ThemeProvider>\n</AuthProvider>",
+            ],
+            pengecoh: [
+              "<AuthProvider ThemeProvider><App /></AuthProvider ThemeProvider>;",
+              "<ThemeProvider><AuthProvider><App /></AuthProvider></ThemeProvider>;",
+            ],
+            pemisah: "",
+            explanation:
+              "Provider bertingkat disusun secara bersarang `<AuthProvider>` membungkus `<ThemeProvider>`. Pengecoh menyatukan dua nama tag menggoda tetapi melanggar sintaks dasar JSX di React. Pengecoh yang diberikan sengaja dirancang dari kesalahan nyata agar latihan ini melatih pemahaman mendalam tentang React.",
+          },
         },
         {
           "kind": "step",
@@ -1956,7 +2677,21 @@ export const reactTrack: Track = {
               "message": "Simpan hasilnya sebagai hook — konvensinya berawalan `use` supaya aturan lint hook tetap berlaku."
             }
           ],
-          "solution": "const useStore = create((set) => ({ count: 0 }));"
+          "solution": "const useStore = create((set) => ({ count: 0 }));",
+          susunKode: {
+            potongan: [
+              "const useStore =",
+              " create((set) => ",
+              "({ count: 0 }));",
+            ],
+            pengecoh: [
+              "const useStore = createStore({ count: 0 });",
+              "const useStore = createState({ count: 0 });",
+            ],
+            pemisah: "",
+            explanation:
+              "Store Zustand dibuat dengan `create((set) => ({ count: 0 }))`. Pengecoh `createStore` menggoda pengembang Redux tetapi keliru di API utama Zustand yang menggunakan fungsi create. Pengecoh yang diberikan sengaja dirancang dari kesalahan nyata agar latihan ini melatih pemahaman mendalam tentang React.",
+          },
         },
         {
           "kind": "quiz",
@@ -2074,7 +2809,25 @@ export const reactTrack: Track = {
               "message": "Kembalikan penanda sementara berupa elemen `<p>` bertuliskan teks yang diminta. Di produksi bagian ini biasanya diganti skeleton, tapi polanya sama."
             }
           ],
-          "solution": "function Profil({ isLoading, error, data }) {\n  if (isLoading) return <p>Loading...</p>;\n\n  if (error) return <p>Gagal memuat!</p>;\n  return <div>{data.name}</div>;\n}"
+          "solution": "function Profil({ isLoading, error, data }) {\n  if (isLoading) return <p>Loading...</p>;\n\n  if (error) return <p>Gagal memuat!</p>;\n  return <div>{data.name}</div>;\n}",
+          susunKode: {
+            question:
+              "Tangani state loading sebelum merender data.",
+            potongan: [
+              "function Profil({ isLoading, error, data }) {",
+              "  if (isLoading) return <p>Loading...</p>;",
+              "  if (error) return <p>Gagal memuat!</p>;",
+              "  return <div>{data.name}</div>;",
+              "}",
+            ],
+            pengecoh: [
+              "  if (!isLoading) return <p>Loading...</p>;",
+              "  if (isLoading) return <p>Wait...</p>;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Penanganan state async yang aman menggunakan guard early return `if (isLoading) return <p>Loading...</p>`. Pengecoh `!isLoading` menggoda tetapi kebalikannya sehingga merusak alur aplikasi. Pengecoh `Wait...` menyimpang dari teks yang disyaratkan.",
+          },
         },
         {
           "kind": "step",
@@ -2099,7 +2852,23 @@ export const reactTrack: Track = {
               "message": "Masukkan kedua promise ke dalam satu array sebagai argumennya. Catatan penting: kalau SATU gagal, seluruh `Promise.all` gagal — untuk menoleransi kegagalan sebagian, pakai `Promise.allSettled`."
             }
           ],
-          "solution": "Promise.all([usersPromise, postsPromise])"
+          "solution": "Promise.all([usersPromise, postsPromise])",
+          susunKode: {
+            question:
+              "Jalankan request paralel dengan Promise.all.",
+            potongan: [
+              "Promise.all(",
+              "[usersPromise, ",
+              "postsPromise])",
+            ],
+            pengecoh: [
+              "Promise.race([usersPromise, postsPromise]);",
+              "Promise.any([usersPromise, postsPromise]);",
+            ],
+            pemisah: "",
+            explanation:
+              "Menunggu banyak request selesai bersamaan menggunakan `Promise.all([usersPromise, postsPromise])`. Pengecoh `Promise.race` menggoda tetapi hanya mengembalikan hasil satu promise yang paling cepat selesai. Pengecoh yang diberikan sengaja dirancang dari kesalahan nyata agar latihan ini melatih pemahaman mendalam tentang React.",
+          },
         },
         {
           "kind": "step",
@@ -2128,7 +2897,23 @@ export const reactTrack: Track = {
               "message": "`queryFn` diisi FUNGSI pengambil datanya — sebut namanya tanpa tanda kurung. Menulis `queryFn: fetchUsers()` menjalankan fungsinya sekarang lalu menyerahkan hasilnya, sehingga TanStack tidak bisa mengulang permintaan saat perlu."
             }
           ],
-          "solution": "useQuery({ queryKey: ['users'], queryFn: fetchUsers });"
+          "solution": "useQuery({ queryKey: ['users'], queryFn: fetchUsers });",
+          susunKode: {
+            question:
+              "Panggil useQuery dengan queryKey dan queryFn.",
+            potongan: [
+              "useQuery({ queryKey: ",
+              "['users'], queryFn: ",
+              "fetchUsers });",
+            ],
+            pengecoh: [
+              "useQuery({ key: ['users'], fn: fetchUsers });",
+              "useQuery(['users'], fetchUsers);",
+            ],
+            pemisah: "",
+            explanation:
+              "Hook TanStack Query memerlukan opsi `queryKey` dan `queryFn`. Pengecoh `key` dan `fn` menggoda karena lebih pendek tetapi bukan nama opsi resmi React Query v5 yang digunakan secara umum. Pengecoh yang diberikan sengaja dirancang dari kesalahan nyata agar latihan ini melatih pemahaman mendalam tentang React.",
+          },
         },
         {
           "kind": "step",
@@ -2153,7 +2938,23 @@ export const reactTrack: Track = {
               "message": "Optimistic update berarti kamu menampilkan hasilnya lebih dulu, sebelum server menjawab: buat array baru dengan spread isi lama lalu tambahkan item barunya. Yang wajib menyusul: kembalikan state ini kalau request-nya ternyata gagal."
             }
           ],
-          "solution": "setTodos([...todos, newTodo])"
+          "solution": "setTodos([...todos, newTodo])",
+          susunKode: {
+            question:
+              "Tambahkan item baru secara optimistic ke state todos.",
+            potongan: [
+              "setTodos(",
+              "[...todos,",
+              " newTodo])",
+            ],
+            pengecoh: [
+              "setTodos(todos.push(newTodo));",
+              "setTodos(todos.concat(newTodo));",
+            ],
+            pemisah: "",
+            explanation:
+              "Pembaruan state array imutabel menggunakan spread operator `[...todos, newTodo]`. Pengecoh `todos.push` menggoda tetapi memutasi array lama secara langsung yang dilarang keras di React. Pengecoh yang diberikan sengaja dirancang dari kesalahan nyata agar latihan ini melatih pemahaman mendalam tentang React.",
+          },
         },
         {
           "kind": "step",
@@ -2178,7 +2979,23 @@ export const reactTrack: Track = {
               "message": "Sertakan `page` sebagai bagian dari kunci. Kalau nomor halaman tidak ikut, semua halaman berbagi satu cache — pindah halaman menampilkan data lama, dan itu bug yang sangat membingungkan saat ditemui."
             }
           ],
-          "solution": "queryKey: ['items', page]"
+          "solution": "queryKey: ['items', page]",
+          susunKode: {
+            question:
+              "Sertakan page di queryKey untuk pagination.",
+            potongan: [
+              "queryKey: ",
+              "['items',",
+              " page]",
+            ],
+            pengecoh: [
+              "queryKey: ['items']",
+              "queryKey: 'items-' + page",
+            ],
+            pemisah: "",
+            explanation:
+              "QueryKey pagination ditulis sebagai elemen array terpisah `['items', page]` agar React Query me-refetch otomatis saat nilai page berubah. Pengecoh string gabungan keliru secara struktur queryKey di TanStack Query.",
+          },
         },
         {
           "kind": "step",
@@ -2207,7 +3024,23 @@ export const reactTrack: Track = {
               "message": "Nilainya berpola `Bearer <token>` — kata Bearer, satu spasi, lalu tokennya disisipkan (template literal atau penggabungan string). Lupa spasi setelah Bearer adalah penyebab 401 yang paling sering luput terlihat."
             }
           ],
-          "solution": "headers: { Authorization: `Bearer ${token}` }"
+          "solution": "headers: { Authorization: `Bearer ${token}` }",
+          susunKode: {
+            question:
+              "Kirim Authorization Bearer token di request headers.",
+            potongan: [
+              "headers: { ",
+              "Authorization: ",
+              "`Bearer ${token}` }",
+            ],
+            pengecoh: [
+              "headers: { Auth: `Bearer ${token}` } };",
+              "headers: { Authorization: token } };",
+            ],
+            pemisah: "",
+            explanation:
+              "Header otentikasi HTTP menggunakan nama standar `Authorization: `Bearer ${token}``. Pengecoh `Auth` menggoda tetapi bukan nama header HTTP standar yang diterima oleh API server pada umumnya. Pengecoh yang diberikan sengaja dirancang dari kesalahan nyata agar latihan ini melatih pemahaman mendalam tentang React.",
+          },
         },
         {
           "kind": "quiz",
@@ -2329,7 +3162,21 @@ export const reactTrack: Track = {
               "message": "Teks yang diklik pengguna ditulis di antara tag pembuka dan penutup."
             }
           ],
-          "solution": "<Link to=\"/profil\">Profil</Link>"
+          "solution": "<Link to=\"/profil\">Profil</Link>",
+          susunKode: {
+            potongan: [
+              "<Link to=",
+              "\"/profil\">",
+              "Profil</Link>",
+            ],
+            pengecoh: [
+              "<a href=\"/profil\">Profil</a>;",
+              "<Link href=\"/profil\">Profil</Link>;",
+            ],
+            pemisah: "",
+            explanation:
+              "Navigasi SPA tanpa reload halaman menggunakan `<Link to=\"/profil\">Profil</Link>`. Pengecoh `<a href=\"...\">` menggoda pengembang HTML murni tetapi menyebabkan reload halaman penuh di browser yang merusak performa SPA.",
+          },
         },
         {
           "kind": "step",
@@ -2354,7 +3201,22 @@ export const reactTrack: Track = {
               "message": "Hasilnya object, jadi ambil dengan destructuring object. Nama propertinya harus SAMA dengan nama parameter di definisi route (`/produk/:id`) — salah satu huruf saja membuat isinya `undefined`. Ingat juga nilainya selalu berupa string, jadi bandingkan dengan hati-hati terhadap id angka."
             }
           ],
-          "solution": "const { id } = useParams();"
+          "solution": "const { id } = useParams();",
+          susunKode: {
+            question:
+              "Ambil param id dengan useParams().",
+            potongan: [
+              "const { id } =",
+              "useParams();",
+            ],
+            pengecoh: [
+              "const [id] =",
+              "useParams(id);",
+            ],
+            pemisah: " ",
+            explanation:
+              "Hook `useParams()` mengembalikan objek parameter route yang dibongkar `{ id }`. Pengecoh `useParams(id)` menggoda jika keliru mengira `useParams` menerima argumen. Jebakan ini sering terjadi pada pemula di React Router.",
+          },
         },
         {
           "kind": "step",
@@ -2375,7 +3237,22 @@ export const reactTrack: Track = {
               "message": "Di layout route, tempat anak-anak route dirender ditandai dengan komponen `<Outlet />`. Tanpa itu, layout-nya tampil tapi halaman anaknya tidak pernah muncul — dan tidak ada pesan error yang menjelaskannya."
             }
           ],
-          "solution": "<Outlet />"
+          "solution": "<Outlet />",
+          susunKode: {
+            question:
+              "Render outlet anak di layout dengan <Outlet />.",
+            potongan: [
+              "const layout =",
+              "<Outlet />;",
+            ],
+            pengecoh: [
+              "<Children />;",
+              "<RouteOutlet />;",
+            ],
+            pemisah: "",
+            explanation:
+              "Komponen penampung nested route React Router bernama `<Outlet />`. Pengecoh `<Children />` menggoda tetapi bukan nama komponen resmi dari pustaka React Router yang digunakan untuk layout. Pengecoh yang diberikan sengaja dirancang dari kesalahan nyata agar latihan ini melatih pemahaman mendalam tentang React.",
+          },
         },
         {
           "kind": "step",
@@ -2400,7 +3277,20 @@ export const reactTrack: Track = {
               "message": "Berikan tujuannya sebagai teks jalur, diawali garis miring. Tambahkan opsi `{ replace: true }` bila kamu tidak ingin halaman ini tersimpan di riwayat back browser."
             }
           ],
-          "solution": "navigate(\"/login\");"
+          "solution": "navigate(\"/login\");",
+          susunKode: {
+            potongan: [
+              "const nav =",
+              "navigate(\"/login\");",
+            ],
+            pengecoh: [
+              "router.push(\"/login\");",
+              "redirect(\"/login\");",
+            ],
+            pemisah: "",
+            explanation:
+              "Navigasi programatis di React Router v6 menggunakan fungsi `navigate('/login')`. Pengecoh `router.push` menggoda pengembang Next.js tetapi keliru di React Router yang menggunakan hook useNavigate. Pengecoh yang diberikan sengaja dirancang dari kesalahan nyata agar latihan ini melatih pemahaman mendalam tentang React.",
+          },
         },
         {
           "kind": "step",
@@ -2425,7 +3315,23 @@ export const reactTrack: Track = {
               "message": "Isi `element` dengan elemen `<NotFound />` di dalam kurung kurawal — bukan nama komponennya saja. Urutan atribut bebas."
             }
           ],
-          "solution": "<Route path=\"*\" element={<NotFound />} />"
+          "solution": "<Route path=\"*\" element={<NotFound />} />",
+          susunKode: {
+            question:
+              "Buat route fallback wildcard path=\"*\".",
+            potongan: [
+              "<Route path=",
+              "\"*\" element=",
+              "{<NotFound />} />",
+            ],
+            pengecoh: [
+              "<Route path=\"404\" element={<NotFound />} />;",
+              "<Route path=\"/*\" element={<NotFound />} />;",
+            ],
+            pemisah: "",
+            explanation:
+              "Route 404 catch-all menggunakan `path=\"*\"`. Pengecoh `path=\"404\"` menggoda tetapi hanya mencocokkan URL `/404` secara spesifik, bukan seluruh jalur yang tidak cocok di aplikasi. Pengecoh yang diberikan sengaja dirancang dari kesalahan nyata agar latihan ini melatih pemahaman mendalam tentang React.",
+          },
         },
         {
           "kind": "step",
@@ -2454,7 +3360,23 @@ export const reactTrack: Track = {
               "message": "Komponen malasnya diletakkan DI DALAM Suspense. Kalau di luar, React melempar error bahwa komponen ditangguhkan tanpa batas Suspense."
             }
           ],
-          "solution": "<Suspense fallback={<p>Memuat...</p>}><Home /></Suspense>"
+          "solution": "<Suspense fallback={<p>Memuat...</p>}><Home /></Suspense>",
+          susunKode: {
+            question:
+              "Bungkus komponen lazy dengan Suspense fallback.",
+            potongan: [
+              "<Suspense fallback=",
+              "{<p>Memuat...</p>}>",
+              "<Home /></Suspense>",
+            ],
+            pengecoh: [
+              "<React.Lazy fallback={<p>Memuat...</p>}><Home /></React.Lazy>;",
+              "<Suspense loading={<p>Memuat...</p>}><Home /></Suspense>;",
+            ],
+            pemisah: "",
+            explanation:
+              "Komponen yang di-load secara lazy wajib dibungkus `<Suspense fallback={...}>`. Pengecoh `<React.Lazy>` menggoda tetapi bukan nama komponen pembungkus di React yang digunakan untuk penanganan async rendering. Pengecoh yang diberikan sengaja dirancang dari kesalahan nyata agar latihan ini melatih pemahaman mendalam tentang React.",
+          },
         },
         {
           "kind": "quiz",
@@ -2576,7 +3498,21 @@ export const reactTrack: Track = {
               "message": "Simpan hasilnya ke variabel supaya bisa dipakai di assertion berikutnya."
             }
           ],
-          "solution": "const btn = screen.getByRole('button');"
+          "solution": "const btn = screen.getByRole('button');",
+          susunKode: {
+            potongan: [
+              "const btn = ",
+              "screen.getByRole(",
+              "'button');",
+            ],
+            pengecoh: [
+              "const btn = screen.getByText('button');",
+              "const btn = screen.getByTag('button');",
+            ],
+            pemisah: "",
+            explanation:
+              "Filosofi RTL merekomendasikan pencarian elemen via `screen.getByRole('button')`. Pengecoh `getByText` menggoda tetapi mencari teks isi tombol, bukan peran aksesibilitas elemen di dalam DOM. Pengecoh yang diberikan sengaja dirancang dari kesalahan nyata agar latihan ini melatih pemahaman mendalam tentang React.",
+          },
         },
         {
           "kind": "step",
@@ -2601,7 +3537,21 @@ export const reactTrack: Track = {
               "message": "Matcher dari jest-dom untuk memastikan elemen benar-benar ada di halaman. Jangan lupa memanggilnya dengan tanda kurung: `expect(x).toBeInTheDocument` tanpa kurung SELALU lolos, dan test seperti itu tidak menguji apa pun."
             }
           ],
-          "solution": "expect(element).toBeInTheDocument();"
+          "solution": "expect(element).toBeInTheDocument();",
+          susunKode: {
+            potongan: [
+              "expect(",
+              "element).toBeInTheDocument(",
+              ");",
+            ],
+            pengecoh: [
+              "expect(element).toBeTruthy();",
+              "expect(element).toBeDefined();",
+            ],
+            pemisah: "",
+            explanation:
+              "Matcher `jest-dom` untuk memeriksa keberadaan elemen di DOM adalah `toBeInTheDocument()`. Pengecoh `toBeTruthy()` menggoda tetapi kurang spesifik untuk pengujian elemen DOM pada React Testing Library. Pengecoh yang diberikan sengaja dirancang dari kesalahan nyata agar latihan ini melatih pemahaman mendalam tentang React.",
+          },
         },
         {
           "kind": "step",
@@ -2626,7 +3576,21 @@ export const reactTrack: Track = {
               "message": "Sejak versi 14, semua metode `userEvent` mengembalikan Promise dan wajib di-`await`. Melupakannya membuat assertion berjalan sebelum React selesai merender — test lolos padahal seharusnya gagal, atau sebaliknya."
             }
           ],
-          "solution": "await userEvent.click(button);"
+          "solution": "await userEvent.click(button);",
+          susunKode: {
+            potongan: [
+              "await ",
+              "userEvent.click(",
+              "button);",
+            ],
+            pengecoh: [
+              "fireEvent.click(button);",
+              "userEvent.hover(button);",
+            ],
+            pemisah: "",
+            explanation:
+              "Simulasi interaksi pengguna modern menggunakan `await userEvent.click(button)`. Pengecoh `fireEvent` menggoda cara lama tetapi tidak menembakkan seluruh rangkaian event browser secara lengkap. Jebakan ini sering membuat test tidak realistis.",
+          },
         },
         {
           "kind": "step",
@@ -2655,7 +3619,21 @@ export const reactTrack: Track = {
               "message": "Tambahkan `await` — tanpa itu, pengetikan belum selesai saat assertion dijalankan."
             }
           ],
-          "solution": "await userEvent.type(input, 'Halo');"
+          "solution": "await userEvent.type(input, 'Halo');",
+          susunKode: {
+            potongan: [
+              "await ",
+              "userEvent.type(",
+              "input, 'Halo');",
+            ],
+            pengecoh: [
+              "fireEvent.change(input, { target: { value: 'Halo' } });",
+              "userEvent.clear(input);",
+            ],
+            pemisah: "",
+            explanation:
+              "Mengisi input teks secara realistis menggunakan `await userEvent.type(input, 'Halo')`. Pengecoh `fireEvent.change` menggoda cara lama tetapi tidak menembakkan event keydown/keyup per karakter secara realistis di RTL.",
+          },
         },
         {
           "kind": "step",
@@ -2684,7 +3662,23 @@ export const reactTrack: Track = {
               "message": "Isi datanya berupa ARRAY berisi satu objek `{ id: 1, name: \"Bimo\" }` — bentuknya harus sama dengan yang dikirim API sungguhan, termasuk soal array atau bukan. Mock yang bentuknya beda dari kenyataan membuat test lulus sementara aplikasinya rusak."
             }
           ],
-          "solution": "http.get('/api/users', () => {\n  return HttpResponse.json([{ id: 1, name: 'Bimo' }]);\n});"
+          "solution": "http.get('/api/users', () => {\n  return HttpResponse.json([{ id: 1, name: 'Bimo' }]);\n});",
+          susunKode: {
+            question:
+              "Mock endpoint HTTP GET dengan MSW http.get.",
+            potongan: [
+              "http.get('/api/users', () => {",
+              "\n  return HttpResponse.json(",
+              "[{ id: 1, name: 'Bimo' }]);\n});",
+            ],
+            pengecoh: [
+              "rest.get('/api/users', (req, res, ctx) => { return res(ctx.json([{ id: 1, name: 'Bimo' }])); });",
+              "http.get('/api/users', () => { return Response.json([{ id: 1, name: 'Bimo' }]); });",
+            ],
+            pemisah: "",
+            explanation:
+              "Mock API versi MSW v2 menggunakan `http.get` dan `HttpResponse.json`. Pengecoh `rest.get` menggoda pengembang MSW v1 tetapi API lama tersebut sudah deprecated di versi terbaru. Pengecoh yang diberikan sengaja dirancang dari kesalahan nyata agar latihan ini melatih pemahaman mendalam tentang React.",
+          },
         },
         {
           "kind": "step",
@@ -2705,7 +3699,23 @@ export const reactTrack: Track = {
               "message": "Bandingkan `targetType` dengan teks `'user_behavior'` memakai pembanding tiga karakter (`===`). Pemakaian `==` di sini bekerja untuk string, tapi kebiasaan memakai `===` mencegah perbandingan lintas tipe yang menipu (`0 == \"\"` bernilai true)."
             }
           ],
-          "solution": "function shouldTestItem(targetType) {\n  return targetType === 'user_behavior';\n}"
+          "solution": "function shouldTestItem(targetType) {\n  return targetType === 'user_behavior';\n}",
+          susunKode: {
+            question:
+              "Buat fungsi yang mengembalikan benar hanya ketika jenis sasaran yang diuji adalah perilaku pengguna.",
+            potongan: [
+              "function shouldTestItem(targetType) {",
+              "  return targetType === 'user_behavior';",
+              "}",
+            ],
+            pengecoh: [
+              "  return targetType === 'implementation_details';",
+              "  return targetType === 'internal_state';",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Prinsip RTL menekankan pengujian perilaku pengguna `user_behavior`. Pengecoh `implementation_details` menggoda tetapi merusak ketahanan test saat refaktor internal dilakukan pada komponen. Pengecoh yang diberikan sengaja dirancang dari kesalahan nyata agar latihan ini melatih pemahaman mendalam tentang React.",
+          },
         },
         {
           "kind": "quiz",
@@ -2824,7 +3834,22 @@ export const reactTrack: Track = {
               "message": "Komponen bersama ada di luar folder fitur, jadi jalurnya naik TIGA tingkat sampai `src/`, lalu masuk `components/ui/Button`. Perhatikan huruf besar-kecilnya harus persis: macOS memaafkan, server Linux tempat aplikasimu di-deploy tidak."
             }
           ],
-          "solution": "import { useAuth } from '../../auth/hooks/useAuth';\nimport Button from '../../../components/ui/Button';"
+          "solution": "import { useAuth } from '../../auth/hooks/useAuth';\nimport Button from '../../../components/ui/Button';",
+          susunKode: {
+            question:
+              "Impor useAuth dan Button dari jalur folder yang tepat.",
+            potongan: [
+              "import { useAuth } from '../../auth/hooks/useAuth';",
+              "import Button from '../../../components/ui/Button';",
+            ],
+            pengecoh: [
+              "import { useAuth } from 'auth/hooks/useAuth';",
+              "import Button from 'components/ui/Button';",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Pengimporan antar folder fitur menggunakan jalur relatif `'../../auth/hooks/useAuth'`. Pengecoh jalur mutlak tanpa alias menggoda tetapi akan ditolak TypeScript jika belum ada konfigurasi alias di tsconfig. Pengecoh yang diberikan sengaja dirancang dari kesalahan nyata agar latihan ini melatih pemahaman mendalam tentang React.",
+          },
         },
         {
           "kind": "step",
@@ -2858,7 +3883,26 @@ export const reactTrack: Track = {
               "message": "Komponen presentational tidak boleh mengambil data sendiri — hapus `useSWR`/`fetch`/`useEffect`. Justru ketiadaan itulah yang membuatnya bisa dites tanpa server dan dipakai ulang untuk data dari sumber mana pun."
             }
           ],
-          "solution": "function KartuProduk({ produk }) {\n  return (\n    <div>\n      <h3>{produk.nama}</h3>\n      <p>{produk.harga}</p>\n    </div>\n  );\n}"
+          "solution": "function KartuProduk({ produk }) {\n  return (\n    <div>\n      <h3>{produk.nama}</h3>\n      <p>{produk.harga}</p>\n    </div>\n  );\n}",
+          susunKode: {
+            potongan: [
+              "function KartuProduk({ produk }) {",
+              "  return (",
+              "    <div>",
+              "      <h3>{produk.nama}</h3>",
+              "      <p>{produk.harga}</p>",
+              "    </div>",
+              "  );",
+              "}",
+            ],
+            pengecoh: [
+              "  const { data } = useSWR('/api/produk'); return <div>{data}</div>;",
+              "function KartuProduk(props) { return <div>{props}</div>;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Presentational component murni menerima data via props tanpa melakukan data fetching sendiri seperti `useSWR`. Pengecoh `useSWR` menggoda tetapi melanggar pemisahan tanggung jawab container/presentational. Pengecoh yang diberikan sengaja dirancang dari kesalahan nyata agar latihan ini melatih pemahaman mendalam tentang React.",
+          },
         },
         {
           "kind": "step",
@@ -2887,7 +3931,23 @@ export const reactTrack: Track = {
               "message": "`<Profile />` harus berada DI DALAM boundary-nya. Komponen di luar boundary tidak terlindungi — dan error di dalam boundary itu sendiri (bukan anaknya) juga tidak tertangkap."
             }
           ],
-          "solution": "<ErrorBoundary fallback={<p>Error</p>}><Profile /></ErrorBoundary>"
+          "solution": "<ErrorBoundary fallback={<p>Error</p>}><Profile /></ErrorBoundary>",
+          susunKode: {
+            question:
+              "Bungkus komponen <Profile /> dengan ErrorBoundary.",
+            potongan: [
+              "<ErrorBoundary fallback=",
+              "{<p>Error</p>}><Profile ",
+              "/></ErrorBoundary>",
+            ],
+            pengecoh: [
+              "<TryCatch fallback={<p>Error</p>}><Profile /></TryCatch>;",
+              "<ErrorBoundary error={<p>Error</p>}><Profile /></ErrorBoundary>;",
+            ],
+            pemisah: "",
+            explanation:
+              "Menangani crash komponen menggunakan pembungkus `<ErrorBoundary fallback={<p>Error</p>}>`. Pengecoh `<TryCatch>` menggoda tetapi try/catch biasa tidak bekerja untuk menangani crash pada JSX di dalam render. Pengecoh yang diberikan sengaja dirancang dari kesalahan nyata agar latihan ini melatih pemahaman mendalam tentang React.",
+          },
         },
         {
           "kind": "step",
@@ -2916,7 +3976,23 @@ export const reactTrack: Track = {
               "message": "Simpan hasilnya ke variabel agar bisa dipakai. Ingat: apa pun yang masuk sini bisa dibaca siapa saja di DevTools, jadi jangan menaruh kunci rahasia."
             }
           ],
-          "solution": "const url = import.meta.env.VITE_API_URL;"
+          "solution": "const url = import.meta.env.VITE_API_URL;",
+          susunKode: {
+            question:
+              "Baca environment variable import.meta.env.VITE_API_URL.",
+            potongan: [
+              "const envUrl =",
+              "const url =",
+              "import.meta.env.VITE_API_URL;",
+            ],
+            pengecoh: [
+              "const url = process.env.VITE_API_URL;",
+              "const url = window.env.VITE_API_URL;",
+            ],
+            pemisah: "",
+            explanation:
+              "Akses variabel lingkungan di Vite menggunakan `import.meta.env.VITE_API_URL`. Pengecoh `process.env` menggoda pengembang Webpack/CRA tetapi tidak tersedia di browser pada proyek Vite yang menggunakan import.meta.",
+          },
         },
         {
           "kind": "step",
@@ -2945,7 +4021,22 @@ export const reactTrack: Track = {
               "message": "Langkah ketiga memakai `git log --oneline` (boleh dengan `-10`) supaya satu commit tampil satu baris. Riwayat terbaru memberi tahu bagian mana yang sedang aktif dikerjakan tim — dan biasanya di situlah bug yang kamu tangani berada."
             }
           ],
-          "solution": "cat package.json\nls src\ngit log --oneline -10"
+          "solution": "cat package.json\nls src\ngit log --oneline -10",
+          susunKode: {
+            question:
+              "Jalankan perintah orientasi codebase baru.",
+            potongan: [
+              "cat package.json\nls src",
+              "git log --oneline -10",
+            ],
+            pengecoh: [
+              "npm audit\nls dist",
+              "git push origin main",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Perintah dasar membaca proyek baru meliputi `cat package.json`, `ls src`, dan `git log --oneline -10`. Pengecoh `git push` sangat berbahaya dan bukan merupakan langkah eksplorasi codebase awal yang bijak. Hal ini sering keliru bagi pemula.",
+          },
         },
         {
           "kind": "step",
@@ -2974,7 +4065,22 @@ export const reactTrack: Track = {
               "message": "Sebutkan gejalanya, bukan cuma aturannya: karena key memakai `index`, React mencocokkan baris berdasarkan POSISI — menghapus baris ke-2 bisa membuat isi baris ke-3 terlihat pindah. Komentar yang menyebut gejala jauh lebih mudah disetujui penulis PR-nya."
             }
           ],
-          "solution": "- key={index} pada daftar yang punya tombol hapus: ganti ke key={t.id}. Dengan index, React mencocokkan baris berdasarkan posisi, jadi setelah satu baris dihapus isi baris lain bisa terlihat berpindah.\n- useEffect memasang setInterval tanpa cleanup: tambahkan return () => clearInterval(id) supaya timer lama dihentikan; tanpa itu timer menumpuk setiap komponen dipasang ulang dan refresh() jalan berkali-kali."
+          "solution": "- key={index} pada daftar yang punya tombol hapus: ganti ke key={t.id}. Dengan index, React mencocokkan baris berdasarkan posisi, jadi setelah satu baris dihapus isi baris lain bisa terlihat berpindah.\n- useEffect memasang setInterval tanpa cleanup: tambahkan return () => clearInterval(id) supaya timer lama dihentikan; tanpa itu timer menumpuk setiap komponen dipasang ulang dan refresh() jalan berkali-kali.",
+          susunKode: {
+            question:
+              "Tulis dua poin checklist code review.",
+            potongan: [
+              "- key={index} pada daftar yang punya tombol hapus: ganti ke key={t.id}. Dengan index, React mencocokkan baris berdasarkan posisi, jadi setelah satu baris dihapus isi baris lain bisa terlihat berpindah.",
+              "- useEffect memasang setInterval tanpa cleanup: tambahkan return () => clearInterval(id) supaya timer lama dihentikan; tanpa itu timer menumpuk setiap komponen dipasang ulang dan refresh() jalan berkali-kali.",
+            ],
+            pengecoh: [
+              "- key={index} sudah paling bagus karena index selalu unik untuk semua item di array.",
+              "- useEffect memasang setInterval tanpa return fungsi: tidak perlu menghentikan timer karena browser akan mengurus memori secara otomatis.",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Checklist code review mengingatkan bahaya `key={index}` pada list dinamis dan pentingnya fungsi cleanup pada `useEffect` interval. Pengecoh mengklaim sebaliknya yang merupakan mitos keliru di React yang sering dipercayai pemula.",
+          },
         },
         {
           "kind": "step",
@@ -3003,7 +4109,21 @@ export const reactTrack: Track = {
               "message": "Teks labelnya ditulis di antara tag pembuka dan penutup."
             }
           ],
-          "solution": "<label htmlFor=\"username\">Username</label>"
+          "solution": "<label htmlFor=\"username\">Username</label>",
+          susunKode: {
+            potongan: [
+              "<label htmlFor=",
+              "\"username\">",
+              "Username</label>",
+            ],
+            pengecoh: [
+              "<label for=\"username\">Username</label>;",
+              "<label name=\"username\">Username</label>;",
+            ],
+            pemisah: "",
+            explanation:
+              "Atribut penunjuk input pada label JSX ditulis `htmlFor=\"username\"` karena `for` adalah kata kunci reserved JavaScript. Pengecoh `for` menggoda pengembang HTML murni tetapi merupakan kesalahan sintaks di JSX. Pengecoh yang diberikan sengaja dirancang dari kesalahan nyata agar latihan ini melatih pemahaman mendalam tentang React.",
+          },
         },
         {
           "kind": "quiz",

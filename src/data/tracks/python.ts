@@ -116,6 +116,21 @@ export const pythonTrack: Track = {
             },
           ],
           solution: "python3 --version",
+          susunKode: {
+            question:
+              "Susun perintah CLI untuk memeriksa versi Python 3 yang terpasang.",
+            potongan: [
+              "python3 ",
+              "--version",
+            ],
+            pengecoh: [
+              "py3 ",
+              "--show-ver",
+            ],
+            pemisah: "",
+            explanation:
+              "Pemeriksaan versi Python di terminal dilakukan dengan perintah `python3 --version`. Pengecoh `py3 --show-ver` adalah nama perintah fiktif yang sering menggoda pemula padahal perintah tersebut tidak ada di CLI resmi.",
+          },
         },
         {
           kind: "materi",
@@ -176,6 +191,21 @@ export const pythonTrack: Track = {
             },
           ],
           solution: 'print("Selamat Datang di BiLearn")',
+          susunKode: {
+            question:
+              "Susun pencetakan pesan Selamat Datang di BiLearn dengan fungsi print.",
+            potongan: [
+              "print(\"Selamat Datang ",
+              "di BiLearn\")",
+            ],
+            pengecoh: [
+              "echo(\"Selamat Datang ",
+              "ke BiLearn\")",
+            ],
+            pemisah: "",
+            explanation:
+              "Pencetakan output teks di Python menggunakan fungsi `print()`. Pengecoh `echo()` diadaptasi dari bahasa PHP atau Bash yang sering keliru dipakai oleh pemula saat pertama kali belajar skrip Python di lingkungan kerja interaktif.",
+          },
         },
         {
           kind: "step",
@@ -199,6 +229,21 @@ export const pythonTrack: Track = {
             },
           ],
           solution: "age = 20",
+          susunKode: {
+            question:
+              "Susun inisialisasi variabel umur age dengan angka 20.",
+            potongan: [
+              "age",
+              " = 20",
+            ],
+            pengecoh: [
+              "tahun",
+              " == 20",
+            ],
+            pemisah: "",
+            explanation:
+              "Deklarasi variabel di Python menggunakan operator sama dengan tunggal `age = 20`. Pengecoh operator pembanding `==` atau variabel `tahun` adalah kesalahan umum yang sering menjebak pemula saat menginisialisasi angka dalam skrip.",
+          },
         },
         {
           kind: "step",
@@ -222,6 +267,21 @@ export const pythonTrack: Track = {
             },
           ],
           solution: 'print(f"Umur: {age}")',
+          susunKode: {
+            question:
+              "Susun f-string untuk mencetak variabel age dengan format Umur.",
+            potongan: [
+              "print(f\"Umur: ",
+              "{age}\")",
+            ],
+            pengecoh: [
+              "print(\"Umur: ",
+              "$age\")",
+            ],
+            pemisah: "",
+            explanation:
+              "Format string Python modern menggunakan f-string `f\"Umur: {age}\"`. Pengecoh `$age` berasal dari bahasa PHP yang keliru jika digunakan di Python dan sering membuat pemula bingung dalam format teks laporan yang rapi.",
+          },
         },
         {
           kind: "step",
@@ -245,6 +305,21 @@ export const pythonTrack: Track = {
             },
           ],
           solution: "score = int(input_str)",
+          susunKode: {
+            question:
+              "Susun konversi string input_str menjadi integer pada variabel score.",
+            potongan: [
+              "score = ",
+              "int(input_str)",
+            ],
+            pengecoh: [
+              "score := ",
+              "parse_int(input_str)",
+            ],
+            pemisah: "",
+            explanation:
+              "Konversi tipe data ke integer di Python menggunakan fungsi bawaan `int()`. Pengecoh `parse_int()` adalah nama fungsi fiktif yang sering menggoda karena mirip dengan fungsi di JavaScript modern saat ini di lembar kerja.",
+          },
         },
         {
           kind: "step",
@@ -270,6 +345,21 @@ export const pythonTrack: Track = {
             },
           ],
           solution: 'if score >= 75:\n    print("Lulus")',
+          susunKode: {
+            question:
+              "Susun percabangan if score >= 75 untuk mencetak Lulus.",
+            potongan: [
+              "if score >= 75:\n",
+              "    print(\"Lulus\")",
+            ],
+            pengecoh: [
+              "if (score >= 75) {\n",
+              "    echo(\"Lulus\");\n}",
+            ],
+            pemisah: "",
+            explanation:
+              "Pengkondisian Python diakhiri titik dua `:` tanpa kurung kurawal. Pengecoh kurung kurawal `{}` adalah jebakan sintaks C-style yang sering keliru ditulis oleh pengguna baru saat pertama belajar Python di platform BiLearn.",
+          },
         },
         {
           kind: "step",
@@ -292,6 +382,21 @@ export const pythonTrack: Track = {
             },
           ],
           solution: "for i in range(5):\n    print(i)",
+          susunKode: {
+            question:
+              "Susun perulangan 5 kali untuk mencetak nilai variabel i.",
+            potongan: [
+              "for i in ",
+              "range(5):\n    print(i)",
+            ],
+            pengecoh: [
+              "foreach i in ",
+              "loop(5):\n    print(i)",
+            ],
+            pemisah: "",
+            explanation:
+              "Perulangan di Python menggunakan `for i in range(5):`. Pengecoh `foreach` dan `loop(5)` adalah kesalahan keliru dari bahasa lain yang memicu SyntaxError di Python saat dieksekusi oleh sistem interpreter Python secara otomatis.",
+          },
         },
         {
           kind: "step",
@@ -324,6 +429,21 @@ export const pythonTrack: Track = {
             },
           ],
           solution: "angka = 1\nfor i in range(2):\n    print(angka)",
+          susunKode: {
+            question:
+              "Susun perulangan 2 kali untuk mencetak variabel angka.",
+            potongan: [
+              "angka = 1\nfor i in ",
+              "range(2):\n    print(angka)",
+            ],
+            pengecoh: [
+              "angka = 1\nloop 2 ",
+              "times():\n    print(angka)",
+            ],
+            pemisah: "",
+            explanation:
+              "Inisialisasi `angka = 1` dan perulangan `range(2)` mencetak nilai angka dua kali. Pengecoh `loop 2 times` adalah instruksi fiktif yang keliru dan menggoda pemula yang belum paham perulangan Python standar pada skrip program.",
+          },
         },
         {
           kind: "quiz",
@@ -479,6 +599,21 @@ export const pythonTrack: Track = {
             },
           ],
           solution: 'items.append("Baru")',
+          susunKode: {
+            question:
+              "Susun penambahan elemen baru 'Baru' ke list items.",
+            potongan: [
+              "items.",
+              "append(\"Baru\")",
+            ],
+            pengecoh: [
+              "items -> ",
+              "push(\"Baru\")",
+            ],
+            pemisah: "",
+            explanation:
+              "Penambahan elemen ke list Python menggunakan method `.append()`. Pengecoh `.push()` adalah method dari JavaScript yang sering keliru digunakan dan menyebabkan AttributeError di Python secara mendadak saat dieksekusi program.",
+          },
         },
         {
           kind: "step",
@@ -504,6 +639,21 @@ export const pythonTrack: Track = {
             },
           ],
           solution: 'role = user.get("role", "user")',
+          susunKode: {
+            question:
+              "Susun pengambilan nilai kunci 'role' dari dictionary user dengan default 'user'.",
+            potongan: [
+              "role = ",
+              "user.get(\"role\", \"user\")",
+            ],
+            pengecoh: [
+              "role := ",
+              "user.fetch(\"role\", \"user\")",
+            ],
+            pemisah: "",
+            explanation:
+              "Pengambilan aman dari dictionary menggunakan `.get('role', 'user')`. Pengecoh `.fetch()` adalah method fiktif yang keliru dan sering menjebak pemula yang terbiasa dengan API JavaScript pada pemrograman web interaktif.",
+          },
         },
         {
           kind: "step",
@@ -528,6 +678,21 @@ export const pythonTrack: Track = {
             },
           ],
           solution: "x, y = coordinates",
+          susunKode: {
+            question:
+              "Susun pembongkaran tuple coordinates ke variabel x dan y.",
+            potongan: [
+              "x, y = ",
+              "coordinates",
+            ],
+            pengecoh: [
+              "x + y = ",
+              "coords_tuple",
+            ],
+            pemisah: "",
+            explanation:
+              "Unpacking tuple di Python menggunakan penetapan langsung `x, y = coordinates`. Pengecoh penjumlahan `x + y` keliru ditaruh di sini dan sering membingungkan pemula saat mengolah struktur data tuple pada kode program Python.",
+          },
         },
         {
           kind: "step",
@@ -552,6 +717,21 @@ export const pythonTrack: Track = {
             },
           ],
           solution: "unique_items = set(my_list)",
+          susunKode: {
+            question:
+              "Susun pengubahan my_list menjadi set unik pada unique_items.",
+            potongan: [
+              "unique_items = ",
+              "set(my_list)",
+            ],
+            pengecoh: [
+              "unique_items := ",
+              "unique(my_list)",
+            ],
+            pemisah: "",
+            explanation:
+              "Pengubahan list menjadi himpunan elemen unik memakai `set(my_list)`. Pengecoh `unique()` adalah fungsi fiktif yang sering keliru diperkirakan ada di Python bawaan oleh para pembelajar baru di platform BiLearn.",
+          },
         },
         {
           kind: "step",
@@ -577,6 +757,21 @@ export const pythonTrack: Track = {
             },
           ],
           solution: "squares = [x ** 2 for x in numbers]",
+          susunKode: {
+            question:
+              "Susun list comprehension kuadrat angka dari numbers.",
+            potongan: [
+              "squares = ",
+              "[x ** 2 for x in numbers]",
+            ],
+            pengecoh: [
+              "squares := ",
+              "[x ^ 2 for x in numbers]",
+            ],
+            pemisah: "",
+            explanation:
+              "Operator perpangkatan Python adalah `**`. Pengecoh `^` adalah operator XOR bitwise yang sering keliru dikira pangkat oleh pemula saat membuat ekspresi matematika list comprehension pada skrip data Python modern.",
+          },
         },
         {
           kind: "step",
@@ -605,6 +800,21 @@ export const pythonTrack: Track = {
             },
           ],
           solution: "for i, item in enumerate(items):\n    print(i, item)",
+          susunKode: {
+            question:
+              "Susun perulangan enumerate pada items untuk mendapatkan indeks i dan item.",
+            potongan: [
+              "for i, item in ",
+              "enumerate(items):\n    print(i, item)",
+            ],
+            pengecoh: [
+              "foreach i, item in ",
+              "with_index(items):\n    print(i, item)",
+            ],
+            pemisah: "",
+            explanation:
+              "Perulangan dengan indeks memakai `enumerate(items)`. Pengecoh `with_index()` adalah fungsi fiktif yang keliru digantikan dari bahasa lain dan sering menjebak dalam perulangan skrip Python modern saat ini secara berulang.",
+          },
         },
         {
           kind: "step",
@@ -629,6 +839,21 @@ export const pythonTrack: Track = {
             },
           ],
           solution: "struktur_pencarian = {}",
+          susunKode: {
+            question:
+              "Susun inisialisasi dictionary kosong struktur_pencarian.",
+            potongan: [
+              "struktur_pencarian = ",
+              "{}",
+            ],
+            pengecoh: [
+              "struktur_pencarian := ",
+              "HashMap()",
+            ],
+            pemisah: "",
+            explanation:
+              "Inisialisasi dictionary kosong menggunakan `{}`. Pengecoh `HashMap()` berasal dari Java yang keliru jika digunakan di skrip Python dan menggoda pemula yang memiliki latar belakang Java sebelumnya pada pemrograman komputer.",
+          },
         },
         {
           kind: "quiz",
@@ -792,6 +1017,21 @@ export const pythonTrack: Track = {
             },
           ],
           solution: "def hitung(a, b=10):\n    return a + b",
+          susunKode: {
+            question:
+              "Susun fungsi hitung dengan nilai default b=10 yang mengembalikan a + b.",
+            potongan: [
+              "def hitung(a, b=10):\n",
+              "    return a + b",
+            ],
+            pengecoh: [
+              "function hitung(a, b=10) {\n",
+              "    return a - b\n}",
+            ],
+            pemisah: "",
+            explanation:
+              "Pendefinisian fungsi diawali kata kunci `def` dan titik dua `:`. Pengecoh `function` adalah kata kunci JavaScript yang keliru dipasang di Python sehingga memicu SyntaxError saat skrip dijalankan oleh sistem BiLearn.",
+          },
         },
         {
           kind: "step",
@@ -820,6 +1060,21 @@ export const pythonTrack: Track = {
             },
           ],
           solution: "def process(*args, **kwargs):\n    pass",
+          susunKode: {
+            question:
+              "Susun fungsi process yang menerima *args dan **kwargs.",
+            potongan: [
+              "def process(*args, ",
+              "**kwargs):\n    pass",
+            ],
+            pengecoh: [
+              "def process(...args, ",
+              "...kwargs):\n    pass",
+            ],
+            pemisah: "",
+            explanation:
+              "Argumen posisi dan kata kunci dinamis ditulis `*args, **kwargs`. Pengecoh `...args` adalah sintaks spread operator JavaScript yang keliru jika dipasang pada definisi fungsi skrip Python saat ini di lembar kerja BiLearn.",
+          },
         },
         {
           kind: "step",
@@ -845,6 +1100,21 @@ export const pythonTrack: Track = {
             },
           ],
           solution: "def set_status():\n    status = 'aktif'",
+          susunKode: {
+            question:
+              "Susun fungsi set_status yang menetapkan variabel lokal status bernilai aktif.",
+            potongan: [
+              "def set_status():\n",
+              "    status = 'aktif'",
+            ],
+            pengecoh: [
+              "def update_status():\n",
+              "    let status = 'nonaktif'",
+            ],
+            pemisah: "",
+            explanation:
+              "Penetapan variabel lokal di dalam fungsi tidak memerlukan kata kunci `let`. Pengecoh `let status` adalah jebakan sintaks yang keliru bagi pembelajar yang biasa memakai bahasa JavaScript sebelumnya pada proyek web digital.",
+          },
         },
         {
           kind: "step",
@@ -868,6 +1138,21 @@ export const pythonTrack: Track = {
             },
           ],
           solution: "square = lambda x: x ** 2",
+          susunKode: {
+            question:
+              "Susun fungsi anonim lambda untuk menghitung kuadrat x.",
+            potongan: [
+              "square = ",
+              "lambda x: x ** 2",
+            ],
+            pengecoh: [
+              "square := ",
+              "fn(x) => x ** 2",
+            ],
+            pemisah: "",
+            explanation:
+              "Fungsi anonim satu baris dibuat dengan `lambda x: x ** 2`. Pengecoh `fn(x) =>` adalah sintaks arrow function yang keliru di Python dan sering menggoda pengguna pemula dari web development modern saat ini di platform.",
+          },
         },
         {
           kind: "step",
@@ -891,6 +1176,21 @@ export const pythonTrack: Track = {
             },
           ],
           solution: 'if __name__ == "__main__":\n    main()',
+          susunKode: {
+            question:
+              "Susun pemeriksaan blok utama __name__ == '__main__' untuk memanggil main().",
+            potongan: [
+              "if __name__ == ",
+              "\"__main__\":\n    main()",
+            ],
+            pengecoh: [
+              "if __file__ == ",
+              "\"__script__\":\n    main()",
+            ],
+            pemisah: "",
+            explanation:
+              "Pemeriksaan berkas utama menggunakan `__name__ == '__main__'`. Pengecoh `__file__` berisi jalur berkas yang keliru jika dibandingkan dengan string nama utama pada modul eksekusi Python proyek yang sedang berjalan saat ini.",
+          },
         },
         {
           kind: "step",
@@ -917,6 +1217,21 @@ export const pythonTrack: Track = {
             },
           ],
           solution: "from datetime import datetime",
+          susunKode: {
+            question:
+              "Susun pengimporan datetime dari modul datetime.",
+            potongan: [
+              "from datetime ",
+              "import datetime",
+            ],
+            pengecoh: [
+              "from date_time ",
+              "import date_time",
+            ],
+            pemisah: "",
+            explanation:
+              "Pengimporan kelas spesifik menggunakan `from datetime import datetime`. Pengecoh `date_time` adalah kesalahan penulisan yang sering menjebak pengembang saat mengimpor modul bawaan di Python secara langsung.",
+          },
         },
         {
           kind: "step",
@@ -944,6 +1259,21 @@ export const pythonTrack: Track = {
             },
           ],
           solution: 'def greet(name: str) -> str:\n    return f"Halo {name}"',
+          susunKode: {
+            question:
+              "Susun type hint pada fungsi greet dengan parameter string name dan return string.",
+            potongan: [
+              "def greet(name: str) ",
+              "-> str:\n    return f\"Halo {name}\"",
+            ],
+            pengecoh: [
+              "def greet(name = str) ",
+              ": str:\n    return f\"Halo {name}\"",
+            ],
+            pemisah: "",
+            explanation:
+              "Type hint Python ditulis setelah nama parameter dengan titik dua `name: str` dan panah `-> str`. Pengecoh `str name` adalah sintaks Java yang keliru pada penulisan tipe data Python terkini dalam pembuatan fungsi modular.",
+          },
         },
         {
           kind: "quiz",
@@ -1111,6 +1441,21 @@ export const pythonTrack: Track = {
             },
           ],
           solution: 'with open("app.log", "r", encoding="utf-8") as f:\n    pass',
+          susunKode: {
+            question:
+              "Susun pembacaan file app.log dengan encoding utf-8 menggunakan context manager with.",
+            potongan: [
+              "with open(\"app.log\", ",
+              "\"r\", encoding=\"utf-8\") as f:\n    pass",
+            ],
+            pengecoh: [
+              "with File.open(\"app.log\", ",
+              "\"r\", charset=\"utf-8\") as f:\n    pass_block",
+            ],
+            pemisah: "",
+            explanation:
+              "Membuka berkas secara aman memakai `with open(...) as f:`. Pengecoh `File.open` adalah metode dari Ruby yang keliru digunakan di Python dan menjebak pemula yang sedang mempelajari I/O berkas lembar skrip Python.",
+          },
         },
         {
           kind: "step",
@@ -1140,6 +1485,21 @@ export const pythonTrack: Track = {
             },
           ],
           solution: "reader = csv.DictReader(f)",
+          susunKode: {
+            question:
+              "Susun pembentukan pembaca CSV DictReader dari berkas f.",
+            potongan: [
+              "reader = ",
+              "csv.DictReader(f)",
+            ],
+            pengecoh: [
+              "reader := ",
+              "csv.create_reader(f)",
+            ],
+            pemisah: "",
+            explanation:
+              "Pembaca CSV berbasis dictionary adalah `csv.DictReader(f)`. Pengecoh `csv.create_reader()` adalah nama fungsi fiktif yang menggoda dan keliru digunakan saat membaca berkas CSV di Python secara otomatis pada program.",
+          },
         },
         {
           kind: "step",
@@ -1166,6 +1526,21 @@ export const pythonTrack: Track = {
             },
           ],
           solution: "data = json.loads(json_string)",
+          susunKode: {
+            question:
+              "Susun pemrosesan string JSON json_string menjadi objek Python dengan json.loads.",
+            potongan: [
+              "data = ",
+              "json.loads(json_string)",
+            ],
+            pengecoh: [
+              "data := ",
+              "json.parse(json_string)",
+            ],
+            pemisah: "",
+            explanation:
+              "Penguraian string JSON di Python menggunakan `json.loads()`. Pengecoh `json.parse()` berasal dari JavaScript yang keliru dipakai dan sering membingungkan pengembang web frontend di awal belajar Python diBiLearn.",
+          },
         },
         {
           kind: "step",
@@ -1193,6 +1568,21 @@ export const pythonTrack: Track = {
             },
           ],
           solution: 'file_path = Path("data/file.txt")',
+          susunKode: {
+            question:
+              "Susun pembentukan objek Path untuk berkas data/file.txt.",
+            potongan: [
+              "file_path = ",
+              "Path(\"data/file.txt\")",
+            ],
+            pengecoh: [
+              "file_path := ",
+              "new Path(\"data/file.txt\")",
+            ],
+            pemisah: "",
+            explanation:
+              "Instansiasi objek Path dilakukan dengan `Path('data/file.txt')`. Pengecoh `new Path()` menggunakan kata kunci `new` yang keliru di Python karena Python tidak memiliki operator `new` bawaan dalam sistemnya saat ini.",
+          },
         },
         {
           kind: "step",
@@ -1229,6 +1619,21 @@ export const pythonTrack: Track = {
           ],
           solution:
             'input_str = "dua puluh"\ntry:\n    angka = int(input_str)\nexcept ValueError as e:\n    print(\'Bukan angka:\', e)',
+          susunKode: {
+            question:
+              "Susun penanganan exception ValueError saat konversi string input_str.",
+            potongan: [
+              "input_str = \"dua puluh\"\ntry:\n ",
+              "angka = int(input_str)\nexcept ValueError as e:\n    print('Bukan angka:', e)",
+            ],
+            pengecoh: [
+              "input_str = \"dua puluh\"\nwhile True:\n ",
+              "angka = parse_int(input_str)\ncatch ValueError as e:\n    print('Bukan angka:', e)",
+            ],
+            pemisah: "",
+            explanation:
+              "Penangkapan exception di Python memakai `except ValueError as e:`. Pengecoh `catch` adalah kata kunci dari bahasa lain yang keliru di Python dan menjebak pemula dalam penanganan eksepsi program di BiLearn secara mendasar.",
+          },
         },
         {
           kind: "step",
@@ -1258,6 +1663,21 @@ export const pythonTrack: Track = {
             },
           ],
           solution: 'raise ValueError("Invalid age")',
+          susunKode: {
+            question:
+              "Susun pelemparan exception ValueError dengan pesan Invalid age.",
+            potongan: [
+              "raise ",
+              "ValueError(\"Invalid age\")",
+            ],
+            pengecoh: [
+              "throw ",
+              "Exception(\"Age error\")",
+            ],
+            pemisah: "",
+            explanation:
+              "Pelemparan eksepsi di Python menggunakan kata kunci `raise`. Pengecoh `throw` adalah kata kunci dari Java/JS yang keliru dipakai dan sering membingungkan pembelajar baru di Python modern saat membuat fungsi penanganan error.",
+          },
         },
         {
           kind: "step",
@@ -1286,6 +1706,21 @@ export const pythonTrack: Track = {
           ],
           solution:
             "with open('pesan.txt', 'w', encoding='utf-8') as f:\n    pass",
+          susunKode: {
+            question:
+              "Susun penulisan berkas pesan.txt dalam mode write dengan encoding utf-8.",
+            potongan: [
+              "with open('pesan.txt', 'w', ",
+              "encoding='utf-8') as f:\n    pass",
+            ],
+            pengecoh: [
+              "with File.create('pesan.txt', 'w', ",
+              "charset='utf-8') as f:\n    pass_block",
+            ],
+            pemisah: "",
+            explanation:
+              "Menulis berkas baru dilakukan dengan `open('pesan.txt', 'w', encoding='utf-8')`. Pengecoh `File.create` adalah metode fiktif yang keliru dan sering menjebak pemula yang mengira ada API tersebut di Python saat ini.",
+          },
         },
         {
           kind: "quiz",
@@ -1460,6 +1895,21 @@ export const pythonTrack: Track = {
             },
           ],
           solution: "def __init__(self, title):\n    self.title = title",
+          susunKode: {
+            question:
+              "Susun konstruktor __init__ untuk menginisialisasi atribut self.title.",
+            potongan: [
+              "def __init__(self, title):\n",
+              "    self.title = title",
+            ],
+            pengecoh: [
+              "def constructor(self, title):\n",
+              "    this.title = title",
+            ],
+            pemisah: "",
+            explanation:
+              "Metode konstruktor kelas Python dinamakan `__init__`. Pengecoh `constructor` berasal dari JavaScript yang keliru dipakai di OOP Python dan sering menggoda pengembang berlatar JS sebelumnya pada pemrograman skrip.",
+          },
         },
         {
           kind: "step",
@@ -1487,6 +1937,21 @@ export const pythonTrack: Track = {
                       }
                     ],
           solution: "species = 'Human'",
+          susunKode: {
+            question:
+              "Susun atribut kelas species berisikan nilai string Human.",
+            potongan: [
+              "species = ",
+              "'Human'",
+            ],
+            pengecoh: [
+              "species == ",
+              "'Person'",
+            ],
+            pemisah: "",
+            explanation:
+              "Atribut kelas di Python dideklarasikan langsung di dalam badan kelas tanpa kata kunci `var` atau `static`. Pengecoh operator pembanding `==` adalah sintaks keliru yang menjebak pengembang Java atau C++ di Python saat ini.",
+          },
         },
         {
           kind: "step",
@@ -1518,6 +1983,21 @@ export const pythonTrack: Track = {
                       }
                     ],
           solution: "super().__init__(name)",
+          susunKode: {
+            question:
+              "Susun pemanggilan konstruktor kelas induk dengan parameter name.",
+            potongan: [
+              "super().__init__(",
+              "name)",
+            ],
+            pengecoh: [
+              "parent.__init__(",
+              "name_arg)",
+            ],
+            pemisah: "",
+            explanation:
+              "Pemanggilan metode kelas induk menggunakan `super().__init__(name)`. Pengecoh `parent` adalah kata kunci fiktif yang keliru dan sering membingungkan pemula saat belajar pewarisan OOP di Python secara bertahap dan terstruktur.",
+          },
         },
         {
           kind: "step",
@@ -1553,6 +2033,21 @@ export const pythonTrack: Track = {
             },
           ],
           solution: "def __str__(self):\n    return self.name",
+          susunKode: {
+            question:
+              "Susun metode __str__ untuk mengembalikan nama objek self.name.",
+            potongan: [
+              "def __str__(self):\n",
+              "    return self.name",
+            ],
+            pengecoh: [
+              "def toString(self):\n",
+              "    return this.name",
+            ],
+            pemisah: "",
+            explanation:
+              "Metode representasi string objek menggunakan dunder method `__str__`. Pengecoh `toString` dari Java/JS adalah kekeliruan yang menggoda dan sering memicu AttributeError pada objek Python saat dipanggil dalam cetakan.",
+          },
         },
         {
           kind: "step",
@@ -1590,6 +2085,21 @@ export const pythonTrack: Track = {
           ],
           solution:
             "from dataclasses import dataclass\n\n@dataclass\nclass Product:\n    name: str\n    price: float",
+          susunKode: {
+            question:
+              "Susun dekorator @dataclass pada kelas Product dengan name: str dan price: float.",
+            potongan: [
+              "from dataclasses import dataclass\n\n@dataclass\nclass Product:\n",
+              "    name: str\n    price: float",
+            ],
+            pengecoh: [
+              "from dataclasses import dataclass\n\n@struct\nclass Product:\n",
+              "    str name\n    float price",
+            ],
+            pemisah: "",
+            explanation:
+              "Dekorator pembuatan kelas data otomatis adalah `@dataclass`. Pengecoh `@struct` adalah istilah dari bahasa lain yang keliru di Python dan sering menjebak pembelajar baru kelas data di lembar kerja BiLearn saat ini.",
+          },
         },
         {
           kind: "step",
@@ -1615,6 +2125,21 @@ export const pythonTrack: Track = {
             },
           ],
           solution: "def proses_data():\n    pass",
+          susunKode: {
+            question:
+              "Susun pendefinisian fungsi proses_data dengan pernyataan pass.",
+            potongan: [
+              "def proses_data()",
+              ":\n    pass",
+            ],
+            pengecoh: [
+              "def olah_data()",
+              " {\n    pass\n}",
+            ],
+            pemisah: "",
+            explanation:
+              "Pernyataan penahan tempat di Python menggunakan `pass`. Pengecoh `olah_data` dan kurung kurawal `{}` adalah kesalahan sintaks yang keliru dan membuat interpreter Python menolak eksekusi fungsi secara langsung.",
+          },
         },
         {
           kind: "quiz",
@@ -1782,6 +2307,21 @@ export const pythonTrack: Track = {
                       }
                     ],
           solution: "pip install requests",
+          susunKode: {
+            question:
+              "Susun perintah pip untuk menginstal pustaka requests.",
+            potongan: [
+              "pip install ",
+              "requests",
+            ],
+            pengecoh: [
+              "pip get ",
+              "req-package",
+            ],
+            pemisah: "",
+            explanation:
+              "Manajer paket standar Python adalah `pip install`. Pengecoh `pip get` adalah sub-perintah fiktif yang keliru dipakai dan sering membuat bingung pengembang pemula pada lingkungan terminal saat menginstal pustaka di BiLearn.",
+          },
         },
         {
           kind: "step",
@@ -1809,6 +2349,21 @@ export const pythonTrack: Track = {
             },
           ],
           solution: "python -m venv .venv",
+          susunKode: {
+            question:
+              "Susun perintah venv untuk membuat lingkungan virtual .venv.",
+            potongan: [
+              "python -m venv ",
+              ".venv",
+            ],
+            pengecoh: [
+              "python create-env ",
+              "my_venv",
+            ],
+            pemisah: "",
+            explanation:
+              "Pembuatan virtual environment bawaan memakai `python -m venv .venv`. Pengecoh `create-env` adalah opsi fiktif yang keliru dan sering menjebak pemula saat menyiapkan proyek Python dari awal pada sistem lokal pengguna.",
+          },
         },
         {
           kind: "step",
@@ -1835,6 +2390,21 @@ export const pythonTrack: Track = {
             },
           ],
           solution: "pip install -r requirements.txt",
+          susunKode: {
+            question:
+              "Susun perintah pip untuk menginstal ketergantungan dari requirements.txt.",
+            potongan: [
+              "pip install ",
+              "-r requirements.txt",
+            ],
+            pengecoh: [
+              "pip get ",
+              "-file reqs.txt",
+            ],
+            pemisah: "",
+            explanation:
+              "Penginstalan ketergantungan berkas menggunakan flag `-r requirements.txt`. Pengecoh `pip get` adalah opsi fiktif yang keliru dan sering menggoda pengguna baru di lingkungan terminal perintah skrip Python secara langsung.",
+          },
         },
         {
           kind: "step",
@@ -1864,6 +2434,21 @@ export const pythonTrack: Track = {
             },
           ],
           solution: "mkdir src && touch src/app.py",
+          susunKode: {
+            question:
+              "Susun perintah pembuatan folder src dan berkas src/app.py.",
+            potongan: [
+              "mkdir src && ",
+              "touch src/app.py",
+            ],
+            pengecoh: [
+              "make dir src && ",
+              "create src/app.py",
+            ],
+            pemisah: "",
+            explanation:
+              "Perintah CLI pembuat folder dan file adalah `mkdir` dan `touch`. Pengecoh `make dir` adalah perintah fiktif yang keliru dan tidak dapat dieksekusi pada shell Linux/macOS standar saat proyek dibuat oleh pengguna BiLearn.",
+          },
         },
         {
           kind: "step",
@@ -1892,6 +2477,21 @@ export const pythonTrack: Track = {
             },
           ],
           solution: "jupyter notebook\npython src/app.py",
+          susunKode: {
+            question:
+              "Susun dua perintah menjalankan jupyter notebook dan python src/app.py.",
+            potongan: [
+              "jupyter ",
+              "notebook\npython src/app.py",
+            ],
+            pengecoh: [
+              "jupyter-notebook-server ",
+              "\npy-exec src/app.py",
+            ],
+            pemisah: "",
+            explanation:
+              "Menjalankan notebook dan skrip Python menggunakan perintah `jupyter notebook` dan `python`. Pengecoh `py-exec` adalah perintah fiktif yang keliru disarankan oleh beberapa pengembang secara tidak resmi saat ini.",
+          },
         },
         {
           kind: "step",
@@ -1915,6 +2515,21 @@ export const pythonTrack: Track = {
             },
           ],
           solution: "ruff check .",
+          susunKode: {
+            question:
+              "Susun perintah linter ruff untuk memeriksa direktori saat ini.",
+            potongan: [
+              "ruff ",
+              "check .",
+            ],
+            pengecoh: [
+              "flake8 ",
+              "lint .",
+            ],
+            pemisah: "",
+            explanation:
+              "Pemeriksaan linter ruff dilakukan dengan `ruff check .`. Pengecoh `ruff lint` adalah sub-perintah yang keliru pada CLI ruff modern yang sering menjebak pengguna linter Python dalam verifikasi kode otomatis di server.",
+          },
         },
         {
           kind: "quiz",
@@ -2077,6 +2692,21 @@ export const pythonTrack: Track = {
             },
           ],
           solution: 'files = glob.glob("data/*.txt")',
+          susunKode: {
+            question:
+              "Susun pencarian berkas data/*.txt menggunakan modul glob.",
+            potongan: [
+              "files = ",
+              "glob.glob(\"data/*.txt\")",
+            ],
+            pengecoh: [
+              "files := ",
+              "glob.find_all(\"data/*.txt\")",
+            ],
+            pemisah: "",
+            explanation:
+              "Pencarian pola berkas menggunakan fungsi `glob.glob()`. Pengecoh `glob.find_all()` adalah nama fungsi fiktif yang keliru dan sering membuat pemula kebingungan mencari modul berkas di Python saat ini pada proyek.",
+          },
         },
         {
           kind: "step",
@@ -2107,6 +2737,21 @@ export const pythonTrack: Track = {
             },
           ],
           solution: 'wb = openpyxl.load_workbook("file.xlsx")',
+          susunKode: {
+            question:
+              "Susun pembacaan workbook file.xlsx dengan openpyxl.load_workbook.",
+            potongan: [
+              "wb = ",
+              "openpyxl.load_workbook(\"file.xlsx\")",
+            ],
+            pengecoh: [
+              "wb := ",
+              "openpyxl.read_excel(\"file.xlsx\")",
+            ],
+            pemisah: "",
+            explanation:
+              "Membuka workbook Excel dengan openpyxl memakai `load_workbook()`. Pengecoh `read_excel` berasal dari pandas yang keliru jika digunakan langsung pada modul openpyxl di Python oleh pemula saat ini di lembar kerja.",
+          },
         },
         {
           kind: "step",
@@ -2134,6 +2779,21 @@ export const pythonTrack: Track = {
             },
           ],
           solution: "res = requests.get(url)",
+          susunKode: {
+            question:
+              "Susun permintaan HTTP GET ke url dengan pustaka requests.",
+            potongan: [
+              "res = ",
+              "requests.get(url)",
+            ],
+            pengecoh: [
+              "res := ",
+              "requests.fetch(url)",
+            ],
+            pemisah: "",
+            explanation:
+              "Permintaan GET HTTP pada pustaka requests memakai `requests.get(url)`. Pengecoh `fetch` berasal dari API browser JavaScript yang keliru dipakai pada pustaka HTTP Python secara langsung dalam proyek web skrip.",
+          },
         },
         {
           kind: "step",
@@ -2162,6 +2822,21 @@ export const pythonTrack: Track = {
             },
           ],
           solution: 'soup = BeautifulSoup(html, "html.parser")',
+          susunKode: {
+            question:
+              "Susun penguraian dokumen HTML dengan BeautifulSoup dan parser html.parser.",
+            potongan: [
+              "soup = ",
+              "BeautifulSoup(html, \"html.parser\")",
+            ],
+            pengecoh: [
+              "soup := ",
+              "BeautifulSoup.parse(html, \"html.parser\")",
+            ],
+            pemisah: "",
+            explanation:
+              "Instansiasi pengurai BeautifulSoup dilakukan dengan `BeautifulSoup(html, 'html.parser')`. Pengecoh `.parse()` adalah metode fiktif yang sering keliru disangka ada oleh pemula di web scraping modern saat mengolah HTML.",
+          },
         },
         {
           kind: "step",
@@ -2191,6 +2866,21 @@ export const pythonTrack: Track = {
             },
           ],
           solution: "msg['Subject'] = 'Laporan'",
+          susunKode: {
+            question:
+              "Susun penetapan header subjek email pada objek msg.",
+            potongan: [
+              "msg['Subject'] = ",
+              "'Laporan'",
+            ],
+            pengecoh: [
+              "msg['Subject'] == ",
+              "'Laporan_Internal'",
+            ],
+            pemisah: "",
+            explanation:
+              "Penetapan header pesan email Python menggunakan sintaks indeks `msg['Subject'] = 'Laporan'`. Pengecoh operator pembanding `==` keliru jika digunakan untuk menginisialisasi subjek email pada skrip Python.",
+          },
         },
         {
           kind: "step",
@@ -2218,6 +2908,21 @@ export const pythonTrack: Track = {
             },
           ],
           solution: 'schedule.every().day.at("08:00").do(run_job)',
+          susunKode: {
+            question:
+              "Susun penjadwalan fungsi run_job setiap hari pukul 08:00 dengan schedule.",
+            potongan: [
+              "schedule.every().day.at(",
+              "\"08:00\").do(run_job)",
+            ],
+            pengecoh: [
+              "schedule.daily.at(",
+              "\"08:00\").run(run_job)",
+            ],
+            pemisah: "",
+            explanation:
+              "Penjadwalan harian dengan pustaka schedule ditulis `schedule.every().day.at(\"08:00\").do(run_job)`. Pengecoh `daily.run` keliru dan sering menjebak dalam otomasi skrip Python di server aplikasi secara rutin.",
+          },
         },
         {
           kind: "step",
@@ -2247,6 +2952,21 @@ export const pythonTrack: Track = {
             },
           ],
           solution: "if len(files) > 0:\n    send_report()",
+          susunKode: {
+            question:
+              "Susun pengkondisian jika daftar files tidak kosong untuk memanggil fungsi pengiriman laporan.",
+            potongan: [
+              "if len(files) > 0:\n",
+              "    send_report()",
+            ],
+            pengecoh: [
+              "if count(files) > 0:\n",
+              "    send_mail()",
+            ],
+            pemisah: "",
+            explanation:
+              "Pemeriksaan jumlah elemen list menggunakan `len(files) > 0`. Pengecoh `count()` di sini adalah fungsi fiktif yang keliru dipakai dan sering menjebak pemula dalam penulisan kondisi pada skrip Python secara umum.",
+          },
         },
         {
           kind: "quiz",
@@ -2400,6 +3120,21 @@ export const pythonTrack: Track = {
             },
           ],
           solution: "import pandas as pd",
+          susunKode: {
+            question:
+              "Susun pengimporan pustaka pandas dengan alias pd.",
+            potongan: [
+              "import pandas ",
+              "as pd",
+            ],
+            pengecoh: [
+              "include pandas ",
+              "using pd",
+            ],
+            pemisah: "",
+            explanation:
+              "Pengimporan pandas dengan alias standar ditulis `import pandas as pd`. Pengecoh `using pd` adalah sintaks C# yang keliru di Python dan sering membingungkan pembelajar baru data science di BiLearn saat ini secara langsung.",
+          },
         },
         {
           kind: "step",
@@ -2424,6 +3159,21 @@ export const pythonTrack: Track = {
             },
           ],
           solution: "df = pd.read_csv('data.csv')",
+          susunKode: {
+            question:
+              "Susun pembacaan data CSV data.csv ke DataFrame df dengan pandas.",
+            potongan: [
+              "df = ",
+              "pd.read_csv('data.csv')",
+            ],
+            pengecoh: [
+              "df := ",
+              "pd.load_csv('data.csv')",
+            ],
+            pemisah: "",
+            explanation:
+              "Membaca file CSV di pandas menggunakan `pd.read_csv()`. Pengecoh `load_csv()` adalah nama fungsi fiktif yang sering keliru diduga ada oleh pemula saat belajar manipulasi data pada modul pandas di Python modern.",
+          },
         },
         {
           kind: "step",
@@ -2451,6 +3201,21 @@ export const pythonTrack: Track = {
             },
           ],
           solution: "print(df.head())",
+          susunKode: {
+            question:
+              "Susun pencetakan lima baris awal DataFrame df.",
+            potongan: [
+              "print(",
+              "df.head())",
+            ],
+            pengecoh: [
+              "echo(",
+              "df.first())",
+            ],
+            pemisah: "",
+            explanation:
+              "Menampilkan sampel baris teratas DataFrame memakai `df.head()`. Pengecoh `df.first()` adalah nama metode fiktif yang keliru dan sering menggoda pengembang dari platform analitik lain pada skrip data Python.",
+          },
         },
         {
           kind: "step",
@@ -2477,6 +3242,21 @@ export const pythonTrack: Track = {
             },
           ],
           solution: "filtered = df[df['price'] > 1000]",
+          susunKode: {
+            question:
+              "Susun penyaringan DataFrame df untuk harga price > 1000.",
+            potongan: [
+              "filtered = ",
+              "df[df['price'] > 1000]",
+            ],
+            pengecoh: [
+              "filtered := ",
+              "df.where('price > 1000')",
+            ],
+            pemisah: "",
+            explanation:
+              "Penyaringan boolean di pandas menggunakan `df[df['price'] > 1000]`. Pengecoh `where('price > 1000')` adalah sintaks SQL/Spark keliru yang sering menjebak pemula saat mengurai data tabel di pandas secara langsung.",
+          },
         },
         {
           kind: "step",
@@ -2502,6 +3282,21 @@ export const pythonTrack: Track = {
             },
           ],
           solution: "df['total'] = df['price'] * df['qty']",
+          susunKode: {
+            question:
+              "Susun pembuatan kolom total dari perkalian kolom price dan qty.",
+            potongan: [
+              "df['total'] = ",
+              "df['price'] * df['qty']",
+            ],
+            pengecoh: [
+              "df['total'] := ",
+              "df['price'] .multiply(df['qty'])",
+            ],
+            pemisah: "",
+            explanation:
+              "Operasi vektor antar kolom pandas ditulis `df['price'] * df['qty']`. Pengecoh dengan spasi sebelum `.multiply` keliru dan menjebak pemula dalam penulisan ekspresi aritmatika DataFrame di Python saat mengolah data.",
+          },
         },
         {
           kind: "step",
@@ -2527,6 +3322,21 @@ export const pythonTrack: Track = {
             },
           ],
           solution: "df['age'] = df['age'].fillna(0)",
+          susunKode: {
+            question:
+              "Susun pengisian nilai hilang kolom age dengan 0 memakai fillna.",
+            potongan: [
+              "df['age'] = ",
+              "df['age'].fillna(0)",
+            ],
+            pengecoh: [
+              "df['age'] := ",
+              "df['age'].replace_null(0)",
+            ],
+            pemisah: "",
+            explanation:
+              "Pengisian nilai NaN di pandas memakai `df['age'].fillna(0)`. Pengecoh `replace_null` adalah metode fiktif yang keliru dan sering menggoda pengembang yang terbiasa dengan SQL saat ini pada pandas secara otomatis.",
+          },
         },
         {
           kind: "step",
@@ -2553,6 +3363,21 @@ export const pythonTrack: Track = {
             },
           ],
           solution: "summary = df.groupby('category')['price'].mean()",
+          susunKode: {
+            question:
+              "Susun agregasi rata-rata harga per kategori dengan groupby dan mean.",
+            potongan: [
+              "summary = ",
+              "df.groupby('category')['price'].mean()",
+            ],
+            pengecoh: [
+              "summary := ",
+              "df.group_by('category')['price'].average()",
+            ],
+            pemisah: "",
+            explanation:
+              "Pengelompokan data di pandas menggunakan `df.groupby('category')['price'].mean()`. Pengecoh `group_by` dengan garis bawah keliru dan sering menjebak dalam manipulasi DataFrame otomatis pada Python saat analisis.",
+          },
         },
         {
           kind: "quiz",
