@@ -1607,6 +1607,7 @@ export const aiDevTrack: Track = {
           example: {
             code: "const daftar = [];\nconsole.log(daftar[0].nama);          // TypeError\nconsole.log(daftar[0]?.nama ?? '-');  // aman",
             output: "TypeError: Cannot read properties of undefined (reading 'nama')\n-",
+            note: "Bongkar kalimatnya: *cannot* = tidak bisa, *read* = membaca, *properties of* = properti milik, *undefined* = belum ada isinya, *reading* = yang sedang dibaca. Jadi bunyinya: \"tidak bisa membaca properti milik sesuatu yang belum ada — yang sedang dibaca: `nama`\". Pola `Cannot read properties of X (reading 'y')` akan kamu temui ratusan kali; yang berubah cuma X dan y. Kunci membacanya: **X adalah yang kosong, y adalah yang kamu minta.**",
           },
           instruction:
             "Kode AI di editor error saat pengguna belum mengisi alamat. Perbaiki agar aman: pakai optional chaining untuk mengakses `user.alamat.kota`, dan tampilkan teks `'Belum diisi'` ketika kotanya tidak ada.",
@@ -2283,7 +2284,14 @@ export const aiDevTrack: Track = {
             "Ada titik di mana meminta perbaikan berikutnya justru memperburuk keadaan: sudah lebih dari tiga putaran tanpa kemajuan, kodenya makin panjang, dan kamu tidak lagi bisa menjelaskan apa yang berubah. Itu tanda untuk berhenti, membuang perubahan lokal, dan kembali ke kondisi bersih terakhir. Membuang satu jam pekerjaan yang membingungkan lebih murah daripada mempertahankan kode yang tidak kamu pahami. Setelah bersih, kerjakan ulang dengan langkah yang jauh lebih kecil — dan kali ini commit setiap kali satu bagian berhasil.",
           example: {
             code: "git status\ngit stash",
-            output: "On branch main\nChanges not staged for commit:\n  modified:   src/checkout.js\nSaved working directory and index state WIP on main",
+            output:
+              "On branch main\n" +
+              "Changes not staged for commit:\n" +
+              '  (use "git add <file>..." to update what will be committed)\n' +
+              "\tmodified:   src/checkout.js\n\n" +
+              'no changes added to commit (use "git add" and/or "git commit -a")\n' +
+              "Saved working directory and index state WIP on main: 3f9a1c2 Perbaiki validasi checkout",
+            note: "Empat frasa yang perlu kamu kenali. *Changes not staged for commit* = perubahan yang belum dimasukkan ke keranjang commit. *modified* = diubah. *no changes added to commit* = tidak ada yang dimasukkan ke commit. *Saved working directory* = direktori kerjamu sudah disimpan. Kata `WIP` adalah singkatan **W**ork **I**n **P**rogress — pekerjaan yang belum selesai. Perhatikan Git selalu menutup pesannya dengan saran di dalam kurung: `(use \"git add\" ...)` artinya \"pakailah git add\" — Git memang gemar memberi tahu perintah berikutnya, jadi biasakan membaca isi kurung itu.",
           },
           instruction:
             "Setelah lima putaran tanpa kemajuan, kamu memutuskan kembali ke kondisi bersih. Tulis perintah Git yang membuang seluruh perubahan lokal yang belum di-commit pada direktori kerja saat ini.",

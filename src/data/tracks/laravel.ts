@@ -483,7 +483,7 @@ export const laravelTrack: Track = {
               "db_laravel\n" +
               "PHP Warning:  include(tidak-ada.php): Failed to open stream: No such file or directory in /app/index.php on line 6\n" +
               " selesai",
-            note: "Kalau baris terakhir memakai `require` alih-alih `include`, kata ` selesai` TIDAK akan pernah tercetak — skrip berhenti di situ. Catatan jujur: panel latihan tidak menjalankan PHP, jadi keluaran ini tidak akan muncul di sini; yang diperiksa adalah kode yang kamu tulis.",
+            note: "Kalau baris terakhir memakai `require` alih-alih `include`, kata ` selesai` TIDAK akan pernah tercetak — skrip berhenti di situ. Baca pesannya bertahap: *Warning* = peringatan (program tetap lanjut), beda dengan *Fatal error* = kesalahan mematikan (program berhenti). Lalu *Failed to open stream* = gagal membuka aliran berkas, dan *No such file or directory* = tidak ada berkas atau direktori semacam itu. Frasa `No such file or directory` adalah salah satu kalimat paling sering muncul di seluruh dunia pemrograman — artinya selalu sama: **alamat yang kamu sebut tidak ditemukan**, biasanya karena salah ketik nama atau salah letak folder. Catatan jujur: panel latihan tidak menjalankan PHP, jadi keluaran ini tidak akan muncul di sini; yang diperiksa adalah kode yang kamu tulis.",
           },
           instruction:
             "Skripmu memanggil beberapa fungsi bantu yang tinggal di berkas `helper.php`. Sisipkan berkas itu dengan bentuk yang memenuhi dua syarat sekaligus: skrip harus **berhenti** kalau berkasnya tidak ditemukan, dan berkasnya **tidak boleh** dimuat dua kali walau dipanggil dari banyak tempat.",
@@ -789,7 +789,7 @@ export const laravelTrack: Track = {
             output:
               "Bimo\n" +
               "PHP Fatal error:  Uncaught Error: Cannot access private property User::$umur in /app/contoh.php:12",
-            note: "Properti dibaca dengan tanda panah `->`, bukan titik seperti JavaScript. Baris terakhir memperlihatkan `private` benar-benar memblokir akses dari luar kelas. Catatan jujur: panel latihan tidak menjalankan PHP, jadi keluaran ini tidak akan muncul di sini; yang diperiksa adalah kode yang kamu tulis.",
+            note: "Properti dibaca dengan tanda panah `->`, bukan titik seperti JavaScript. Baris terakhir memperlihatkan `private` benar-benar memblokir akses dari luar kelas. Arti pesannya: *Uncaught* = tidak tertangkap (tidak ada kode yang menangani kesalahan ini), *Cannot access* = tidak bisa mengakses, *private property* = properti privat. Ingat pola `Cannot <kata kerja>` — sudah kamu temui sebagai `Cannot read` di JavaScript, dan akan muncul lagi sebagai `Cannot redeclare`. Semuanya berarti hal yang sama: **komputer menolak melakukan tindakan itu**, dan kata setelah *Cannot* memberi tahu tindakan apa yang ditolak. Catatan jujur: panel latihan tidak menjalankan PHP, jadi keluaran ini tidak akan muncul di sini; yang diperiksa adalah kode yang kamu tulis.",
           },
           instruction:
             "Buat kelas `Product` yang setiap objeknya wajib dibuat dengan sebuah judul. Judul itu harus tersimpan sebagai properti publik bernama `title` bertipe `string`, dan deklarasinya ditulis langsung di parameter konstruktor (gaya ringkas PHP 8), bukan dipisah menjadi properti terpisah.",
@@ -924,7 +924,7 @@ export const laravelTrack: Track = {
               "Guk\n" +
               "Mengambil bola\n" +
               "PHP Fatal error:  Uncaught Error: Call to undefined method Animal::fetch() in /app/contoh.php:14",
-            note: "Pewarisan hanya mengalir satu arah, dari induk ke anak. Method anak yang bernama sama akan menimpa milik induk (*override*). Catatan jujur: panel latihan tidak menjalankan PHP, jadi keluaran ini tidak akan muncul di sini; yang diperiksa adalah kode yang kamu tulis.",
+            note: "Pewarisan hanya mengalir satu arah, dari induk ke anak. Method anak yang bernama sama akan menimpa milik induk (*override* — dalam bahasa Inggris sehari-hari berarti \"membatalkan lalu menggantikan\"). Arti pesan errornya: *Call to undefined method* = panggilan ke method yang tidak terdefinisi. Kata *undefined* akan terus mengikutimu di semua bahasa pemrograman — di JavaScript sebagai `is not defined`, di PHP sebagai `undefined method`. Akar katanya sama: *define* = mendefinisikan/menetapkan, awalan *un-* membalik artinya jadi \"belum ditetapkan\". Jadi setiap kali kamu melihat *undefined*, tanyakan satu hal: **apakah aku memang pernah membuat yang ini?** Catatan jujur: panel latihan tidak menjalankan PHP, jadi keluaran ini tidak akan muncul di sini; yang diperiksa adalah kode yang kamu tulis.",
           },
           instruction:
             "Editor sudah berisi kelas `User`. Buat kelas `Admin` yang otomatis mendapat seluruh properti dan method `User` tanpa menyalin satu barisnya pun. Badan kelas `Admin` boleh kamu biarkan kosong.",
@@ -3002,7 +3002,7 @@ export const laravelTrack: Track = {
             ],
             pemisah: " ",
             explanation:
-              "Paket Laravel Breeze diinstal menggunakan composer require dengan flag --dev. Keping composer install keliru perintah penambahan paket baru. Keping --save-dev menggoda pengembang NPM/Node.js, padahal flag Composer adalah --dev.",
+              "Paket Laravel Breeze diinstal menggunakan composer require dengan flag --dev. Keping composer install keliru perintah penambahan paket baru. Keping --save-dev menggoda pengembang npm/Node.js, padahal flag Composer adalah --dev.",
           },
         },
         {

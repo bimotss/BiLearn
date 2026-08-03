@@ -453,8 +453,11 @@ export const nodeExpressTrack: Track = {
             "Selama proses pengembangan backend, mengeksekusi ulang server secara manual setiap kali mengubah baris kode sangat tidak efisien. Pustaka seperti `tsx` adalah *runner* TypeScript super cepat yang dilengkapi opsi `--watch` untuk memantau perubahan berkas dan me-restart server secara instan. Dibandingkan perkakas lama seperti `nodemon` atau `ts-node`, `tsx` memanfaatkan kompilator esbuild berbasis Go sehingga proses eksekusi kode terasa sangat cepat. Menggunakan runner otomatis ini meningkatkan produktivitas alur kerja harian pengembang backend secara signifikan. Jebakan utama adalah menjalankan runner pengembangan seperti `tsx --watch` di server produksi asli — di sana yang dipakai adalah hasil build yang sudah dikompilasi, bukan pemantau berkas.",
           example: {
             code: "npx tsx --watch src/index.ts",
-            output: "[tsx] Watching for changes in src/index.ts...",
-            note: "tsx adalah pengganti ts-node/nodemon modern yang sangat cepat.",
+            output:
+              "Server berjalan di http://localhost:3000\n\n" +
+              "[tsx] Rerunning...\n" +
+              "Server berjalan di http://localhost:3000",
+            note: "tsx tidak mencetak pengumuman 'sedang memantau' saat start — yang muncul pertama adalah keluaran programmu sendiri. Baris `[tsx] Rerunning...` baru tampil setiap kali kamu menyimpan berkas.",
           },
           instruction:
             "Tuliskan perintah CLI npx untuk menjalankan berkas `src/server.ts` menggunakan runner `tsx` dengan opsi pemantau berkas otomatis (`--watch`).",
@@ -1465,7 +1468,9 @@ export const nodeExpressTrack: Track = {
             "Prisma adalah ORM generasi baru yang memungkinkan kamu mendefinisikan struktur tabel database menggunakan sintaks deklaratif di berkas `schema.prisma`. Setelah mendefinisikan model, perintah CLI `npx prisma migrate dev` akan membaca skema tersebut dan otomatis membuat skrip migrasi SQL untuk memperbarui database fisik. Proses migrasi ini bertindak seperti pengontrol versi (*version control*) untuk struktur database aplikasi backend-mu. Melakukan migrasi secara teratur memastikan seluruh tim pengembang memiliki struktur database yang identik. Jebakan utama pemula adalah mengubah file `schema.prisma` namun lupa menjalankan perintah migrasi.",
           example: {
             code: "npx prisma migrate dev --name init",
-            output: "Your database is now in sync with your schema.",
+            output:
+              "Applying migration `20240101120000_init`\n\n" +
+              "Your database is now in sync with your Prisma schema. Done in 51ms",
             note: "Atribut @unique menjamin email tidak bisa duplikat di database.",
           },
           instruction:

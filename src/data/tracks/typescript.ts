@@ -253,8 +253,10 @@ export const typescriptTrack: Track = {
               "}\n" +
               "console.log(ulangi(3, \"ha\"));   // dua argumen tertukar",
             output:
-              "index.ts:4:20 - error TS2345: Argument of type 'number' is not\n" +
-              "assignable to parameter of type 'string'.\n\n" +
+              "index.ts:4:20 - error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.\n\n" +
+              "4 console.log(ulangi(3, \"ha\"));   // dua argumen tertukar\n" +
+              "                     ~\n\n" +
+              "Found 1 error in index.ts:4\n\n" +
               "Setelah argumen ditukar menjadi ulangi(\"ha\", 3), hasilnya:\n" +
               "hahaha",
             note: "Baca urutan argumennya, bukan cuma tipenya — error TS2345 sering berarti posisi argumen tertukar.",
@@ -263,8 +265,7 @@ export const typescriptTrack: Track = {
             "Kode di editor gagal dikompilasi dengan pesan yang sudah dituliskan sebagai komentar di atasnya. Sesuai isi pesan itu, perbaiki **pemanggilan fungsinya** — bukan tipe parameter di deklarasi — agar argumen yang dikirim benar-benar berjenis angka.",
           starterCode:
             "// Terminal menampilkan:\n" +
-            "// index.ts:8:25 - error TS2345: Argument of type 'string' is not\n" +
-            "// assignable to parameter of type 'number'.\n\n" +
+            "// index.ts:8:25 - error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.\n\n" +
             "function luasPersegi(sisi: number): number {\n" +
             "  return sisi * sisi;\n" +
             "}\n" +

@@ -120,7 +120,7 @@ export const javascriptTrack: Track = {
               "Uncaught TypeError: Cannot read properties of null (reading 'addEventListener')\n\n" +
               "Versi kedua, Console:\n" +
               "(tidak ada error — elemen sudah ada saat kode berjalan)",
-            note: "Kalau kamu tidak boleh mengubah `<head>`, alternatif yang sama benarnya adalah menaruh `<script src=\"main.js\"></script>` tepat sebelum `</body>`.",
+            note: "Kalau kamu tidak boleh mengubah `<head>`, alternatif yang sama benarnya adalah menaruh `<script src=\"main.js\"></script>` tepat sebelum `</body>`. Sebelum lanjut, kuasai dulu tiga kata pembuka error JavaScript karena kamu akan membacanya setiap hari: *Uncaught* = tidak tertangkap, *Cannot read* = tidak bisa membaca, *null* = kosong/tidak ada isinya. Rangkaiannya berbunyi \"tidak bisa membaca properti milik sesuatu yang kosong — yang sedang dibaca: `addEventListener`\". Terjemahan itu langsung menunjuk penyebabnya: elemen yang kamu cari **belum ada** saat kodenya berjalan.",
           },
           instruction:
             "Halaman ini akan memakai kode dari berkas bernama `app.js` yang berada di folder yang sama. Tambahkan tag pemuat berkas itu di dalam `<head>`, dan pastikan kodenya baru berjalan setelah seluruh halaman selesai dibangun.",
@@ -5593,7 +5593,7 @@ export const javascriptTrack: Track = {
               "     Tests  4 passed (4)\n\n" +
               "// jika baris toBe pada object diaktifkan:\n" +
               "AssertionError: expected { a: 1 } to be { a: 1 } // Object.is equality",
-            note: "Aturan cepat: kalau nilainya bisa 'dipegang langsung' (angka/string/boolean) pakai toBe, kalau berisi struktur pakai toEqual.",
+            note: "Aturan cepat: kalau nilainya bisa 'dipegang langsung' (angka/string/boolean) pakai toBe, kalau berisi struktur pakai toEqual. Baris `AssertionError: expected { a: 1 } to be { a: 1 }` terlihat gila bagi pemula karena kedua sisinya tampak sama persis. Terjemahannya: *expected A to be B* = \"seharusnya A adalah B\". Kata *expected* (diharapkan) dan *received* (yang diterima) adalah pasangan tetap di semua perkakas tes — begitu kamu hafal keduanya, kamu bisa membaca laporan tes apa pun. Dan pesan yang seolah menyamakan dua hal identik itu justru inti pelajarannya: `toBe` menanyakan \"apakah ini **benda yang sama**\", bukan \"apakah isinya sama\".",
           },
           instruction:
             "Tulis dua assertion: `expect(2 + 1).toBe(3)` untuk angka, dan `expect([1, 2]).toEqual([1, 2])` untuk array.",

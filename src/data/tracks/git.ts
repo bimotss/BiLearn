@@ -205,8 +205,13 @@ export const gitTrack: Track = {
           example: {
             code: "git init\ngit add index.html\ngit status",
             output:
-              "Initialized empty Git repository...\nChanges to be committed: index.html",
-            note: "git status membantu melihat status file di Staging Area.",
+              "Initialized empty Git repository in /home/kamu/toko/.git/\n" +
+              "On branch main\n\n" +
+              "No commits yet\n\n" +
+              "Changes to be committed:\n" +
+              '  (use "git rm --cached <file>..." to unstage)\n' +
+              "\tnew file:   index.html",
+            note: "git status membantu melihat status file di Staging Area. Perhatikan nama berkas muncul di baris tersendiri dengan label `new file:`, bukan sederet dengan judulnya.",
           },
           instruction:
             "Tulis perintah untuk menambahkan file `app.js` ke staging area.",
@@ -712,7 +717,7 @@ export const gitTrack: Track = {
           example: {
             code: "git switch -c feature/cart",
             output: "Switched to a new branch 'feature/cart'",
-            note: "`git switch -c` adalah pengganti modern untuk `git checkout -b`.",
+            note: "`git switch -c` adalah pengganti modern untuk `git checkout -b`. Arti keluarannya: *switched* = sudah dipindahkan (bentuk lampau dari *switch*, berpindah), *to a new branch* = ke sebuah cabang baru. Perhatikan Git memakai **bentuk lampau** untuk melaporkan hal yang sudah terjadi — `Switched`, `Saved`, `Deleted`, `Initialized`. Begitu kamu melihat kata kerja berakhiran `-ed` di awal baris, itu laporan \"sudah beres\", bukan perintah untukmu.",
           },
           instruction:
             "Tulis perintah untuk membuat dan berpindah ke branch `feature/checkout`.",
@@ -836,8 +841,11 @@ export const gitTrack: Track = {
             "`git stash` menyimpan perubahan yang belum di-commit ke tempat penyimpanan sementara dan mengembalikan direktori kerjamu ke keadaan bersih. Ini penyelamat saat kamu sedang setengah jalan mengerjakan sesuatu lalu harus buru-buru memperbaiki bug di branch lain. Ambil kembali dengan `git stash pop` yang sekaligus menghapusnya dari tumpukan, atau `git stash apply` bila ingin menyimpannya. Yang sering terlupa: stash tidak mengikutkan berkas yang belum pernah dilacak Git kecuali kamu menambahkan opsi `-u`.",
           example: {
             code: "git stash\ngit stash pop",
-            output: "Saved working directory...\nRestored working directory...",
-            note: "git stash pop mengembalikan draft tersimpan ke workspace.",
+            output:
+              "Saved working directory and index state WIP on main: 3f9a1c2 Perbaiki keranjang\n" +
+              "Restored working directory and index state WIP on main\n" +
+              "Dropped refs/stash@{0} (8c4d1e7f2a9b5c3d6e0f1a2b3c4d5e6f7a8b9c0d)",
+            note: "`git stash pop` mengembalikan draft tersimpan ke direktori kerja. Kosakatanya berpasangan dan sengaja berlawanan: *saved* = disimpan ↔ *restored* = dikembalikan seperti semula, lalu *dropped* = dibuang. Baris `Dropped` itulah beda `pop` dan `apply`: `pop` mengambil **lalu membuang** salinannya, `apply` mengambil tanpa membuang. Kata *stash* sendiri dalam bahasa Inggris sehari-hari berarti \"menyimpan diam-diam di tempat rahasia\" — persis itulah fungsinya.",
           },
           instruction:
             "Tulis perintah untuk mengembalikan draft pekerjaan yang di-stash.",
@@ -1127,7 +1135,7 @@ export const gitTrack: Track = {
           example: {
             code: "git remote add origin https://github.com/user/app.git\ngit push -u origin main",
             output: "Branch 'main' set up to track remote branch 'main' from 'origin'.",
-            note: "Flag -u (upstream) hanya perlu diisi saat push pertama kali.",
+            note: "Flag -u (upstream) hanya perlu diisi saat push pertama kali. Kalimat ini termasuk yang paling sulit dibaca pemula karena memakai **kata kerja majemuk**: *set up* (bukan *set* saja) berarti \"disiapkan/didaftarkan\", dan *to track* berarti \"untuk mengikuti\". Susunan lengkapnya: \"Cabang 'main' sudah didaftarkan untuk mengikuti cabang jauh 'main' dari 'origin'.\" Kata *remote* di sini bukan \"remot TV\" melainkan \"yang berada jauh di server\".",
           },
           instruction:
             "Tulis perintah untuk push commit branch `main` ke `origin` pertama kali.",
@@ -2065,7 +2073,7 @@ export const gitTrack: Track = {
               "CONFLICT (content): Merge conflict in src/keranjang.css\n" +
               "Automatic merge failed; fix conflicts and then commit the result.",
             note:
-              "Setelah conflict selesai, tombol Merge di PR aktif kembali. Jangan pernah menyelesaikannya dengan cara menghapus lalu membuat ulang branch.",
+              "Setelah conflict selesai, tombol Merge di PR aktif kembali. Jangan pernah menyelesaikannya dengan cara menghapus lalu membuat ulang branch. Baris `Automatic merge failed; fix conflicts and then commit the result.` wajib kamu pahami karena isinya **perintah untukmu**, bukan sekadar laporan: *automatic merge failed* = penggabungan otomatis gagal; lalu datang dua suruhan — *fix conflicts* = perbaiki bentrokannya, *and then commit the result* = lalu commit hasilnya. Ciri kalimat perintah dalam bahasa Inggris: diawali kata kerja telanjang tanpa subjek (*fix*, *use*, *run*, *try*). Begitu kamu melihat pola itu di terminal, komputer sedang menyuruhmu bertindak — bukan memberi kabar.",
           },
           instruction:
             "PR-mu bentrok dengan `main`. Tulis **dua perintah pertama** dari alur penyelesaiannya, satu per baris: ambil pembaruan dari remote `origin`, lalu gabungkan `origin/main` ke branch fitur yang sedang aktif (boleh memakai merge atau rebase).",
@@ -2639,8 +2647,10 @@ export const gitTrack: Track = {
             "`git bisect` mencari commit penyebab bug dengan pencarian biner: kamu menyebut satu commit yang sudah rusak dan satu yang masih baik, lalu Git melompat ke tengah-tengah dan bertanya kondisinya. Setiap jawabanmu memangkas separuh kemungkinan, sehingga riwayat seribu commit selesai ditelusuri hanya dalam sekitar sepuluh langkah. Beri tanda dengan `git bisect good` atau `git bisect bad` di setiap langkah, dan akhiri sesi dengan `git bisect reset` agar kembali ke posisi semula. Untuk proyek yang punya test otomatis, `git bisect run` bahkan menjalankan seluruh proses ini tanpa kamu tunggui.",
           example: {
             code: "git bisect start\ngit bisect bad\ngit bisect good a1b2c3d",
-            output: "Bisecting: 5 revisions left to test after this...",
-            note: "Git akan memindahkanmu ke commit tengah untuk dites sampai sumber bug ditemukan.",
+            output:
+              "Bisecting: 5 revisions left to test after this (roughly 3 steps)\n" +
+              "[a6a83062c1170cffe017a9a66ce2f5bfb4667d6e] Menambah validasi form checkout",
+            note: "Angka dalam kurung adalah perkiraan sisa langkah — itulah bukti pencarian biner: 12 commit selesai hanya dalam sekitar 3 tebakan. Baris kedua menunjukkan commit tengah tempat Git menaruhmu sekarang.",
           },
           instruction:
             "Tulis perintah untuk mengakhiri sesi git bisect.",

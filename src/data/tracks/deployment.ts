@@ -1709,7 +1709,7 @@ export const deploymentTrack: Track = {
               "Successfully received certificate.\n" +
               "Deploying certificate to VirtualHost /etc/nginx/sites-enabled/app.conf\n" +
               "Congratulations! You have successfully enabled https://domainku.com",
-            note: "Certbot otomatis menambahkan timer systemd untuk memperbarui sertifikat tiap 90 hari.",
+            note: "Certbot otomatis menambahkan timer systemd untuk memperbarui sertifikat tiap 90 hari. Empat baris keluarannya adalah cerita berurutan, dan kata kerjanya menandai tahapan: *Requesting* (sedang meminta) → *received* (sudah diterima) → *Deploying* (sedang memasang) → *enabled* (sudah diaktifkan). Perhatikan polanya — akhiran **-ing** berarti *sedang berlangsung*, akhiran **-ed** berarti *sudah selesai*. Satu pola itu saja cukup untuk membaca hampir semua keluaran perkakas: kamu langsung tahu mana yang masih berjalan dan mana yang sudah tuntas. *Successfully* = dengan berhasil, dan munculnya kata itu adalah tanda kamu boleh melanjutkan.",
           },
           instruction:
             "Tulis perintah certbot untuk mendapatkan dan mengonfigurasi SSL Nginx secara otomatis pada domain `myapp.com`.",

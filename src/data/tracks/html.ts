@@ -2505,7 +2505,7 @@ export const htmlTrack: Track = {
               "Menekan submit dengan kode kosong memunculkan pesan bawaan browser 'Please fill out this field'.\n" +
               "Umur 15 ditolak dengan pesan 'Value must be greater than or equal to 17'.\n" +
               "Kode pos '123' ditolak, dan isi atribut title ditampilkan sebagai petunjuk.",
-            note: "Isi `title` pada input ber-`pattern` dipakai browser sebagai penjelasan tambahan saat isiannya salah — tanpa itu pesannya terasa membingungkan bagi pengguna.",
+            note: "Isi `title` pada input ber-`pattern` dipakai browser sebagai penjelasan tambahan saat isiannya salah — tanpa itu pesannya terasa membingungkan bagi pengguna. Dua pesan di atas datang dari browser, bukan dari kodemu, dan **pengunjung situsmu ikut membacanya** — jadi kamu wajib tahu artinya. *Please fill out this field* = \"mohon isi kolom ini\" (*fill out* adalah kata kerja majemuk untuk mengisi formulir). *Value must be greater than or equal to 17* = \"nilainya harus lebih besar dari atau sama dengan 17\" — hafalkan tiga kata pembanding ini karena muncul di mana-mana: *greater than* (lebih besar dari), *less than* (lebih kecil dari), *equal to* (sama dengan). Kalau penggunamu berbahasa Indonesia, inilah alasan mengisi atribut `title` itu penting.",
           },
           instruction:
             "Buat input `type=\"text\"` dengan `name=\"username\"`, atribut `required`, dan `minlength=\"3\"`.",

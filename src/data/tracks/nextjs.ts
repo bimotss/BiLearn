@@ -3037,7 +3037,7 @@ export const nextjsTrack: Track = {
             ],
             pemisah: "\n",
             explanation:
-              "NPM secara otomatis menjalankan skrip dengan awalan pre- sebelum skrip utamanya dieksekusi, sehingga predeploy akan berjalan tepat sebelum deploy. Keping postdeploy keliru karena skrip tersebut baru berjalan setelah proses deploy selesai yang sudah terlambat. Keping vercel dev keliru karena vercel dev digunakan untuk server lokal, bukan rilis produksi (--prod).",
+              "npm secara otomatis menjalankan skrip dengan awalan pre- sebelum skrip utamanya dieksekusi, sehingga predeploy akan berjalan tepat sebelum deploy. Keping postdeploy keliru karena skrip tersebut baru berjalan setelah proses deploy selesai yang sudah terlambat. Keping vercel dev keliru karena vercel dev digunakan untuk server lokal, bukan rilis produksi (--prod).",
           },
         },
         {
