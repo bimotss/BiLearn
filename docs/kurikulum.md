@@ -241,6 +241,30 @@ Prasyarat: Python, SQL (Track 9 modul 1–4).
 
 ---
 
+## Track 16 — Business English (≈45 jam, ~55 step)
+
+Prasyarat: tidak ada. Track pendukung — bisa dijalankan paralel dengan track mana pun.
+
+Kerangka topik mengikuti urutan *Business English for Success* (The Saylor Foundation, CC BY-NC-SA 3.0). **Seluruh isi ditulis ulang dalam bahasa Indonesia, bukan terjemahan,** agar BiLearn tidak terikat klausa NonCommercial dan ShareAlike. Bab 14 sumber (APA/MLA) tidak diambil karena hanya relevan di konteks akademik.
+
+| Modul | Isi |
+|---|---|
+| 0. Persiapan & alat belajar | Kamus Inggris-Inggris, LanguageTool, level CEFR, American vs British |
+| 1. Dasar kalimat | Subject/verb/complete thought, fragment, run-on, comma splice, agreement, modifier |
+| 2. Tanda baca | Comma, semicolon, colon, quotes, apostrophe, parentheses, dash, hyphen |
+| 3. Bekerja dengan kata | Commonly confused words, ejaan, denotasi/konotasi/register, prefix-suffix, context clues |
+| 4. Jebakan non-native | Word order, article a/an/the, count/noncount, tense, modal, preposition, idiom |
+| 5. Menulis paragraf | Topic sentence di depan, unity, coherence, coordination/subordination, parallelism |
+| 6. Proses menulis | Prewriting, outline, drafting, thesis, revising vs editing |
+| 7. Prinsip business writing | Lisan vs tulisan, 7 C's, style, kata mubazir, batas plagiarisme |
+| 8. Dokumen bisnis | E-mail & netiquette, memo, surat, proposal, report, résumé, sales message |
+
+**Catatan teknis pengisian:** regex tidak bisa menilai kalimat Inggris bebas, jadi latihan bertumpu pada `susunKode` (merangkai kalimat dari potongan) dan kuis pilihan ganda. Step ngetik bebas hanya untuk kasus deterministik — menyisipkan tanda baca, memilih bentuk verb, mengganti satu kata. Semua step `language: "text"`.
+
+**Proyek sertifikasi:** satu paket lamaran kerja berbahasa Inggris — résumé satu halaman, cover letter, dan e-mail follow-up — plus satu laporan status proyek satu halaman.
+
+---
+
 ## Estimasi Total
 
 | Jalur | Track | Total jam |

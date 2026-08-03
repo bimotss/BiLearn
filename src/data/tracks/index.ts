@@ -15,6 +15,7 @@ import { aiDevTrack } from "./ai-dev";
 import { spreadsheetTrack } from "./spreadsheet";
 import { pythonTrack } from "./python";
 import { dataAnalysisTrack } from "./data-analysis";
+import { businessEnglishTrack } from "./business-english";
 
 export const tracks: Track[] = [
   htmlTrack,
@@ -33,6 +34,7 @@ export const tracks: Track[] = [
   spreadsheetTrack,
   pythonTrack,
   dataAnalysisTrack,
+  businessEnglishTrack,
 ].sort((a, b) => a.order - b.order);
 
 export function getTrack(slug: string): Track | undefined {
