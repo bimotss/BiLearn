@@ -7,6 +7,7 @@
  */
 
 import { tracks } from "../src/data/tracks/index";
+import { jalankanTes } from "../src/lib/tes";
 import type { Step, Quiz, Materi } from "../src/lib/types";
 
 let materis = 0;
@@ -64,14 +65,11 @@ function lapor(pesan: string) {
   masalah++;
 }
 
-function cocok(pattern: string, flags: string | undefined, teks: string) {
-  return new RegExp(pattern, flags ?? "i").test(teks);
-}
-
 /** Hasil satu tes terhadap sebuah kode, sudah memperhitungkan mustNotMatch. */
 function lulus(t: Step["tests"][number], teks: string) {
-  const c = cocok(t.pattern, t.flags, teks);
-  return t.mustNotMatch ? !c : c;
+  // Tetap validasi sintaks regex; penilaian scope mengikuti aplikasi.
+  new RegExp(t.pattern, t.flags ?? "i");
+  return jalankanTes([t], teks)[0].pass;
 }
 
 for (const track of tracks) {

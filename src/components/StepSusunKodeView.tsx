@@ -10,6 +10,7 @@ import Tuts from "./Tuts";
 interface Props {
   step: Step;
   onPassed: () => void;
+  isLanguageTrack?: boolean;
 }
 
 /** Kepingan di kolam, dengan penanda asal supaya urutannya tetap acak-tetap. */
@@ -19,11 +20,15 @@ interface Keping {
 }
 
 /**
- * Mode susun kode: user merangkai kode dari kepingan yang tersedia, bukan
- * mengetiknya. Hasil rangkaian dinilai dengan `tests` step yang sama persis
- * dengan mode ngetik (lihat `@/lib/tes`).
+ * Mode susun kode/kalimat: user merangkai teks dari kepingan yang tersedia,
+ * bukan mengetiknya. Hasil rangkaian dinilai dengan `tests` step yang sama
+ * persis dengan mode ngetik (lihat `@/lib/tes`).
  */
-export default function StepSusunKodeView({ step, onPassed }: Props) {
+export default function StepSusunKodeView({
+  step,
+  onPassed,
+  isLanguageTrack,
+}: Props) {
   const data = step.susunKode;
 
   const [tersusun, setTersusun] = useState<Keping[]>([]);
@@ -171,7 +176,7 @@ export default function StepSusunKodeView({ step, onPassed }: Props) {
           <InlineMarkdown text={pertanyaan} />
         </p>
         <p className="mt-1 text-sm text-neutral-500">
-          Rangkai kodenya dari kepingan di bawah. Ada kepingan yang sengaja
+          {isLanguageTrack ? "Rangkai kalimatnya" : "Rangkai kodenya"} dari kepingan di bawah. Ada kepingan yang sengaja
           salah — tidak semuanya perlu dipakai.
         </p>
 
@@ -183,7 +188,7 @@ export default function StepSusunKodeView({ step, onPassed }: Props) {
           mengeluarkan keping itu saja.
         </p>
         <ol
-          aria-label="Susunan kode yang sudah kamu rangkai"
+          aria-label={isLanguageTrack ? "Susunan kalimat yang sudah kamu rangkai" : "Susunan kode yang sudah kamu rangkai"}
           className="mt-2 flex min-h-[3.5rem] flex-wrap items-center gap-2 rounded-lg border border-dashed border-neutral-300 bg-neutral-50 p-3"
         >
           {tersusun.length === 0 && (
@@ -245,15 +250,21 @@ export default function StepSusunKodeView({ step, onPassed }: Props) {
 
         {/* Kolam kepingan */}
         <p className="mt-4 text-sm font-semibold text-neutral-700">
-          Kepingan yang tersedia
+          {isLanguageTrack ? "Potongan kalimat yang tersedia" : "Kepingan yang tersedia"}
         </p>
         <ul
-          aria-label="Kepingan kode yang bisa dipakai"
+          aria-label={
+            isLanguageTrack
+              ? "Potongan kalimat yang bisa dipakai"
+              : "Kepingan kode yang bisa dipakai"
+          }
           className="mt-2 flex flex-wrap gap-2"
         >
           {sisa.length === 0 && (
             <li className="text-sm text-neutral-400">
-              Semua kepingan sudah kamu pakai.
+              {isLanguageTrack
+                ? "Semua potongan kalimat sudah kamu pakai."
+                : "Semua kepingan sudah kamu pakai."}
             </li>
           )}
           {sisa.map((k) => (
@@ -275,7 +286,7 @@ export default function StepSusunKodeView({ step, onPassed }: Props) {
         {tersusun.length > 0 && (
           <div className="mt-4">
             <p className="text-sm font-semibold text-neutral-700">
-              Kode yang terbentuk
+              {isLanguageTrack ? "Kalimat yang terbentuk" : "Kode yang terbentuk"}
             </p>
             <pre className="mt-2 overflow-x-auto rounded-md bg-neutral-900 p-3 font-mono text-sm text-neutral-100">
               {kodeTersusun}
@@ -290,7 +301,7 @@ export default function StepSusunKodeView({ step, onPassed }: Props) {
             disabled={lulus || tersusun.length === 0}
             className="rounded-lg bg-gold-500 px-5 py-2.5 font-medium text-neutral-900 transition hover:bg-gold-400 disabled:opacity-50"
           >
-            Periksa susunan{" "}
+            {isLanguageTrack ? "Periksa susunan kalimat" : "Periksa susunan"}{" "}
             <span className="text-neutral-900/60">(Ctrl + Enter)</span>
           </button>
           {tersusun.length > 0 && !lulus && (
@@ -323,7 +334,11 @@ export default function StepSusunKodeView({ step, onPassed }: Props) {
                 lulus ? "text-green-900" : "text-amber-900"
               }`}
             >
-              {lulus ? "🎉 Susunanmu benar!" : "❌ Belum tepat"}
+              {lulus
+                ? isLanguageTrack
+                  ? "✅ Pemeriksaan susunan lolos. Tinjau kembali isi kalimatmu."
+                  : "🎉 Susunanmu benar!"
+                : "❌ Belum tepat"}
             </p>
             {lulus ? (
               <>
@@ -352,14 +367,22 @@ export default function StepSusunKodeView({ step, onPassed }: Props) {
           onClick={() => setLihatSolusi((s) => !s)}
           className="rounded-lg border border-neutral-300 px-5 py-2.5 text-sm font-medium text-neutral-700 transition hover:bg-neutral-100"
         >
-          {lihatSolusi ? "Sembunyikan kode jawabannya" : "Lihat kode jawabannya"}
+          {lihatSolusi
+            ? isLanguageTrack
+              ? "Sembunyikan kalimat jawaban"
+              : "Sembunyikan kode jawabannya"
+            : isLanguageTrack
+              ? "Lihat kalimat jawaban"
+              : "Lihat kode jawabannya"}
         </button>
         {lihatSolusi && (
           <div className="mt-3 rounded-lg bg-neutral-900 p-4">
             <p className="mb-2 font-mono text-xs text-neutral-400">
-              {"// Bentuk kode aslinya saat diketik sendiri:"}
+              {isLanguageTrack
+                ? "// Bentuk kalimat aslinya saat ditulis langsung:"
+                : "// Bentuk kode aslinya saat diketik sendiri:"}
             </p>
-            <pre className="overflow-x-auto font-mono text-sm text-green-300">
+            <pre className="overflow-x-auto text-sm text-green-300">
               {step.solution}
             </pre>
           </div>

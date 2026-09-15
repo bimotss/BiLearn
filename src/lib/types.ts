@@ -124,6 +124,8 @@ export interface StepExample {
 
 /** Tes sederhana berbasis pola untuk MVP (fase 2: test runner beneran) */
 export interface StepTest {
+  /** Batasi pemeriksaan ke paragraf pertama setelah salam e-mail. */
+  scope?: "email-opening";
   /** Regex yang harus match dengan kode user */
   pattern: string;
   /** Flag regex, default "i" */

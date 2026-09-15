@@ -7,6 +7,8 @@ import {
   getTrackItems,
   getTrackItemsForMode,
   itemLintasMode,
+  LEGACY_ITEM_ALIASES,
+  resolveItemAlias,
 } from "@/data/tracks";
 
 const KEY = "bilearn-progress-v1";
@@ -204,15 +206,33 @@ export function useProgress() {
 
   /** Selesai di dunia yang sedang aktif. */
   const isDone = useCallback(
-    (trackSlug: string, itemId: string) =>
-      (emberDari(progress, mode)[trackSlug] ?? []).includes(itemId),
+    (trackSlug: string, itemId: string) => {
+      const canonicalId = resolveItemAlias(itemId);
+      const list = emberDari(progress, mode)[trackSlug] ?? [];
+      if (list.includes(itemId) || list.includes(canonicalId)) return true;
+      for (const [legacyId, { targetId }] of Object.entries(
+        LEGACY_ITEM_ALIASES
+      )) {
+        if (targetId === canonicalId && list.includes(legacyId)) return true;
+      }
+      return false;
+    },
     [progress, mode]
   );
 
   /** Selesai di dunia tertentu, tanpa peduli mode yang sedang aktif. */
   const isDoneDi = useCallback(
-    (trackSlug: string, itemId: string, modeDicek: ModeBelajar) =>
-      (emberDari(progress, modeDicek)[trackSlug] ?? []).includes(itemId),
+    (trackSlug: string, itemId: string, modeDicek: ModeBelajar) => {
+      const canonicalId = resolveItemAlias(itemId);
+      const list = emberDari(progress, modeDicek)[trackSlug] ?? [];
+      if (list.includes(itemId) || list.includes(canonicalId)) return true;
+      for (const [legacyId, { targetId }] of Object.entries(
+        LEGACY_ITEM_ALIASES
+      )) {
+        if (targetId === canonicalId && list.includes(legacyId)) return true;
+      }
+      return false;
+    },
     [progress]
   );
 
@@ -228,9 +248,9 @@ export function useProgress() {
       const target = new Set(
         getTrackItemsForMode(track, modeDicek).map((i) => i.id)
       );
-      return (emberDari(progress, modeDicek)[trackSlug] ?? []).filter((id) =>
-        target.has(id)
-      ).length;
+      const completedList = emberDari(progress, modeDicek)[trackSlug] ?? [];
+      const completedCanonical = new Set(completedList.map(resolveItemAlias));
+      return Array.from(target).filter((id) => completedCanonical.has(id)).length;
     },
     [progress, mode]
   );

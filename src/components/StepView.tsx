@@ -10,10 +10,11 @@ import Tuts from "./Tuts";
 interface Props {
   step: Step;
   onPassed: () => void;
+  isLanguageTrack?: boolean;
 }
 
 /** Editor sederhana (textarea) + live preview + tes regex. Fase 2: Monaco + test runner. */
-export default function StepView({ step, onPassed }: Props) {
+export default function StepView({ step, onPassed, isLanguageTrack }: Props) {
   const [code, setCode] = useState(step.starterCode);
   const [results, setResults] = useState<{ pass: boolean; message: string }[]>([]);
   const [passed, setPassed] = useState(false);
@@ -26,19 +27,22 @@ export default function StepView({ step, onPassed }: Props) {
       : "";
     const base =
       "<style>body{margin:0;padding:12px;font-family:system-ui,sans-serif}<\/style>";
-    // Konten non-JS (perintah shell/git, SQL, Markdown, formula): tampilkan
-    // apa adanya, JANGAN dieksekusi — kalau dieksekusi akan jadi SyntaxError.
+    // Konten non-JS (perintah shell/git, SQL, Markdown, formula, atau bahasa Inggris):
+    // tampilkan apa adanya, JANGAN dieksekusi — kalau dieksekusi akan jadi SyntaxError.
     if (step.language === "text") {
       const aman = code
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;");
+      const capText = isLanguageTrack
+        ? "Draf tulisanmu:"
+        : "Yang kamu tulis (tidak dijalankan di preview):";
       return `${base}<style>
         .term{background:#0f172a;color:#e2e8f0;padding:12px;border-radius:6px;
               font-family:ui-monospace,monospace;font-size:12px;white-space:pre-wrap}
         .cap{font-size:11px;color:#64748b;margin:0 0 6px}
       <\/style>
-      <p class="cap">Yang kamu tulis (tidak dijalankan di preview):<\/p>
+      <p class="cap">${capText}<\/p>
       <div class="term">${aman || "(masih kosong)"}<\/div>${body}`;
     }
 
@@ -173,7 +177,7 @@ export default function StepView({ step, onPassed }: Props) {
 })();
 <\/script>`;
     return `${tw}${base}${body}${consoleShim}<script>try{\n${code}\n}catch(e){var o=document.getElementById('bilearn-out');var d=document.createElement('div');d.className='err';d.textContent=e.name+': '+e.message;o.appendChild(d);}<\/script>`;
-  }, [code, step.language, step.previewHtml, step.loadTailwind]);
+  }, [code, step.language, step.previewHtml, step.loadTailwind, isLanguageTrack]);
 
   function runTests() {
     const res = jalankanTes(step.tests, code);
@@ -243,7 +247,10 @@ export default function StepView({ step, onPassed }: Props) {
 
         {passed && (
           <div className="rounded-lg bg-green-100 p-4 font-medium text-green-900">
-            🎉 Semua tes lolos! Tekan <Tuts>Ctrl</Tuts> + <Tuts>Enter</Tuts>{" "}
+            {isLanguageTrack
+              ? "✅ Pemeriksaan otomatis lolos. Tinjau kembali isi jawabanmu. Tekan "
+              : "🎉 Semua tes lolos! Tekan "}
+            <Tuts>Ctrl</Tuts> + <Tuts>Enter</Tuts>{" "}
             sekali lagi untuk lanjut ke materi berikutnya.
           </div>
         )}
@@ -253,7 +260,7 @@ export default function StepView({ step, onPassed }: Props) {
             onClick={runTests}
             className="rounded-lg bg-gold-500 px-5 py-2.5 font-medium text-neutral-900 hover:bg-gold-400"
           >
-            Jalankan Tes{" "}
+            {isLanguageTrack ? "Periksa Jawaban" : "Jalankan Tes"}{" "}
             <span className="text-neutral-900/60">(Ctrl + Enter)</span>
           </button>
           <button
@@ -278,14 +285,14 @@ export default function StepView({ step, onPassed }: Props) {
           onChange={(e) => setCode(e.target.value)}
           spellCheck={false}
           className="h-56 w-full resize-y rounded-lg bg-neutral-900 p-4 font-mono text-sm text-neutral-100 outline-none"
-          aria-label="Editor kode"
+          aria-label={isLanguageTrack ? "Editor jawaban" : "Editor kode"}
         />
         <div className="rounded-lg border border-neutral-200">
           <div className="border-b border-neutral-200 bg-neutral-50 px-3 py-1.5 text-xs font-medium text-neutral-500">
-            Preview
+            {isLanguageTrack ? "Draf Tulisan" : "Preview"}
           </div>
           <iframe
-            title="Preview hasil kode"
+            title={isLanguageTrack ? "Preview draf tulisan" : "Preview hasil kode"}
             sandbox="allow-scripts"
             srcDoc={previewDoc}
             className="h-48 w-full rounded-b-lg bg-white"

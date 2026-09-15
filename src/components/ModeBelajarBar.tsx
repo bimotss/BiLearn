@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import { useProgress } from "@/lib/progress";
 
 /**
@@ -15,33 +16,47 @@ import { useProgress } from "@/lib/progress";
  * seperti tidak ada.
  */
 
-const LABEL: Record<"koding" | "pilihan-ganda", string> = {
-  koding: "⌨️ Mode ngetik",
-  "pilihan-ganda": "🔘 Mode pilihan ganda",
-};
-
 export function PenunjukMode() {
   const { ready, mode, setMode } = useProgress();
+  const pathname = usePathname();
 
   // Sebelum localStorage terbaca, jangan tampilkan apa pun — kalau tidak,
   // render server dan client berbeda dan React melaporkan hydration mismatch.
   if (!ready) return null;
 
+  const isLanguageTrack = pathname?.includes("/tracks/business-english");
+  const labelMode =
+    mode === "koding"
+      ? isLanguageTrack
+        ? "⌨️ Tulis langsung"
+        : "⌨️ Mode ngetik"
+      : isLanguageTrack
+        ? "🧩 Susun kalimat"
+        : "🧩 Susun kode";
+
   const lawan = mode === "koding" ? "pilihan-ganda" : "koding";
+  const labelLawan =
+    lawan === "koding"
+      ? isLanguageTrack
+        ? "⌨️ Tulis langsung"
+        : "⌨️ Mode ngetik"
+      : isLanguageTrack
+        ? "🧩 Susun kalimat"
+        : "🧩 Susun kode";
 
   return (
     <button
       type="button"
       onClick={() => setMode(lawan)}
-      title={`Sedang ${LABEL[mode]}. Klik untuk pindah ke ${LABEL[lawan]}.`}
+      title={`Sedang ${labelMode}. Klik untuk pindah ke ${labelLawan}.`}
       className="rounded-lg border border-neutral-300 px-3 py-1.5 text-xs font-medium text-neutral-700 transition hover:border-gold-400 hover:bg-gold-50"
     >
       <span className="text-neutral-500">Mode:</span>{" "}
-      <span className="font-semibold text-neutral-900">{LABEL[mode]}</span>
+      <span className="font-semibold text-neutral-900">{labelMode}</span>
       <span className="ml-1.5 text-neutral-400" aria-hidden="true">
         ⇄
       </span>
-      <span className="sr-only">. Klik untuk pindah ke {LABEL[lawan]}.</span>
+      <span className="sr-only">. Klik untuk pindah ke {labelLawan}.</span>
     </button>
   );
 }
@@ -117,10 +132,10 @@ export function PemilihModeAwal() {
             <span className="text-2xl" aria-hidden="true">
               ⌨️
             </span>
-            <span className="mt-2 block font-bold">Mengetik kode</span>
+            <span className="mt-2 block font-bold">Mengetik / menulis langsung</span>
             <span className="mt-1 block text-sm text-neutral-600">
-              Kamu menulis kodenya sendiri di editor, lalu dinilai otomatis. Cara
-              belajar yang paling dekat dengan pekerjaan aslinya.
+              Kamu menulis kode atau kalimat jawaban sendiri di editor, lalu dinilai
+              otomatis. Cara belajar yang paling dekat dengan praktik aslinya.
             </span>
           </button>
 
@@ -130,20 +145,20 @@ export function PemilihModeAwal() {
             className="rounded-xl border border-neutral-200 p-5 text-left transition hover:border-gold-400 hover:bg-gold-50 focus:outline-none focus:ring-2 focus:ring-gold-400"
           >
             <span className="text-2xl" aria-hidden="true">
-              🔘
+              🧩
             </span>
-            <span className="mt-2 block font-bold">Pilihan ganda</span>
+            <span className="mt-2 block font-bold">Menyusun potongan (tanpa ngetik)</span>
             <span className="mt-1 block text-sm text-neutral-600">
-              Kamu memilih jawaban yang benar, tanpa mengetik. Cocok kalau kamu
-              belajar dari ponsel atau belum nyaman mengetik kode.
+              Kamu merangkai kepingan kode atau potongan kalimat yang tersedia.
+              Cocok jika belajar dari ponsel atau melatih struktur tanpa mengetik manual.
             </span>
           </button>
         </div>
 
         <div className="mt-5 flex items-center justify-between gap-3">
           <p className="text-xs text-neutral-500">
-            Belum semua step punya soal pilihan ganda. Yang belum ada tetap bisa
-            dibuka, dan akan ditandai apa adanya.
+            Belum semua step punya varian susun potongan. Yang belum ada tetap bisa
+            dibuka lewat mode menulis langsung, dan akan ditandai apa adanya.
           </p>
           <button
             type="button"

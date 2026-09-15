@@ -1,13 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { notFound, useRouter } from "next/navigation";
 import StepView from "@/components/StepView";
 import StepSusunKodeView from "@/components/StepSusunKodeView";
 import QuizView from "@/components/QuizView";
 import MateriView from "@/components/MateriView";
-import { getTrack, getTrackItems } from "@/data/tracks";
+import { getTrack, getTrackItems, resolveItemAlias } from "@/data/tracks";
 import { useProgress } from "@/lib/progress";
 import { usePintasanCtrlEnter } from "@/lib/pintasan";
 
@@ -22,13 +22,21 @@ export default function ItemDetail({
   const { ready, mode, isDone, isDoneDi, markDone } = useProgress();
   const router = useRouter();
 
+  const resolvedStepId = resolveItemAlias(stepId);
+
+  useEffect(() => {
+    if (stepId !== resolvedStepId) {
+      router.replace(`/tracks/${slug}/${resolvedStepId}`);
+    }
+  }, [stepId, resolvedStepId, slug, router]);
+
   /**
    * Lolos di sesi ini — bukan sekadar "pernah selesai". Pintasan Ctrl+Enter
    * untuk pindah materi hanya hidup setelah user benar-benar lolos di layar
    * ini. Kalau patokannya progres tersimpan, membuka ulang materi yang sudah
    * selesai membuat Ctrl+Enter langsung melompat tanpa menjalankan tes.
    */
-  const kunciItem = `${slug}/${stepId}`;
+  const kunciItem = `${slug}/${resolvedStepId}`;
   const [sesi, setSesi] = useState({ kunci: kunciItem, lolos: false });
   // Kunci ikut disimpan supaya status lolos hangus sendiri saat pindah materi
   // — tanpa useEffect yang memanggil setState dan memicu render beruntun.
@@ -37,7 +45,7 @@ export default function ItemDetail({
   if (!track) notFound();
 
   const items = getTrackItems(track);
-  const index = items.findIndex((it) => it.id === stepId);
+  const index = items.findIndex((it) => it.id === resolvedStepId);
   if (index === -1) notFound();
 
   const item = items[index];
@@ -120,19 +128,20 @@ export default function ItemDetail({
               key={item.id}
               step={item}
               onPassed={() => selesaikan("pilihan-ganda")}
+              isLanguageTrack={track.slug === "business-english"}
             />
           ) : (
             <div className="space-y-6">
               <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
-                ℹ️ Step ini belum punya soal pilihan ganda, jadi yang tampil
-                mode ngetik. Kalau kamu menyelesaikannya di sini, itu tercatat
-                sebagai pencapaian mode ngetik — bukan mode pilihan ganda,
-                karena kamu memang mengetik kodenya sendiri.
+                {track.slug === "business-english"
+                  ? "ℹ️ Step ini belum punya mode susun kalimat, jadi yang tampil adalah mode menulis langsung di editor. Pencapaiannya akan tercatat di progres utama."
+                  : "ℹ️ Step ini belum punya soal pilihan ganda, jadi yang tampil mode ngetik. Kalau kamu menyelesaikannya di sini, itu tercatat sebagai pencapaian mode ngetik — bukan mode pilihan ganda, karena kamu memang mengetik kodenya sendiri."}
               </div>
               <StepView
                 key={item.id}
                 step={item}
                 onPassed={() => selesaikan("koding")}
+                isLanguageTrack={track.slug === "business-english"}
               />
             </div>
           )
@@ -141,6 +150,7 @@ export default function ItemDetail({
             key={item.id}
             step={item}
             onPassed={() => selesaikan("koding")}
+            isLanguageTrack={track.slug === "business-english"}
           />
         )
       ) : (

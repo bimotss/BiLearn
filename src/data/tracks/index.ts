@@ -72,3 +72,25 @@ export function getTrackItemsForMode(track: Track, mode: ModeBelajar) {
 export function itemLintasMode(item: ModuleItem): boolean {
   return item.kind !== "step";
 }
+
+/**
+ * Peta kompatibilitas untuk ID item lama yang telah dikonsolidasikan.
+ * Memastikan URL lama tidak 404 dan progres pengguna lama tetap terjaga.
+ */
+export const LEGACY_ITEM_ALIASES: Record<
+  string,
+  { targetId: string; slug: string }
+> = {
+  "beng-1-k2": { targetId: "beng-1-k1", slug: "business-english" },
+  "beng-2-k2": { targetId: "beng-2-k1", slug: "business-english" },
+  "beng-3-k2": { targetId: "beng-3-k1", slug: "business-english" },
+  "beng-4-k2": { targetId: "beng-4-k1", slug: "business-english" },
+  "beng-5-k2": { targetId: "beng-5-k1", slug: "business-english" },
+  "beng-6-k2": { targetId: "beng-6-k1", slug: "business-english" },
+  "beng-7-k2": { targetId: "beng-7-k1", slug: "business-english" },
+  "beng-8-k2": { targetId: "beng-8-k1", slug: "business-english" },
+};
+
+export function resolveItemAlias(stepId: string): string {
+  return LEGACY_ITEM_ALIASES[stepId]?.targetId ?? stepId;
+}
