@@ -126,6 +126,8 @@ export interface StepExample {
 export interface StepTest {
   /** Batasi pemeriksaan ke paragraf pertama setelah salam e-mail. */
   scope?: "email-opening";
+  /** Abaikan komentar (// dan /* ... * /) saat memeriksa kode */
+  stripComments?: boolean;
   /** Regex yang harus match dengan kode user */
   pattern: string;
   /** Flag regex, default "i" */

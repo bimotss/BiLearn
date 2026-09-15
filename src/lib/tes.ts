@@ -17,9 +17,12 @@ export function jalankanTes(tests: StepTest[], code: string): HasilTes[] {
   return tests.map((t) => {
     let pass = false;
     try {
-      const text = t.scope === "email-opening" ? paragrafPembukaEmail(code) : code;
+      let text = t.scope === "email-opening" ? paragrafPembukaEmail(code) : code;
       // Scope yang tidak ditemukan bukan keberhasilan tes larangan.
       if (text === null) return { pass: false, message: t.message };
+      if (t.stripComments) {
+        text = stripComments(text);
+      }
       const cocok = new RegExp(t.pattern, t.flags ?? "i").test(text);
       // mustNotMatch: lulus justru kalau pattern TIDAK ditemukan
       pass = t.mustNotMatch ? !cocok : cocok;
@@ -28,6 +31,54 @@ export function jalankanTes(tests: StepTest[], code: string): HasilTes[] {
     }
     return { pass, message: t.message };
   });
+}
+
+/**
+ * Menghapus komentar single-line (//) dan multi-line (/* ... *\/) dari kode,
+ * tanpa menghapus substring di dalam string literal ('...', "...", `...`).
+ */
+export function stripComments(code: string): string {
+  let result = "";
+  let i = 0;
+  const n = code.length;
+  while (i < n) {
+    const ch = code[i];
+    const next = code[i + 1];
+
+    if (ch === '"' || ch === "'" || ch === "`") {
+      const quote = ch;
+      result += quote;
+      i++;
+      while (i < n) {
+        const c = code[i];
+        result += c;
+        if (c === "\\") {
+          i++;
+          if (i < n) result += code[i];
+        } else if (c === quote) {
+          break;
+        }
+        i++;
+      }
+      i++;
+    } else if (ch === "/" && next === "/") {
+      i += 2;
+      while (i < n && code[i] !== "\n") {
+        i++;
+      }
+    } else if (ch === "/" && next === "*") {
+      i += 2;
+      while (i < n && !(code[i] === "*" && code[i + 1] === "/")) {
+        if (code[i] === "\n") result += "\n";
+        i++;
+      }
+      i += 2;
+    } else {
+      result += ch;
+      i++;
+    }
+  }
+  return result;
 }
 
 /** Struktur latihan: salam pada baris sendiri, lalu paragraf permintaan.

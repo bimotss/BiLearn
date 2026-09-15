@@ -20,7 +20,7 @@ Karena itu:
 Tugas: isi konten interaktif untuk <TRACK> di src/data/tracks/<file>.ts
 
 WAJIB dibaca dulu, jangan mulai sebelum ini:
-1. panduan_isi.md  — standar penulisan (khususnya bagian 2b: anti-pattern)
+1. panduan_isi.md  — standar penulisan (khususnya bagian 2b dan 2c; baca juga perintah review track yang dikerjakan)
 2. src/data/tracks/javascript.ts — contoh kualitas untuk track yang bisa dieksekusi
 3. src/data/tracks/git.ts modul 4 (pr-workflow) — contoh untuk track non-JavaScript
 
@@ -29,7 +29,7 @@ Yang TIDAK boleh (akan ditolak skrip verifikasi):
 - instruksi yang memuat jawaban utuh (user cuma menyalin)
 - language: "js" untuk perintah shell/SQL/PHP/Python/formula → pakai "text"
 - tugas yang cuma "tuliskan komentar <kalimat>"
-- kuis kurang dari 3 soal, atau soal tanpa explanation
+- total kuis di satu modul di luar 5–7 soal, bukan pilihan-ganda, atau soal tanpa explanation
 - example.output berisi klaim manfaat ("menghemat waktu") bukan hasil nyata
 
 Struktur modul & bab (topics) SUDAH ADA dan tidak boleh diubah.
@@ -177,6 +177,24 @@ pattern: "git\\s+(switch\\s+-c|checkout\\s+-b)\\s+\\S+"
 
 ---
 
+## 2c. Pelajaran Audit Worker — 15 September 2026 (WAJIB)
+
+Audit Business English berulang menemukan perbaikan yang hanya mengejar contoh tes, menolak variasi sah, meloloskan jawaban salah karena kata kunci di bagian lain, serta laporan yang melebihi bukti. Audit React dan Next.js kemudian mereproduksi pola yang sama. Aturan berikut berlaku untuk worker dan reviewer, bukan hanya kedua track tersebut.
+
+1. **Mulai dari kontrak latihan.** Tuliskan kemampuan yang diuji, konteks berkas/dependensi, serta batas format yang memang diperlukan. Nama variabel, bentuk fungsi, dan penulisan API yang setara harus diterima bila instruksi tidak membatasinya. Jangan mempersempit instruksi sesudah tes gagal hanya demi meloloskan implementasi.
+2. **Uji makna pada lokasi yang tepat.** Kata benar dalam komentar, string, elemen lain, paragraf lain, atau kode setelah `return` tidak membuktikan tugas benar. Untuk kode, gunakan pemeriksaan struktur (AST) atau eksekusi yang sesuai bila regex tidak cukup. Jangan memindahkan scope paragraf email ke kode; binding, alur kontrol, dan atribut JSX memerlukan pemeriksaan tersendiri. Jangan menambah blacklist tanpa menguji dampaknya terhadap jawaban sah.
+3. **Matriks wajib setiap validator yang diubah:** solution, sedikitnya dua variasi benar yang berbeda, jawaban salah yang hampir benar, komentar/string pengecoh, lokasi yang salah, kode kosong, serta sintaks rusak. Kasus harus mewakili kontrak; jumlah assertion saja bukan bukti kualitas. Jalankan evaluator produksi `jalankanTes`, bukan tiruan regex di skrip terpisah. Periksa konsistensi mode mengetik dan susun kode serta verifier jika mengubah evaluator bersama. Scope yang tidak ditemukan harus gagal, termasuk tes negatif.
+4. **Jangan memperbaiki tes dengan menghapus bukti.** Simpan kasus regresi dan expected result. Perubahan expected hanya boleh karena kontrak/sumber resmi membuktikan ekspektasi semula salah, disertai alasan tertulis. Audit awal yang gagal bukan hasil perbaikan yang lulus.
+5. **Pisahkan kompilasi, render, dan perilaku.** Babel berhasil tidak membuktikan komponen berhasil dirender; render tidak membuktikan klik, cleanup, fetch, atau proteksi akses benar. Jalankan komponen lengkap untuk interaksi; server Next.js harus diuji dalam proyek yang menyediakan server dan dependensinya. Pesan sukses tidak boleh menyebut seluruh jawaban benar jika pemeriksaan hanya bentuk terbatas. Catat error pengguna secara jujur; jangan menganggap semua runtime error wajar.
+6. **Buktikan output dan konsep.** Output konsol harus berasal dari kode yang benar-benar mencetaknya. Gunakan fixture data deterministik; jangan mengarang durasi, jumlah data, atau pesan runtime. Pisahkan jejak konseptual dari output aktual. Ajarkan konsep sebelum dipakai, gunakan contoh berbeda dari solution, dan jangan membocorkan jawaban utuh dalam instruksi. Periksa API terhadap versi proyek dan dokumentasi primer. Contoh penting: klik React terpisah bukan satu batch; ISR bukan jaminan batas maksimum usia data.
+7. **Hitung aturan pada unit yang benar.** Kuis wajib 5–7 soal total per modul, semuanya pilihan-ganda dengan explanation. Dua kuis masing-masing enam soal tetap melanggar. Periksa topics terhadap isi nyata, kedalaman materi, dan tugas yang benar-benar meminta keputusan; lolos hitungan karakter tidak membuktikan pengajaran baik.
+8. **Pertahankan kompatibilitas.** Jangan menghapus/mengganti ID item tanpa menangani URL lama dan progres tersimpan. Uji migrasi/alias dan kedua mode belajar bila terdampak. Pertahankan perubahan pengguna; cek diff sebelum dan sesudah pekerjaan.
+9. **Laporan harus dapat diperiksa.** Cantumkan command yang benar-benar dijalankan, exit code, jumlah aktual, dan batas cakupan. Bedakan temuan sumber kode, simulasi, pengujian browser, dan pengujian server. Jangan memakai laporan lama atau situs yang belum diperbarui sebagai bukti versi lokal terbaru. Jangan menulis “semua benar”, “siap kerja”, atau “tanpa kesalahan” berdasarkan verifier/build saja. Jika ada kegagalan, laporkan; jangan mengklaim track selesai.
+
+Untuk audit React/Next.js saat ini baca `perintah-react-review-2026-09-15.md` dan `perintah-nextjs-review-2026-09-15.md`. Bukti awal: `npx tsx scripts/audit-react-next-learning.ts --check` (baseline 13 kasus tidak sesuai; bukan suite hijau). Worker wajib menambah cakupan di luar 13 contoh ini, bukan hanya menambal string fixture.
+
+---
+
 ## 3. Struktur Data
 
 Definisi lengkap ada di `src/lib/types.ts`. Ringkasnya:
@@ -251,7 +269,7 @@ Track
   questions: [
     {
       id: "q1",
-      type: "pilihan-ganda",       // ⬅️ WAJIB pilihan-ganda (5–7 soal per kuis)
+      type: "pilihan-ganda",       // ⬅️ WAJIB pilihan-ganda (5–7 soal TOTAL per modul)
       question: "Pertanyaan berbasis skenario kerja / use case, bukan hafalan definisi",
       code: "cuplikan kode (opsional)",
       choices: [
@@ -363,7 +381,8 @@ Preview adalah iframe ber-sandbox. Ini yang bisa dan tidak bisa:
 | DOM, event, form | SQL (butuh database) |
 | `fetch` ke API publik | PHP / Laravel (butuh server) |
 | `localStorage`* | Python (butuh interpreter) |
-| Tailwind (dengan `loadTailwind: true`) | React / JSX (belum ada bundler di preview) |
+| Tailwind (dengan `loadTailwind: true`) | Server Next.js, Node.js, dan dependensi paket yang tidak disediakan preview |
+| React / JSX dengan `language: "jsx"` (Babel dan React) | Integrasi router, server action, autentikasi, dan build proyek |
 | Kelas, closure, async/await | Formula spreadsheet, Markdown, Dockerfile, YAML |
 
 \* `localStorage` di iframe sandbox memakai **pengganti in-memory** yang disuntikkan otomatis (lihat `StepView.tsx`). Perilakunya sama untuk keperluan belajar, tapi datanya hilang saat halaman dimuat ulang. Sebutkan ini di `note` bila relevan.
@@ -436,12 +455,11 @@ Keduanya diperiksa otomatis oleh skrip verifikasi.
 
 ## 6. Aturan Menulis Kuis
 
-- **3–6 soal per modul**, ditempatkan sebagai item terakhir modul.
+- **5–7 soal TOTAL per modul, seluruhnya bertipe `pilihan-ganda`**, ditempatkan sebagai item terakhir modul.
 - Utamakan soal **berbasis skenario**: "Kode ini error X, kenapa?" jauh lebih berguna daripada "Apa itu closure?".
 - Untuk pilihan ganda: **distraktor (pilihan salah) harus menggoda** — ambil dari kesalahpahaman nyata, bukan pilihan absurd yang jelas salah.
 - `explanation` **wajib** dan harus menjelaskan **kenapa**, bukan mengulang jawaban. Idealnya juga menyinggung kenapa pilihan lain terlihat benar.
-- Untuk `prediksi-output`: masukkan beberapa variasi penulisan jawaban ke `acceptedAnswers` (mis. `["A C B", "A, C, B", "a c b"]`).
-- Untuk `isian`: terima variasi wajar (`["preventDefault", "preventDefault()", "e.preventDefault()"]`).
+- Soal prediksi output tetap menggunakan pilihan-ganda, dengan pilihan yang mewakili kesalahan pemahaman nyata. Jangan menambahkan tipe `prediksi-output` atau `isian` pada kuis track.
 
 ---
 
@@ -468,6 +486,7 @@ ID harus **unik secara global** (diperiksa otomatis).
 | HTML | `"html"` | Kode user dirender langsung |
 | CSS | `"css"` | **Wajib** isi `previewHtml` — markup yang di-style |
 | Tailwind (CSS modul 8) | `"html"` + `loadTailwind: true` | Kelas Tailwind benar-benar dirender |
+| React, JSX, TypeScript | `"jsx"` | Babel mentranspilasi; bukan pemeriksaan tipe atau runner Next.js server |
 | JavaScript | `"js"` | Kode DIEKSEKUSI; panel output konsol otomatis muncul; `previewHtml` untuk step DOM |
 | Git, SQL, PHP, Python, formula, Markdown | **`"text"`** | **Tidak dieksekusi** — ditampilkan sebagai panel monospace. Wajib dipakai, kalau tidak preview melempar SyntaxError. |
 
@@ -580,7 +599,7 @@ Struktur 16 track sudah final untuk saat ini. Kalau nanti perlu menambah:
 - [ ] Minimal satu step atau soal membahas **jebakan/bug nyata**
 - [ ] Ada kaitan ke dunia kerja (code review / interview / lowongan)
 - [ ] Pesan error tes membantu, bukan sekadar "salah"
-- [ ] Kuis 3–6 soal, semua punya `explanation` yang menjelaskan kenapa
+- [ ] Total kuis 5–7 soal per modul, semuanya pilihan-ganda dan punya `explanation` yang menjelaskan kenapa
 - [ ] `npx tsx scripts/verify-konten.ts` bersih
 - [ ] `npx tsc --noEmit && npx eslint src` bersih
 - [ ] `npm run build` sukses
@@ -643,7 +662,7 @@ Hal-hal yang perlu diperhatikan saat mengisi track yang belum jadi:
 
 **TypeScript** — Preview tidak mengecek tipe. Fokus: membaca pesan error TS (tampilkan pesan error asli di `example.output`), dan pola tipe untuk data API. Jebakan wajib: `any` sebagai jalan pintas, `as` yang menyembunyikan bug.
 
-**React** — Belum ada preview React. Tulis step sebagai penulisan komponen yang benar; `example.output` berupa deskripsi UI/perilaku. Jebakan wajib: state adalah snapshot, mutasi state langsung, dependency array `useEffect`, `key` pada list.
+**React** — Preview `language: "jsx"` tersedia, tetapi bukan lingkungan proyek lengkap: import/export disederhanakan, paket eksternal tidak otomatis tersedia, dan TypeScript ditranspilasi tanpa pemeriksaan tipe. Sediakan komponen lengkap untuk latihan interaksi; jelaskan konteks potongan kode dan dependensi yang harus diuji di proyek lokal. `example.output` harus sesuai perilaku kode, bukan klaim manfaat. Jebakan wajib: state adalah snapshot, mutasi state langsung, dependency array `useEffect`, `key` pada list.
 
 **SQL** — Fokus pada JOIN (materi interview tersering). `example.output` berupa tabel hasil kecil dalam bentuk teks. Jebakan wajib: `UPDATE` tanpa `WHERE`, `= NULL`, `GROUP BY` yang salah kolom.
 
@@ -679,7 +698,7 @@ Supaya jelas batasnya — hal berikut **sengaja** belum diatur dan perlu keputus
 | Hal | Status | Kapan perlu diputuskan |
 |---|---|---|
 | **Test runner sungguhan** | Belum ada. Tes masih regex, jadi ia memeriksa *bentuk kode*, bukan *hasil eksekusi*. | Sebelum track React/Node, karena di sana kebenaran hasil lebih penting daripada bentuk. |
-| **Preview React/JSX** | Belum ada bundler di preview. | Sebelum mengisi track React — kalau tidak, seluruh track React hanya "menulis kode tanpa melihat hasil". |
+| **Preview React/JSX** | Preview terbatas sudah tersedia; belum merupakan runner proyek lengkap. | Uji interaksi komponen nyata dan bedakan kompilasi, render, serta integrasi paket/server. |
 | **Eksekusi SQL** | Belum ada. Bisa diselesaikan dengan SQLite WASM di browser. | Sebelum mengisi track SQL, kalau ingin kualitas setara HTML/CSS/JS. |
 | **Proyek sertifikasi** | Struktur datanya belum ada (`Track` baru punya `modules`). Daftar proyek ada di `docs/kurikulum.md` tapi belum bisa dikerjakan di platform. | Setelah satu learning path tuntas. |
 | **Konten video/gambar** | Semua materi masih teks + kode. | Opsional; teks lebih mudah dirawat dan diperbaiki. |

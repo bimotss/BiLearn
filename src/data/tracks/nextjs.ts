@@ -179,11 +179,19 @@ export const nextjsTrack: Track = {
           "tests": [
             {
               "pattern": "await\\s+params",
+              "stripComments": true,
               "message": "`params` di Next.js versi ini berbentuk Promise, jadi harus ditunggu. Tanpa `await`, yang kamu pegang objek Promise: TypeScript menolaknya, dan kalau lolos, halaman menampilkan `[object Promise]`."
             },
             {
-              "pattern": "(\\{[^}]*\\bid\\b[^}]*\\}|\\bconst\\s+id)\\s*=\\s*(await\\s+params|[A-Za-z_$][\\w$]*\\.id)",
-              "message": "Setelah ditunggu, ambil properti `id` dari hasilnya — boleh dengan destructuring, boleh lewat variabel perantara lalu titik `id`. Namanya harus `id` karena itu nama folder `[id]`; folder `[userId]` berarti propertinya `userId`."
+              "pattern": "(?:\\{[^}]*\\bid\\b[^}]*\\}|\\b(?:const|let|var)\\s+id)\\s*=\\s*(?:\\(?\\s*await\\s+params\\s*\\)?(?:\\??\\.id)?|[A-Za-z_$][\\w$]*\\.id)",
+              "stripComments": true,
+              "message": "Setelah ditunggu, ambil properti `id` dari hasilnya — boleh dengan destructuring (`const { id } = await params`), boleh lewat tanda kurung `(await params).id`, atau lewat variabel perantara lalu titik `id`. Namanya harus `id` karena itu nama folder `[id]`."
+            },
+            {
+              "pattern": "return[\\s\\S]*await\\s+params",
+              "mustNotMatch": true,
+              "stripComments": true,
+              "message": "Ekstrak `id` dari `params` sebelum `return`. Jangan meletakkan `return` lebih dulu karena kode setelahnya tidak akan dieksekusi."
             }
           ],
           "solution": "export default async function UserPage({ params }) {\n  const { id } = await params;\n  return <h1>User: {id}</h1>;\n}",
@@ -680,7 +688,7 @@ export const nextjsTrack: Track = {
           "explanation": "Untuk menjaga agar ukuran berkas JavaScript aplikasi kamu tetap sekecil mungkin, terapkan pola arsitektur 'Moving Client Components to the Leaves' (Menggeser Client Component ke Daun Pohon Komponen). Hindari menaruh direktif `'use client'` pada berkas layout root atau halaman utama jika hanya ada satu elemen kecil yang membutuhkan interaktivitas. Sebaiknya, pisahkan elemen interaktif tersebut (misalnya tombol toggle tema atau form pencarian) ke dalam berkas komponen kecilnya sendiri dan beri direktif `'use client'` hanya pada berkas tersebut. Dengan demikian, komponen induk yang membungkusnya tetap bertahan sebagai Server Component yang hemat memori dan cepat dimuat.",
           "example": {
             "code": "// ❌ satu baris ini membuat SELURUH aplikasi jadi client\n// app/layout.tsx\n'use client';\nexport default function RootLayout({ children }) { return <body>{children}</body>; }\n\n// ✅ direktifnya dipindahkan ke daun\n// app/_komponen/TombolTema.tsx\n'use client';\nexport default function TombolTema() { /* useState di sini */ }",
-            "output": "Ukuran First Load JS dari `npm run build`:\n\n'use client' di app/layout.tsx      First Load JS  187 kB\n'use client' hanya di TombolTema     First Load JS   94 kB\n\nRoute (app)                              Size\n┌ ○ /                                    1.2 kB\n└ ○ /produk                              0.9 kB",
+            "output": "$ npm run build\n\n▲ Next.js 16.2.12 (Turbopack)\n\nUkuran First Load JS:\n'use client' di app/layout.tsx      First Load JS  187 kB\n'use client' hanya di TombolTema     First Load JS   94 kB\n\nRoute (app)                              Size\n┌ ○ /                                    1.2 kB\n└ ○ /produk                              0.9 kB",
             "note": "Direktif itu menular ke bawah: semua yang diimpor sebuah berkas client ikut menjadi client. Karena itu posisinya di pohon komponen menentukan berapa KB yang diunduh pengguna. Catatan jujur: berkas ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
           "instruction": "`RootLayout` harus tetap menjadi Server Component. Tampilkan tombol ganti tema yang interaktif (tersimpan di `./ThemeToggle`) di dalam `<body>`, tanpa mengubah status berkas layout ini sendiri.",
@@ -871,24 +879,32 @@ export const nextjsTrack: Track = {
           "explanation": "Di App Router, sebuah komponen halaman boleh dideklarasikan `async` dan memanggil `await fetch()` langsung di dalam bodinya — tanpa `useState`, tanpa `useEffect`, tanpa state loading buatan sendiri. Alasannya komponen ini dijalankan di server: datanya sudah lengkap sebelum HTML dikirim, jadi perayap mesin pencari dan pengguna dengan koneksi lambat langsung menerima isi halaman. Dipakai untuk semua pengambilan data awal halaman: daftar artikel, detail produk, profil pengguna. Ada DUA `await` yang mudah dilupakan: satu untuk `fetch` (menunggu respons datang) dan satu untuk `.json()` (menunggu isinya selesai dibaca) — melewatkan yang kedua membuatmu memegang Promise, dan halaman menampilkan `[object Promise]`. Jebakan lain: hanya Server Component yang boleh `async`; menambahkan `'use client'` di berkas ini langsung membuatnya error.",
           "example": {
             "code": "// app/artikel/page.tsx\nexport default async function ArtikelPage() {\n  const res = await fetch('https://api.example.com/artikel');\n  const daftar = await res.json();\n  return <h1>{daftar.length} artikel</h1>;\n}",
-            "output": "Terminal `npm run dev`:\n GET /artikel 200 in 214ms\n\nHTML yang diterima browser (View Source):\n<h1>12 artikel</h1>\n\nAngka 12 sudah ada di HTML — bukan disisipkan JavaScript setelah halaman terbuka.",
-            "note": "Kalau `await` kedua (pada `.json()`) hilang, yang tampil `<h1>[object Promise] artikel</h1>`. Gejala itu hampir selalu berarti ada Promise yang lupa ditunggu. Catatan jujur: berkas ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
+            "output": "Terminal npm run dev:\nGET /artikel 200 in 142ms\n\nHTML yang diterima browser (View Source):\n<h1>3 artikel</h1>\n\nData \"3 artikel\" langsung ada di dokumen HTML awal dari server.",
+            "note": "Jika `await` pada `.json()` dihilangkan, variabel `daftar` berupa objek Promise sehingga `daftar.length` bernilai `undefined` (tampilan menjadi `<h1> artikel</h1>` tanpa angka). Catatan jujur: Server Component seperti ini tidak dijalankan di panel preview — Next.js butuh server sendiri untuk menjalankan fetch di server. Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
           "instruction": "Halaman `app/produk/page.tsx` harus menampilkan nama satu produk yang diambil dari alamat pada konstanta `URL_API` yang sudah disediakan. Tulis komponen halamannya sebagai default export yang bisa menunggu data, ambil datanya, ubah respons menjadi objek, lalu tampilkan properti `nama` di dalam `<h1>`. Jangan pakai `useState` atau `useEffect`.",
           "starterCode": "// app/produk/page.tsx\nconst URL_API = 'https://api.example.com/produk/1';\n\n// Tulis komponen halamannya di bawah ini\n",
           "language": "text",
           "tests": [
             {
-              "pattern": "export\\s+default\\s+async\\s+function\\s+Page",
-              "message": "Halaman yang menunggu data harus dideklarasikan `async` dan diekspor sebagai default. Tanpa `async` kamu tidak boleh memakai `await`; dan hanya Server Component yang boleh async — Client Component akan error."
+              "pattern": "export\\s+default\\s+async\\s+function(?:\\s+[A-Za-z_$][\\w$]*)?\\s*\\(",
+              "stripComments": true,
+              "message": "Halaman yang menunggu data harus dideklarasikan `async` dan diekspor sebagai default (`export default async function ...`). Tanpa `async` kamu tidak boleh memakai `await`; dan hanya Server Component yang boleh async — Client Component akan error."
             },
             {
               "pattern": "await\\s+fetch\\(\\s*(URL_API|['\"]https://api\\.example\\.com/produk/1['\"])",
+              "stripComments": true,
               "message": "Tunggu `fetch`-nya dengan `await`, dan pakai alamat dari konstanta yang sudah disediakan. Tanpa `await`, `res` berisi Promise dan langkah berikutnya gagal."
             },
             {
               "pattern": "await\\s+[A-Za-z_$][\\w$]*\\.json\\(\\)",
+              "stripComments": true,
               "message": "Respons HTTP belum berisi data siap pakai: badan responsnya harus dibaca dulu dengan `.json()`, dan itu juga menghasilkan Promise — jadi butuh `await` yang KEDUA."
+            },
+            {
+              "pattern": "<h1>[\\s\\S]*\\{[^}]*\\bnama\\b[^}]*\\}[\\s\\S]*</h1>",
+              "stripComments": true,
+              "message": "Tampilkan properti `nama` dari data yang sudah diambil di dalam elemen `<h1>` (misalnya `<h1>{produk.nama}</h1>`)."
             }
           ],
           "solution": "const URL_API = 'https://api.example.com/produk/1';\n\nexport default async function Page() {\n  const res = await fetch(URL_API);\n  const produk = await res.json();\n  return <h1>{produk.nama}</h1>;\n}",
@@ -919,7 +935,7 @@ export const nextjsTrack: Track = {
           "explanation": "Next.js secara otomatis mengategorikan proses rendering halaman menjadi dua mode: **Static Rendering** (default) dan **Dynamic Rendering**. Pada Static Rendering, halaman di-pre-render satu kali pada saat pembentukan build produksi sehingga dapat di-cache secara agresif untuk kecepatan maksimal. Namun, jika halaman membaca fungsi yang bersifat dinamis saat runtime (seperti `cookies()`, `headers()`, atau `searchParams`), Next.js akan secara otomatis beralih ke mode Dynamic Rendering di mana halaman di-render ulang pada setiap request HTTP yang masuk. Kamu juga dapat memaksa halaman menjadi dynamic dengan mengekspor konstanta `export const dynamic = 'force-dynamic';`. Gunakan mode dynamic ini pada halaman dashboard pribadi atau keranjang belanja real-time.",
           "example": {
             "code": "// app/harga/page.tsx — statis (default)\nexport default function Harga() {\n  return <h1>Rp85.000</h1>;\n}\n\n// app/keranjang/page.tsx — dinamis karena membaca cookie\nimport { cookies } from 'next/headers';\nexport default async function Keranjang() {\n  const sesi = (await cookies()).get('sesi');\n  return <h1>Keranjang {sesi?.value}</h1>;\n}",
-            "output": "$ npm run build\n\nRoute (app)                    Size     First Load JS\n┌ ○ /harga                     1.1 kB          94 kB\n└ ƒ /keranjang                 1.3 kB          96 kB\n\n○  (Static)   prerendered as static content\nƒ  (Dynamic)  server-rendered on demand",
+            "output": "$ npm run build\n\n▲ Next.js 16.2.12 (Turbopack)\n\nRoute (app)                    Size     First Load JS\n┌ ○ /harga                     1.1 kB          94 kB\n└ ƒ /keranjang                 1.3 kB          96 kB\n\n○  (Static)   prerendered as static content\nƒ  (Dynamic)  server-rendered on demand",
             "note": "Tabel inilah cara memastikan mode rendering halamanmu: lambang bulat berarti statis, lambang f berarti dirender ulang setiap request. Cek di sini dulu sebelum menuduh cache bermasalah. Catatan jujur: berkas ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
           "instruction": "Dashboard ini menampilkan angka penjualan yang berubah setiap menit, tapi `npm run build` melaporkannya sebagai halaman statis sehingga isinya membeku sejak build. Paksa Next.js merendernya ulang pada setiap request lewat konstanta konfigurasi yang dibaca dari berkas halaman.",
@@ -954,26 +970,29 @@ export const nextjsTrack: Track = {
           "kind": "step",
           "id": "next-3-3",
           "title": "Revalidasi Cache (ISR & On-Demand)",
-          "explanation": "Incremental Static Regeneration (ISR) mengizinkan kamu mempertahankan kecepatan halaman statis sekaligus memperbaruinya secara berkala tanpa melakukan build ulang aplikasi secara keseluruhan. Dengan memberikan opsi `{ next: { revalidate: 60 } }` pada pemanggilan `fetch()`, Next.js akan meng-cache halaman statis tersebut dan memperbaruinya secara otomatis di latar belakang setiap 60 detik saat ada request baru. Selain revalidasi berbasis waktu, kamu juga dapat memicu revalidasi secara langsung saat terjadi perubahan data di backend menggunakan fungsi `revalidatePath()` atau `revalidateTag()`. Gunakan strategi ISR ini untuk halaman portal berita, katalog produk, atau blog yang datanya berkala diperbarui.",
+          "explanation": "Incremental Static Regeneration (ISR) memungkinkan halaman tetap berkecepatan statis sekaligus diperbarui di latar belakang menggunakan pola *stale-while-revalidate*. Dengan opsi `{ next: { revalidate: 30 } }` pada `fetch()`, Next.js menyajikan data dari cache. Ketika interval 30 detik terlewati, request berikutnya tetap menerima data cache lama (stale) secara instan tanpa menunggu, sementara Next.js memicu regenerasi data baru di latar belakang server. Begitu regenerasi selesai, pengunjung setelahnya akan menerima data terbaru. Di mode development (`next dev`), cache di-bypass saat refresh agar mempermudah coding, sedangkan perilaku caching dan background revalidation ISR aktif penuh pada server produksi (`next build && next start`).",
           "example": {
-            "code": "// data kurs boleh basi maksimal 5 menit\nconst res = await fetch('https://api.example.com/kurs', {\n  next: { revalidate: 300 },\n});",
-            "output": "Permintaan ke-1 (detik 0)    : ambil dari API, simpan ke Data Cache\nPermintaan ke-2 (detik 12)   : dilayani dari cache, 0 panggilan API\nPermintaan ke-301            : dilayani dari cache LAMA, lalu API dipanggil\n                               di latar belakang untuk pengunjung berikutnya\n\n$ npm run build\n└ ISR /kurs    revalidate: 5m",
-            "note": "Pengunjung yang datang tepat setelah masa berlaku habis masih menerima data lama — perbaruinya terjadi di latar belakang. Itu perbedaan penting ISR dibanding `cache: 'no-store'`. Catatan jujur: berkas ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
+            "code": "// data kurs boleh basi maksimal 5 menit (300 detik)\nconst res = await fetch('https://api.example.com/kurs', {\n  next: { revalidate: 300 },\n});",
+            "output": "Permintaan ke-1 (detik 0)    : ambil dari API, simpan ke Data Cache\nPermintaan ke-2 (detik 12)   : dilayani dari cache, 0 panggilan API\nPermintaan ke-301            : dilayani dari cache LAMA (stale), lalu API dipanggil\n                               di latar belakang untuk pengunjung berikutnya\n\n$ npm run build\n└ ISR /kurs    revalidate: 5m",
+            "note": "Pengunjung yang datang tepat setelah interval habis tetap menerima data lama secara instan — pembaruannya terjadi di latar belakang server (stale-while-revalidate). Catatan jujur: berkas ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
-          "instruction": "Daftar artikel blog di bawah boleh tertinggal paling lama setengah menit. Tambahkan opsi pada pemanggilan `fetch` supaya Next.js tetap menyajikan versi cache, lalu memperbaruinya di latar belakang setelah rentang waktu itu terlewati.",
+          "instruction": "Atur pembaruan cache daftar artikel blog di bawah dengan revalidasi berkala 30 detik (setengah menit). Tambahkan opsi pada pemanggilan `fetch` agar Next.js menyajikan cache dan meregenerasi data baru di latar belakang saat request masuk setelah interval tersebut.",
           "starterCode": "export default async function Blog() {\n  const res = await fetch('https://api.example.com/posts');\n  return <div>Blog</div>;\n}",
           "language": "text",
           "tests": [
             {
               "pattern": "revalidate\\s*:\\s*30\\b",
+              "stripComments": true,
               "message": "Rentang waktunya ditulis dalam DETIK, jadi setengah menit berarti 30 — bukan 0.5, bukan 30000."
             },
             {
               "pattern": "next\\s*:\\s*\\{[\\s\\S]*revalidate",
+              "stripComments": true,
               "message": "Opsi cache Next.js dibungkus di dalam properti `next`. Menaruh `revalidate` langsung di objek opsi `fetch` (tanpa `next`) diabaikan tanpa pesan error — halamanmu tetap membeku dan itu sulit dilacak."
             },
             {
               "pattern": "fetch\\(\\s*['\"][^'\"]+['\"]\\s*,\\s*\\{",
+              "stripComments": true,
               "message": "Opsinya menjadi ARGUMEN KEDUA `fetch`, tepat setelah URL-nya, bukan pernyataan terpisah di bawahnya."
             }
           ],
@@ -1094,7 +1113,7 @@ export const nextjsTrack: Track = {
           "explanation": "Secara default, rute dinamis dengan parameter kurung siku `[slug]` akan di-render secara dinamis pada saat pengguna meminta halaman tersebut. Namun, jika kamu sudah mengetahui daftar parameter yang tersedia (misalnya 100 ID artikel blog teratas), kamu dapat mengekspor fungsi khusus bernama `generateStaticParams()` di dalam berkas `page.tsx`. Fungsi ini mengembalikan daftar array objek parameter yang akan di-pre-render secara statis menjadi HTML pada saat proses build produksi. Hasilnya, ketika pengunjung mengklik artikel tersebut, halaman akan terbuka dalam hitungan milidetik karena sudah berbentuk HTML statis di CDN server. Gunakan fitur ini untuk rute artikel blog, dokumentasi, atau produk terpopuler.",
           "example": {
             "code": "// app/dokumen/[kode]/page.tsx\nexport async function generateStaticParams() {\n  const daftar = await fetch('https://api.example.com/dokumen').then((r) => r.json());\n  return daftar.map((d) => ({ kode: d.kode }));\n}",
-            "output": "$ npm run build\n\nRoute (app)                       Size\n┌ ● /dokumen/[kode]               1.4 kB\n├   /dokumen/panduan-mutu\n├   /dokumen/sop-gudang\n└   /dokumen/formulir-cuti\n\n●  (SSG)  prerendered as static HTML (uses generateStaticParams)",
+            "output": "$ npm run build\n\n▲ Next.js 16.2.12 (Turbopack)\n\nRoute (app)                       Size\n┌ ● /dokumen/[kode]               1.4 kB\n│ ├ /dokumen/panduan-mutu\n│ ├ /dokumen/sop-gudang\n│ └ /dokumen/formulir-cuti\n\n●  (SSG)  prerendered as static HTML (uses generateStaticParams)",
             "note": "Nama properti pada objek yang dikembalikan WAJIB sama dengan nama folder dinamisnya: folder `[kode]` berarti `{ kode: ... }`. Salah nama tidak menghasilkan error, hanya membuat halamannya tidak ikut di-prerender. Catatan jujur: berkas ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
           "instruction": "Tiga slug pada konstanta `SLUG_POPULER` seharusnya sudah menjadi HTML statis sejak proses build, bukan dirender saat pengunjung pertama datang. Ekspor fungsi konvensi Next.js yang menyebutkan daftar parameter mana yang perlu di-prerender, dan kembalikan satu objek per slug dengan nama properti yang cocok dengan folder `[slug]`.",
@@ -1611,7 +1630,7 @@ export const nextjsTrack: Track = {
           "kind": "materi",
           "id": "next-5-m1",
           "title": "Server Actions & Mutasi Data di Next.js",
-          "body": "# Server Actions & Mutasi Data\n\nDi aplikasi web tradisional, untuk menyimpan data dari Form, kamu harus: membuat Form -> menulis event listener `onSubmit` -> panggil `fetch('/api/submit')` -> buat Route Handler API -> mutasi DB -> kembalikan JSON -> update state React. Alur ini sangat panjang dan melelahkan.\n\n**Server Actions** menyederhanakan alur ini secara drastis! Server Actions adalah **fungsi async yang dieksekusi di server**, tetapi dapat dipanggil secara langsung dari komponen client atau atribut `action` pada elemen `<form>`.\n\n## Model Keamanan & Direktif 'use server'\n\nKamu menandai sebuah fungsi sebagai Server Action dengan menambahkan direktif `'use server';` di baris pertama fungsi atau di baris pertama berkas khusus (misal `app/actions.ts`).\n\n```typescript\n// app/actions.ts\n'use server';\n\nimport { revalidatePath } from 'next/cache';\nimport { db } from '@/lib/db';\n\nexport async function createPost(formData: FormData) {\n  const title = formData.get('title') as string;\n  await db.post.create({ data: { title } });\n  \n  // Otomatis memperbarui cache halaman /blog di server\n  revalidatePath('/blog');\n}\n```\n\n> **Keamanan Krusial:** Di balik layar, Next.js membuatkan endpoint POST rahasia bermuatan hash khusus. Selalu lakukan **validasi input** dan **pengecekan autentikasi session** di dalam setiap Server Action!\n\n## Integrasi React 19: `useActionState` & `useFormStatus`\n\nDi Next.js modern (React 19), penanganan status loading dan error dari Server Action dipandu oleh dua hook bawaan:\n\n1. **`useActionState`**: Membungkus Server Action untuk mengelola respon `state` (seperti pesan sukses/error) dan status `isPending` (apakah action sedang berjalan).\n2. **`useFormStatus`**: Hook yang dipanggil di dalam komponen anak `<form>` untuk mengetahui apakah form tersebut sedang dalam proses pengiriman (`pending === true`). Sangat berguna untuk mendisable tombol submit!\n\n```tsx\n// ClientForm.tsx ('use client')\nimport { useActionState } from 'react';\nimport { createPost } from '@/app/actions';\n\nexport default function AddPostForm() {\n  const [state, formAction, isPending] = useActionState(createPost, null);\n\n  return (\n    <form action={formAction}>\n      <input name=\"title\" required />\n      <button disabled={isPending}>\n        {isPending ? 'Saving...' : 'Submit'}\n      </button>\n      {state?.error && <p>{state.error}</p>}\n    </form>\n  );\n}\n```\n\n## Mutasi & Revalidasi Cache: `revalidatePath` vs `revalidateTag`\n\nSetelah Server Action selesai mengubah data di database, tampilan UI di browser tidak akan berubah sampai cache server diperbarui. Panggil:\n- **`revalidatePath('/blog')`**: Membuang cache seluruh halaman pada path tersebut.\n- **`revalidateTag('posts', 'max')`**: Membuang cache data spesifik yang ditandai tag `fetch(..., { next: { tags: ['posts'] } })`. Sejak Next.js 16 argumen kedua (profil `cacheLife`, mis. `'max'`) wajib ada — bentuk satu argumen sudah deprecated dan ditandai error oleh TypeScript. Kalau kamu butuh pengguna langsung melihat hasil perubahannya sendiri (read-your-writes), pakai `updateTag()` di dalam Server Action, bukan `revalidateTag()`.\n\n## Optimistic UI dengan `useOptimistic`\n\nUntuk memberikan respon UI instan tanpa menunggu Server Action selesai di server (seperti tombol Like yang langsung merah), gunakan hook `useOptimistic`. UI diupdate secara hipotetis seketika, dan jika server gagal, React akan mengembalikan UI ke state semula secara otomatis.\n\n## Analogi Dunia Nyata\n\nServer Action seperti **Tombol Bel Pintu Cerdas**. Ketika kamu menekan tombol bel di pagar rumah (Client Form), sinyal listrik langsung membunyikan lonceng di dalam dapur rumah (Server). Kamu tidak perlu mengirim surat pos melalui kantor pos (REST API fetch) hanya untuk memberitahu tuan rumah bahwa ada tamu di depan pagar.\n\n## Jebakan & Kesalahan Umum\n\n1. **Mengabaikan Pengecekan Autentikasi**: Menganggap Server Action aman karena dipanggil dari UI internal. Ingat, endpoint di balik Server Action tetap bisa ditembak oleh penyerang jika tidak ada pengecekan `auth()`!\n2. **Mengoper Objek Non-Serializable**: Mengirimkan objek kompleks ke Server Action yang tidak bisa di-serialize.\n3. **Lupa Revalidasi**: Data di database sudah berubah, tetapi UI pengguna tidak berganti karena developer lupa memanggil `revalidatePath()`.\n\n## Kaitan ke Dunia Kerja\n\nServer Actions adalah standar utama dalam pembangunan aplikasi Next.js modern. Penguasaan Server Actions bersama React 19 hooks mempercepat kecepatan pengembangan fitur (development velocity) hingga 2x lipat dibanding pola REST API lama."
+          "body": "# Server Actions & Mutasi Data\n\nDi aplikasi web tradisional, untuk menyimpan data dari Form, kamu harus: membuat Form -> menulis event listener `onSubmit` -> panggil `fetch('/api/submit')` -> buat Route Handler API -> mutasi DB -> kembalikan JSON -> update state React. Alur ini sangat panjang dan melelahkan.\n\n**Server Actions** menyederhanakan alur ini secara drastis! Server Actions adalah **fungsi async yang dieksekusi di server**, tetapi dapat dipanggil secara langsung dari komponen client atau atribut `action` pada elemen `<form>`.\n\n## Model Keamanan & Direktif 'use server'\n\nKamu menandai sebuah fungsi sebagai Server Action dengan menambahkan direktif `'use server';` di baris pertama fungsi atau di baris pertama berkas khusus (misal `app/actions.ts`).\n\n```typescript\n// app/actions.ts\n'use server';\n\nimport { revalidatePath } from 'next/cache';\nimport { db } from '@/lib/db';\n\n// Signature saat dipakai bersama useActionState: (prevState, formData)\nexport async function createPost(prevState: unknown, formData: FormData) {\n  const title = formData.get('title') as string;\n  await db.post.create({ data: { title } });\n  \n  // Otomatis memperbarui cache halaman /blog di server\n  revalidatePath('/blog');\n  return { success: true };\n}\n```\n\n> **Keamanan Krusial:** Di balik layar, Next.js membuatkan endpoint POST rahasia bermuatan hash khusus. Selalu lakukan **validasi input** dan **pengecekan autentikasi session** di dalam setiap Server Action!\n\n## Integrasi React 19: `useActionState` & `useFormStatus`\n\nDi Next.js modern (React 19), penanganan status loading dan error dari Server Action dipandu oleh dua hook bawaan:\n\n1. **`useActionState`**: Membungkus Server Action untuk mengelola respon `state` (seperti pesan sukses/error) dan status `isPending` (apakah action sedang berjalan).\n> **Penting soal Signature:** Server Action yang dibungkus `useActionState` **wajib** menerima parameter `(prevState, formData)`. React 19 selalu menyuntikkan nilai state sebelumnya sebagai argumen pertama. Jika fungsimu hanya menerima `(formData: FormData)`, maka saat form dikirim parameter `formData` justru berisi `prevState` (misal `null`) dan memicu `TypeError: Cannot read properties of null` saat memanggil `.get()`!\n2. **`useFormStatus`**: Hook yang dipanggil di dalam komponen anak `<form>` untuk mengetahui apakah form tersebut sedang dalam proses pengiriman (`pending === true`). Sangat berguna untuk mendisable tombol submit!\n\n```tsx\n// ClientForm.tsx ('use client')\nimport { useActionState } from 'react';\nimport { createPost } from '@/app/actions';\n\nexport default function AddPostForm() {\n  const [state, formAction, isPending] = useActionState(createPost, null);\n\n  return (\n    <form action={formAction}>\n      <input name=\"title\" required />\n      <button disabled={isPending}>\n        {isPending ? 'Saving...' : 'Submit'}\n      </button>\n      {state?.error && <p>{state.error}</p>}\n    </form>\n  );\n}\n```\n\n## Mutasi & Revalidasi Cache: `revalidatePath` vs `revalidateTag`\n\nSetelah Server Action selesai mengubah data di database, tampilan UI di browser tidak akan berubah sampai cache server diperbarui. Panggil:\n- **`revalidatePath('/blog')`**: Membuang cache seluruh halaman pada path tersebut.\n- **`revalidateTag('posts', 'max')`**: Membuang cache data spesifik yang ditandai tag `fetch(..., { next: { tags: ['posts'] } })`. Sejak Next.js 16 argumen kedua (profil `cacheLife`, mis. `'max'`) wajib ada — bentuk satu argumen sudah deprecated dan ditandai error oleh TypeScript. Kalau kamu butuh pengguna langsung melihat hasil perubahannya sendiri (read-your-writes), pakai `updateTag()` di dalam Server Action, bukan `revalidateTag()`.\n\n## Optimistic UI dengan `useOptimistic`\n\nUntuk memberikan respon UI instan tanpa menunggu Server Action selesai di server (seperti tombol Like yang langsung merah), gunakan hook `useOptimistic`. UI diupdate secara hipotetis seketika, dan jika server gagal, React akan mengembalikan UI ke state semula secara otomatis.\n\n## Analogi Dunia Nyata\n\nServer Action seperti **Tombol Bel Pintu Cerdas**. Ketika kamu menekan tombol bel di pagar rumah (Client Form), sinyal listrik langsung membunyikan lonceng di dalam dapur rumah (Server). Kamu tidak perlu mengirim surat pos melalui kantor pos (REST API fetch) hanya untuk memberitahu tuan rumah bahwa ada tamu di depan pagar.\n\n## Jebakan & Kesalahan Umum\n\n1. **Mengabaikan Pengecekan Autentikasi**: Menganggap Server Action aman karena dipanggil dari UI internal. Ingat, endpoint di balik Server Action tetap bisa ditembak oleh penyerang jika tidak ada pengecekan `auth()`!\n2. **Mengoper Objek Non-Serializable**: Mengirimkan objek kompleks ke Server Action yang tidak bisa di-serialize.\n3. **Lupa Revalidasi**: Data di database sudah berubah, tetapi UI pengguna tidak berganti karena developer lupa memanggil `revalidatePath()`.\n\n## Kaitan ke Dunia Kerja\n\nServer Actions adalah standar utama dalam pembangunan aplikasi Next.js modern. Penguasaan Server Actions bersama React 19 hooks mempercepat kecepatan pengembangan fitur (development velocity) hingga 2x lipat dibanding pola REST API lama."
         },
         {
           "kind": "step",
@@ -1657,11 +1676,11 @@ export const nextjsTrack: Track = {
           "kind": "step",
           "id": "next-5-2",
           "title": "Form Handling dengan useActionState",
-          "explanation": "Di Next.js (React 19), hook `useActionState` digunakan di dalam Client Component untuk menghubungkan form antarmuka dengan Server Action. Hook ini menerima dua argumen utama: fungsi Server Action dan nilai awal state (`initialState`). Hook mengembalikan array bernilai: state respon terbaru dari server, fungsi penangan form (`formAction`), dan status indikator pemrosesan (`isPending`). Dengan mengoper `formAction` ke atribut `action` pada elemen `<form>`, form dapat terkirim dan merespons hasil kembalian dari server secara progresif tanpa melakukan muat ulang halaman. Gunakan `useActionState` untuk seluruh form interaktif yang membutuhkan penanganan pesan sukses atau pesan kesalahan dari server.",
+          "explanation": "Di Next.js (React 19), hook `useActionState` digunakan di dalam Client Component untuk menghubungkan form antarmuka dengan Server Action. Hook ini menerima dua argumen utama: fungsi Server Action dan nilai awal state (`initialState`). Hook mengembalikan array bernilai: state respon terbaru dari server, fungsi penangan form (`formAction`), dan status indikator pemrosesan (`isPending`). Server Action yang dibungkus hook ini wajib dideklarasikan menerima dua parameter `(prevState, formData)` karena React 19 otomatis menyisipkan state sebelumnya sebagai argumen pertama. Dengan mengoper `formAction` ke atribut `action` pada elemen `<form>`, form dapat terkirim dan merespons hasil kembalian dari server secara progresif tanpa melakukan muat ulang halaman. Gunakan `useActionState` untuk seluruh form interaktif yang membutuhkan penanganan pesan sukses atau pesan kesalahan dari server.",
           "example": {
             "code": "// app/komentar/Form.tsx\n'use client';\nimport { useActionState } from 'react';\nimport { kirimKomentar } from './actions';\n\nexport default function FormKomentar() {\n  const [state, formAction, isPending] = useActionState(kirimKomentar, null);\n  return (\n    <form action={formAction}>\n      <input name=\"isi\" />\n      <button disabled={isPending}>{isPending ? 'Mengirim...' : 'Kirim'}</button>\n      {state?.error && <p>{state.error}</p>}\n    </form>\n  );\n}",
             "output": "Urutan yang terlihat saat tombol Kirim diklik:\n\n1. <button disabled>Mengirim...</button>\n2. server menjalankan kirimKomentar()\n3. <button>Kirim</button>  +  <p>Komentar minimal 3 karakter</p>\n\nHalaman tidak pernah dimuat ulang; tidak ada fetch() yang kamu tulis sendiri.",
-            "note": "Nilai kembalian Server Action-lah yang muncul di `state`. Kalau action-mu tidak me-return apa pun, `state` tetap `null` dan pesan errornya tidak akan pernah tampil. Catatan jujur: berkas ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
+            "note": "Nilai kembalian Server Action-lah yang muncul di `state`. Pastikan fungsi Server Action di sisi server dideklarasikan menerima `(prevState, formData)` agar masukan form tidak tertukar dengan state sebelumnya. Catatan jujur: berkas ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
           "instruction": "Form di bawah sudah punya elemen dan tombolnya, tapi belum tersambung ke Server Action `createItem`. Panggil hook React 19 yang membungkus action itu dengan nilai awal state `null`, dan simpan hasilnya ke tiga variabel yang sudah dipakai di JSX (`state`, `formAction`, `isPending`).",
           "starterCode": "'use client';\nimport { useActionState } from 'react';\nimport { createItem } from './actions';\n\nexport default function Form() {\n  // Panggil hook-nya di bawah ini\n\n  return (\n    <form action={formAction}>\n      <input name=\"nama\" />\n      <button disabled={isPending}>Simpan</button>\n      {state?.error && <p>{state.error}</p>}\n    </form>\n  );\n}",
@@ -2009,17 +2028,20 @@ export const nextjsTrack: Track = {
           "language": "text",
           "tests": [
             {
-              "pattern": "httpOnly\\s*:\\s*true",
-              "message": "Flag `httpOnly` harus `true` supaya cookie tidak bisa dibaca `document.cookie`. Nilainya boolean, bukan string `'true'`."
+              "pattern": "cookieOptions\\s*=\\s*\\{[^}]*\\bhttpOnly\\s*:\\s*true\\b",
+              "stripComments": true,
+              "message": "Flag `httpOnly: true` harus berada di dalam objek `cookieOptions` supaya cookie tidak bisa dibaca `document.cookie`. Nilainya boolean, bukan string `'true'`."
             },
             {
-              "pattern": "httpOnly\\s*:\\s*false",
+              "pattern": "httpOnly\\s*:\\s*(?:false|!true)",
               "mustNotMatch": true,
-              "message": "Masih ada `httpOnly: false` di kode. Selama nilainya `false`, cookie sesi tetap terbaca skrip apa pun yang berhasil berjalan di halamanmu."
+              "stripComments": true,
+              "message": "Masih ada `httpOnly: false` atau `!true` di kode. Selama nilainya tidak `true`, cookie sesi tetap terbaca skrip apa pun yang berhasil berjalan di halamanmu."
             },
             {
-              "pattern": "secure\\s*:\\s*true",
-              "message": "Pertahankan `secure: true` — tanpa itu cookie ikut terkirim lewat HTTP biasa dan bisa dibaca di jaringan publik."
+              "pattern": "cookieOptions\\s*=\\s*\\{[^}]*\\bsecure\\s*:\\s*true\\b",
+              "stripComments": true,
+              "message": "Pertahankan `secure: true` di dalam `cookieOptions` — tanpa itu cookie ikut terkirim lewat HTTP biasa dan bisa dibaca di jaringan publik."
             }
           ],
           "solution": "// Konfigurasi cookie sesi — ada satu flag yang salah nilai\nconst cookieOptions = {\n  httpOnly: true,\n  secure: true,\n  sameSite: 'lax',\n};",
@@ -2101,23 +2123,27 @@ export const nextjsTrack: Track = {
             "note": "`redirect()` bekerja dengan melempar sinyal khusus ke dalam, jadi jangan membungkusnya dengan `try/catch` — kalau tertangkap, halaman rahasianya justru lanjut dirender. Catatan jujur: berkas ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
           "instruction": "Halaman `Dashboard` di bawah sudah membaca sesi, tapi belum menolak pengunjung yang belum login: HTML rahasianya tetap terkirim. Tambahkan penjagaan agar pengunjung tanpa sesi dialihkan ke `/login` sebelum apa pun dirender.",
-          "starterCode": "import { redirect } from 'next/navigation';\n\nexport default async function Dashboard() {\n  const session = await auth();\n  // Tambahkan proteksi di bawah ini\n  \n  return <h1>Rahasia</h1>;\n}",
+          "starterCode": "import { auth } from '@/auth';\nimport { redirect } from 'next/navigation';\n\nexport default async function Dashboard() {\n  const session = await auth();\n  // Tambahkan proteksi di bawah ini\n  \n  return <h1>Rahasia</h1>;\n}",
           "language": "text",
           "tests": [
             {
-              "pattern": "if\\s*\\(\\s*!\\s*session\\s*\\)",
-              "message": "Jaga kasus \"tidak ada sesi\" — `auth()` mengembalikan `null` untuk pengunjung anonim, jadi `!session` adalah kondisi yang benar."
+              "pattern": "if\\s*\\(\\s*!\\s*session\\s*\\)[\\s\\S]*redirect\\(\\s*['\"]/login['\"]\\s*\\)[\\s\\S]*return",
+              "stripComments": true,
+              "message": "Jaga kasus \"tidak ada sesi\" sebelum merender konten — panggil `if (!session) redirect('/login')` sebelum `return`, agar konten rahasia tidak sempat dikirim ke pengunjung anonim."
             },
             {
-              "pattern": "redirect\\(\\s*['\"]/login['\"]\\s*\\)",
-              "message": "Pakai `redirect()` dari `next/navigation` (sudah diimpor) dengan tujuan `/login`. Boleh ditulis satu baris maupun di dalam blok kurawal. Jangan pakai `useRouter` — hook itu hanya hidup di Client Component."
+              "pattern": "return[\\s\\S]*if\\s*\\(\\s*!\\s*session\\s*\\)",
+              "mustNotMatch": true,
+              "stripComments": true,
+              "message": "Jangan meletakkan `return` sebelum pengecekan sesi. Kode setelah `return` tidak akan pernah dieksekusi sehingga halaman rahasia tetap lolos ke pengunjung tanpa login."
             }
           ],
-          "solution": "import { redirect } from 'next/navigation';\n\nexport default async function Dashboard() {\n  const session = await auth();\n  if (!session) redirect('/login');\n  return <h1>Rahasia</h1>;\n}",
+          "solution": "import { auth } from '@/auth';\nimport { redirect } from 'next/navigation';\n\nexport default async function Dashboard() {\n  const session = await auth();\n  if (!session) redirect('/login');\n  return <h1>Rahasia</h1>;\n}",
           susunKode: {
             question:
               "Susun proteksi halaman rute rahasia yang mengalihkan pengguna ke /login jika belum ada sesi.",
             potongan: [
+              "import { auth } from '@/auth';",
               "import { redirect } from 'next/navigation';",
               "export default async function Dashboard() {",
               "  const session = await auth();",
@@ -2131,7 +2157,7 @@ export const nextjsTrack: Track = {
             ],
             pemisah: "\n",
             explanation:
-              "Fungsi redirect dipanggil saat pengondisian !session bernilai true untuk mengamankan halaman dari akses anonim. Keping if (session) redirect menggoda tetapi salah logika karena justru mengalihkan pengguna yang sudah berhasil login. Keping redirect('/dashboard') keliru target rute pengalihan.",
+              "Fungsi redirect dipanggil saat pengondisian !session bernilai true untuk mengamankan halaman dari akses anonim sebelum merender return markup rahasia. Keping if (session) redirect menggoda tetapi salah logika karena justru mengalihkan pengguna yang sudah berhasil login. Keping redirect('/dashboard') keliru target rute pengalihan.",
           },
         },
         {
@@ -2150,19 +2176,23 @@ export const nextjsTrack: Track = {
           "tests": [
             {
               "pattern": "export\\s+(default\\s+)?(async\\s+)?function\\s+proxy\\s*\\(",
+              "stripComments": true,
               "message": "Sejak Next.js 16 fungsinya bernama `proxy`, bukan `middleware`. Berkas `proxy.ts` yang mengekspor fungsi bernama `middleware` tidak dikenali — dan nama lama sendiri sudah deprecated."
             },
             {
               "pattern": "export\\s+const\\s+config\\s*=",
+              "stripComments": true,
               "message": "Next.js membaca jangkauannya dari named export bernama tepat `config`. Tanpa `export`, objeknya diabaikan dan berkas ini tetap jalan untuk semua path."
             },
             {
-              "pattern": "matcher\\s*:\\s*\\[[^\\]]*['\"]/dashboard/:path\\*['\"]",
-              "message": "Isi `matcher` dengan array pola path. `'/dashboard/:path*'` mencakup `/dashboard` beserta `/dashboard/laporan` dan seterusnya; menuliskannya hanya sebagai `'/dashboard'` membuat sub-halamannya lolos tanpa penjagaan."
+              "pattern": "matcher\\s*:\\s*(?:\\[[^\\]]*['\"]/dashboard/:path\\*['\"]|['\"]/dashboard/:path\\*['\"])",
+              "stripComments": true,
+              "message": "Isi `matcher` dengan string atau array pola path `'/dashboard/:path*'`. Pola ini mencakup `/dashboard` beserta `/dashboard/laporan` dan seterusnya; menuliskannya hanya sebagai `'/dashboard'` membuat sub-halamannya lolos tanpa penjagaan."
             },
             {
               "pattern": "export\\s+(default\\s+)?(async\\s+)?function\\s+middleware",
               "mustNotMatch": true,
+              "stripComments": true,
               "message": "Masih ada `export function middleware` di kode. Konvensi itu deprecated sejak Next.js 16 — ganti namanya menjadi `proxy`, jangan menambahkan fungsi baru di sebelahnya."
             }
           ],
@@ -2384,19 +2414,23 @@ export const nextjsTrack: Track = {
           "tests": [
             {
               "pattern": "import\\s+Image\\s+from\\s*[\"']next/image[\"']",
+              "stripComments": true,
               "message": "Impor dulu `Image` dari `next/image`. Tanpa impor, `<Image>` dianggap tag HTML tak dikenal."
             },
             {
-              "pattern": "<Image\\b[\\s\\S]*src=[\"']/banner\\.png[\"']",
+              "pattern": "<Image\\b[^>]*\\bsrc=[\"']/banner\\.png[\"']",
+              "stripComments": true,
               "message": "Pakai komponen `<Image>` dengan `src=\"/banner.png\"` (garis miring di depan berarti folder public)."
             },
             {
-              "pattern": "alt=[\"']Banner[\"']",
-              "message": "`alt` wajib diisi — `next/image` menolak render tanpa `alt`, dan itu juga syarat aksesibilitas."
+              "pattern": "<Image\\b[^>]*\\balt=[\"']Banner[\"']",
+              "stripComments": true,
+              "message": "Atribut `alt=\"Banner\"` wajib dipasang langsung pada komponen `<Image>` — `next/image` menolak render tanpa `alt`, dan itu juga syarat aksesibilitas."
             },
             {
-              "pattern": "width=\\{\\s*800\\s*\\}[\\s\\S]*height=\\{\\s*400\\s*\\}|height=\\{\\s*400\\s*\\}[\\s\\S]*width=\\{\\s*800\\s*\\}",
-              "message": "Sertakan `width={800}` dan `height={400}` (angka di dalam kurawal, bukan string). Tanpa keduanya Next.js melempar error karena rasio aspek tidak diketahui. Urutan atribut bebas."
+              "pattern": "<Image\\b(?=[^>]*\\bwidth=\\{\\s*800\\s*\\})(?=[^>]*\\bheight=\\{\\s*400\\s*\\})[^>]*\\/?>",
+              "stripComments": true,
+              "message": "Sertakan `width={800}` dan `height={400}` (angka di dalam kurawal) langsung pada komponen `<Image>`. Tanpa keduanya Next.js melempar error karena rasio aspek tidak diketahui. Urutan atribut bebas."
             }
           ],
           "solution": "import Image from 'next/image';\n\nexport default function Header() {\n  return (\n    <header>\n      <Image src=\"/banner.png\" alt=\"Banner\" width={800} height={400} />\n    </header>\n  );\n}",
@@ -2629,7 +2663,7 @@ export const nextjsTrack: Track = {
           "explanation": "Semua yang diimpor secara statis masuk ke bundel utama, ikut diunduh pengguna meski komponennya baru terlihat setelah tombol tertentu diklik. `dynamic()` dari `next/dynamic` memecah komponen berat menjadi berkas JavaScript terpisah yang baru diunduh saat komponennya benar-benar dipasang. Dipakai untuk editor rich text, library grafik, pemutar video, dan peta — kandidatnya biasanya terlihat jelas di laporan `@next/bundle-analyzer`. Opsi `{ ssr: false }` berguna kalau komponennya menyentuh `window` atau `document`, karena di server dua objek itu tidak ada — tetapi opsi itu **hanya boleh dipakai di dalam berkas berdirektif `'use client'`**; menuliskannya di Server Component langsung ditolak dengan pesan `ssr: false is not allowed with next/dynamic in Server Components`. Jebakan yang sering: memberi `dynamic()` sebuah komponen yang tampil di layar pertama — pengguna justru menunggu dua kali (bundel utama, lalu chunk tambahan), sehingga LCP memburuk. Jebakan lain: memanggil `dynamic()` di dalam badan komponen, sehingga chunk-nya dibuat ulang setiap render.",
           "example": {
             "code": "// app/kontak/PanelPeta.tsx — WAJIB Client Component karena memakai ssr: false\n'use client';\nimport dynamic from 'next/dynamic';\n\nconst PetaLokasi = dynamic(() => import('./PetaLokasi'), {\n  ssr: false,                              // komponennya memakai window\n  loading: () => <p>Memuat peta...</p>,\n});\n\nexport default function PanelPeta() {\n  return <PetaLokasi />;\n}",
-            "output": "$ npm run build\n\nRoute (app)                     Size     First Load JS\n┌ ○ /kontak                     1.8 kB          96 kB\n+ chunk chunks/peta-4f1c.js    182 kB          (diunduh saat dibutuhkan)\n\nSebelum dynamic(): First Load JS /kontak = 278 kB",
+            "output": "$ npm run build\n\n▲ Next.js 16.2.12 (Turbopack)\n\nRoute (app)                     Size     First Load JS\n┌ ○ /kontak                     1.8 kB          96 kB\n+ chunk chunks/peta-4f1c.js    182 kB          (diunduh saat dibutuhkan)\n\nSebelum dynamic(): First Load JS /kontak = 278 kB",
             "note": "Perhatikan `'use client'` di baris pertama: contoh ini memakai `ssr: false`, dan opsi itu hanya sah di Client Component. Angka `First Load JS` di tabel build itulah cara membuktikan pemisahannya berhasil — bukan perasaan bahwa halaman \"terasa\" lebih cepat. Catatan jujur: berkas ini tidak dijalankan di panel preview — Next.js butuh server sendiri (dan sebagian berkas hanya hidup di server). Yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus."
           },
           "instruction": "Komponen berat di `./Heavy` hanya muncul setelah pengguna menggulir ke bawah, tapi sekarang ikut diunduh sejak halaman dibuka. Muat komponen itu secara terpisah memakai pembantu dari `next/dynamic` yang sudah diimpor, dan simpan hasilnya ke konstanta `HeavyComponent` yang sudah dipakai di JSX.",

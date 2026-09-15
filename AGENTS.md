@@ -8,6 +8,19 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 Dokumen terkait: `panduan_isi.md` (standar penulisan konten), `perintah_kuli.md` (perintah & antrean perbaikan per track).
 
+## Wajib Menggunakan Graphify untuk Arsitektur & Eksplorasi
+
+Sebelum menelusuri, menganalisis arsitektur, atau memodifikasi alur kode, agen **WAJIB** mengecek knowledge graph:
+1. Periksa `graphify-out/graph.json` dan laporan `graphify-out/GRAPH_REPORT.md` (skema interaktif ada di `graphify-out/graph.html`).
+2. Gunakan query graph untuk mencari relasi file/komponen sebelum membaca manual satu per satu:
+   ```bash
+   uv run --with graphifyy graphify query "<pertanyaan alur kode>"
+   ```
+3. Jika menambahkan modul/fitur baru atau refactor kode, perbarui graph di akhir:
+   ```bash
+   uv run --with graphifyy graphify update
+   ```
+
 ## Sebelum menyentuh `src/data/tracks/**`
 
 **BACA `panduan_isi.md` LEBIH DULU.** Itu standar penulisan konten, bukan saran. Riwayat proyek ini: 13 track pernah diisi tanpa mengikutinya → 935 pelanggaran, konten harus ditulis ulang.
@@ -48,6 +61,7 @@ Tambahan: tes regex harus menerima variasi penulisan yang sama-sama benar (mis. 
 npm run verify:konten          # kualitas konten — harus bersih
 npx tsc --noEmit && npx eslint src
 npm run build
+uv run --with graphifyy graphify update  # sinkronkan skema graph jika ada file yang berubah
 ```
 
 Jangan pernah melaporkan pekerjaan selesai kalau `verify:konten` masih menemukan pelanggaran pada bagian yang kamu kerjakan.
@@ -55,3 +69,7 @@ Jangan pernah melaporkan pekerjaan selesai kalau `verify:konten` masih menemukan
 ## Bahasa konten
 
 Penjelasan bahasa Indonesia, istilah teknis tetap Inggris (`state`, `closure`, `query`). Sapa pembaca dengan "kamu". Jangan meremehkan kesulitan ("gampang banget!", "tinggal ketik").
+
+## Pencegahan kesalahan worker berulang
+
+Sebelum mereview atau memperbaiki konten/validator, wajib baca `panduan_isi.md` bagian **2c. Pelajaran Audit Worker**. Untuk React dan Next.js baca juga `perintah-react-review-2026-09-15.md` / `perintah-nextjs-review-2026-09-15.md`. Jalankan audit kontrak `npx tsx scripts/audit-react-next-learning.ts --check` ketika mengerjakan kedua track tersebut; kegagalan awal adalah temuan yang harus diperbaiki, bukan alasan menghapus fixture. Verifier/build hijau tidak menggantikan bukti variasi jawaban sah, jawaban salah yang hampir benar, dan perilaku runtime.

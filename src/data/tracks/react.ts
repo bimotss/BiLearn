@@ -1245,23 +1245,31 @@ export const reactTrack: Track = {
           "kind": "step",
           "id": "react-3-4",
           "title": "Updater Function (prev => ...)",
-          "explanation": "Updater function (`setCount(prev => prev + 1)`) adalah cara meng-update state di mana kita mengoper fungsi callback yang menerima nilai state paling akhir sebagai argumennya. Pola ini sangat krusial digunakan jika nilai state baru bergantung pada kalkulasi nilai state sebelumnya atau saat terjadi pembaruan state berturut-turut di dalam satu event handler. Menggunakan updater function menjamin kamu selalu bekerja dengan data Paling segar dari antrean pembaruan React. Jebakan pemula adalah mengabaikan pola ini pada operasi perhitungan nilai bertahap.",
+          "explanation": "Updater function (`setCount(prev => prev + 1)`) adalah cara meng-update state di mana kita mengoper fungsi callback yang menerima nilai state paling akhir sebagai argumennya. Pada React, penekanan tombol secara terpisah diproses sebagai interaksi diskret berbeda, namun pemanggilan setter berkali-kali di dalam satu event handler yang sama akan membaca nilai snapshot render yang sama. Pola updater function sangat krusial digunakan jika nilai state baru bergantung pada kalkulasi nilai state sebelumnya atau saat terjadi beberapa pembaruan state di dalam satu handler. Menggunakan updater function menjamin kamu selalu bekerja dengan data paling segar dari antrean pembaruan React. Jebakan pemula adalah menulis blok kurawal `{ ... }` pada fungsi panah tetapi lupa menulis `return`.",
           "example": {
             "code": "// dipanggil tiga kali berturut-turut dalam satu handler\nsetCount(prev => prev + 1);\nsetCount(prev => prev + 1);\nsetCount(prev => prev + 1);",
-            "output": "count sebelum: 0\ncount sesudah: 3\n\nBandingkan dengan setCount(count + 1) tiga kali → hasilnya tetap 1.",
+            "output": "count sebelum: 0\ncount sesudah: 3\n\nBandingkan dengan setCount(count + 1) tiga kali dalam satu handler → hasilnya tetap 1 karena membaca snapshot yang sama.",
             "note": "React menyimpan ketiga fungsi itu di antrean, lalu menjalankannya berurutan: 0→1, 1→2, 2→3. Karena tiap fungsi menerima hasil sebelumnya, snapshot render tidak lagi jadi masalah. Catatan jujur: potongan sebaris seperti ini bukan komponen utuh, jadi panel preview tidak menampilkan hasil visual — yang diperiksa kodenya, dan tesnya tetap bisa lulus."
           },
-          "instruction": "Tombol bonus menambah skor 10 poin, tapi menekannya dua kali cepat hanya menambah 10 karena `score` yang dibaca masih nilai lama (state adalah snapshot). Panggil `setScore` dengan bentuk yang menerima nilai sebelumnya sebagai argumen, lalu tambahkan 10 padanya. Beri nama parameternya `prev`.",
+          "instruction": "Di dalam handler tombol bonus, panggil `setScore` menggunakan updater function yang menerima nilai state sebelumnya (beri nama parameter `prev`) dan mengembalikan nilai tersebut ditambah 10.",
           "starterCode": "// Tulis setScore di sini\n",
           "language": "jsx",
           "tests": [
             {
-              "pattern": "setScore\\(\\s*\\(?\\s*prev",
+              "pattern": "setScore\\(\\s*(?:function\\s*\\(\\s*prev\\s*\\)|\\(?\\s*prev\\s*\\)?\\s*=>)",
+              "stripComments": true,
               "message": "Bentuk aman memberi FUNGSI ke setter, bukan nilai jadi. Parameter pertamanya adalah nilai state terbaru yang dijamin React — beri nama `prev`."
             },
             {
-              "pattern": "prev\\s*\\+\\s*10",
-              "message": "Kembalikan nilai sebelumnya ditambah 10. Menulis `score + 10` di dalamnya mengalahkan tujuan updater function, karena `score` masih snapshot render ini."
+              "pattern": "setScore\\(\\s*(?:\\(?\\s*prev\\s*\\)?\\s*=>\\s*(?:\\(?\\s*prev\\s*\\+\\s*10\\s*\\)?|\\{[^}]*\\breturn\\s+\\(?\\s*prev\\s*\\+\\s*10\\b)|function(?:\\s+[A-Za-z_$][\\w$]*)?\\s*\\(\\s*prev\\s*\\)\\s*\\{[^}]*\\breturn\\s+\\(?\\s*prev\\s*\\+\\s*10\\b)",
+              "stripComments": true,
+              "message": "Kembalikan nilai sebelumnya ditambah 10. Jika menggunakan kurung kurawal `{ ... }`, pastikan menulis `return prev + 10`. Menulis `score + 10` di dalamnya mengalahkan tujuan updater function karena `score` masih snapshot render saat ini."
+            },
+            {
+              "pattern": "return\\s*;[\\s\\S]*setScore",
+              "mustNotMatch": true,
+              "stripComments": true,
+              "message": "Jangan meletakkan `return;` sebelum pemanggilan `setScore`. Kode setelah `return` tidak akan pernah dieksekusi."
             }
           ],
           "solution": "setScore(prev => prev + 10);",
@@ -1284,7 +1292,7 @@ export const reactTrack: Track = {
           "kind": "step",
           "id": "react-3-5",
           "title": "Update State Object & Array Secara Immutable",
-          "explanation": "Objek dan array di dalam state React wajib diperbarui secara immutable (tanpa mutasi langsung) menggunakan teknik penyalinan seperti spread operator (`[...items, newItem]`). Perubahan referensi objek/array baru inilah yang memberi tahu React bahwa data telah berubah sehingga proses re-render UI dapat terpicu. Memutasi array secara langsung dengan `.push()` atau `.splice()` akan membuat referensi memori tetap sama sehingga layar tidak akan diperbarui. Jebakan yang sering ditemui adalah mengira `.push()` sudah cukup untuk mengubah tampilan state di layar.",
+          "explanation": "Objek dan array di dalam state React wajib diperbarui secara immutable (tanpa mutasi langsung) menggunakan teknik penyalinan seperti spread operator (`[...items, newItem]`) atau metode yang menghasilkan array baru seperti `.concat()`. Perubahan referensi objek/array baru inilah yang memberi tahu React bahwa data telah berubah sehingga proses re-render UI dapat terpicu. Memutasi array secara langsung dengan `.push()` atau `.splice()` akan membuat referensi memori tetap sama sehingga layar tidak akan diperbarui. Jebakan yang sering ditemui adalah mengira `.push()` sudah cukup untuk mengubah tampilan state di layar.",
           "example": {
             "code": "const [items, setItems] = useState(['A', 'B']);\nsetItems([...items, 'C']);",
             "output": "items sebelum: [\"A\", \"B\"]\nitems sesudah: [\"A\", \"B\", \"C\"]\n\nDaftar di layar:\n<li>A</li>\n<li>B</li>\n<li>C</li>",
@@ -1296,15 +1304,19 @@ export const reactTrack: Track = {
           "tests": [
             {
               "pattern": "setItems\\(",
+              "stripComments": true,
               "message": "Perubahan state selalu lewat setter-nya, bukan dengan menyentuh variabelnya langsung."
             },
             {
-              "pattern": "\\[\\s*\\.\\.\\.items\\s*,",
-              "message": "Buat array BARU dengan menyebar isi array lama memakai tiga titik (spread), lalu tambahkan elemen baru di belakangnya. `items.push(...)` mengubah array yang sama, dan React tidak melihat perubahan itu sebagai state baru sehingga tampilan tidak diperbarui."
+              "pattern": "setItems\\(\\s*(?:(?:\\[\\s*\\.\\.\\.(?:items|prev)\\s*,\\s*['\"]Baru['\"]\\s*\\]|(?:items|prev)\\.concat\\(\\s*['\"]Baru['\"]\\s*\\))|\\(?\\s*(?:items|prev)\\s*\\)?\\s*=>\\s*(?:\\[\\s*\\.\\.\\.(?:items|prev)\\s*,\\s*['\"]Baru['\"]\\s*\\]|(?:items|prev)\\.concat\\(\\s*['\"]Baru['\"]\\s*\\)))",
+              "stripComments": true,
+              "message": "Buat array BARU tanpa memutasi array lama — bisa dengan spread `[...items, 'Baru']` atau metode immutable `items.concat('Baru')`."
             },
             {
-              "pattern": "['\"]Baru['\"]\\s*\\]",
-              "message": "Elemen barunya ditulis setelah spread, sebelum kurung siku penutup — posisinya menentukan ia masuk ke akhir array."
+              "pattern": "\\.(push|splice|unshift)\\(",
+              "mustNotMatch": true,
+              "stripComments": true,
+              "message": "Jangan gunakan metode yang memutasi array asli seperti `.push()`. React membutuhkan referensi array baru agar dapat mendeteksi perubahan state dan memicu re-render."
             }
           ],
           "solution": "setItems([...items, 'Baru']);",
@@ -1318,11 +1330,11 @@ export const reactTrack: Track = {
             ],
             pengecoh: [
               "items.push('Baru');",
-              "items.concat('Baru');",
+              "[items, 'Baru']);",
             ],
             pemisah: "",
             explanation:
-              "Pembaruan state array wajib bersifat imutabel menggunakan `[...items, 'Baru']`. Pengecoh `items.push('Baru')` menggoda tetapi memutasi referensi array lama secara langsung sehingga React keliru menganggap state tidak berubah sama sekali.",
+              "Pembaruan state array wajib bersifat imutabel menggunakan spread operator `[...items, 'Baru']`. Pengecoh `items.push('Baru')` menggoda tetapi memutasi referensi array lama secara langsung. Pengecoh `[items, 'Baru']` juga keliru karena membuat array bersarang di dalam array, bukan menyebarkan elemennya.",
           },
         },
         {
@@ -1473,12 +1485,14 @@ export const reactTrack: Track = {
           "language": "jsx",
           "tests": [
             {
-              "pattern": "<input\\b[\\s\\S]*value=\\{\\s*text\\s*\\}",
-              "message": "Elemen `<input>` belum diikat ke state: tambahkan `value={text}`. Tanpa itu input tidak terkontrol, dan mengubah state tidak akan mengubah isi kotaknya."
+              "pattern": "<input\\b(?:\\{[^{}]*\\}|[^>])*\\bvalue=\\{\\s*text\\s*\\}",
+              "stripComments": true,
+              "message": "Elemen `<input>` belum diikat ke state: tambahkan `value={text}` pada tag input. Urutan atribut bebas."
             },
             {
-              "pattern": "onChange=\\{\\s*\\(?\\s*e\\s*\\)?\\s*=>\\s*setText\\(\\s*e\\.target\\.value\\s*\\)\\s*\\}",
-              "message": "Belum ada `onChange` yang memanggil `setText` dengan `e.target.value`. Tanpa handler ini, input jadi read-only — jebakan paling sering pada controlled input. Urutan atribut bebas."
+              "pattern": "<input\\b(?:\\{[^{}]*\\}|[^>])*\\bonChange=\\{\\s*(?:\\(?\\s*([A-Za-z_$][\\w$]*)\\s*\\)?\\s*=>\\s*(?:setText\\(\\s*\\1\\.target\\.value\\s*\\)|\\{[^}]*setText\\(\\s*\\1\\.target\\.value\\s*\\);?[^}]*\\})|function(?:\\s+[A-Za-z_$][\\w$]*)?\\s*\\(\\s*([A-Za-z_$][\\w$]*)\\s*\\)\\s*\\{[^}]*setText\\(\\s*\\2\\.target\\.value\\s*\\);?[^}]*\\})\\s*\\}",
+              "stripComments": true,
+              "message": "Tambahkan `onChange` yang memanggil `setText` dengan `target.value` dari event (misalnya `(e) => setText(e.target.value)` atau `(event) => setText(event.target.value)`). Tanpa handler ini, input menjadi read-only."
             }
           ],
           "solution": "<input value={text} onChange={(e) => setText(e.target.value)} />",
@@ -1880,21 +1894,29 @@ export const reactTrack: Track = {
           "title": "Cleanup Function dalam useEffect",
           "explanation": "Fungsi pembersih (*cleanup function*) adalah fungsi yang dikembalikan (`return () => { ... }`) di dalam callback `useEffect`. Fungsi ini secara otomatis dieksekusi oleh React saat komponen dilepas dari layar (*unmount*) atau sebelum effect dijalankan kembali pada render berikutnya. Menulis fungsi cleanup sangat vital untuk membatalkan koneksi, menghentikan timer (`clearInterval`), atau menghapus event listener browser agar tidak terjadi kebocoran memori (*memory leak*). Jebakan umum adalah lupa melepaskan `addEventListener` yang telah dipasang.",
           "example": {
-            "code": "useEffect(() => {\n  const timer = setInterval(() => {}, 1000);\n  return () => clearInterval(timer); // Cleanup\n}, []);",
-            "output": "Konsol dengan cleanup (StrictMode, dev):\ntimer 1 dibuat\ntimer 1 dibersihkan\ntimer 2 dibuat\n→ satu timer berjalan\n\nKonsol tanpa cleanup:\ntimer 1 dibuat\ntimer 2 dibuat\n→ dua timer berjalan; angka di layar naik dua kali lebih cepat",
-            "note": "Gejala lupa cleanup jarang berupa error — yang muncul justru \"aneh\": angka melompat dua-dua, atau pesan yang sama diterima dua kali. Itu sebabnya jebakan ini bisa lolos berhari-hari."
+            "code": "useEffect(() => {\n  console.log(\"timer dibuat\");\n  const timer = setInterval(() => console.log(\"tik\"), 1000);\n  return () => {\n    console.log(\"timer dibersihkan\");\n    clearInterval(timer);\n  };\n}, []);",
+            "output": "Saat mount di development (StrictMode):\ntimer dibuat\ntimer dibersihkan\ntimer dibuat\ntik (setiap 1000ms)\n\nSaat komponen dilepas (unmount):\ntimer dibersihkan",
+            "note": "Pada development mode dengan StrictMode, React sengaja menjalankan siklus setup dan cleanup sekali ekstra untuk membuktikan bahwa fungsi pembersihmu benar-benar bekerja. Tanpa cleanup, timer menumpuk dan mencetak log ganda."
           },
           "instruction": "Komponen `Jam` di editor memasang `setInterval` tapi tidak pernah menghentikannya, jadi timer menumpuk setiap kali komponen dipasang ulang. Lengkapi effect-nya: kembalikan sebuah fungsi yang menghentikan `timer` itu memakai fungsi bawaan pasangan `setInterval`.",
           "starterCode": "function Jam() {\n  useEffect(() => {\n    const timer = setInterval(() => console.log(\"tik\"), 1000);\n\n    // tulis fungsi pembersihnya di bawah ini\n  }, []);\n\n  return <p>Jam berjalan</p>;\n}\n",
           "language": "jsx",
           "tests": [
             {
-              "pattern": "return\\s*\\(\\s*\\)\\s*=>",
-              "message": "Cleanup diberikan dengan MENGEMBALIKAN sebuah fungsi dari dalam effect. React memanggilnya sebelum effect berikutnya dan saat komponen dilepas."
+              "pattern": "return\\s+(?:\\(?\\s*\\)?\\s*=>|function(?:\\s+[A-Za-z_$][\\w$]*)?\\s*\\(\\s*\\))",
+              "stripComments": true,
+              "message": "Cleanup diberikan dengan MENGEMBALIKAN sebuah fungsi dari dalam effect (boleh fungsi panah `return () => ...` maupun fungsi bernama `return function cleanup() { ... }`). React memanggilnya sebelum effect berikutnya dan saat komponen dilepas."
             },
             {
               "pattern": "clearInterval\\(\\s*timer\\s*\\)",
-              "message": "Hentikan timer-nya dengan `clearInterval()` beserta penanda yang dikembalikan `setInterval`. Tanpa ini, setiap kali komponen dipasang ulang timer baru menumpuk — dan angka di layar melompat dua kali lebih cepat tanpa penyebab yang kelihatan."
+              "stripComments": true,
+              "message": "Hentikan timer-nya dengan `clearInterval(timer)` beserta penanda yang dikembalikan `setInterval`. Tanpa ini, setiap kali komponen dipasang ulang timer baru menumpuk — dan angka di layar melompat dua kali lebih cepat tanpa penyebab yang kelihatan."
+            },
+            {
+              "pattern": "return\\s*;[\\s\\S]*clearInterval",
+              "mustNotMatch": true,
+              "stripComments": true,
+              "message": "Jangan meletakkan `return;` sebelum fungsi pembersih `clearInterval`. Kode setelah `return` tidak akan pernah dieksekusi."
             }
           ],
           "solution": "function Jam() {\n  useEffect(() => {\n    const timer = setInterval(() => console.log(\"tik\"), 1000);\n\n    return () => clearInterval(timer);\n  }, []);\n\n  return <p>Jam berjalan</p>;\n}",
@@ -2182,22 +2204,37 @@ export const reactTrack: Track = {
           "tests": [
             {
               "pattern": "(function\\s+useFetch\\s*\\(\\s*url|const\\s+useFetch\\s*=\\s*\\(?\\s*url)",
+              "stripComments": true,
               "message": "Namanya wajib diawali `use` — itulah yang membuat plugin ESLint React memberlakukan Rules of Hooks padanya. Fungsi bernama `fetchData` yang memanggil `useState` di dalamnya tidak diperiksa siapa pun, dan itu sumber bug yang sulit dilacak."
             },
             {
               "pattern": "useState\\(\\s*null\\s*\\)",
+              "stripComments": true,
               "message": "Data hasil jaringan belum ada saat render pertama, jadi state-nya dimulai dari `null`. Nilai awal inilah yang harus diperiksa komponen sebelum membaca isinya."
             },
             {
               "pattern": "useEffect\\(",
+              "stripComments": true,
               "message": "Pengambilan datanya adalah side effect, jadi letakkan di dalam `useEffect` — bukan langsung di badan hook. Memanggil `fetch` di badan hook membuatnya berjalan lagi di setiap render."
             },
             {
+              "pattern": "\\bfetch\\(\\s*url\\s*\\)",
+              "stripComments": true,
+              "message": "Panggil `fetch(url)` di dalam effect untuk mengambil data dari alamat URL yang diterima sebagai argumen hook."
+            },
+            {
+              "pattern": "(?:\\.then\\s*\\(\\s*setData\\b|setData\\s*\\()",
+              "stripComments": true,
+              "message": "Simpan hasil data ke state dengan memanggil `setData(...)` (misalnya `.then(setData)` atau `setData(hasil)`)."
+            },
+            {
               "pattern": "\\[\\s*url\\s*\\]",
+              "stripComments": true,
               "message": "Masukkan `url` ke dependency array supaya data diambil ulang saat URL-nya berganti. Dengan `[]`, hook ini akan terus menampilkan data alamat pertama meski komponen dipakai untuk alamat lain."
             },
             {
               "pattern": "return\\s+data",
+              "stripComments": true,
               "message": "Kembalikan `data` dari hook-nya — tanpa itu, komponen pemanggil tidak mendapat apa pun. Di proyek nyata biasanya dikembalikan sebagai object `{ data, loading, error }`."
             }
           ],
@@ -2889,15 +2926,24 @@ export const reactTrack: Track = {
           "tests": [
             {
               "pattern": "useQuery\\s*\\(\\s*\\{",
+              "stripComments": true,
               "message": "Sejak TanStack Query v5, `useQuery` menerima SATU objek opsi. Bentuk lama `useQuery(['users'], fetchUsers)` yang banyak beredar di tutorial sudah dihapus dan akan melempar error."
             },
             {
               "pattern": "queryKey\\s*:\\s*\\[\\s*['\"]users['\"]\\s*\\]",
+              "stripComments": true,
               "message": "`queryKey` adalah identitas cache-nya dan bentuknya ARRAY, bukan string. Menulis `queryKey: \"users\"` ditolak TypeScript, dan array inilah yang nanti kamu tambahi parameter (`[\"users\", page]`) supaya tiap halaman punya cache sendiri."
             },
             {
-              "pattern": "queryFn\\s*:\\s*fetchUsers\\b",
-              "message": "`queryFn` diisi FUNGSI pengambil datanya — sebut namanya tanpa tanda kurung. Menulis `queryFn: fetchUsers()` menjalankan fungsinya sekarang lalu menyerahkan hasilnya, sehingga TanStack tidak bisa mengulang permintaan saat perlu."
+              "pattern": "queryFn\\s*:\\s*(?:fetchUsers(?![\\w$]*\\s*\\()|\\([^)]*\\)\\s*=>\\s*fetchUsers\\b|function\\b[^{]*\\{[^}]*fetchUsers)",
+              "stripComments": true,
+              "message": "`queryFn` diisi referensi fungsi pengambil datanya (`queryFn: fetchUsers`), bukan hasil pemanggilannya langsung `fetchUsers()`. Menulis `fetchUsers()` mengeksekusinya seketika saat render dan merusak manajemen cache TanStack Query."
+            },
+            {
+              "pattern": "queryFn\\s*:\\s*fetchUsers\\s*\\(",
+              "mustNotMatch": true,
+              "stripComments": true,
+              "message": "Jangan memanggil `fetchUsers()` secara langsung di properti `queryFn`. Berikan fungsinya sebagai referensi tanpa tanda kurung pemanggil."
             }
           ],
           "solution": "useQuery({ queryKey: ['users'], queryFn: fetchUsers });",
@@ -3959,40 +4005,43 @@ export const reactTrack: Track = {
           "title": "Environment Variable (import.meta.env)",
           "explanation": "Variabel lingkungan (*environment variables*) di Vite diakses melalui objek `import.meta.env` dan hanya variabel yang diawali dengan awalan `VITE_` yang akan diikutsertakan ke dalam bundel client. Sangat krusial untuk diingat bahwa seluruh variabel bermprefix `VITE_` dapat dibaca oleh siapapun yang menginspeksi sumber kode di browser. Oleh karena itu, jangan pernah menyimpan kunci rahasia backend (*Secret Keys*, database password, private tokens) di dalam berkas `.env` client React. Jebakan paling berbahaya adalah membocorkan secret API key ke repository publik via file `.env`.",
           "example": {
-            "code": "const apiUrl = import.meta.env.VITE_API_URL;",
-            "output": "Mengakses URL backend tanpa hardcode di berkas kode.",
-            "note": "Jangan simpan API Key rahasia backend di environment frontend! Catatan jujur: potongan sebaris seperti ini bukan komponen utuh, jadi panel preview tidak menampilkan hasil visual — yang diperiksa kodenya, dan tesnya tetap bisa lulus."
+            "code": "// .env.local: VITE_API_URL=https://api.example.com\nconsole.log(import.meta.env.VITE_API_URL);\nconsole.log(import.meta.env.DB_PASSWORD); // rahasia tanpa prefix VITE_ tidak diekspos",
+            "output": "https://api.example.com\nundefined",
+            "note": "Vite hanya mengekspos variabel yang diawali `VITE_` ke bundel browser client. Variabel rahasia seperti `DB_PASSWORD` bernilai `undefined` jika diakses di frontend demi keamanan. Catatan jujur: potongan sebaris seperti ini bukan komponen utuh, jadi panel preview tidak menampilkan hasil visual — yang diperiksa kodenya, dan tesnya tetap bisa lulus."
           },
-          "instruction": "Deklarasikan konstanta `url` yang membaca nilai environment variable `import.meta.env.VITE_API_URL`.",
+          "instruction": "Di berkas konfigurasi lingkungan sudah didefinisikan variabel `VITE_API_URL`. Buat konstanta bernama `url` yang membaca nilai variabel lingkungan tersebut menggunakan API runtime standar Vite (bukan `process.env`).",
           "starterCode": "// Tulis variabel url di sini\n",
           "language": "jsx",
           "tests": [
             {
               "pattern": "import\\.meta\\.env",
+              "stripComments": true,
               "message": "Di proyek Vite, variabel lingkungan dibaca lewat `import.meta.env` — bukan `process.env` yang hanya ada di Node."
             },
             {
               "pattern": "VITE_API_URL",
+              "stripComments": true,
               "message": "Sebut nama variabelnya. Awalan `VITE_` itu wajib: Vite HANYA mengekspos variabel berawalan itu ke kode browser, justru supaya kredensial tanpa awalan tidak ikut terkirim ke pengguna."
             },
             {
               "pattern": "const\\s+url\\s*=",
-              "message": "Simpan hasilnya ke variabel agar bisa dipakai. Ingat: apa pun yang masuk sini bisa dibaca siapa saja di DevTools, jadi jangan menaruh kunci rahasia."
+              "stripComments": true,
+              "message": "Simpan hasilnya ke variabel `url` agar bisa dipakai. Ingat: apa pun yang masuk sini bisa dibaca siapa saja di DevTools, jadi jangan menaruh kunci rahasia."
             }
           ],
           "solution": "const url = import.meta.env.VITE_API_URL;",
           susunKode: {
             question:
-              "Baca environment variable import.meta.env.VITE_API_URL.",
+              "Ambil nilai variabel lingkungan VITE_API_URL ke dalam konstanta url menggunakan objek lingkungan Vite.",
             potongan: [
               "const url = ",
               "import.meta.env.",
               "VITE_API_URL;"
-],
+            ],
             pengecoh: [
               "const api = ",
               "process.env."
-],
+            ],
             pemisah: "",
             explanation:
               "Akses variabel lingkungan di Vite menggunakan `import.meta.env.VITE_API_URL`. Pengecoh `process.env` menggoda pengembang Webpack/CRA tetapi tidak tersedia di browser pada proyek Vite yang menggunakan import.meta.",
