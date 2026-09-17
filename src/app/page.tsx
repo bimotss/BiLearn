@@ -1,47 +1,97 @@
 "use client";
 
 import Link from "next/link";
+import { Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { tracks, getTrackItems } from "@/data/tracks";
 import { getPath } from "@/data/paths";
 import { useProgress } from "@/lib/progress";
 
-export default function HomePage() {
+function HomeContent() {
+  const searchParams = useSearchParams();
+  const kategori = searchParams.get("kategori") === "bahasa" ? "bahasa" : "code";
   const { progress, ready, mode, doneCount, totalCount, setActivePath } =
     useProgress();
   const activePath = ready ? getPath(progress.activePath ?? "") : undefined;
+  const activePathKategori = kategori === "code" ? activePath : undefined;
 
   // Dengan path aktif: track diurutkan sesuai path (sisanya di bawah).
   // Tanpa path: semua track urutan default.
-  const ordered = activePath
+  const tracksKategori = tracks.filter((track) =>
+    kategori === "bahasa"
+      ? track.slug === "business-english"
+      : track.slug !== "business-english"
+  );
+
+  const ordered = activePathKategori
     ? [
-        ...activePath.trackSlugs
+        ...activePathKategori.trackSlugs
           .map((s) => tracks.find((t) => t.slug === s))
+          .filter((t) =>
+            kategori === "bahasa"
+              ? t?.slug === "business-english"
+              : t?.slug !== "business-english"
+          )
           .filter((t): t is (typeof tracks)[number] => Boolean(t)),
-        ...tracks.filter((t) => !activePath.trackSlugs.includes(t.slug)),
+        ...tracksKategori.filter((t) => !activePathKategori.trackSlugs.includes(t.slug)),
       ]
-    : tracks;
+    : tracksKategori;
 
   return (
     <div className="space-y-10">
       <section className="space-y-3">
-        <h1 className="text-3xl font-bold">
-          Belajar coding yang{" "}
-          <span className="text-gold-700">kepake di dunia kerja</span>
+        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-gold-700">
+          Pilih dunia belajarmu
+        </p>
+        <h1 className="text-3xl font-bold sm:text-4xl">
+          Belajar skill yang <span className="text-gold-700">kepake</span>
         </h1>
         <p className="max-w-2xl text-neutral-600">
-          Kurikulum disusun dari skill yang benar-benar diminta lowongan kerja.
-          Semua materi terbuka — mulai dari mana pun, atau pilih learning path
-          sesuai tujuan kariermu.
+          Masuk ke ruang belajar yang sesuai tujuanmu. Pindah kategori kapan saja
+          tanpa menghapus progress.
         </p>
       </section>
 
-      {activePath ? (
+      <section className="grid gap-4 md:grid-cols-2" aria-label="Kategori belajar">
+        <Link
+          href="/"
+          className={`rounded-2xl border p-6 text-left transition hover:-translate-y-0.5 hover:shadow-md ${
+            kategori === "code"
+              ? "border-neutral-900 bg-neutral-900 text-white shadow-lg"
+              : "border-neutral-200 bg-white"
+          }`}
+        >
+          <span className="text-3xl" aria-hidden="true">⌘</span>
+          <h2 className="mt-3 text-xl font-bold">Belajar Code</h2>
+          <p className={`mt-1 text-sm ${kategori === "code" ? "text-neutral-300" : "text-neutral-600"}`}>
+            HTML, CSS, JavaScript, framework, database, dan skill teknis untuk
+            membangun produk digital.
+          </p>
+        </Link>
+        <Link
+          href="/?kategori=bahasa"
+          className={`rounded-2xl border p-6 text-left transition hover:-translate-y-0.5 hover:shadow-md ${
+            kategori === "bahasa"
+              ? "border-gold-500 bg-gold-50 shadow-lg"
+              : "border-neutral-200 bg-white"
+          }`}
+        >
+          <span className="text-3xl" aria-hidden="true">文</span>
+          <h2 className="mt-3 text-xl font-bold">Belajar Bahasa</h2>
+          <p className="mt-1 text-sm text-neutral-600">
+            Business English untuk email, meeting, presentasi, dan komunikasi
+            profesional sehari-hari.
+          </p>
+        </Link>
+      </section>
+
+      {activePathKategori ? (
         <section className="rounded-xl border border-gold-200 bg-gold-50 p-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
               <p className="text-sm font-medium text-gold-800">Path aktif</p>
               <p className="text-lg font-bold text-gold-900">
-                {activePath.icon} {activePath.title}
+                {activePathKategori.icon} {activePathKategori.title}
               </p>
             </div>
             <div className="flex gap-3">
@@ -77,7 +127,11 @@ export default function HomePage() {
 
       <section>
         <h2 className="mb-4 text-xl font-bold">
-          {activePath ? `Urutan track: ${activePath.title}` : "Semua Track"}
+          {kategori === "bahasa"
+            ? "Track Bahasa"
+            : activePathKategori
+              ? `Urutan track: ${activePathKategori.title}`
+              : "Track Code"}
         </h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {ordered.map((track, i) => {
@@ -88,7 +142,7 @@ export default function HomePage() {
             const done = ready ? doneCount(track.slug) : 0;
             const total = ready ? totalCount(track.slug) : semuaItem.length;
             const pct = total > 0 ? Math.round((done / total) * 100) : 0;
-            const inPath = activePath?.trackSlugs.includes(track.slug);
+            const inPath = activePathKategori?.trackSlugs.includes(track.slug);
             return (
               <Link
                 key={track.slug}
@@ -103,7 +157,7 @@ export default function HomePage() {
                   >
                     {track.icon}
                   </span>
-                  {activePath && inPath && (
+                  {activePathKategori && inPath && (
                     <span className="rounded-full bg-gold-100 px-2.5 py-0.5 text-xs font-medium text-gold-800">
                       Langkah {i + 1}
                     </span>
@@ -150,5 +204,13 @@ export default function HomePage() {
         </div>
       </section>
     </div>
+  );
+}
+
+export default function HomePage() {
+  return (
+    <Suspense fallback={<div className="min-h-[32rem]" />}>
+      <HomeContent />
+    </Suspense>
   );
 }
