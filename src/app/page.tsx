@@ -1,17 +1,24 @@
 "use client";
 
 import Link from "next/link";
-import { Suspense } from "react";
+import { Suspense, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 import { tracks, getTrackItems } from "@/data/tracks";
 import { getPath } from "@/data/paths";
 import { useProgress } from "@/lib/progress";
+import { useFlashcardProgress } from "@/lib/flashcards-progress";
+import { japaneseCards } from "@/data/flashcards";
 
 function HomeContent() {
   const searchParams = useSearchParams();
   const kategori = searchParams.get("kategori") === "bahasa" ? "bahasa" : "code";
   const { progress, ready, mode, doneCount, totalCount, setActivePath } =
     useProgress();
+  const { getTotalMemorizedCount } = useFlashcardProgress();
+  const flashcardCardIds = useMemo(() => japaneseCards.map((c) => c.id), []);
+  const flashcardDone = ready ? getTotalMemorizedCount(flashcardCardIds) : 0;
+  const flashcardPct = Math.round((flashcardDone / japaneseCards.length) * 100);
+
   const activePath = ready ? getPath(progress.activePath ?? "") : undefined;
   const activePathKategori = kategori === "code" ? activePath : undefined;
 
@@ -79,8 +86,7 @@ function HomeContent() {
           <span className="text-3xl" aria-hidden="true">文</span>
           <h2 className="mt-3 text-xl font-bold">Belajar Bahasa</h2>
           <p className="mt-1 text-sm text-neutral-600">
-            Business English untuk email, meeting, presentasi, dan komunikasi
-            profesional sehari-hari.
+            Business English untuk komunikasi profesional dan Flashcard Jepang untuk hafalan kosakata JLPT N5.
           </p>
         </Link>
       </section>
@@ -128,7 +134,7 @@ function HomeContent() {
       <section>
         <h2 className="mb-4 text-xl font-bold">
           {kategori === "bahasa"
-            ? "Track Bahasa"
+            ? "Katalog Bahasa"
             : activePathKategori
               ? `Urutan track: ${activePathKategori.title}`
               : "Track Code"}
@@ -201,6 +207,39 @@ function HomeContent() {
               </Link>
             );
           })}
+          {kategori === "bahasa" && (
+            <Link
+              href="/flashcards/jepang"
+              className="group rounded-xl border border-neutral-200 p-5 transition hover:shadow-md"
+            >
+              <div className="flex items-start justify-between">
+                <span className="flex h-10 w-10 items-center justify-center rounded-lg text-xl text-white bg-red-600">
+                  🎴
+                </span>
+                <span className="rounded-full bg-red-50 px-2.5 py-0.5 text-xs font-medium text-red-700">
+                  Flashcard
+                </span>
+              </div>
+              <h3 className="mt-3 font-bold group-hover:text-gold-700">
+                Flashcard Jepang
+              </h3>
+              <p className="mt-1 text-sm text-neutral-600">
+                Hafalkan kosakata bahasa Jepang lewat kartu interaktif, lengkap dengan cara baca, arti, dan contoh kalimat.
+              </p>
+              <div className="mt-3 flex items-center justify-between text-xs text-neutral-500">
+                <span>100 kosakata · 10 bagian</span>
+                <span>
+                  {flashcardDone}/100 ditandai hafal ({flashcardPct}%)
+                </span>
+              </div>
+              <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-neutral-100">
+                <div
+                  className="h-full rounded-full transition-all bg-red-500"
+                  style={{ width: `${flashcardPct}%` }}
+                />
+              </div>
+            </Link>
+          )}
         </div>
       </section>
     </div>

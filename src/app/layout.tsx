@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -38,14 +39,18 @@ export default function RootLayout({
               <Link href="/paths" className="hover:text-gold-700">
                 Learning Path
               </Link>
-              <PenunjukMode />
+              <Suspense fallback={null}>
+                <PenunjukMode />
+              </Suspense>
             </div>
           </nav>
         </header>
         <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8">
           {children}
         </main>
-        <PemilihModeAwal />
+        <Suspense fallback={null}>
+          <PemilihModeAwal />
+        </Suspense>
         <footer className="border-t border-neutral-200 py-6 text-center text-sm text-neutral-500">
           BiLearn — semua materi terbuka, belajar dengan urutanmu sendiri.
         </footer>

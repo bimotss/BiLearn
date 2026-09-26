@@ -1,0 +1,83 @@
+{
+  "sourceFileName": "JLPT N5 Vol 1 Flashcards (Lengkap).xlsx",
+  "sha256": "6cea86e6e3b73b1e28c7cc1b60fb8329dc02dbdba4d603058a0579493e58d658",
+  "sheetName": "Untitled",
+  "importDate": "2026-09-26T16:15:18.277285",
+  "totalRecords": 100,
+  "columnMapping": {
+    "No": "sourceNo",
+    "Kanji": "term",
+    "Hiragana": "hiragana",
+    "Katakana": "katakana",
+    "Romaji": "romaji",
+    "Arti": "meaning",
+    "Contoh Kalimat (Kanji)": "exampleJapanese",
+    "Contoh Kalimat (Kana / Hiragana-Katakana)": "exampleKana",
+    "Contoh Kalimat (Romaji / Pelafalan)": "exampleRomaji",
+    "Arti Contoh Kalimat": "exampleMeaning"
+  },
+  "normalizationApplied": "Trimming edge whitespace on string fields; preserve exact Japanese characters, punctuation, and translation as stored in source cells.",
+  "unrecognizedExtraCells": [
+    {
+      "rowNumber": 54,
+      "sourceNo": 53,
+      "term": "地方",
+      "extraCells": [
+        {
+          "columnIndex": 10,
+          "value": "Jepang."
+        }
+      ]
+    },
+    {
+      "rowNumber": 66,
+      "sourceNo": 65,
+      "term": "大丈夫",
+      "extraCells": [
+        {
+          "columnIndex": 10,
+          "value": "Jangan khawatir"
+        },
+        {
+          "columnIndex": 11,
+          "value": "tidak apa-apa kok."
+        }
+      ]
+    }
+  ],
+  "appliedCorrections": [
+    {
+      "sourceNo": 53,
+      "term": "地方",
+      "field": "exampleMeaning",
+      "before": "Melakukan perjalanan ke wilayah Tohoku",
+      "after": "Melakukan perjalanan ke wilayah Tohoku Jepang.",
+      "reason": "Menggabungkan sel ekstra col 10 ('Jepang.') yang terpotong akibat koma/pemisahan sel di workbook sumber."
+    },
+    {
+      "sourceNo": 65,
+      "term": "大丈夫",
+      "field": "exampleRomaji & exampleMeaning",
+      "before": "exampleRomaji: 'Shimpai shinaide', exampleMeaning: 'daijoubu desu yo.'",
+      "after": "exampleRomaji: 'Shimpai shinaide, daijoubu desu yo.', exampleMeaning: 'Jangan khawatir, tidak apa-apa kok.'",
+      "reason": "Menggabungkan romaji utuh yang tergeser ke kolom arti akibat koma dan mengembalikan arti terjemahan dari sel ekstra col 10-11."
+    },
+    {
+      "sourceNo": 66,
+      "term": "大好き",
+      "field": "exampleRomaji",
+      "before": "Watashi no kudamono ga daisuki desu.",
+      "after": "Watashi wa kudamono ga daisuki desu.",
+      "reason": "Koreksi pelafalan partikel wa (私は) yang salah tertulis 'no' di workbook sumber."
+    },
+    {
+      "sourceNo": 68,
+      "term": "男性",
+      "field": "exampleRomaji",
+      "before": "Kaigi ni wa tooku no dansei ga sanka shimashita.",
+      "after": "Kaigi ni wa ooku no dansei ga sanka shimashita.",
+      "reason": "Koreksi pelafalan kanji banyak/ooku (多く) yang salah tertulis 'tooku' di workbook sumber."
+    }
+  ],
+  "linguisticAuditNote": "Data diekspor secara mekanis dari workbook sumber, lalu diterapkan 4 koreksi data terdokumentasi: penggabungan sel tergeser akibat koma pada No 53 dan No 65, serta pembetulan romaji pada No 66 (partikel wa) dan No 68 (ooku)."
+}

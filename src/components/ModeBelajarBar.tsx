@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useProgress } from "@/lib/progress";
 
 /**
@@ -16,33 +16,27 @@ import { useProgress } from "@/lib/progress";
  * seperti tidak ada.
  */
 
+function useIsAreaBahasa(): boolean {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  if (pathname?.startsWith("/flashcards")) return true;
+  if (pathname?.startsWith("/tracks/business-english")) return true;
+  if (searchParams.get("kategori") === "bahasa") return true;
+
+  return false;
+}
+
 export function PenunjukMode() {
   const { ready, mode, setMode } = useProgress();
-  const pathname = usePathname();
+  const isAreaBahasa = useIsAreaBahasa();
 
-  // Sebelum localStorage terbaca, jangan tampilkan apa pun — kalau tidak,
-  // render server dan client berbeda dan React melaporkan hydration mismatch.
-  if (!ready) return null;
+  // Sebelum localStorage terbaca atau jika berada di area Bahasa, jangan tampilkan
+  if (!ready || isAreaBahasa) return null;
 
-  const isLanguageTrack = pathname?.includes("/tracks/business-english");
-  const labelMode =
-    mode === "koding"
-      ? isLanguageTrack
-        ? "⌨️ Tulis langsung"
-        : "⌨️ Mode ngetik"
-      : isLanguageTrack
-        ? "🧩 Susun kalimat"
-        : "🧩 Susun kode";
-
+  const labelMode = mode === "koding" ? "⌨️ Mode ngetik" : "🧩 Susun kode";
   const lawan = mode === "koding" ? "pilihan-ganda" : "koding";
-  const labelLawan =
-    lawan === "koding"
-      ? isLanguageTrack
-        ? "⌨️ Tulis langsung"
-        : "⌨️ Mode ngetik"
-      : isLanguageTrack
-        ? "🧩 Susun kalimat"
-        : "🧩 Susun kode";
+  const labelLawan = lawan === "koding" ? "⌨️ Mode ngetik" : "🧩 Susun kode";
 
   return (
     <button
@@ -63,9 +57,10 @@ export function PenunjukMode() {
 
 export function PemilihModeAwal() {
   const { ready, modeDipilih, setMode, lewatiPemilihanMode } = useProgress();
+  const isAreaBahasa = useIsAreaBahasa();
   const kotak = useRef<HTMLDivElement>(null);
   const tombolPertama = useRef<HTMLButtonElement>(null);
-  const perluTampil = ready && !modeDipilih;
+  const perluTampil = ready && !modeDipilih && !isAreaBahasa;
 
   // Fokus dipindahkan ke dalam dialog supaya pengguna keyboard tidak
   // ditinggal di belakang overlay.
@@ -132,10 +127,10 @@ export function PemilihModeAwal() {
             <span className="text-2xl" aria-hidden="true">
               ⌨️
             </span>
-            <span className="mt-2 block font-bold">Mengetik / menulis langsung</span>
+            <span className="mt-2 block font-bold">Mengetik kode langsung</span>
             <span className="mt-1 block text-sm text-neutral-600">
-              Kamu menulis kode atau kalimat jawaban sendiri di editor, lalu dinilai
-              otomatis. Cara belajar yang paling dekat dengan praktik aslinya.
+              Kamu menulis kode sendiri di editor, lalu dinilai otomatis. Cara belajar
+              yang paling dekat dengan praktik aslinya.
             </span>
           </button>
 
@@ -147,18 +142,18 @@ export function PemilihModeAwal() {
             <span className="text-2xl" aria-hidden="true">
               🧩
             </span>
-            <span className="mt-2 block font-bold">Menyusun potongan (tanpa ngetik)</span>
+            <span className="mt-2 block font-bold">Menyusun potongan kode (tanpa ngetik)</span>
             <span className="mt-1 block text-sm text-neutral-600">
-              Kamu merangkai kepingan kode atau potongan kalimat yang tersedia.
-              Cocok jika belajar dari ponsel atau melatih struktur tanpa mengetik manual.
+              Kamu merangkai kepingan kode yang tersedia. Cocok jika belajar dari ponsel
+              atau melatih struktur tanpa mengetik manual.
             </span>
           </button>
         </div>
 
         <div className="mt-5 flex items-center justify-between gap-3">
           <p className="text-xs text-neutral-500">
-            Belum semua step punya varian susun potongan. Yang belum ada tetap bisa
-            dibuka lewat mode menulis langsung, dan akan ditandai apa adanya.
+            Belum semua step punya varian susun potongan kode. Yang belum ada tetap bisa
+            dibuka lewat mode menulis kode langsung, dan akan ditandai apa adanya.
           </p>
           <button
             type="button"
