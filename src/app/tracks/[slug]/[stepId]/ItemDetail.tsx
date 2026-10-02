@@ -10,6 +10,7 @@ import MateriView from "@/components/MateriView";
 import { getTrack, getTrackItems, resolveItemAlias } from "@/data/tracks";
 import { useProgress } from "@/lib/progress";
 import { usePintasanCtrlEnter } from "@/lib/pintasan";
+import Tuts from "@/components/Tuts";
 
 export default function ItemDetail({
   slug,
@@ -32,14 +33,10 @@ export default function ItemDetail({
 
   /**
    * Lolos di sesi ini — bukan sekadar "pernah selesai". Pintasan Ctrl+Enter
-   * untuk pindah materi hanya hidup setelah user benar-benar lolos di layar
-   * ini. Kalau patokannya progres tersimpan, membuka ulang materi yang sudah
-   * selesai membuat Ctrl+Enter langsung melompat tanpa menjalankan tes.
+   * untuk pindah materi hanya hidup setelah user benar-benar lolos di layar ini.
    */
   const kunciItem = `${slug}/${resolvedStepId}`;
   const [sesi, setSesi] = useState({ kunci: kunciItem, lolos: false });
-  // Kunci ikut disimpan supaya status lolos hangus sendiri saat pindah materi
-  // — tanpa useEffect yang memanggil setState dan memicu render beruntun.
   const lolosSesi = sesi.kunci === kunciItem && sesi.lolos;
 
   if (!track) notFound();
@@ -53,9 +50,6 @@ export default function ItemDetail({
   const next = items[index + 1];
   const hasSusunKode = item.kind === "step" && Boolean(item.susunKode);
 
-  // Step tanpa varian dikerjakan lewat editor, jadi statusnya ada di dunia
-  // koding — walaupun mode aktifnya pilihan ganda. Tanpa penyesuaian ini,
-  // user menyelesaikan step lalu tidak melihat tanda selesai sama sekali.
   const diLuarMode =
     item.kind === "step" && mode === "pilihan-ganda" && !hasSusunKode;
   const finished =
@@ -68,11 +62,6 @@ export default function ItemDetail({
     ? `/tracks/${track.slug}/${next.id}`
     : `/tracks/${track.slug}`;
 
-  /**
-   * Ctrl+Enter kedua. Penekanan pertama dipakai komponen latihan untuk
-   * menjalankan tes; komponen itu melepas pintasannya begitu lolos, jadi
-   * penekanan berikutnya sampai ke sini.
-   */
   function selesaikan(dunia: Parameters<typeof markDone>[2]) {
     markDone(track!.slug, item.id, dunia);
     setSesi({ kunci: kunciItem, lolos: true });
@@ -80,42 +69,76 @@ export default function ItemDetail({
 
   usePintasanCtrlEnter(lolosSesi, () => router.push(tautanLanjut));
 
+  const stepProgressPct = Math.round(((index + 1) / items.length) * 100);
+
   return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-neutral-200 pb-4">
+    <div className="w-full min-w-0 space-y-6">
+      {/* Top Header & Breadcrumb Bar */}
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 dark:border-white/[0.08] pb-4">
         <Link
           href={`/tracks/${track.slug}`}
-          className="text-sm text-gold-700 hover:underline font-medium"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-amber-600 dark:hover:text-amber-300 transition-colors cursor-pointer"
         >
-          ← {track.title}
+          <span aria-hidden="true">←</span>
+          <span>{track.title}</span>
         </Link>
-        {/*
-          Pemilih mode sekarang tinggal satu, di header utama (PenunjukMode),
-          supaya tidak ada dua sumber kebenaran di layar yang sama — dan supaya
-          mode juga terlihat dari halaman depan.
-        */}
-        <span className="text-sm text-neutral-500">
-          {index + 1} / {items.length}
+
+        <div className="flex items-center gap-3">
+          {/* Mini progress tracker */}
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-slate-500 dark:text-slate-400">
+              {index + 1} / {items.length}
+            </span>
+            <div className="h-1.5 w-16 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-800">
+              <div
+                className="h-full bg-amber-400 transition-all duration-300"
+                style={{ width: `${stepProgressPct}%` }}
+              />
+            </div>
+          </div>
+
           {finished && (
             <span
-              className={`ml-2 font-medium ${
-                mode === "pilihan-ganda" ? "text-purple-700" : "text-green-600"
+              className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${
+                mode === "pilihan-ganda"
+                  ? "border border-purple-500/30 bg-purple-500/10 text-purple-700 dark:text-purple-300"
+                  : "border border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400"
               }`}
             >
-              ✓ selesai
+              ✓ Selesai
             </span>
           )}
-        </span>
+        </div>
       </div>
 
-      <h1 className="text-2xl font-bold">
-        {item.kind === "quiz" ? "🧠 " : item.kind === "materi" ? "📖 " : ""}
-        {item.title}
-      </h1>
+      {/* Item Title & Badge */}
+      <div className="space-y-1.5">
+        <div className="inline-flex items-center gap-2">
+          <span
+            className={`rounded-md px-2 py-0.5 text-[11px] font-bold uppercase tracking-wider ${
+              item.kind === "quiz"
+                ? "bg-purple-500/15 text-purple-700 dark:text-purple-300 border border-purple-500/30"
+                : item.kind === "materi"
+                ? "bg-blue-500/15 text-blue-700 dark:text-blue-300 border border-blue-500/30"
+                : "bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30"
+            }`}
+          >
+            {item.kind === "quiz"
+              ? "🧠 Kuis Evaluasi"
+              : item.kind === "materi"
+              ? "📖 Materi Bacaan"
+              : mode === "pilihan-ganda" && hasSusunKode
+              ? "🧩 Susun Potongan Kode"
+              : "⌨️ Latihan Interaktif"}
+          </span>
+        </div>
+        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white break-words">
+          {item.title}
+        </h1>
+      </div>
 
+      {/* Item Content View */}
       {item.kind === "materi" ? (
-        // Materi & kuis isinya sama di dua mode, jadi sekali selesai berlaku
-        // di kedua dunia.
         <MateriView
           key={item.id}
           materi={item}
@@ -132,10 +155,10 @@ export default function ItemDetail({
             />
           ) : (
             <div className="space-y-6">
-              <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+              <div className="rounded-xl border border-amber-400/60 bg-amber-50 dark:border-amber-500/30 dark:bg-amber-500/10 p-4 text-xs sm:text-sm text-amber-900 dark:text-amber-200">
                 {track.slug === "business-english"
-                  ? "ℹ️ Step ini belum punya mode susun kalimat, jadi yang tampil adalah mode menulis langsung di editor. Pencapaiannya akan tercatat di progres utama."
-                  : "ℹ️ Step ini belum punya soal pilihan ganda, jadi yang tampil mode ngetik. Kalau kamu menyelesaikannya di sini, itu tercatat sebagai pencapaian mode ngetik — bukan mode pilihan ganda, karena kamu memang mengetik kodenya sendiri."}
+                  ? "ℹ️ Step ini belum memiliki mode susun kalimat, sehingga otomatis menggunakan editor ngetik. Pencapaian akan tetap tercatat di progres utama."
+                  : "ℹ️ Step ini belum memiliki varian susun kode, sehingga yang tampil adalah mode ngetik. Penyelesaian akan tercatat sebagai pencapaian mode ngetik."}
               </div>
               <StepView
                 key={item.id}
@@ -161,37 +184,41 @@ export default function ItemDetail({
         />
       )}
 
-      <div className="flex items-center justify-between border-t border-neutral-200 pt-6">
+      {/* Bottom Navigation Control Bar */}
+      <div className="flex items-center justify-between rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-slate-900/60 p-4 sm:p-5 backdrop-blur-sm shadow-xs">
         {prev ? (
           <Link
             href={`/tracks/${track.slug}/${prev.id}`}
-            className="rounded-lg border border-neutral-300 px-5 py-2.5 text-neutral-700 hover:bg-neutral-100"
+            className="cursor-pointer rounded-xl border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-slate-800/80 px-4 py-2.5 text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 transition hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white"
           >
             ← Sebelumnya
           </Link>
         ) : (
-          <span />
+          <div />
         )}
+
         {next ? (
           <Link
             href={`/tracks/${track.slug}/${next.id}`}
-            className={`rounded-lg px-5 py-2.5 font-medium ${
+            className={`cursor-pointer inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-xs sm:text-sm font-bold transition-all duration-200 ${
               finished
-                ? "bg-gold-500 text-neutral-900 hover:bg-gold-400"
-                : "border border-neutral-300 text-neutral-700 hover:bg-neutral-100"
+                ? "bg-gradient-to-r from-amber-400 to-amber-500 text-slate-950 shadow-md shadow-amber-500/20 hover:from-amber-300 hover:to-amber-400 hover:scale-[1.02]"
+                : "border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white"
             }`}
           >
-            Berikutnya →
+            <span>Berikutnya →</span>
             {lolosSesi && (
-              <span className="ml-2 font-normal opacity-70">Ctrl + Enter</span>
+              <span className="hidden sm:inline-flex items-center gap-1 opacity-90">
+                <Tuts>Ctrl</Tuts> + <Tuts>Enter</Tuts>
+              </span>
             )}
           </Link>
         ) : (
           <Link
             href={`/tracks/${track.slug}`}
-            className="rounded-lg bg-green-600 px-5 py-2.5 font-medium text-white hover:bg-green-700"
+            className="cursor-pointer rounded-xl bg-gradient-to-r from-emerald-500 to-teal-400 px-5 py-2.5 text-xs sm:text-sm font-bold text-slate-950 shadow-md shadow-emerald-500/20 hover:from-emerald-400 hover:to-teal-300 transition-all hover:scale-[1.02]"
           >
-            Selesai — kembali ke track 🎉
+            Selesai Track Ini 🎉
           </Link>
         )}
       </div>

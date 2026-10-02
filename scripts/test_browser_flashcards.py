@@ -82,13 +82,30 @@ def run_tests():
             page.goto(f"http://127.0.0.1:{PORT}/?kategori=bahasa")
             page.wait_for_load_state("networkidle")
 
-            # Verifikasi Flashcard Jepang ada di katalog Bahasa
-            has_flashcard_card = page.locator("text=Flashcard Jepang").count() > 0
-            has_beng_card = page.locator("text=Business English").count() > 0
-            if has_flashcard_card and has_beng_card:
-                pass_test("Katalog Bahasa menampilkan Flashcard Jepang berdampingan dengan Business English.")
+            # Verifikasi Hub Bahasa di Katalog Bahasa
+            has_japanese_hub = page.locator("h3:has-text('Bahasa Jepang')").count() > 0
+            has_english_hub = page.locator("h3:has-text('Bahasa Inggris')").count() > 0
+            if has_japanese_hub and has_english_hub:
+                pass_test("Katalog Bahasa menampilkan hub Bahasa Jepang berdampingan dengan Bahasa Inggris.")
             else:
-                fail_test("Katalog Bahasa tidak menampilkan kedua kartu.")
+                fail_test("Katalog Bahasa tidak menampilkan kedua hub bahasa.")
+
+            # Navigasi lewat hub Bahasa Jepang
+            page.click("a[href*='/bahasa/jepang']")
+            page.wait_for_load_state("networkidle")
+
+            has_hiragana = page.locator("text=Hiragana").count() > 0
+            has_katakana = page.locator("text=Katakana").count() > 0
+            has_flashcards_link = page.locator("a[href*='/flashcards/jepang']").count() > 0
+
+            if has_hiragana and has_katakana and has_flashcards_link:
+                pass_test("Hub Bahasa Jepang memuat modul Hiragana, Katakana, dan tautan Flashcard N5.")
+            else:
+                fail_test("Hub Bahasa Jepang tidak memuat modul yang lengkap.")
+
+            # Kembali ke katalog Bahasa untuk verifikasi pemilih mode
+            page.goto(f"http://127.0.0.1:{PORT}/?kategori=bahasa")
+            page.wait_for_load_state("networkidle")
 
             # Verifikasi pemilih mode header & modal tidak muncul di Bahasa
             header_mode_button = page.locator("header button:has-text('Mode:')").count()
@@ -166,7 +183,21 @@ def run_tests():
             else:
                 fail_test(f"Sisi depan tidak sesuai kontrak (term='{term_front}', leaked={meaning_leaked}).")
 
-            # 3.2 Balik kartu (buka jawaban)
+            # 3.2 Uji navigasi keyboard: fokus pada tautan 'Kembali' lalu Enter tidak boleh membuka jawaban
+            back_link = page3.locator("a:has-text('Kembali ke Daftar Bagian')")
+            back_link.focus()
+            page3.keyboard.press("Enter")
+            try:
+                page3.wait_for_url("**/flashcards/jepang/", timeout=3000)
+                pass_test("Fokus pada tautan 'Kembali' dan menekan Enter berhasil navigasi tanpa membuka jawaban.")
+            except Exception:
+                fail_test(f"Menekan Enter pada tautan 'Kembali' gagal bernavigasi (URL: {page3.url}).")
+
+            page3.goto(f"http://127.0.0.1:{PORT}/flashcards/jepang/n5/vol-1/bagian-1/")
+            page3.wait_for_load_state("networkidle")
+            reveal_btn = page3.locator("button:has-text('Lihat jawaban')")
+
+            # 3.3 Balik kartu (buka jawaban)
             reveal_btn.click()
             page3.wait_for_timeout(200)
 
@@ -249,6 +280,22 @@ def run_tests():
                 pass_test("Tombol 'Ulangi semua' memulai ulang sesi 10 kartu dari awal tanpa menghapus progres.")
             else:
                 fail_test("Tombol 'Ulangi semua' gagal memulai ulang 10 kartu.")
+
+            # 3.6 Uji sinkronisasi antartab saat storage dihapus di tab lain
+            page_tab2 = context3.new_page()
+            page_tab2.goto(f"http://127.0.0.1:{PORT}/flashcards/jepang")
+            page_tab2.wait_for_load_state("networkidle")
+            page_tab2.evaluate("() => localStorage.removeItem('bilearn-flashcards-v1')")
+            page_tab2.evaluate("() => window.dispatchEvent(new StorageEvent('storage', { key: 'bilearn-flashcards-v1', newValue: null }))")
+            page3.wait_for_timeout(300)
+            page_tab2.reload()
+            page_tab2.wait_for_load_state("networkidle")
+            zero_memorized = page_tab2.locator("text=0 dari 100").is_visible() or page_tab2.locator("text=0/10 Hafal").count() > 0
+            if zero_memorized:
+                pass_test("Sinkronisasi progres antartab: progres kembali ke 0 setelah storage dihapus di tab lain.")
+            else:
+                fail_test("Sinkronisasi antartab gagal: progres lama masih muncul setelah storage dihapus.")
+            page_tab2.close()
 
             context3.close()
 

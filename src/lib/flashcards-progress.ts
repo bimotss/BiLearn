@@ -56,7 +56,7 @@ function getSnapshot(): FlashcardProgressData {
       } catch {
         cache = EMPTY_DATA;
       }
-    } else if (Object.keys(cache.cards).length === 0) {
+    } else {
       cache = EMPTY_DATA;
     }
   }

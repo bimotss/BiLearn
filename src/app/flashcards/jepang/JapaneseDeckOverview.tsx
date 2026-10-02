@@ -21,7 +21,7 @@ export function JapaneseDeckOverview() {
       {storageWarning && (
         <div
           role="alert"
-          className="rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900"
+          className="rounded-xl border border-amber-500/40 bg-amber-500/10 p-4 text-xs sm:text-sm text-amber-200"
         >
           {storageWarning}
         </div>
@@ -31,70 +31,74 @@ export function JapaneseDeckOverview() {
       <div>
         <Link
           href="/?kategori=bahasa"
-          className="inline-flex items-center gap-1.5 text-sm font-medium text-neutral-600 hover:text-gold-700 transition mb-3"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-400 hover:text-amber-300 transition-colors mb-4 cursor-pointer"
         >
           <span aria-hidden="true">←</span> Kembali ke Belajar Bahasa
         </Link>
-        <div className="flex flex-wrap items-center gap-3">
-          <span className="flex h-10 w-10 items-center justify-center rounded-lg text-2xl text-white bg-red-600">
-            🎴
-          </span>
-          <div>
-            <div className="flex items-center gap-2">
-              <h1 className="text-2xl sm:text-3xl font-bold text-neutral-900">
-                {deck.title}
-              </h1>
-              <span className="rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-semibold text-red-800">
-                {deck.subtitle}
-              </span>
+
+        <div className="rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-slate-900/70 p-6 sm:p-8 backdrop-blur-md shadow-xs">
+          <div className="flex flex-col sm:flex-row items-start gap-4">
+            <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl text-3xl text-white bg-rose-600 shadow-lg shadow-rose-500/30">
+              🎴
+            </span>
+            <div className="space-y-1.5">
+              <div className="flex flex-wrap items-center gap-2">
+                <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+                  {deck.title}
+                </h1>
+                <span className="rounded-full border border-rose-500/30 bg-rose-500/10 px-2.5 py-0.5 text-xs font-semibold text-rose-700 dark:text-rose-300">
+                  {deck.subtitle}
+                </span>
+              </div>
+              <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed max-w-2xl">
+                {deck.description}
+              </p>
             </div>
-            <p className="mt-1 text-sm text-neutral-600 max-w-2xl">
-              {deck.description}
-            </p>
           </div>
         </div>
       </div>
 
-      {/* Kotak Panduan Singkat */}
-      <div className="rounded-xl border border-neutral-200 bg-neutral-50 p-4 sm:p-5 text-sm text-neutral-700 space-y-2">
-        <p className="font-semibold text-neutral-900">
-          💡 Cara belajar dengan Flashcard:
+      {/* Kotak Panduan Belajar */}
+      <div className="rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-slate-900/60 p-5 text-xs sm:text-sm text-slate-700 dark:text-slate-300 space-y-2 backdrop-blur-sm shadow-xs">
+        <p className="font-bold text-amber-600 dark:text-amber-400 flex items-center gap-1.5">
+          <span>💡</span>
+          <span>Panduan Belajar Flashcard Spaced Repetition:</span>
         </p>
-        <ol className="list-decimal list-inside space-y-1 text-neutral-600">
-          <li>Lihat kata Jepang di sisi depan kartu dan coba ingat artinya.</li>
-          <li>Tekan <strong>Lihat jawaban</strong> untuk membuka cara baca, arti, dan contoh kalimat.</li>
-          <li>Nilai dirimu sendiri dengan menekan <strong>Belum hafal</strong> atau <strong>Sudah hafal</strong>.</li>
-          <li>Semua bagian dapat dibuka langsung dan diulang kapan saja tanpa batasan.</li>
+        <ol className="list-decimal list-inside space-y-1 text-slate-600 dark:text-slate-300 leading-relaxed pl-1">
+          <li>Perhatikan kata Jepang di sisi depan kartu dan coba ingat artinya sebelum membuka.</li>
+          <li>Tekan tombol <strong className="text-slate-900 dark:text-white">Buka Jawaban</strong> (atau tekan <kbd className="rounded bg-slate-100 dark:bg-slate-800 px-1 font-mono text-xs text-amber-700 dark:text-amber-300 border border-slate-300 dark:border-slate-700">Spasi</kbd>) untuk melihat cara baca Kana/Romaji, arti Indonesia, dan contoh kalimat.</li>
+          <li>Nilai dirimu secara jujur dengan menekan <strong className="text-rose-600 dark:text-rose-400">Belum Hafal</strong> atau <strong className="text-emerald-600 dark:text-emerald-400">Sudah Hafal</strong>.</li>
+          <li>Setiap bagian dapat dibuka bebas dan diulang tanpa batas kapan saja.</li>
         </ol>
       </div>
 
-      {/* Ringkasan Progress Volume */}
-      <div className="rounded-xl border border-neutral-200 bg-white p-5 shadow-sm">
-        <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+      {/* Ringkasan Progres Keseluruhan */}
+      <div className="rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-slate-900/60 p-6 backdrop-blur-sm shadow-xs">
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-neutral-500">
-              Progress Keseluruhan {deck.subtitle}
+            <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+              Progres Keseluruhan {deck.subtitle}
             </p>
-            <p className="text-xl font-bold text-neutral-900">
+            <p className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white mt-0.5">
               {totalMemorized} dari {totalCards} kosakata ditandai hafal ({totalPct}%)
             </p>
           </div>
-          <span className="text-xs font-medium text-neutral-500">
+          <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
             10 bagian · 10 kosakata per bagian
           </span>
         </div>
-        <div className="h-2 w-full overflow-hidden rounded-full bg-neutral-100">
+        <div className="h-2.5 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-800">
           <div
-            className="h-full rounded-full transition-all duration-300 bg-red-600"
+            className="h-full rounded-full transition-all duration-500 bg-gradient-to-r from-rose-500 to-orange-400"
             style={{ width: `${totalPct}%` }}
           />
         </div>
       </div>
 
-      {/* Daftar 10 Bagian */}
-      <section>
-        <h2 className="text-xl font-bold text-neutral-900 mb-4">
-          Daftar Bagian ({deck.totalParts} Bagian)
+      {/* Grid 10 Bagian */}
+      <section className="space-y-4">
+        <h2 className="text-xl font-bold text-slate-900 dark:text-white">
+          Daftar Bagian Latihan ({deck.totalParts} Bagian)
         </h2>
         <div className="grid gap-4 sm:grid-cols-2">
           {deck.parts.map((part) => {
@@ -108,39 +112,42 @@ export function JapaneseDeckOverview() {
             return (
               <div
                 key={part.slug}
-                className="flex flex-col justify-between rounded-xl border border-neutral-200 bg-white p-5 transition hover:shadow-md"
+                className="flex flex-col justify-between rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-slate-900/60 p-5 backdrop-blur-sm transition-all duration-300 hover:border-rose-400 dark:hover:border-rose-500/40 hover:bg-slate-50 dark:hover:bg-slate-900/90 shadow-xs hover:shadow-md"
               >
                 <div>
                   <div className="flex items-center justify-between gap-2">
-                    <h3 className="font-bold text-lg text-neutral-900">
+                    <h3 className="font-bold text-base sm:text-lg text-slate-900 dark:text-white">
                       {part.title}
                     </h3>
                     {isCompleted ? (
-                      <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-medium text-emerald-800">
-                        ✓ 10 Hafal
+                      <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 text-xs font-semibold text-emerald-700 dark:text-emerald-300">
+                        ✓ Selesai Hafal
                       </span>
                     ) : partMemorized > 0 ? (
-                      <span className="rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-medium text-amber-800">
+                      <span className="rounded-full border border-amber-500/30 bg-amber-500/10 px-2.5 py-0.5 text-xs font-semibold text-amber-700 dark:text-amber-300">
                         {partMemorized}/10 Hafal
                       </span>
                     ) : (
-                      <span className="rounded-full bg-neutral-100 px-2.5 py-0.5 text-xs font-medium text-neutral-600">
+                      <span className="rounded-full bg-slate-100 dark:bg-white/[0.06] px-2.5 py-0.5 text-xs font-medium text-slate-500 dark:text-slate-400">
                         0/10 Hafal
                       </span>
                     )}
                   </div>
-                  <p className="mt-1 text-sm text-neutral-600">
+                  <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
                     Kosakata nomor {part.startNo}–{part.endNo}
                   </p>
-                  <div className="mt-3">
-                    <div className="flex justify-between text-xs text-neutral-500 mb-1">
-                      <span>{partMemorized}/{partTotal} ditandai hafal</span>
-                      <span>{partPct}%</span>
+
+                  <div className="mt-4 space-y-1.5">
+                    <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400">
+                      <span>Progres Hafalan</span>
+                      <span className="text-slate-700 dark:text-slate-200 font-medium">{partPct}%</span>
                     </div>
-                    <div className="h-1.5 w-full overflow-hidden rounded-full bg-neutral-100">
+                    <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-800">
                       <div
                         className={`h-full rounded-full transition-all duration-300 ${
-                          isCompleted ? "bg-emerald-500" : "bg-red-500"
+                          isCompleted
+                            ? "bg-emerald-500"
+                            : "bg-gradient-to-r from-rose-500 to-orange-400"
                         }`}
                         style={{ width: `${partPct}%` }}
                       />
@@ -148,12 +155,16 @@ export function JapaneseDeckOverview() {
                   </div>
                 </div>
 
-                <div className="mt-5">
+                <div className="mt-5 pt-3 border-t border-slate-200 dark:border-white/[0.06]">
                   <Link
                     href={`/flashcards/jepang/n5/vol-1/${part.slug}`}
-                    className="inline-flex w-full items-center justify-center rounded-lg bg-neutral-900 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-gold-400"
+                    className={`cursor-pointer inline-flex w-full items-center justify-center rounded-xl py-2.5 text-xs sm:text-sm font-bold transition-all duration-200 ${
+                      isCompleted
+                        ? "border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700"
+                        : "bg-gradient-to-r from-rose-600 to-orange-600 text-white shadow-md shadow-rose-600/20 hover:from-rose-500 hover:to-orange-500 hover:scale-[1.01]"
+                    }`}
                   >
-                    {partMemorized > 0 ? "Lanjutkan Latihan" : "Mulai Latihan"}
+                    {partMemorized > 0 ? "Lanjutkan Latihan Flashcard →" : "Mulai Sesi Flashcard →"}
                   </Link>
                 </div>
               </div>

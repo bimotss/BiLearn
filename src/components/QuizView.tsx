@@ -9,8 +9,8 @@ interface Props {
 }
 
 /**
- * Kuis dengan kunci jawaban: setelah user menjawab, tampilkan benar/salah
- * + penjelasan KENAPA. Salah boleh dicoba lagi tanpa penalti.
+ * Kuis dengan kunci jawaban dan penjelasan mendalam: setelah user menjawab,
+ * sistem memberikan feedback benar/salah secara langsung beserta penalaran teknis.
  */
 export default function QuizView({ quiz, onPassed }: Props) {
   const [answered, setAnswered] = useState<Record<string, boolean>>({});
@@ -26,29 +26,59 @@ export default function QuizView({ quiz, onPassed }: Props) {
     }
   }
 
+  const pct = Math.round((correctCount / total) * 100);
+
   return (
     <div className="space-y-8">
-      <p className="text-neutral-600">
-        Jawab semua pertanyaan. Setelah menjawab, kunci jawaban dan
-        penjelasannya langsung ditampilkan — salah pun tidak apa-apa, bisa
-        dicoba lagi.
-      </p>
-      {quiz.questions.map((q, i) => (
-        <QuestionCard
-          key={q.id}
-          index={i}
-          question={q}
-          onResult={(correct) => handleResult(q.id, correct)}
-        />
-      ))}
+      {/* Overview Card */}
+      <div className="rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-slate-900/60 p-5 backdrop-blur-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 shadow-xs">
+        <div>
+          <h2 className="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+            Kuis Pemahaman Modul
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-1">
+            Jawab semua pertanyaan untuk menguji daya serap konsep. Kunci jawaban dan penjelasan langsung terlihat setelah menjawab.
+          </p>
+        </div>
+        <div className="shrink-0 flex items-center gap-3">
+          <div className="text-right">
+            <div className="text-xs text-slate-500 dark:text-slate-400">Skor Kuis</div>
+            <div className="text-base font-bold text-slate-900 dark:text-white">
+              {correctCount} / {total}
+            </div>
+          </div>
+          <div className="h-2 w-24 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-800">
+            <div
+              className="h-full bg-gradient-to-r from-purple-500 to-indigo-400 transition-all duration-300"
+              style={{ width: `${pct}%` }}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Daftar Pertanyaan */}
+      <div className="space-y-6">
+        {quiz.questions.map((q, i) => (
+          <QuestionCard
+            key={q.id}
+            index={i}
+            question={q}
+            onResult={(correct) => handleResult(q.id, correct)}
+          />
+        ))}
+      </div>
+
+      {/* Completion Banner */}
       <div
-        className={`rounded-lg p-4 font-medium ${
-          allCorrect ? "bg-green-100 text-green-900" : "bg-neutral-100 text-neutral-600"
+        className={`rounded-2xl border p-5 font-semibold transition-all ${
+          allCorrect
+            ? "border-emerald-400/60 bg-emerald-50 dark:border-emerald-500/40 dark:bg-emerald-950/30 text-emerald-900 dark:text-emerald-200 shadow-lg shadow-emerald-500/10 text-center text-base"
+            : "border-slate-200 dark:border-white/[0.08] bg-white dark:bg-slate-900/60 text-slate-600 dark:text-slate-400 text-sm"
         }`}
       >
         {allCorrect
-          ? "🎉 Semua benar! Kuis selesai."
-          : `Benar ${correctCount} dari ${total} pertanyaan.`}
+          ? "🎉 Luar biasa! Semua pertanyaan kuis berhasil dijawab dengan benar."
+          : `Telah dijawab benar ${correctCount} dari ${total} pertanyaan.`}
       </div>
     </div>
   );
@@ -93,85 +123,118 @@ function QuestionCard({
     setText("");
   }
 
+  const optionLetters = ["A", "B", "C", "D", "E", "F"];
+
   return (
-    <div className="rounded-xl border border-neutral-200 p-5">
-      <p className="font-medium text-neutral-900">
-        {index + 1}. {question.question}
-      </p>
+    <div className="rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-slate-900/60 p-6 backdrop-blur-sm space-y-4 shadow-xs">
+      <div className="flex items-start gap-3">
+        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-slate-100 dark:bg-white/[0.06] text-xs font-mono font-bold text-amber-600 dark:text-amber-400 border border-slate-200 dark:border-white/10">
+          {String(index + 1).padStart(2, "0")}
+        </span>
+        <p className="text-base sm:text-lg font-bold text-slate-900 dark:text-white leading-snug">
+          {question.question}
+        </p>
+      </div>
+
       {question.code && (
-        <pre className="mt-3 overflow-x-auto rounded-lg bg-neutral-900 p-4 text-sm text-neutral-100">
+        <pre className="overflow-x-auto rounded-xl border border-slate-300 dark:border-white/[0.06] bg-slate-950 dark:bg-[#090d16] p-4 font-mono text-xs sm:text-sm text-slate-200 leading-relaxed">
           {question.code}
         </pre>
       )}
 
       {question.type === "pilihan-ganda" ? (
-        <div className="mt-4 space-y-2">
-          {question.choices.map((c, i) => (
-            <button
-              key={i}
-              disabled={submitted && correct}
-              onClick={() => submitChoice(i)}
-              className={`block w-full rounded-lg border px-4 py-2.5 text-left transition ${
-                submitted && i === question.answerIndex
-                  ? "border-green-500 bg-green-50"
-                  : submitted && i === selected
-                    ? "border-red-400 bg-red-50"
-                    : "border-neutral-200 hover:border-gold-400 hover:bg-gold-50"
-              }`}
-            >
-              {c}
-            </button>
-          ))}
+        <div className="space-y-2.5 pt-2">
+          {question.choices.map((c, i) => {
+            const isTargetAnswer = submitted && i === question.answerIndex;
+            const isUserWrong = submitted && i === selected && !correct;
+
+            return (
+              <button
+                key={i}
+                type="button"
+                disabled={submitted && correct}
+                onClick={() => submitChoice(i)}
+                className={`group flex w-full cursor-pointer items-center gap-3 rounded-xl border px-4 py-3 text-left transition-all duration-200 ${
+                  isTargetAnswer
+                    ? "border-emerald-500/60 bg-emerald-500/15 text-emerald-900 dark:text-emerald-200 ring-1 ring-emerald-500/50"
+                    : isUserWrong
+                    ? "border-rose-500/60 bg-rose-500/15 text-rose-900 dark:text-rose-200 ring-1 ring-rose-500/50"
+                    : "border-slate-200 dark:border-white/[0.08] bg-slate-50 dark:bg-slate-800/40 text-slate-800 dark:text-slate-200 hover:border-amber-400/50 hover:bg-amber-50/50 dark:hover:bg-slate-800/80 hover:text-slate-950 dark:hover:text-white"
+                }`}
+              >
+                <span
+                  className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-md font-mono text-xs font-bold transition-colors ${
+                    isTargetAnswer
+                      ? "bg-emerald-500 text-slate-950"
+                      : isUserWrong
+                      ? "bg-rose-500 text-white"
+                      : "bg-slate-200 dark:bg-white/[0.06] text-slate-600 dark:text-slate-400 group-hover:bg-amber-500/20 group-hover:text-amber-700 dark:group-hover:text-amber-300"
+                  }`}
+                >
+                  {optionLetters[i] ?? i + 1}
+                </span>
+                <span className="text-xs sm:text-sm leading-relaxed">{c}</span>
+              </button>
+            );
+          })}
         </div>
       ) : (
-        <div className="mt-4 flex gap-2">
+        <div className="flex gap-2 pt-2">
           <input
             value={text}
             onChange={(e) => setText(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && submitText()}
             disabled={submitted && correct}
-            placeholder="Ketik jawabanmu…"
-            className="flex-1 rounded-lg border border-neutral-300 px-4 py-2.5 outline-none focus:border-gold-400"
+            placeholder="Ketik jawabanmu..."
+            className="flex-1 rounded-xl border border-slate-300 dark:border-white/10 bg-white dark:bg-[#090d16] px-4 py-2.5 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 outline-none focus:border-amber-500"
             aria-label="Jawaban isian"
           />
           <button
+            type="button"
             onClick={submitText}
             disabled={submitted && correct}
-            className="rounded-lg bg-gold-500 px-5 py-2.5 font-medium text-neutral-900 hover:bg-gold-400 disabled:opacity-50"
+            className="cursor-pointer rounded-xl bg-amber-500 px-5 py-2.5 font-bold text-slate-950 transition hover:bg-amber-400 disabled:opacity-50"
           >
             Jawab
           </button>
         </div>
       )}
 
-      {/* Kunci jawaban + penjelasan — selalu tampil setelah menjawab */}
+      {/* Kunci Jawaban & Penjelasan Mendalam */}
       {submitted && (
         <div
-          className={`mt-4 rounded-lg p-4 ${
-            correct ? "bg-green-50" : "bg-amber-50"
+          className={`mt-4 space-y-2 rounded-xl border p-4.5 text-xs sm:text-sm ${
+            correct
+              ? "border-emerald-400/60 bg-emerald-50 dark:border-emerald-500/40 dark:bg-emerald-950/30 text-emerald-950 dark:text-emerald-200"
+              : "border-amber-400/60 bg-amber-50 dark:border-amber-500/40 dark:bg-amber-950/30 text-amber-950 dark:text-amber-200"
           }`}
         >
-          <p className={`font-medium ${correct ? "text-green-900" : "text-amber-900"}`}>
-            {correct ? "✅ Benar!" : "❌ Belum tepat."}
-          </p>
-          <p className="mt-2 text-sm text-neutral-700">
-            <span className="font-medium">Kunci jawaban: </span>
+          <div className="flex items-center justify-between">
+            <p className="font-bold text-sm sm:text-base">
+              {correct ? "✅ Jawabanmu Tepat!" : "❌ Belum Tepat"}
+            </p>
+            {!correct && (
+              <button
+                type="button"
+                onClick={retry}
+                className="cursor-pointer rounded-lg border border-amber-400/60 bg-amber-500/20 px-3 py-1 text-xs font-semibold text-amber-900 dark:text-amber-200 transition hover:bg-amber-500/30"
+              >
+                Coba Lagi
+              </button>
+            )}
+          </div>
+
+          <p className="text-slate-700 dark:text-slate-300">
+            <span className="font-semibold text-slate-900 dark:text-white">Kunci Jawaban: </span>
             {question.type === "pilihan-ganda"
               ? question.choices[question.answerIndex]
               : question.acceptedAnswers[0]}
           </p>
-          <p className="mt-1 text-sm text-neutral-700">
-            <span className="font-medium">Penjelasan: </span>
+
+          <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
+            <span className="font-semibold text-slate-900 dark:text-white">Penjelasan: </span>
             {question.explanation}
           </p>
-          {!correct && (
-            <button
-              onClick={retry}
-              className="mt-3 rounded-md border border-amber-300 px-4 py-1.5 text-sm text-amber-900 hover:bg-amber-100"
-            >
-              Coba lagi
-            </button>
-          )}
         </div>
       )}
     </div>

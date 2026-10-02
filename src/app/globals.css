@@ -1,39 +1,343 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-border: #e2e8f0;
+
+  /* Palet emas & amber BiLearn — Light Mode */
+  --color-gold-50: #fbf7ee;
+  --color-gold-100: #f5ebd3;
+  --color-gold-200: #edd7a6;
+  --color-gold-300: #e2be74;
+  --color-gold-400: #d4a044;
+  --color-gold-500: #d97706;
+  --color-gold-600: #b45309;
+  --color-gold-700: #92400e;
+  --color-gold-800: #78350f;
+  --color-gold-900: #451a03;
+}
+
+.dark {
+  --background: #030712;
+  --foreground: #f8fafc;
+  --card: #0b0f19;
+  --card-border: rgba(255, 255, 255, 0.08);
+
+  /* Palet emas & amber BiLearn — Dark Mode OLED premium */
+  --color-gold-50: rgba(245, 158, 11, 0.08);
+  --color-gold-100: rgba(245, 158, 11, 0.16);
+  --color-gold-200: rgba(245, 158, 11, 0.32);
+  --color-gold-300: #fde68a;
+  --color-gold-400: #fbbf24;
+  --color-gold-500: #f59e0b;
+  --color-gold-600: #d97706;
+  --color-gold-700: #fbbf24;
+  --color-gold-800: #fef3c7;
+  --color-gold-900: #ffffff;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+}
 
-  /* Palet emas BiLearn — warna aksen tunggal untuk seluruh aplikasi.
-     Ubah nilainya di sini kalau ingin emas yang lebih terang atau lebih tua;
-     seluruh tombol, link, dan progress bar ikut menyesuaikan. */
-  --color-gold-50: #fdfaf1;
-  --color-gold-100: #f8f0d8;
-  --color-gold-200: #efdfaa;
-  --color-gold-300: #e3c974;
-  --color-gold-400: #d4af37;
-  --color-gold-500: #c39a24;
-  --color-gold-600: #9a6f14;
-  --color-gold-700: #7e5a11;
-  --color-gold-800: #5f430d;
-  --color-gold-900: #45300a;
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #030712;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #1e293b;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #334155;
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
   font-family:
-    ui-sans-serif,
-    system-ui,
+    "Inter",
     -apple-system,
+    BlinkMacSystemFont,
     "Segoe UI",
     Roboto,
     "Helvetica Neue",
     Arial,
     sans-serif;
+  letter-spacing: -0.011em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* High-tech ambient background gradient helper */
+.bg-radial-ambient {
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(245, 158, 11, 0.12), transparent),
+    radial-gradient(ellipse 60% 40% at 85% -10%, rgba(59, 130, 246, 0.08), transparent);
+}
+
+/* Glassmorphism panel */
+.glass-panel {
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+.dark .glass-panel {
+  background-color: rgba(11, 15, 25, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Card hover glow */
+.card-hover-glow {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.card-hover-glow:hover {
+  transform: translateY(-2px);
+  border-color: rgba(245, 158, 11, 0.35);
+  box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.7), 0 0 20px -5px rgba(245, 158, 11, 0.15);
+}
+
+/* Focus ring for accessibility */
+*:focus-visible {
+  outline: 2px solid #f59e0b;
+  outline-offset: 2px;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* =========================================================================
+   ADAPTASI TEMA TERANG (LIGHT MODE)
+   ========================================================================= */
+
+html:not(.dark) {
+  color-scheme: light;
+}
+
+html:not(.dark) body {
+  background-color: #f8fafc;
+  color: #0f172a;
+}
+
+/* Header & footer di mode terang */
+html:not(.dark) header {
+  background-color: rgba(255, 255, 255, 0.88) !important;
+  border-bottom-color: rgba(226, 232, 240, 0.95) !important;
+}
+
+html:not(.dark) footer {
+  background-color: rgba(241, 245, 249, 0.9) !important;
+  border-top-color: #e2e8f0 !important;
+  color: #64748b !important;
+}
+
+/* Kartu & Container berlatar Slate diubah menjadi Kartu Putih Bersih */
+html:not(.dark) [class*="bg-slate-900"],
+html:not(.dark) [class*="bg-[#0b0f19]"] {
+  background-color: #ffffff !important;
+  border-color: rgba(226, 232, 240, 0.95) !important;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+}
+
+/* Blok kode tetap gelap elegan seperti VS Code/GitHub */
+html:not(.dark) pre[class*="bg-[#090d16]"],
+html:not(.dark) code[class*="bg-[#090d16]"],
+html:not(.dark) textarea[class*="bg-[#090d16]"] {
+  background-color: #0f172a !important;
+  color: #f8fafc !important;
+}
+
+/* Wadah non-pre yang pakai bg-[#090d16] jadi surface bersih */
+html:not(.dark) div[class*="bg-[#090d16]"]:not(pre):not([class*="rounded-2xl border border-white/[0.08] bg-[#090d16] shadow-2xl"]),
+html:not(.dark) ol[class*="bg-[#090d16]"],
+html:not(.dark) details[class*="bg-slate-800"],
+html:not(.dark) div[class*="bg-slate-800/40"] {
+  background-color: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+}
+
+/* Tombol sekunder dengan latar gelap diubah ke slate terang */
+html:not(.dark) button[class*="bg-slate-800"],
+html:not(.dark) a[class*="bg-slate-800"] {
+  background-color: #f1f5f9 !important;
+  border-color: #cbd5e1 !important;
+  color: #1e293b !important;
+}
+html:not(.dark) button[class*="bg-slate-800"]:hover,
+html:not(.dark) a[class*="bg-slate-800"]:hover {
+  background-color: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+/* Border adaptations */
+html:not(.dark) [class*="border-white/"] {
+  border-color: rgba(226, 232, 240, 0.95) !important;
+}
+
+html:not(.dark) [class*="hover:border-white/"]:hover {
+  border-color: #cbd5e1 !important;
+}
+
+/* Semua teks yang hardcoded text-white diubah ke charcoal kecuali tombol/badge berlatar kontras */
+html:not(.dark) .text-white:not([class*="bg-amber"]):not([class*="bg-rose"]):not([class*="bg-emerald"]):not([class*="bg-blue"]):not([class*="bg-purple"]):not([class*="bg-red"]):not([class*="bg-green"]):not(button[class*="bg-gradient"]) {
+  color: #0f172a !important;
+}
+
+/* Teks bernuansa Slate Gelap untuk keterbacaan tinggi di Mode Terang */
+html:not(.dark) [class*="text-slate-100"] {
+  color: #0f172a !important;
+}
+
+html:not(.dark) [class*="text-slate-200"] {
+  color: #1e293b !important;
+}
+
+html:not(.dark) [class*="text-slate-300"] {
+  color: #334155 !important;
+}
+
+html:not(.dark) [class*="text-slate-400"] {
+  color: #64748b !important;
+}
+
+/* Warna aksen di Mode Terang agar kontras tinggi (WCAG AAA >= 4.5:1 untuk normal, >= 3:1 untuk large text) */
+html:not(.dark) [class*="text-amber-200"],
+html:not(.dark) [class*="text-amber-300"],
+html:not(.dark) [class*="text-amber-400"],
+html:not(.dark) [class*="text-amber-500"] {
+  color: #92400e !important; /* amber-800: rasio kontras 5.4:1 terhadap putih */
+}
+
+html:not(.dark) [class*="text-rose-300"],
+html:not(.dark) [class*="text-rose-400"],
+html:not(.dark) [class*="text-rose-500"] {
+  color: #9f1239 !important; /* rose-800: rasio kontras 6.9:1 terhadap putih */
+}
+
+html:not(.dark) [class*="text-emerald-200"],
+html:not(.dark) [class*="text-emerald-300"],
+html:not(.dark) [class*="text-emerald-400"],
+html:not(.dark) [class*="text-emerald-500"] {
+  color: #065f46 !important; /* emerald-800: rasio kontras 6.8:1 terhadap putih */
+}
+
+html:not(.dark) [class*="text-purple-300"],
+html:not(.dark) [class*="text-purple-400"],
+html:not(.dark) [class*="text-purple-500"] {
+  color: #581c87 !important; /* purple-800: rasio kontras 8.8:1 terhadap putih */
+}
+
+html:not(.dark) [class*="text-cyan-300"],
+html:not(.dark) [class*="text-cyan-400"],
+html:not(.dark) [class*="text-cyan-500"] {
+  color: #155e75 !important; /* cyan-800: rasio kontras 6.4:1 terhadap putih */
+}
+
+html:not(.dark) [class*="text-blue-300"],
+html:not(.dark) [class*="text-blue-400"],
+html:not(.dark) [class*="text-blue-500"] {
+  color: #1e40af !important; /* blue-800: rasio kontras 7.2:1 terhadap putih */
+}
+
+/* Kartu Kategori Aktif di Mode Terang (Code & Bahasa) */
+html:not(.dark) .category-card-active-code,
+html:not(.dark) [data-active-category="code"] {
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 45%, #ffffff 100%) !important;
+  background-color: #fffbeb !important;
+  border-color: #f59e0b !important;
+}
+
+html:not(.dark) .category-card-active-bahasa,
+html:not(.dark) [data-active-category="bahasa"] {
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 45%, #ffffff 100%) !important;
+  background-color: #eff6ff !important;
+  border-color: #3b82f6 !important;
+}
+
+/* Banner Sekarang Giliranmu di Mode Terang */
+html:not(.dark) div[class*="from-amber-950/30"] {
+  background: linear-gradient(135deg, rgba(254, 243, 199, 0.7) 0%, #ffffff 100%) !important;
+  border-color: #f59e0b !important;
+  color: #0f172a !important;
+}
+
+/* Banner Sukses Lolos di Mode Terang */
+html:not(.dark) div[class*="bg-emerald-950/30"] {
+  background-color: #ecfdf5 !important;
+  border-color: #10b981 !important;
+  color: #065f46 !important;
+}
+
+/* Kepingan susun kode di Mode Terang */
+html:not(.dark) button[class*="bg-amber-500/15"] {
+  background-color: #fef3c7 !important;
+  color: #92400e !important;
+  border-color: #f59e0b !important;
+}
+
+/* Input di Mode Terang */
+html:not(.dark) input[class*="bg-[#090d16]"] {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+/* Mobile dropdown drawer di mode terang */
+html:not(.dark) div[class*="bg-[#030712]/95"] {
+  background-color: rgba(255, 255, 255, 0.98) !important;
+  border-bottom-color: #e2e8f0 !important;
+}
+
+/* Markdown prose & inline code di Mode Terang */
+html:not(.dark) .prose-invert {
+  color: #334155 !important;
+}
+html:not(.dark) .prose-invert strong,
+html:not(.dark) strong.text-white {
+  color: #0f172a !important;
+}
+html:not(.dark) .prose-invert h1,
+html:not(.dark) .prose-invert h2,
+html:not(.dark) .prose-invert h3,
+html:not(.dark) .prose-invert h4 {
+  color: #0f172a !important;
+}
+html:not(.dark) .prose-invert code,
+html:not(.dark) code.text-amber-300 {
+  color: #92400e !important;
+  background-color: #fef3c7 !important;
+  border-color: #fde68a !important;
+}
+html:not(.dark) .prose-invert blockquote {
+  border-left-color: #f59e0b !important;
+  color: #475569 !important;
 }

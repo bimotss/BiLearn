@@ -13,7 +13,7 @@ interface Props {
   isLanguageTrack?: boolean;
 }
 
-/** Editor sederhana (textarea) + live preview + tes regex. Fase 2: Monaco + test runner. */
+/** Editor IDE interaktif + live preview sandbox + test runner regex */
 export default function StepView({ step, onPassed, isLanguageTrack }: Props) {
   const [code, setCode] = useState(step.starterCode);
   const [results, setResults] = useState<{ pass: boolean; message: string }[]>([]);
@@ -27,8 +27,6 @@ export default function StepView({ step, onPassed, isLanguageTrack }: Props) {
       : "";
     const base =
       "<style>body{margin:0;padding:12px;font-family:system-ui,sans-serif}<\/style>";
-    // Konten non-JS (perintah shell/git, SQL, Markdown, formula, atau bahasa Inggris):
-    // tampilkan apa adanya, JANGAN dieksekusi — kalau dieksekusi akan jadi SyntaxError.
     if (step.language === "text") {
       const aman = code
         .replace(/&/g, "&amp;")
@@ -38,7 +36,7 @@ export default function StepView({ step, onPassed, isLanguageTrack }: Props) {
         ? "Draf tulisanmu:"
         : "Yang kamu tulis (tidak dijalankan di preview):";
       return `${base}<style>
-        .term{background:#0f172a;color:#e2e8f0;padding:12px;border-radius:6px;
+        .term{background:#090d16;color:#e2e8f0;padding:12px;border-radius:6px;
               font-family:ui-monospace,monospace;font-size:12px;white-space:pre-wrap}
         .cap{font-size:11px;color:#64748b;margin:0 0 6px}
       <\/style>
@@ -46,16 +44,11 @@ export default function StepView({ step, onPassed, isLanguageTrack }: Props) {
       <div class="term">${aman || "(masih kosong)"}<\/div>${body}`;
     }
 
-    // Step React/TypeScript: JSX & anotasi tipe bukan JavaScript yang bisa
-    // langsung dijalankan browser. Kode dikompilasi dulu dengan Babel, lalu
-    // komponen terakhir yang terdefinisi dirender ke #root. Potongan kode yang
-    // belum utuh (mis. hanya `<Outlet />`) TIDAK ditampilkan sebagai error
-    // merah — pemula cukup diberi tahu sintaksnya sudah benar.
     if (step.language === "jsx") {
       const kodeJson = JSON.stringify(code).replace(/<\//g, "<\\/");
       return `${base}<style>
         #root{min-height:40px}
-        #bilearn-out{font-family:ui-monospace,monospace;font-size:12px;background:#0f172a;
+        #bilearn-out{font-family:ui-monospace,monospace;font-size:12px;background:#090d16;
           color:#e2e8f0;padding:8px;border-radius:6px;white-space:pre-wrap;margin-top:8px}
         #bilearn-out .err{color:#fca5a5}
         #bilearn-out .ok{color:#86efac}
@@ -89,7 +82,6 @@ export default function StepView({ step, onPassed, isLanguageTrack }: Props) {
         }
 
         if (React && typeof Babel !== 'undefined') {
-          // import/export tidak bisa dievaluasi di dalam Function biasa
           const bersih = kode
             .replace(/^\\s*import[^;\\n]*;?$/gm, '')
             .replace(/^\\s*export\\s+default\\s+/gm, '')
@@ -130,9 +122,8 @@ export default function StepView({ step, onPassed, isLanguageTrack }: Props) {
     if (step.language === "css")
       return `${tw}${base}<style>${code}<\/style>${body}`;
 
-    // Step JS: sediakan panel output agar console.log dan error terlihat.
     const consoleShim = `
-<style>#bilearn-out{font-family:ui-monospace,monospace;font-size:12px;background:#0f172a;color:#e2e8f0;padding:8px;border-radius:6px;white-space:pre-wrap;margin-top:8px;min-height:20px}
+<style>#bilearn-out{font-family:ui-monospace,monospace;font-size:12px;background:#090d16;color:#e2e8f0;padding:8px;border-radius:6px;white-space:pre-wrap;margin-top:8px;min-height:20px}
 #bilearn-out .err{color:#fca5a5}<\/style>
 <pre id="bilearn-out"><\/pre>
 <script>
@@ -148,9 +139,6 @@ export default function StepView({ step, onPassed, isLanguageTrack }: Props) {
     if (typeof v === 'string') return v;
     try { return JSON.stringify(v); } catch(e) { return String(v); }
   }
-  // Preview berjalan di iframe sandbox (opaque origin), sehingga localStorage
-  // asli melempar SecurityError. Sediakan pengganti in-memory agar step
-  // localStorage tetap bisa dipraktikkan.
   try { window.localStorage.getItem('__cek'); }
   catch (e) {
     var mem = {};
@@ -165,7 +153,7 @@ export default function StepView({ step, onPassed, isLanguageTrack }: Props) {
     try {
       Object.defineProperty(window, 'localStorage', { value: palsu, configurable: true });
       Object.defineProperty(window, 'sessionStorage', { value: palsu, configurable: true });
-    } catch (e2) { /* biarkan, error asli akan tampil di panel */ }
+    } catch (e2) {}
   }
   var orig = console.log;
   console.log = function(){
@@ -188,114 +176,180 @@ export default function StepView({ step, onPassed, isLanguageTrack }: Props) {
     }
   }
 
-  // Ctrl+Enter menjalankan tes. Setelah lolos, pintasannya sengaja dilepas
-  // supaya penekanan berikutnya ditangani halaman untuk pindah materi.
   usePintasanCtrlEnter(!passed, runTests);
 
-  return (
-    <div className="grid gap-6 lg:grid-cols-2">
-      {/* Kiri: penjelasan + instruksi */}
-      <div className="space-y-4">
-        <p className="text-neutral-700 leading-relaxed">
-          <InlineMarkdown text={step.explanation} />
-        </p>
+  const getLanguageFileName = () => {
+    switch (step.language) {
+      case "html":
+        return "index.html";
+      case "css":
+        return "styles.css";
+      case "jsx":
+        return "Component.tsx";
+      case "text":
+        return isLanguageTrack ? "draft.txt" : "terminal.sh";
+      default:
+        return "script.js";
+    }
+  };
 
-        {/* Contoh kerja: dilihat dulu sebelum mengerjakan */}
-        <div className="rounded-lg border border-neutral-200 bg-neutral-50 p-4">
-          <p className="text-sm font-semibold text-neutral-700">
-            👀 Contoh dulu
-          </p>
-          <pre className="mt-2 overflow-x-auto rounded-md bg-neutral-900 p-3 text-sm text-neutral-100">
+  return (
+    <div className="grid w-full min-w-0 gap-6 lg:grid-cols-2">
+      {/* Kolom Kiri: Penjelasan, Contoh & Instruksi */}
+      <div className="min-w-0 space-y-5">
+        <div className="rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-slate-900/60 p-5 backdrop-blur-sm shadow-xs">
+          <h2 className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">
+            Penjelasan Konsep
+          </h2>
+          <div className="text-slate-700 dark:text-slate-300 leading-relaxed text-sm sm:text-base break-words">
+            <InlineMarkdown text={step.explanation} />
+          </div>
+        </div>
+
+        {/* Contoh Kerja Acuan */}
+        <div className="min-w-0 rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-slate-900/60 p-5 backdrop-blur-sm space-y-3 shadow-xs">
+          <div className="flex items-center justify-between">
+            <p className="text-xs font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400 flex items-center gap-1.5">
+              <span>👀 Contoh Acuan</span>
+            </p>
+            <span className="text-[11px] font-mono text-slate-500">contoh-referensi</span>
+          </div>
+
+          <pre className="w-full min-w-0 overflow-x-auto rounded-xl border border-slate-300 dark:border-white/[0.06] bg-slate-950 dark:bg-[#090d16] p-3.5 font-mono text-xs text-amber-300 dark:text-amber-200/90 leading-relaxed">
             {step.example.code}
           </pre>
-          <p className="mt-2 text-sm text-neutral-600">
-            <span className="font-medium text-neutral-700">Hasilnya: </span>
-            {step.example.output}
-          </p>
+
+          <div className="min-w-0 rounded-lg border border-slate-200 dark:border-white/[0.06] bg-slate-100 dark:bg-slate-800/40 p-3 text-xs text-slate-700 dark:text-slate-300 break-words">
+            <span className="font-semibold text-slate-900 dark:text-slate-200">Hasil Nyata: </span>
+            <span className="font-mono text-slate-600 dark:text-slate-400 break-words whitespace-pre-wrap">{step.example.output}</span>
+          </div>
+
           {step.example.note && (
-            <p className="mt-1.5 text-sm text-neutral-500">
-              💡 {step.example.note}
+            <p className="text-xs text-slate-600 dark:text-slate-400 flex items-start gap-1.5 break-words">
+              <span>💡</span>
+              <span>{step.example.note}</span>
             </p>
           )}
         </div>
 
-        <div className="rounded-lg border-l-4 border-gold-400 bg-gold-50 p-4">
-          <p className="font-medium text-gold-900">
-            📝 Sekarang giliranmu
-          </p>
-          <p className="mt-1 text-gold-900">
+        {/* Sekarang Giliranmu (Instruksi Tugas) */}
+        <div className="min-w-0 rounded-2xl border border-amber-400/60 bg-gradient-to-br from-amber-500/10 via-amber-100/40 to-white dark:border-amber-500/40 dark:from-amber-950/30 dark:via-slate-900 dark:to-slate-900 p-5 shadow-lg shadow-amber-500/5">
+          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400">
+            <span>📝 Sekarang Giliranmu</span>
+          </div>
+          <div className="mt-2 text-sm sm:text-base font-medium text-slate-900 dark:text-slate-100 leading-relaxed min-w-0 break-words">
             <InlineMarkdown text={step.instruction} />
-          </p>
+          </div>
         </div>
 
+        {/* Hasil Evaluasi Tes Otomatis */}
         {results.length > 0 && (
-          <ul className="space-y-2">
+          <ul className="min-w-0 space-y-2">
             {results.map((r, i) => (
               <li
                 key={i}
-                className={`rounded-md p-3 text-sm ${
+                className={`flex items-start gap-2.5 rounded-xl border p-3.5 text-xs sm:text-sm font-medium break-words ${
                   r.pass
-                    ? "bg-green-50 text-green-800"
-                    : "bg-red-50 text-red-800"
+                    ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-300"
+                    : "border-rose-500/30 bg-rose-500/10 text-rose-300"
                 }`}
               >
-                {r.pass ? "✅ Lolos" : `❌ ${r.message}`}
+                <span className="text-base shrink-0">{r.pass ? "✅" : "❌"}</span>
+                <span className="min-w-0 break-words">{r.pass ? "Lolos tes otomatis" : r.message}</span>
               </li>
             ))}
           </ul>
         )}
 
+        {/* Banner Sukses Lolos */}
         {passed && (
-          <div className="rounded-lg bg-green-100 p-4 font-medium text-green-900">
+          <div className="min-w-0 rounded-2xl border border-emerald-500/40 bg-emerald-950/30 p-5 text-sm font-medium text-emerald-200 shadow-lg shadow-emerald-500/10 animate-fade-in break-words">
             {isLanguageTrack
-              ? "✅ Pemeriksaan otomatis lolos. Tinjau kembali isi jawabanmu. Tekan "
-              : "🎉 Semua tes lolos! Tekan "}
-            <Tuts>Ctrl</Tuts> + <Tuts>Enter</Tuts>{" "}
-            sekali lagi untuk lanjut ke materi berikutnya.
+              ? "✅ Pemeriksaan otomatis lolos! Tekan "
+              : "🎉 Semua pengujian lolos sempurna! Tekan "}
+            <Tuts>Ctrl</Tuts> + <Tuts>Enter</Tuts> sekali lagi untuk melangkah ke materi berikutnya.
           </div>
         )}
 
-        <div className="flex gap-3">
+        {/* Tombol Aksi */}
+        <div className="flex flex-wrap items-center gap-3 pt-1">
           <button
+            type="button"
             onClick={runTests}
-            className="rounded-lg bg-gold-500 px-5 py-2.5 font-medium text-neutral-900 hover:bg-gold-400"
+            className="cursor-pointer inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 px-5 py-2.5 text-sm font-bold text-slate-950 shadow-md shadow-amber-500/20 hover:from-amber-300 hover:to-amber-400 transition-all hover:scale-[1.02]"
           >
-            {isLanguageTrack ? "Periksa Jawaban" : "Jalankan Tes"}{" "}
-            <span className="text-neutral-900/60">(Ctrl + Enter)</span>
+            <span>{isLanguageTrack ? "Periksa Jawaban" : "Jalankan Tes"}</span>
+            <span className="font-mono text-xs opacity-75">(Ctrl + Enter)</span>
           </button>
           <button
+            type="button"
             onClick={() => setShowSolution((s) => !s)}
-            className="rounded-lg border border-neutral-300 px-5 py-2.5 text-neutral-700 hover:bg-neutral-100"
+            className="cursor-pointer rounded-xl border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-slate-800/80 px-4 py-2.5 text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 transition hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white"
           >
-            {showSolution ? "Sembunyikan solusi" : "Lihat solusi"}
+            {showSolution ? "Sembunyikan Solusi" : "Lihat Solusi"}
           </button>
         </div>
 
+        {/* Solusi Terbuka */}
         {showSolution && (
-          <pre className="overflow-x-auto rounded-lg bg-neutral-900 p-4 text-sm text-green-300">
-            {step.solution}
-          </pre>
+          <div className="min-w-0 rounded-2xl border border-slate-300 dark:border-white/10 bg-slate-950 dark:bg-[#090d16] p-4 shadow-md">
+            <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">
+              Kunci Solusi Referensi:
+            </div>
+            <pre className="w-full min-w-0 overflow-x-auto font-mono text-xs leading-relaxed text-emerald-400">
+              {step.solution}
+            </pre>
+          </div>
         )}
       </div>
 
-      {/* Kanan: editor + preview */}
-      <div className="space-y-3">
-        <textarea
-          value={code}
-          onChange={(e) => setCode(e.target.value)}
-          spellCheck={false}
-          className="h-56 w-full resize-y rounded-lg bg-neutral-900 p-4 font-mono text-sm text-neutral-100 outline-none"
-          aria-label={isLanguageTrack ? "Editor jawaban" : "Editor kode"}
-        />
-        <div className="rounded-lg border border-neutral-200">
-          <div className="border-b border-neutral-200 bg-neutral-50 px-3 py-1.5 text-xs font-medium text-neutral-500">
-            {isLanguageTrack ? "Draf Tulisan" : "Preview"}
+      {/* Kolom Kanan: Pro Code Editor + Live Preview Sandbox */}
+      <div className="min-w-0 space-y-4">
+        {/* Editor Chrome Window */}
+        <div className="w-full min-w-0 overflow-hidden rounded-2xl border border-slate-300 dark:border-white/[0.08] bg-slate-950 dark:bg-[#090d16] shadow-2xl">
+          {/* Mac-style Window Title Bar */}
+          <div className="flex items-center justify-between border-b border-slate-800 dark:border-white/[0.08] bg-slate-900/90 px-4 py-2.5 min-w-0">
+            <div className="flex items-center gap-2 min-w-0">
+              <div className="flex items-center gap-1.5 shrink-0">
+                <span className="h-3 w-3 rounded-full bg-rose-500/80" />
+                <span className="h-3 w-3 rounded-full bg-amber-500/80" />
+                <span className="h-3 w-3 rounded-full bg-emerald-500/80" />
+              </div>
+              <div className="ml-3 flex items-center gap-2 rounded-lg bg-black/40 px-2.5 py-1 text-xs font-mono text-slate-300 border border-white/[0.06] min-w-0 truncate">
+                <span className="truncate">{getLanguageFileName()}</span>
+              </div>
+            </div>
+            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 shrink-0">
+              {step.language}
+            </span>
+          </div>
+
+          <textarea
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+            spellCheck={false}
+            className="h-64 w-full min-w-0 resize-y bg-slate-950 dark:bg-[#090d16] p-4 font-mono text-sm leading-relaxed text-slate-100 outline-none focus:ring-1 focus:ring-amber-500/40"
+            aria-label={isLanguageTrack ? "Editor jawaban" : "Editor kode"}
+          />
+        </div>
+
+        {/* Preview Chrome Window */}
+        <div className="w-full min-w-0 overflow-hidden rounded-2xl border border-slate-300 dark:border-white/[0.08] bg-white dark:bg-[#090d16] shadow-xl">
+          <div className="flex items-center justify-between border-b border-slate-200 dark:border-white/[0.08] bg-slate-100 dark:bg-slate-900/90 px-4 py-2.5 min-w-0">
+            <div className="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300 shrink-0">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+              </span>
+              <span>{isLanguageTrack ? "Draf Teks Preview" : "Live Preview Sandbox"}</span>
+            </div>
+            <span className="text-[10px] text-slate-500 font-mono shrink-0">browser-renderer</span>
           </div>
           <iframe
             title={isLanguageTrack ? "Preview draf tulisan" : "Preview hasil kode"}
             sandbox="allow-scripts"
             srcDoc={previewDoc}
-            className="h-48 w-full rounded-b-lg bg-white"
+            className="h-56 w-full min-w-0 bg-white"
           />
         </div>
       </div>

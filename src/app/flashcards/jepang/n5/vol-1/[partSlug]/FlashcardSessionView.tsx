@@ -30,7 +30,6 @@ export function FlashcardSessionView({
 
   const partMemorizedCount = ready ? getPartMemorizedCount(part.itemIds) : 0;
 
-  // Hitung hasil penilaian putaran ini
   const roundStats = useMemo(() => {
     let memorized = 0;
     let notMemorized = 0;
@@ -45,7 +44,6 @@ export function FlashcardSessionView({
     };
   }, [roundRatings]);
 
-  // Kartu yang belum hafal (atau belum dipelajari) di bagian ini berdasarkan storage
   const unmemorizedCards = useMemo(() => {
     return initialCards.filter((card) => getStatus(card.id) !== "memorized");
   }, [initialCards, getStatus]);
@@ -58,14 +56,12 @@ export function FlashcardSessionView({
 
   const handleRate = useCallback(
     (status: "memorized" | "not-memorized") => {
-      // Keamanan klik ganda: tombol hanya berlaku saat jawaban terbuka & kartu valid
       if (!isAnswerShown || !currentCard) return;
 
       const cardId = currentCard.id;
       markCard(cardId, status);
       setRoundRatings((prev) => ({ ...prev, [cardId]: status }));
 
-      // Tutup jawaban sebelum pindah agar kartu berikutnya selalu mulai dari sisi depan
       setIsAnswerShown(false);
       const nextIndex = currentIndex + 1;
       setCurrentIndex(nextIndex);
@@ -81,10 +77,8 @@ export function FlashcardSessionView({
     [isAnswerShown, currentCard, markCard, currentIndex, queue]
   );
 
-  // Navigasi keyboard
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
-      // Abaikan jika user sedang mengetik di input/textarea
       const target = e.target as HTMLElement | null;
       if (
         target?.tagName === "INPUT" ||
@@ -97,6 +91,10 @@ export function FlashcardSessionView({
       if (isRoundComplete) return;
 
       if (!isAnswerShown) {
+        if (target?.closest("a, button, summary, select")) {
+          return;
+        }
+
         if (e.key === " " || e.key === "Enter") {
           e.preventDefault();
           handleRevealAnswer();
@@ -116,7 +114,6 @@ export function FlashcardSessionView({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isRoundComplete, isAnswerShown, handleRevealAnswer, handleRate]);
 
-  // Aksi pengulangan dari ringkasan
   const handleRepeatUnmemorized = () => {
     if (unmemorizedCards.length === 0) return;
     setQueue(unmemorizedCards);
@@ -136,7 +133,6 @@ export function FlashcardSessionView({
 
   return (
     <div className="space-y-6 max-w-2xl mx-auto w-full px-2 sm:px-0">
-      {/* Live Region Aksesibilitas */}
       <div className="sr-only" aria-live="polite" aria-atomic="true">
         {announcement}
       </div>
@@ -144,21 +140,21 @@ export function FlashcardSessionView({
       {storageWarning && (
         <div
           role="alert"
-          className="rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900"
+          className="rounded-xl border border-amber-500/40 bg-amber-500/10 p-4 text-xs sm:text-sm text-amber-200"
         >
           {storageWarning}
         </div>
       )}
 
       {/* Header & Navigasi */}
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-neutral-200 pb-3">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 dark:border-white/[0.08] pb-3">
         <Link
           href="/flashcards/jepang"
-          className="inline-flex items-center gap-1.5 text-sm font-medium text-neutral-600 hover:text-gold-700 transition"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-amber-600 dark:hover:text-amber-300 transition-colors cursor-pointer"
         >
           <span aria-hidden="true">←</span> Kembali ke Daftar Bagian
         </Link>
-        <span className="text-xs font-semibold text-neutral-500 uppercase tracking-wider">
+        <span className="text-xs font-semibold text-rose-600 dark:text-rose-400 uppercase tracking-wider">
           JLPT N5 — Vol. 1 · {part.title}
         </span>
       </div>
@@ -166,52 +162,52 @@ export function FlashcardSessionView({
       {!isRoundComplete && currentCard ? (
         <div className="space-y-4">
           {/* Posisi & Bar Progress Sesi */}
-          <div className="flex items-center justify-between text-xs font-medium text-neutral-500">
+          <div className="flex items-center justify-between text-xs font-medium text-slate-500 dark:text-slate-400">
             <span>
               Kartu {currentIndex + 1} dari {queue.length}
             </span>
-            <span>
-              Bagian: {partMemorizedCount}/10 hafal
+            <span className="text-slate-700 dark:text-slate-300">
+              Hafal di Bagian Ini: {partMemorizedCount}/10
             </span>
           </div>
-          <div className="h-1.5 w-full overflow-hidden rounded-full bg-neutral-100">
+          <div className="h-2 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-800">
             <div
-              className="h-full bg-gold-500 transition-all duration-300"
+              className="h-full bg-gradient-to-r from-rose-500 to-orange-400 transition-all duration-300"
               style={{
-                width: `${Math.round(((currentIndex) / queue.length) * 100)}%`,
+                width: `${Math.round((currentIndex / queue.length) * 100)}%`,
               }}
             />
           </div>
 
-          {/* Kartu Flashcard */}
+          {/* Kartu Flashcard Pro */}
           <div
-            className={`rounded-2xl border bg-white p-6 sm:p-8 shadow-sm transition-all min-h-[22rem] flex flex-col justify-between ${
-              isAnswerShown ? "border-gold-300" : "border-neutral-200"
+            className={`rounded-3xl border bg-white dark:bg-slate-900/80 p-6 sm:p-8 shadow-xl dark:shadow-2xl backdrop-blur-xl transition-all min-h-[22rem] flex flex-col justify-between ${
+              isAnswerShown ? "border-rose-400 dark:border-rose-500/40" : "border-slate-200 dark:border-white/[0.08]"
             }`}
           >
             {!isAnswerShown ? (
               /* SISI DEPAN KARTU */
-              <div className="flex flex-col items-center justify-center text-center my-auto py-8 space-y-6">
-                <span className="text-xs font-semibold uppercase tracking-wider text-neutral-400">
+              <div className="flex flex-col items-center justify-center text-center my-auto py-10 space-y-6">
+                <span className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                   Kosakata #{currentCard.sourceNo}
                 </span>
                 <h2
                   lang="ja"
-                  className="text-4xl sm:text-5xl font-bold text-neutral-900 tracking-wide select-none"
+                  className="text-5xl sm:text-6xl font-black text-slate-900 dark:text-white tracking-widest select-none drop-shadow-md"
                 >
                   {currentCard.term}
                 </h2>
-                <p className="text-sm text-neutral-500 max-w-sm">
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-sm">
                   Coba ingat arti dan cara bacanya, lalu buka jawaban di bawah.
                 </p>
-                <div className="pt-4">
+                <div className="pt-2">
                   <button
                     type="button"
                     onClick={handleRevealAnswer}
-                    className="inline-flex items-center gap-2 rounded-xl bg-gold-500 px-6 py-3 text-sm font-bold text-neutral-900 shadow-sm transition hover:bg-gold-400 focus:outline-none focus:ring-2 focus:ring-gold-400"
+                    className="cursor-pointer inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 px-6 py-3 text-sm font-bold text-slate-950 shadow-md shadow-amber-500/20 transition-all hover:from-amber-300 hover:to-amber-400 hover:scale-[1.02]"
                   >
-                    <span>Lihat jawaban</span>
-                    <span aria-hidden="true" className="text-xs opacity-75">
+                    <span>Buka Jawaban</span>
+                    <span className="hidden sm:inline text-xs opacity-75 font-mono">
                       (Spasi / Enter)
                     </span>
                   </button>
@@ -221,98 +217,98 @@ export function FlashcardSessionView({
               /* SISI BELAKANG KARTU */
               <div className="space-y-5">
                 {/* Kata & Bacaan */}
-                <div className="border-b border-neutral-100 pb-4">
-                  <span className="text-xs font-semibold uppercase tracking-wider text-neutral-400">
+                <div className="border-b border-slate-200 dark:border-white/[0.08] pb-4">
+                  <span className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                     Kosakata #{currentCard.sourceNo}
                   </span>
                   <div className="mt-1 flex flex-wrap items-baseline gap-3">
                     <h2
                       lang="ja"
-                      className="text-2xl sm:text-3xl font-bold text-neutral-900"
+                      className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white"
                     >
                       {currentCard.term}
                     </h2>
                     <span
                       lang="ja"
-                      className="text-lg font-semibold text-neutral-700"
+                      className="text-xl font-bold text-rose-600 dark:text-rose-300"
                     >
                       {currentCard.hiragana}
                     </span>
-                    <span className="text-sm text-neutral-500">
+                    <span className="text-sm font-mono text-slate-500 dark:text-slate-400">
                       ({currentCard.romaji})
                     </span>
                   </div>
-                  <div className="mt-2">
-                    <p className="text-xs font-semibold uppercase tracking-wider text-neutral-500">
-                      Arti
+                  <div className="mt-2.5">
+                    <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                      Arti Kata
                     </p>
-                    <p className="text-lg font-bold text-neutral-900">
+                    <p className="text-xl font-extrabold text-amber-700 dark:text-amber-300 mt-0.5">
                       {currentCard.meaning}
                     </p>
                   </div>
                 </div>
 
                 {/* Bagian Contoh Kalimat */}
-                <div className="rounded-xl border border-neutral-200 bg-neutral-50/80 p-4 space-y-2">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-neutral-500">
+                <div className="rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-slate-50 dark:bg-[#090d16] p-4 space-y-2">
+                  <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                     Contoh Kalimat
                   </p>
                   <p
                     lang="ja"
-                    className="text-base sm:text-lg font-semibold text-neutral-900 leading-relaxed"
+                    className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100 leading-relaxed"
                   >
                     {currentCard.exampleJapanese}
                   </p>
-                  <p lang="ja" className="text-sm text-neutral-600">
+                  <p lang="ja" className="text-xs sm:text-sm text-rose-600 dark:text-rose-300/90 font-medium">
                     {currentCard.exampleKana}
                   </p>
-                  <p className="text-xs sm:text-sm text-neutral-500 italic">
+                  <p className="text-xs font-mono text-slate-500 italic">
                     {currentCard.exampleRomaji}
                   </p>
-                  <div className="border-t border-neutral-200/80 pt-2 mt-2">
-                    <p className="text-sm font-medium text-neutral-800">
+                  <div className="border-t border-slate-200 dark:border-white/[0.06] pt-2 mt-2">
+                    <p className="text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-300">
                       {currentCard.exampleMeaning}
                     </p>
                   </div>
                 </div>
 
-                {/* Detail Katakana Transliterasi (Opsional/Collapsible) */}
-                <details className="rounded-lg border border-neutral-200 bg-white p-3 text-xs text-neutral-600">
-                  <summary className="cursor-pointer font-medium text-neutral-700 select-none">
-                    Katakana (transliterasi)
+                {/* Detail Katakana Transliterasi */}
+                <details className="rounded-xl border border-slate-200 dark:border-white/[0.08] bg-slate-100 dark:bg-slate-800/40 p-3 text-xs text-slate-600 dark:text-slate-400">
+                  <summary className="cursor-pointer font-semibold text-slate-700 dark:text-slate-300 select-none">
+                    Katakana (Transliterasi)
                   </summary>
-                  <p lang="ja" className="mt-2 text-sm font-medium text-neutral-800">
+                  <p lang="ja" className="mt-2 text-sm font-bold text-slate-900 dark:text-white">
                     {currentCard.katakana}
                   </p>
                 </details>
 
                 {/* Tombol Penilaian Diri */}
-                <div className="pt-2 border-t border-neutral-100">
-                  <p className="text-xs font-medium text-neutral-500 text-center mb-3">
+                <div className="pt-2 border-t border-slate-200 dark:border-white/[0.08]">
+                  <p className="text-xs font-medium text-slate-500 dark:text-slate-400 text-center mb-3">
                     Bagaimana ingatanmu tentang kata ini?
                   </p>
                   <div className="grid grid-cols-2 gap-3">
                     <button
                       type="button"
                       onClick={() => handleRate("not-memorized")}
-                      className="flex flex-col items-center justify-center rounded-xl border border-amber-300 bg-amber-50/50 py-3 px-4 transition hover:bg-amber-100 hover:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-400"
+                      className="cursor-pointer flex flex-col items-center justify-center rounded-xl border border-amber-400/60 bg-amber-50 dark:border-amber-500/40 dark:bg-amber-500/10 py-3 px-4 transition-all hover:bg-amber-100 dark:hover:bg-amber-500/20"
                     >
-                      <span className="font-bold text-amber-900 text-sm sm:text-base">
-                        Belum hafal
+                      <span className="font-bold text-amber-800 dark:text-amber-300 text-sm sm:text-base">
+                        Belum Hafal
                       </span>
-                      <span className="text-[11px] text-amber-700 mt-0.5">
+                      <span className="text-[11px] text-amber-700/80 dark:text-amber-400/80 mt-0.5 font-mono">
                         (Tombol 1 / ←)
                       </span>
                     </button>
                     <button
                       type="button"
                       onClick={() => handleRate("memorized")}
-                      className="flex flex-col items-center justify-center rounded-xl border border-emerald-500 bg-emerald-600 py-3 px-4 text-white shadow-sm transition hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                      className="cursor-pointer flex flex-col items-center justify-center rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 py-3 px-4 text-slate-950 font-bold shadow-md shadow-emerald-500/20 transition-all hover:from-emerald-400 hover:to-teal-400 hover:scale-[1.01]"
                     >
-                      <span className="font-bold text-sm sm:text-base">
-                        Sudah hafal
+                      <span className="text-sm sm:text-base">
+                        Sudah Hafal
                       </span>
-                      <span className="text-[11px] text-emerald-100 mt-0.5">
+                      <span className="text-[11px] opacity-80 mt-0.5 font-mono">
                         (Tombol 2 / →)
                       </span>
                     </button>
@@ -324,59 +320,61 @@ export function FlashcardSessionView({
         </div>
       ) : (
         /* RINGKASAN PUTARAN */
-        <div className="rounded-2xl border border-neutral-200 bg-white p-6 sm:p-8 shadow-sm space-y-6">
+        <div className="rounded-3xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-slate-900/80 p-6 sm:p-8 shadow-xl dark:shadow-2xl backdrop-blur-xl space-y-6">
           <div className="text-center space-y-2">
-            <span className="text-3xl" aria-hidden="true">
+            <span className="text-4xl" aria-hidden="true">
               🎉
             </span>
-            <h2 className="text-2xl font-bold text-neutral-900">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
               Putaran Selesai!
             </h2>
-            <p className="text-sm text-neutral-600">
+            <p className="text-sm text-slate-600 dark:text-slate-300">
               Kamu telah menyelesaikan putaran {roundStats.reviewed} kartu di {part.title}.
             </p>
           </div>
 
           {/* Statistik Hasil Putaran */}
-          <div className="grid grid-cols-3 gap-3 rounded-xl border border-neutral-100 bg-neutral-50 p-4 text-center">
+          <div className="grid grid-cols-3 gap-3 rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-slate-50 dark:bg-slate-800/40 p-4 text-center">
             <div>
-              <p className="text-xs font-semibold text-neutral-500 uppercase">
+              <p className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                 Dinilai
               </p>
-              <p className="mt-1 text-xl font-bold text-neutral-900">
+              <p className="mt-1 text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
                 {roundStats.reviewed}
               </p>
             </div>
             <div>
-              <p className="text-xs font-semibold text-emerald-700 uppercase">
+              <p className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
                 Sudah Hafal
               </p>
-              <p className="mt-1 text-xl font-bold text-emerald-600">
+              <p className="mt-1 text-xl sm:text-2xl font-black text-emerald-600 dark:text-emerald-400">
                 {roundStats.memorized}
               </p>
             </div>
             <div>
-              <p className="text-xs font-semibold text-amber-700 uppercase">
+              <p className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">
                 Belum Hafal
               </p>
-              <p className="mt-1 text-xl font-bold text-amber-600">
+              <p className="mt-1 text-xl sm:text-2xl font-black text-amber-600 dark:text-amber-400">
                 {roundStats.notMemorized}
               </p>
             </div>
           </div>
 
           {/* Status Tersimpan Bagian Ini */}
-          <div className="rounded-xl border border-neutral-200 bg-white p-4">
-            <div className="flex justify-between items-center text-sm font-medium mb-1">
-              <span className="text-neutral-700">Status tersimpan bagian ini:</span>
-              <span className="font-bold text-neutral-900">
-                {partMemorizedCount}/10 ditandai hafal ({Math.round((partMemorizedCount / 10) * 100)}%)
+          <div className="rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-slate-50 dark:bg-[#090d16] p-4">
+            <div className="flex justify-between items-center text-xs sm:text-sm font-medium mb-1">
+              <span className="text-slate-700 dark:text-slate-300">Total tersimpan di bagian ini:</span>
+              <span className="font-bold text-slate-900 dark:text-white">
+                {partMemorizedCount}/10 hafal ({Math.round((partMemorizedCount / 10) * 100)}%)
               </span>
             </div>
-            <div className="h-2 w-full overflow-hidden rounded-full bg-neutral-100 mt-2">
+            <div className="h-2 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-800 mt-2">
               <div
-                className={`h-full rounded-full transition-all duration-300 ${
-                  partMemorizedCount === 10 ? "bg-emerald-500" : "bg-red-500"
+                className={`h-full rounded-full transition-all duration-500 ${
+                  partMemorizedCount === 10
+                    ? "bg-emerald-500"
+                    : "bg-gradient-to-r from-rose-500 to-orange-400"
                 }`}
                 style={{
                   width: `${Math.round((partMemorizedCount / 10) * 100)}%`,
@@ -391,29 +389,29 @@ export function FlashcardSessionView({
               <button
                 type="button"
                 onClick={handleRepeatUnmemorized}
-                className="w-full rounded-xl bg-gold-500 py-3 text-sm font-bold text-neutral-900 shadow-sm transition hover:bg-gold-400 focus:outline-none focus:ring-2 focus:ring-gold-400"
+                className="cursor-pointer w-full rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 py-3 text-sm font-bold text-slate-950 shadow-md shadow-amber-500/20 transition-all hover:from-amber-300 hover:to-amber-400"
               >
-                Ulangi yang belum hafal ({unmemorizedCards.length} kartu)
+                Ulangi yang Belum Hafal ({unmemorizedCards.length} Kartu)
               </button>
             ) : (
-              <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-center text-sm text-emerald-800">
-                Semua kartu bagian ini sudah kamu tandai hafal. Kerja bagus!
+              <div className="rounded-xl border border-emerald-400/60 bg-emerald-50 dark:border-emerald-500/30 dark:bg-emerald-950/30 p-4 text-center text-xs sm:text-sm text-emerald-800 dark:text-emerald-300">
+                Semua kartu di bagian ini telah berhasil kamu kuasai dan tandai hafal. Kerja luar biasa!
               </div>
             )}
 
             <button
               type="button"
               onClick={handleRepeatAll}
-              className="w-full rounded-xl border border-neutral-300 bg-white py-3 text-sm font-bold text-neutral-700 transition hover:bg-neutral-50 hover:border-neutral-400 focus:outline-none focus:ring-2 focus:ring-gold-400"
+              className="cursor-pointer w-full rounded-xl border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-slate-800/80 py-3 text-sm font-bold text-slate-700 dark:text-slate-200 transition hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white"
             >
-              Ulangi semua (10 kartu)
+              Ulangi Semua (10 Kartu)
             </button>
 
             <Link
               href="/flashcards/jepang"
-              className="block w-full text-center rounded-xl py-2.5 text-sm font-medium text-neutral-600 hover:text-neutral-900 transition"
+              className="block w-full text-center rounded-xl py-2.5 text-xs sm:text-sm font-semibold text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition"
             >
-              Kembali ke daftar bagian
+              Kembali ke Daftar Bagian
             </Link>
           </div>
         </div>

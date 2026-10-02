@@ -22,7 +22,7 @@ interface Keping {
 /**
  * Mode susun kode/kalimat: user merangkai teks dari kepingan yang tersedia,
  * bukan mengetiknya. Hasil rangkaian dinilai dengan `tests` step yang sama
- * persis dengan mode ngetik (lihat `@/lib/tes`).
+ * persis dengan mode ngetik.
  */
 export default function StepSusunKodeView({
   step,
@@ -38,40 +38,23 @@ export default function StepSusunKodeView({
   const [diseret, setDiseret] = useState<number | null>(null);
   const [sasaran, setSasaran] = useState<number | null>(null);
   const refKeping = useRef<(HTMLButtonElement | null)[]>([]);
-  /**
-   * Indeks yang harus difokuskan ulang setelah keping dipindah. Disimpan di
-   * ref, bukan state: ini urusan DOM, dan menyimpannya sebagai state memicu
-   * render berantai.
-   */
   const fokusKe = useRef<number | null>(null);
 
-  // Setelah keping berpindah, fokus keyboard ikut pindah bersamanya. Tanpa ini
-  // fokus melompat ke awal halaman dan pemindahan berturut-turut jadi mustahil.
   useEffect(() => {
     if (fokusKe.current === null) return;
     refKeping.current[fokusKe.current]?.focus();
     fokusKe.current = null;
   }, [tersusun]);
 
-  /**
-   * Kolam kepingan diacak sekali dengan urutan yang TETAP (bukan Math.random),
-   * supaya susunannya tidak berubah setiap render dan hasil render di server
-   * sama dengan di client.
-   */
   const kolam = useMemo<Keping[]>(() => {
     if (!data) return [];
     const semua: Keping[] = [
       ...data.potongan.map((teks, i) => ({ key: `b${i}`, teks })),
       ...data.pengecoh.map((teks, i) => ({ key: `p${i}`, teks })),
     ];
-    // pengacak deterministik sederhana: urutkan berdasarkan sidik jari teks
     return [...semua].sort((a, b) => sidik(a.teks) - sidik(b.teks));
   }, [data]);
 
-  /**
-   * Didefinisikan sebelum `if (!data)` di bawah karena pintasan keyboard-nya
-   * adalah hook — hook tidak boleh dilewati oleh early return.
-   */
   function periksa() {
     if (!data || lulus || !step.tests.length || tersusun.length === 0) return;
     const res = jalankanTes(
@@ -88,8 +71,6 @@ export default function StepSusunKodeView({
     }
   }
 
-  // Ctrl+Enter memeriksa susunan. Setelah lulus pintasannya dilepas, supaya
-  // penekanan berikutnya dipakai halaman untuk pindah materi.
   usePintasanCtrlEnter(!lulus, periksa);
 
   if (!data) return null;
@@ -115,12 +96,6 @@ export default function StepSusunKodeView({
     setHasil(null);
   }
 
-  /**
-   * Memindahkan keping dari satu posisi ke posisi lain.
-   *
-   * Ini yang membuat kesalahan di urutan kedua tidak memaksa user membongkar
-   * delapan keping berikutnya — cukup geser keping itu saja.
-   */
   function pindah(dari: number, ke: number) {
     if (lulus) return;
     if (ke < 0 || ke >= tersusun.length || dari === ke) return;
@@ -152,157 +127,168 @@ export default function StepSusunKodeView({
 
   return (
     <div className="space-y-6">
-      <p className="text-neutral-700 leading-relaxed">
-        <InlineMarkdown text={step.explanation} />
-      </p>
+      {/* Penjelasan Konsep */}
+      <div className="rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-slate-900/60 p-5 backdrop-blur-sm shadow-xs">
+        <h2 className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">
+          Penjelasan Materi
+        </h2>
+        <div className="text-slate-700 dark:text-slate-300 leading-relaxed text-sm sm:text-base">
+          <InlineMarkdown text={step.explanation} />
+        </div>
+      </div>
 
-      {/* Contoh kerja WAJIB — sama seperti mode ngetik */}
-      <div className="rounded-lg border border-neutral-200 bg-neutral-50 p-4">
-        <p className="text-sm font-semibold text-neutral-700">👀 Contoh dulu</p>
-        <pre className="mt-2 overflow-x-auto rounded-md bg-neutral-900 p-3 font-mono text-sm text-neutral-100">
+      {/* Contoh Acuan */}
+      <div className="rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-slate-900/60 p-5 backdrop-blur-sm space-y-3 shadow-xs">
+        <p className="text-xs font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400 flex items-center gap-1.5">
+          <span>👀 Contoh Acuan</span>
+        </p>
+        <pre className="overflow-x-auto rounded-xl border border-slate-300 dark:border-white/[0.06] bg-slate-950 dark:bg-[#090d16] p-3.5 font-mono text-xs text-amber-300 dark:text-amber-200/90 leading-relaxed">
           {step.example.code}
         </pre>
-        <p className="mt-2 text-sm text-neutral-600">
-          <span className="font-medium text-neutral-700">Hasilnya: </span>
-          {step.example.output}
-        </p>
+        <div className="rounded-lg border border-slate-200 dark:border-white/[0.06] bg-slate-100 dark:bg-slate-800/40 p-3 text-xs text-slate-700 dark:text-slate-300">
+          <span className="font-semibold text-slate-900 dark:text-slate-200">Hasil Nyata: </span>
+          <span className="font-mono text-slate-600 dark:text-slate-400">{step.example.output}</span>
+        </div>
         {step.example.note && (
-          <p className="mt-1.5 text-sm text-neutral-500">💡 {step.example.note}</p>
+          <p className="text-xs text-slate-600 dark:text-slate-400 flex items-start gap-1.5">
+            <span>💡</span>
+            <span>{step.example.note}</span>
+          </p>
         )}
       </div>
 
-      <div className="rounded-xl border border-neutral-200 bg-white p-5">
-        <p className="font-medium text-neutral-800">
-          <InlineMarkdown text={pertanyaan} />
-        </p>
-        <p className="mt-1 text-sm text-neutral-500">
-          {isLanguageTrack ? "Rangkai kalimatnya" : "Rangkai kodenya"} dari kepingan di bawah. Ada kepingan yang sengaja
-          salah — tidak semuanya perlu dipakai.
-        </p>
+      {/* Papan Tantangan Susun Kode */}
+      <div className="rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-slate-900/70 p-6 backdrop-blur-md space-y-5 shadow-xs">
+        <div>
+          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-purple-600 dark:text-purple-400">
+            <span>🧩 Tantangan Susun Logika</span>
+          </div>
+          <div className="mt-2 text-sm sm:text-base font-semibold text-slate-900 dark:text-white">
+            <InlineMarkdown text={pertanyaan} />
+          </div>
+          <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+            {isLanguageTrack ? "Rangkai kalimatnya" : "Rangkai kodenya"} dari kepingan di bawah. Hati-hati dengan kepingan pengecoh.
+          </p>
+        </div>
 
-        {/* Papan susunan */}
-        <p className="mt-5 text-sm font-semibold text-neutral-700">Susunanmu</p>
-        <p className="text-xs text-neutral-500">
-          Urutannya bisa diperbaiki tanpa membongkar semuanya: seret kepingnya,
-          atau fokuskan dengan Tab lalu tekan panah kiri/kanan. Delete
-          mengeluarkan keping itu saja.
-        </p>
-        <ol
-          aria-label={isLanguageTrack ? "Susunan kalimat yang sudah kamu rangkai" : "Susunan kode yang sudah kamu rangkai"}
-          className="mt-2 flex min-h-[3.5rem] flex-wrap items-center gap-2 rounded-lg border border-dashed border-neutral-300 bg-neutral-50 p-3"
-        >
-          {tersusun.length === 0 && (
-            <li className="text-sm text-neutral-400">
-              Belum ada kepingan. Ketuk salah satu di bawah.
-            </li>
-          )}
-          {tersusun.map((k, i) => (
-            <li
-              key={`${k.key}-${i}`}
-              onDragOver={(e) => {
-                if (diseret === null) return;
-                e.preventDefault();
-                setSasaran(i);
-              }}
-              onDrop={(e) => {
-                e.preventDefault();
-                if (diseret !== null) pindah(diseret, i);
-                setDiseret(null);
-                setSasaran(null);
-              }}
-              className={`flex items-center rounded-md ${
-                sasaran === i && diseret !== null && diseret !== i
-                  ? "ring-2 ring-gold-500"
-                  : ""
-              } ${diseret === i ? "opacity-50" : ""}`}
-            >
-              <button
-                type="button"
-                ref={(el) => {
-                  refKeping.current[i] = el;
+        {/* Papan Susunan (Drop Area) */}
+        <div>
+          <div className="flex items-center justify-between text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400 mb-1.5">
+            <span>Papan Susunanmu</span>
+            <span className="text-[11px] font-normal text-slate-500 dark:text-slate-400">
+              Geser untuk atur posisi atau gunakan panah keyboard
+            </span>
+          </div>
+
+          <ol
+            aria-label={isLanguageTrack ? "Susunan kalimat" : "Susunan kode"}
+            className="flex min-h-[4rem] flex-wrap items-center gap-2 rounded-xl border border-dashed border-amber-400/80 dark:border-amber-500/40 bg-amber-500/5 dark:bg-[#090d16] p-3.5"
+          >
+            {tersusun.length === 0 && (
+              <li className="text-xs text-slate-500 italic">
+                Belum ada kepingan tersusun. Klik salah satu kepingan di bawah.
+              </li>
+            )}
+            {tersusun.map((k, i) => (
+              <li
+                key={`${k.key}-${i}`}
+                onDragOver={(e) => {
+                  if (diseret === null) return;
+                  e.preventDefault();
+                  setSasaran(i);
                 }}
-                draggable={!lulus}
-                onDragStart={() => setDiseret(i)}
-                onDragEnd={() => {
+                onDrop={(e) => {
+                  e.preventDefault();
+                  if (diseret !== null) pindah(diseret, i);
                   setDiseret(null);
                   setSasaran(null);
                 }}
-                onKeyDown={(e) => tombolKeping(e, i)}
-                disabled={lulus}
-                aria-label={`${k.teks} — urutan ${i + 1} dari ${tersusun.length}. Panah kiri dan kanan memindahkan, Delete mengeluarkannya.`}
-                className="cursor-grab rounded-l-md border border-r-0 border-gold-400 bg-gold-50 px-2.5 py-1.5 font-mono text-sm text-neutral-900 transition focus:outline-none focus:ring-2 focus:ring-gold-400 active:cursor-grabbing disabled:cursor-default disabled:opacity-70"
+                className={`flex items-center rounded-lg ${
+                  sasaran === i && diseret !== null && diseret !== i
+                    ? "ring-2 ring-amber-400"
+                    : ""
+                } ${diseret === i ? "opacity-50" : ""}`}
               >
-                {k.teks}
-              </button>
-              {!lulus && (
                 <button
                   type="button"
-                  onClick={() => hapus(i)}
-                  aria-label={`Keluarkan ${k.teks} dari susunan, urutan ${i + 1}`}
-                  className="rounded-r-md border border-gold-400 bg-gold-50 px-2 py-1.5 text-sm text-neutral-400 transition hover:border-red-400 hover:bg-red-50 hover:text-red-700 focus:outline-none focus:ring-2 focus:ring-gold-400"
+                  ref={(el) => {
+                    refKeping.current[i] = el;
+                  }}
+                  draggable={!lulus}
+                  onDragStart={() => setDiseret(i)}
+                  onDragEnd={() => {
+                    setDiseret(null);
+                    setSasaran(null);
+                  }}
+                  onKeyDown={(e) => tombolKeping(e, i)}
+                  disabled={lulus}
+                  className="cursor-grab rounded-l-lg border border-r-0 border-amber-400 bg-amber-100 text-amber-950 dark:border-amber-500/50 dark:bg-amber-500/15 dark:text-amber-200 px-3 py-1.5 font-mono text-xs sm:text-sm font-semibold transition hover:bg-amber-200 dark:hover:bg-amber-500/25 active:cursor-grabbing disabled:cursor-default"
                 >
-                  ×
+                  {k.teks}
                 </button>
-              )}
-            </li>
-          ))}
-        </ol>
+                {!lulus && (
+                  <button
+                    type="button"
+                    onClick={() => hapus(i)}
+                    className="cursor-pointer rounded-r-lg border border-amber-400 bg-amber-100 text-amber-800 dark:border-amber-500/50 dark:bg-amber-500/15 dark:text-amber-400 px-2 py-1.5 text-xs hover:bg-rose-100 hover:text-rose-700 dark:hover:bg-rose-500/20 dark:hover:text-rose-300 hover:border-rose-400 transition-colors"
+                    aria-label={`Keluarkan ${k.teks}`}
+                  >
+                    ×
+                  </button>
+                )}
+              </li>
+            ))}
+          </ol>
+        </div>
 
-        {/* Kolam kepingan */}
-        <p className="mt-4 text-sm font-semibold text-neutral-700">
-          {isLanguageTrack ? "Potongan kalimat yang tersedia" : "Kepingan yang tersedia"}
-        </p>
-        <ul
-          aria-label={
-            isLanguageTrack
-              ? "Potongan kalimat yang bisa dipakai"
-              : "Kepingan kode yang bisa dipakai"
-          }
-          className="mt-2 flex flex-wrap gap-2"
-        >
-          {sisa.length === 0 && (
-            <li className="text-sm text-neutral-400">
-              {isLanguageTrack
-                ? "Semua potongan kalimat sudah kamu pakai."
-                : "Semua kepingan sudah kamu pakai."}
-            </li>
-          )}
-          {sisa.map((k) => (
-            <li key={k.key}>
-              <button
-                type="button"
-                onClick={() => tambah(k)}
-                disabled={lulus}
-                aria-label={`Tambahkan ${k.teks} ke susunan`}
-                className="rounded-md border border-neutral-300 bg-white px-2.5 py-1.5 font-mono text-sm text-neutral-800 transition hover:border-gold-400 hover:bg-gold-50 focus:outline-none focus:ring-2 focus:ring-gold-400 disabled:opacity-50"
-              >
-                {k.teks}
-              </button>
-            </li>
-          ))}
-        </ul>
+        {/* Kolam Kepingan yang Tersedia */}
+        <div>
+          <p className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">
+            {isLanguageTrack ? "Potongan Kalimat Tersedia:" : "Kepingan Kode Tersedia:"}
+          </p>
+          <ul className="flex flex-wrap gap-2">
+            {sisa.length === 0 && (
+              <li className="text-xs text-slate-500 italic">
+                Semua potongan kepingan telah masuk ke papan susunan.
+              </li>
+            )}
+            {sisa.map((k) => (
+              <li key={k.key}>
+                <button
+                  type="button"
+                  onClick={() => tambah(k)}
+                  disabled={lulus}
+                  className="cursor-pointer rounded-lg border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-slate-800/80 px-3 py-1.5 font-mono text-xs sm:text-sm font-medium text-slate-800 dark:text-slate-200 shadow-xs transition hover:border-amber-500 dark:hover:border-amber-400/60 hover:bg-slate-200 dark:hover:bg-slate-700/80 hover:text-slate-950 dark:hover:text-white disabled:opacity-40"
+                >
+                  {k.teks}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
 
-        {/* Pratinjau kode hasil rangkaian */}
+        {/* Pratinjau Teks yang Terbentuk */}
         {tersusun.length > 0 && (
-          <div className="mt-4">
-            <p className="text-sm font-semibold text-neutral-700">
-              {isLanguageTrack ? "Kalimat yang terbentuk" : "Kode yang terbentuk"}
+          <div>
+            <p className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">
+              {isLanguageTrack ? "Kalimat Terbentuk:" : "Kode Terbentuk:"}
             </p>
-            <pre className="mt-2 overflow-x-auto rounded-md bg-neutral-900 p-3 font-mono text-sm text-neutral-100">
+            <pre className="overflow-x-auto rounded-xl border border-slate-200 dark:border-white/[0.08] bg-slate-100 dark:bg-[#090d16] p-3 font-mono text-xs text-slate-800 dark:text-slate-200 leading-relaxed">
               {kodeTersusun}
             </pre>
           </div>
         )}
 
-        <div className="mt-4 flex flex-wrap gap-3">
+        {/* Tombol Periksa & Reset */}
+        <div className="flex flex-wrap items-center gap-3 pt-2">
           <button
             type="button"
             onClick={periksa}
             disabled={lulus || tersusun.length === 0}
-            className="rounded-lg bg-gold-500 px-5 py-2.5 font-medium text-neutral-900 transition hover:bg-gold-400 disabled:opacity-50"
+            className="cursor-pointer inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 px-5 py-2.5 text-sm font-bold text-slate-950 shadow-md shadow-amber-500/20 hover:from-amber-300 hover:to-amber-400 transition-all hover:scale-[1.02] disabled:opacity-50 disabled:scale-100"
           >
-            {isLanguageTrack ? "Periksa susunan kalimat" : "Periksa susunan"}{" "}
-            <span className="text-neutral-900/60">(Ctrl + Enter)</span>
+            <span>{isLanguageTrack ? "Periksa Susunan Kalimat" : "Periksa Susunan Kode"}</span>
+            <span className="font-mono text-xs opacity-75">(Ctrl + Enter)</span>
           </button>
           {tersusun.length > 0 && !lulus && (
             <button
@@ -311,49 +297,45 @@ export default function StepSusunKodeView({
                 setTersusun([]);
                 setHasil(null);
               }}
-              className="rounded-lg border border-neutral-300 px-4 py-2.5 text-sm font-medium text-neutral-700 transition hover:bg-neutral-100"
+              className="cursor-pointer rounded-xl border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-slate-800/80 px-4 py-2.5 text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 transition hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white"
             >
-              Bongkar semua
+              Bongkar Semua
             </button>
           )}
         </div>
 
-        {/* Umpan balik */}
+        {/* Umpan Balik Hasil Pengujian */}
         {hasil && (
           <div
             role="status"
             aria-live="polite"
-            className={`mt-4 space-y-2 rounded-lg border p-4 ${
+            className={`space-y-2.5 rounded-2xl border p-5 ${
               lulus
-                ? "border-green-200 bg-green-50"
-                : "border-amber-200 bg-amber-50"
+                ? "border-emerald-400/60 bg-emerald-50 dark:border-emerald-500/40 dark:bg-emerald-950/30 text-emerald-950 dark:text-emerald-200 shadow-lg shadow-emerald-500/10"
+                : "border-amber-400/60 bg-amber-50 dark:border-amber-500/40 dark:bg-amber-950/30 text-amber-950 dark:text-amber-200"
             }`}
           >
-            <p
-              className={`font-semibold ${
-                lulus ? "text-green-900" : "text-amber-900"
-              }`}
-            >
+            <p className="font-bold text-base">
               {lulus
                 ? isLanguageTrack
-                  ? "✅ Pemeriksaan susunan lolos. Tinjau kembali isi kalimatmu."
-                  : "🎉 Susunanmu benar!"
-                : "❌ Belum tepat"}
+                  ? "✅ Susunan kalimat tepat dan terverifikasi!"
+                  : "🎉 Susunan kodemu benar dan lolos pengujian!"
+                : "❌ Susunan belum sesuai"}
             </p>
             {lulus ? (
-              <>
-                <p className="text-sm leading-relaxed text-neutral-800">
-                  <InlineMarkdown text={data.explanation} />
+              <div className="space-y-2 text-sm leading-relaxed">
+                <InlineMarkdown text={data.explanation} />
+                <p className="text-xs font-semibold text-emerald-700 dark:text-emerald-300">
+                  Tekan <Tuts>Ctrl</Tuts> + <Tuts>Enter</Tuts> untuk melanjutkan ke langkah berikutnya.
                 </p>
-                <p className="text-sm text-green-900">
-                  Tekan <Tuts>Ctrl</Tuts> + <Tuts>Enter</Tuts> sekali lagi untuk
-                  lanjut ke materi berikutnya.
-                </p>
-              </>
+              </div>
             ) : (
-              <ul className="space-y-1.5 text-sm text-amber-900">
+              <ul className="space-y-1.5 text-xs sm:text-sm">
                 {gagal.map((r, i) => (
-                  <li key={i}>• {r.message}</li>
+                  <li key={i} className="flex items-start gap-1.5">
+                    <span>•</span>
+                    <span>{r.message}</span>
+                  </li>
                 ))}
               </ul>
             )}
@@ -361,28 +343,30 @@ export default function StepSusunKodeView({
         )}
       </div>
 
+      {/* Kunci Jawaban Referensi */}
       <div>
         <button
           type="button"
           onClick={() => setLihatSolusi((s) => !s)}
-          className="rounded-lg border border-neutral-300 px-5 py-2.5 text-sm font-medium text-neutral-700 transition hover:bg-neutral-100"
+          className="cursor-pointer rounded-xl border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-slate-800/80 px-4 py-2.5 text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 transition hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white"
         >
           {lihatSolusi
             ? isLanguageTrack
-              ? "Sembunyikan kalimat jawaban"
-              : "Sembunyikan kode jawabannya"
+              ? "Sembunyikan Kalimat Jawaban"
+              : "Sembunyikan Solusi Kode"
             : isLanguageTrack
-              ? "Lihat kalimat jawaban"
-              : "Lihat kode jawabannya"}
+              ? "Lihat Kalimat Jawaban"
+              : "Lihat Solusi Kode"}
         </button>
+
         {lihatSolusi && (
-          <div className="mt-3 rounded-lg bg-neutral-900 p-4">
-            <p className="mb-2 font-mono text-xs text-neutral-400">
+          <div className="mt-3 rounded-2xl border border-slate-300 dark:border-white/10 bg-slate-950 dark:bg-[#090d16] p-4 shadow-md">
+            <p className="mb-2 font-mono text-xs text-slate-400">
               {isLanguageTrack
                 ? "// Bentuk kalimat aslinya saat ditulis langsung:"
-                : "// Bentuk kode aslinya saat diketik sendiri:"}
+                : "// Bentuk kode aslinya saat diketik langsung:"}
             </p>
-            <pre className="overflow-x-auto text-sm text-green-300">
+            <pre className="overflow-x-auto font-mono text-xs leading-relaxed text-emerald-400">
               {step.solution}
             </pre>
           </div>
@@ -392,7 +376,6 @@ export default function StepSusunKodeView({
   );
 }
 
-/** Sidik jari teks — dipakai untuk mengacak kolam secara tetap. */
 function sidik(teks: string): number {
   let n = 0;
   for (let i = 0; i < teks.length; i++) {

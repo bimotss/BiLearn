@@ -19,228 +19,387 @@ function HomeContent() {
   const flashcardDone = ready ? getTotalMemorizedCount(flashcardCardIds) : 0;
   const flashcardPct = Math.round((flashcardDone / japaneseCards.length) * 100);
 
+  const beTrack = tracks.find((t) => t.slug === "business-english");
+  const beItems = useMemo(() => (beTrack ? getTrackItems(beTrack) : []), [beTrack]);
+  const beDone = ready && beTrack ? doneCount(beTrack.slug) : 0;
+  const beTotal = ready && beTrack ? totalCount(beTrack.slug) : beItems.length;
+  const bePct = beTotal > 0 ? Math.round((beDone / beTotal) * 100) : 0;
+
   const activePath = ready ? getPath(progress.activePath ?? "") : undefined;
   const activePathKategori = kategori === "code" ? activePath : undefined;
 
-  // Dengan path aktif: track diurutkan sesuai path (sisanya di bawah).
-  // Tanpa path: semua track urutan default.
-  const tracksKategori = tracks.filter((track) =>
-    kategori === "bahasa"
-      ? track.slug === "business-english"
-      : track.slug !== "business-english"
-  );
+  // Untuk kategori code: tampilkan seluruh track selain business-english
+  const tracksKategori = tracks.filter((track) => track.slug !== "business-english");
 
   const ordered = activePathKategori
     ? [
         ...activePathKategori.trackSlugs
           .map((s) => tracks.find((t) => t.slug === s))
-          .filter((t) =>
-            kategori === "bahasa"
-              ? t?.slug === "business-english"
-              : t?.slug !== "business-english"
-          )
+          .filter((t) => t && t.slug !== "business-english")
           .filter((t): t is (typeof tracks)[number] => Boolean(t)),
         ...tracksKategori.filter((t) => !activePathKategori.trackSlugs.includes(t.slug)),
       ]
     : tracksKategori;
 
   return (
-    <div className="space-y-10">
-      <section className="space-y-3">
-        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-gold-700">
-          Pilih dunia belajarmu
-        </p>
-        <h1 className="text-3xl font-bold sm:text-4xl">
-          Belajar skill yang <span className="text-gold-700">kepake</span>
+    <div className="space-y-12">
+      {/* Hero Section */}
+      <section className="relative space-y-5 pt-4 text-center sm:text-left">
+        <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-3.5 py-1 text-xs font-semibold text-amber-700 dark:text-amber-300 shadow-[0_0_15px_rgba(245,158,11,0.15)]">
+          <span className="inline-block h-1.5 w-1.5 rounded-full bg-amber-500 dark:bg-amber-400 animate-pulse" />
+          <span>Platform Belajar Interaktif 2026 · Kurikulum Standar Industri</span>
+        </div>
+
+        <h1 className="text-3xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl text-slate-900 dark:text-white">
+          Belajar Skill Kerja yang{" "}
+          <span className="bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-500 bg-clip-text text-transparent">
+            Benar-Benar Kepake
+          </span>
         </h1>
-        <p className="max-w-2xl text-neutral-600">
-          Masuk ke ruang belajar yang sesuai tujuanmu. Pindah kategori kapan saja
-          tanpa menghapus progress.
+
+        <p className="max-w-2xl text-base text-slate-600 dark:text-slate-300 sm:text-lg leading-relaxed">
+          Bukan sekadar menonton video pasif. Tulis kode nyata di browser dengan feedback otomatis,
+          kuasai kurikulum berbasis kebutuhan lowongan kerja riil, dan belajar dengan ritmemu sendiri.
         </p>
+
+        {/* Platform Highlights Bar */}
+        <div className="grid grid-cols-2 gap-3 pt-2 sm:grid-cols-4">
+          <div className="rounded-xl border border-slate-200 bg-white dark:border-white/[0.08] dark:bg-slate-900/60 p-3.5 backdrop-blur-sm shadow-xs">
+            <div className="text-xl font-black text-amber-800 dark:text-amber-400">17 Track</div>
+            <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Spesialisasi Lengkap</div>
+          </div>
+          <div className="rounded-xl border border-slate-200 bg-white dark:border-white/[0.08] dark:bg-slate-900/60 p-3.5 backdrop-blur-sm shadow-xs">
+            <div className="text-xl font-black text-emerald-800 dark:text-emerald-400">880+ Latihan</div>
+            <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Praktik Kode Nyata</div>
+          </div>
+          <div className="rounded-xl border border-slate-200 bg-white dark:border-white/[0.08] dark:bg-slate-900/60 p-3.5 backdrop-blur-sm shadow-xs">
+            <div className="text-xl font-black text-purple-800 dark:text-purple-400">Dual Mode</div>
+            <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Ngetik & Susun Logika</div>
+          </div>
+          <div className="rounded-xl border border-slate-200 bg-white dark:border-white/[0.08] dark:bg-slate-900/60 p-3.5 backdrop-blur-sm shadow-xs">
+            <div className="text-xl font-black text-cyan-800 dark:text-cyan-400">100% Terbuka</div>
+            <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Gratis Tanpa Paywall</div>
+          </div>
+        </div>
       </section>
 
+      {/* World Switcher Cards (Code vs Bahasa) */}
       <section className="grid gap-4 md:grid-cols-2" aria-label="Kategori belajar">
         <Link
           href="/"
-          className={`rounded-2xl border p-6 text-left transition hover:-translate-y-0.5 hover:shadow-md ${
+          data-active-category={kategori === "code" ? "code" : undefined}
+          className={`group relative overflow-hidden rounded-2xl border p-6 text-left transition-all duration-300 cursor-pointer ${
             kategori === "code"
-              ? "border-neutral-900 bg-neutral-900 text-white shadow-lg"
-              : "border-neutral-200 bg-white"
+              ? "category-card-active-code border-amber-500/80 bg-gradient-to-br from-amber-50 via-amber-100/50 to-white dark:border-amber-500/60 dark:from-slate-900 dark:via-slate-900/90 dark:to-amber-950/20 shadow-md dark:shadow-[0_0_30px_rgba(245,158,11,0.15)] ring-1 ring-amber-500/40"
+              : "border-slate-200 bg-white hover:border-slate-300 hover:shadow-md dark:border-white/[0.08] dark:bg-slate-900/50 dark:hover:border-white/20 dark:hover:bg-slate-900/80"
           }`}
         >
-          <span className="text-3xl" aria-hidden="true">⌘</span>
-          <h2 className="mt-3 text-xl font-bold">Belajar Code</h2>
-          <p className={`mt-1 text-sm ${kategori === "code" ? "text-neutral-300" : "text-neutral-600"}`}>
-            HTML, CSS, JavaScript, framework, database, dan skill teknis untuk
-            membangun produk digital.
+          <div className="flex items-center justify-between">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-500/10 border border-amber-500/20 text-2xl text-amber-600 dark:text-amber-400 shadow-sm">
+              ⌘
+            </div>
+            <span
+              className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                kategori === "code"
+                  ? "bg-amber-400/20 text-amber-800 dark:text-amber-300 border border-amber-400/30"
+                  : "bg-slate-100 text-slate-600 dark:bg-white/[0.06] dark:text-slate-400"
+              }`}
+            >
+              16 Track Coding
+            </span>
+          </div>
+          <h2 className="mt-4 text-xl font-bold text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-300 transition-colors">
+            Rekayasa Web & Software
+          </h2>
+          <p className="mt-1.5 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+            HTML, CSS, JavaScript, React, Next.js, TypeScript, Node.js, Laravel, SQL, Docker, dan AI Development.
           </p>
+          <div className="mt-4 flex items-center gap-1.5 text-xs font-semibold text-amber-700 dark:text-amber-400">
+            <span>{kategori === "code" ? "Kategori Aktif" : "Buka Track Coding"}</span>
+            <span aria-hidden="true" className="transition-transform group-hover:translate-x-1">→</span>
+          </div>
         </Link>
+
         <Link
           href="/?kategori=bahasa"
-          className={`rounded-2xl border p-6 text-left transition hover:-translate-y-0.5 hover:shadow-md ${
+          data-active-category={kategori === "bahasa" ? "bahasa" : undefined}
+          className={`group relative overflow-hidden rounded-2xl border p-6 text-left transition-all duration-300 cursor-pointer ${
             kategori === "bahasa"
-              ? "border-gold-500 bg-gold-50 shadow-lg"
-              : "border-neutral-200 bg-white"
+              ? "category-card-active-bahasa border-blue-500/80 bg-gradient-to-br from-blue-50 via-blue-100/50 to-white dark:border-blue-500/60 dark:from-slate-900 dark:via-slate-900/90 dark:to-blue-950/20 shadow-md dark:shadow-[0_0_30px_rgba(59,130,246,0.15)] ring-1 ring-blue-500/40"
+              : "border-slate-200 bg-white hover:border-slate-300 hover:shadow-md dark:border-white/[0.08] dark:bg-slate-900/50 dark:hover:border-white/20 dark:hover:bg-slate-900/80"
           }`}
         >
-          <span className="text-3xl" aria-hidden="true">文</span>
-          <h2 className="mt-3 text-xl font-bold">Belajar Bahasa</h2>
-          <p className="mt-1 text-sm text-neutral-600">
-            Business English untuk komunikasi profesional dan Flashcard Jepang untuk hafalan kosakata JLPT N5.
+          <div className="flex items-center justify-between">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-500/10 border border-blue-500/20 text-2xl text-blue-600 dark:text-blue-400 shadow-sm">
+              文
+            </div>
+            <span
+              className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                kategori === "bahasa"
+                  ? "bg-blue-400/20 text-blue-800 dark:text-blue-300 border border-blue-400/30"
+                  : "bg-slate-100 text-slate-600 dark:bg-white/[0.06] dark:text-slate-400"
+              }`}
+            >
+              2 Hub Bahasa
+            </span>
+          </div>
+          <h2 className="mt-4 text-xl font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-300 transition-colors">
+            Komunikasi Global & Bahasa
+          </h2>
+          <p className="mt-1.5 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+            Business English untuk komunikasi profesional dan Bahasa Jepang dari sistem huruf Hiragana/Katakana hingga JLPT N5.
           </p>
+          <div className="mt-4 flex items-center gap-1.5 text-xs font-semibold text-blue-700 dark:text-blue-400">
+            <span>{kategori === "bahasa" ? "Kategori Aktif" : "Buka Hub Bahasa"}</span>
+            <span aria-hidden="true" className="transition-transform group-hover:translate-x-1">→</span>
+          </div>
         </Link>
       </section>
 
+      {/* Active Learning Path or Discovery Callout */}
       {activePathKategori ? (
-        <section className="rounded-xl border border-gold-200 bg-gold-50 p-5">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div>
-              <p className="text-sm font-medium text-gold-800">Path aktif</p>
-              <p className="text-lg font-bold text-gold-900">
-                {activePathKategori.icon} {activePathKategori.title}
+        <section className="category-card-active-code relative overflow-hidden rounded-2xl border border-amber-500/40 bg-gradient-to-r from-amber-50 via-amber-100/40 to-white dark:from-amber-950/30 dark:via-slate-900 dark:to-slate-900 p-6 shadow-md dark:shadow-xl backdrop-blur-md">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-amber-700 dark:text-amber-400">
+                <span>✦ Career Path Terpilih</span>
+              </div>
+              <p className="text-xl font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
+                <span>{activePathKategori.icon}</span>
+                <span>{activePathKategori.title}</span>
+              </p>
+              <p className="text-xs text-slate-600 dark:text-slate-400 max-w-xl">
+                Katalog di bawah telah diurutkan otomatis mengikuti tahapan karier ini.
               </p>
             </div>
-            <div className="flex gap-3">
+            <div className="flex items-center gap-2.5">
               <Link
                 href="/paths"
-                className="rounded-lg border border-gold-300 px-4 py-2 text-sm font-medium text-gold-800 hover:bg-gold-100"
+                className="cursor-pointer rounded-xl border border-amber-500/40 bg-amber-500/10 px-4 py-2 text-xs font-semibold text-amber-700 dark:text-amber-300 transition hover:bg-amber-500/20"
               >
-                Ganti path
+                Ganti Path
               </Link>
               <button
+                type="button"
                 onClick={() => setActivePath(undefined)}
-                className="rounded-lg px-4 py-2 text-sm text-gold-700 hover:bg-gold-100"
+                className="cursor-pointer rounded-xl px-4 py-2 text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-white/[0.06] dark:hover:text-white"
               >
-                Lepas path
+                Lepas Path
               </button>
             </div>
           </div>
         </section>
       ) : (
-        <section className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-neutral-200 p-5">
-          <p className="text-neutral-700">
-            🎯 Belum tahu mulai dari mana? Pilih tujuan kariermu, kami susunkan
-            urutannya.
-          </p>
-          <Link
-            href="/paths"
-            className="rounded-lg bg-gold-500 px-5 py-2.5 font-medium text-neutral-900 hover:bg-gold-400"
-          >
-            Pilih Learning Path
-          </Link>
+        <section className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white dark:border-white/[0.08] dark:bg-slate-900/60 p-6 backdrop-blur-md shadow-xs">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div className="space-y-1">
+              <h3 className="font-bold text-slate-900 dark:text-white text-base">
+                🎯 Belum tahu harus mulai dari mana?
+              </h3>
+              <p className="text-sm text-slate-600 dark:text-slate-300 max-w-xl">
+                Pilih tujuan kariermu (Frontend, Backend, Fullstack, atau Data), sistem kami akan menyusunkan urutan belajarnya.
+              </p>
+            </div>
+            <Link
+              href="/paths"
+              className="inline-flex items-center justify-center gap-2 shrink-0 rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 px-5 py-2.5 text-sm font-bold text-slate-950 shadow-md shadow-amber-500/20 transition hover:from-amber-300 hover:to-amber-400 cursor-pointer"
+            >
+              <span>Pilih Learning Path</span>
+              <span aria-hidden="true">→</span>
+            </Link>
+          </div>
         </section>
       )}
 
-      <section>
-        <h2 className="mb-4 text-xl font-bold">
-          {kategori === "bahasa"
-            ? "Katalog Bahasa"
-            : activePathKategori
-              ? `Urutan track: ${activePathKategori.title}`
-              : "Track Code"}
-        </h2>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {ordered.map((track, i) => {
-            // Angka mengikuti dunia yang sedang aktif. Sebelum localStorage
-            // terbaca, pakai jumlah item apa adanya supaya tidak ada lompatan
-            // tampilan saat hydration.
-            const semuaItem = getTrackItems(track);
-            const done = ready ? doneCount(track.slug) : 0;
-            const total = ready ? totalCount(track.slug) : semuaItem.length;
-            const pct = total > 0 ? Math.round((done / total) * 100) : 0;
-            const inPath = activePathKategori?.trackSlugs.includes(track.slug);
-            return (
-              <Link
-                key={track.slug}
-                href={`/tracks/${track.slug}`}
-                className={`group rounded-xl border p-5 transition hover:shadow-md ${
-                  inPath ? "border-gold-300" : "border-neutral-200"
-                }`}
-              >
+      {/* Main Catalog Section */}
+      <section className="space-y-6">
+        <div className="flex items-center justify-between border-b border-slate-200 dark:border-white/[0.08] pb-4">
+          <div>
+            <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+              {kategori === "bahasa"
+                ? "Katalog Pembelajaran Bahasa"
+                : activePathKategori
+                  ? `Urutan Track: ${activePathKategori.title}`
+                  : "Katalog Track Coding"}
+            </h2>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+              {kategori === "bahasa"
+                ? "Tersedia modul interaktif dan flashcard dengan spaced repetition"
+                : "Semua materi terbuka secara gratis. Belajar mandiri sesuai ritmemu."}
+            </p>
+          </div>
+          <span className="hidden sm:inline-block text-xs font-medium text-slate-500 dark:text-slate-400">
+            {kategori === "bahasa" ? "2 Program Aktif" : `${ordered.length} Track Spesialisasi`}
+          </span>
+        </div>
+
+        {kategori === "bahasa" ? (
+          <div className="grid gap-6 sm:grid-cols-2">
+            {/* Card 1: Bahasa Inggris */}
+            <Link
+              href="/bahasa/inggris"
+              className="group flex flex-col justify-between rounded-2xl border border-slate-200 bg-white dark:border-white/[0.08] dark:bg-slate-900/60 p-6 transition-all duration-300 hover:border-blue-500/40 hover:bg-slate-50 dark:hover:bg-slate-900/90 hover:shadow-lg dark:hover:shadow-[0_12px_36px_rgba(0,0,0,0.5)] cursor-pointer"
+            >
+              <div className="space-y-4">
                 <div className="flex items-start justify-between">
-                  <span
-                    className={`flex h-10 w-10 items-center justify-center rounded-lg text-xl text-white ${track.color}`}
-                  >
-                    {track.icon}
+                  <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-600 text-2xl text-white shadow-md shadow-blue-500/30">
+                    🇬🇧
                   </span>
-                  {activePathKategori && inPath && (
-                    <span className="rounded-full bg-gold-100 px-2.5 py-0.5 text-xs font-medium text-gold-800">
-                      Langkah {i + 1}
-                    </span>
-                  )}
+                  <span className="rounded-full border border-blue-500/30 bg-blue-500/10 px-3 py-1 text-xs font-semibold text-blue-700 dark:text-blue-300">
+                    1 Program Belajar
+                  </span>
                 </div>
-                <h3 className="mt-3 font-bold group-hover:text-gold-700">
-                  {track.title}
-                </h3>
-                <p className="mt-1 text-sm text-neutral-600">
-                  {track.description}
-                </p>
-                <div className="mt-3 flex items-center justify-between text-xs text-neutral-500">
-                  <span>±{track.hours} jam</span>
-                  {total > 0 ? (
-                    <span>
-                      {done}/{total} selesai ({pct}%)
-                      {ready && mode === "pilihan-ganda" && (
-                        <span className="ml-1 text-purple-700">· pilihan ganda</span>
-                      )}
-                    </span>
-                  ) : (
-                    <span>
-                      {ready && mode === "pilihan-ganda"
-                        ? "belum ada soal pilihan ganda"
-                        : `${track.modules.length} modul`}
-                    </span>
-                  )}
+                <div>
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-300 transition-colors">
+                    Bahasa Inggris Bisnis & Kerja
+                  </h3>
+                  <p className="mt-2 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                    Kuasai komunikasi bisnis, penulisan email profesional, etika korespondensi, dan tata kalimat praktis untuk lingkungan kerja global.
+                  </p>
                 </div>
-                {total > 0 && (
-                  <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-neutral-100">
+                <div className="space-y-2 pt-2">
+                  <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400">
+                    <span>Business English (±30 jam)</span>
+                    <span className="font-semibold text-slate-700 dark:text-slate-200">
+                      {beDone}/{beTotal} selesai ({bePct}%)
+                    </span>
+                  </div>
+                  <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
                     <div
-                      className={`h-full rounded-full transition-all ${
-                        ready && mode === "pilihan-ganda"
-                          ? "bg-purple-500"
-                          : "bg-gold-500"
-                      }`}
-                      style={{ width: `${pct}%` }}
+                      className="h-full rounded-full transition-all duration-500 bg-gradient-to-r from-blue-500 to-cyan-400"
+                      style={{ width: `${bePct}%` }}
                     />
                   </div>
-                )}
-              </Link>
-            );
-          })}
-          {kategori === "bahasa" && (
-            <Link
-              href="/flashcards/jepang"
-              className="group rounded-xl border border-neutral-200 p-5 transition hover:shadow-md"
-            >
-              <div className="flex items-start justify-between">
-                <span className="flex h-10 w-10 items-center justify-center rounded-lg text-xl text-white bg-red-600">
-                  🎴
-                </span>
-                <span className="rounded-full bg-red-50 px-2.5 py-0.5 text-xs font-medium text-red-700">
-                  Flashcard
-                </span>
+                </div>
               </div>
-              <h3 className="mt-3 font-bold group-hover:text-gold-700">
-                Flashcard Jepang
-              </h3>
-              <p className="mt-1 text-sm text-neutral-600">
-                Hafalkan kosakata bahasa Jepang lewat kartu interaktif, lengkap dengan cara baca, arti, dan contoh kalimat.
-              </p>
-              <div className="mt-3 flex items-center justify-between text-xs text-neutral-500">
-                <span>100 kosakata · 10 bagian</span>
-                <span>
-                  {flashcardDone}/100 ditandai hafal ({flashcardPct}%)
-                </span>
-              </div>
-              <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-neutral-100">
-                <div
-                  className="h-full rounded-full transition-all bg-red-500"
-                  style={{ width: `${flashcardPct}%` }}
-                />
+
+              <div className="mt-6 pt-4 border-t border-slate-100 dark:border-white/[0.08] flex items-center justify-between text-sm font-semibold text-blue-600 dark:text-blue-400 group-hover:text-blue-500 dark:group-hover:text-blue-300">
+                <span>Buka Hub Bahasa Inggris</span>
+                <span aria-hidden="true" className="transition-transform group-hover:translate-x-1">→</span>
               </div>
             </Link>
-          )}
-        </div>
+
+            {/* Card 2: Bahasa Jepang */}
+            <Link
+              href="/bahasa/jepang"
+              className="group flex flex-col justify-between rounded-2xl border border-slate-200 bg-white dark:border-white/[0.08] dark:bg-slate-900/60 p-6 transition-all duration-300 hover:border-rose-500/40 hover:bg-slate-50 dark:hover:bg-slate-900/90 hover:shadow-lg dark:hover:shadow-[0_12px_36px_rgba(0,0,0,0.5)] cursor-pointer"
+            >
+              <div className="space-y-4">
+                <div className="flex items-start justify-between">
+                  <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-rose-600 text-2xl text-white shadow-md shadow-rose-500/30">
+                    🇯🇵
+                  </span>
+                  <span className="rounded-full border border-rose-500/30 bg-rose-500/10 px-3 py-1 text-xs font-semibold text-rose-700 dark:text-rose-300">
+                    Hiragana · Katakana · N5
+                  </span>
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-white group-hover:text-rose-600 dark:group-hover:text-rose-300 transition-colors">
+                    Bahasa Jepang (日本語)
+                  </h3>
+                  <p className="mt-2 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                    Pelajari sistem huruf dari nol (Hiragana & Katakana), kaidah urutan goresan (stroke order), serta hafalan kosakata JLPT N5 via kartu interaktif.
+                  </p>
+                </div>
+                <div className="space-y-2 pt-2">
+                  <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400">
+                    <span>3 Modul Pembelajaran</span>
+                    <span className="font-semibold text-slate-700 dark:text-slate-200">
+                      {flashcardDone}/100 kosakata ({flashcardPct}%)
+                    </span>
+                  </div>
+                  <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
+                    <div
+                      className="h-full rounded-full transition-all duration-500 bg-gradient-to-r from-rose-500 to-orange-400"
+                      style={{ width: `${flashcardPct}%` }}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-6 pt-4 border-t border-slate-100 dark:border-white/[0.08] flex items-center justify-between text-sm font-semibold text-rose-600 dark:text-rose-400 group-hover:text-rose-500 dark:group-hover:text-rose-300">
+                <span>Buka Hub Bahasa Jepang</span>
+                <span aria-hidden="true" className="transition-transform group-hover:translate-x-1">→</span>
+              </div>
+            </Link>
+          </div>
+        ) : (
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {ordered.map((track, i) => {
+              const semuaItem = getTrackItems(track);
+              const done = ready ? doneCount(track.slug) : 0;
+              const total = ready ? totalCount(track.slug) : semuaItem.length;
+              const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+              const inPath = activePathKategori?.trackSlugs.includes(track.slug);
+
+              return (
+                <Link
+                  key={track.slug}
+                  href={`/tracks/${track.slug}`}
+                  className={`group relative flex flex-col justify-between overflow-hidden rounded-2xl border p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg dark:hover:shadow-[0_16px_40px_rgba(0,0,0,0.6)] cursor-pointer ${
+                    inPath
+                      ? "border-amber-500/50 bg-gradient-to-b from-amber-50/50 to-white dark:from-slate-900 dark:to-amber-950/20 shadow-xs"
+                      : "border-slate-200 bg-white hover:border-amber-500/40 hover:bg-slate-50 dark:border-white/[0.08] dark:bg-slate-900/60 dark:hover:bg-slate-900/90 shadow-xs"
+                  }`}
+                >
+                  <div className="space-y-3">
+                    <div className="flex items-start justify-between">
+                      <span
+                        className={`flex h-11 w-11 items-center justify-center rounded-xl text-xl text-white shadow-md ${track.color}`}
+                      >
+                        {track.icon}
+                      </span>
+                      {activePathKategori && inPath && (
+                        <span className="rounded-full border border-amber-500/30 bg-amber-500/10 px-2.5 py-0.5 text-xs font-semibold text-amber-700 dark:text-amber-300">
+                          Langkah {i + 1}
+                        </span>
+                      )}
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-slate-900 dark:text-white text-lg group-hover:text-amber-600 dark:group-hover:text-amber-300 transition-colors">
+                        {track.title}
+                      </h3>
+                      <p className="mt-1.5 text-xs text-slate-600 dark:text-slate-300 line-clamp-2 leading-relaxed">
+                        {track.description}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-5 space-y-2 pt-3 border-t border-slate-100 dark:border-white/[0.06]">
+                    <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+                      <span>±{track.hours} jam</span>
+                      <span className="font-medium text-slate-700 dark:text-slate-300">
+                        {total > 0 ? (
+                          <>
+                            {done}/{total} selesai ({pct}%)
+                            {ready && mode === "pilihan-ganda" && (
+                              <span className="ml-1 text-purple-600 dark:text-purple-400">· susun kode</span>
+                            )}
+                          </>
+                        ) : (
+                          `${track.modules.length} modul`
+                        )}
+                      </span>
+                    </div>
+
+                    {total > 0 && (
+                      <div className="h-1.5 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
+                        <div
+                          className={`h-full rounded-full transition-all duration-300 ${
+                            ready && mode === "pilihan-ganda"
+                              ? "bg-gradient-to-r from-purple-500 to-indigo-400"
+                              : "bg-gradient-to-r from-amber-500 to-amber-300"
+                          }`}
+                          style={{ width: `${pct}%` }}
+                        />
+                      </div>
+                    )}
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        )}
       </section>
     </div>
   );
