@@ -83,133 +83,61 @@ function HomeContent() {
         </div>
       </section>
 
-      {/* World Switcher Cards (Code vs Bahasa) */}
-      <section className="grid gap-4 md:grid-cols-2" aria-label="Kategori belajar">
-        <Link
-          href="/"
-          data-active-category={kategori === "code" ? "code" : undefined}
-          className={`group relative overflow-hidden rounded-2xl border p-6 text-left transition-all duration-300 cursor-pointer ${
-            kategori === "code"
-              ? "category-card-active-code border-amber-500/80 bg-gradient-to-br from-amber-50 via-amber-100/50 to-white dark:border-amber-500/60 dark:from-slate-900 dark:via-slate-900/90 dark:to-amber-950/20 shadow-md dark:shadow-[0_0_30px_rgba(245,158,11,0.15)] ring-1 ring-amber-500/40"
-              : "border-slate-200 bg-white hover:border-slate-300 hover:shadow-md dark:border-white/[0.08] dark:bg-slate-900/50 dark:hover:border-white/20 dark:hover:bg-slate-900/80"
-          }`}
-        >
-          <div className="flex items-center justify-between">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-500/10 border border-amber-500/20 text-2xl text-amber-600 dark:text-amber-400 shadow-sm">
-              ⌘
-            </div>
-            <span
-              className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                kategori === "code"
-                  ? "bg-amber-400/20 text-amber-800 dark:text-amber-300 border border-amber-400/30"
-                  : "bg-slate-100 text-slate-600 dark:bg-white/[0.06] dark:text-slate-400"
-              }`}
-            >
-              16 Track Coding
-            </span>
-          </div>
-          <h2 className="mt-4 text-xl font-bold text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-300 transition-colors">
-            Rekayasa Web & Software
-          </h2>
-          <p className="mt-1.5 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-            HTML, CSS, JavaScript, React, Next.js, TypeScript, Node.js, Laravel, SQL, Docker, dan AI Development.
-          </p>
-          <div className="mt-4 flex items-center gap-1.5 text-xs font-semibold text-amber-700 dark:text-amber-400">
-            <span>{kategori === "code" ? "Kategori Aktif" : "Buka Track Coding"}</span>
-            <span aria-hidden="true" className="transition-transform group-hover:translate-x-1">→</span>
-          </div>
-        </Link>
-
-        <Link
-          href="/?kategori=bahasa"
-          data-active-category={kategori === "bahasa" ? "bahasa" : undefined}
-          className={`group relative overflow-hidden rounded-2xl border p-6 text-left transition-all duration-300 cursor-pointer ${
-            kategori === "bahasa"
-              ? "category-card-active-bahasa border-blue-500/80 bg-gradient-to-br from-blue-50 via-blue-100/50 to-white dark:border-blue-500/60 dark:from-slate-900 dark:via-slate-900/90 dark:to-blue-950/20 shadow-md dark:shadow-[0_0_30px_rgba(59,130,246,0.15)] ring-1 ring-blue-500/40"
-              : "border-slate-200 bg-white hover:border-slate-300 hover:shadow-md dark:border-white/[0.08] dark:bg-slate-900/50 dark:hover:border-white/20 dark:hover:bg-slate-900/80"
-          }`}
-        >
-          <div className="flex items-center justify-between">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-500/10 border border-blue-500/20 text-2xl text-blue-600 dark:text-blue-400 shadow-sm">
-              文
-            </div>
-            <span
-              className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                kategori === "bahasa"
-                  ? "bg-blue-400/20 text-blue-800 dark:text-blue-300 border border-blue-400/30"
-                  : "bg-slate-100 text-slate-600 dark:bg-white/[0.06] dark:text-slate-400"
-              }`}
-            >
-              2 Hub Bahasa
-            </span>
-          </div>
-          <h2 className="mt-4 text-xl font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-300 transition-colors">
-            Komunikasi Global & Bahasa
-          </h2>
-          <p className="mt-1.5 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-            Business English untuk komunikasi profesional dan Bahasa Jepang dari sistem huruf Hiragana/Katakana hingga JLPT N5.
-          </p>
-          <div className="mt-4 flex items-center gap-1.5 text-xs font-semibold text-blue-700 dark:text-blue-400">
-            <span>{kategori === "bahasa" ? "Kategori Aktif" : "Buka Hub Bahasa"}</span>
-            <span aria-hidden="true" className="transition-transform group-hover:translate-x-1">→</span>
-          </div>
-        </Link>
-      </section>
-
       {/* Active Learning Path or Discovery Callout */}
-      {activePathKategori ? (
-        <section className="category-card-active-code relative overflow-hidden rounded-2xl border border-amber-500/40 bg-gradient-to-r from-amber-50 via-amber-100/40 to-white dark:from-amber-950/30 dark:via-slate-900 dark:to-slate-900 p-6 shadow-md dark:shadow-xl backdrop-blur-md">
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <div className="space-y-1">
-              <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-amber-700 dark:text-amber-400">
-                <span>✦ Career Path Terpilih</span>
+      {kategori === "code" &&
+        (activePathKategori ? (
+          <section className="category-card-active-code relative overflow-hidden rounded-2xl border border-amber-500/40 bg-gradient-to-r from-amber-50 via-amber-100/40 to-white dark:from-amber-950/30 dark:via-slate-900 dark:to-slate-900 p-6 shadow-md dark:shadow-xl backdrop-blur-md">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-amber-700 dark:text-amber-400">
+                  <span>✦ Career Path Terpilih</span>
+                </div>
+                <p className="text-xl font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
+                  <span>{activePathKategori.icon}</span>
+                  <span>{activePathKategori.title}</span>
+                </p>
+                <p className="text-xs text-slate-600 dark:text-slate-400 max-w-xl">
+                  Katalog di bawah telah diurutkan otomatis mengikuti tahapan karier ini.
+                </p>
               </div>
-              <p className="text-xl font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
-                <span>{activePathKategori.icon}</span>
-                <span>{activePathKategori.title}</span>
-              </p>
-              <p className="text-xs text-slate-600 dark:text-slate-400 max-w-xl">
-                Katalog di bawah telah diurutkan otomatis mengikuti tahapan karier ini.
-              </p>
+              <div className="flex items-center gap-2.5">
+                <Link
+                  href="/paths"
+                  className="cursor-pointer rounded-xl border border-amber-500/40 bg-amber-500/10 px-4 py-2 text-xs font-semibold text-amber-700 dark:text-amber-300 transition hover:bg-amber-500/20"
+                >
+                  Ganti Path
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => setActivePath(undefined)}
+                  className="cursor-pointer rounded-xl px-4 py-2 text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-white/[0.06] dark:hover:text-white"
+                >
+                  Lepas Path
+                </button>
+              </div>
             </div>
-            <div className="flex items-center gap-2.5">
+          </section>
+        ) : (
+          <section className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white dark:border-white/[0.08] dark:bg-slate-900/60 p-6 backdrop-blur-md shadow-xs">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div className="space-y-1">
+                <h3 className="font-bold text-slate-900 dark:text-white text-base">
+                  🎯 Belum tahu harus mulai dari mana?
+                </h3>
+                <p className="text-sm text-slate-600 dark:text-slate-300 max-w-xl">
+                  Pilih tujuan kariermu (Frontend, Backend, Fullstack, atau Data), sistem kami akan menyusunkan urutan belajarnya.
+                </p>
+              </div>
               <Link
                 href="/paths"
-                className="cursor-pointer rounded-xl border border-amber-500/40 bg-amber-500/10 px-4 py-2 text-xs font-semibold text-amber-700 dark:text-amber-300 transition hover:bg-amber-500/20"
+                className="inline-flex items-center justify-center gap-2 shrink-0 rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 px-5 py-2.5 text-sm font-bold text-slate-950 shadow-md shadow-amber-500/20 transition hover:from-amber-300 hover:to-amber-400 cursor-pointer"
               >
-                Ganti Path
+                <span>Pilih Learning Path</span>
+                <span aria-hidden="true">→</span>
               </Link>
-              <button
-                type="button"
-                onClick={() => setActivePath(undefined)}
-                className="cursor-pointer rounded-xl px-4 py-2 text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-white/[0.06] dark:hover:text-white"
-              >
-                Lepas Path
-              </button>
             </div>
-          </div>
-        </section>
-      ) : (
-        <section className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white dark:border-white/[0.08] dark:bg-slate-900/60 p-6 backdrop-blur-md shadow-xs">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div className="space-y-1">
-              <h3 className="font-bold text-slate-900 dark:text-white text-base">
-                🎯 Belum tahu harus mulai dari mana?
-              </h3>
-              <p className="text-sm text-slate-600 dark:text-slate-300 max-w-xl">
-                Pilih tujuan kariermu (Frontend, Backend, Fullstack, atau Data), sistem kami akan menyusunkan urutan belajarnya.
-              </p>
-            </div>
-            <Link
-              href="/paths"
-              className="inline-flex items-center justify-center gap-2 shrink-0 rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 px-5 py-2.5 text-sm font-bold text-slate-950 shadow-md shadow-amber-500/20 transition hover:from-amber-300 hover:to-amber-400 cursor-pointer"
-            >
-              <span>Pilih Learning Path</span>
-              <span aria-hidden="true">→</span>
-            </Link>
-          </div>
-        </section>
-      )}
+          </section>
+        ))}
 
       {/* Main Catalog Section */}
       <section className="space-y-6">

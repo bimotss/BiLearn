@@ -125,54 +125,57 @@ def run():
                 else:
                     fail_test(f"Kontras '{text_name}' ({ratio:.2f}:1) di bawah 3.0:1")
 
-            # 1.2 Temuan 1: Kartu kategori aktif di mode terang
-            # Kategori default: Code
-            card_code = page.locator("[data-active-category='code']").first
-            card_code_bg = card_code.evaluate("el => window.getComputedStyle(el).backgroundColor")
-            card_code_img = card_code.evaluate("el => window.getComputedStyle(el).backgroundImage")
-            print(f"  Active Code card background-color: {card_code_bg}")
-            print(f"  Active Code card background-image: {card_code_img[:80]}...")
+            # 1.2 Temuan 1: Kartu kategori aktif di mode terang (atau telah dihapus karena navigasi dipindah ke navbar)
+            cards_code = page.locator("[data-active-category='code']")
+            if cards_code.count() > 0:
+                card_code = cards_code.first
+                card_code_bg = card_code.evaluate("el => window.getComputedStyle(el).backgroundColor")
+                card_code_img = card_code.evaluate("el => window.getComputedStyle(el).backgroundImage")
+                print(f"  Active Code card background-color: {card_code_bg}")
+                print(f"  Active Code card background-image: {card_code_img[:80]}...")
 
-            # Pastikan background terang (luminance > 0.7)
-            rgb_card_code = parse_rgb(card_code_bg)
-            lum_card_code = relative_luminance(rgb_card_code)
-            print(f"  Active Code card luminance: {lum_card_code:.3f}")
-            if lum_card_code > 0.7:
-                pass_test(f"Active Code card background terang di mode terang (luminance {lum_card_code:.3f} > 0.7)")
-            else:
-                fail_test(f"Active Code card background masih gelap! Luminance: {lum_card_code:.3f}")
+                # Pastikan background terang (luminance > 0.7)
+                rgb_card_code = parse_rgb(card_code_bg)
+                lum_card_code = relative_luminance(rgb_card_code)
+                print(f"  Active Code card luminance: {lum_card_code:.3f}")
+                if lum_card_code > 0.7:
+                    pass_test(f"Active Code card background terang di mode terang (luminance {lum_card_code:.3f} > 0.7)")
+                else:
+                    fail_test(f"Active Code card background masih gelap! Luminance: {lum_card_code:.3f}")
 
-            # Cek keterbacaan judul & deskripsi di kartu aktif
-            h2_code = card_code.locator("h2").first
-            h2_code_color = h2_code.evaluate("el => window.getComputedStyle(el).color")
-            ratio_h2 = contrast_ratio(parse_rgb(h2_code_color), rgb_card_code)
-            print(f"  Active Code card H2 color: {h2_code_color}, ratio vs bg: {ratio_h2:.2f}:1")
-            if ratio_h2 >= 4.5:
-                pass_test(f"Kontras judul kartu aktif ({ratio_h2:.2f}:1) >= 4.5:1")
-            else:
-                fail_test(f"Kontras judul kartu aktif ({ratio_h2:.2f}:1) di bawah 4.5:1")
+                # Cek keterbacaan judul & deskripsi di kartu aktif
+                h2_code = card_code.locator("h2").first
+                h2_code_color = h2_code.evaluate("el => window.getComputedStyle(el).color")
+                ratio_h2 = contrast_ratio(parse_rgb(h2_code_color), rgb_card_code)
+                print(f"  Active Code card H2 color: {h2_code_color}, ratio vs bg: {ratio_h2:.2f}:1")
+                if ratio_h2 >= 4.5:
+                    pass_test(f"Kontras judul kartu aktif ({ratio_h2:.2f}:1) >= 4.5:1")
+                else:
+                    fail_test(f"Kontras judul kartu aktif ({ratio_h2:.2f}:1) di bawah 4.5:1")
 
-            p_code = card_code.locator("p").first
-            p_code_color = p_code.evaluate("el => window.getComputedStyle(el).color")
-            ratio_p = contrast_ratio(parse_rgb(p_code_color), rgb_card_code)
-            print(f"  Active Code card P color: {p_code_color}, ratio vs bg: {ratio_p:.2f}:1")
-            if ratio_p >= 4.5:
-                pass_test(f"Kontras deskripsi kartu aktif ({ratio_p:.2f}:1) >= 4.5:1")
-            else:
-                fail_test(f"Kontras deskripsi kartu aktif ({ratio_p:.2f}:1) di bawah 4.5:1")
+                p_code = card_code.locator("p").first
+                p_code_color = p_code.evaluate("el => window.getComputedStyle(el).color")
+                ratio_p = contrast_ratio(parse_rgb(p_code_color), rgb_card_code)
+                print(f"  Active Code card P color: {p_code_color}, ratio vs bg: {ratio_p:.2f}:1")
+                if ratio_p >= 4.5:
+                    pass_test(f"Kontras deskripsi kartu aktif ({ratio_p:.2f}:1) >= 4.5:1")
+                else:
+                    fail_test(f"Kontras deskripsi kartu aktif ({ratio_p:.2f}:1) di bawah 4.5:1")
 
-            # 1.3 Kartu Kategori Bahasa aktif di mode terang
-            page.goto(f"http://127.0.0.1:{PORT}/?kategori=bahasa")
-            page.wait_for_load_state("networkidle")
-            card_bahasa = page.locator("[data-active-category='bahasa']").first
-            card_bahasa_bg = card_bahasa.evaluate("el => window.getComputedStyle(el).backgroundColor")
-            rgb_card_bahasa = parse_rgb(card_bahasa_bg)
-            lum_card_bahasa = relative_luminance(rgb_card_bahasa)
-            print(f"  Active Bahasa card background-color: {card_bahasa_bg}, luminance: {lum_card_bahasa:.3f}")
-            if lum_card_bahasa > 0.7:
-                pass_test(f"Active Bahasa card background terang di mode terang (luminance {lum_card_bahasa:.3f} > 0.7)")
+                # 1.3 Kartu Kategori Bahasa aktif di mode terang
+                page.goto(f"http://127.0.0.1:{PORT}/?kategori=bahasa")
+                page.wait_for_load_state("networkidle")
+                card_bahasa = page.locator("[data-active-category='bahasa']").first
+                card_bahasa_bg = card_bahasa.evaluate("el => window.getComputedStyle(el).backgroundColor")
+                rgb_card_bahasa = parse_rgb(card_bahasa_bg)
+                lum_card_bahasa = relative_luminance(rgb_card_bahasa)
+                print(f"  Active Bahasa card background-color: {card_bahasa_bg}, luminance: {lum_card_bahasa:.3f}")
+                if lum_card_bahasa > 0.7:
+                    pass_test(f"Active Bahasa card background terang di mode terang (luminance {lum_card_bahasa:.3f} > 0.7)")
+                else:
+                    fail_test(f"Active Bahasa card background masih gelap! Luminance: {lum_card_bahasa:.3f}")
             else:
-                fail_test(f"Active Bahasa card background masih gelap! Luminance: {lum_card_bahasa:.3f}")
+                pass_test("World switcher cards dihapus dari beranda (navigasi kategori diakomodasi oleh navbar)")
 
             context.close()
 
