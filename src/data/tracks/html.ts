@@ -73,7 +73,7 @@ export const htmlTrack: Track = {
             "</html>\n" +
             "```\n\n" +
             "Aturan pembagiannya cuma satu kalimat: **`head` untuk keterangan tentang halaman, `body` untuk isi yang dilihat pengunjung.**\n\n" +
-            "## Jebakan yang Menjatuhkan Hampir Semua Pemula\n\n" +
+            "\n\n## Membuka Berkas: file:/// vs Local Server\n\nBanyak pemula membuka berkas HTML dengan klik ganda di file manager. Alamat browser akan menampilkan `file:///C:/Users/...` atau `file:///Users/...`. Untuk percobaan pertama ini cukup, tetapi cara ini punya keterbatasan besar di dunia nyata:\n\n1. **Path absolut rusak.** Tautan seperti `<img src=\"/aset/logo.png\">` akan gagal karena browser mencarinya di akar sistem operasi (`C:\\`), bukan di folder proyekmu.\n2. **Fitur modern diblokir.** Permintaan JavaScript seperti `fetch()` atau pemuatan web font lokal sering diblokir oleh browser demi keamanan saat memakai protokol `file:///`.\n3. **Standar industri.** Developer profesional selalu menjalankan **Local Development Server** (misalnya ekstensi *Live Server* di VS Code) yang menyajikan berkas di `http://localhost:5500`. Seluruh tautan dan skrip berjalan persis seperti di server produksi.\n\n## Alat Rahasia Developer: DevTools Inspector\n\nDi browser apa pun, klik kanan pada bagian halaman mana saja lalu pilih **Inspect** (atau tekan F12). Tab **Elements** menampilkan pohon DOM yang sedang dirender browser:\n\n- Kamu bisa melihat bagaimana browser memperbaiki tag yang lupa ditutup secara otomatis.\n- Kamu bisa mengubah teks atau atribut secara langsung untuk menguji ide secara instan tanpa mengedit berkas.\n\n## Karakter Khusus (HTML Entities)\n\nKarena karakter `<` dan `>` dipakai sebagai pembuka dan penutup tag, kamu tidak boleh menuliskannya sembarangan di teks biasa. Kalau kamu menulis `Harga < 50000`, browser bisa mengira `< 50000` adalah tag yang rusak. Gunakan **entitas HTML**:\n\n- `&lt;` untuk kurang dari (*less than* `<`)\n- `&gt;` untuk lebih dari (*greater than* `>`)\n- `&amp;` untuk simbol dan (`&`)\n- `&quot;` untuk kutip dua (`\"`)\n\n## Jebakan yang Menjatuhkan Hampir Semua Pemula\n\n" +
             "1. **Menyimpan tanpa ekstensi `.html`.** Berkas bernama `halaman` atau `halaman.txt` akan dibuka browser sebagai teks polos — kamu melihat tag-nya sendiri di layar, bukan hasilnya.\n" +
             "2. **Mengetik di aplikasi pengolah kata.** Word menyimpan format tersembunyi dan mengubah tanda kutip lurus `\"` menjadi kutip miring `”` yang tidak dikenali HTML. Pakai editor kode.\n" +
             "3. **Lupa menyimpan sebelum menyegarkan browser.** Berkas yang belum disimpan tidak berubah, dan orang bisa kehilangan waktu lama mencari kesalahan yang sebenarnya tidak ada.\n" +
@@ -546,7 +546,7 @@ export const htmlTrack: Track = {
             "> **Kapan dipakai:** ini keputusan sehari-hari yang berdampak langsung ke kecepatan halaman. Mengunggah foto kamera 4 MB apa adanya adalah penyebab paling umum halaman terasa berat di jaringan seluler.\n\n" +
             "## Analogi Dunia Nyata\n\n" +
             "Elemen HTML itu seperti **label pada kardus saat pindahan**. Isi kardus tetap sama entah dilabeli atau tidak — tapi label \"PECAH BELAH — DAPUR\" menentukan bagaimana orang lain memperlakukannya. Mesin pencari, screen reader, dan rekan setimmu adalah \"orang lain\" itu. Kardus tanpa label (`<div>` untuk segalanya) tetap bisa diangkut, hanya saja semua orang harus menebak isinya.\n\n" +
-            "## Jebakan yang Sering Menjatuhkan Pemula\n\n" +
+            "\n\n## Elemen Block vs Elemen Inline\n\nBrowser memperlakukan setiap elemen HTML dengan salah satu dari dua perilaku aliran dasar:\n\n| Jenis Elemen | Karakteristik | Contoh Tag | Larangan Nesting |\n|---|---|---|---|\n| **Block-level** | Selalu mulai di baris baru, memenuhi lebar penuh ruang | `<h1>`-`<h6>`, `<p>`, `<ul>`, `<div>` | Boleh membungkus inline & block lain |\n| **Inline-level** | Mengalir sebaris dengan teks, lebarnya hanya selebar isinya | `<a>`, `<span>`, `<strong>`, `<img>` | **DILARANG** membungkus elemen block (mis. `<p>` di dalam `<span>`) |\n\nElemen `<span>` adalah pembungkus inline netral (saudara sebaris dari `<div>`) yang dipakai untuk menandai atau mewarnai potongan kata di tengah kalimat.\n\n## Format Gambar Web Modern\n\nMemilih format gambar yang tepat menentukan kecepatan loading situs:\n\n- **SVG (.svg):** Grafis vektor berbasis XML. Tidak pernah pecah di resolusi apa pun dan ukuran filenya sangat kecil. Wajib untuk logo, ikon, dan ilustrasi flat.\n- **WebP & AVIF:** Format kompresi modern yang jauh lebih ringan daripada JPEG/PNG dengan kualitas visual yang sama. Standar utama situs modern.\n- **PNG (.png):** Dipakai jika butuh transparansi latar belakang untuk gambar bitmap.\n- **JPEG (.jpg):** Format tradisional untuk foto kaya warna tanpa transparansi.\n\n## Jebakan yang Sering Menjatuhkan Pemula\n\n" +
             "1. **Lupa menutup tag.** Tidak ada pesan error; halaman hanya jadi aneh. Kalau tampilan tiba-tiba kacau setelah satu baris ditambah, periksa baris itu dulu.\n" +
             "2. **Menutup tag tunggal.** `<br></br>` dan `</img>` bukan HTML.\n" +
             "3. **Memilih heading berdasarkan ukuran.** Struktur dulu, tampilan diatur CSS.\n" +
@@ -714,7 +714,7 @@ export const htmlTrack: Track = {
           tests: [
             {
               pattern:
-                '<a\\s+href=[\'"]https://bilearn\\.id[\'"]\\s*>\\s*Kunjungi BiLearn\\s*</a>',
+                '<a(?=[^>]*\\bhref=[\'"]https://bilearn\\.id/?[\'"])[^>]*>\\s*Kunjungi BiLearn\\s*</a>',
               message:
                 'Buat elemen <a> dengan atribut href="https://bilearn.id" dan teks "Kunjungi BiLearn".',
             },
@@ -1052,6 +1052,103 @@ export const htmlTrack: Track = {
           },
         },
         {
+          kind: "step",
+          id: "html-1-11",
+          title: "Navigasi Internal Halaman: Tautan Berbasis id",
+          explanation:
+            "Selain menghubungkan ke situs web lain, elemen tautan juga bisa membawa pengunjung berpindah ke bagian tertentu di halaman yang sama. Kamu menghubungkannya dengan mengisi atribut href menggunakan tanda pagar diikuti nama id sasaran, misalnya href=\"#jadwal\". Begitu tautan diklik, browser otomatis menggulir layar langsung ke posisi elemen tersebut. Pola ini sangat umum dipakai pada daftar isi artikel panjang, tombol kembali ke atas, atau menu navigasi halaman tunggal. Jebakan yang sering terjadi adalah lupa mengetik tanda pagar di dalam href sehingga browser mengira kamu sedang mencari berkas baru bernama jadwal.",
+          example: {
+            code: '<a href="#biografi">Lihat Profil</a>\n\n<h2 id="biografi">Profil Singkat</h2>\n<p>Pengembang web dari Surabaya.</p>',
+            output:
+              "Mengklik tautan Lihat Profil langsung menggulirkan layar ke heading dengan id biografi.",
+            note: "Tanda pagar wajib ada di atribut href, namun di atribut id sasaran ditulis polos tanpa tanda pagar.",
+          },
+          instruction:
+            "Buat satu tautan bertuliskan Lihat Fitur yang mengarah ke bagian dengan id fitur di halaman yang sama, lalu di bawahnya buat elemen judul h2 dengan id fitur bertuliskan Daftar Fitur.",
+          starterCode: "<!-- buat tautan dan elemen tujuannya di bawah -->\n",
+          language: "html",
+          tests: [
+            {
+              pattern: "<a\\s+[^>]*href=['\"]#fitur['\"][^>]*>\\s*Lihat Fitur\\s*</a>",
+              message: "Gunakan elemen <a> dengan href=\"#fitur\" dan teks Lihat Fitur.",
+            },
+            {
+              pattern: "<h2\\s+[^>]*id=['\"]fitur['\"][^>]*>\\s*Daftar Fitur\\s*</h2>",
+              message: "Buat elemen <h2> dengan id=\"fitur\" dan teks Daftar Fitur.",
+            },
+            {
+              pattern: "id=['\"]#fitur['\"]",
+              mustNotMatch: true,
+              message:
+                "Atribut id tidak boleh memakai tanda pagar — tulis id=\"fitur\", bukan id=\"#fitur\".",
+            },
+          ],
+          solution:
+            '<a href="#fitur">Lihat Fitur</a>\n<h2 id="fitur">Daftar Fitur</h2>',
+          susunKode: {
+            question:
+              "Rangkai tautan internal yang melompat ke elemen judul Daftar Fitur di halaman yang sama.",
+            potongan: [
+              '<a href="#fitur">Lihat Fitur</a>',
+              '<h2 id="fitur">Daftar Fitur</h2>',
+            ],
+            pengecoh: [
+              '<a href="fitur">Lihat Fitur</a>',
+              '<h2 id="#fitur">Daftar Fitur</h2>',
+            ],
+            pemisah: "\n",
+            explanation:
+              "Tautan internal wajib menggunakan tanda pagar di atribut href agar browser tahu ini adalah lompatan ke id lokal. Sebaliknya, pada elemen tujuan nilai id ditulis polos tanpa pagar. Pengecoh href=\"fitur\" tanpa pagar sangat menggoda karena orang sering lupa bahwa tanda pagar adalah penanda jangkar. Pengecoh id=\"#fitur\" adalah kekeliruan klasik karena terbiasa melihat tanda pagar di penyeleksi CSS.",
+          },
+        },
+        {
+          kind: "step",
+          id: "html-1-12",
+          title: "Elemen Inline span dan Pembungkus Teks",
+          explanation:
+            "Elemen HTML terbagi dalam dua perilaku tampilan mendasar: block-level dan inline. Elemen block seperti p dan div selalu memulai baris baru dan memenuhi seluruh lebar baris. Sebaliknya, elemen inline seperti a dan span mengalir bersama teks tanpa memotong baris paragraf. Elemen span adalah pembungkus sebaris serbaguna tanpa makna bawaan yang dipakai untuk memberi penanda, kelas warna, atau gaya pada kata tertentu. Aturan keras yang wajib dipegang: elemen inline tidak boleh membungkus elemen block seperti meletakkan p di dalam span, karena browser akan memecah struktur dokumenmu.",
+          example: {
+            code: '<p>Harga normal <span class="coret">Rp 100.000</span> promo hari ini!</p>',
+            output:
+              "Teks Rp 100.000 dibungkus span agar bisa digayakan coret tanpa memotong baris kalimat paragraf.",
+            note: "span mengalir mulus di tengah kalimat tanpa membuat baris baru seperti div.",
+          },
+          instruction:
+            "Tulis satu paragraf yang memuat kalimat promosi, lalu bungkus kata Diskon 50% di dalamnya menggunakan elemen inline span berkelas diskon.",
+          starterCode: "<!-- tulis paragraf promosi dengan span berkelas diskon di bawah -->\n",
+          language: "html",
+          tests: [
+            {
+              pattern: "<p>[\\s\\S]*<span\\s+[^>]*class=['\"]diskon['\"][^>]*>\\s*Diskon 50%\\s*</span>[\\s\\S]*</p>",
+              message:
+                "Bungkus kata Diskon 50% dengan <span class=\"diskon\">...</span> di dalam elemen <p>.",
+            },
+            {
+              pattern: "<span[^>]*><p>",
+              mustNotMatch: true,
+              message: "Jangan membungkus elemen block <p> di dalam elemen inline <span>.",
+            },
+          ],
+          solution:
+            '<p>Dapatkan <span class="diskon">Diskon 50%</span> sekarang juga!</p>',
+          susunKode: {
+            question:
+              "Rangkai paragraf promosi yang membungkus kata diskon dengan elemen inline span berkelas diskon.",
+            potongan: [
+              "<p>Dapatkan",
+              '<span class="diskon">Diskon 50%</span>',
+              "sekarang juga!</p>",
+            ],
+            pengecoh: [
+              "<div>Dapatkan",
+              '<div class="diskon">Diskon 50%</div>',
+            ],
+            pemisah: " ",
+            explanation:
+              "Kata diskon harus dibungkus oleh elemen inline span agar tidak memotong baris paragraf. Pengecoh elemen div sangat menggoda karena sama-sama pembungkus generik, tetapi div bertipe block dan akan memecah baris kalimat menjadi berantakan. Pengecoh div pembuka di awal kalimat keliru karena merusak integritas elemen paragraf.",
+          },
+        },
+        {
           kind: "quiz",
           id: "html-1-kuis",
           title: "Kuis: Dasar Dokumen",
@@ -1258,7 +1355,7 @@ export const htmlTrack: Track = {
                 "Pastikan ada <nav> di DALAM <header> (nav harus bersarang di dalam header, bukan di sebelahnya).",
             },
             {
-              pattern: '<a\\s+href=[\'"]/[\'"]\\s*>\\s*Beranda\\s*</a>',
+              pattern: '<a(?=[^>]*\\bhref=[\'"]/[\'"])[^>]*>\\s*Beranda\\s*</a>',
               message: 'Tambahkan link <a href="/">Beranda</a> di dalam nav.',
             },
           ],
@@ -1602,6 +1699,52 @@ export const htmlTrack: Track = {
             pemisah: "\n",
             explanation:
               "Kutipan panjang dibungkus `<blockquote>`, sumbernya ditandai `<cite>`, dan blok kode butuh DUA elemen: `<pre>` yang mempertahankan spasi serta pergantian baris, dan `<code>` yang menandai isinya sebagai kode. Keping `<i>` menggoda karena `<cite>` memang tampil miring secara bawaan, jadi hasilnya terlihat sama — tapi `<i>` tidak mengatakan apa pun tentang sumber kutipan. Keping `<pre>` tanpa `<code>` adalah jebakan yang paling sering terjadi: spasi dan pergantian barisnya memang terjaga, tapi tidak ada yang menandai isinya sebagai kode bagi alat bantu maupun mesin pencari. Keping kutipan tanpa titik menunjukkan bahwa tanda baca ikut menjadi bagian isi yang diperiksa.",
+          },
+        },
+        {
+          kind: "step",
+          id: "html-2-8",
+          title: "Accordion Native: details dan summary",
+          explanation:
+            "Sebelum HTML5, membuat komponen FAQ atau menu buka-tutup membutuhkan banyak baris kode JavaScript untuk mengatur status klik. HTML menyediakan elemen native details dan summary yang bisa dibuka dan ditutup otomatis tanpa script apa pun. Elemen details bertindak sebagai wadah lipatan, dan summary di dalamnya bertindak sebagai judul atau tombol pemicu yang bisa diklik. Konten apa pun di bawah summary akan disembunyikan dan hanya muncul ketika diklik pengguna. Browser juga otomatis memberikan navigasi keyboard dengan tombol Enter serta ikon segitiga panah bawaan. Jebakan yang sering terjadi adalah menaruh summary di luar tag details atau lupa bahwa summary harus menjadi elemen anak pertama.",
+          example: {
+            code: "<details>\n  <summary>Cara Pembayaran</summary>\n  <p>Kami menerima transfer bank dan dompet digital.</p>\n</details>",
+            output:
+              "Judul Cara Pembayaran tampil dengan ikon panah. Saat diklik, paragraf di bawahnya terbuka.",
+            note: "summary harus menjadi elemen anak pertama langsung di dalam details.",
+          },
+          instruction:
+            "Buat komponen lipatan FAQ memakai details: pasang summary bertuliskan Apakah kursus ini gratis?, lalu tambahkan satu paragraf di bawahnya bertuliskan Ya, semua materi gratis.",
+          starterCode: "<!-- buat elemen details dan summary di bawah -->\n",
+          language: "html",
+          tests: [
+            {
+              pattern: "<details>[\\s\\S]*<summary>\\s*Apakah kursus ini gratis\\?\\s*</summary>[\\s\\S]*</details>",
+              message: "Gunakan <summary>Apakah kursus ini gratis?</summary> di dalam <details>.",
+            },
+            {
+              pattern: "<details>[\\s\\S]*<p>\\s*Ya, semua materi gratis\\.\\s*</p>[\\s\\S]*</details>",
+              message: "Tambahkan <p>Ya, semua materi gratis.</p> di dalam <details>.",
+            },
+          ],
+          solution:
+            "<details>\n  <summary>Apakah kursus ini gratis?</summary>\n  <p>Ya, semua materi gratis.</p>\n</details>",
+          susunKode: {
+            question:
+              "Susun komponen lipatan FAQ menggunakan elemen native details dan summary.",
+            potongan: [
+              "<details>",
+              "  <summary>Apakah kursus ini gratis?</summary>",
+              "  <p>Ya, semua materi gratis.</p>",
+              "</details>",
+            ],
+            pengecoh: [
+              "  <button>Apakah kursus ini gratis?</button>",
+              "  <section>Apakah kursus ini gratis?</section>",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Elemen details membungkus seluruh lipatan, dan summary menjadi kepala lipatan yang interaktif. Pengecoh button sangat menggoda karena orang mengira pemicu buka-tutup selalu butuh tombol biasa, padahal summary sudah otomatis memiliki perilaku tombol. Pengecoh section keliru karena elemen section tidak memiliki mekanisme buka-tutup bawaan browser.",
           },
         },
         {
@@ -2024,7 +2167,7 @@ export const htmlTrack: Track = {
               message: 'Tambahkan atribut media="(min-width: 800px)" pada source.',
             },
             {
-              pattern: '<img[^>]*src=[\'"]kecil\\.jpg[\'"][^>]*alt=[\'"]Banner[\'"]|<img[^>]*alt=[\'"]Banner[\'"][^>]*src=[\'"]kecil\\.jpg[\'"]',
+              pattern: '<img(?=[^>]*\\bsrc=[\'"]kecil\\.jpg[\'"])(?=[^>]*\\balt=[\'"]Banner[\'"])[^>]*>',
               message:
                 'Tambahkan <img src="kecil.jpg" alt="Banner"> sebagai fallback di dalam picture.',
             },
@@ -2048,6 +2191,60 @@ export const htmlTrack: Track = {
             pemisah: "\n",
             explanation:
               "`<picture>` membiarkan browser memilih berkas gambar yang paling pas: `<source>` menawarkan pilihan beserta syaratnya, dan `<img>` di dalamnya adalah jaring pengaman yang selalu dipakai kalau tak ada syarat yang cocok. Karena itu `<img>` tidak boleh dihilangkan. Keping `src` pada `<source>` adalah kekeliruan yang sangat sering terjadi — di elemen itu atributnya `srcset`, dan browser mengabaikan sumber yang salah atribut tanpa berkata apa-apa. Keping `max-width` membalik logikanya: gambar besar justru dipakai di layar kecil, jebakan yang muncul karena terbiasa menulis media query gaya desktop-first.",
+          },
+        },
+        {
+          kind: "step",
+          id: "html-3-7",
+          title: "Responsive Image dengan srcset dan sizes pada img",
+          explanation:
+            "Bila tag picture dipakai untuk mengganti rasio potongan gambar, maka pada sebagian besar kebutuhan industri kamu hanya ingin menyajikan gambar yang sama dalam beberapa ukuran resolusi berbeda. Atribut srcset pada elemen img mendaftar pilihan berkas gambar beserta lebar aslinya dalam satuan w. Atribut sizes memberi tahu browser berapa lebar gambar itu akan ditampilkan di layar pengguna pada breakpoint tertentu. Browser akan menghitung kepadatan layar dan mengunduh berkas terkecil yang tetap tajam tanpa memboroskan kuota data. Pola inilah yang secara otomatis dihasilkan oleh komponen gambar modern seperti Next.js Image. Jebakan yang sering terjadi adalah lupa mencantumkan atribut src standar sebagai cadangan bagi browser lama.",
+          example: {
+            code: '<img src="hero-800.jpg" srcset="hero-400.jpg 400w, hero-800.jpg 800w" sizes="(max-width: 600px) 100vw, 50vw" alt="Pemandangan kota">',
+            output:
+              "Layar ponsel memuat berkas hero-400.jpg sementara layar monitor lebar memuat hero-800.jpg.",
+            note: "src wajib tetap ditulis sebagai fallback untuk peramban yang belum mendukung srcset.",
+          },
+          instruction:
+            "Tulis elemen gambar dengan berkas cadangan kucing-800.jpg, sediakan srcset berisi pilihan kucing-400.jpg 400w dan kucing-800.jpg 800w, atur sizes bernilai (max-width: 600px) 100vw, 50vw, serta alt Kucing lucu.",
+          starterCode: "<!-- buat elemen img dengan srcset dan sizes di bawah -->\n",
+          language: "html",
+          tests: [
+            {
+              pattern: "<img[^>]*srcset=['\"]kucing-400\\.jpg 400w,\\s*kucing-800\\.jpg 800w['\"]",
+              message: "Tambahkan atribut srcset=\"kucing-400.jpg 400w, kucing-800.jpg 800w\".",
+            },
+            {
+              pattern: "<img[^>]*sizes=['\"]\\(max-width:\\s*600px\\)\\s*100vw,\\s*50vw['\"]",
+              message: "Tambahkan atribut sizes=\"(max-width: 600px) 100vw, 50vw\".",
+            },
+            {
+              pattern: "<img[^>]*src=['\"]kucing-800\\.jpg['\"]",
+              message: "Sertakan src=\"kucing-800.jpg\" sebagai cadangan fallback.",
+            },
+            {
+              pattern: "<img[^>]*alt=['\"]Kucing lucu['\"]",
+              message: "Sertakan teks alternatif alt=\"Kucing lucu\".",
+            },
+          ],
+          solution:
+            '<img src="kucing-800.jpg" srcset="kucing-400.jpg 400w, kucing-800.jpg 800w" sizes="(max-width: 600px) 100vw, 50vw" alt="Kucing lucu">',
+          susunKode: {
+            question:
+              "Rangkai elemen gambar responsif yang menyediakan pilihan resolusi menggunakan srcset dan sizes.",
+            potongan: [
+              '<img src="kucing-800.jpg"',
+              'srcset="kucing-400.jpg 400w, kucing-800.jpg 800w"',
+              'sizes="(max-width: 600px) 100vw, 50vw"',
+              'alt="Kucing lucu">',
+            ],
+            pengecoh: [
+              'src="kucing-400.jpg 400w, kucing-800.jpg 800w"',
+              'sizes="(min-width: 600px) 100vw, 50vw"',
+            ],
+            pemisah: " ",
+            explanation:
+              "Atribut srcset mendata pilihan gambar dan lebarnya dalam satuan w, sedangkan sizes mengatur ukuran tampilan di layar. Pengecoh menaruh daftar ukuran di dalam atribut src adalah kekeliruan klasik karena terbiasa hanya mengisi src. Pengecoh min-width menggoda tetapi membalikkan aturan media query yang diminta.",
           },
         },
         {
@@ -2331,15 +2528,15 @@ export const htmlTrack: Track = {
           language: "html",
           tests: [
             {
-              pattern: '<input[^>]*type=[\'"]password[\'"][^>]*name=[\'"]sandi[\'"]|<input[^>]*name=[\'"]sandi[\'"][^>]*type=[\'"]password[\'"]',
+              pattern: '<input(?=[^>]*\\btype=[\'"]password[\'"])(?=[^>]*\\bname=[\'"]sandi[\'"])[^>]*>',
               message: 'Buat input type="password" dengan name="sandi".',
             },
             {
-              pattern: '<input[^>]*type=[\'"]tel[\'"][^>]*name=[\'"]telepon[\'"]|<input[^>]*name=[\'"]telepon[\'"][^>]*type=[\'"]tel[\'"]',
+              pattern: '<input(?=[^>]*\\btype=[\'"]tel[\'"])(?=[^>]*\\bname=[\'"]telepon[\'"])[^>]*>',
               message: 'Buat input type="tel" dengan name="telepon".',
             },
             {
-              pattern: '<input[^>]*type=[\'"]date[\'"][^>]*name=[\'"]lahir[\'"]|<input[^>]*name=[\'"]lahir[\'"][^>]*type=[\'"]date[\'"]',
+              pattern: '<input(?=[^>]*\\btype=[\'"]date[\'"])(?=[^>]*\\bname=[\'"]lahir[\'"])[^>]*>',
               message: 'Buat input type="date" dengan name="lahir".',
             },
           ],
@@ -2676,6 +2873,107 @@ export const htmlTrack: Track = {
           },
         },
         {
+          kind: "step",
+          id: "html-4-9",
+          title: "Checkbox: Pilihan Banyak dan Nilai Centang",
+          explanation:
+            "Berbeda dari radio button yang membatasi pengguna hanya boleh memilih satu opsi dari kelompok, input bertipe checkbox memungkinkan pengguna mencentang beberapa pilihan secara bebas atau menandai kotak persetujuan tunggal. Atribut value menentukan data apa yang dikirim ke server bila kotak tersebut dicentang. Bila kotak tidak dicentang, browser sama sekali tidak akan mengirimkan nama isian tersebut saat form disubmit. Karena itu setiap checkbox dalam formulir wajib memiliki atribut value yang jelas agar server tahu data apa yang disetujui. Jebakan yang sering terjadi adalah lupa memberi atribut value, sehingga secara otomatis browser mengirimkan teks on yang membingungkan backend.",
+          example: {
+            code: '<form action="/simpan" method="post">\n  <label><input type="checkbox" name="hobi" value="baca"> Membaca</label>\n  <label><input type="checkbox" name="hobi" value="musik"> Musik</label>\n</form>',
+            output:
+              "Dua kotak centang independen. Pengguna bisa memilih keduanya atau membiarkan kosong.",
+            note: "Checkbox yang tidak dicentang tidak akan dikirimkan sama sekali saat formulir disubmit.",
+          },
+          instruction:
+            "Di dalam formulir pendaftaran, tambahkan kotak persetujuan memakai checkbox dengan nama setuju, nilai centang ya, dan atribut required agar wajib dicentang sebelum submit, diikuti label Saya menyetujui aturan.",
+          starterCode: '<form action="/daftar" method="post">\n  <!-- tambahkan isian persetujuan checkbox di sini -->\n</form>',
+          language: "html",
+          tests: [
+            {
+              pattern: "<input(?=[^>]*\\btype=['\"]checkbox['\"])(?=[^>]*\\bname=['\"]setuju['\"])(?=[^>]*\\bvalue=['\"]ya['\"])(?=[^>]*\\brequired\\b)[^>]*>",
+              message: "Gunakan <input type=\"checkbox\" name=\"setuju\" value=\"ya\" required>.",
+            },
+            {
+              pattern: "Saya menyetujui aturan",
+              message: "Sertakan teks label Saya menyetujui aturan.",
+            },
+          ],
+          solution:
+            '<form action="/daftar" method="post">\n  <label><input type="checkbox" name="setuju" value="ya" required> Saya menyetujui aturan</label>\n</form>',
+          susunKode: {
+            question:
+              "Susun isian kotak persetujuan wajib centang menggunakan checkbox di dalam formulir.",
+            potongan: [
+              '<form action="/daftar" method="post">',
+              '  <label><input type="checkbox"',
+              'name="setuju" value="ya" required>',
+              'Saya menyetujui aturan</label>',
+              "</form>",
+            ],
+            pengecoh: [
+              '  <label><input type="radio"',
+              'name="pilihan" value="ya">',
+            ],
+            pemisah: "\n",
+            explanation:
+              "Kotak centang persetujuan menggunakan tipe checkbox dan wajib dilengkapi atribut required serta value. Pengecoh type=\"radio\" sangat menggoda karena sama-sama input centang, tetapi radio dirancang untuk opsi tunggal bergantian, bukan persetujuan mandiri. Pengecoh name=\"pilihan\" keliru karena nama parameter formulir harus sesuai spesifikasi yaitu setuju.",
+          },
+        },
+        {
+          kind: "step",
+          id: "html-4-10",
+          title: "Unggah Berkas dan Enctype Formulir",
+          explanation:
+            "Mengirimkan berkas biner seperti foto profil atau dokumen PDF membutuhkan konfigurasi khusus pada formulir HTML. Pertama, elemen input harus menggunakan type file dan bisa dibatasi ekstensinya dengan atribut accept seperti accept=\".pdf\" atau accept=\"image/*\". Kedua, dan ini yang paling krusial di dunia kerja: tag pembungkus form wajib memiliki atribut enctype=\"multipart/form-data\" serta method=\"post\". Tanpa enctype ini, browser hanya akan mengirimkan nama teks berkasnya saja dan backend tidak akan pernah menerima data isi filenya. Lupa menyertakan atribut enctype multipart pada tag form adalah kesalahan yang paling sering membuat programmer pemula bingung berjam-jam saat fitur upload selalu kosong.",
+          example: {
+            code: '<form action="/unggah" method="post" enctype="multipart/form-data">\n  <label for="avatar">Foto Profil</label>\n  <input type="file" id="avatar" name="foto" accept="image/*">\n</form>',
+            output:
+              "Formulir menampilkan tombol Choose File yang membuka jendela pemilihan gambar sistem operasi.",
+            note: 'enctype="multipart/form-data" wajib ada pada form saat mengunggah berkas.',
+          },
+          instruction:
+            "Buat formulir dengan aksi /unggah, method post, dan enctype multipart/form-data. Di dalamnya pasang label untuk berkas-cv bertuliskan Unggah CV, serta input berkas bertipe file dengan id berkas-cv, nama cv, dan batasan accept=\".pdf\".",
+          starterCode: "<!-- buat formulir unggah berkas di bawah -->\n",
+          language: "html",
+          tests: [
+            {
+              pattern: "<form[^>]*enctype=['\"]multipart/form-data['\"][^>]*>",
+              message: "Tambahkan atribut enctype=\"multipart/form-data\" pada elemen <form>.",
+            },
+            {
+              pattern: "<form(?=[^>]*\\baction=['\"]/unggah['\"])(?=[^>]*\\bmethod=['\"]post['\"])[^>]*>",
+              message: "Gunakan action=\"/unggah\" dan method=\"post\" pada formulir.",
+            },
+            {
+              pattern: "<input(?=[^>]*\\btype=['\"]file['\"])(?=[^>]*\\bname=['\"]cv['\"])(?=[^>]*\\baccept=['\"]\\.pdf['\"])(?=[^>]*\\bid=['\"]berkas-cv['\"])[^>]*>",
+              message: "Gunakan <input type=\"file\" id=\"berkas-cv\" name=\"cv\" accept=\".pdf\">.",
+            },
+            {
+              pattern: "<label[^>]*for=['\"]berkas-cv['\"][^>]*>\\s*Unggah CV\\s*</label>",
+              message: "Sertakan <label for=\"berkas-cv\">Unggah CV</label>.",
+            },
+          ],
+          solution:
+            '<form action="/unggah" method="post" enctype="multipart/form-data">\n  <label for="berkas-cv">Unggah CV</label>\n  <input type="file" id="berkas-cv" name="cv" accept=".pdf">\n</form>',
+          susunKode: {
+            question:
+              "Susun formulir pengiriman berkas dokumen PDF dengan konfigurasi enctype yang tepat.",
+            potongan: [
+              '<form action="/unggah" method="post" enctype="multipart/form-data">',
+              '  <label for="berkas-cv">Unggah CV</label>',
+              '  <input type="file" id="berkas-cv" name="cv" accept=".pdf">',
+              "</form>",
+            ],
+            pengecoh: [
+              '<form action="/unggah" method="post">',
+              '  <input type="text" id="berkas-cv" name="cv" accept=".pdf">',
+            ],
+            pemisah: "\n",
+            explanation:
+              "Mengirimkan berkas biner menuntut enctype=\"multipart/form-data\" pada elemen form pembungkusnya. Pengecoh form tanpa enctype adalah jebakan yang paling sering terjadi di lapangan: tombol upload muncul normal tetapi file biner gagal terkirim ke server. Pengecoh type=\"text\" keliru karena teks biasa tidak bisa membuka dialog pemilihan dokumen.",
+          },
+        },
+        {
           kind: "quiz",
           id: "html-4-kuis",
           title: "Kuis: Formulir",
@@ -2838,12 +3136,12 @@ export const htmlTrack: Track = {
           language: "html",
           tests: [
             {
-              pattern: '<img[^>]*src=[\'"]grafik\\.png[\'"][^>]*alt=[\'"][^"\']*penjualan[^"\']*[\'"]|<img[^>]*alt=[\'"][^"\']*penjualan[^"\']*[\'"][^>]*src=[\'"]grafik\\.png[\'"]',
+              pattern: '<img(?=[^>]*\\bsrc=[\'"]grafik\\.png[\'"])(?=[^>]*\\balt=[\'"][^"\']*penjualan[^"\']*[\'"])[^>]*>',
               message:
                 'Gambar grafik.png harus punya alt deskriptif yang memuat kata "penjualan", misal alt="Grafik penjualan naik tiap bulan".',
             },
             {
-              pattern: '<img[^>]*src=[\'"]hiasan\\.svg[\'"][^>]*alt=[\'"][\'"]|<img[^>]*alt=[\'"][\'"][^>]*src=[\'"]hiasan\\.svg[\'"]',
+              pattern: '<img(?=[^>]*\\bsrc=[\'"]hiasan\\.svg[\'"])(?=[^>]*\\balt=[\'"][\'"])[^>]*>',
               message:
                 'Gambar dekoratif hiasan.svg harus punya alt="" (kosong) agar dilewati screen reader.',
             },
@@ -3119,6 +3417,110 @@ export const htmlTrack: Track = {
             pemisah: " ",
             explanation:
               "Ikon panah tidak menambah makna apa pun bagi yang mendengarkan — `aria-hidden=\"true\"` menyembunyikannya dari screen reader sambil tetap terlihat di layar. Keping `<span>` polos menggoda karena tampilannya sama persis; bedanya, pengguna screen reader mendengar nama karakter panahnya dibacakan di tengah kalimat. Keping `aria-hidden=\"false\"` justru menegaskan agar dibacakan. Keping yang menaruh `aria-hidden` pada `<button>` adalah jebakan paling berbahaya: seluruh tombol beserta teksnya hilang dari pembacaan, sehingga tombol itu praktis lenyap bagi penggunanya — kesalahan yang tidak terlihat sama sekali di layar.",
+          },
+        },
+        {
+          kind: "step",
+          id: "html-5-7",
+          title: "Aksesibilitas Formulir: aria-describedby dan aria-invalid",
+          explanation:
+            "Ketika pengguna penyandang disabilitas mengisi formulir dan terjadi kesalahan input, mewarnai kotak menjadi merah saja tidak membantu mereka. Standar aksesibilitas mewajibkan dua atribut: aria-invalid=\"true\" untuk menandai bahwa nilai input salah, dan aria-describedby untuk menghubungkan kotak input dengan pesan kesalahan di bawahnya. Begitu kursor masuk ke input tersebut, teknologi screen reader tidak hanya membacakan label inputnya tetapi juga langsung membacakan isi kalimat kesalahan yang ditunjuk. Pola ini memastikan formulir ramah bagi semua pengguna dan merupakan syarat utama kelulusan audit aksesibilitas web. Jebakan yang sering terjadi adalah mengira aria-label bisa menggantikan teks error; aria-label menggantikan nama input, bukan menambahkan penjelasan kesalahan.",
+          example: {
+            code: '<label for="sandi">Kata Sandi</label>\n<input type="password" id="sandi" name="sandi" aria-invalid="true" aria-describedby="pesan-sandi">\n<p id="pesan-sandi">Sandi minimal 8 karakter.</p>',
+            output:
+              "Screen reader membacakan nama input dan langsung melanjutkan dengan pengumuman pesan kesalahannya.",
+            note: "Nilai aria-describedby harus persis sama dengan nilai id pada elemen penjelas kesalahan.",
+          },
+          instruction:
+            "Input email pada formulir di editor gagal divalidasi. Lengkapi elemen input email tersebut dengan atribut aria-invalid bernilai true dan hubungkan dengan elemen keterangan kesalahan menggunakan aria-describedby bernilai err-surel.",
+          starterCode:
+            '<label for="surel">Email</label>\n<input type="email" id="surel" name="email">\n<p id="err-surel">Format email tidak valid.</p>\n',
+          language: "html",
+          tests: [
+            {
+              pattern: "<input[^>]*aria-invalid=['\"]true['\"][^>]*>",
+              message: "Tambahkan atribut aria-invalid=\"true\" pada input email.",
+            },
+            {
+              pattern: "<input[^>]*aria-describedby=['\"]err-surel['\"][^>]*>",
+              message: "Tambahkan atribut aria-describedby=\"err-surel\" pada input email.",
+            },
+            {
+              pattern: "<p(?=[^>]*\\bid=['\"]err-surel['\"])[^>]*>\\s*Format email tidak valid\\.\\s*</p>",
+              message: "Pertahankan elemen pesan kesalahan dengan id=\"err-surel\".",
+            },
+          ],
+          solution:
+            '<label for="surel">Email</label>\n<input type="email" id="surel" name="email" aria-invalid="true" aria-describedby="err-surel">\n<p id="err-surel">Format email tidak valid.</p>',
+          susunKode: {
+            question:
+              "Rangkai isian email yang ditandai gagal validasi dan terhubung ke teks pesan kesalahan err-surel.",
+            potongan: [
+              '<label for="surel">Email</label>',
+              '<input type="email" id="surel" name="email"',
+              'aria-invalid="true"',
+              'aria-describedby="err-surel">',
+              '<p id="err-surel">Format email tidak valid.</p>',
+            ],
+            pengecoh: [
+              'aria-invalid="false"',
+              'aria-labelledby="err-surel">',
+            ],
+            pemisah: "\n",
+            explanation:
+              "Atribut aria-invalid=\"true\" memberitahukan status kesalahan input, dan aria-describedby menghubungkannya ke teks penjelas. Pengecoh aria-invalid=\"false\" keliru karena justru menyatakan input sudah benar. Pengecoh aria-labelledby sangat menggoda karena namanya mirip, tetapi atribut itu menggantikan nama label utama alih-alih menambahkan keterangan bantuan.",
+          },
+        },
+        {
+          kind: "step",
+          id: "html-5-8",
+          title: "Urutan Fokus Keyboard dengan tabindex",
+          explanation:
+            "Secara bawaan browser hanya mengizinkan elemen interaktif seperti tautan dan tombol untuk menerima fokus navigasi tombol Tab keyboard. Atribut tabindex memungkinkanmu mengontrol perilaku fokus ini dengan aturan angka yang jelas. Nilai tabindex=\"0\" memasukkan elemen kustom ke dalam urutan Tab alami sesuai urutan dokumen tanpa mengubah hierarki. Nilai tabindex=\"-1\" membuat elemen bisa menerima fokus lewat JavaScript seperti saat membuka modal dialog, tetapi dilewati oleh tombol Tab biasa. Aturan keras industri: jangan pernah memakai angka positif seperti tabindex=\"1\" atau tabindex=\"2\", karena nilai positif merusak urutan alami navigasi dan membingungkan pengguna keyboard.",
+          example: {
+            code: '<div class="kartu" tabindex="0">\n  <h3>Kartu Promo</h3>\n</div>',
+            output:
+              "Elemen div kini bisa disorot menggunakan tombol Tab keyboard persis seperti sebuah tombol.",
+            note: 'tabindex="0" untuk urutan alami dokumen, tabindex="-1" untuk fokus lewat script.',
+          },
+          instruction:
+            'Pasang atribut tabindex="0" pada elemen div banner promo agar bisa disorot menggunakan tombol Tab keyboard, dan pertahankan judul Penawaran Spesial di dalamnya.',
+          starterCode:
+            '<div class="banner-promo">\n  <h2>Penawaran Spesial</h2>\n</div>\n',
+          language: "html",
+          tests: [
+            {
+              pattern: "<div[^>]*tabindex=['\"]0['\"][^>]*>",
+              message: "Tambahkan tabindex=\"0\" pada elemen <div>.",
+            },
+            {
+              pattern: "tabindex=['\"][1-9]\\d*['\"]",
+              mustNotMatch: true,
+              message:
+                "Hindari nilai tabindex positif karena merusak urutan navigasi alami — gunakan tabindex=\"0\".",
+            },
+            {
+              pattern: "<h2>Penawaran Spesial</h2>",
+              message: "Pertahankan judul <h2>Penawaran Spesial</h2> di dalam div.",
+            },
+          ],
+          solution:
+            '<div class="banner-promo" tabindex="0">\n  <h2>Penawaran Spesial</h2>\n</div>',
+          susunKode: {
+            question:
+              "Susun elemen banner promo yang bisa dijangkau navigasi tombol Tab keyboard memakai tabindex yang benar.",
+            potongan: [
+              '<div class="banner-promo" tabindex="0">',
+              "  <h2>Penawaran Spesial</h2>",
+              "</div>",
+            ],
+            pengecoh: [
+              '<div class="banner-promo" tabindex="1">',
+              "  <h3>Penawaran Spesial</h3>",
+            ],
+            pemisah: "\n",
+            explanation:
+              "tabindex=\"0\" memasukkan elemen non-interaktif ke dalam urutan navigasi Tab alami. Pengecoh tabindex=\"1\" adalah kesalahan yang sangat sering dibuat pemula karena mengira angka 1 berarti prioritas pertama; padahal nilai positif mengacaukan alur fokus di seluruh halaman. Pengecoh tag heading tingkat h3 keliru karena instruksi meminta mempertahankan judul tingkat h2 asli.",
           },
         },
         {
@@ -3452,11 +3854,11 @@ export const htmlTrack: Track = {
           language: "html",
           tests: [
             {
-              pattern: '<link[^>]*rel=[\'"]icon[\'"][^>]*href=[\'"]/favicon\\.ico[\'"]|<link[^>]*href=[\'"]/favicon\\.ico[\'"][^>]*rel=[\'"]icon[\'"]',
+              pattern: '<link(?=[^>]*\\brel=[\'"]icon[\'"])(?=[^>]*\\bhref=[\'"]/favicon\\.ico[\'"])[^>]*>',
               message: 'Tambahkan <link rel="icon" href="/favicon.ico">.',
             },
             {
-              pattern: '<link[^>]*rel=[\'"]stylesheet[\'"][^>]*href=[\'"]/style\\.css[\'"]|<link[^>]*href=[\'"]/style\\.css[\'"][^>]*rel=[\'"]stylesheet[\'"]',
+              pattern: '<link(?=[^>]*\\brel=[\'"]stylesheet[\'"])(?=[^>]*\\bhref=[\'"]/style\\.css[\'"])[^>]*>',
               message: 'Tambahkan <link rel="stylesheet" href="/style.css">.',
             },
           ],
@@ -3682,6 +4084,102 @@ export const htmlTrack: Track = {
             pemisah: "\n",
             explanation:
               "Tiga kesalahan inilah yang paling sering ditemukan validator: tag yang tidak ditutup, `id` yang dipakai dua kali, dan gambar tanpa `alt`. Ketiganya punya gejala yang sama — browser tidak menampilkan error apa pun, jadi kamu baru tahu setelah ada yang rusak. Keping `<p>Kopi tubruk<p>` menggoda karena sekilas terlihat berpasangan, padahal itu dua paragraf yang dibuka dan tidak pernah ditutup. Keping `id=\"harga-kopi\"` menggoda karena namanya terasa lebih deskriptif, padahal `id` harus cocok persis dengan yang dirujuk di tempat lain. Soal `id` kembar: kalau dua elemen memakai `id` yang sama, tautan jangkar dan `getElementById` hanya menemukan yang pertama — bug yang bisa menghabiskan berjam-jam karena kodenya terlihat benar.",
+          },
+        },
+        {
+          kind: "step",
+          id: "html-6-8",
+          title: "Twitter Cards dan Canonical URL untuk SEO",
+          explanation:
+            "Selain Open Graph yang dipakai oleh Facebook dan aplikasi pesan instan, platform Twitter menggunakan format metadatanya sendiri yang dinamakan Twitter Cards. Tag meta twitter:card dengan nilai summary_large_image memastikan tautan yang dibagikan tampil dengan kartu visual lebar yang menarik perhatian. Di samping itu, mesin pencari seperti Google membutuhkan tag link rel=\"canonical\" untuk menentukan alamat resmi halaman tersebut. Tag kanonikal ini sangat vital di industri untuk mencegah penalti duplikasi konten ketika satu halaman yang sama bisa diakses lewat berbagai variasi parameter tautan kampanye. Jebakan yang sering terjadi adalah memasang URL relatif pada canonical; Google mewajibkan URL kanonikal ditulis lengkap dan absolut dengan protokol https.",
+          example: {
+            code: '<head>\n  <meta name="twitter:card" content="summary_large_image">\n  <link rel="canonical" href="https://toko.id/produk/sepatu">\n</head>',
+            output:
+              "Di Twitter tautan tampil dengan kartu visual besar, dan Google mencatat alamat https resmi halaman.",
+            note: "href pada link canonical wajib berupa URL lengkap dan absolut berawalan https.",
+          },
+          instruction:
+            "Di dalam elemen head, tambahkan meta tag Twitter Card dengan jenis summary_large_image, dan pasang tautan canonical yang mengarah ke alamat resmi https://bilearn.id/kursus.",
+          starterCode:
+            "<head>\n  <title>Kursus HTML - BiLearn</title>\n</head>\n",
+          language: "html",
+          tests: [
+            {
+              pattern: "<meta(?=[^>]*\\bname=['\"]twitter:card['\"])(?=[^>]*\\bcontent=['\"]summary_large_image['\"])[^>]*>",
+              message: "Gunakan <meta name=\"twitter:card\" content=\"summary_large_image\">.",
+            },
+            {
+              pattern: "<link(?=[^>]*\\brel=['\"]canonical['\"])(?=[^>]*\\bhref=['\"]https://bilearn\\.id/kursus/?['\"])[^>]*>",
+              message: "Gunakan <link rel=\"canonical\" href=\"https://bilearn.id/kursus\">.",
+            },
+          ],
+          solution:
+            '<head>\n  <title>Kursus HTML - BiLearn</title>\n  <meta name="twitter:card" content="summary_large_image">\n  <link rel="canonical" href="https://bilearn.id/kursus">\n</head>',
+          susunKode: {
+            question:
+              "Susun meta tag Twitter Card bertipe gambar besar dan link canonical ke alamat resmi https://bilearn.id/kursus.",
+            potongan: [
+              "<head>",
+              "  <title>Kursus HTML - BiLearn</title>",
+              '  <meta name="twitter:card" content="summary_large_image">',
+              '  <link rel="canonical" href="https://bilearn.id/kursus">',
+              "</head>",
+            ],
+            pengecoh: [
+              '  <meta property="twitter:card" content="summary_large_image">',
+              '  <link rel="canonical" href="/kursus">',
+            ],
+            pemisah: "\n",
+            explanation:
+              "Twitter Card menggunakan atribut name=\"twitter:card\" (berbeda dari Open Graph yang memakai property), dan canonical URL wajib berupa URL absolut berawalan https. Pengecoh property menggoda karena terbiasa dengan sintaks Open Graph. Pengecoh href=\"/kursus\" keliru karena mesin pencari membutuhkan domain lengkap untuk menentukan alamat kanonikal.",
+          },
+        },
+        {
+          kind: "step",
+          id: "html-6-9",
+          title: "Resource Hints dan Script Loading untuk Performa Web",
+          explanation:
+            "Di dunia kerja nyata, kecepatan pemuatan halaman web sangat menentukan kenyamanan pengguna dan skor Core Web Vitals di Google. Ada dua teknik HTML krusial untuk performa pemuatan. Pertama adalah Resource Hint rel=\"preload\" di dalam head yang memberi tahu peramban untuk mengunduh aset penting seperti berkas font atau banner utama sedini mungkin sebelum CSS selesai diuraikan. Kedua adalah atribut defer pada tag script yang memungkinkan browser mengunduh berkas JavaScript secara paralel di latar belakang tanpa menghentikan pemrosesan HTML, lalu menjalankannya setelah seluruh dokumen siap. Memuat skrip tanpa atribut defer di head adalah kesalahan klasik penyebab utama halaman web lambat dan mengalami layar putih sejenak.",
+          example: {
+            code: '<head>\n  <link rel="preload" href="/font.woff2" as="font" type="font/woff2" crossorigin>\n  <script src="/bundle.js" defer></script>\n</head>',
+            output:
+              "Berkas font diunduh dengan prioritas tinggi dan skrip dieksekusi setelah halaman selesai dimuat.",
+            note: "preload membutuhkan atribut as untuk memberi tahu peramban tipe berkas yang diunduh.",
+          },
+          instruction:
+            'Di dalam elemen head, tambahkan tautan preload untuk gambar hero.jpg dengan atribut as="image", lalu sertakan pemanggilan berkas skrip /main.js dengan atribut defer agar tidak memblokir render halaman.',
+          starterCode:
+            "<head>\n  <title>Beranda</title>\n</head>\n",
+          language: "html",
+          tests: [
+            {
+              pattern: "<link(?=[^>]*\\brel=['\"]preload['\"])(?=[^>]*\\bhref=['\"]hero\\.jpg['\"])(?=[^>]*\\bas=['\"]image['\"])[^>]*>",
+              message: "Gunakan <link rel=\"preload\" href=\"hero.jpg\" as=\"image\">.",
+            },
+            {
+              pattern: "<script(?=[^>]*\\bsrc=['\"]/main\\.js['\"])(?=[^>]*\\bdefer\\b)[^>]*>",
+              message: "Tambahkan tag <script src=\"/main.js\" defer></script>.",
+            },
+          ],
+          solution:
+            '<head>\n  <title>Beranda</title>\n  <link rel="preload" href="hero.jpg" as="image">\n  <script src="/main.js" defer></script>\n</head>',
+          susunKode: {
+            question:
+              "Susun tautan preload untuk berkas hero.jpg dan pemanggilan skrip /main.js dengan atribut defer di dalam head.",
+            potongan: [
+              "<head>",
+              "  <title>Beranda</title>",
+              '  <link rel="preload" href="hero.jpg" as="image">',
+              '  <script src="/main.js" defer></script>',
+              "</head>",
+            ],
+            pengecoh: [
+              '  <link rel="prefetch" href="hero.jpg" as="image">',
+              '  <script src="/main.js" async></script>',
+            ],
+            pemisah: "\n",
+            explanation:
+              "rel=\"preload\" meminta peramban mengunduh aset penting untuk halaman saat ini dengan segera, dan defer menunda eksekusi JavaScript sampai seluruh DOM selesai diproses. Pengecoh rel=\"prefetch\" menggoda tetapi fungsinya berbeda: prefetch dipakai untuk halaman berikutnya yang mungkin dibuka nanti dengan prioritas rendah. Pengecoh async mengeksekusi skrip seketika saat unduhan selesai dan berisiko merusak urutan dokumen.",
           },
         },
         {

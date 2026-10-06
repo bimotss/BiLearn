@@ -75,13 +75,40 @@ export default function ItemDetail({
     <div className="w-full min-w-0 space-y-6">
       {/* Top Header & Breadcrumb Bar */}
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 dark:border-white/[0.08] pb-4">
-        <Link
-          href={`/tracks/${track.slug}`}
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-amber-600 dark:hover:text-amber-300 transition-colors cursor-pointer"
-        >
-          <span aria-hidden="true">←</span>
-          <span>{track.title}</span>
-        </Link>
+        <div className="flex items-center gap-2 text-xs">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-1 font-semibold text-slate-500 dark:text-slate-400 hover:text-amber-600 dark:hover:text-amber-300 transition-colors cursor-pointer"
+            title="Kembali ke Landing Page BiLearn"
+          >
+            <span>Landing Page</span>
+          </Link>
+          <span className="text-slate-300 dark:text-slate-600">/</span>
+          {track.slug === "business-english" ? (
+            <Link
+              href="/bahasa"
+              className="inline-flex items-center gap-1 font-semibold text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-300 transition-colors cursor-pointer"
+              title="Pusat Pembelajaran Bahasa"
+            >
+              <span>Pusat Bahasa</span>
+            </Link>
+          ) : (
+            <Link
+              href="/tracks/"
+              className="inline-flex items-center gap-1 font-semibold text-slate-500 dark:text-slate-400 hover:text-amber-600 dark:hover:text-amber-300 transition-colors cursor-pointer"
+              title="Katalog Belajar Koding"
+            >
+              <span>Belajar Code</span>
+            </Link>
+          )}
+          <span className="text-slate-300 dark:text-slate-600">/</span>
+          <Link
+            href={`/tracks/${track.slug}/`}
+            className="inline-flex items-center gap-1 font-semibold text-slate-500 dark:text-slate-400 hover:text-amber-600 dark:hover:text-amber-300 transition-colors cursor-pointer"
+          >
+            <span>{track.title}</span>
+          </Link>
+        </div>
 
         <div className="flex items-center gap-3">
           {/* Mini progress tracker */}

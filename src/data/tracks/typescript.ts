@@ -53,18 +53,26 @@ export const typescriptTrack: Track = {
             "| **npx** | menjalankan program dari paket yang **sudah ada di proyekmu**, jadi kamu tidak perlu memasangnya untuk seluruh komputer |\n\n" +
             "Satu istilah lagi yang akan sering muncul: **devDependency**. Itu paket yang hanya dibutuhkan saat kamu *menulis* kode — bukan saat aplikasi berjalan melayani pengguna. Compiler TypeScript termasuk di dalamnya, dan cara memasangnya begitu adalah dengan menambahkan `-D` pada perintah `npm install`.\n\n" +
             "Kalau kamu belum punya folder proyek sama sekali, urutannya: buat folder baru, buka terminal di folder itu, jalankan `npm init -y` (sekali saja), baru mulai step 1.\n\n" +
+            "## Jebakan yang Sering Menjatuhkan Pemula\n\n" +
+            "1. **Memasang TypeScript secara global (`npm i -g typescript`).** Ini sering keliru karena proyek lama dan baru bisa butuh versi compiler yang berbeda. Selalu pasang lokal per proyek dengan `npm i -D typescript`.\n" +
+            "2. **Menjalankan `node index.ts` langsung.** Node.js bawaan tidak mengerti anotasi tipe dan akan langsung melempar SyntaxError. Kompilasi dulu ke `.js` dengan `tsc`, atau jalankan lewat runner modern seperti `tsx`.\n" +
+            "3. **Lupa membuat `tsconfig.json`.** Menjalankan `tsc` tanpa berkas konfigurasi membuat compiler mengabaikan aturan ketat (*strict*) yang seharusnya melindungi kodemu.\n" +
+            "4. **Mengira tipe melindungi data di runtime.** Tipe dibuang total saat kompilasi — tidak ada satu pun tipe yang tertinggal di hasil akhir yang dijalankan browser.\n\n" +
             "## Alur Kerja yang Akan Kamu Pakai\n\n" +
             "```text\n" +
-            "index.ts        ← kamu menulis di sini (JavaScript + tipe)\n" +
+            "src/index.ts    ← kamu menulis di sini (JavaScript + tipe)\n" +
             "    |\n" +
             "    |  npx tsc          (compiler memeriksa tipe, lalu membuang tipenya)\n" +
             "    v\n" +
-            "index.js        ← hasilnya: JavaScript biasa, tanpa satu pun tipe\n" +
+            "dist/index.js   ← hasilnya: JavaScript biasa di folder dist, tanpa satu pun tipe\n" +
             "    |\n" +
-            "    |  node index.js\n" +
+            "    |  node dist/index.js\n" +
             "    v\n" +
             "hasil di terminal\n" +
             "```\n\n" +
+            "### tsc --noEmit dan Pemeriksaan di CI/CD Dunia Kerja\n\n" +
+            "Di proyek industri modern (seperti Next.js, Vite, atau NestJS), kompilasi file ke bundle browser atau server biasanya dikerjakan oleh compiler cepat seperti SWC, esbuild, atau Turbopack. Lalu untuk apa compiler TypeScript dipakai?\n\n" +
+            "Untuk **pemeriksaan tipe murni tanpa membuat berkas fisik apa pun**. Perintahnya adalah `npx tsc --noEmit`. Di tim profesional, perintah ini dipasang di dalam skrip `npm run typecheck` dan dijalankan otomatis oleh CI/CD (seperti GitHub Actions) setiap kali ada yang mengajukan Pull Request. Bila ada kesalahan tipe sekecil apa pun, sistem langsung menolak penggabungan kode sebelum bug sempat masuk ke server produksi.\n\n" +
             "Enam step berikutnya menjalankan alur ini dari nol: memasang, membuat konfigurasi, mengompilasi, membaca error, dan mempercepat lingkaran belajarmu dengan `tsx`.\n\n" +
             "**Catatan tentang preview di BiLearn:** panel kanan bisa memeriksa apakah *sintaks* TypeScript-mu benar, tapi ia tidak menjalankan pemeriksaan tipe penuh seperti `tsc` di komputermu. Untuk step berisi perintah terminal, panel hanya menampilkan apa yang kamu ketik. Praktikkan perintah-perintahnya di terminal sungguhan supaya terbiasa.",
         },
@@ -464,9 +472,20 @@ export const typescriptTrack: Track = {
             "| `boolean` | benar/salah | `true`, `false` |\n" +
             "| `string[]` | array berisi teks saja | `[\"a\", \"b\"]` |\n" +
             "| `number[]` | array berisi angka saja | `[1, 2, 3]` |\n" +
+            "| `[string, number]` | tuple: array dengan panjang dan tipe urutan pasti | `[\"OK\", 200]`, koordinat `[-6.2, 106.8]` |\n" +
+            "| `void` | nilai kembalian fungsi yang tidak menghasilkan apa-apa | `function catat(): void` |\n" +
+            "| `never` | fungsi yang tidak pernah selesai (melempar error) | `function lempar(): never` |\n" +
             "| `null` | sengaja kosong | `null` |\n" +
             "| `undefined` | belum diisi sama sekali | `undefined` |\n\n" +
             "Perhatikan: TypeScript **tidak** punya `int` dan `float` terpisah seperti Java atau C. Semua angka adalah `number`, persis seperti di JavaScript.\n\n" +
+            "## Tuple vs Array Biasa\n\n" +
+            "Banyak pemula rancu antara array biasa dengan tuple:\n\n" +
+            "```text\n(string | number)[]   → array biasa: panjang bebas, urutan bebas ([1, \"a\", 2])\n[string, number]      → tuple: persis dua elemen, indeks 0 wajib string, indeks 1 wajib number\n```\n\n" +
+            "Tuple dipakai di mana-mana di industri. Contoh paling terkenal adalah hook React `const [state, setState] = useState(0)` yang mengembalikan tuple dua elemen: nilai state dan fungsi pengubahnya.\n\n" +
+            "## void vs never vs undefined pada Fungsi\n\n" +
+            "- `void`: fungsi selesai bekerja tapi tidak mengembalikan nilai bermakna (misal mencetak `console.log` atau menyimpan ke database).\n" +
+            "- `never`: fungsi yang tidak mungkin pernah selesai normal — ia melempar pengecualian (`throw new Error(...)`) atau berjalan dalam perulangan tanpa henti.\n" +
+            "- `undefined`: fungsi yang secara eksplisit menulis `return undefined;`.\n\n" +
             "## Use Case Utama\n\n" +
             "> **Kapan dipakai:** anotasi paling berguna di tempat yang tidak punya nilai awal — terutama **parameter fungsi**. Tanpa anotasi, TypeScript tidak punya petunjuk apa pun tentang isi parameter, dan dengan `strict: true` ia akan menolak kodemu.\n\n" +
             "> **Kapan TIDAK dipakai:** saat kamu langsung memberi nilai. `let kota = \"Bandung\"` sudah cukup jelas — menulis `let kota: string = \"Bandung\"` hanya menambah kebisingan. Ini dibahas tuntas di step Type Inference.\n\n" +
@@ -478,11 +497,13 @@ export const typescriptTrack: Track = {
             "3. **Menambal error dengan `any`.** Errornya hilang seketika, dan bersamanya hilang juga seluruh perlindungan di baris-baris berikutnya.\n" +
             "4. **Menganotasi variabel yang sudah jelas.** `let kota: string = \"Bandung\"` bukan salah, tapi ia teks tambahan yang harus ikut dirawat setiap kali nilainya berganti jenis.\n" +
             "5. **Mengira `null` dan `undefined` bisa dipertukarkan.** Dengan `strict` menyala keduanya tipe berbeda, dan `string` tidak menerima salah satu pun tanpa kamu tuliskan.\n\n" +
-            "## Satu Hal yang Sering Membingungkan\n\n" +
+            "## Satu Hal yang Sering Membingungkan: Kapan Anotasi vs Inference?\n\n" +
             "Di step pertama modul ini kamu diminta **menulis** anotasi secara eksplisit, lalu beberapa step kemudian diminta **tidak** menulisnya. Itu bukan kontradiksi:\n\n" +
             "- Saat belajar, menulis anotasi eksplisit membuatmu terbiasa dengan bentuknya.\n" +
             "- Di kode nyata, anotasi ditulis **hanya di tempat yang tidak bisa ditebak TypeScript**.\n\n" +
-            "Aturan praktis yang dipakai kebanyakan tim: **selalu** beri anotasi pada parameter fungsi dan pada data yang datang dari luar (API, form). **Jangan** beri anotasi pada variabel lokal yang langsung diisi nilai.",
+            "**Aturan praktis industri:**\n" +
+            "- **Wajib Anotasi:** parameter fungsi, return type fungsi publik, deklarasi model data/interface, dan inisialisasi state kosong seperti `useState<User | null>(null)`.\n" +
+            "- **Biarkan Inference:** variabel lokal di dalam fungsi yang langsung diisi nilai awal (`const total = 50000`).",
         },
         {
           kind: "step",
@@ -565,7 +586,7 @@ export const typescriptTrack: Track = {
           tests: [
             {
               pattern:
-                "const\\s+nilai\\s*:\\s*(number\\s*\\[\\s*\\]|Array\\s*<\\s*number\\s*>)\\s*=\\s*\\[\\s*85\\s*,\\s*90\\s*,\\s*95\\s*,?\\s*\\]",
+                "(?:const|let)\\s+nilai\\s*:\\s*(number\\s*\\[\\s*\\]|Array\\s*<\\s*number\\s*>)\\s*=\\s*\\[\\s*85\\s*,\\s*90\\s*,\\s*95\\s*,?\\s*\\]",
               message:
                 "Bentuknya `const nilai: <tipe> = [85, 90, 95];`. Tipenya harus menyatakan \"array berisi angka\" — tulis `number[]` (atau `Array<number>`).",
             },
@@ -884,6 +905,58 @@ export const typescriptTrack: Track = {
           },
         },
         {
+          kind: "step",
+          id: "ts-1-8",
+          title: "Tuple: Array dengan Panjang dan Tipe Pasti",
+          explanation:
+            "Array biasa seperti `number[]` hanya mengunci jenis datanya, tetapi membebaskan berapa banyak elemen di dalamnya — bisa kosong, bisa sepuluh. **Tuple** adalah variasi array yang mengunci **panjang dan urutan tipe pada setiap posisi**, ditulis dengan kurung siku berisi daftar tipe seperti `[string, number]`. Posisi pertama wajib teks, posisi kedua wajib angka, dan menambahkan elemen ketiga dengan jenis berbeda akan ditolak oleh compiler. Pola ini dipakai di mana-mana dalam ekosistem modern: kembalian hook React `useState` adalah tuple dua elemen berisi nilai state dan fungsi pengubahnya, dan endpoint API sering memakai tuple untuk koordinat `[latitude, longitude]` atau pasangan status `[kodeStatus, pesan]`. Jebakan yang sering menjatuhkan pemula: metode mutasi bawaan JavaScript seperti `.push()` secara teknis masih diizinkan compiler pada tuple biasa kecuali kamu menguncinya dengan `readonly [string, number]`.",
+          example: {
+            code:
+              "const koordinat: [number, number] = [-6.2088, 106.8456];\n" +
+              "console.log(koordinat[0], koordinat[1]);",
+            output: "-6.2088 106.8456",
+            note: "`koordinat` wajib berisi persis dua angka — memasukkan elemen ketiga atau teks akan langsung ditolak compiler.",
+          },
+          instruction:
+            "Sebuah sistem mencatat status respons HTTP sebagai pasangan: kode status berupa angka pada posisi pertama, dan pesan status berupa teks pada posisi kedua. Buat sebuah konstanta bernama `respon` bertipe tuple yang menampung kedua nilai itu, lalu isi nilai awalnya dengan angka `200` dan teks `\"OK\"`.",
+          starterCode: "// Tulis konstanta respon di bawah ini\n",
+          language: "jsx",
+          tests: [
+            {
+              pattern:
+                "(?:const|let)\\s+respon\\s*:\\s*\\[\\s*number\\s*,\\s*string\\s*\\]\\s*=\\s*\\[\\s*200\\s*,\\s*['\"]OK['\"]\\s*\\]",
+              message:
+                "Deklarasikan `const respon: [number, string] = [200, \"OK\"];` — posisi pertama number (200), posisi kedua string (\"OK\").",
+            },
+            {
+              pattern:
+                "respon\\s*:\\s*\\(\\s*(number\\s*\\|\\s*string|string\\s*\\|\\s*number)\\s*\\)\\s*\\[\\s*\\]",
+              mustNotMatch: true,
+              message:
+                "Jangan gunakan array union `(number | string)[]`. Gunakan sintaks tuple `[number, string]` agar posisi dan panjangnya terkunci.",
+            },
+          ],
+          solution:
+            "const respon: [number, string] = [200, \"OK\"];\n" +
+            "console.log(respon[0], respon[1]);",
+          susunKode: {
+            question:
+              "Deklarasikan konstanta respon sebagai tuple pasangan angka dan teks bernilai 200 dan OK.",
+            potongan: [
+              "const respon: [number, string] =",
+              "[200, \"OK\"];",
+              "console.log(respon[0], respon[1]);",
+            ],
+            pengecoh: [
+              "const respon: (number | string)[] =",
+              "[\"OK\", 200];",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Sintaks tuple menggunakan kurung siku `[number, string]` untuk mengunci tipe per indeks. Pengecoh `(number | string)[]` menggoda karena sama-sama array tetapi keliru karena tidak mengunci urutan posisi. Pengecoh urutan terbalik `[\"OK\", 200]` juga jebakan yang melanggar kontrak tipe tuple.",
+          },
+        },
+        {
           kind: "quiz",
           id: "ts-1-kuis",
           title: "Kuis: Tipe Dasar",
@@ -958,6 +1031,21 @@ export const typescriptTrack: Track = {
               explanation:
                 "Tipe union `object | null` menuliskan kenyataannya apa adanya, sehingga compiler memaksamu memeriksa null sebelum mengakses isinya. `any` menggoda karena membuat semua error hilang seketika — tapi itu berarti melepas seluruh perlindungan; sedangkan `object` saja akan ditolak begitu nilai null benar-benar masuk.",
             },
+            {
+              id: "q6",
+              type: "pilihan-ganda",
+              question:
+                "Kamu mendeklarasikan variabel `const item: [string, number] = ['Buku', 50000];`. Mengapa bentuk ini disebut tuple dan bukan array biasa?",
+              choices: [
+                "Karena panjang dan tipe pada setiap posisinya terkunci secara spesifik",
+                "Karena tuple hanya bisa memuat data teks tanpa angka",
+                "Karena tuple otomatis dikonversi menjadi objek saat dijalankan di Node",
+                "Karena tuple tidak bisa dibaca menggunakan indeks seperti item[0]",
+              ],
+              answerIndex: 0,
+              explanation:
+                "Tuple adalah tipe array khusus di mana jumlah elemen dan jenis tipe pada setiap indeks sudah ditentukan sejak awal. Pilihan kedua keliru karena tuple mendukung berbagai tipe. Pilihan ketiga dan keempat juga jebakan yang tidak sesuai kenyataan.",
+            },
           ],
         },
       ],
@@ -1000,8 +1088,13 @@ export const typescriptTrack: Track = {
             "| Mendeskripsikan objek | ✅ | ✅ |\n" +
             "| Union (`\"a\" \\| \"b\"`) | ❌ tidak bisa | ✅ |\n" +
             "| Alias untuk tipe primitif | ❌ tidak bisa | ✅ |\n" +
-            "| Menggabungkan | `extends` | operator `&` |\n\n" +
-            "> **Jawaban pragmatisnya:** pakai `interface` untuk bentuk objek, pakai `type` untuk segala hal lain (union, alias, hasil utility type). Kalau tim kamu punya aturan berbeda, ikuti aturan tim — ini bukan perdebatan yang layak menghabiskan waktu rapat.\n\n" +
+            "| Menggabungkan | `extends` | operator `&` |\n" +
+            "| Otomatis bergabung saat dideklarasikan ulang | ✅ Ya (Declaration Merging) | ❌ Error duplikat |\n\n" +
+            "## Kenapa Ada Dua? Kekuatan Declaration Merging\n\n" +
+            "Salah satu alasan terbesar `interface` tetap ada adalah **Declaration Merging**: bila dua `interface` dideklarasikan dengan nama sama, compiler menyatukan propertinya secara otomatis:\n\n" +
+            "```text\ninterface User { id: number; }\ninterface User { nama: string; }\n// Hasil akhir: User punya properti id DAN nama!\n```\n\n" +
+            "Fitur ini memungkinkan kita memperluas interface bawaan library (misalnya menambahkan `user` ke `Request` di Express atau variabel kustom ke `Window`). Sebaliknya, kata kunci `type` sengaja melarang deklarasi ulang agar tidak terjadi penimpaan yang tak disengaja.\n\n" +
+            "> **Jawaban pragmatisnya:** pakai `interface` untuk bentuk objek entitas (User, Produk, respons API) dan kontrak yang berpotensi diperluas; pakai `type` untuk segala hal lain (union, tuple, alias primitif, hasil utility type, dan React component props). Kalau tim punya aturan sendiri, ikuti kesepakatan tim.\n\n" +
             "## Analogi Dunia Nyata\n\n" +
             "Interface itu seperti **formulir kosong yang dicetak kantor**. Formulir menentukan kolom apa saja yang ada dan mana yang wajib diisi. Setiap orang yang mengisinya menghasilkan berkas berbeda, tapi semuanya berbentuk sama — sehingga bagian arsip tahu persis di mana mencari nomor telepon.\n\n" +
             "## Tiga Penanda yang Akan Kamu Pakai Terus\n\n" +
@@ -1011,6 +1104,7 @@ export const typescriptTrack: Track = {
             "  diskon?: number;       // boleh tidak ada sama sekali\n" +
             "}\n```\n\n" +
             "Tanda `?` mengubah tipe properti menjadi `number | undefined`. Artinya setelah kamu menandainya opsional, compiler akan menagih pengecekan sebelum kamu memakainya — itu memang tujuannya.\n\n" +
+            "Untuk array, kamu juga bisa membuat array yang tidak boleh diubah dengan `readonly number[]` atau `ReadonlyArray<number>`. Memanggil `.push()` atau `.splice()` pada array tersebut langsung dicegah oleh compiler.\n\n" +
             "## Jebakan yang Sering Menjatuhkan Pemula\n\n" +
             "1. **Memakai koma seperti di objek.** Di dalam `interface`, pemisah antar properti adalah **titik koma** (`;`). Koma juga diterima, tapi jangan campur keduanya dalam satu berkas.\n" +
             "2. **Mengira `readonly` mengunci isi objek di dalamnya.** `readonly alamat: Alamat` hanya melarang mengganti seluruh objek alamat; properti *di dalam* alamat tetap bisa diubah.\n" +
@@ -1517,12 +1611,17 @@ export const typescriptTrack: Track = {
             "| `in` | membedakan bentuk objek | `\"radius\" in bentuk` |\n" +
             "| `instanceof` | objek hasil `new` / class bawaan | `x instanceof Date` |\n" +
             "| properti pembeda | discriminated union | `bentuk.kind === \"circle\"` |\n\n" +
+            "## Exhaustive Checking dengan never\n\n" +
+            "Ketika menangani discriminated union menggunakan `switch`, bagaimana cara memastikan kamu tidak lupa menangani salah satu variasinya?\n\n" +
+            "Caranya adalah **Exhaustive Checking** menggunakan tipe `never` di blok `default`:\n\n" +
+            "```text\nswitch (state.status) {\n  case \"success\": return state.data;\n  case \"error\": return state.pesan;\n  default: {\n    const _exhaustive: never = state; // ← aman: semua kasus sudah tertangani\n    return _exhaustive;\n  }\n}\n```\n\n" +
+            "Jika suatu saat rekan setim menambahkan `| { status: \"loading\" }` pada union tapi lupa menambahkan `case \"loading\"`, compiler TypeScript langsung menolak baris `_exhaustive` dengan pesan error merah! Ini adalah standar industri untuk alur pembayaran, state machine, dan reducer.\n\n" +
             "## Jebakan yang Sering Terjadi\n\n" +
             "1. **Memakai `string` padahal nilainya terbatas.** `status: string` menerima typo `\"sucess\"`; union literal menolaknya sebelum kode dijalankan.\n" +
             "2. **`let` menghapus literal type.** `let peran = \"admin\"` disimpulkan sebagai `string` biasa karena masih bisa berubah — pakai `const`, atau tulis tipenya secara eksplisit.\n" +
             "3. **Memakai `instanceof` pada interface.** Interface hilang saat kompilasi, jadi tidak ada wujudnya saat aplikasi berjalan; untuk bentuk objek gunakan `in` atau properti pembeda.\n" +
             "4. **Lupa properti pembeda pada union objek.** Tanpa `kind`/`status`, compiler tidak bisa memilih anggota mana yang sedang ditangani.\n" +
-            "5. **Mengira penanda `is` diperiksa compiler.** Ia janji dari kamu; kalau isi fungsinya salah, TypeScript tetap percaya dan bug-nya lolos.\n\n" +
+            "5. **Menyalahgunakan non-null assertion (`!`).** Menulis `user!.nama` membungkam peringatan compiler, tapi bila data aslinya bernilai null, aplikasi tetap meledak saat dijalankan.\n\n" +
             "## Analogi Dunia Nyata\n\n" +
             "Bayangkan sebuah **paket yang datang tanpa keterangan isi**. Kamu tidak boleh langsung menyeduhnya — bisa saja isinya bukan kopi. Narrowing adalah proses memeriksa isinya dulu: begitu kamu yakin itu kopi, barulah semua tindakan khusus kopi masuk akal. Compiler bersikap persis seperti itu, dan ia mengingat hasil pemeriksaanmu di dalam blok `if`.\n\n" +
             "## Kenapa Ini Penting di Dunia Kerja\n\n" +
@@ -1611,7 +1710,7 @@ export const typescriptTrack: Track = {
           language: "jsx",
           tests: [
             {
-              pattern: "typeof\\s+val\\s*===\\s*['\"]number['\"]",
+              pattern: "typeof\\s+val\\s*===?\\s*['\"]number['\"]",
               message:
                 "Pakai `typeof val === \"number\"` di dalam sebuah `if` — inilah yang membuat compiler yakin isinya angka.",
             },
@@ -1745,13 +1844,13 @@ export const typescriptTrack: Track = {
             },
             {
               pattern:
-                "status\\s*:\\s*['\"]success['\"][\\s\\S]*data\\s*:\\s*string",
+                "(?:status\\s*:\\s*['\"]success['\"][\\s\\S]*data\\s*:\\s*string|data\\s*:\\s*string[\\s\\S]*status\\s*:\\s*['\"]success['\"])",
               message:
                 "Kemungkinan pertama harus memuat `status: \"success\"` beserta `data: string` di dalam objek yang sama.",
             },
             {
               pattern:
-                "status\\s*:\\s*['\"]error['\"][\\s\\S]*message\\s*:\\s*string",
+                "(?:status\\s*:\\s*['\"]error['\"][\\s\\S]*message\\s*:\\s*string|message\\s*:\\s*string[\\s\\S]*status\\s*:\\s*['\"]error['\"])",
               message:
                 "Kemungkinan kedua harus memuat `status: \"error\"` beserta `message: string` di dalam objek yang sama.",
             },
@@ -1813,7 +1912,7 @@ export const typescriptTrack: Track = {
                 "Tipe kembaliannya bukan `boolean`, melainkan penanda `val is number` — tulis `function isNumber(val: unknown): val is number`. Bentuk arrow function juga diterima.",
             },
             {
-              pattern: "typeof\\s+val\\s*===\\s*['\"]number['\"]",
+              pattern: "typeof\\s+val\\s*===?\\s*['\"]number['\"]",
               message:
                 "Isi fungsinya harus benar-benar memeriksa, misalnya `return typeof val === \"number\";`. Penanda `is` hanya janji — pemeriksaannya tetap tanggung jawabmu.",
             },
@@ -2015,6 +2114,99 @@ export const typescriptTrack: Track = {
           },
         },
         {
+          kind: "step",
+          id: "ts-3-9",
+          title: "Exhaustive Checking dengan never",
+          explanation:
+            "Saat menangani discriminated union dengan `switch`, bahaya terbesar di proyek tim adalah ketika seseorang menambahkan satu varian baru tetapi lupa menanganinya di seluruh fungsi yang ada. **Exhaustive checking** adalah teknik industri yang memanfaatkan tipe `never` untuk memastikan setiap kemungkinan varian sudah tertangani tanpa ada yang terlewat. Di blok `default`, kamu menetapkan variabel tersebut ke sebuah konstanta bertipe `never`: jika seluruh kasus sudah tertangani di `case`, compiler tahu cabang `default` mustahil tercapai sehingga penugasan ke `never` dinyatakan sah. Namun begitu ada varian baru yang belum ditangani, compiler langsung memprotes baris itu dengan pesan error bahwa varian baru tersebut tidak bisa dimasukkan ke `never`. Pola ini adalah standar wajib di fintech, sistem transaksi, dan manajemen state aplikasi besar.",
+          example: {
+            code:
+              "type Mode = \"terang\" | \"gelap\";\n\n" +
+              "function ambilWarna(m: Mode): string {\n" +
+              "  switch (m) {\n" +
+              "    case \"terang\":\n" +
+              "      return \"#ffffff\";\n" +
+              "    case \"gelap\":\n" +
+              "      return \"#000000\";\n" +
+              "    default: {\n" +
+              "      const _cek: never = m;\n" +
+              "      return _cek;\n" +
+              "    }\n" +
+              "  }\n" +
+              "}\n" +
+              "console.log(ambilWarna(\"terang\"));",
+            output: "#ffffff",
+            note: "Coba tambahkan | \"otomatis\" pada Mode tanpa menambah case-nya — compiler akan langsung menolak baris const _cek: never = m.",
+          },
+          instruction:
+            "Tipe `Lampu` sudah tersedia di editor dengan dua kemungkinan warna: `\"MERAH\"` dan `\"HIJAU\"`. Lengkapi blok `default` pada fungsi `artiLampu` dengan membuat konstanta bernama `_exhaustiveCheck` bertipe `never` yang menampung parameter `lampu`. Ini memastikan jika suatu saat warna baru ditambahkan, compiler akan langsung memperingatkannya.",
+          starterCode:
+            "type Lampu = \"MERAH\" | \"HIJAU\";\n\n" +
+            "function artiLampu(lampu: Lampu): string {\n" +
+            "  switch (lampu) {\n" +
+            "    case \"MERAH\":\n" +
+            "      return \"Berhenti\";\n" +
+            "    case \"HIJAU\":\n" +
+            "      return \"Jalan\";\n" +
+            "    default: {\n" +
+            "      // Tulis exhaustive check di sini\n" +
+            "      return \"Tidak dikenal\";\n" +
+            "    }\n" +
+            "  }\n" +
+            "}\n" +
+            "console.log(artiLampu(\"MERAH\"));\n",
+          language: "jsx",
+          tests: [
+            {
+              pattern: "const\\s+_exhaustiveCheck\\s*:\\s*never\\s*=\\s*lampu",
+              message:
+                "Tulis `const _exhaustiveCheck: never = lampu;` di dalam blok default untuk memastikan seluruh varian tertangani.",
+            },
+            {
+              pattern: "const\\s+_exhaustiveCheck\\s*:\\s*(any|unknown|string)",
+              mustNotMatch: true,
+              message:
+                "Gunakan tipe `never` untuk exhaustive check, bukan `any`, `unknown`, atau `string` — hanya `never` yang bisa menjamin tidak ada varian tersisa.",
+            },
+            {
+              pattern: "return\\s+(_exhaustiveCheck|['\"]Tidak dikenal['\"])",
+              message:
+                "Kembalikan nilai `_exhaustiveCheck` (atau pertahankan return yang ada) dari blok default untuk menyelesaikan fungsi.",
+            },
+          ],
+          solution:
+            "type Lampu = \"MERAH\" | \"HIJAU\";\n\n" +
+            "function artiLampu(lampu: Lampu): string {\n" +
+            "  switch (lampu) {\n" +
+            "    case \"MERAH\":\n" +
+            "      return \"Berhenti\";\n" +
+            "    case \"HIJAU\":\n" +
+            "      return \"Jalan\";\n" +
+            "    default: {\n" +
+            "      const _exhaustiveCheck: never = lampu;\n" +
+            "      return _exhaustiveCheck;\n" +
+            "    }\n" +
+            "  }\n" +
+            "}\n" +
+            "console.log(artiLampu(\"MERAH\"));",
+          susunKode: {
+            question:
+              "Tambahkan exhaustive check pada blok default agar seluruh cabang dipastikan tertangani.",
+            potongan: [
+              "      const _exhaustiveCheck:",
+              " never = lampu;\n",
+              "      return _exhaustiveCheck;",
+            ],
+            pengecoh: [
+              " any = lampu;\n",
+              "      return lampu;",
+            ],
+            pemisah: "",
+            explanation:
+              "Exhaustive check menggunakan `const _exhaustiveCheck: never = lampu;` untuk membuktikan kepada compiler bahwa seluruh cabang sudah ditangani. Pengecoh tipe `any` menggoda karena menghilangkan pesan kompilasi tetapi mematikan proteksi tipe. Pengecoh `return lampu;` keliru karena mengembalikan variabel yang belum tentu aman tanpa exhaustive check.",
+          },
+        },
+        {
           kind: "quiz",
           id: "ts-3-kuis",
           title: "Kuis: Union & Narrowing",
@@ -2178,8 +2370,16 @@ export const typescriptTrack: Track = {
             "| `Promise<User>` | Promise yang isinya User |\n" +
             "| `useState<number>(0)` | state yang isinya number |\n\n" +
             "Huruf `T` hanyalah kebiasaan (dari *Type*). Kamu boleh menamainya `Item`, `Data`, atau apa pun — dan di kode nyata nama yang deskriptif justru lebih disukai.\n\n" +
+            "## Use Case Terbesar di Dunia Kerja: ApiResponse<T>\n\n" +
+            "Di backend maupun frontend, pola generics yang paling sering kamu buat sendiri adalah **pembungkus respons API standar**:\n\n" +
+            "```text\ninterface ApiResponse<T> {\n  success: boolean;\n  data: T;\n  message?: string;\n}\n```\n\n" +
+            "Tanpa generics, kamu terpaksa membuat puluhan interface kembar yang melelahkan: `UserApiResponse`, `ProductApiResponse`, `OrderApiResponse`. Dengan generics, cukup satu interface `ApiResponse<T>` yang dipakai di mana-mana — tinggal mengganti `<T>` dengan model data yang sesuai saat dipanggil.\n\n" +
+            "## Generic Constraint dengan keyof: <T, K extends keyof T>\n\n" +
+            "Terkadang kamu ingin menghubungkan dua tipe: satu objek, dan satu key dari objek itu:\n\n" +
+            "```text\nfunction getProp<T, K extends keyof T>(obj: T, key: K): T[K] {\n  return obj[key];\n}\n```\n\n" +
+            "Di sini `K` dibatasi (`extends`) hanya boleh berupa nama properti sah di dalam `T`. Jika kamu mencoba mengambil properti yang tidak ada, compiler langsung menolaknya sebelum runtime.\n\n" +
             "## Jebakan yang Perlu Diketahui Sejak Awal\n\n" +
-            "1. **Menulis `<T>` padahal tidak butuh.** Kalau T hanya muncul sekali di seluruh signature, kemungkinan besar kamu tidak butuh generics — pakai tipe biasa.\n" +
+            "1. **Menulis `<T>` padahal tidak butuh.** Kalau T hanya muncul sekali di seluruh signature fungsi (misal `function cetak<T>(item: T): void`), kamu tidak butuh generics — pakai tipe biasa atau union.\n" +
             "2. **Mengira T punya method tertentu.** Di dalam fungsi generic, T bisa apa saja, jadi kamu tidak boleh memanggil `t.nama`. Kalau kamu butuh itu, pakai `extends` untuk membatasinya.\n" +
             "3. **Menyamakan `extends` di generics dengan `extends` di interface.** Di generics artinya \"minimal harus memenuhi\", bukan \"mewarisi\".\n\n" +
             "> **Kapan dipakai di dunia kerja:** kamu akan **membaca** generics jauh lebih sering daripada menulisnya. `useState<User | null>(null)`, `Promise<Response>`, `Array<string>` — semuanya generics. Modul ini terutama membuatmu bisa membaca dokumentasi library modern tanpa tersesat.",
@@ -2209,7 +2409,7 @@ export const typescriptTrack: Track = {
           tests: [
             {
               pattern:
-                "function\\s+identity\\s*<\\s*(\\w+)\\s*>\\s*\\(\\s*arg\\s*:\\s*\\1\\s*\\)\\s*:\\s*\\1",
+                "(?:function\\s+identity|const\\s+identity\\s*=\\s*)<\\s*(\\w+)\\s*>\\s*\\(\\s*arg\\s*:\\s*\\1\\s*\\)(?:\\s*:\\s*\\1)?",
               message:
                 "Deklarasikan parameter tipenya di antara `<` dan `>` setelah nama fungsi, lalu pakai nama yang SAMA untuk tipe parameter dan tipe kembalian — misalnya `function identity<T>(arg: T): T`.",
             },
@@ -2266,7 +2466,7 @@ export const typescriptTrack: Track = {
           tests: [
             {
               pattern:
-                "function\\s+getName\\s*<\\s*\\w+\\s+extends\\s*\\{\\s*name\\s*:\\s*string\\s*;?\\s*\\}\\s*>",
+                "(?:function\\s+getName|const\\s+getName\\s*=\\s*)<\\s*\\w+\\s+extends\\s*\\{\\s*name\\s*:\\s*string\\s*;?\\s*\\}\\s*>",
               message:
                 "Tambahkan syaratnya di dalam kurung sudut: `<T extends { name: string }>`. Tanpa syarat itu compiler tidak akan mengizinkan `item.name`.",
             },
@@ -2276,7 +2476,7 @@ export const typescriptTrack: Track = {
                 "Parameternya bernama `item` dan bertipe parameter generic-mu, sedangkan nilai kembaliannya bertipe `string`.",
             },
             {
-              pattern: "return\\s+item\\s*\\.\\s*name",
+              pattern: "(?:return\\s+|=>\\s*)item\\s*\\.\\s*name",
               message: "Kembalikan `item.name` dari dalam fungsinya.",
             },
           ],
@@ -2505,7 +2705,7 @@ export const typescriptTrack: Track = {
           tests: [
             {
               pattern:
-                "async\\s+function\\s+fetcher\\s*<\\s*(\\w+)\\s*>\\s*\\(\\s*url\\s*:\\s*string\\s*\\)\\s*:\\s*Promise\\s*<\\s*\\1\\s*>",
+                "(?:async\\s+function\\s+fetcher|const\\s+fetcher\\s*=\\s*async)\\s*<\\s*(\\w+)\\s*>\\s*\\(\\s*url\\s*:\\s*string\\s*\\)\\s*:\\s*Promise\\s*<\\s*\\1\\s*>",
               message:
                 "Bentuknya `async function fetcher<T>(url: string): Promise<T>` — tipe kembalian fungsi async selalu dibungkus `Promise<...>`.",
             },
@@ -2667,12 +2867,20 @@ export const typescriptTrack: Track = {
             "| `Partial<T>` | semua properti jadi opsional | untuk form edit |\n" +
             "| `Required<T>` | semua properti jadi wajib | kebalikan Partial |\n" +
             "| `Readonly<T>` | semua properti jadi tidak bisa diubah | data konfigurasi |\n" +
-            "| `Pick<T, K>` | ambil hanya properti K | tipe ringkas untuk daftar |\n" +
-            "| `Omit<T, K>` | buang properti K | User tanpa password |\n" +
+            "| `Pick<T, K>` | ambil hanya properti K dari objek | tipe ringkas untuk daftar |\n" +
+            "| `Omit<T, K>` | buang properti K dari objek | User tanpa password |\n" +
             "| `Record<K, V>` | objek dengan key K dan nilai V | kamus/pemetaan |\n" +
             "| `ReturnType<F>` | tipe hasil sebuah fungsi | mengikuti fungsi tanpa menyalin |\n" +
             "| `Parameters<F>` | tuple berisi tipe parameter fungsi | membungkus fungsi lain |\n" +
-            "| `Awaited<P>` | isi sebuah Promise | `Awaited<Promise<User>>` → `User` |\n\n" +
+            "| `Awaited<P>` | isi sebuah Promise | `Awaited<Promise<User>>` → `User` |\n" +
+            "| `Exclude<T, U>` | buang anggota U dari union T | `Exclude<Role, \"tamu\">` |\n" +
+            "| `Extract<T, U>` | ambil anggota U yang cocok dari union T | `Extract<string \\| number, string>` |\n" +
+            "| `NonNullable<T>` | buang null dan undefined dari T | `NonNullable<string \\| null>` → `string` |\n\n" +
+            "## Properti Objek vs Anggota Union\n\n" +
+            "Jebakan yang sering membuat pemula bingung adalah membedakan kapan memakai `Omit` vs `Exclude`:\n\n" +
+            "- `Pick` dan `Omit` bekerja pada **properti objek** (`Pick<User, \"nama\">`).\n" +
+            "- `Extract` dan `Exclude` bekerja pada **anggota union** (`Exclude<\"admin\" | \"user\" | \"guest\", \"guest\">`).\n\n" +
+            "Rumus mudahnya: memotong kolom data objek gunakan `Pick`/`Omit`, memangkas opsi nilai union gunakan `Extract`/`Exclude`.\n\n" +
             "## Dua Operator yang Mendasarinya\n\n" +
             "Utility type dibangun di atas dua operator tingkat tipe. Keduanya sering membingungkan karena namanya sama dengan sesuatu di JavaScript, padahal bekerja di dunia yang berbeda:\n\n" +
             "```text\n" +
@@ -3209,6 +3417,17 @@ export const typescriptTrack: Track = {
             "| `as` | `data as User` | memaksa compiler percaya tanpa bukti |\n" +
             "| `@ts-ignore` | komentar di atas baris error | menyembunyikan error, bukan menyelesaikannya |\n\n" +
             "Ketiganya punya pemakaian yang sah — tapi masing-masing sebaiknya disertai komentar yang menjelaskan **kenapa** aman di tempat itu. Di code review, `as` tanpa penjelasan hampir selalu ditanyakan.\n\n" +
+            "## Penanganan Error Runtime: catch (err: unknown)\n\n" +
+            "Di TypeScript modern dengan `strict: true` (opsi `useUnknownInCatchVariables`), variabel pada blok `catch` **bukan `any`, melainkan `unknown`**:\n\n" +
+            "```text\ntry {\n  await simpanKeDatabase();\n} catch (err: unknown) {\n  if (err instanceof Error) {\n    console.error(\"Pesan:\", err.message);\n  } else {\n    console.error(\"Terjadi error tidak dikenal:\", err);\n  }\n}\n```\n\n" +
+            "Di JavaScript, siapa pun bisa melempar teks biasa `throw 'gagal'` atau angka `throw 500`. Karena compiler tidak bisa menebak apa yang dilempar, ia melarang mengakses `err.message` sebelum kamu membuktikan tipenya lewat `instanceof Error`. Jangan menambalnya dengan `as any`!\n\n" +
+            "## File Deklarasi (.d.ts) dan Ambient Modules\n\n" +
+            "File berekstensi `.d.ts` (*declaration file*) adalah file yang **hanya memuat tipe tanpa kode yang dijalankan**. Digunakan untuk:\n\n" +
+            "- Memberi tahu compiler bentuk modul eksternal yang belum punya tipe: `declare module \"*.svg\" { const src: string; export default src; }`.\n" +
+            "- Menambahkan variabel kustom ke objek global: `declare global { interface Window { analitik: any; } }`.\n\n" +
+            "## Zod dan Pola safeParse di Batas Sistem\n\n" +
+            "Di kode produksi, jangan memanggil `Schema.parse()` sembarangan karena ia melempar error bila data tidak cocok. Gunakan `Schema.safeParse()`:\n\n" +
+            "```text\nconst hasil = UserSchema.safeParse(dataLuar);\nif (!hasil.success) {\n  console.error(hasil.error.flatten());\n  return;\n}\n// Di bawah baris ini, hasil.data terjamin 100% valid dan bertipe User!\nconst user = hasil.data;\n```\n\n" +
             "## Jebakan yang Sering Terjadi\n\n" +
             "1. **Memakai `as` sebagai obat penghilang error.** Compiler menurut tanpa memeriksa apa pun, dan crash-nya terjadi jauh dari tempat assertion ditulis.\n" +
             "2. **Menganggap interface memvalidasi respons API.** Ia hilang saat kompilasi; tanpa validasi runtime, bentuk data yang berbeda lolos begitu saja.\n" +
@@ -3599,9 +3818,9 @@ export const typescriptTrack: Track = {
           tests: [
             {
               pattern:
-                "const\\s+ProductSchema\\s*=\\s*z\\s*\\.\\s*object\\s*\\(\\s*\\{[\\s\\S]*id\\s*:\\s*z\\s*\\.\\s*number\\s*\\(\\s*\\)[\\s\\S]*title\\s*:\\s*z\\s*\\.\\s*string\\s*\\(\\s*\\)[\\s\\S]*\\}\\s*\\)",
+                "const\\s+ProductSchema\\s*=\\s*z\\s*\\.\\s*object\\s*\\(\\s*\\{(?=[\\s\\S]*\\bid\\s*:\\s*z\\s*\\.\\s*number\\s*\\(\\s*\\))(?=[\\s\\S]*\\btitle\\s*:\\s*z\\s*\\.\\s*string\\s*\\(\\s*\\))[\\s\\S]*\\}\\s*\\)",
               message:
-                "Bungkus kedua properti di dalam `z.object({ ... })`, dan tulis tipe tiap properti sebagai pemanggilan fungsi: `z.number()` dan `z.string()`.",
+                "Bungkus kedua properti di dalam `z.object({ ... })`, dan tulis tipe tiap properti sebagai pemanggilan fungsi: `z.number()` dan `z.string()`. Urutan properti di dalam objek bebas.",
             },
             {
               pattern:
@@ -3635,6 +3854,88 @@ export const typescriptTrack: Track = {
             pemisah: "\n",
             explanation:
               "Inferensi tipe dari skema Zod menggunakan `z.infer<typeof ProductSchema>`. Pengecoh `typeof ProductSchema` menggoda tetapi keliru karena hanya menghasilkan tipe objek skema Zod itu sendiri. Pengecoh `z.struct` adalah jebakan metode yang tidak ada pada pustaka Zod.",
+          },
+        },
+        {
+          kind: "step",
+          id: "ts-6-7",
+          title: "Menangani Error di Blok Catch (unknown & instanceof Error)",
+          explanation:
+            "Saat kamu menulis blok `try ... catch` dengan `strict` menyala, TypeScript secara otomatis menganggap parameter error di blok catch bertipe `unknown`. Hal ini sering mengagetkan pemula yang terbiasa langsung mengetik `err.message`, karena compiler akan menolaknya dengan pesan bahwa properti tidak bisa diakses pada tipe unknown. Alasannya defensif: di JavaScript, siapa pun bisa melempar teks biasa `throw 'Gagal'` atau angka `throw 500`, bukan cuma objek Error. Untuk menanganinya dengan aman di kode produksi, lakukan narrowing menggunakan operator `instanceof Error` sebelum membaca pesannya, dan sediakan penanganan alternatif bila yang dilempar bukan objek error standar. Pola ini mencegah crash tak terduga dan merupakan standar wajib saat menulis API client atau form submission di industri.",
+          example: {
+            code:
+              "function proses(data: string) {\n" +
+              "  try {\n" +
+              "    if (!data) throw new Error(\"Data kosong\");\n" +
+              "    console.log(\"Berhasil:\", data);\n" +
+              "  } catch (err: unknown) {\n" +
+              "    if (err instanceof Error) {\n" +
+              "      console.log(\"Error tertangkap:\", err.message);\n" +
+              "    } else {\n" +
+              "      console.log(\"Error bukan objek:\", String(err));\n" +
+              "    }\n" +
+              "  }\n" +
+              "}\n" +
+              "proses(\"\");",
+            output: "Error tertangkap: Data kosong",
+            note: "`err.message` hanya sah di dalam blok `if (err instanceof Error)` — di luarnya, compiler menolak karena tipenya masih unknown.",
+          },
+          instruction:
+            "Fungsi `bacaFile` di editor menjalankan operasi yang bisa melempar pengecualian. Lengkapi blok `catch` dengan memeriksa apakah `err` merupakan instance dari class `Error`. Jika ya, cetak pesannya ke konsol menggunakan `console.log(err.message)`. Jangan memakai type assertion `as any`.",
+          starterCode:
+            "function bacaFile() {\n" +
+            "  try {\n" +
+            "    throw new Error(\"Berkas tidak ditemukan\");\n" +
+            "  } catch (err: unknown) {\n" +
+            "    // Periksa apakah err adalah instance dari Error, lalu cetak err.message di sini\n" +
+            "  }\n" +
+            "}\n" +
+            "bacaFile();\n",
+          language: "jsx",
+          tests: [
+            {
+              pattern: "if\\s*\\(\\s*err\\s+instanceof\\s+Error\\s*\\)",
+              message:
+                "Gunakan `if (err instanceof Error)` untuk mempersempit tipe error sebelum mengakses properti miliknya.",
+            },
+            {
+              pattern: "console\\.log\\s*\\(\\s*err\\.message\\s*\\)",
+              message:
+                "Cetak pesan error menggunakan `console.log(err.message)` di dalam blok pemeriksaan.",
+            },
+            {
+              pattern: "err\\s+as\\s+(any|Error)",
+              mustNotMatch: true,
+              message:
+                "Jangan gunakan type assertion `as any` atau `as Error`. Gunakan operator `instanceof Error` untuk pemeriksaan runtime yang aman.",
+            },
+          ],
+          solution:
+            "function bacaFile() {\n" +
+            "  try {\n" +
+            "    throw new Error(\"Berkas tidak ditemukan\");\n" +
+            "  } catch (err: unknown) {\n" +
+            "    if (err instanceof Error) {\n" +
+            "      console.log(err.message);\n" +
+            "    }\n" +
+            "  }\n" +
+            "}\n" +
+            "bacaFile();",
+          susunKode: {
+            question:
+              "Periksa apakah error merupakan objek Error lalu cetak pesannya.",
+            potongan: [
+              "    if (err instanceof Error) {",
+              "      console.log(err.message);",
+              "    }",
+            ],
+            pengecoh: [
+              "    if (typeof err === \"error\") {",
+              "      console.log((err as any).message);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Narrowing variabel error pada catch dilakukan dengan `if (err instanceof Error)`. Pengecoh `typeof err === \"error\"` menggoda tetapi keliru karena typeof tidak mengenal tipe 'error' di JavaScript runtime. Pengecoh `(err as any).message` juga jebakan type assertion yang mematikan keamanan tipe.",
           },
         },
         {
@@ -3726,6 +4027,21 @@ export const typescriptTrack: Track = {
               answerIndex: 1,
               explanation:
                 "Validasi cukup dilakukan sekali, tepat di tempat data tak terpercaya masuk — biasanya di fungsi fetch atau route handler. Setelah lolos di sana, seluruh kode di dalamnya boleh mempercayai tipenya. Memvalidasi ulang di setiap komponen memperlambat aplikasi dan menyebar tanggung jawab yang seharusnya terpusat.",
+            },
+            {
+              id: "q7",
+              type: "pilihan-ganda",
+              question:
+                "Saat menggunakan TypeScript dengan strict: true, mengapa variabel err pada blok catch otomatis bertipe unknown dan bukan any?",
+              choices: [
+                "Karena di JavaScript apa pun bisa dilempar (string, angka, dsb.), sehingga TypeScript memaksa kita membuktikan jenisnya sebelum mengakses properti",
+                "Karena browser tidak mendukung objek Error jika dijalankan dengan TypeScript",
+                "Karena tipe unknown secara otomatis menghapus pesan error dari memori",
+                "Karena compiler TypeScript hanya mengizinkan penanganan error bertipe number",
+              ],
+              answerIndex: 0,
+              explanation:
+                "Di JavaScript, ekspresi throw bisa melempar tipe apa pun (tidak selalu instance dari Error). Dengan flag strict (useUnknownInCatchVariables), TypeScript menetapkan tipenya sebagai unknown agar developer wajib melakukan narrowing aman dengan if (err instanceof Error) sebelum membaca .message.",
             },
           ],
         },

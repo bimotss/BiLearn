@@ -12,7 +12,7 @@ export default function PathsPage() {
 
   function choose(slug: string) {
     setActivePath(slug);
-    router.push("/");
+    router.push("/tracks/");
   }
 
   return (
@@ -20,10 +20,10 @@ export default function PathsPage() {
       {/* Header & Breadcrumb */}
       <div>
         <Link
-          href="/"
+          href="/tracks/"
           className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-amber-600 dark:text-slate-400 dark:hover:text-amber-300 transition-colors mb-4 cursor-pointer"
         >
-          <span aria-hidden="true">←</span> Kembali ke Halaman Utama
+          <span aria-hidden="true">←</span> Kembali ke Katalog Koding
         </Link>
         <div className="space-y-2">
           <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-0.5 text-xs font-semibold text-amber-700 dark:text-amber-300">

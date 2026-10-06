@@ -17,10 +17,10 @@ export function JapaneseHubView() {
       {/* Navigasi & Header */}
       <div>
         <Link
-          href="/?kategori=bahasa"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-400 hover:text-amber-300 transition-colors mb-4 cursor-pointer"
+          href="/bahasa"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-rose-600 dark:text-slate-400 dark:hover:text-rose-300 transition-colors mb-4 cursor-pointer"
         >
-          <span aria-hidden="true">←</span> Kembali ke Belajar Bahasa
+          <span aria-hidden="true">←</span> Kembali ke Pusat Bahasa
         </Link>
 
         <div className="rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-slate-900/70 p-6 sm:p-8 backdrop-blur-md shadow-xs">

@@ -22,12 +22,21 @@ export default function TrackDetail({ slug }: { slug: string }) {
     <div className="space-y-8">
       {/* Breadcrumb Navigation */}
       <div>
-        <Link
-          href="/"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-400 hover:text-amber-300 transition-colors cursor-pointer"
-        >
-          <span aria-hidden="true">←</span> Kembali ke Semua Track
-        </Link>
+        {track.slug === "business-english" ? (
+          <Link
+            href="/bahasa/inggris"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-300 transition-colors cursor-pointer"
+          >
+            <span aria-hidden="true">←</span> Kembali ke Hub Bahasa Inggris
+          </Link>
+        ) : (
+          <Link
+            href="/tracks/"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-amber-600 dark:text-slate-400 dark:hover:text-amber-300 transition-colors cursor-pointer"
+          >
+            <span aria-hidden="true">←</span> Kembali ke Semua Track Koding
+          </Link>
+        )}
       </div>
 
       {/* Track Hero Banner */}

@@ -161,7 +161,7 @@ export const cssTrack: Track = {
           previewHtml: "<div class=\"kotak\">Perbaiki aku</div>",
           tests: [
             {
-              pattern: "\\.kotak\\s*\\{[^}]*[^-]color\\s*:\\s*white",
+              pattern: "\\.kotak\\s*\\{[^}]*[^-]color\\s*:\\s*(white|#fff\\b|#ffffff\\b)",
               message:
                 "Nama properti untuk warna teks adalah `color` (ejaan Amerika), bukan `colour`. Browser mengabaikan properti yang tidak dikenalnya.",
             },
@@ -531,14 +531,14 @@ export const cssTrack: Track = {
             note: "Pola: selector (h1) → kurung kurawal → properti: nilai; Titik koma di akhir wajib.",
           },
           instruction:
-            "Buat semua `<p>` berwarna biru dengan properti `color: blue;`.",
+            "Beri gaya pada semua elemen paragraf `<p>` agar teksnya berwarna biru (blue).",
           starterCode: "/* tulis aturan CSS di sini */\n",
           language: "css",
           previewHtml:
             "<h1>Judul Halaman</h1>\n<p>Paragraf pertama.</p>\n<p>Paragraf kedua.</p>",
           tests: [
             {
-              pattern: "p\\s*\\{[^}]*color\\s*:\\s*blue\\s*;?[^}]*\\}",
+              pattern: "p\\s*\\{[^}]*color\\s*:\\s*(blue|#0000ff\\b|#00f\\b|rgb\\(\\s*0\\s*,?\\s*0\\s*,?\\s*255\\s*\\))\\s*;?[^}]*\\}",
               message:
                 "Buat aturan dengan selector p yang berisi color: blue;",
             },
@@ -575,14 +575,14 @@ export const cssTrack: Track = {
             note: "Di CSS pakai titik (.peringatan), di HTML tanpa titik (class=\"peringatan\"). Ini sering tertukar.",
           },
           instruction:
-            "Beri elemen ber-class `sorotan` latar kuning (`background-color: yellow;`) dan teks tebal (`font-weight: bold;`).",
+            "Beri elemen ber-class `sorotan` warna latar kuning (yellow) dan atur ketebalan teks menjadi tebal (bold).",
           starterCode: "",
           language: "css",
           previewHtml:
             '<p>Teks biasa.</p>\n<p class="sorotan">Teks yang disorot.</p>\n<p>Teks biasa lagi.</p>',
           tests: [
             {
-              pattern: "\\.sorotan\\s*\\{[^}]*background(-color)?\\s*:\\s*yellow",
+              pattern: "\\.sorotan\\s*\\{[^}]*background(-color)?\\s*:\\s*(yellow|#ffff00\\b|#ff0\\b)",
               message:
                 "Gunakan selector .sorotan (dengan titik di depan) dan atur background-color: yellow; — menulis `background: yellow` juga diterima.",
             },
@@ -631,7 +631,7 @@ export const cssTrack: Track = {
           previewHtml: '<h1 id="judul" class="besar">Judul Utama</h1>',
           tests: [
             {
-              pattern: "\\.besar\\s*\\{[^}]*color\\s*:\\s*green",
+              pattern: "\\.besar\\s*\\{[^}]*color\\s*:\\s*(green|#008000\\b|#16a34a\\b|#15803d\\b|#22c55e\\b)",
               message:
                 "Buat aturan .besar { color: green; } — class (10) mengalahkan tag (1).",
             },
@@ -689,7 +689,7 @@ export const cssTrack: Track = {
             },
             {
               pattern:
-                "\\.kartu\\s*\\{[^}]*border\\s*:\\s*2px\\s+solid\\s+black",
+                "\\.kartu\\s*\\{[^}]*border\\s*:\\s*(2px\\s+solid\\s+(black|#000\\b|#000000\\b)|solid\\s+2px\\s+(black|#000\\b|#000000\\b))",
               message: "Tambahkan border: 2px solid black;",
             },
             {
@@ -733,7 +733,7 @@ export const cssTrack: Track = {
             note: "Karena itu hampir semua proyek menulis * { box-sizing: border-box } sebagai aturan pertama.",
           },
           instruction:
-            "Tambahkan aturan untuk selector `*` (semua elemen) dengan `box-sizing: border-box;`.",
+            "Tambahkan aturan pada selector universal `*` yang mengatur model kotak ke `border-box` agar padding dan border dihitung di dalam dimensi lebar elemen.",
           starterCode:
             ".kotak {\n  width: 200px;\n  padding: 20px;\n  border: 2px solid navy;\n  background: #dbeafe;\n}\n\n",
           language: "css",
@@ -917,6 +917,60 @@ export const cssTrack: Track = {
           },
         },
         {
+          kind: "step",
+          id: "css-1-9",
+          title: "Margin collapse: saat dua jarak saling menelan",
+          explanation:
+            "Ketika dua elemen blok bertetangga secara vertikal masing-masing memiliki margin, browser tidak menjumlahkan kedua nilai tersebut. Jarak vertikal yang dihasilkan justru hanya mengambil nilai margin yang paling besar di antara keduanya — fenomena ini disebut margin collapse. Jebakan ini sering mengecoh pemula yang mengira margin 24px bertemu 16px akan menghasilkan jarak 40px, padahal kenyataannya tetap 24px. Di dunia kerja, cara paling bersih untuk menghindari tabrakan margin adalah menetapkan aturan satu arah yang konsisten atau menggunakan padding pada elemen pembungkus.",
+          example: {
+            code: ".bagian-satu { margin-bottom: 20px; }\n.bagian-dua { margin-top: 10px; }",
+            output: "Jarak vertikal antara bagian-satu dan bagian-dua di layar adalah 20px (bukan 30px).",
+            note: "Margin 20px menelan margin 10px, sehingga hanya nilai terbesar yang berlaku.",
+          },
+          instruction:
+            "Di editor ada dua kartu yang bertumpuk. Hindari kebingungan margin collapse dengan menetapkan jarak satu arah: beri `.kartu-atas` margin bawah sebesar 28px, lalu netralkan margin atas pada `.kartu-bawah` menjadi 0. Beri juga `.pembungkus` padding sebesar 16px.",
+          starterCode: ".pembungkus {\n  background: #f1f5f9;\n}\n.kartu-atas {\n  background: white;\n  padding: 12px;\n}\n.kartu-bawah {\n  background: white;\n  padding: 12px;\n}\n",
+          language: "css",
+          previewHtml: "<div class=\"pembungkus\"><div class=\"kartu-atas\">Kartu Atas</div><div class=\"kartu-bawah\">Kartu Bawah</div></div>",
+          tests: [
+            {
+              pattern: "\\.pembungkus\\s*\\{[^}]*padding\\s*:\\s*16px",
+              message:
+                "Tambahkan padding: 16px; pada .pembungkus",
+            },
+            {
+              pattern: "\\.kartu-atas\\s*\\{[^}]*margin-bottom\\s*:\\s*28px",
+              message:
+                "Tambahkan margin-bottom: 28px; pada .kartu-atas",
+            },
+            {
+              pattern: "\\.kartu-bawah\\s*\\{[^}]*margin-top\\s*:\\s*0",
+              message:
+                "Atur margin-top: 0; pada .kartu-bawah untuk menetralkan tabrakan margin vertikal.",
+            },
+          ],
+          solution: ".pembungkus {\n  background: #f1f5f9;\n  padding: 16px;\n}\n.kartu-atas {\n  background: white;\n  padding: 12px;\n  margin-bottom: 28px;\n}\n.kartu-bawah {\n  background: white;\n  padding: 12px;\n  margin-top: 0;\n}",
+          susunKode: {
+            question:
+              "Susun aturan untuk menghindari margin collapse dan mengatur padding pembungkus:",
+            potongan: [
+              ".pembungkus {\n  background: #f1f5f9;",
+              "  padding: 16px;\n}",
+              ".kartu-atas {\n  background: white;\n  padding: 12px;",
+              "  margin-bottom: 28px;\n}",
+              ".kartu-bawah {\n  background: white;\n  padding: 12px;",
+              "  margin-top: 0;\n}",
+            ],
+            pengecoh: [
+              "  margin-bottom: 14px;\n}",
+              "  margin-top: 14px;\n}",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Membagi margin menjadi 14px atas dan 14px bawah adalah jebakan yang sering menggoda pemula. Cara paling aman dan konsisten dalam sistem layout adalah menetapkan margin satu arah (misalnya margin-bottom saja) dan menetralkan margin-top ke 0.",
+          },
+        },
+        {
           kind: "quiz",
           id: "css-1-kuis",
           title: "Kuis: Dasar Styling",
@@ -981,6 +1035,21 @@ export const cssTrack: Track = {
               answerIndex: 1,
               explanation:
                 "30px. Margin vertikal yang bersinggungan akan 'collapse' — yang berlaku adalah nilai terbesar, bukan jumlahnya. Ini jebakan klasik saat orang bingung 'kok jaraknya kurang'. Margin horizontal tidak collapse.",
+            },
+            {
+              id: "q6",
+              type: "pilihan-ganda",
+              question:
+                "Dua kolom div masing-masing diberi width: 50% dan padding: 16px. Di layar, kolom kedua malah turun ke baris bawah padahal lebarnya pas 50%. Apa penyebabnya dan bagaimana mengatasinya?",
+              choices: [
+                "Secara default box-sizing adalah content-box sehingga padding menambah lebar total melebihi 50%; solusinya adalah memasang box-sizing: border-box",
+                "Browser selalu menambahkan margin otomatis pada div; solusinya adalah memberi margin: 0 !important pada kedua div",
+                "Nilai width 50% hanya berlaku jika elemen diberi display: inline; solusinya adalah mengganti div menjadi span",
+                "Padding horizontal hanya boleh ditulis dengan satuan rem, bukan px; solusinya adalah mengganti 16px menjadi 1rem",
+              ],
+              answerIndex: 0,
+              explanation:
+                "Pada model bawaan browser (box-sizing: content-box), padding dan border ditambahkan di luar width. Dua kotak selebar 50% yang masing-masing ditambah padding 32px memiliki total lebar 100% + 64px, sehingga tidak muat dalam satu baris. Mengatur box-sizing: border-box menyertakan padding ke dalam perhitungan 50% sehingga keduanya muat berdampingan.",
             },
           ],
         },
@@ -1476,6 +1545,59 @@ export const cssTrack: Track = {
             pemisah: "\n",
             explanation:
               "Elemen yang di-`float` keluar dari alur normal, sehingga induknya menganggap dirinya kosong dan tingginya menyusut jadi nol — gejala khas kode lama yang tata letaknya tiba-tiba rusak. Clearfix mengatasinya dengan menyisipkan elemen semu di akhir yang membersihkan float. Keping `content: none` menggoda karena isinya memang tidak perlu terlihat, padahal tanpa `content` yang berisi string kosong, elemen semunya tidak pernah dibuat sama sekali. Keping `clear: left` hanya membersihkan float kiri; `both` lebih aman karena kode lama sering mencampur kiri dan kanan. Keping bertitik dua satu adalah penulisan lama yang masih jalan, tapi standar sekarang memakai dua titik dua untuk elemen semu.",
+          },
+        },
+        {
+          kind: "step",
+          id: "css-2-8",
+          title: "position: fixed untuk elemen yang melayang di layar",
+          explanation:
+            "`position: fixed` mengeluarkan elemen sepenuhnya dari aliran normal dokumen dan menempatkannya relatif langsung terhadap viewport (jendela browser). Elemen ini akan tetap menempel di koordinat yang sama meskipun pengguna menggulir halaman ke atas maupun ke bawah. Properti ini lazim dipakai untuk tombol bantuan WhatsApp, bilah navigasi melayang, atau tombol scroll-to-top. Jebakan umumnya adalah lupa menetapkan koordinat penahan seperti `bottom` atau `right`, sehingga elemen melayang di posisi awal tanpa jangkar yang jelas.",
+          example: {
+            code: ".banner-promo {\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n}",
+            output: "Kotak banner selalu menempel di bagian paling atas layar saat halaman digulir.",
+            note: "position: fixed mengabaikan elemen induk dan mengunci posisinya terhadap layar browser.",
+          },
+          instruction:
+            "Kunci posisi `.tombol-bantuan` agar tetap melayang di layar dengan `position: fixed`, lalu atur jarak 24px dari tepi bawah dan 24px dari tepi kanan viewport.",
+          starterCode: ".konten {\n  height: 350px;\n  background: #f8fafc;\n  padding: 16px;\n}\n.tombol-bantuan {\n  background: #16a34a;\n  color: white;\n  padding: 12px 18px;\n  border-radius: 20px;\n}\n",
+          language: "css",
+          previewHtml: "<div class=\"konten\"><p>Gulir konten ini ke bawah...</p></div><button class=\"tombol-bantuan\">Bantuan</button>",
+          tests: [
+            {
+              pattern: "\\.tombol-bantuan\\s*\\{[^}]*position\\s*:\\s*fixed",
+              message:
+                "Tambahkan position: fixed; pada .tombol-bantuan",
+            },
+            {
+              pattern: "\\.tombol-bantuan\\s*\\{[^}]*bottom\\s*:\\s*24px",
+              message:
+                "Kunci posisi bawah dengan bottom: 24px;",
+            },
+            {
+              pattern: "\\.tombol-bantuan\\s*\\{[^}]*right\\s*:\\s*24px",
+              message:
+                "Kunci posisi kanan dengan right: 24px;",
+            },
+          ],
+          solution: ".konten {\n  height: 350px;\n  background: #f8fafc;\n  padding: 16px;\n}\n.tombol-bantuan {\n  background: #16a34a;\n  color: white;\n  padding: 12px 18px;\n  border-radius: 20px;\n  position: fixed;\n  bottom: 24px;\n  right: 24px;\n}",
+          susunKode: {
+            question:
+              "Susun aturan fixed positioning untuk mengunci tombol di pojok layar:",
+            potongan: [
+              ".konten {\n  height: 350px;\n  background: #f8fafc;\n  padding: 16px;\n}",
+              ".tombol-bantuan {\n  background: #16a34a;\n  color: white;\n  padding: 12px 18px;\n  border-radius: 20px;",
+              "  position: fixed;",
+              "  bottom: 24px;",
+              "  right: 24px;\n}",
+            ],
+            pengecoh: [
+              "  position: sticky;",
+              "  top: 24px;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Memilih position: sticky adalah keliru karena sticky masih bergantung pada batas kontainer induknya. Untuk elemen melayang permanen seperti tombol bantuan, position: fixed dengan koordinat bottom dan right adalah jawaban yang tepat.",
           },
         },
         {
@@ -2051,6 +2173,89 @@ export const cssTrack: Track = {
           },
         },
         {
+          kind: "step",
+          id: "css-3-8",
+          title: "Pola navbar: mendorong item ke kanan dengan margin-left: auto",
+          explanation:
+            "Di dalam Flexbox, margin bernilai `auto` memiliki kekuatan khusus untuk menyerap seluruh ruang kosong yang tersisa pada sumbu utama. Jika kamu menambahkan `margin-left: auto` pada sebuah flex item, elemen tersebut akan terdorong sejauh mungkin ke sisi kanan kontainer. Pola ini adalah standar industri untuk memisahkan menu navigasi utama di kiri dengan tombol profil atau login di kanan tanpa memerlukan pembungkus ekstra. Jebakan pemula adalah memaksakan `justify-content: space-between` lalu membuat div kosong hanya untuk mendorong tombol ke ujung.",
+          example: {
+            code: ".nav { display: flex; }\n.nav-keluar { margin-left: auto; }",
+            output: "Item nav-keluar otomatis melompat ke ujung kanan baris navigasi.",
+            note: "margin-left: auto menyerap ruang sisa di sebelah kirinya dan mendorong item ke tepi kanan.",
+          },
+          instruction:
+            "Dorong item `.menu-masuk` ke ujung kanan baris navbar memanfaatkan margin otomatis pada sisi kiri item flex.",
+          starterCode: ".nav {\n  display: flex;\n  align-items: center;\n  gap: 16px;\n  background: #0f172a;\n  padding: 12px 16px;\n  color: white;\n}\n.menu-masuk {\n  background: #3b82f6;\n  padding: 6px 14px;\n  border-radius: 4px;\n}\n",
+          language: "css",
+          previewHtml: "<nav class=\"nav\"><span>BiLearn</span><a href=\"#\">Belajar</a><a href=\"#\">Katalog</a><button class=\"menu-masuk\">Masuk</button></nav>",
+          tests: [
+            {
+              pattern: "\\.menu-masuk\\s*\\{[^}]*margin-left\\s*:\\s*auto",
+              message:
+                "Tambahkan margin-left: auto; pada .menu-masuk untuk mendorongnya ke kanan.",
+            },
+          ],
+          solution: ".nav {\n  display: flex;\n  align-items: center;\n  gap: 16px;\n  background: #0f172a;\n  padding: 12px 16px;\n  color: white;\n}\n.menu-masuk {\n  background: #3b82f6;\n  padding: 6px 14px;\n  border-radius: 4px;\n  margin-left: auto;\n}",
+          susunKode: {
+            question:
+              "Susun aturan navbar untuk mendorong item ke tepi kanan di baris flex:",
+            potongan: [
+              ".nav {\n  display: flex;\n  align-items: center;\n  gap: 16px;\n  background: #0f172a;\n  padding: 12px 16px;\n  color: white;\n}",
+              ".menu-masuk {\n  background: #3b82f6;\n  padding: 6px 14px;\n  border-radius: 4px;",
+              "  margin-left: auto;\n}",
+            ],
+            pengecoh: [
+              "  margin-right: auto;\n}",
+              "  float: right;\n}",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Memakai margin-right: auto adalah keliru karena itu justru akan mendorong item ke kiri. Properti float: right juga sering menggoda pemula padahal float sepenuhnya diabaikan di dalam flex item. Menggunakan margin-left: auto adalah cara paling bersih yang menjadi standar industri.",
+          },
+        },
+        {
+          kind: "step",
+          id: "css-3-9",
+          title: "Teks panjang di dalam flex: mengatasi jebakan min-width: auto",
+          explanation:
+            "Secara bawaan spesifikasi CSS, seluruh elemen anak di dalam flex container memiliki nilai default `min-width: auto`. Nilai ini mencegah elemen menyusut lebih kecil daripada ukuran konten intrinsik di dalamnya. Akibatnya, pemotongan teks menggunakan `overflow: hidden` dan `text-overflow: ellipsis` tidak akan mempan dan kartu flex akan jebol melebar ke kanan. Solusi standar di tempat kerja adalah menyetel `min-width: 0` secara eksplisit pada flex item yang memuat teks panjang tersebut.",
+          example: {
+            code: ".kolom-flex {\n  display: flex;\n}\n.teks-potong {\n  min-width: 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}",
+            output: "Teks panjang yang melebihi lebar kartu terpotong rapi dengan simbol elipsis (...).",
+            note: "Tanpa min-width: 0, flex item menolak menyusut dan menyebabkan horizontal scrollbar.",
+          },
+          instruction:
+            "Izinkan flex item `.pesan-teks` menyusut melebihi ukuran konten bawaannya dengan menyetel batas lebar minimum ke 0 agar pemotongan teks ellipsis aktif.",
+          starterCode: ".pesan-baris {\n  display: flex;\n  align-items: center;\n  gap: 12px;\n  width: 240px;\n  border: 1px solid #cbd5e1;\n  padding: 8px;\n}\n.pesan-teks {\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n",
+          language: "css",
+          previewHtml: "<div class=\"pesan-baris\"><span>📌</span><div class=\"pesan-teks\">Pemberitahuan penting mengenai pembaruan sistem berkala untuk seluruh pengguna aktif</div></div>",
+          tests: [
+            {
+              pattern: "\\.pesan-teks\\s*\\{[^}]*min-width\\s*:\\s*0",
+              message:
+                "Tambahkan min-width: 0; pada .pesan-teks",
+            },
+          ],
+          solution: ".pesan-baris {\n  display: flex;\n  align-items: center;\n  gap: 12px;\n  width: 240px;\n  border: 1px solid #cbd5e1;\n  padding: 8px;\n}\n.pesan-teks {\n  min-width: 0;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}",
+          susunKode: {
+            question:
+              "Susun kode agar flex item diizinkan menyusut dan elipsis aktif:",
+            potongan: [
+              ".pesan-baris {\n  display: flex;\n  align-items: center;\n  gap: 12px;\n  width: 240px;\n  border: 1px solid #cbd5e1;\n  padding: 8px;\n}",
+              ".pesan-teks {",
+              "  min-width: 0;",
+              "  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}",
+            ],
+            pengecoh: [
+              "  min-width: auto;",
+              "  width: auto;",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Membiarkan min-width: auto adalah jebakan klasik yang sering terjadi karena flex item menolak menyusut lebih kecil dari panjang teksnya. Menetapkan min-width: 0 secara eksplisit adalah kunci agar pemotongan teks berhasil.",
+          },
+        },
+        {
           kind: "quiz",
           id: "css-3-kuis",
           title: "Kuis: Flexbox",
@@ -2117,6 +2322,21 @@ export const cssTrack: Track = {
               answerIndex: 1,
               explanation:
                 "flex: 1 adalah shorthand untuk flex-grow: 1, flex-shrink: 1, flex-basis: 0% — artinya 'tumbuh mengisi ruang sisa'. Kalau beberapa item diberi flex: 1, ruang sisa dibagi rata di antara mereka.",
+            },
+            {
+              id: "q6",
+              type: "pilihan-ganda",
+              question:
+                "Sebuah kartu flex berisi teks panjang dengan text-overflow: ellipsis dan overflow: hidden. Namun di layar, teksnya menolak terpotong dan malah membuat kontainer kartu melebar jebol ke kanan. Apa yang menyebabkan bug ini?",
+              choices: [
+                "Elemen anak flex secara bawaan memiliki min-width: auto, sehingga menolak menyusut lebih kecil dari ukuran teksnya tanpa min-width: 0",
+                "Flexbox tidak mendukung properti text-overflow; pemotongan teks hanya bisa dilakukan pada elemen dengan display: block biasa",
+                "Properti overflow: hidden tidak diizinkan berada di dalam kontainer flex; solusinya adalah menggantinya dengan overflow: clip",
+                "Flex-basis bawaan adalah 100%, sehingga kartu flex dipaksa selalu meregang mengikuti seluruh panjang teks",
+              ],
+              answerIndex: 0,
+              explanation:
+                "Ini adalah jebakan klasik dan bug produksi nomor satu di Flexbox: secara spesifikasi, seluruh flex child memiliki default min-width: auto. Nilai ini melarang elemen menyusut lebih kecil dari teks terpanjang di dalamnya, mengabaikan aturan ellipsis. Solusi standarnya adalah menambahkan min-width: 0 pada flex item tersebut.",
             },
           ],
         },
@@ -2466,6 +2686,47 @@ export const cssTrack: Track = {
           },
         },
         {
+          kind: "step",
+          id: "css-4-6",
+          title: "auto-fill vs auto-fit: mempertahankan slot kolom kosong",
+          explanation:
+            "`repeat(auto-fit, ...)` dan `repeat(auto-fill, ...)` sama-sama menciptakan tata letak responsif tanpa media query, tetapi memiliki perilaku berbeda ketika jumlah item sedikit. `auto-fit` akan merapatkan kolom yang kosong menjadi 0px sehingga item yang ada melebar mengisi seluruh kontainer. Sebaliknya, `auto-fill` tetap mempertahankan slot kolom kosong dengan ukuran penuh di samping item yang ada. Pola `auto-fill` sangat berguna saat kamu ingin ukuran kartu produk tetap konsisten dan tidak membesar raksasa saat baru ada satu atau dua barang di katalog.",
+          example: {
+            code: ".grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));\n}",
+            output: "Grid tetap menyediakan slot kolom kosong di sisi kanan saat item yang ada hanya sedikit.",
+            note: "auto-fill menjaga slot kosong tetap ada; auto-fit meruntuhkan slot kosong agar item melebar.",
+          },
+          instruction:
+            "Konfigurasikan kolom `.katalog` menggunakan `repeat` dengan strategi `auto-fill` dan ukuran rentang antara 130px hingga 1fr agar slot kolom kosong tetap dipertahankan saat item sedikit.",
+          starterCode: ".katalog {\n  display: grid;\n  gap: 12px;\n  padding: 12px;\n  background: #f8fafc;\n}\n.produk {\n  background: #6366f1;\n  color: white;\n  padding: 16px;\n  border-radius: 6px;\n}\n",
+          language: "css",
+          previewHtml: "<div class=\"katalog\"><div class=\"produk\">Buku CSS</div><div class=\"produk\">Kursus JS</div></div>",
+          tests: [
+            {
+              pattern: "\\.katalog\\s*\\{[^}]*grid-template-columns\\s*:\\s*repeat\\(\\s*auto-fill\\s*,\\s*minmax\\(\\s*130px\\s*,\\s*1fr\\s*\\)\\s*\\)",
+              message:
+                "Atur grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); pada .katalog",
+            },
+          ],
+          solution: ".katalog {\n  display: grid;\n  gap: 12px;\n  padding: 12px;\n  background: #f8fafc;\n  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));\n}\n.produk {\n  background: #6366f1;\n  color: white;\n  padding: 16px;\n  border-radius: 6px;\n}",
+          susunKode: {
+            question:
+              "Susun fungsi repeat dengan auto-fill dan minmax untuk template kolom grid:",
+            potongan: [
+              ".katalog {\n  display: grid;\n  gap: 12px;\n  padding: 12px;\n  background: #f8fafc;",
+              "  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));\n}",
+              ".produk {\n  background: #6366f1;\n  color: white;\n  padding: 16px;\n  border-radius: 6px;\n}",
+            ],
+            pengecoh: [
+              "  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));\n}",
+              "  grid-template-columns: repeat(auto-fill, minmax(130px, 100%));\n}",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Menggunakan auto-fit adalah keliru karena akan meratakan item tunggal menjadi selebar halaman penuh saat jumlah item sedikit. Menggunakan auto-fill dengan 1fr memastikan slot kolom kosong tetap dipertahankan dengan ukuran wajar.",
+          },
+        },
+        {
           kind: "quiz",
           id: "css-4-kuis",
           title: "Kuis: CSS Grid",
@@ -2649,7 +2910,7 @@ export const cssTrack: Track = {
             note: "Perhatikan struktur: @media (kondisi) { selector { properti } } — ada dua tingkat kurung kurawal.",
           },
           instruction:
-            "Tambahkan media query `@media (min-width: 600px)` yang mengubah `.kotak` menjadi `background: green;`.",
+            "Buat media query yang mengubah latar `.kotak` menjadi hijau (`green`) mulai lebar layar minimal 600px ke atas.",
           starterCode:
             ".kotak {\n  background: crimson;\n  color: white;\n  padding: 20px;\n}\n\n",
           language: "css",
@@ -2658,7 +2919,7 @@ export const cssTrack: Track = {
           tests: [
             {
               pattern:
-                "@media\\s*\\(\\s*min-width\\s*:\\s*600px\\s*\\)\\s*\\{[\\s\\S]*\\.kotak[\\s\\S]*background\\s*:\\s*green",
+                "@media\\s*\\(\\s*min-width\\s*:\\s*600px\\s*\\)\\s*\\{[\\s\\S]*\\.kotak[\\s\\S]*background(-color)?\\s*:\\s*(green|#008000\\b|#16a34a\\b|#22c55e\\b)",
               message:
                 "Buat @media (min-width: 600px) yang di dalamnya ada .kotak { background: green; }",
             },
@@ -2698,7 +2959,7 @@ export const cssTrack: Track = {
             note: "Aturan dasar tidak perlu media query — hanya perubahannya yang perlu. Itulah efisiensi mobile-first.",
           },
           instruction:
-            "Di dalam `@media (min-width: 700px)`, ubah `.grid` menjadi `grid-template-columns: 1fr 1fr;`.",
+            "Di dalam breakpoint `min-width: 700px`, ubah layout `.grid` yang sebelumnya 1 kolom menjadi 2 kolom sama lebar memakai unit fr.",
           starterCode:
             ".grid {\n  display: grid;\n  grid-template-columns: 1fr;\n  gap: 8px;\n}\n.sel {\n  background: #7dd3fc;\n  padding: 16px;\n}\n\n",
           language: "css",
@@ -2827,6 +3088,54 @@ export const cssTrack: Track = {
             pemisah: "\n",
             explanation:
               "`max-width: 100%` membuat gambar menyusut kalau wadahnya sempit, tapi tidak memaksanya melar melebihi ukuran aslinya. `height: auto` menjaga perbandingan sisi supaya gambarnya tidak gepeng. Keping `width: 100%` menggoda karena hasilnya mirip di layar sempit, tapi ia MEMAKSA gambar selebar wadah — foto kecil ikut dibesarkan sampai pecah. Keping `height: 100%` bersama lebar yang menyesuaikan adalah jebakan yang paling merusak: perbandingan sisinya hilang dan wajah orang di foto jadi melar. Ini kekeliruan yang paling sering ditemukan saat memeriksa situs di ponsel.",
+          },
+        },
+        {
+          kind: "step",
+          id: "css-5-5",
+          title: "Container Queries: responsif berbasis ukuran pembungkus",
+          explanation:
+            "Media query tradisional `@media` hanya membaca ukuran jendela browser secara keseluruhan. Dalam era arsitektur komponen modern seperti React, satu kartu yang sama bisa ditempatkan di bilah samping yang sempit atau di area konten utama yang luas pada layar laptop yang sama. Container Queries memungkinkan gaya elemen berubah berdasarkan lebar kontainer induknya sendiri. Caranya: beri pembungkus properti `container-type: inline-size`, lalu gunakan kueri `@container (min-width: ...)` untuk menargetkan elemen di dalamnya.",
+          example: {
+            code: ".wrapper {\n  container-type: inline-size;\n}\n@container (min-width: 400px) {\n  .item { display: flex; }\n}",
+            output: "Elemen item berubah menjadi flex saat pembungkus wrapper memiliki lebar minimal 400px.",
+            note: "Perubahan layout dipicu oleh lebar elemen pembungkus, bukan lebar layar jendela browser.",
+          },
+          instruction:
+            "Aktifkan pemantauan lebar pada `.wadah-kartu` dengan `container-type: inline-size`. Lalu buat container query yang mengubah arah flex `.kartu-berita` menjadi mendatar (baris) saat lebar wadah minimal 360px.",
+          starterCode: ".wadah-kartu {\n  border: 1px solid #e2e8f0;\n  padding: 12px;\n}\n.kartu-berita {\n  display: flex;\n  flex-direction: column;\n  gap: 12px;\n}\n",
+          language: "css",
+          previewHtml: "<div class=\"wadah-kartu\" style=\"width: 420px\"><div class=\"kartu-berita\"><div style=\"background:#3b82f6;color:white;padding:20px\">Foto</div><div><h4>Judul Komponen</h4><p>Deskripsi berita terkini</p></div></div></div>",
+          tests: [
+            {
+              pattern: "\\.wadah-kartu\\s*\\{[^}]*container-type\\s*:\\s*inline-size",
+              message:
+                "Tambahkan container-type: inline-size; pada .wadah-kartu",
+            },
+            {
+              pattern: "@container\\s*\\(\\s*min-width\\s*:\\s*360px\\s*\\)\\s*\\{\\s*\\.kartu-berita\\s*\\{[^}]*flex-direction\\s*:\\s*row",
+              message:
+                "Tambahkan @container (min-width: 360px) yang mengatur .kartu-berita { flex-direction: row; }",
+            },
+          ],
+          solution: ".wadah-kartu {\n  border: 1px solid #e2e8f0;\n  padding: 12px;\n  container-type: inline-size;\n}\n.kartu-berita {\n  display: flex;\n  flex-direction: column;\n  gap: 12px;\n}\n\n@container (min-width: 360px) {\n  .kartu-berita {\n    flex-direction: row;\n  }\n}",
+          susunKode: {
+            question:
+              "Susun deklarasi tipe kontainer dan aturan container query:",
+            potongan: [
+              ".wadah-kartu {\n  border: 1px solid #e2e8f0;\n  padding: 12px;",
+              "  container-type: inline-size;\n}\n.kartu-berita {\n  display: flex;\n  flex-direction: column;\n  gap: 12px;\n}",
+              "@container (min-width: 360px) {",
+              "  .kartu-berita {",
+              "    flex-direction: row;\n  }\n}",
+            ],
+            pengecoh: [
+              "  container-type: normal;\n}\n.kartu-berita {\n  display: flex;\n  flex-direction: column;\n  gap: 12px;\n}",
+              "@media (min-width: 360px) {",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Memilih @media adalah jebakan yang sering terjadi karena media query mendeteksi viewport jendela, bukan kontainer komponen. Properti container-type: inline-size wajib dipasang agar @container dapat memantau lebar pembungkus.",
           },
         },
         {
@@ -3249,13 +3558,13 @@ export const cssTrack: Track = {
           tests: [
             {
               pattern:
-                "\\.tombol\\s*\\{[^}]*transition\\s*:\\s*background-color\\s+0\\.3s\\s+ease",
+                "\\.tombol\\s*\\{[^}]*transition\\s*:\\s*(background(-color)?|all)\\s+0?\\.3s(\\s+ease)?",
               message:
                 "Tambahkan transition: background-color 0.3s ease; di dalam .tombol (bukan di :hover).",
             },
             {
               pattern:
-                "\\.tombol:hover\\s*\\{[^}]*background-color\\s*:\\s*#1e40af",
+                "\\.tombol:hover\\s*\\{[^}]*background(-color)?\\s*:\\s*#1e40af",
               message:
                 "Buat aturan .tombol:hover { background-color: #1e40af; }",
             },
@@ -3274,13 +3583,13 @@ export const cssTrack: Track = {
               "}",
             ],
             pengecoh: [
-              "  transition: background-color 0.3s;",
+              "  transition: color 0.3s ease;",
               "  animation: background-color 0.3s ease;",
               ".tombol :hover {",
             ],
             pemisah: "\n",
             explanation:
-              "`transition` memerlukan tiga keterangan: properti apa yang dianimasikan, berapa lama, dan kurva percepatannya. Ia dipasang pada keadaan NORMAL, bukan di dalam `:hover` — kalau dipasang di `:hover`, perubahannya halus saat masuk tapi menghentak saat keluar. Keping `animation` menukar properti: `animation` butuh `@keyframes` dan dipakai untuk gerakan yang berulang, sedangkan perpindahan antar dua keadaan adalah pekerjaan `transition`. Keping `.tombol :hover` dengan spasi adalah jebakan yang sangat sulit terlihat: spasi mengubahnya menjadi \"elemen apa pun DI DALAM tombol yang sedang disentuh\", bukan tombolnya sendiri.",
+              "`transition` memerlukan tiga keterangan: properti apa yang dianimasikan, berapa lama, dan kurva percepatannya. Keping `transition: color` keliru karena menargetkan warna teks alih-alih latar tombol. Ia dipasang pada keadaan NORMAL, bukan di dalam `:hover` — kalau dipasang di `:hover`, perubahannya halus saat masuk tapi menghentak saat keluar. Keping `animation` menukar properti: `animation` butuh `@keyframes` dan dipakai untuk gerakan yang berulang, sedangkan perpindahan antar dua keadaan adalah pekerjaan `transition`. Keping `.tombol :hover` dengan spasi adalah jebakan yang sangat sulit terlihat: spasi mengubahnya menjadi \"elemen apa pun DI DALAM tombol yang sedang disentuh\", bukan tombolnya sendiri.",
           },
         },
         {
@@ -3470,6 +3779,53 @@ export const cssTrack: Track = {
             pemisah: "\n",
             explanation:
               "Gradasi adalah gambar, bukan warna — itulah sebabnya ia dipasang lewat `background` atau `background-image`, bukan `background-color`. Keping `background-color` adalah kekeliruan yang sangat sering terjadi karena namanya terasa lebih tepat untuk \"mengatur warna\"; hasilnya deklarasi itu diabaikan seluruhnya dan spandukmu tampil polos. Keping tanpa arah menggoda karena hasilnya tetap gradasi yang terlihat bagus, tapi arah bawaannya dari atas ke bawah — bukan mendatar seperti yang diminta. Menyebutkan arah secara eksplisit membuat maksudmu jelas bagi siapa pun yang membaca kode ini nanti.",
+          },
+        },
+        {
+          kind: "step",
+          id: "css-6-9",
+          title: "Memuat custom web font dengan @font-face dan font-display: swap",
+          explanation:
+            "Saat menggunakan berkas font kustom sendiri di web, kita mendefinisikannya menggunakan aturan `@font-face`. Salah satu masalah performa paling umum adalah FOIT (Flash of Invisible Text), di mana teks halaman menghilang atau blank selama browser mengunduh berkas font melalui jaringan. Untuk mencegah hal tersebut, standar industri mewajibkan penambahan deklarasi `font-display: swap;`. Pengaturan ini menyuruh browser langsung merender teks memakai font cadangan sistem terlebih dahulu, lalu menukarnya secara mulus begitu berkas web font selesai diunduh.",
+          example: {
+            code: "@font-face {\n  font-family: 'ModernFont';\n  src: url('/fonts/font.woff2') format('woff2');\n  font-display: swap;\n}",
+            output: "Font ModernFont dimuat ke browser dengan strategi pertukaran teks instan tanpa blank.",
+            note: "font-display: swap mencegah teks menghilang saat jaringan pengguna sedang lambat.",
+          },
+          instruction:
+            "Lengkapi blok `@font-face`: terapkan strategi pemuatan font `swap` agar teks tidak blank saat mengunduh, dan tentukan bobot font normal (400).",
+          starterCode: "@font-face {\n  font-family: \"FontKustom\";\n  src: url(\"/fonts/custom.woff2\") format(\"woff2\");\n}\n\nbody {\n  font-family: \"FontKustom\", sans-serif;\n}\n",
+          language: "css",
+          previewHtml: "<p>Teks halaman yang menggunakan custom web font dengan strategi swap.</p>",
+          tests: [
+            {
+              pattern: "@font-face\\s*\\{[^}]*font-display\\s*:\\s*swap",
+              message:
+                "Tambahkan font-display: swap; di dalam blok @font-face",
+            },
+            {
+              pattern: "@font-face\\s*\\{[^}]*font-weight\\s*:\\s*400",
+              message:
+                "Tambahkan font-weight: 400; di dalam blok @font-face",
+            },
+          ],
+          solution: "@font-face {\n  font-family: \"FontKustom\";\n  src: url(\"/fonts/custom.woff2\") format(\"woff2\");\n  font-display: swap;\n  font-weight: 400;\n}\n\nbody {\n  font-family: \"FontKustom\", sans-serif;\n}",
+          susunKode: {
+            question:
+              "Susun deklarasi font-display dan bobot font di dalam @font-face:",
+            potongan: [
+              "@font-face {\n  font-family: \"FontKustom\";\n  src: url(\"/fonts/custom.woff2\") format(\"woff2\");",
+              "  font-display: swap;",
+              "  font-weight: 400;\n}",
+              "body {\n  font-family: \"FontKustom\", sans-serif;\n}",
+            ],
+            pengecoh: [
+              "  font-display: block;",
+              "  font-weight: 700;\n}",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Memilih font-display: block adalah keliru karena nilai tersebut justru menahan teks agar tidak muncul sampai font selesai diunduh (menyebabkan blank screen). Nilai swap adalah strategi terbaik yang sering direkomendasikan untuk web performant.",
           },
         },
         {
@@ -3990,7 +4346,7 @@ export const cssTrack: Track = {
             },
             {
               pattern:
-                "\\.kartu\\s*\\{[\\s\\S]*&:hover\\s*\\{[^}]*background\\s*:\\s*#eef2ff",
+                "\\.kartu\\s*\\{[\\s\\S]*&:hover\\s*\\{[^}]*background(-color)?\\s*:\\s*#eef2ff",
               message:
                 "Untuk keadaan hover kartunya sendiri, tanda `&` wajib: `&:hover { background: #eef2ff; }`. Tanpa `&`, artinya berubah menjadi elemen di dalam kartu.",
             },
@@ -4026,6 +4382,105 @@ export const cssTrack: Track = {
             pemisah: "\n",
             explanation:
               "CSS sekarang mendukung penulisan bersarang tanpa alat bantu apa pun. Tanda `&` berarti \"elemen ini sendiri\", dan ia WAJIB dipakai saat menempelkan pseudo-class seperti `:hover`. Keping `:hover` tanpa `&` adalah jebakan yang paling sering terjadi karena di Sass penulisan itu pun salah, tapi kesalahannya tidak kelihatan: tanpa `&`, artinya berubah menjadi \"elemen keturunan apa pun yang sedang disentuh\", bukan kartunya. Sebaliknya, keping `&h3` menempelkan `&` pada nama elemen sehingga ia mencari elemen yang sekaligus `.kartu` dan `h3` — sesuatu yang tidak pernah ada.",
+          },
+        },
+        {
+          kind: "step",
+          id: "css-7-8",
+          title: "Logical properties: jarak adaptif tanpa arah fisik kaku",
+          explanation:
+            "Properti fisik tradisional seperti `margin-left` dan `padding-top` mengasumsikan layar selalu mengalir dari kiri ke kanan (LTR). Di era web global dan sistem desain multi-bahasa, standar industri beralih ke Logical Properties yang mengikuti arah aliran teks. `padding-block` mengatur bantalan pada sumbu vertikal (sejajar aliran baris paragraf), sedangkan `padding-inline` mengatur bantalan pada sumbu horizontal (sejajar teks sebaris). Pola ini membuat komponen otomatis siap mendukung tata letak multi-arah seperti teks Arab atau Ibrani tanpa perlu menulis override CSS tambahan.",
+          example: {
+            code: ".kartu {\n  padding-block: 16px;\n  padding-inline: 24px;\n  margin-inline: auto;\n}",
+            output: "Kotak memiliki bantalan atas-bawah 16px, kiri-kanan 24px, dan terpusat di tengah horizontal.",
+            note: "Logical properties memisahkan arah tata letak dari orientasi fisik layar monitor.",
+          },
+          instruction:
+            "Beri `.tombol-modern` bantalan dalam vertikal 10px dan horizontal 20px memakai logical properties. Jadikan tombol bertipe block lalu pusatkan secara horizontal dengan margin inline otomatis.",
+          starterCode: ".tombol-modern {\n  background: #2563eb;\n  color: white;\n  border: none;\n  border-radius: 6px;\n}\n",
+          language: "css",
+          previewHtml: "<div style=\"background:#f1f5f9;padding:24px\"><button class=\"tombol-modern\">Simpan Data</button></div>",
+          tests: [
+            {
+              pattern: "\\.tombol-modern\\s*\\{[^}]*padding-block\\s*:\\s*10px",
+              message:
+                "Tambahkan padding-block: 10px; pada .tombol-modern",
+            },
+            {
+              pattern: "\\.tombol-modern\\s*\\{[^}]*padding-inline\\s*:\\s*20px",
+              message:
+                "Tambahkan padding-inline: 20px; pada .tombol-modern",
+            },
+            {
+              pattern: "\\.tombol-modern\\s*\\{[^}]*margin-inline\\s*:\\s*auto",
+              message:
+                "Tambahkan margin-inline: auto; pada .tombol-modern",
+            },
+            {
+              pattern: "\\.tombol-modern\\s*\\{[^}]*display\\s*:\\s*block",
+              message:
+                "Tambahkan display: block; pada .tombol-modern",
+            },
+          ],
+          solution: ".tombol-modern {\n  background: #2563eb;\n  color: white;\n  border: none;\n  border-radius: 6px;\n  padding-block: 10px;\n  padding-inline: 20px;\n  display: block;\n  margin-inline: auto;\n}",
+          susunKode: {
+            question:
+              "Susun logical properties untuk bantalan dan perataan tengah tombol:",
+            potongan: [
+              ".tombol-modern {\n  background: #2563eb;\n  color: white;\n  border: none;\n  border-radius: 6px;",
+              "  padding-block: 10px;",
+              "  padding-inline: 20px;",
+              "  display: block;",
+              "  margin-inline: auto;\n}",
+            ],
+            pengecoh: [
+              "  padding-top: 10px;",
+              "  margin-left: auto;\n}",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Memakai padding-top dan margin-left fisik adalah kebiasaan lama yang sering menggoda pengembang. Di sistem desain modern, logical properties seperti padding-block dan margin-inline lebih diutamakan karena adaptif terhadap mode penulisan dokumen.",
+          },
+        },
+        {
+          kind: "step",
+          id: "css-7-9",
+          title: "@layer: mengatur hierarki cascade tanpa perang specificity",
+          explanation:
+            "Dalam CSS biasa, selektor dengan ID seperti `#header` akan selalu mengalahkan selektor kelas `.judul`, seberapa pun kerasnya kamu berusaha menimpanya di bagian bawah berkas stylesheet. Fitur modern `@layer` (Cascade Layers) memungkinkan pengembang mendefinisikan urutan prioritas lapisan sejak awal, misalnya `@layer reset, komponen, utilitas;`. Aturan di dalam lapisan yang dideklarasikan lebih akhir (`komponen`) akan selalu memenangkan pertarungan cascade melawan lapisan sebelumnya (`reset`), bahkan jika lapisan sebelumnya menggunakan selektor ID yang memiliki skor specificity jauh lebih tinggi.",
+          example: {
+            code: "@layer reset, tema;\n@layer reset { h1#utama { color: gray; } }\n@layer tema { .judul { color: blue; } }",
+            output: "Elemen h1 tampil berwarna biru karena layer tema dideklarasikan setelah layer reset.",
+            note: "Urutan deklarasi layer mengalahkan kalkulasi skor specificity antar-selektor.",
+          },
+          instruction:
+            "Di dalam blok `@layer komponen`, tetapkan warna teks biru (`#2563eb`) pada kelas `.judul` untuk membuktikan layer komponen mengalahkan selektor ID pada layer reset.",
+          starterCode: "@layer reset, komponen;\n\n@layer reset {\n  h2#judul-khusus {\n    color: #64748b;\n  }\n}\n\n@layer komponen {\n  .judul {\n    \n  }\n}\n",
+          language: "css",
+          previewHtml: "<h2 id=\"judul-khusus\" class=\"judul\">Judul Artikel Penting</h2>",
+          tests: [
+            {
+              pattern: "@layer\\s+komponen\\s*\\{[^}]*\\.judul\\s*\\{[^}]*color\\s*:\\s*#2563eb",
+              message:
+                "Di dalam @layer komponen, atur .judul { color: #2563eb; }",
+            },
+          ],
+          solution: "@layer reset, komponen;\n\n@layer reset {\n  h2#judul-khusus {\n    color: #64748b;\n  }\n}\n\n@layer komponen {\n  .judul {\n    color: #2563eb;\n  }\n}",
+          susunKode: {
+            question:
+              "Susun deklarasi warna di dalam lapisan komponen:",
+            potongan: [
+              "@layer reset, komponen;\n\n@layer reset {\n  h2#judul-khusus {\n    color: #64748b;\n  }\n}\n\n@layer komponen {",
+              "  .judul {",
+              "    color: #2563eb;\n  }\n}",
+            ],
+            pengecoh: [
+              "  .teks-utama {",
+              "    color: #94a3b8;\n  }\n}",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Memilih selektor kelas yang tidak cocok adalah jebakan yang keliru. Menulis .judul { color: #2563eb; } di dalam layer komponen sudah cukup untuk mengalahkan selektor ID pada layer reset karena urutan lapisan yang menang.",
           },
         },
         {
@@ -4591,6 +5046,57 @@ export const cssTrack: Track = {
           },
         },
         {
+          kind: "step",
+          id: "css-8-7",
+          title: "State bersarang: interaksi kartu dengan group-hover",
+          explanation:
+            "Saat membangun antarmuka web, sering kali kita ingin elemen anak berubah tampilan ketika seluruh kartu pembungkusnya disentuh oleh mouse. Di Tailwind CSS, kita tidak perlu menulis selektor CSS kustom seperti `.kartu:hover .judul`. Cukup tambahkan kelas penanda `group` pada elemen kontainer pembungkus, lalu tambahkan modifier state `group-hover:text-blue-600` pada elemen anak yang ingin diubah warnanya. Pola ini sangat populer di industri untuk membangun kartu navigasi, item daftar produk, atau baris tabel yang interaktif.",
+          example: {
+            code: "<div class=\"group p-4 bg-white\">\n  <h4 class=\"group-hover:text-indigo-600\">Judul</h4>\n</div>",
+            output: "Teks Judul berubah menjadi warna indigo ketika mouse mengarahkan kursor ke area div pembungkus.",
+            note: "Modifier group-hover mendeteksi event hover dari elemen induk yang memiliki kelas group.",
+          },
+          instruction:
+            "Jadikan `<div>` luar sebagai penanda interaksi dengan menambahkan kelas `group`. Kemudian pada elemen judul `<h3>`, tambahkan kelas `group-hover:text-blue-600` dan `transition-colors` agar warna judul berubah saat kartu disentuh.",
+          starterCode: "<div class=\"p-6 bg-white rounded-xl shadow-md cursor-pointer border border-slate-200\">\n  <h3 class=\"text-lg font-bold text-slate-800\">Panduan Karir Frontend</h3>\n  <p class=\"text-slate-500 text-sm mt-1\">Pelajari langkah demi langkah dari nol.</p>\n</div>",
+          language: "html",
+          loadTailwind: true,
+          tests: [
+            {
+              pattern: "<div[^>]*class=['\"][^\"']*\\bgroup\\b[^\"']*['\"]",
+              message:
+                "Tambahkan kelas group pada elemen div luar",
+            },
+            {
+              pattern: "<h3[^>]*class=['\"][^\"']*\\bgroup-hover:text-blue-600\\b[^\"']*['\"]",
+              message:
+                "Tambahkan group-hover:text-blue-600 pada elemen h3",
+            },
+            {
+              pattern: "<h3[^>]*class=['\"][^\"']*\\btransition-colors\\b[^\"']*['\"]",
+              message:
+                "Tambahkan transition-colors pada elemen h3",
+            },
+          ],
+          solution: "<div class=\"group p-6 bg-white rounded-xl shadow-md cursor-pointer border border-slate-200\">\n  <h3 class=\"text-lg font-bold text-slate-800 group-hover:text-blue-600 transition-colors\">Panduan Karir Frontend</h3>\n  <p class=\"text-slate-500 text-sm mt-1\">Pelajari langkah demi langkah dari nol.</p>\n</div>",
+          susunKode: {
+            question:
+              "Susun markup kartu interaktif dengan group dan group-hover:",
+            potongan: [
+              "<div class=\"group p-6 bg-white rounded-xl shadow-md cursor-pointer border border-slate-200\">",
+              "  <h3 class=\"text-lg font-bold text-slate-800 group-hover:text-blue-600 transition-colors\">Panduan Karir Frontend</h3>",
+              "  <p class=\"text-slate-500 text-sm mt-1\">Pelajari langkah demi langkah dari nol.</p>\n</div>",
+            ],
+            pengecoh: [
+              "<div class=\"peer p-6 bg-white rounded-xl shadow-md cursor-pointer border border-slate-200\">",
+              "  <h3 class=\"text-lg font-bold text-slate-800 hover:text-blue-500 transition-colors\">Panduan Karir Frontend</h3>",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Memilih peer adalah kekeliruan karena peer digunakan untuk elemen saudara setingkat (sibling), bukan elemen induk ke anak. Menggunakan hover:text-blue-500 biasa juga sering menggoda pemula padahal itu hanya aktif saat teks judul disentuh langsung, bukan seluruh kartu.",
+          },
+        },
+        {
           kind: "quiz",
           id: "css-8-kuis",
           title: "Kuis: Tailwind CSS",
@@ -5029,6 +5535,108 @@ export const cssTrack: Track = {
           },
         },
         {
+          kind: "step",
+          id: "css-9-5",
+          title: "Menyambungkan ikon SVG dengan currentColor",
+          explanation:
+            "Ketika mengekspor ikon SVG dari Figma, desainer sering kali meninggalkan atribut warna paten seperti `fill=\"#000000\"`. Jika dibiarkan apa adanya di kode web, kamu harus menyiapkan berkas ikon baru setiap kali warna tombol berubah pada keadaan hover, mode gelap, atau disabled. Standar industri yang elegan adalah menghapus kode warna permanen tersebut dan menetapkan `fill: currentColor;` pada SVG di CSS. Kata kunci `currentColor` secara otomatis mewarisi nilai properti `color` dari elemen induknya, sehingga ikon akan selalu selaras dengan warna teks.",
+          example: {
+            code: ".btn { color: white; }\n.btn svg { fill: currentColor; }",
+            output: "Ikon svg secara otomatis mengambil warna putih mengikuti properti color teks tombol.",
+            note: "currentColor bertindak seperti variabel bawaan yang merefleksikan nilai color aktif elemen tersebut.",
+          },
+          instruction:
+            "Hubungkan warna ikon SVG dengan warna teks tombol memakai kata kunci warna saat ini (`currentColor`). Tambahkan juga aturan hover pada tombol aksi yang mengubah latar menjadi `#4338ca` dan teks menjadi `#fef08a`.",
+          starterCode: ".tombol-aksi {\n  display: inline-flex;\n  align-items: center;\n  gap: 8px;\n  background: #4f46e5;\n  color: #ffffff;\n  padding: 10px 18px;\n  border-radius: 8px;\n  border: none;\n}\n.ikon-svg {\n  width: 20px;\n  height: 20px;\n}\n",
+          language: "css",
+          previewHtml: "<button class=\"tombol-aksi\"><svg class=\"ikon-svg\" viewBox=\"0 0 24 24\"><path d=\"M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z\"/></svg><span>Favorit</span></button>",
+          tests: [
+            {
+              pattern: "\\.ikon-svg\\s*\\{[^}]*fill\\s*:\\s*currentColor",
+              message:
+                "Tambahkan fill: currentColor; pada .ikon-svg",
+            },
+            {
+              pattern: "\\.tombol-aksi:hover\\s*\\{[^}]*background(-color)?\\s*:\\s*#4338ca",
+              message:
+                "Atur background: #4338ca; pada .tombol-aksi:hover",
+            },
+            {
+              pattern: "\\.tombol-aksi:hover\\s*\\{[^}]*color\\s*:\\s*#fef08a",
+              message:
+                "Atur color: #fef08a; pada .tombol-aksi:hover agar ikon ikut berubah warna",
+            },
+          ],
+          solution: ".tombol-aksi {\n  display: inline-flex;\n  align-items: center;\n  gap: 8px;\n  background: #4f46e5;\n  color: #ffffff;\n  padding: 10px 18px;\n  border-radius: 8px;\n  border: none;\n}\n.ikon-svg {\n  width: 20px;\n  height: 20px;\n  fill: currentColor;\n}\n.tombol-aksi:hover {\n  background: #4338ca;\n  color: #fef08a;\n}",
+          susunKode: {
+            question:
+              "Susun deklarasi pewarisan warna ikon dan aturan status hover:",
+            potongan: [
+              ".tombol-aksi {\n  display: inline-flex;\n  align-items: center;\n  gap: 8px;\n  background: #4f46e5;\n  color: #ffffff;\n  padding: 10px 18px;\n  border-radius: 8px;\n  border: none;\n}",
+              ".ikon-svg {\n  width: 20px;\n  height: 20px;",
+              "  fill: currentColor;\n}",
+              ".tombol-aksi:hover {",
+              "  background: #4338ca;",
+              "  color: #fef08a;\n}",
+            ],
+            pengecoh: [
+              "  fill: #fef08a;\n}",
+              "  color: #4338ca;\n}",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Menulis warna paten hex langsung pada ikon adalah pola keliru yang sering menjebak pemula karena ikon tidak akan bisa berganti warna secara dinamis saat tombol di-hover. Dengan currentColor, warna ikon otomatis mengikuti teks tombol.",
+          },
+        },
+        {
+          kind: "step",
+          id: "css-9-6",
+          title: "Menerjemahkan sifat Hug dan Fill dari Figma ke CSS",
+          explanation:
+            "Dalam fitur Auto Layout di Figma, desainer selalu memilih antara dua opsi dimensi utama: 'Hug contents' dan 'Fill container'. Sering kali pengembang pemula bingung menerjemahkannya dan malah mengetik angka lebar statis seperti `width: 324px`. Di CSS, 'Fill container' berarti elemen harus meregang menyerap seluruh ruang yang tersedia di baris flex, yang diterjemahkan menjadi `flex: 1;`. Sebaliknya, 'Hug contents' berarti ukuran kotak pas membungkus isi teks dan padding-nya saja, yang diterjemahkan menjadi `width: fit-content;`.",
+          example: {
+            code: ".input-isi { flex: 1; }\n.tombol-peluk { width: fit-content; }",
+            output: "Input mengisi sisa baris secara penuh, sementara tombol memiliki lebar pas membungkus teksnya.",
+            note: "Memetakan konsep Auto Layout Figma langsung ke CSS menghasilkan kode yang adaptif.",
+          },
+          instruction:
+            "Berdasarkan spesifikasi Figma: buat `.input-cari` mengisi ruang kosong (Fill) dan `.tombol-cari` berukuran pas membungkus labelnya (Hug) menggunakan properti CSS yang tepat.",
+          starterCode: ".toolbar-cari {\n  display: flex;\n  gap: 12px;\n  padding: 12px;\n  background: #f1f5f9;\n  border-radius: 8px;\n}\n.input-cari {\n  padding: 8px 12px;\n  border: 1px solid #cbd5e1;\n  border-radius: 6px;\n}\n.tombol-cari {\n  background: #0ea5e9;\n  color: white;\n  padding: 8px 16px;\n  border: none;\n  border-radius: 6px;\n}\n",
+          language: "css",
+          previewHtml: "<div class=\"toolbar-cari\"><input class=\"input-cari\" placeholder=\"Ketik kata kunci pencarian...\"><button class=\"tombol-cari\">Cari</button></div>",
+          tests: [
+            {
+              pattern: "\\.input-cari\\s*\\{[^}]*flex\\s*:\\s*1",
+              message:
+                "Tambahkan flex: 1; pada .input-cari untuk mengisi ruang yang tersedia (Fill)",
+            },
+            {
+              pattern: "\\.tombol-cari\\s*\\{[^}]*width\\s*:\\s*fit-content",
+              message:
+                "Tambahkan width: fit-content; pada .tombol-cari agar pas membungkus teks (Hug)",
+            },
+          ],
+          solution: ".toolbar-cari {\n  display: flex;\n  gap: 12px;\n  padding: 12px;\n  background: #f1f5f9;\n  border-radius: 8px;\n}\n.input-cari {\n  padding: 8px 12px;\n  border: 1px solid #cbd5e1;\n  border-radius: 6px;\n  flex: 1;\n}\n.tombol-cari {\n  background: #0ea5e9;\n  color: white;\n  padding: 8px 16px;\n  border: none;\n  border-radius: 6px;\n  width: fit-content;\n}",
+          susunKode: {
+            question:
+              "Susun aturan CSS yang tepat untuk menerjemahkan sifat Fill dan Hug dari Figma:",
+            potongan: [
+              ".toolbar-cari {\n  display: flex;\n  gap: 12px;\n  padding: 12px;\n  background: #f1f5f9;\n  border-radius: 8px;\n}",
+              ".input-cari {\n  padding: 8px 12px;\n  border: 1px solid #cbd5e1;\n  border-radius: 6px;",
+              "  flex: 1;\n}",
+              ".tombol-cari {\n  background: #0ea5e9;\n  color: white;\n  padding: 8px 16px;\n  border: none;\n  border-radius: 6px;",
+              "  width: fit-content;\n}",
+            ],
+            pengecoh: [
+              "  width: 100%;\n}",
+              "  flex: auto;\n}",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Memilih width: 100% pada elemen flex baris adalah jebakan yang sering membuat layout rusak karena elemen akan mencoba mengambil lebar penuh dan mendesak elemen tetangganya. Untuk Fill container di baris flex, flex: 1 adalah padanan yang benar.",
+          },
+        },
+        {
           kind: "quiz",
           id: "css-9-kuis",
           title: "Kuis: Figma → CSS",
@@ -5107,6 +5715,21 @@ export const cssTrack: Track = {
               answerIndex: 1,
               explanation:
                 "Identik di setiap perangkat tidak mungkin dan bukan tujuannya — rendering font dan ukuran layar berbeda. Yang diharapkan adalah kesetiaan pada sistem desain: token konsisten, hierarki terjaga, dan hasil yang terlihat benar di semua ukuran.",
+            },
+            {
+              id: "q6",
+              type: "pilihan-ganda",
+              question:
+                "Kamu mengekspor ikon SVG dari Figma untuk tombol yang memiliki efek hover berganti warna. Bagaimana cara terbaik mengatur warna ikon di CSS agar tidak perlu mengekspor ulang berkas SVG yang berbeda untuk setiap warna?",
+              choices: [
+                "Mengatur fill: currentColor atau stroke: currentColor pada SVG di CSS agar warnanya otomatis mewarisi properti color tombol",
+                "Menggunakan filter: invert(100%) pada setiap tombol hover agar semua warna ikon otomatis terbalik secara grafis",
+                "Mengekspor berkas SVG terpisah untuk setiap keadaan tombol (normal, hover, active, disabled) lalu menukarnya lewat JavaScript",
+                "Menghapus seluruh tag svg dan menggantinya dengan karakter emoji Unicode yang warnanya bisa diubah font-size",
+              ],
+              answerIndex: 0,
+              explanation:
+                "Kata kunci currentColor mewarisi nilai properti color dari elemen induknya. Dengan menetapkan fill: currentColor; pada SVG, warna ikon akan otomatis mengikuti teks tombol di semua status (:hover, :active, mode gelap) tanpa perlu aset SVG ekstra atau trik filter.",
             },
           ],
         },

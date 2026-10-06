@@ -88,86 +88,190 @@ export const laravelTrack: Track = {
             "1. **Ekstensi PHP Belum Aktif:** Laravel membutuhkan ekstensi seperti `pdo_mysql`, `mbstring`, `openssl`, dan `curl`. Jika perintah artisan melempar error *missing extension*, pastikan ekstensi tersebut diaktifkan pada file `php.ini` (hapus tanda titik koma `;` di depan nama ekstensi).\n" +
             "2. **Menjalankan `php artisan` di Luar Folder Proyek:** Perintah `php artisan` hanya dapat dijalankan di dalam direktori akar (*root*) proyek Laravel yang berisi berkas `artisan`.\n" +
             "3. **Masalah Izin Folder `storage` dan `bootstrap/cache`:** Di Linux/macOS, pastikan folder `storage` dan `bootstrap/cache` memiliki izin tulis (*write permission*) agar Laravel bisa menulis log dan file cache.\n\n" +
+            "## Standar Modern Laravel 11: SQLite Default & Vite\n\n" +
+            "Sejak Laravel 11, kerangka kerja ini memperkenalkan perubahan besar yang mempermudah pemula:\n" +
+            "1. **Database Default SQLite:** Saat proyek baru dibuat, Laravel 11 otomatis mengonfigurasi basis data SQLite (`database/database.sqlite`). Kamu bisa langsung menjalankan `php artisan migrate` tanpa perlu menyalakan MySQL server atau XAMPP terlebih dahulu.\n" +
+            "2. **Frontend Tooling Berbasis Vite:** Untuk mengompilasi aset CSS dan JavaScript, Laravel 11 menggunakan **Vite** secara bawaan (dijalankan via `npm run dev`), menggantikan pustaka Laravel Mix terdahulu.\n\n" +
             "## Kaitan ke Dunia Kerja\n\n" +
             "Di industri perangkat lunak Indonesia, Laravel adalah *framework* backend paling populer untuk sistem manufaktur, perbankan, *e-commerce*, dan pemerintahan. Pemahaman instalasi lingkungan lokal yang bersih serta penguasaan alat perintah Artisan adalah keahlian mendasar yang diuji saat *technical test* posisi Junior PHP / Laravel Developer.",
         },
         {
+  kind: "step",
+  id: "laravel-0-1",
+  title: "Memeriksa Versi PHP CLI & Ekstensi",
+  explanation: "Perintah `php -v` adalah langkah diagnosa paling awal untuk memastikan PHP CLI terpasang dan dapat dieksekusi dari terminal. Informasi yang ditampilkan mencakup versi rilis utama, jenis thread safety, dan konfigurasi Zend Engine. Kenapa ini wajib diperiksa: Laravel 11 membutuhkan PHP versi 8.2 ke atas, sehingga mengetahui versi aktif di terminal mencegah kegagalan eksekusi skrip sejak awal. Kapan dipakai: setiap kali kamu selesai memasang PHP, mengganti versi PHP di OS, atau memecahkan masalah dependensi. Jebakan klasik pemula: versi PHP di antarmuka web (seperti phpMyAdmin pada XAMPP) bisa berbeda dengan versi PHP yang terpanggil di terminal jika variabel lingkungan PATH menunjuk ke folder instalasi lain.",
+  example: {
+    code: "node -v",
+    output: "v20.15.1",
+    note: "Perintah versi dengan opsi singkat mencetak baris versi langsung ke stdout."
+  },
+  instruction: "Buka terminal sistem operasimu. Periksa nomor versi PHP yang terpasang menggunakan flag singkat satu huruf.",
+  starterCode: "# Periksa versi PHP di terminal\n",
+  language: "text",
+  tests: [
+    {
+      pattern: "^php\\s+(-v|--version)$",
+      message: "Gunakan perintah php diikuti flag versi seperti -v untuk memeriksa versi mesin PHP."
+    }
+  ],
+  solution: "php -v",
+  susunKode: {
+    question: "Susun perintah terminal untuk memeriksa nomor versi PHP CLI yang aktif di sistem.",
+    potongan: [
+      "php",
+      "-v"
+    ],
+    pengecoh: [
+      "--check",
+      "-version"
+    ],
+    pemisah: " ",
+    explanation: "Perintah php dengan flag singkat -v menampilkan versi mesin PHP yang aktif di terminal. Keping --check keliru karena bukan flag resmi PHP CLI untuk memeriksa versi. Keping -version menggoda bagi pemula tetapi sintaks flag panjang di PHP memakai tanda hubung ganda."
+  }
+},
+{
+  kind: "step",
+  id: "laravel-0-2",
+  title: "Membuat Proyek Baru dengan Composer",
+  explanation: "`composer create-project` adalah perintah resmi untuk menduplikasi kerangka kerjanya langsung dari repositori Packagist ke direktori baru. Perintah ini mengunduh kerangka dasar `laravel/laravel`, memasang seluruh paket dependensi di folder `vendor/`, membuat salinan `.env` dari `.env.example`, dan otomatis membangkitkan `APP_KEY`. Kenapa penting dipahami: proses ini mengisolasi seluruh pustaka di dalam folder proyek tanpa mengotori instalasi global sistem operasi. Kapan dipakai: setiap kali kamu memulai inisiasi aplikasi baru dari nol. Jebakan umum: menjalankan perintah ini di dalam folder yang sudah berisi berkas dengan nama yang sama, atau jaringan internet terputus saat composer sedang mengunduh pustaka sehingga vendor tidak lengkap.",
+  example: {
+    code: "composer create-project laravel/laravel blog-pribadi",
+    output: "Creating a \"laravel/laravel\" project at \"./blog-pribadi\"\nInstalling laravel/laravel (v11.x)\nGenerating optimized autoload files\nApplication key set successfully.",
+    note: "Composer otomatis menyiapkan autoloader dan kunci aplikasi unik di berkas .env."
+  },
+  instruction: "Buat sebuah proyek Laravel baru bernama `toko-buku` menggunakan perintah resmi manajer paket Composer.",
+  starterCode: "# Buat proyek Laravel baru di sini\n",
+  language: "text",
+  tests: [
+    {
+      pattern: "composer\\s+create-project\\s+laravel/laravel\\s+toko-buku",
+      message: "Gunakan composer create-project laravel/laravel diikuti nama folder proyek tujuan."
+    }
+  ],
+  solution: "composer create-project laravel/laravel toko-buku",
+  susunKode: {
+    question: "Susun perintah Composer untuk menginisialisasi proyek Laravel baru bernama toko-buku.",
+    potongan: [
+      "composer",
+      "create-project",
+      "laravel/laravel",
+      "toko-buku"
+    ],
+    pengecoh: [
+      "new-project",
+      "laravel/installer"
+    ],
+    pemisah: " ",
+    explanation: "Perintah create-project pada Composer menduplikasi skeleton paket laravel/laravel ke direktori tujuan. Keping new-project keliru karena bukan perintah yang disediakan oleh Composer. Keping laravel/installer menggoda bagi yang pernah membaca dokumentasi CLI alternatif tetapi memerlukan alat terpisah."
+  }
+},
+{
+  kind: "step",
+  id: "laravel-0-3",
+  title: "Menjalankan Server Pengembang Lokal Artisan",
+  explanation: "`php artisan serve` menyalakan server web bawaan PHP (*built-in web server*) yang dioptimalkan untuk pengujian lokal di alamat `http://127.0.0.1:8000`. Perintah ini memetakan dokumen akar langsung ke folder `public/index.php`, sehingga aset dan rute aplikasi dapat dibuka di peramban tanpa perlu mengonfigurasi Apache atau Nginx. Kenapa cara ini disukai: prosesnya cepat, bersih, dan tidak memerlukan hak akses administrator root. Kapan dipakai: saat proses pengembangan sehari-hari di komputer lokal. Jebakan yang sangat sering terjadi pada pemula: menutup jendela terminal atau menekan `Ctrl+C` saat aplikasi masih dibuka di browser — akibatnya server langsung mati dan browser menampilkan pesan *Unable to connect*.",
+  example: {
+    code: "npm run dev",
+    output: "  VITE v5.3.4  ready in 240 ms\n  ➜  Local:   http://localhost:5173/\n  ➜  press h + enter to show help",
+    note: "Server lokal harus dibiarkan tetap menyala di satu tab terminal selama sesi pengembangan berlangsung."
+  },
+  instruction: "Nyalakan server pengembang lokal aplikasi Laravel menggunakan perintah bawaan antarmuka Artisan.",
+  starterCode: "# Nyalakan server pengembang lokal di sini\n",
+  language: "text",
+  tests: [
+    {
+      pattern: "php\\s+artisan\\s+serve",
+      message: "Panggil perintah serve melalui berkas php artisan untuk memulai development server."
+    }
+  ],
+  solution: "php artisan serve",
+  susunKode: {
+    question: "Susun perintah Artisan untuk menyalakan development server lokal Laravel.",
+    potongan: [
+      "php",
+      "artisan",
+      "serve"
+    ],
+    pengecoh: [
+      "run",
+      "start"
+    ],
+    pemisah: " ",
+    explanation: "Perintah php artisan serve menyalakan web server lokal bawaan PHP untuk proyek Laravel. Keping run keliru karena meniru perintah npm run dari JavaScript. Keping start menggoda karena terbiasa dengan skrip lain tetapi bukan subperintah resmi yang dikenali oleh kernel Artisan."
+  }
+},
+        {
           kind: "quiz",
           id: "laravel-0-kuis",
-          title: "Kuis: Persiapan & Instalasi Laravel",
+          title: "Kuis: Persiapan & Instalasi Lingkungan Kerja",
           questions: [
             {
               id: "l0-q1",
               type: "pilihan-ganda",
-              question: "Apa fungsi utama dari Composer dalam ekosistem pengembangan PHP?",
+              question: "Apa fungsi utama dari Composer dalam ekosistem pengembangan PHP modern?",
               choices: [
-                "Menjalankan server web HTTP untuk menampilkan halaman HTML di browser",
-                "Mengelola dan mengunduh library atau dependensi pihak ketiga untuk proyek PHP",
-                "Mengompilasi kode PHP menjadi bahasa mesin binary executable (.exe)",
-                "Mengedit berkas kode program secara visual di dalam terminal",
+                "Menjalankan server web HTTP lokal untuk menampilkan HTML di browser",
+                "Mengompilasi kode PHP menjadi bahasa mesin binary biner (.exe)",
+                "Mengelola dan mengunduh pustaka atau dependensi pihak ketiga untuk proyek PHP",
+                "Menyediakan antarmuka grafis (GUI) untuk merancang struktur database MySQL"
               ],
-              answerIndex: 1,
-              explanation:
-                "Composer adalah dependency manager PHP: ia mengunduh pustaka dari packagist.org, mencatatnya di composer.json, mengunci versinya di composer.lock, lalu menyiapkan autoloader. Pilihan \"menjalankan server web\" menggoda karena Composer memang dipakai lewat terminal seperti perintah server, padahal yang menyalakan server pengembang adalah `php artisan serve`. Pilihan \"mengompilasi jadi .exe\" keliru karena PHP adalah bahasa interpretasi — kodenya dibaca langsung, tidak pernah menjadi berkas binary.",
+              answerIndex: 2,
+              explanation: "Composer adalah dependency manager resmi PHP: ia mengunduh paket dari packagist.org, mengunci versinya di composer.lock, dan menghasilkan autoloader PSR-4 otomatis. Pilihan menjalankan server keliru karena itu tugas php artisan serve atau Nginx. Pilihan kompilasi biner keliru karena PHP adalah bahasa interpretasi dinamis."
             },
             {
               id: "l0-q2",
               type: "pilihan-ganda",
               question: "Perintah CLI apakah yang digunakan untuk menjalankan server pengembang lokal bawaan Laravel?",
               choices: [
-                "php run dev",
-                "composer start",
                 "php artisan serve",
-                "laravel start-server",
+                "composer start",
+                "php run server",
+                "php artisan up"
               ],
-              answerIndex: 2,
-              explanation:
-                "`php artisan serve` menyalakan server HTTP bawaan PHP di http://127.0.0.1:8000 tanpa perlu Apache maupun Nginx. Pilihan `php run dev` sering keliru dipilih karena mirip `npm run dev` dari ekosistem JavaScript — tetapi `run` bukan perintah artisan. `composer start` juga menggoda karena Composer memang alat terminal utama PHP, padahal tugasnya hanya mengurus paket, bukan menjalankan aplikasi.",
+              answerIndex: 0,
+              explanation: "`php artisan serve` menyalakan server pengembangan lokal bawaan PHP di port 8000. Pilihan `php artisan up` menggoda karena berpasangan dengan `down`, tetapi fungsinya mematikan mode maintenance, bukan menyalakan server web. Pilihan `composer start` adalah skrip custom, bukan perintah default."
             },
             {
               id: "l0-q3",
               type: "pilihan-ganda",
-              question: "Manakah di bawah ini syarat minimum sebelum kamu bisa membuat proyek Laravel baru?",
+              question: "Manakah di bawah ini syarat minimum sebelum kamu bisa membuat dan menjalankan proyek Laravel baru?",
               choices: [
-                "Komputer harus terhubung ke database Oracle secara aktif",
-                "Harus memasang PHP CLI dan Composer di sistem operasi",
-                "Harus memasang Docker Engine versi Enterprise",
-                "Harus mengubah kode PHP menjadi bahasa C++ terlebih dahulu",
+                "Wajib memasang Docker Container dan Kubernetes di sistem operasi",
+                "Harus memasang PHP CLI dan Composer di sistem pengembang",
+                "Mengonfigurasi Apache HTTP Server dan sertifikat SSL terlebih dahulu",
+                "Mengunduh MySQL Workbench dan phpMyAdmin secara manual"
               ],
               answerIndex: 1,
-              explanation:
-                "Yang mutlak dibutuhkan hanya dua: PHP CLI untuk menjalankan kodenya, dan Composer untuk mengunduh komponen kerangka kerjanya. Pilihan Docker menggoda karena banyak tutorial modern memakainya lewat Laravel Sail — tetapi itu satu cara di antara banyak, bukan syarat. Pilihan \"database Oracle aktif\" juga keliru: proyek Laravel baru bisa dibuat dan dijalankan tanpa database sama sekali, dan bawaannya justru SQLite.",
+              explanation: "Syarat mutlak untuk menjalankan Laravel adalah tersedianya PHP CLI dengan ekstensi yang sesuai serta Composer sebagai pengelola dependensi. Docker (Sail) atau web server Apache/Nginx adalah opsi lingkungan tingkat lanjut, bukan prasyarat awal yang wajib untuk memulai."
             },
             {
               id: "l0-q4",
               type: "pilihan-ganda",
-              question: "Apa yang terjadi jika kamu menjalankan perintah `php artisan` di luar direktori akar proyek Laravel?",
+              question: "Apa yang terjadi jika kamu menjalankan perintah `php artisan` di terminal saat berada di luar folder proyek Laravel?",
               choices: [
-                "Laravel akan membuat proyek baru secara otomatis di direktori tersebut",
-                "Terminal akan menampilkan pesan error bahwa berkas artisan tidak ditemukan",
-                "Komputer akan merestart sistem secara otomatis",
-                "Composer akan mengunduh ulang seluruh pustaka PHP",
+                "Artisan otomatis menginisialisasi proyek Laravel baru di direktori aktif",
+                "Perintah dialihkan ke Composer secara otomatis untuk mencari proyek terdekat",
+                "Artisan akan mencari file konfigurasi global di direktori user home",
+                "Terminal akan menampilkan pesan error bahwa file artisan tidak ditemukan"
               ],
-              answerIndex: 1,
-              explanation:
-                "Perintah `php artisan` menjalankan berkas bernama `artisan` yang hanya ada di akar proyek, jadi di luar folder itu terminal menjawab \"Could not open input file: artisan\". Pilihan \"membuat proyek baru otomatis\" menggoda karena `composer create-project` memang bisa dijalankan dari mana saja — tetapi itu perintah Composer, bukan artisan. Ini kesalahan pertama yang hampir semua pemula alami, dan solusinya cukup `cd` ke folder proyek.",
+              answerIndex: 3,
+              explanation: "File `artisan` adalah berkas skrip PHP fisik yang berada di direktori akar (*root*) proyek Laravel. Jika kamu menjalankannya di luar folder proyek, PHP melempar pesan error `Could not open input file: artisan` karena berkas tersebut tidak ada di folder aktif."
             },
             {
               id: "l0-q5",
               type: "pilihan-ganda",
               question: "Di manakah kode PHP dieksekusi saat pengguna mengakses halaman web?",
               choices: [
-                "Di dalam peramban web (browser) pengguna menggunakan mesin V8",
-                "Di server backend sebelum hasil HTML/JSON dikirimkan ke pengguna",
-                "Di router jaringan Wi-Fi pengguna",
-                "Di dalam kartu grafis (GPU) komputer pengguna",
+                "Di peramban (browser) pengguna menggunakan JavaScript V8 engine",
+                "Di dalam cache memori lokal perangkat klien setelah halaman selesai diunduh",
+                "Di jaringan DNS internet saat proses lookup domain berlangsung",
+                "Di server backend sebelum hasil HTML/JSON dikirimkan ke peramban pengguna"
               ],
-              answerIndex: 1,
-              explanation:
-                "PHP dieksekusi sepenuhnya di server; peramban hanya menerima hasil akhirnya berupa HTML atau JSON. Pilihan \"dijalankan di browser dengan mesin V8\" menggoda karena itu benar untuk JavaScript, dan pemula yang datang dari JavaScript sering mengira semua bahasa web bekerja begitu. Konsekuensi praktisnya penting: kode PHP-mu tidak pernah terlihat di View Source, sehingga logika rahasia aman di sana — sesuatu yang tidak berlaku untuk JavaScript sisi klien.",
-            },
-          ],
-        },
+              answerIndex: 3,
+              explanation: "PHP adalah bahasa pemrograman sisi server (*server-side*). Seluruh kode PHP dieksekusi di server web sebelum hasilnya berupa teks HTML atau respons JSON dikirimkan melalui protokol HTTP ke browser pengguna."
+            }
+          ]
+        }
       ],
     },
     {
@@ -640,82 +744,121 @@ export const laravelTrack: Track = {
           },
         },
         {
+  kind: "step",
+  id: "laravel-1-8",
+  title: "Fungsi Singkat: Arrow Function & Type Hinting",
+  explanation: "Arrow Function di PHP (`fn() => ...`) adalah sintaks ringkas untuk closure satu baris yang secara otomatis menangkap variabel dari cakupan induk (*by-value scoping*) tanpa perlu menulis klausa `use (...)`. Penambahan tipe data pada parameter dan nilai kembalian (*type declarations*) memastikan fungsi menolak input yang salah sebelum bug merambat jauh. Kenapa ini penting: di Laravel modern, arrow function digunakan di mana-mana mulai dari pemetaan koleksi (`$collection->map(fn($x) => ...)`), closure rute, hingga pengujian Pest. Kapan dipakai: ketika kamu butuh fungsi anonim ringkas yang hanya mengembalikan satu ekspresi. Jebakan umum: mencoba menulis banyak baris atau blok kurung kurawal `{}` di dalam arrow function — di PHP, arrow function hanya menerima satu ekspresi tunggal.",
+  example: {
+    code: "<?php\n$kaliDua = fn(int $angka): int => $angka * 2;\necho $kaliDua(7);",
+    output: "14",
+    note: "Arrow function otomatis mengembalikan hasil evaluasi ekspresi tanpa kata kunci return."
+  },
+  instruction: "Buat fungsi panah ringkas yang menerima satu parameter `$harga` bertipe `int` dan mengembalikan nilai harga setelah diskon sepuluh persen (dikalikan `0.9`). Simpan fungsi tersebut ke variabel `$hitungDiskon`.",
+  starterCode: "<?php\n// Buat arrow function penghitung diskon di sini\n",
+  language: "text",
+  tests: [
+    {
+      pattern: "\\$hitungDiskon\\s*=\\s*fn\\s*\\(",
+      message: "Deklarasikan arrow function diawali kata kunci fn dan tampung ke variabel $hitungDiskon."
+    },
+    {
+      pattern: "fn\\s*\\(\\s*int\\s*\\$harga\\s*\\)",
+      message: "Sertakan type hint int pada parameter $harga di dalam tanda kurung fungsi."
+    },
+    {
+      pattern: "=>\\s*\\$harga\\s*\\*\\s*0\\.9",
+      message: "Kembalikan nilai perkalian $harga dengan 0.9 setelah tanda panah =>."
+    }
+  ],
+  solution: "<?php\n$hitungDiskon = fn(int $harga): float => $harga * 0.9;",
+  susunKode: {
+    question: "Susun deklarasi arrow function PHP dengan type hint yang menghitung diskon harga.",
+    potongan: [
+      "<?php",
+      "$hitungDiskon =",
+      "fn(int $harga): float",
+      "=> $harga * 0.9;"
+    ],
+    pengecoh: [
+      "function(int $harga)",
+      "return $harga * 0.9;"
+    ],
+    pemisah: "\n",
+    explanation: "Arrow function di PHP menggunakan kata kunci fn diikuti deklarasi parameter dan tanda panah ekspresi => tanpa blok kurung kurawal. Keping function(int $harga) keliru karena memerlukan blok fungsi penuh dan kata kunci return. Keping return $harga * 0.9; menggoda tetapi tidak sah di dalam arrow function."
+  }
+},
+        {
           kind: "quiz",
           id: "laravel-1-kuis",
-          title: "Kuis: Sintaks & Array PHP Dasar",
+          title: "Kuis: Sintaks Dasar & Fitur Modern PHP",
           questions: [
             {
               id: "l1-q1",
               type: "pilihan-ganda",
               question: "Manakah aturan penulisan variabel yang BENAR di dalam bahasa PHP?",
               choices: [
-                "Variabel harus diawali dengan angka, misal $1user",
-                "Semua nama variabel wajib diawali tanda $ dan bersifat case-sensitive",
-                "Variabel PHP dibuat menggunakan kata kunci let atau const",
-                "Variabel PHP tidak boleh mengandung huruf kapital",
+                "Semua nama variabel wajib diawali tanda dollar $, peka huruf besar-kecil (case-sensitive), dan tidak boleh diawali angka",
+                "Variabel dideklarasikan menggunakan kata kunci var atau let seperti JavaScript",
+                "Nama variabel di PHP tidak boleh mengandung garis bawah (underscore)",
+                "Huruf besar dan kecil dianggap sama pada semua variabel di PHP"
               ],
-              answerIndex: 1,
-              explanation:
-                "Nama variabel PHP wajib diawali `$` dan peka huruf besar-kecil, sehingga `$nama` dan `$Nama` adalah dua wadah berbeda. Pilihan `let`/`const` sangat menggoda bagi yang baru selesai belajar JavaScript, padahal PHP tidak punya kata kunci deklarasi sama sekali — variabel lahir saat pertama kali diisi. Pilihan \"tidak boleh huruf kapital\" juga keliru: kapital diperbolehkan, hanya saja perbedaannya bermakna dan itulah sumber bug salah ketik yang sulit terlihat.",
+              answerIndex: 0,
+              explanation: "Variabel PHP wajib diawali `$`, dilanjutkan huruf atau garis bawah, dan bersifat case-sensitive (`$total` berbeda dari `$Total`). Kata kunci `var` sudah usang dan `let` tidak ada di PHP."
             },
             {
               id: "l1-q2",
               type: "pilihan-ganda",
               question: "Apa perbedaan utama antara variabel superglobal $_GET dan $_POST?",
               choices: [
-                "$_GET hanya untuk mengambil angka, $_POST untuk mengambil string",
-                "$_GET mengirimkan data terlihat di URL parameter, sedangkan $_POST mengirim data di dalam HTTP body request",
-                "$_GET otomatis menghapus data setelah 5 detik, $_POST menyimpan data permanen",
-                "$_GET digunakan di Linux, $_POST digunakan di Windows",
+                "$_GET hanya menerima file biner gambar, sedangkan $_POST menerima string teks",
+                "$_GET secara otomatis mengenkripsi data, sedangkan $_POST mengirim teks polos",
+                "$_GET menyimpan data ke basis data, sedangkan $_POST menyimpan ke sesi pengguna",
+                "$_GET membaca data yang terlihat di URL query string, sedangkan $_POST membaca data di badan permintaan HTTP"
               ],
-              answerIndex: 1,
-              explanation:
-                "`$_GET` menampung parameter yang menempel di URL setelah tanda `?` sehingga terlihat siapa pun, sedangkan `$_POST` menampung data yang dikirim di badan permintaan. Pilihan \"GET untuk angka, POST untuk string\" menggoda karena terdengar teknis, padahal keduanya selalu berisi teks. Yang perlu diingat: POST bukan berarti aman — isinya tetap bisa dilihat dengan alat seperti DevTools; yang membuatnya aman adalah HTTPS, bukan metodenya.",
+              answerIndex: 3,
+              explanation: "$_GET mengambil parameter dari query string URL (?key=val), cocok untuk pencarian dan filter yang bisa di-bookmark. $_POST mengambil data dari badan request HTTP, wajib untuk data sensitif atau mutasi data seperti formulir login dan checkout."
             },
             {
               id: "l1-q3",
               type: "pilihan-ganda",
-              question: "Mengapa ekspresi match di PHP 8 lebih disukai daripada perulangan switch lama?",
+              question: "Mengapa ekspresi match di PHP 8 lebih disukai daripada percabangan switch konvensional?",
               choices: [
-                "Ekspresi match tidak membutuhkan PHP 8",
-                "Match melakukan pemeriksaan tipe ketat (===) dan langsung mengembalikan nilai tanpa kata kunci break",
-                "Match otomatis menyimpan hasil perhitungan ke dalam database",
-                "Match bisa dijalankan langsung di dalam file HTML tanpa tag PHP",
+                "Match mengeksekusi semua blok tanpa perlu memeriksa kecocokan kondisi",
+                "Match mengonversi semua tipe data string ke integer secara otomatis",
+                "Match melakukan perbandingan identik ketat (===), mengembalikan nilai langsung, dan tidak rawan fall-through karena tidak memerlukan break",
+                "Match dapat berjalan di versi PHP 7.4 tanpa membutuhkan pembaruan interpreter"
               ],
-              answerIndex: 1,
-              explanation:
-                "`match` membandingkan dengan `===` sehingga tipe datanya harus sama persis, dan ia mengembalikan nilai sehingga hasilnya bisa langsung disimpan ke variabel tanpa `break`. Pilihan \"bisa jalan di HTML tanpa tag PHP\" menggoda karena Blade memang punya direktif yang tampak begitu, padahal itu fitur Blade bukan fitur `match`. Jebakan yang perlu diingat: tanpa cabang `default`, nilai yang tidak cocok melempar `UnhandledMatchError` — bukan mengembalikan null.",
+              answerIndex: 2,
+              explanation: "Ekspresi `match` menggunakan perbandingan ketat `===` sehingga aman dari bug *type coercion* yang sering terjadi di `switch` (`==`), mengembalikan nilai langsung sebagai ekspresi, dan tidak memerlukan `break` yang sering lupa ditulis."
             },
             {
               id: "l1-q4",
               type: "pilihan-ganda",
               question: "Apa fungsi dari operator null coalescing (??) di PHP?",
               choices: [
-                "Menggabungkan dua buah string menjadi satu",
-                "Mengembalikan nilai default jika operand di sebelah kiri bernilai null atau belum terdefinisi",
-                "Membagi dua buah bilangan bulat secara otomatis",
-                "Menghapus seluruh file PHP di dalam server",
+                "Mengalikan dua operan jika keduanya bernilai null",
+                "Mengembalikan nilai default di sebelah kanan jika operan di sebelah kiri bernilai null atau belum terdefinisi",
+                "Mengubah nilai variabel menjadi boolean true atau false",
+                "Menghapus variabel dari memori server jika nilainya kosong"
               ],
               answerIndex: 1,
-              explanation:
-                "Operator `??` mengambil nilai kiri bila ada dan bukan null, dan sekaligus meredam warning \"Undefined array key\" — itulah yang membedakannya dari `?:`. Pilihan \"menggabungkan dua string\" menggoda karena di PHP penggabungan memang memakai operator pendek (titik), sehingga simbol dua tanda tanya terlihat seperti kerabatnya. Jebakan yang sering terlewat: `??` hanya peduli pada null, jadi teks kosong dan angka 0 dianggap nilai sah dan tidak akan diganti.",
+              explanation: "Operator null coalescing `??` mengembalikan operan kanan jika operan kiri `null` atau kuncinya belum ada di array asosiatif, tanpa memicu peringatan *Undefined array key* di PHP."
             },
             {
               id: "l1-q5",
               type: "pilihan-ganda",
-              question: "Apa akibatnya jika kamu menggunakan `require` untuk menyertakan file yang tidak pernah ada?",
+              question: "Apa akibatnya jika kamu menggunakan `require` untuk menyertakan file yang ternyata tidak ada di server?",
               choices: [
-                "PHP hanya akan menampilkan pesan Warning dan melanjutkan eksekusi program",
-                "PHP melempar Fatal Error dan langsung menghentikan seluruh eksekusi skrip",
-                "PHP otomatis membuat file kosong dengan nama tersebut",
-                "Browser akan otomatis mengunduh file dari internet",
+                "PHP hanya memunculkan Notice ringan dan kode berikutnya tetap berjalan normal",
+                "PHP otomatis mengunduh berkas yang hilang dari repositori Composer",
+                "PHP melempar Fatal Error dan langsung menghentikan eksekusi seluruh skrip saat itu juga",
+                "PHP mengganti isi file yang hilang dengan string kosong tanpa memicu pesan kesalahan"
               ],
-              answerIndex: 1,
-              explanation:
-                "`require` menganggap keberadaan berkas mutlak, jadi kegagalannya adalah `Fatal error` yang langsung menghentikan skrip. Pilihan \"hanya Warning lalu lanjut\" sangat menggoda karena itu memang perilaku `include` — dan justru di situlah bahayanya: skrip berjalan terus tanpa fungsi yang dibutuhkan, lalu meledak beberapa baris kemudian dengan pesan yang tidak menyebut berkas hilang sama sekali. Untuk konfigurasi dan kelas, `require` yang berhenti lebih baik daripada `include` yang menyesatkan.",
-            },
-          ],
-        },
+              answerIndex: 2,
+              explanation: "Pernyataan `require` mewajibkan keberadaan berkas secara mutlak. Jika berkas tidak ditemukan di path yang ditentukan, PHP melempar `Fatal error` dan langsung menghentikan eksekusi. Berbeda dengan `include` yang hanya memunculkan `Warning` dan membiarkan skrip lanjut."
+            }
+          ]
+        }
       ],
     },
     {
@@ -1210,65 +1353,106 @@ export const laravelTrack: Track = {
           },
         },
         {
+  kind: "step",
+  id: "laravel-2-8",
+  title: "Mendefinisikan Status dengan PHP Backed Enum",
+  explanation: "PHP 8.1 memperkenalkan Backed Enum yang mengikat kasus enumerasi ke nilai primitif skalar berupa string atau integer. Dalam arsitektur Laravel modern, enum menggantikan konstanta kelas kuno untuk merepresentasikan status pesanan, jenis pengguna, atau tahapan alur kerja. Kenapa ini menjadi standar industri: enum memberikan keamanan tipe (*type safety*) penuh di level PHP dan dapat dicasting otomatis oleh Model Eloquent melalui properti `$casts`. Kapan dipakai: setiap kali suatu kolom database hanya boleh bernilai salah satu dari kumpulan pilihan yang tetap. Jebakan umum: lupa memberi tanda `: string` atau `: int` setelah nama enum saat kamu butuh enum yang nilainya tersimpan di database — enum murni tanpa tipe pendukung tidak memiliki properti `->value`.",
+  example: {
+    code: "<?php\nenum UserRole: string {\n    case ADMIN = 'admin';\n    case MEMBER = 'member';\n}\n\necho UserRole::ADMIN->value;",
+    output: "admin",
+    note: "Akses properti ->value menghasilkan nilai string yang siap disimpan ke database."
+  },
+  instruction: "Definisikan Backed Enum bernama `OrderStatus` bertipe string dengan dua kasus status: `PENDING` bernilai `'pending'`, dan `PAID` bernilai `'paid'`.",
+  starterCode: "<?php\n// Definisikan Backed Enum OrderStatus di sini\n",
+  language: "text",
+  tests: [
+    {
+      pattern: "enum\\s+OrderStatus\\s*:\\s*string\\s*\\{",
+      message: "Gunakan kata kunci enum OrderStatus : string untuk mendeklarasikan Backed Enum berbasis string."
+    },
+    {
+      pattern: "case\\s+PENDING\\s*=\\s*['\"]pending['\"];",
+      message: "Definisikan kasus PENDING dengan nilai string 'pending'."
+    },
+    {
+      pattern: "case\\s+PAID\\s*=\\s*['\"]paid['\"];",
+      message: "Definisikan kasus PAID dengan nilai string 'paid'."
+    }
+  ],
+  solution: "<?php\nenum OrderStatus: string {\n    case PENDING = 'pending';\n    case PAID = 'paid';\n}",
+  susunKode: {
+    question: "Susun deklarasi PHP Backed Enum untuk mengelola status pesanan.",
+    potongan: [
+      "<?php",
+      "enum OrderStatus: string {",
+      "    case PENDING = 'pending';",
+      "    case PAID = 'paid';",
+      "}"
+    ],
+    pengecoh: [
+      "enum OrderStatus {",
+      "    const PENDING = 'pending';"
+    ],
+    pemisah: "\n",
+    explanation: "Backed Enum PHP membutuhkan deklarasi tipe dasar seperti : string agar setiap varian case dapat memiliki nilai primitif. Keping enum OrderStatus { keliru karena menjadikannya pure enum tanpa nilai pendukung. Keping const PENDING = 'pending'; menggoda karena merupakan kebiasaan lama sebelum enum ada."
+  }
+},
+        {
           kind: "quiz",
           id: "laravel-2-kuis",
-          title: "Kuis: OOP & Autoloading PHP",
+          title: "Kuis: PHP OOP & Arsitektur Modern",
           questions: [
             {
               id: "l2-q1",
               type: "pilihan-ganda",
               question: "Apakah keuntungan utama dari fitur Constructor Property Promotion di PHP 8?",
               choices: [
-                "Properti kelas dapat diakses langsung tanpa membuat instance objek",
-                "Meringkas pengenalan properti dan pengisian nilainya secara langsung di parameter __construct",
-                "Membuat kelas PHP berjalan 100 kali lebih cepat di server Linux",
-                "Mengubah kode PHP menjadi komponen tampilan HTML secara otomatis",
+                "Membuat objek baru tanpa perlu mendeklarasikan method __construct",
+                "Meringkas pengenalan properti dan pengisian nilainya secara langsung di parameter __construct tanpa deklarasi berulang",
+                "Mengizinkan sebuah kelas mewarisi lebih dari sepuluh kelas induk sekaligus",
+                "Menjamin seluruh properti kelas otomatis tersimpan ke tabel basis data"
               ],
               answerIndex: 1,
-              explanation:
-                "Constructor property promotion menyatukan tiga baris (deklarasi properti, parameter, dan penetapan `$this->x = $x`) menjadi satu, cukup dengan menaruh kata kunci visibilitas di depan parameter. Pilihan \"bisa diakses tanpa membuat instance\" menggoda karena terdengar seperti keuntungan besar, padahal itu deskripsi properti `static` yang sama sekali berbeda. Jebakan nyatanya: tanpa kata kunci visibilitas, nilainya hanya parameter biasa dan `$obj->title` melempar Undefined property.",
+              explanation: "Constructor Property Promotion menggabungkan deklarasi properti, tipe data, parameter konstruktor, dan assignment `$this->prop = $prop` menjadi satu baris deklarasi di signature `__construct`, memangkas *boilerplate* kelas secara signifikan."
             },
             {
               id: "l2-q2",
               type: "pilihan-ganda",
-              question: "Tingkat hak akses (visibility) mana yang memperbolehkan properti diakses oleh kelas induk dan kelas turunannya saja?",
+              question: "Tingkat hak akses (visibility) mana yang memperbolehkan properti diakses di dalam kelas sendiri dan kelas turunannya, namun tertutup dari luar?",
               choices: [
                 "public",
                 "private",
                 "protected",
-                "static",
+                "static"
               ],
               answerIndex: 2,
-              explanation:
-                "`protected` membuka akses untuk kelas itu sendiri beserta seluruh turunannya, tetapi menutupnya dari luar. Pilihan `private` sangat menggoda karena juga terdengar tertutup — bedanya `private` bahkan memblokir kelas anak, dan itulah sumber error `Cannot access private property` yang membingungkan saat kamu mewarisi kelas orang lain. Pilihan `static` bukan tingkat visibilitas sama sekali, melainkan penanda bahwa anggota itu milik kelas, bukan milik objek.",
+              explanation: "Hak akses `protected` membatasi visibilitas hanya untuk kelas itu sendiri dan kelas anak yang mewarisinya. `private` hanya mengizinkan kelas pemilik asli, sedangkan `public` terbuka bebas untuk diakses dari mana saja."
             },
             {
               id: "l2-q3",
               type: "pilihan-ganda",
-              question: "Mengapa standar Namespace PSR-4 sangat penting dalam proyek Laravel?",
+              question: "Mengapa standar Namespace PSR-4 sangat penting dalam proyek Laravel dan PHP modern?",
               choices: [
-                "Agar kode PHP tidak perlu diuji menggunakan pengujian otomatis",
                 "Memungkinkan pemuatan berkas kelas secara otomatis (autoloading) berdasarkan struktur folder tanpa banyak require_once",
-                "Menghapus seluruh berkas di folder vendor/ saat aplikasi berjalan",
-                "Mengubah nama database MySQL secara otomatis",
+                "Mencegah peretas membaca kode sumber PHP yang disimpan di server hosting",
+                "Menggantikan fungsi database relasional dengan sistem file terenkripsi",
+                "Mengompresi seluruh berkas kelas PHP menjadi berkas archive zip saat dijalankan"
               ],
-              answerIndex: 1,
-              explanation:
-                "PSR-4 memetakan namespace ke struktur folder (`App\\Services\\Mailer` → `app/Services/Mailer.php`), sehingga Composer bisa memuat kelas secara otomatis tanpa satu pun `require_once`. Pilihan \"menghapus isi vendor saat berjalan\" jelas keliru, tetapi pilihan \"agar tidak perlu pengujian otomatis\" menggoda bagi yang menganggap standar penulisan menggantikan pengujian. Konsekuensi praktis yang perlu diingat: salah satu huruf di namespace menghasilkan `Class not found`, bukan pesan yang menyebut namespace.",
+              answerIndex: 0,
+              explanation: "PSR-4 memetakan namespace kelas (seperti `App\\Services\\BillingService`) langsung ke struktur direktori fisik (`app/Services/BillingService.php`). Autoloader Composer memuat berkas kelas secara otomatis saat kelas dipanggil tanpa perlu `require_once` manual."
             },
             {
               id: "l2-q4",
               type: "pilihan-ganda",
               question: "Apa perbedaan mendasar antara Interface dan Trait di PHP?",
               choices: [
-                "Interface berisi logika kode fungsi, Trait hanya berisi nama variabel",
-                "Interface hanya mendefinisikan rancangan metode tanpa isi, sedangkan Trait berisi implementasi metode reusable yang dapat disuntikkan ke kelas",
-                "Interface digunakan di Windows, Trait digunakan di macOS",
-                "Tidak ada perbedaan sama sekali",
+                "Interface dapat diinstansiasi langsung, sedangkan Trait memerlukan kata kunci new",
+                "Trait hanya boleh berisi properti statis, sedangkan Interface memiliki method dinamis",
+                "Interface khusus untuk query database, sedangkan Trait khusus untuk tampilan HTML",
+                "Interface hanya mendefinisikan kontrak metode tanpa isi, sedangkan Trait berisi implementasi metode reusable yang dapat disuntikkan ke kelas"
               ],
-              answerIndex: 1,
-              explanation:
-                "Interface hanya berisi tanda tangan method tanpa badan — sebuah kontrak; Trait berisi kode nyata yang disisipkan ke kelas. Pilihan yang membalik keduanya menggoda karena dua-duanya sama-sama \"dipakai bersama banyak kelas\" dan sama-sama memakai kata kunci `use` di suatu tempat. Cara membedakannya: interface menjawab \"apa yang harus ada\" dan dicek saat berkas dimuat, trait menjawab \"bagaimana melakukannya\" dan benar-benar menambahkan method.",
+              answerIndex: 3,
+              explanation: "Interface adalah kontrak murni: hanya mendeklarasikan signature method yang wajib dibuat oleh kelas yang mengimplementasikannya. Trait adalah sarana *horizontal code reuse* yang menyuntikkan logika kode nyata ke banyak kelas tanpa hierarki pewarisan bertingkat."
             },
             {
               id: "l2-q5",
@@ -1278,14 +1462,13 @@ export const laravelTrack: Track = {
                 "app/Http/Controllers/",
                 "resources/views/",
                 "vendor/",
-                "storage/logs/",
+                "storage/logs/"
               ],
               answerIndex: 2,
-              explanation:
-                "Composer menaruh seluruh paket pihak ketiga beserta `autoload.php` di folder `vendor/`. Pilihan `app/Http/Controllers/` menggoda karena itu folder yang paling sering kamu buka, sehingga terasa seperti pusat proyek. Yang penting diingat soal `vendor/`: folder ini TIDAK di-commit ke Git karena bisa dibangun ulang dari `composer.lock`, dan isinya tidak boleh disunting manual — perubahanmu hilang pada `composer update` berikutnya.",
-            },
-          ],
-        },
+              explanation: "Composer mengunduh semua pustaka dari Packagist ke direktori `vendor/` dan menaruh `vendor/autoload.php` di dalamnya. Folder ini umumnya dimasukkan ke `.gitignore` karena dapat dibangun ulang dengan `composer install`."
+            }
+          ]
+        }
       ],
     },
     {
@@ -1355,6 +1538,11 @@ export const laravelTrack: Track = {
             "1. **Lupa Menjalankan `php artisan config:clear`:** Setelah mengubah nilai variabel di berkas `.env`, Laravel terkadang masih menggunakan nilai cache lama jika konfigurasi telah di-cache. Jalankan `php artisan config:clear` untuk memperbarui cache.\n" +
             "2. **Menuliskan Logika Query Database di View:** Mengetik query database langsung di file `.blade.php` melanggar prinsip MVC dan membuat aplikasi sangat sulit dirawat.\n" +
             "3. **Urutan Route yang Bentrok:** Menempatkan route berparameter dinamis seperti `Route::get('/users/{id}')` **di atas** route statis `Route::get('/users/create')` akan menyebabkan URL `/users/create` dianggap mencari user dengan ID bernilai `'create'`.\n\n" +
+            "## Arsitektur Modern Laravel 11: bootstrap/app.php\n\n" +
+            "Pada Laravel versi lama (Laravel 10 ke bawah), middleware dan routing didaftarkan di dalam berkas `app/Http/Kernel.php`. Namun di **Laravel 11**, arsitektur disederhanakan secara radikal:\n" +
+            "1. Berkas `Kernel.php` dihapus sepenuhnya.\n" +
+            "2. Seluruh konfigurasi middleware, routing, dan penanganan exception kini dipusatkan di berkas `bootstrap/app.php` menggunakan pola fluent builder (`withMiddleware()`, `withExceptions()`, `withRouting()`).\n" +
+            "3. Pemula tidak perlu lagi bingung mencari di mana mendaftarkan alias middleware global, karena semuanya didefinisikan secara deklaratif di satu tempat yang ringkas.\n\n" +
             "## Kaitan ke Dunia Kerja\n\n" +
             "Penguasaan struktur folder Laravel dan arsitektur MVC adalah syarat utama saat bekerja dalam tim pengembang software profesional agar setiap pengembang dapat bekerja di area berkas yang terstruktur tanpa saling menimpa kode.",
         },
@@ -1391,7 +1579,7 @@ export const laravelTrack: Track = {
                 "Pilih metode HTTP-nya lebih dulu. \"Permintaan baca\" adalah metode yang dipakai browser saat kamu mengetik alamat di address bar — bukan metode yang dipakai formulir saat menyimpan data.",
             },
             {
-              pattern: "Route::get\\s*\\(\\s*['\"]/contact['\"]\\s*,",
+              pattern: "Route::get\\s*\\(\\s*['\"]/?contact['\"]\\s*,",
               message:
                 "Argumen pertama adalah jalurnya, ditulis sebagai teks lengkap dengan garis miring pembuka. Menulis `'contact'` tanpa garis miring memang masih dikenali Laravel, tetapi menuliskannya konsisten membuat `route:list` jauh lebih mudah dibaca.",
             },
@@ -1450,7 +1638,7 @@ export const laravelTrack: Track = {
           language: "text",
           tests: [
             {
-              pattern: "Route::get\\s*\\(\\s*['\"]/post/\\{\\s*slug\\s*\\}['\"]",
+              pattern: "Route::get\\s*\\(\\s*['\"]/?post/\\{\\s*slug\\s*\\}['\"]",
               message:
                 "Bagian alamat yang berubah-ubah ditulis di dalam kurung kurawal, bukan tanda titik dua seperti di framework lain. Jadi bentuknya `/post/` diikuti nama parameter dalam kurawal.",
             },
@@ -1485,52 +1673,44 @@ export const laravelTrack: Track = {
           },
         },
         {
-          kind: "step",
-          id: "laravel-3-3",
-          title: "Membuat Controller dengan Artisan",
-          explanation:
-            "Controller adalah kelas tempat logika penanganan permintaan tinggal, supaya `routes/web.php` tetap berupa daftar alamat — bukan berisi ratusan baris fungsi anonim. Perintah `php artisan make:controller` membuat berkasnya di `app/Http/Controllers/` lengkap dengan namespace yang benar, jadi kamu tidak perlu menghafal susunan foldernya. Kenapa tidak menulis kelasnya manual saja? Karena satu huruf salah di namespace membuat Composer tidak menemukan kelasnya, dan pesan errornya (`Target class does not exist`) tidak menyebutkan namespace sama sekali. Kapan dipakai apa: tanpa opsi untuk controller kosong, `--resource` untuk tujuh method CRUD standar (`index`, `create`, `store`, `show`, `edit`, `update`, `destroy`), `--invokable` untuk controller sekali pakai berisi satu aksi. Jebakan yang sering muncul: menjalankan `php artisan` dari luar folder proyek — perintahnya bergantung pada berkas `artisan` di akar proyek, sehingga terminal hanya menjawab \"Could not open input file: artisan\".",
-          example: {
-            code: "# Di terminal, di akar proyek Laravel:\nphp artisan make:controller ProductController --resource",
-            output:
-              "   INFO  Controller [app/Http/Controllers/ProductController.php] created successfully.\n\n" +
-              "$ php artisan route:list --path=product\n" +
-              "  (kosong — berkasnya sudah ada, tetapi route-nya belum kamu daftarkan)",
-            note: "Baris kedua adalah kesalahpahaman yang paling sering terjadi: `make:controller` hanya membuat BERKAS. Selama belum ada `Route::resource('/products', ProductController::class);` di `routes/web.php`, tidak ada satu pun URL yang mengarah ke sana. Catatan jujur: panel latihan tidak menjalankan terminal, jadi keluaran ini tidak akan muncul di sini; yang diperiksa adalah perintah yang kamu tulis.",
-          },
-          instruction:
-            "Tuliskan perintah Artisan terminal untuk membuat `UserController`.",
-          starterCode: "# Tulis perintah artisan make:controller di sini\n",
-          language: "text",
-          tests: [
-                      {
-                        "pattern": "php\\s+artisan\\s+make:controller",
-                        "message": "Semua generator Laravel dijalankan lewat `php artisan make:<jenis>`. Jenisnya ditulis setelah tanda titik dua, tanpa spasi. Untuk pengendali HTTP, jenisnya sama dengan nama lapisannya di pola MVC."
-                      },
-                      {
-                        "pattern": "UserController",
-                        "message": "Nama kelas ditulis dengan PascalCase dan berakhiran `Controller` — konvensi ini yang membuat Laravel dan rekan setimmu langsung tahu isi berkasnya. Tambahkan `--resource` bila kamu ingin tujuh method CRUD sekaligus."
-                      }
-                    ],
-          solution: "php artisan make:controller UserController",
-          susunKode: {
-            question:
-              "Rangkai perintah Artisan untuk membuat Controller bernama UserController.",
-            potongan: [
-              "php",
-              "artisan",
-              "make:controller",
-              "UserController",
-            ],
-            pengecoh: [
-              "create:controller",
-              "UsersController",
-            ],
-            pemisah: " ",
-            explanation:
-              "Perintah make:controller digunakan oleh Artisan CLI untuk menghasilkan berkas controller baru. Keping create:controller keliru nama sub-perintah Artisan. Keping UsersController menggoda tetapi konvensi penamaan controller tunggal Laravel menggunakan nama singular UserController.",
-          },
-        },
+  kind: "step",
+  id: "laravel-3-3",
+  title: "Membuat Controller & Action Method",
+  explanation: "Controller mengelompokkan logika penanganan rute ke dalam metode kelas (*action methods*) yang terstruktur rapi. Method `index()` secara konvensi bertugas menampilkan daftar data dan mengembalikan tampilan (*view*) ke peramban menggunakan helper `view('nama.view')`. Kenapa Controller penting: memisahkan logika HTTP dari berkas `routes/web.php` mencegah berkas rute membengkak menjadi ribuan baris dan memungkinkan injeksi dependensi layanan secara otomatis. Kapan dipakai: setiap kali kamu menangani logika aplikasi web sebelum data disajikan ke antarmuka pengguna. Jebakan umum pemula: menulis titik koma `;` setelah deklarasi nama method atau lupa menggunakan kata kunci `return` sehingga halaman menghasilkan layar putih kosong tanpa respon.",
+  example: {
+    code: "class ProductController extends Controller {\n    public function index() {\n        return view('products.index');\n    }\n}",
+    output: "# Respon saat route GET /products dipanggil:\nHTTP/1.1 200 OK\nContent-Type: text/html\n(Menampilkan isi file resources/views/products/index.blade.php)",
+    note: "Helper view() mencari berkas Blade berdasarkan notasi titik di dalam folder resources/views."
+  },
+  instruction: "Di dalam kelas `UserController`, buat method publik `index()` yang mengembalikan tampilan berlabel `'users.index'` menggunakan helper `view()`.",
+  starterCode: "<?php\nnamespace App\\Http\\Controllers;\n\nclass UserController extends Controller {\n    // Buat method index di sini\n}",
+  language: "text",
+  tests: [
+    {
+      pattern: "public\\s+function\\s+index\\s*\\(\\s*\\)\\s*\\{",
+      message: "Deklarasikan method publik index tanpa parameter dengan blok pembuka di dalam UserController."
+    },
+    {
+      pattern: "return\\s+view\\s*\\(\\s*['\"]users\\.index['\"]\\s*\\);",
+      message: "Kembalikan view('users.index') dari dalam method index."
+    }
+  ],
+  solution: "<?php\nnamespace App\\Http\\Controllers;\n\nclass UserController extends Controller {\n    public function index() {\n        return view('users.index');\n    }\n}",
+  susunKode: {
+    question: "Susun method index pada UserController yang mengembalikan view users.index.",
+    potongan: [
+      "    public function index() {",
+      "        return view('users.index');",
+      "    }"
+    ],
+    pengecoh: [
+      "    public function index();",
+      "        return 'users.index';"
+    ],
+    pemisah: "\n",
+    explanation: "Method Controller memerlukan blok kurung kurawal dan helper view() untuk memuat template Blade. Keping titik koma keliru karena mengakhiri definisi tanpa badan fungsi. Keping return string menggoda tetapi hanya mengembalikan teks mentah alih-alih merender tampilan HTML."
+  }
+},
         {
           kind: "step",
           id: "laravel-3-4",
@@ -1562,7 +1742,7 @@ export const laravelTrack: Track = {
           language: "text",
           tests: [
             {
-              pattern: "Route::get\\s*\\(\\s*['\"]/profile['\"]\\s*,",
+              pattern: "Route::get\\s*\\(\\s*['\"]/?profile['\"]\\s*,",
               message:
                 "Bagian pertamanya sama seperti route biasa: metode `get` dan jalur `/profile`. Yang berubah hanya argumen keduanya.",
             },
@@ -1773,9 +1953,88 @@ export const laravelTrack: Track = {
           },
         },
         {
+  kind: "step",
+  id: "laravel-3-8",
+  title: "Mendaftarkan Resource Controller Lengkap",
+  explanation: "`Route::resource` memetakan tujuh aksi CRUD konvensional (index, create, store, show, edit, update, destroy) ke Controller dalam satu baris deklarasi yang bersih. Pola ini mematuhi prinsip arsitektur RESTful murni dan otomatis memberi nama pada setiap rute sesuai konvensi standar Laravel (`products.index`, `products.show`, dll.). Kenapa cara ini penting: kamu tidak perlu lagi mendaftarkan tujuh baris `Route::get` dan `Route::post` secara manual yang rentan salah ketik dan inkonsistensi nama rute. Kapan dipakai: saat membangun modul manajemen entitas standar di aplikasi web. Jebakan umum: mendaftarkan `Route::resource` di bawah rute dinamis lain sehingga URL bentrok, atau lupa bahwa method form edit dan hapus di browser tetap membutuhkan spoofing `@method('PUT')` dan `@method('DELETE')`.",
+  example: {
+    code: "<?php\nuse App\\Http\\Controllers\\ArticleController;\nuse Illuminate\\Support\\Facades\\Route;\n\nRoute::resource('articles', ArticleController::class);",
+    output: "# Hasil php artisan route:list:\nGET|HEAD   articles ................ articles.index\nPOST       articles ................ articles.store\nGET|HEAD   articles/create ......... articles.create\nGET|HEAD   articles/{article} ...... articles.show\nPUT|PATCH  articles/{article} ...... articles.update\nDELETE     articles/{article} ...... articles.destroy\nGET|HEAD   articles/{article}/edit . articles.edit",
+    note: "Tujuh rute terpasang otomatis lengkap dengan nama rute baku standar industri."
+  },
+  instruction: "Daftarkan rute resource untuk entitas `products` yang menghubungkan seluruh aksi CRUD standar ke `ProductController`.",
+  starterCode: "<?php\nuse App\\Http\\Controllers\\ProductController;\nuse Illuminate\\Support\\Facades\\Route;\n\n// Daftarkan route resource di sini\n",
+  language: "text",
+  tests: [
+    {
+      pattern: "Route::resource\\s*\\(\\s*['\"]/?products['\"]\\s*,\\s*ProductController::class\\s*\\);",
+      message: "Panggil Route::resource dengan argumen nama resource 'products' dan ProductController::class."
+    }
+  ],
+  solution: "<?php\nuse App\\Http\\Controllers\\ProductController;\nuse Illuminate\\Support\\Facades\\Route;\n\nRoute::resource('products', ProductController::class);",
+  susunKode: {
+    question: "Susun pendaftaran rute resource Laravel untuk ProductController.",
+    potongan: [
+      "<?php",
+      "use App\\Http\\Controllers\\ProductController;",
+      "use Illuminate\\Support\\Facades\\Route;",
+      "Route::resource('products', ProductController::class);"
+    ],
+    pengecoh: [
+      "Route::apiResource('products', ProductController::class);",
+      "Route::controller('products', ProductController::class);"
+    ],
+    pemisah: "\n",
+    explanation: "Route::resource mendaftarkan tujuh rute standar aplikasi web lengkap dengan form HTML create dan edit. Keping Route::apiResource keliru karena hanya mendaftarkan lima endpoint API tanpa tampilan form. Keping Route::controller menggoda karena mengelompokkan controller tetapi membutuhkan definisi rute terpisah."
+  }
+},
+{
+  kind: "step",
+  id: "laravel-3-9",
+  title: "Memanggil Komponen Tampilan Blade (<x-...>)",
+  explanation: "Komponen Blade (`<x-nama-komponen>`) adalah standar modern penyusunan antarmuka di Laravel yang menggantikan pola lama `@include` dan `@component`. Komponen memungkinkan kamu membuat elemen antarmuka yang modular, dapat dipakai ulang, dan menerima data props serta konten slot. Kenapa komponen disukai di tempat kerja: tampilan aplikasi web modern menjadi sangat bersih dan mirip tata letak berbasis komponen seperti React/Vue tanpa overhead JavaScript. Kapan dipakai: untuk kartu informasi, tombol, modal dialog, formulir input, dan notifikasi peringatan. Jebakan umum: lupa bahwa atribut biasa dioper sebagai string literal (`type=\"warning\"`), sedangkan jika ingin mengoper variabel PHP atau ekspresi harus diawali tanda titik dua (`:user=\"$user\"`).",
+  example: {
+    code: "<x-badge color=\"green\">\n    Aktif\n</x-badge>",
+    output: "<span class=\"inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800\">\n    Aktif\n</span>",
+    note: "Tag kustom <x-badge> dirender menjadi elemen HTML lengkap oleh template engine Blade."
+  },
+  instruction: "Panggil komponen `<x-alert>` dengan mengoper atribut prop `type` bernilai `warning`, dan isi teks di dalam slotnya berupa pesan peringatan 'Stok barang menipis!'.",
+  starterCode: "{{-- Tampilkan komponen x-alert di sini --}}\n",
+  language: "text",
+  tests: [
+    {
+      pattern: "<x-alert\\s+type=[\"']warning[\"']>",
+      message: "Buka tag komponen <x-alert type=\"warning\"> dengan atribut type yang tepat."
+    },
+    {
+      pattern: "Stok barang menipis!",
+      message: "Tuliskan isi pesan peringatan di dalam slot komponen."
+    },
+    {
+      pattern: "</x-alert>",
+      message: "Tutup tag komponen dengan penutup </x-alert>."
+    }
+  ],
+  solution: "<x-alert type=\"warning\">\n    Stok barang menipis!\n</x-alert>",
+  susunKode: {
+    question: "Susun pemanggilan komponen Blade modern x-alert dengan atribut prop type.",
+    potongan: [
+      "<x-alert type=\"warning\">",
+      "    Stok barang menipis!",
+      "</x-alert>"
+    ],
+    pengecoh: [
+      "<x-alert :type=\"warning\">",
+      "<x-alert type=\"danger\">"
+    ],
+    pemisah: "\n",
+    explanation: "Komponen Blade dipanggil dengan awalan tag kustom <x-nama-komponen> dan atribut teks literal tanpa titik dua. Keping :type=\"warning\" keliru karena tanda titik dua mengevaluasi nilai sebagai kode PHP sehingga mencari konstanta tak terdefinisi. Keping type=\"danger\" menggoda tetapi nilai tipe yang diminta adalah warning."
+  }
+},
+        {
           kind: "quiz",
           id: "laravel-3-kuis",
-          title: "Kuis: Fundamental Laravel & MVC",
+          title: "Kuis: Laravel Fundamental & Routing",
           questions: [
             {
               id: "l3-q1",
@@ -1785,11 +2044,10 @@ export const laravelTrack: Track = {
                 "Model",
                 "View",
                 "Controller",
-                "Migration",
+                "Migration"
               ],
               answerIndex: 2,
-              explanation:
-                "Controller menerima permintaan HTTP, memanggil Model bila perlu, lalu memutuskan respons apa yang dikembalikan. Pilihan Model menggoda karena Model-lah yang memegang data, sehingga terasa paling \"berkuasa\" — tetapi Model tidak pernah tahu ada permintaan HTTP masuk. Pilihan Migration bahkan bukan bagian MVC; ia alat pengelola skema database. Cara mengingatnya: Controller adalah satu-satunya lapisan yang berbicara langsung dengan route.",
+              explanation: "Controller bertindak sebagai pengatur lalu lintas: ia menerima input request dari pengguna, berkoordinasi dengan Model untuk mengambil atau mengolah data, lalu mengembalikan respon (View Blade atau respons JSON)."
             },
             {
               id: "l3-q2",
@@ -1799,39 +2057,36 @@ export const laravelTrack: Track = {
                 "<?php echo $name; ?>",
                 "{{ $name }}",
                 "{!! $name !!}",
-                "<% $name %>",
+                "<% $name %>"
               ],
               answerIndex: 1,
-              explanation:
-                "`{{ $name }}` otomatis melewatkan nilainya ke `htmlspecialchars()`, sehingga `<script>` yang dikirim pengguna tampil sebagai teks, bukan dijalankan. Pilihan `{!! $name !!}` sangat menggoda karena bentuknya mirip dan sering muncul di tutorial — padahal itu justru mencetak HTML mentah dan merupakan lubang XSS bila isinya berasal dari pengguna. Pilihan `<?php echo $name; ?>` tetap berjalan di Blade, tetapi tanpa perlindungan apa pun.",
+              explanation: "Sintaks `{{ $name }}` di Blade otomatis melewatkan nilai melalui `htmlspecialchars()` untuk menetralkan karakter berbahaya (`<script>`, dll.). Sintaks `{!! $name !!}` merender teks tanpa proteksi escape dan hanya dipakai jika konten HTML dijamin aman."
             },
             {
               id: "l3-q3",
               type: "pilihan-ganda",
-              question: "Mengapa berkas `.env` dilarang keras diunggah ke repositori Git publik?",
+              question: "Mengapa berkas konfigurasi `.env` dilarang keras diunggah ke repositori Git publik?",
               choices: [
-                "Karena berkas .env berukuran sangat besar hingga ratusan megabyte",
-                "Karena berkas .env menyimpan kredensial rahasia seperti kunci enkripsi, password database, dan token API",
-                "Karena Git akan merusak format penulisan berkas .env",
-                "Karena berkas .env hanya bisa dibaca di sistem operasi Linux",
+                "Karena format penulisan berkas .env tidak didukung oleh sistem version control Git",
+                "Karena ukuran berkas .env terlalu besar dan memperlambat proses clone repositori",
+                "Karena berkas .env otomatis dihapus oleh server saat proses deployment berlangsung",
+                "Karena berkas .env menyimpan kredensial rahasia seperti kunci enkripsi APP_KEY, password database, dan kredensial API"
               ],
-              answerIndex: 1,
-              explanation:
-                "`.env` menyimpan password database, kunci enkripsi `APP_KEY`, dan token API — semuanya berbeda antar-lingkungan dan tidak boleh dibagikan. Pilihan \"ukurannya sangat besar\" menggoda karena beberapa berkas memang dikecualikan dari Git karena alasan ukuran (seperti `vendor/` dan `node_modules/`), tetapi `.env` hanya beberapa baris. Praktik standarnya: `.env` diabaikan Git, sementara `.env.example` yang berisi kunci tanpa nilai justru ikut di-commit.",
+              answerIndex: 3,
+              explanation: "Berkas `.env` menyimpan kredensial paling sensitif: rahasia koneksi basis data, kunci enkripsi aplikasi (APP_KEY), kredensial SMTP, dan token API pihak ketiga. Mengunggahnya ke repositori publik membocorkan seluruh infrastruktur aplikasi."
             },
             {
               id: "l3-q4",
               type: "pilihan-ganda",
               question: "Apakah keuntungan utama memberikan nama pada route menggunakan metode `->name('nama.route')`?",
               choices: [
-                "Route akan berjalan dua kali lebih cepat",
                 "Memudahkan pembuatan URL di tampilan Blade via helper route() tanpa khawatir jika path URL fisik berubah di masa depan",
-                "Route otomatis mendapatkan validasi keamanan database",
-                "Membuat controller secara otomatis saat aplikasi dijalankan",
+                "Route otomatis mendapatkan proteksi firewall tambahan dari framework Laravel",
+                "Meningkatkan kecepatan eksekusi rute hingga sepuluh kali lipat di server produksi",
+                "Menginstansiasi Controller terkait ke dalam memori RAM saat aplikasi pertama kali booting"
               ],
-              answerIndex: 1,
-              explanation:
-                "Nama route memisahkan tautan di tampilan dari URL fisiknya, sehingga mengubah `/post/{slug}` menjadi `/artikel/{slug}` tidak merusak satu pun berkas Blade. Pilihan \"route jadi dua kali lebih cepat\" menggoda karena penamaan terdengar seperti optimasi, padahal dampaknya nol terhadap kecepatan. Nilainya murni pada perawatan — dan itu baru terasa saat proyekmu punya ratusan tautan yang tidak mungkin dicari satu per satu.",
+              answerIndex: 0,
+              explanation: "Penamaan route memisahkan URL fisik dari referensi kode. Jika di kemudian hari path URL `/produk-unggulan` diubah menjadi `/featured-products`, kamu cukup mengganti rutenya sekali di berkas route tanpa perlu menyisir dan mengganti ratusan tautan di template Blade."
             },
             {
               id: "l3-q5",
@@ -1841,14 +2096,13 @@ export const laravelTrack: Track = {
                 "php artisan create:controller NamaController",
                 "php artisan make:controller NamaController",
                 "composer make:controller NamaController",
-                "php artisan generate:controller NamaController",
+                "php artisan generate:controller NamaController"
               ],
               answerIndex: 1,
-              explanation:
-                "Semua generator Laravel berpola `php artisan make:<jenis>`, jadi untuk Controller perintahnya `php artisan make:controller`. Pilihan `create:controller` dan `generate:controller` menggoda karena kata kerjanya terdengar lebih alami dalam bahasa Inggris — tetapi Laravel konsisten memakai `make:`. Pilihan yang diawali `composer` juga keliru: Composer mengurus paket, sedangkan pembuatan berkas proyek adalah tugas artisan.",
-            },
-          ],
-        },
+              explanation: "Semua generator kode di Laravel menggunakan awalan `make:`, sehingga pembuatan controller dilakukan dengan `php artisan make:controller NamaController`. Perintah `create:` atau `generate:` bukan perintah resmi Artisan."
+            }
+          ]
+        }
       ],
     },
     {
@@ -1899,118 +2153,93 @@ export const laravelTrack: Track = {
             "1. **Bencana Mass Assignment Protection:** Memanggil `Product::create($request->all())` tanpa mendefinisikan properti `protected $fillable = ['name', 'price'];` di dalam Model akan melempar *MassAssignmentException*.\n" +
             "2. **Menjalankan `migrate:fresh` di Produksi:** Perintah `php artisan migrate:fresh` akan **menghapus seluruh tabel dan data** di database lalu menjalankan ulang migration dari awal. Jangan pernah jalankan perintah ini di database produksi!\n" +
             "3. **Metode `get()` vs `first()`:** Metode `where()` mengembalikan *Query Builder*. Kamu harus memanggil `->get()` untuk mendapatkan Koleksi banyak data, atau `->first()` untuk mendapatkan 1 objek data saja.\n\n" +
+            "## Pembaruan Eloquent Modern: Method casts() & Anonymous Migration\n\n" +
+            "Dua konvensi modern yang wajib dipahami di Laravel 11:\n" +
+            "1. **Metode casts(): array di Model:** Alih-alih mendefinisikan array statis `protected $casts = [...]`, Laravel 11 merekomendasikan penulisan method `protected function casts(): array`. Pola method ini memungkinkan penggunaan kelas enum terdefinisi atau closure konversi dinamis yang jauh lebih fleksibel.\n" +
+            "2. **Anonymous Class Migration:** Semua berkas migrasi modern ditulis dalam bentuk kelas anonim (`return new class extends Migration { ... };`). Pola ini mencegah terjadinya bentrok nama kelas (*class name collision*) jika di masa depan kamu membuat dua tabel dengan nama migrasi yang serupa.\n\n" +
             "## Kaitan ke Dunia Kerja\n\n" +
             "Pencegahan N+1 Query dan penulisan skema migration yang rapi adalah hal utama yang diperiksa saat *code review* dan evaluasi performa aplikasi backend Laravel di skala industri.",
         },
         {
-          kind: "step",
-          id: "laravel-4-1",
-          title: "Membuat Berkas Migration Tabel",
-          explanation:
-            "Migration adalah berkas PHP berisi instruksi perubahan struktur tabel — bukan datanya — sehingga skema database ikut tersimpan di Git bersama kodemu. Kenapa tidak membuat tabel langsung lewat phpMyAdmin? Karena perubahan yang dilakukan dengan klik tidak tercatat di mana pun: rekan setim yang menarik kodemu mendapat kode baru dengan tabel lama, dan bug-nya muncul sebagai `Column not found` di komputer orang lain. Dengan migration, satu perintah `php artisan migrate` menyamakan skema semua orang. Nama berkasnya diawali stempel waktu (`2026_07_28_000000_...`) karena urutan itulah yang menentukan mana yang dijalankan lebih dulu — tabel `orders` yang punya kunci asing ke `users` harus lahir setelah `users`. Setiap migration punya dua method: `up()` untuk perubahan, `down()` untuk membatalkannya. Jebakan yang wajib kamu ingat: **jangan pernah menyunting migration yang sudah dijalankan di server**, karena Laravel mencatat berkas mana saja yang sudah dieksekusi di tabel `migrations` dan tidak akan menjalankannya lagi — buat migration baru untuk perubahannya. Dan `php artisan migrate:fresh` menghapus seluruh tabel beserta isinya; perintah itu tidak boleh mendekati database produksi.",
-          example: {
-            code: "# Di terminal, di akar proyek Laravel:\nphp artisan make:migration create_products_table",
-            output:
-              "   INFO  Migration [database/migrations/2026_07_28_041530_create_products_table.php] created successfully.\n\n" +
-              "$ php artisan migrate\n" +
-              "   INFO  Running migrations.\n\n" +
-              "  2026_07_28_041530_create_products_table .............. 24ms DONE\n\n" +
-              "$ php artisan migrate        # dijalankan kedua kalinya\n" +
-              "   INFO  Nothing to migrate.",
-            note: "Perhatikan `Nothing to migrate` pada percobaan kedua: Laravel mencatat berkas yang sudah jalan di tabel `migrations`, jadi menyunting berkas lama tidak akan berpengaruh apa-apa. Catatan jujur: panel latihan tidak menjalankan terminal, jadi keluaran ini tidak akan muncul di sini; yang diperiksa adalah perintah yang kamu tulis.",
-          },
-          instruction:
-            "Tuliskan perintah Artisan terminal untuk membuat migration tabel `categories`.",
-          starterCode: "# Tulis perintah make:migration di sini\n",
-          language: "text",
-          tests: [
-                      {
-                        "pattern": "php\\s+artisan\\s+make:migration",
-                        "message": "Semua generator Laravel dijalankan lewat `php artisan make:<jenis>`. Jenisnya ditulis setelah tanda titik dua, tanpa spasi. Untuk berkas perubahan skema database, jenisnya `migration`."
-                      },
-                      {
-                        "pattern": "create_categories_table",
-                        "message": "Nama migrasi memakai snake_case dan mengikuti pola `create_<nama_tabel>_table`. Bukan sekadar gaya: dari pola itu Laravel menebak nama tabel dan mengisi kerangka `Schema::create` untukmu."
-                      }
-                    ],
-          solution: "php artisan make:migration create_categories_table",
-          susunKode: {
-            question:
-              "Rangkai perintah Artisan untuk membuat berkas migrasi tabel baru create_categories_table.",
-            potongan: [
-              "php",
-              "artisan",
-              "make:migration",
-              "create_categories_table",
-            ],
-            pengecoh: [
-              "create:migration",
-              "new_categories_table",
-            ],
-            pemisah: " ",
-            explanation:
-              "Artisan make:migration membuat skema migrasi tabel baru dengan konvensi nama create_nama-tabel_table. Keping create:migration keliru nama sub-perintah Artisan. Keping new_categories_table menggoda tetapi menyalahi konvensi penamaan migrasi Laravel.",
-          },
-        },
+  kind: "step",
+  id: "laravel-4-1",
+  title: "Mendefinisikan Skema Kolom Tabel di Migrasi",
+  explanation: "Method `up()` pada berkas migrasi menggunakan objek Blueprint `$table` untuk merancang struktur kolom tabel secara deklaratif. Kolom string `$table->string('name')->unique()` membuat kolom `VARCHAR(255)` dengan indeks unik yang mencegah duplikasi nilai di database, sedangkan `$table->text('description')->nullable()` membuat kolom teks panjang yang boleh bernilai `NULL`. Kenapa menulis skema lewat migrasi sangat penting: seluruh anggota tim pengembang dan server produksi memiliki struktur database yang identik tanpa perlu mengekspor berkas SQL manual. Kapan dipakai: setiap kali membuat tabel baru atau menambahkan kolom ke tabel yang sudah ada. Jebakan umum: lupa menambahkan `->nullable()` pada kolom profil opsional — akibatnya proses simpan data gagal dengan error database *Field doesn't have a default value*.",
+  example: {
+    code: "Schema::create('tags', function (Blueprint $table) {\n    $table->id();\n    $table->string('slug')->unique();\n    $table->timestamps();\n});",
+    output: "# DDL SQL MySQL yang dieksekusi:\nCREATE TABLE `tags` (\n  `id` bigint unsigned NOT NULL AUTO_INCREMENT,\n  `slug` varchar(255) NOT NULL UNIQUE,\n  `created_at` timestamp NULL DEFAULT NULL,\n  `updated_at` timestamp NULL DEFAULT NULL,\n  PRIMARY KEY (`id`)\n);",
+    note: "Modifier ->unique() menambahkan constraint unik langsung di level engine database."
+  },
+  instruction: "Di dalam closure `Schema::create('categories', ...)` pada migrasi, tambahkan kolom teks `name` berindeks unik dan kolom teks panjang `description` yang boleh kosong (*nullable*).",
+  starterCode: "<?php\nuse Illuminate\\Database\\Schema\\Blueprint;\nuse Illuminate\\Support\\Facades\\Schema;\n\nSchema::create('categories', function (Blueprint $table) {\n    $table->id();\n    // Definisikan kolom name unik dan description nullable di sini\n    $table->timestamps();\n});",
+  language: "text",
+  tests: [
+    {
+      pattern: "\\$table->string\\s*\\(\\s*['\"]name['\"]\\s*\\)->unique\\s*\\(\\s*\\);",
+      message: "Definisikan kolom teks unik dengan $table->string('name')->unique();."
+    },
+    {
+      pattern: "\\$table->text\\s*\\(\\s*['\"]description['\"]\\s*\\)->nullable\\s*\\(\\s*\\);",
+      message: "Definisikan kolom teks panjang opsional dengan $table->text('description')->nullable();."
+    }
+  ],
+  solution: "<?php\nuse Illuminate\\Database\\Schema\\Blueprint;\nuse Illuminate\\Support\\Facades\\Schema;\n\nSchema::create('categories', function (Blueprint $table) {\n    $table->id();\n    $table->string('name')->unique();\n    $table->text('description')->nullable();\n    $table->timestamps();\n});",
+  susunKode: {
+    question: "Susun pembuatan kolom name berindeks unik dan description opsional pada migrasi tabel.",
+    potongan: [
+      "    $table->id();",
+      "    $table->string('name')->unique();",
+      "    $table->text('description')->nullable();",
+      "    $table->timestamps();"
+    ],
+    pengecoh: [
+      "    $table->string('name');",
+      "    $table->text('description');"
+    ],
+    pemisah: "\n",
+    explanation: "Modifier ->unique() dan ->nullable() mengatur batasan data langsung di tingkat mesin SQL. Keping string('name') tanpa unique keliru karena mengizinkan nama kategori kembar. Keping text('description') tanpa nullable menggoda tetapi mewajibkan kolom diisi sehingga form gagal jika dikosongkan."
+  }
+},
         {
-          kind: "step",
-          id: "laravel-4-2",
-          title: "Membuat Model Eloquent",
-          explanation:
-            "Model adalah kelas PHP yang mewakili satu tabel, dan setiap objeknya mewakili satu baris di tabel itu. Kenapa terasa \"ajaib\"? Karena Laravel menyimpulkan nama tabelnya dari nama kelas lewat konvensi: kelas tunggal PascalCase `Product` dipetakan ke tabel jamak snake_case `products`, kunci utamanya diasumsikan `id`, dan kolom `created_at`/`updated_at` diisi otomatis. Kapan konvensinya perlu ditimpa: tabel warisan bernama `tbl_produk` ditangani dengan `protected $table = 'tbl_produk';` di dalam Model. Opsi `-m` membuat berkas migration-nya sekaligus, sehingga kelas dan skemanya lahir berpasangan dan tidak ada yang tertinggal — ada juga `-mcr` yang sekalian membuat controller resource-nya. Jebakan penamaan yang paling sering: menamai Model dalam bentuk jamak (`Categories`) melanggar konvensi ini — begitu tebakan Laravel tidak lagi bisa kamu duga dari nama kelasnya, kamu bertemu `Base table or view not found` yang tidak menyebut nama Model sama sekali. Kata Inggris tidak beraturan memang ikut ditangani (`Person` → `people`), tetapi kata Indonesia tidak — `Barang` akan dicari sebagai tabel `barangs`.",
-          example: {
-            code: "# Di terminal, di akar proyek Laravel:\nphp artisan make:model Product -m",
-            output:
-              "   INFO  Model [app/Models/Product.php] created successfully.\n\n" +
-              "   INFO  Migration [database/migrations/2026_07_28_041812_create_products_table.php] created successfully.\n\n" +
-              "$ php artisan tinker\n" +
-              "> App\\Models\\Product::first();\n" +
-              "= App\\Models\\Product {#6142\n" +
-              "    id: 1,\n" +
-              "    name: \"Kopi Gayo\",\n" +
-              "    price: 25000,\n" +
-              "    created_at: \"2026-07-28 04:20:11\",\n" +
-              "  }",
-            note: "`php artisan tinker` adalah REPL Laravel — tempat tercepat menguji Model tanpa membuat route atau halaman. Perhatikan `created_at` yang terisi sendiri: itu bagian dari konvensi. Catatan jujur: panel latihan tidak menjalankan terminal, jadi keluaran ini tidak akan muncul di sini; yang diperiksa adalah perintah yang kamu tulis.",
-          },
-          instruction:
-            "Tuliskan perintah Artisan terminal untuk membuat Model `Category` beserta migration-nya (`-m`).",
-          starterCode: "# Tulis perintah make:model dengan flag -m\n",
-          language: "text",
-          tests: [
-                      {
-                        "pattern": "php\\s+artisan\\s+make:model",
-                        "message": "Semua generator Laravel dijalankan lewat `php artisan make:<jenis>`. Jenisnya ditulis setelah tanda titik dua, tanpa spasi."
-                      },
-                      {
-                        "pattern": "make:model\\s+Category\\b",
-                        "message": "Nama model ditulis TUNGGAL dan PascalCase, sementara tabelnya jamak — Eloquent menghubungkan keduanya otomatis. Menamainya `Categories` melanggar konvensi itu, dan nama tabel yang ditebak Eloquent tidak lagi bisa kamu duga dari nama kelasnya."
-                      },
-                      {
-                        "pattern": "(^|\\s)-m(\\s|$)|--migration",
-                        "message": "Tambahkan flag pembuat migrasi sekaligus (`-m`), supaya model dan berkas skemanya lahir bersamaan dan tidak ada yang tertinggal."
-                      }
-                    ],
-          solution: "php artisan make:model Category -m",
-          susunKode: {
-            question:
-              "Rangkai perintah Artisan untuk membuat Model Category beserta berkas migrasinya sekaligus (-m).",
-            potongan: [
-              "php",
-              "artisan",
-              "make:model",
-              "Category",
-              "-m",
-            ],
-            pengecoh: [
-              "make:model-migration",
-              "--with-migration",
-            ],
-            pemisah: " ",
-            explanation:
-              "Opsi singkat -m atau --migration pada make:model memerintahkan Artisan untuk membuat berkas migrasi tabel terkait secara otomatis. Keping make:model-migration keliru perintah. Keping --with-migration adalah nama flag fiktif.",
-          },
-        },
+  kind: "step",
+  id: "laravel-4-2",
+  title: "Deklarasi Model & Properti Tabel Kustom",
+  explanation: "Secara baku, Eloquent menebak nama tabel dari bentuk jamak nama Model (`Category` menjadi `categories`) dan primary key sebagai kolom `id`. Saat bekerja di proyek warisan (*legacy database*) atau integrasi sistem luar, nama tabel dan kunci utama sering kali tidak mengikuti konvensi tersebut. Menimpa properti `protected $table = 'tbl_categories'` dan `protected $primaryKey = 'category_id'` menginstruksikan Eloquent untuk memetakan model ke skema yang ada tanpa perlu merombak database. Kenapa ini wajib dikuasai: di dunia kerja nyata, developer sering kali harus menghubungkan aplikasi baru ke database lama perusahaan. Kapan dipakai: setiap kali tabel database memiliki awalan (*prefix*) atau nama kolom ID kustom. Jebakan umum: lupa mendeklarasikan `$incrementing = false` atau `$keyType = 'string'` jika primary key kustom berupa UUID atau string alih-alih integer auto-increment.",
+  example: {
+    code: "class Member extends Model {\n    protected $table = 'tbl_members';\n    protected $primaryKey = 'member_code';\n}",
+    output: "# Kueri yang dijalankan saat Member::find('MB01'):\nselect * from `tbl_members` where `member_code` = 'MB01' limit 1",
+    note: "Eloquent menggunakan nama tabel dan kolom kunci primer yang dideklarasikan secara eksplisit."
+  },
+  instruction: "Di dalam kelas Model `Category`, tentukan nama tabel database menjadi `'tbl_categories'` dan primary key menjadi `'category_id'` menggunakan properti bawaan Eloquent.",
+  starterCode: "<?php\nnamespace App\\Models;\nuse Illuminate\\Database\\Eloquent\\Model;\n\nclass Category extends Model {\n    // Tentukan properti table dan primaryKey di sini\n}",
+  language: "text",
+  tests: [
+    {
+      pattern: "protected\\s+\\$table\\s*=\\s*['\"]tbl_categories['\"];",
+      message: "Deklarasikan properti protected $table = 'tbl_categories';."
+    },
+    {
+      pattern: "protected\\s+\\$primaryKey\\s*=\\s*['\"]category_id['\"];",
+      message: "Deklarasikan properti protected $primaryKey = 'category_id';."
+    }
+  ],
+  solution: "<?php\nnamespace App\\Models;\nuse Illuminate\\Database\\Eloquent\\Model;\n\nclass Category extends Model {\n    protected $table = 'tbl_categories';\n    protected $primaryKey = 'category_id';\n}",
+  susunKode: {
+    question: "Susun konfigurasi Model Eloquent untuk menghubungkan ke tabel dan primary key non-standar.",
+    potongan: [
+      "class Category extends Model {",
+      "    protected $table = 'tbl_categories';",
+      "    protected $primaryKey = 'category_id';",
+      "}"
+    ],
+    pengecoh: [
+      "    public $tableName = 'tbl_categories';",
+      "    private $id = 'category_id';"
+    ],
+    pemisah: "\n",
+    explanation: "Eloquent membaca konfigurasi penimpaan skema dari properti terlindung $table dan $primaryKey. Keping tableName keliru karena Eloquent tidak mengenali properti tersebut. Keping private $id menggoda bagi pemula tetapi hak akses private menyembunyikan properti dari kelas induk Model."
+  }
+},
         {
           kind: "step",
           id: "laravel-4-3",
@@ -2322,9 +2551,136 @@ export const laravelTrack: Track = {
           },
         },
         {
+  kind: "step",
+  id: "laravel-4-8",
+  title: "Mendefinisikan Kunci Asing di Berkas Migrasi",
+  explanation: "Metode `$table->foreignId('user_id')->constrained()->cascadeOnDelete()` adalah konvensi ringkas di Laravel untuk membangun relasi kunci asing antartabel secara aman di tingkat mesin basis data. `foreignId` membuat kolom integer tak bertanda, `constrained()` secara otomatis menebak tabel induknya dari nama kolom (`user_id` merujuk ke tabel `users` kolom `id`), dan `cascadeOnDelete()` memastikan data anak otomatis terhapus jika baris induknya dihapus. Kenapa ini esensial: integritas data terjaga langsung di database sehingga tidak meninggalkan baris yatim (*orphan records*) saat ada data pengguna yang dihapus. Kapan dipakai: setiap kali kamu mendesain tabel anak yang bergantung pada tabel induk. Jebakan yang sering merusak migrasi: urutan eksekusi berkas migrasi yang salah — jika tabel `posts` dimigrasi sebelum tabel `users` dibuat, database melempar error *Foreign key constraint is incorrectly formed*.",
+  example: {
+    code: "$table->foreignId('category_id')->constrained()->nullOnDelete();",
+    output: "# DDL SQL yang dihasilkan di MySQL:\nALTER TABLE `posts` ADD CONSTRAINT `posts_category_id_foreign`\nFOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE SET NULL;",
+    note: "Satu rantai metode ringkas menghasilkan perintah DDL constraint lengkap di database."
+  },
+  instruction: "Di dalam method `up()` migrasi tabel `posts`, tambahkan definisi kolom foreign key `user_id` yang terikat ke tabel `users` dan otomatis menghapus artikel jika pengguna induknya dihapus (*cascade on delete*).",
+  starterCode: "<?php\nuse Illuminate\\Database\\Schema\\Blueprint;\nuse Illuminate\\Support\\Facades\\Schema;\n\nSchema::create('posts', function (Blueprint $table) {\n    $table->id();\n    // Tambahkan kolom foreign key user_id di sini\n    $table->timestamps();\n});",
+  language: "text",
+  tests: [
+    {
+      pattern: "\\$table->foreignId\\s*\\(\\s*['\"]user_id['\"]\\s*\\)",
+      message: "Gunakan method $table->foreignId('user_id') untuk membuat kolom foreign key."
+    },
+    {
+      pattern: "->constrained\\s*\\(\\s*\\)",
+      message: "Rantaikan metode ->constrained() untuk mengikat constraint ke tabel induk secara otomatis."
+    },
+    {
+      pattern: "->cascadeOnDelete\\s*\\(\\s*\\);",
+      message: "Rantaikan metode ->cascadeOnDelete() untuk menghapus baris anak jika induk dihapus."
+    }
+  ],
+  solution: "<?php\nuse Illuminate\\Database\\Schema\\Blueprint;\nuse Illuminate\\Support\\Facades\\Schema;\n\nSchema::create('posts', function (Blueprint $table) {\n    $table->id();\n    $table->foreignId('user_id')->constrained()->cascadeOnDelete();\n    $table->timestamps();\n});",
+  susunKode: {
+    question: "Susun pembuatan kolom kunci asing dengan constraint cascade on delete di berkas migrasi.",
+    potongan: [
+      "    $table->id();",
+      "    $table->foreignId('user_id')",
+      "        ->constrained()",
+      "        ->cascadeOnDelete();",
+      "    $table->timestamps();"
+    ],
+    pengecoh: [
+      "    $table->unsignedBigInteger('user_id');",
+      "        ->onDelete('cascade');"
+    ],
+    pemisah: "\n",
+    explanation: "foreignId('user_id') bersama constrained() dan cascadeOnDelete() adalah sintaks deklarasi relasi kunci asing modern di Laravel. Keping unsignedBigInteger keliru karena membutuhkan deklarasi foreign() terpisah yang panjang. Keping ->onDelete('cascade') menggoda gaya lama tetapi cascadeOnDelete() lebih ringkas dan idiomatis."
+  }
+},
+{
+  kind: "step",
+  id: "laravel-4-9",
+  title: "Mendefinisikan Relasi Many-to-Many (belongsToMany)",
+  explanation: "Relasi banyak-ke-banyak (*many-to-many*) terjadi saat satu rekaman di tabel A dapat terhubung ke banyak rekaman di tabel B, dan sebaliknya — misalnya seorang `User` dapat memiliki banyak `Role`, dan satu `Role` dapat dimiliki oleh banyak `User`. Di Eloquent, relasi ini dideklarasikan dengan `$this->belongsToMany(Role::class)`. Laravel secara cerdas menebak tabel perantara (*pivot table*) dengan menggabungkan nama kedua model dalam urutan alfabet dan huruf kecil tunggal (`role_user`). Kenapa penting dipahami: tanpa relasi ini kamu terpaksa mengelola tabel pivot secara manual melalui query join yang panjang dan rumit. Kapan dipakai: sistem hak akses, penandaan artikel (*tags*), dan keranjang belanja produk. Jebakan umum: membuat tabel pivot dengan nama jamak (`roles_users`) tanpa mendeklarasikannya di parameter kedua `belongsToMany(Role::class, 'roles_users')`.",
+  example: {
+    code: "class Post extends Model {\n    public function tags() {\n        return $this->belongsToMany(Tag::class);\n    }\n}",
+    output: "# SQL saat menyentuh $post->tags:\nselect `tags`.*, `post_tag`.`post_id` as `pivot_post_id`\nfrom `tags` inner join `post_tag` on `tags`.`id` = `post_tag`.`tag_id`\nwhere `post_tag`.`post_id` = 5",
+    note: "Eloquent otomatis mengeksekusi inner join ke tabel pivot tanpa perlu query manual."
+  },
+  instruction: "Di dalam Model `User`, definisikan method relasi `roles()` yang mengembalikan relasi many-to-many ke Model `Role` melalui tabel pivot.",
+  starterCode: "<?php\nclass User extends Model {\n    public function roles() {\n        // Kembalikan relasi many-to-many di sini\n    }\n}",
+  language: "text",
+  tests: [
+    {
+      pattern: "return\\s+\\$this->belongsToMany\\s*\\(\\s*Role::class\\s*\\);",
+      message: "Kembalikan relasi dengan memanggil $this->belongsToMany(Role::class)."
+    }
+  ],
+  solution: "<?php\nclass User extends Model {\n    public function roles() {\n        return $this->belongsToMany(Role::class);\n    }\n}",
+  susunKode: {
+    question: "Susun method relasi many-to-many pada Model User ke Model Role.",
+    potongan: [
+      "<?php",
+      "class User extends Model {",
+      "    public function roles() {",
+      "        return $this->belongsToMany(Role::class);",
+      "    }",
+      "}"
+    ],
+    pengecoh: [
+      "        return $this->hasMany(Role::class);",
+      "        return $this->hasManyThrough(Role::class);"
+    ],
+    pemisah: "\n",
+    explanation: "Relasi many-to-many pada Eloquent dihubungkan melalui method belongsToMany yang otomatis mencari tabel pivot perantara. Keping hasMany keliru karena hanya mendefinisikan relasi satu-ke-banyak. Keping hasManyThrough menggoda karena terdengar mirip melewati tabel lain tetapi membutuhkan model perantara terpisah."
+  }
+},
+{
+  kind: "step",
+  id: "laravel-4-10",
+  title: "Menjaga Konsistensi Data dengan DB::transaction",
+  explanation: "`DB::transaction(function () { ... })` membungkus sekumpulan operasi database ke dalam satu unit transaksi atomik (*ACID*). Jika seluruh pernyataan di dalam closure berhasil dieksekusi tanpa galat, transaksi otomatis di-*commit*; namun jika terjadi satu saja `Exception`, seluruh perubahan dibatalkan (*rollback*) secara otomatis seolah tidak pernah terjadi. Kenapa ini wajib di dunia kerja: transaksi mencegah inkonsistensi fatal pada alur pembayaran — bayangkan saldo pengguna sudah berkurang tetapi pencatatan pesanan gagal akibat server terputus. Kapan dipakai: setiap kali sebuah aksi bisnis mengubah lebih dari satu baris atau lebih dari satu tabel yang saling berkaitan. Jebakan umum: membungkus panggilan API eksternal di dalam database transaction — jika API luar lambat, koneksi database terkunci (*lock wait timeout*) dan melumpuhkan sistem.",
+  example: {
+    code: "<?php\nuse Illuminate\\Support\\Facades\\DB;\n\nDB::transaction(function () use ($wallet, $amount) {\n    $wallet->decrement('balance', $amount);\n    Transaction::create(['amount' => $amount]);\n});",
+    output: "# Log database query:\nSTART TRANSACTION;\nUPDATE `wallets` SET `balance` = `balance` - 50000 WHERE `id` = 2;\nINSERT INTO `transactions` (`amount`) VALUES (50000);\nCOMMIT;",
+    note: "Kedua perintah dieksekusi sebagai satu kesatuan utuh dengan mekanisme rollback otomatis bila ada error."
+  },
+  instruction: "Bungkus aksi pembuatan pesanan `$order = Order::create(['total' => 50000]);` dan pemotongan stok `$product->decrement('stock', 1);` di dalam transaksi basis data `DB::transaction()`.",
+  starterCode: "<?php\nuse App\\Models\\Order;\nuse Illuminate\\Support\\Facades\\DB;\n\n// Bungkus aksi di dalam transaksi database di sini\n",
+  language: "text",
+  tests: [
+    {
+      pattern: "DB::transaction\\s*\\(",
+      message: "Panggil metode transaksi atomik melalui Facade DB::transaction."
+    },
+    {
+      pattern: "Order::create\\s*\\(\\s*\\[\\s*['\"]total['\"]\\s*=>\\s*50000\\s*\\]\\s*\\);",
+      message: "Eksekusi pembuatan pesanan Order::create di dalam closure transaksi."
+    },
+    {
+      pattern: "\\$product->decrement\\s*\\(\\s*['\"]stock['\"]\\s*,\\s*1\\s*\\);",
+      message: "Kurangi stok produk menggunakan metode decrement di dalam closure transaksi."
+    }
+  ],
+  solution: "<?php\nuse App\\Models\\Order;\nuse Illuminate\\Support\\Facades\\DB;\n\nDB::transaction(function () use ($product) {\n    $order = Order::create(['total' => 50000]);\n    $product->decrement('stock', 1);\n});",
+  susunKode: {
+    question: "Susun pembungkusan operasi mutasi ganda database ke dalam DB::transaction.",
+    potongan: [
+      "DB::transaction(function () use ($product) {",
+      "    $order = Order::create(['total' => 50000]);",
+      "    $product->decrement('stock', 1);",
+      "});"
+    ],
+    pengecoh: [
+      "DB::afterCommit(function () use ($product) {",
+      "    $order = Order::make(['total' => 50000]);"
+    ],
+    pemisah: "\n",
+    explanation: "DB::transaction membungkus sekumpulan mutasi basis data dalam satu unit atomik yang otomatis di-rollback jika terjadi error. Keping DB::afterCommit keliru karena hanya menunda eksekusi setelah transaksi induk selesai. Keping Order::make menggoda karena tampak mirip create tetapi hanya membuat instans memori tanpa menyimpan ke database."
+  }
+},
+        {
           kind: "quiz",
           id: "laravel-4-kuis",
-          title: "Kuis: Eloquent ORM & Relasi Database",
+          title: "Kuis: Eloquent ORM & Basis Data",
           questions: [
             {
               id: "l4-q1",
@@ -2334,25 +2690,23 @@ export const laravelTrack: Track = {
                 "article_table",
                 "articles",
                 "tbl_article",
-                "ArticleModel",
+                "article"
               ],
               answerIndex: 1,
-              explanation:
-                "Eloquent menebak nama tabel dengan mengubah nama Model tunggal PascalCase menjadi jamak snake_case: `Article` → `articles`. Pilihan `article_table` dan `tbl_article` menggoda karena banyak proyek warisan memang memakai awalan atau akhiran seperti itu — dan untuk kasus tersebut kamu memang harus menimpanya dengan `protected $table`. Jebakan penamaan yang sering: memberi nama Model dalam bentuk jamak (`Categories`) — tebakan nama tabelnya tidak lagi bisa kamu duga dari nama kelas, dan itulah asal `Base table or view not found` yang tidak menyebut Model sama sekali.",
+              explanation: "Eloquent menggunakan konvensi bentuk jamak bahasa Inggris (*plural snake_case*): model `Article` dipetakan ke tabel `articles`, model `User` ke `users`, dan model `ProductCategory` ke `product_categories`."
             },
             {
               id: "l4-q2",
               type: "pilihan-ganda",
               question: "Apakah dampak negatif dari Masalah N+1 Query di dalam aplikasi Laravel?",
               choices: [
-                "Aplikasi akan merusak struktur file Blade secara otomatis",
-                "Terjadi pembengkakan jumlah query SQL ke database yang menyebabkan aplikasi menjadi sangat lambat",
-                "Laravel akan menghapus kolom primary key di tabel database",
-                "Browser pengguna tidak bisa lagi menerima file gambar",
+                "Terjadi korupsi data pada transaksi database yang sedang berlangsung di server",
+                "Model Eloquent otomatis mematikan fitur query builder secara permanen",
+                "Kunci foreign key database terlepas dari tabel induk saat relasi dipanggil",
+                "Terjadi pembengkakan ratusan hingga ribuan query SQL berulang ke database yang menyebabkan aplikasi menjadi sangat lambat"
               ],
-              answerIndex: 1,
-              explanation:
-                "N+1 berarti satu query utama diikuti satu query tambahan untuk setiap baris, sehingga 100 produk menghasilkan 101 query dan halaman menjadi lambat. Pilihan yang menyebut kerusakan berkas atau kolom menggoda karena terdengar lebih \"serius\", padahal justru sifat N+1 yang jinak itulah masalahnya: hasilnya tetap benar, jadi bug ini lolos sampai produksi dan baru terasa ketika datanya sudah banyak.",
+              answerIndex: 3,
+              explanation: "N+1 Query terjadi ketika kamu mengambil N record (1 query), lalu di dalam loop memanggil data relasinya (N query tambahan). Akibatnya ada 1+N query terpisah ke basis data yang membebani CPU database dan melambatkan respon web secara drastis."
             },
             {
               id: "l4-q3",
@@ -2362,42 +2716,39 @@ export const laravelTrack: Track = {
                 "->join()",
                 "->with()",
                 "->loadFast()",
-                "->attach()",
+                "->include()"
               ],
               answerIndex: 1,
-              explanation:
-                "`->with('relasi')` memuat relasi di awal dengan satu query tambahan `where id in (...)`, berapa pun jumlah barisnya. Pilihan `->join()` sangat menggoda karena secara SQL juga menggabungkan tabel — tetapi `join` mengembalikan baris datar, bukan objek relasi, sehingga `$post->user->name` tetap memicu query baru. Pilihan `->attach()` berbeda urusan: ia menambah baris di tabel perantara relasi many-to-many.",
+              explanation: "`Post::with('author')->get()` memuat seluruh data relasi `author` di muka hanya dalam 2 query SQL teroptimasi (`SELECT * FROM posts` dan `SELECT * FROM authors WHERE id IN (...)`), memangkas puluhan query N+1."
             },
             {
               id: "l4-q4",
               type: "pilihan-ganda",
-              question: "Properti apakah yang wajib didefinisikan di dalam Model untuk mengizinkan penyisipan data melalui `Model::create()`?",
+              question: "Properti apakah yang wajib didefinisikan di dalam Model untuk menentukan kolom mana saja yang aman diisi pada operasi `Model::create()`?",
               choices: [
                 "protected $table",
-                "protected $fillable",
                 "public $timestamps",
-                "private $primaryKey",
+                "protected $fillable",
+                "private $primaryKey"
               ],
-              answerIndex: 1,
-              explanation:
-                "`protected $fillable` adalah daftar putih kolom yang boleh diisi lewat `create()` atau `update()` massal. Pilihan `$table` menggoda karena juga properti Model yang sering muncul di tutorial, tetapi ia hanya menimpa tebakan nama tabel. Kenapa pengaman ini ada: tanpanya, seseorang bisa menambahkan `is_admin=1` ke formulir pendaftaran dan mengangkat dirinya jadi administrator — dan pengisian satu per satu (`$user->is_admin = true`) tetap diizinkan karena di situ kamu yang memutuskan.",
+              answerIndex: 2,
+              explanation: "Properti `protected $fillable = ['nama', 'harga']` menentukan daftar putih (*whitelist*) atribut yang boleh diisi secara mass assignment melalui `Model::create($request->all())` guna melindungi aplikasi dari injeksi kolom tak berizin."
             },
             {
               id: "l4-q5",
               type: "pilihan-ganda",
-              question: "Perintah Artisan apakah yang digunakan untuk mengeksekusi seluruh berkas Migration ke dalam database?",
+              question: "Perintah Artisan apakah yang digunakan untuk mengeksekusi seluruh berkas Migration yang belum berjalan ke dalam database?",
               choices: [
-                "php artisan db:run",
                 "php artisan migrate",
+                "php artisan db:run",
                 "composer run-migration",
-                "php artisan schema:build",
+                "php artisan schema:build"
               ],
-              answerIndex: 1,
-              explanation:
-                "`php artisan migrate` menjalankan berkas migration yang belum pernah dieksekusi, berdasarkan catatan di tabel `migrations`. Pilihan `schema:build` dan `db:run` menggoda karena namanya deskriptif, tetapi tidak ada di Laravel. Yang wajib kamu bedakan: `migrate` aman dijalankan berulang, sedangkan `migrate:fresh` MENGHAPUS seluruh tabel beserta isinya lebih dulu — perintah itu tidak boleh mendekati database produksi.",
-            },
-          ],
-        },
+              answerIndex: 0,
+              explanation: "`php artisan migrate` membaca seluruh berkas di direktori `database/migrations` dan mengeksekusi method `up()` untuk migrasi yang belum tercatat di tabel `migrations` basis data."
+            }
+          ]
+        }
       ],
     },
     {
@@ -2587,60 +2938,46 @@ export const laravelTrack: Track = {
           },
         },
         {
-          kind: "step",
-          id: "laravel-5-3",
-          title: "Form Request Class",
-          explanation:
-            "Form Request adalah kelas khusus berisi dua method: `rules()` yang mengembalikan aturan validasi, dan `authorize()` yang menjawab boleh atau tidak pengguna ini melakukan aksinya. Cara memakainya elegan — kamu cukup mengganti tipe parameter Controller dari `Request` menjadi `StoreProductRequest`, dan Laravel menjalankan validasi **sebelum** satu baris pun method-mu berjalan. Kenapa dipisah? Karena aturan validasi nyata jarang tiga baris: unggahan berkas, aturan `unique` yang mengecualikan baris yang sedang disunting, pesan kesalahan berbahasa Indonesia, dan pemeriksaan bersyarat dengan cepat menjadikan Controller-mu tidak terbaca. Selain itu aturan yang sama sering dipakai dua kali (form web dan endpoint API) — satu kelas, dua pemakai. Jebakan yang membuat banyak orang menyerah di percobaan pertama: `authorize()` yang di beberapa versi Laravel bernilai `return false;` secara bawaan, sehingga setiap permintaan ditolak **403 Forbidden** tanpa satu pun pesan validasi muncul — gejalanya terlihat seperti formulir yang rusak, bukan seperti masalah izin.",
-          example: {
-            code: "# Di terminal, di akar proyek Laravel:\nphp artisan make:request StoreProductRequest",
-            output:
-              "   INFO  Request [app/Http/Requests/StoreProductRequest.php] created successfully.\n\n" +
-              "# isi berkas yang dihasilkan (disingkat):\n" +
-              "class StoreProductRequest extends FormRequest\n" +
-              "{\n" +
-              "    public function authorize(): bool { return false; }   // <- wajib diubah jadi true\n" +
-              "    public function rules(): array { return []; }\n" +
-              "}\n\n" +
-              "# memakainya di Controller:\n" +
-              "public function store(StoreProductRequest $request) { ... }\n\n" +
-              "# jika authorize() dibiarkan false:\n" +
-              "POST /products  ->  HTTP/1.1 403 Forbidden   (tanpa pesan validasi apa pun)",
-            note: "Baris terakhir itulah jebakannya. Kalau formulirmu tiba-tiba menjawab 403, periksa `authorize()` sebelum mencurigai aturan validasinya. Catatan jujur: panel latihan tidak menjalankan terminal maupun Laravel, jadi keluaran ini tidak akan muncul di sini; yang diperiksa adalah perintah yang kamu tulis.",
-          },
-          instruction:
-            "Tuliskan perintah Artisan terminal untuk membuat Form Request `StoreUserRequest`.",
-          starterCode: "# Tulis perintah make:request di sini\n",
-          language: "text",
-          tests: [
-                      {
-                        "pattern": "php\\s+artisan\\s+make:request",
-                        "message": "Semua generator Laravel dijalankan lewat `php artisan make:<jenis>`. Jenisnya ditulis setelah tanda titik dua, tanpa spasi. Untuk kelas validasi terpisah, jenisnya `request`."
-                      },
-                      {
-                        "pattern": "StoreUserRequest",
-                        "message": "Konvensi namanya `<Aksi><Model>Request` — `Store` untuk membuat, `Update` untuk mengubah. Jangan lupa method `authorize()` di dalamnya: nilai bawaannya `false` pada sebagian versi, dan itu membuat semua permintaan ditolak 403 tanpa penjelasan."
-                      }
-                    ],
-          solution: "php artisan make:request StoreUserRequest",
-          susunKode: {
-            question:
-              "Rangkai perintah Artisan untuk membuat kelas Form Request bernama StoreUserRequest.",
-            potongan: [
-              "php",
-              "artisan",
-              "make:request",
-              "StoreUserRequest",
-            ],
-            pengecoh: [
-              "make:form-request",
-              "CreateUserRequest",
-            ],
-            pemisah: " ",
-            explanation:
-              "Perintah make:request membuat kelas Form Request terspesialisasi di folder app/Http/Requests. Keping make:form-request keliru sub-perintah Artisan. Keping CreateUserRequest menggoda tetapi instruksi meminta nama StoreUserRequest.",
-          },
-        },
+  kind: "step",
+  id: "laravel-5-3",
+  title: "Menggunakan Form Request di Controller",
+  explanation: "Alih-alih menyuntikkan `Request` standar dan memanggil `$request->validate([...])` di dalam Controller, menyuntikkan kelas `StoreUserRequest` ke parameter method Controller mendelegasikan seluruh verifikasi masukan ke lapisan khusus. Di dalam method, memanggil `$request->validated()` mengembalikan array yang **hanya** berisi data yang telah lolos validasi — secara otomatis menepis field tak dikenal atau berbahaya yang coba diselundupkan penyerang. Kenapa pola ini menjadi standar perusahaan: Controller tetap tipis (*Thin Controller*), aturan validasi dapat diuji terpisah (*isolated unit testing*), dan keamanan Mass Assignment terlindungi ganda. Kapan dipakai: pada seluruh aksi mutasi penyimpanan dan pembaruan data formulir. Jebakan umum: memanggil `$request->all()` alih-alih `$request->validated()` saat `User::create()` — data kotor yang tidak didefinisikan aturannya tetap ikut tersimpan.",
+  example: {
+    code: "public function store(StoreArticleRequest $request) {\n    $data = $request->validated();\n    Article::create($data);\n    return redirect()->route('articles.index');\n}",
+    output: "# Alur eksekusi saat form disubmit:\n1. StoreArticleRequest memvalidasi input\n2. Jika valid, Controller menerima $request\n3. $data hanya memuat field yang lolos aturan",
+    note: "validated() bertindak sebagai filter pembersih sebelum data disentuh oleh Eloquent."
+  },
+  instruction: "Di dalam `UserController`, buat method `store` yang menerima injeksi `StoreUserRequest $request`, lalu ambil data yang sudah tervalidasi menggunakan `$request->validated()` dan simpan ke variabel `$data`.",
+  starterCode: "<?php\nnamespace App\\Http\\Controllers;\nuse App\\Http\\Requests\\StoreUserRequest;\n\nclass UserController extends Controller {\n    // Lengkapi method store dengan Form Request dan validated() di sini\n}",
+  language: "text",
+  tests: [
+    {
+      pattern: "public\\s+function\\s+store\\s*\\(\\s*StoreUserRequest\\s+\\$request\\s*\\)",
+      message: "Injeksi StoreUserRequest $request ke dalam parameter method publik store."
+    },
+    {
+      pattern: "\\$data\\s*=\\s*\\$request->validated\\s*\\(\\s*\\);",
+      message: "Tampung data terverifikasi ke variabel $data menggunakan $request->validated()."
+    }
+  ],
+  solution: "<?php\nnamespace App\\Http\\Controllers;\nuse App\\Http\\Requests\\StoreUserRequest;\n\nclass UserController extends Controller {\n    public function store(StoreUserRequest $request) {\n        $data = $request->validated();\n    }\n}",
+  susunKode: {
+    question: "Susun injeksi Form Request pada method store Controller dan pengambilan data tervalidasi.",
+    potongan: [
+      "class UserController extends Controller {",
+      "    public function store(StoreUserRequest $request) {",
+      "        $data = $request->validated();",
+      "    }",
+      "}"
+    ],
+    pengecoh: [
+      "    public function store(Request $request) {",
+      "        $data = $request->all();"
+    ],
+    pemisah: "\n",
+    explanation: "Injeksi StoreUserRequest memicu validasi otomatis sebelum kode controller dijalankan, dan method validated() memfilter input bersih. Keping Request biasa keliru karena tidak memicu aturan StoreUserRequest. Keping $request->all() menggoda tetapi mengambil seluruh masukan kotor tanpa filter validasi."
+  }
+},
         {
           kind: "step",
           id: "laravel-5-4",
@@ -2820,37 +3157,129 @@ export const laravelTrack: Track = {
           },
         },
         {
+  kind: "step",
+  id: "laravel-5-7",
+  title: "Menyusun Aturan Validasi pada Kelas Form Request",
+  explanation: "Kelas `FormRequest` memisahkan logika otorisasi dan validasi formulir dari Controller agar kode Controller tetap ramping (*Thin Controller*). Method `rules(): array` mengembalikan daftar bidang masukan beserta aturan pemeriksaannya. Ketika diinjeksi ke metode Controller (`public function store(StoreUserRequest $request)`), Laravel secara otomatis mengeksekusi validasi sebelum badan Controller disentuh. Kenapa ini standar industri: Controller menjadi bersih, logika validasi dapat diuji secara terisolasi, dan aturan validasi yang sama dapat digunakan ulang di beberapa endpoint. Kapan dipakai: pada seluruh formulir kompleks atau endpoint API produksi. Jebakan pemula yang sangat umum: method `authorize()` di Form Request secara default mengembalikan `false` saat digenerate oleh Artisan — jika tidak diubah menjadi `true`, form akan selalu ditolak dengan respon HTTP 403 Forbidden.",
+  example: {
+    code: "public function rules(): array {\n    return [\n        'sku' => 'required|string|unique:products,sku',\n        'price' => 'required|numeric|min:1000',\n    ];\n}",
+    output: "# Respon otomatis saat input tidak valid:\nHTTP/1.1 422 Unprocessable Content\n{\n  \"message\": \"The sku has already been taken.\",\n  \"errors\": { \"sku\": [\"The sku has already been taken.\"] }\n}",
+    note: "Laravel otomatis merespon dengan status 422 JSON jika permintaan datang dari klien API."
+  },
+  instruction: "Di dalam kelas `StoreUserRequest`, lengkapi method `rules()` agar mengembalikan array aturan validasi: field `name` wajib diisi bertipe string dengan batas maksimal `255` karakter, dan field `email` wajib diisi serta harus berformat email yang valid.",
+  starterCode: "<?php\nnamespace App\\Http\\Requests;\nuse Illuminate\\Foundation\\Http\\FormRequest;\n\nclass StoreUserRequest extends FormRequest {\n    public function rules(): array {\n        // Kembalikan aturan validasi di sini\n    }\n}",
+  language: "text",
+  tests: [
+    {
+      pattern: "return\\s*\\[",
+      message: "Kembalikan array asosiatif berisi aturan validasi dari method rules()."
+    },
+    {
+      pattern: "['\"]name['\"]\\s*=>\\s*['\"]required\\|string\\|max:255['\"]",
+      message: "Tentukan aturan untuk field 'name': required|string|max:255."
+    },
+    {
+      pattern: "['\"]email['\"]\\s*=>\\s*['\"]required\\|email['\"]",
+      message: "Tentukan aturan untuk field 'email': required|email."
+    }
+  ],
+  solution: "<?php\nnamespace App\\Http\\Requests;\nuse Illuminate\\Foundation\\Http\\FormRequest;\n\nclass StoreUserRequest extends FormRequest {\n    public function rules(): array {\n        return [\n            'name' => 'required|string|max:255',\n            'email' => 'required|email',\n        ];\n    }\n}",
+  susunKode: {
+    question: "Susun method rules() di dalam Form Request dengan aturan validasi name dan email.",
+    potongan: [
+      "    public function rules(): array {",
+      "        return [",
+      "            'name' => 'required|string|max:255',",
+      "            'email' => 'required|email',",
+      "        ];",
+      "    }"
+    ],
+    pengecoh: [
+      "            'name' => 'required|string|min:255',",
+      "            'email' => 'required|string',"
+    ],
+    pemisah: "\n",
+    explanation: "Method rules() di kelas Form Request wajib mengembalikan array berisi nama bidang dan aturan validasinya. Keping min:255 keliru karena membatasi panjang minimum alih-alih batas maksimum karakter. Keping required|string menggoda untuk email tetapi tidak memeriksa format alamat email yang valid."
+  }
+},
+{
+  kind: "step",
+  id: "laravel-5-8",
+  title: "Menampilkan Pesan Validasi @error & Helper old()",
+  explanation: "Kombinasi helper `old('nama_field')` dan direktif `@error('nama_field')` adalah fondasi kenyamanan pengguna (*UX*) pada formulir web. Helper `old()` mengisi kembali elemen input dengan data yang sebelumnya diketik pengunjung agar mereka tidak perlu mengetik ulang saat form gagal diverifikasi. Sementara direktif `@error` memeriksa apakah ada pesan kegagalan untuk kolom tersebut dan menyediakan variabel `$message` yang siap dicetak di dalam tag tampilan. Kenapa wajib dipasang: formulir tanpa `old()` dan `@error` membuat pengguna frustrasi karena formulir kosong kembali dan pengguna tidak tahu letak kesalahannya. Kapan dipakai: pada setiap formulir input di file tampilan Blade. Jebakan umum: salah menulis nama field di `@error` sehingga pesan galat tidak pernah muncul padahal validasi di backend sebenarnya gagal.",
+  example: {
+    code: "<input type=\"email\" name=\"email\" value=\"{{ old('email') }}\">\n@error('email')\n    <span class=\"error-text\">{{ $message }}</span>\n@enderror",
+    output: "<input type=\"email\" name=\"email\" value=\"bimo@tidakvalid\">\n<span class=\"error-text\">The email field must be a valid email address.</span>",
+    note: "Nilai input lama dipertahankan dan pesan error spesifik ditampilkan tepat di bawah kolom."
+  },
+  instruction: "Buat satu elemen `<input>` teks untuk field `title` yang mempertahankan input sebelumnya dengan `value=\"{{ old('title') }}\"`, lalu tepat di bawahnya tampilkan pesan error menggunakan direktif `@error('title')` yang mencetak `$message` di dalam tag `<p>` berkelas `text-red-500`.",
+  starterCode: "{{-- Tulis input title dan pesan error validasinya di sini --}}\n",
+  language: "text",
+  tests: [
+    {
+      pattern: "<input\\s+type=[\"']text[\"']\\s+name=[\"']title[\"']\\s+value=[\"']{{\\s*old\\(['\"]title['\"]\\)\\s*}}[\"']>",
+      message: "Tuliskan tag input teks dengan atribut name='title' dan value yang memanggil old('title')."
+    },
+    {
+      pattern: "@error\\(['\"]title['\"]\\)",
+      message: "Buka blok pemeriksaan error menggunakan direktif @error('title')."
+    },
+    {
+      pattern: "<p\\s+class=[\"']text-red-500[\"']>{{\\s*\\$message\\s*}}</p>",
+      message: "Cetak variabel $message di dalam elemen p berkelas text-red-500."
+    },
+    {
+      pattern: "@enderror",
+      message: "Tutup blok penanganan error dengan direktif @enderror."
+    }
+  ],
+  solution: "<input type=\"text\" name=\"title\" value=\"{{ old('title') }}\">\n@error('title')\n    <p class=\"text-red-500\">{{ $message }}</p>\n@enderror",
+  susunKode: {
+    question: "Susun formulir Blade dengan input ber-old value dan pesan galat validasi @error.",
+    potongan: [
+      "<input type=\"text\" name=\"title\" value=\"{{ old('title') }}\">",
+      "@error('title')",
+      "    <p class=\"text-red-500\">{{ $message }}</p>",
+      "@enderror"
+    ],
+    pengecoh: [
+      "<input type=\"text\" name=\"title\" value=\"{{ $title }}\">",
+      "@error('name')"
+    ],
+    pemisah: "\n",
+    explanation: "Helper old() mempertahankan masukan sebelumnya dan direktif @error menampilkan pesan galat validasi khusus field title. Keping value=\"{{ $title }}\" keliru karena melempar error variabel tak terdefinisi saat form pertama dibuka. Keping @error('name') menggoda tetapi menyaring pesan untuk field yang salah."
+  }
+},
+        {
           kind: "quiz",
           id: "laravel-5-kuis",
-          title: "Kuis: Form & Validasi Request",
+          title: "Kuis: Form, Keamanan CSRF, & Validasi",
           questions: [
             {
               id: "l5-q1",
               type: "pilihan-ganda",
-              question: "Apakah pesan error HTTP yang akan muncul jika kamu lupa mencantumkan direktif `@csrf` pada form POST?",
+              question: "Apakah pesan status HTTP yang akan dikembalikan oleh Laravel jika form POST dikirim tanpa token CSRF yang valid?",
               choices: [
                 "404 Not Found",
                 "419 Page Expired",
                 "500 Internal Server Error",
-                "200 OK",
+                "403 Forbidden"
               ],
               answerIndex: 1,
-              explanation:
-                "Tanpa `@csrf`, formulir tidak membawa token `_token`, sehingga middleware menolaknya dan pengguna melihat halaman 419 Page Expired. Pilihan 500 menggoda karena semua error terasa seperti \"server bermasalah\", padahal 500 berarti kode aplikasimu yang rusak — sedangkan 419 berarti aplikasimu bekerja benar dan sengaja menolak. Penyebab kedua 419 yang juga sering: tab dibiarkan terbuka berjam-jam sampai sesinya kedaluwarsa.",
+              explanation: "Laravel melempar error status HTTP 419 (Page Expired) jika token CSRF yang dikirimkan hilang, tidak cocok, atau sesi pengguna telah kedaluwarsa, guna melindungi pengguna dari serangan pemalsuan permintaan antar-situs (*Cross-Site Request Forgery*)."
             },
             {
               id: "l5-q2",
               type: "pilihan-ganda",
               question: "Fungsi helper Blade apakah yang digunakan untuk menampilkan kembali nilai masukan form sebelumnya setelah terjadi kegagalan validasi?",
               choices: [
-                "previous()",
+                "previous('nama_field')",
+                "restore('nama_field')",
                 "old('nama_field')",
-                "restore()",
-                "back()",
+                "flash('nama_field')"
               ],
-              answerIndex: 1,
-              explanation:
-                "`old('nama_field')` mengambil nilai isian sebelumnya dari session flash yang diisi Laravel saat validasi gagal. Pilihan `back()` menggoda karena memang sering muncul berdampingan di controller — tetapi `back()` mengembalikan pengguna ke halaman sebelumnya, bukan mengisi ulang kotak isian. Tanpa `old()`, pengguna yang salah mengisi satu kolom harus mengetik ulang seluruh formulir, dan itu penyebab orang meninggalkan proses pendaftaran.",
+              answerIndex: 2,
+              explanation: "Helper `old('email')` mengambil masukan lama dari data sesi kilat (*flashed session data*) yang otomatis disimpan Laravel saat validasi gagal, sehingga pengguna tidak perlu mengisi ulang formulir dari awal."
             },
             {
               id: "l5-q3",
@@ -2860,42 +3289,39 @@ export const laravelTrack: Track = {
                 "php artisan storage:link",
                 "php artisan make:storage",
                 "composer storage-publish",
-                "php artisan file:open",
+                "php artisan file:open"
               ],
               answerIndex: 0,
-              explanation:
-                "`php artisan storage:link` membuat symbolic link dari `public/storage` ke `storage/app/public`, sehingga berkas unggahan bisa dibuka lewat URL. Pilihan `make:storage` menggoda karena mengikuti pola `make:` yang kamu pakai untuk semua generator lain — padahal ini bukan pembuatan berkas kode, melainkan penyambungan folder. Gejala saat perintah ini terlupa: unggahannya berhasil dan tercatat di database, tetapi setiap gambar menjawab 404.",
+              explanation: "`php artisan storage:link` membuat symbolic link (*symlink*) dari direktori publik `public/storage` mengarah ke folder internal `storage/app/public`, memungkinkan berkas unggahan diakses melalui URL web."
             },
             {
               id: "l5-q4",
               type: "pilihan-ganda",
-              question: "Atribut HTML apakah yang wajib ditambahkan pada tag `<form>` saat formulir tersebut berisi elemen pengunggahan berkas gambar/file?",
+              question: "Atribut HTML apakah yang wajib ditambahkan pada tag `<form>` saat formulir tersebut berisi elemen pengunggahan berkas file atau gambar?",
               choices: [
                 "type=\"file-upload\"",
                 "enctype=\"multipart/form-data\"",
                 "method=\"FILE\"",
-                "target=\"_blank\"",
+                "data-upload=\"binary\""
               ],
               answerIndex: 1,
-              explanation:
-                "`enctype=\"multipart/form-data\"` memberitahu peramban untuk mengirim isi formulir sebagai segmen biner, satu-satunya format yang bisa membawa berkas. Pilihan `type=\"file-upload\"` menggoda karena input berkas memang memakai atribut `type`, tetapi itu atribut pada `<input>` (`type=\"file\"`), bukan pada `<form>`. Gejala saat atribut ini lupa: `$request->file('foto')` bernilai null tanpa pesan error apa pun — berkasnya memang tidak pernah sampai ke server.",
+              explanation: "Atribut `enctype=\"multipart/form-data\"` memberitahukan browser agar mengirim isi file dalam bentuk stream biner terpisah. Tanpa atribut ini, browser hanya mengirimkan teks nama filenya saja sehingga `$request->file('avatar')` bernilai null."
             },
             {
               id: "l5-q5",
               type: "pilihan-ganda",
               question: "Apakah fungsi utama dari kelas Form Request (`make:request`) di Laravel?",
               choices: [
-                "Membuat tabel baru di database MySQL",
-                "Memindahkan aturan validasi masukan dari Controller ke kelas terpisah agar Controller tetap ringkas",
-                "Menjalankan server web tambahan di port 9000",
-                "Mengirim email notifikasi ke administrator secara otomatis",
+                "Mengirim permintaan HTTP ke server eksternal seperti cURL",
+                "Menyimpan data masukan form langsung ke tabel basis data tanpa controller",
+                "Memisahkan aturan validasi dan otorisasi ke kelas mandiri agar Controller tetap ramping dan mudah diuji",
+                "Mengompresi ukuran file gambar yang diunggah secara otomatis sebelum disimpan"
               ],
-              answerIndex: 1,
-              explanation:
-                "Form Request memindahkan aturan validasi dan pemeriksaan izin ke kelas terpisah, lalu dijalankan otomatis begitu tipe parameter Controller diganti menjadi kelas itu. Pilihan \"membuat tabel database\" menggoda karena kata `make:request` mirip dengan `make:migration` yang memang menyentuh database. Jebakan yang membuat banyak orang menyerah: method `authorize()` yang bernilai `false` secara bawaan membuat setiap permintaan ditolak 403 tanpa satu pun pesan validasi muncul.",
-            },
-          ],
-        },
+              answerIndex: 2,
+              explanation: "Kelas Form Request mengisolasi aturan validasi (`rules()`) dan izin akses (`authorize()`) ke kelas mandiri, menjaga Controller tetap bersih, ramping, dan memenuhi prinsip *Single Responsibility*."
+            }
+          ]
+        }
       ],
     },
     {
@@ -2951,60 +3377,39 @@ export const laravelTrack: Track = {
             "Di skala enterprise, keamanan otorisasi bertingkat (*Role-Based Access Control / RBAC*) dan penggunaan Policy adalah syarat wajib sertifikasi audit keamanan sistem backend.",
         },
         {
-          kind: "step",
-          id: "laravel-6-1",
-          title: "Laravel Breeze Scaffolding",
-          explanation:
-            "Laravel Breeze adalah *starter kit* resmi yang menuliskan seluruh fitur autentikasi ke dalam proyekmu sebagai berkas biasa: route, Controller, Form Request, dan tampilan Blade untuk login, registrasi, reset password, verifikasi email, serta halaman profil. Kenapa dipasang alih-alih ditulis sendiri? Bukan karena sulit, melainkan karena detail keamanannya banyak dan mudah terlewat — hashing password, regenerasi session setelah login (pencegah *session fixation*), pembatasan percobaan login, token reset yang kedaluwarsa. Menulis semua itu dari nol berarti mengulang pekerjaan yang sudah diaudit ribuan orang. Perbedaan penting dari paket lain: Breeze **menyalin kode** ke proyekmu sehingga bebas kamu ubah, berbeda dari paket yang menyembunyikan kodenya di `vendor/`. Alurnya dua langkah: `composer require laravel/breeze --dev` mengunduhnya, lalu `php artisan breeze:install blade` menuliskan berkasnya. Jebakan yang sering: perintah `breeze:install` menimpa berkas yang sudah ada seperti `routes/web.php` dan layout — jalankan di proyek yang masih baru, atau siapkan commit bersih dulu supaya perubahannya bisa kamu tinjau lewat `git diff`. Sesudahnya, `php artisan migrate` wajib dijalankan agar tabel `users` benar-benar ada.",
-          example: {
-            code: "# Di terminal, di akar proyek Laravel:\ncomposer require laravel/breeze --dev\nphp artisan breeze:install blade\nphp artisan migrate",
-            output:
-              "Using version ^2.3 for laravel/breeze\n" +
-              "  - Installing laravel/breeze (v2.3.6): Extracting archive\n\n" +
-              "   INFO  Installing and building Node dependencies.\n" +
-              "   INFO  Breeze scaffolding installed successfully.\n\n" +
-              "$ php artisan migrate\n" +
-              "  0001_01_01_000000_create_users_table ................. 31ms DONE\n" +
-              "  0001_01_01_000001_create_cache_table ................. 18ms DONE\n" +
-              "  0001_01_01_000002_create_jobs_table .................. 14ms DONE\n\n" +
-              "$ php artisan route:list --path=login\n" +
-              "  GET|HEAD   login .......... login › AuthenticatedSessionController@create\n" +
-              "  POST       login ................. AuthenticatedSessionController@store",
-            note: "Baris terakhir memperlihatkan hasil nyatanya: route login sudah terdaftar dan menunjuk ke Controller yang berkasnya ada di proyekmu — bisa kamu buka dan ubah. Catatan jujur: panel latihan tidak menjalankan terminal, jadi keluaran ini tidak akan muncul di sini; yang diperiksa adalah perintah yang kamu tulis.",
-          },
-          instruction:
-            "Tuliskan perintah terminal untuk mengunduh paket `laravel/breeze` sebagai dev dependency via Composer.",
-          starterCode: "# Tulis perintah composer require breeze di sini\n",
-          language: "text",
-          tests: [
-                      {
-                        "pattern": "composer\\s+require\\s+laravel/breeze",
-                        "message": "Starter kit resmi dipasang lewat `composer require` dengan nama paket `laravel/breeze`."
-                      },
-                      {
-                        "pattern": "--dev",
-                        "message": "Tambahkan flag pengembangan, karena scaffolding hanya dibutuhkan saat menyiapkan proyek — bukan saat aplikasi berjalan di produksi. Setelah ini, jalankan `php artisan breeze:install` untuk memasang berkasnya."
-                      }
-                    ],
-          solution: "composer require laravel/breeze --dev",
-          susunKode: {
-            question:
-              "Rangkai perintah Composer untuk menginstal paket scaffolding otentikasi laravel/breeze pada lingkungan dev.",
-            potongan: [
-              "composer",
-              "require",
-              "laravel/breeze",
-              "--dev",
-            ],
-            pengecoh: [
-              "composer install",
-              "--save-dev",
-            ],
-            pemisah: " ",
-            explanation:
-              "Paket Laravel Breeze diinstal menggunakan composer require dengan flag --dev. Keping composer install keliru perintah penambahan paket baru. Keping --save-dev menggoda pengembang npm/Node.js, padahal flag Composer adalah --dev.",
-          },
-        },
+  kind: "step",
+  id: "laravel-6-1",
+  title: "Hashing Password Aman dengan Facade Hash",
+  explanation: "Menyimpan kata sandi dalam bentuk teks polos (*plaintext*) adalah pelanggaran keamanan fatal yang membahayakan seluruh kredensial pengguna jika basis data bocor. Facade `Hash::make('teks')` di Laravel menggunakan algoritma hashing satu arah yang sangat kuat seperti Bcrypt atau Argon2id yang dilengkapi salt acak. Kenapa hashing satu arah wajib: nilai hash tidak dapat didekripsi kembali menjadi teks asli; sistem hanya memverifikasi kecocokannya saat login menggunakan `Hash::check($input, $hash)`. Kapan dipakai: saat proses registrasi akun baru, perubahan kata sandi, atau verifikasi ulang kredensial sensitif. Jebakan klasik pemula: menggunakan fungsi `md5()` atau `sha1()` kuno bawaan PHP — algoritma tersebut sudah lama dianggap tidak aman dan dapat dijebol dalam hitungan detik menggunakan tabel pelangi (*rainbow table*).",
+  example: {
+    code: "use Illuminate\\Support\\Facades\\Hash;\n\n$hash = Hash::make('secret');\necho Hash::check('secret', $hash) ? 'Cocok' : 'Salah';",
+    output: "Cocok",
+    note: "Nilai hash string Bcrypt selalu memiliki panjang 60 karakter dan diawali $2y$."
+  },
+  instruction: "Enkripsi kata sandi `'rahasia123'` menggunakan Facade `Hash::make()` dan simpan string hasil hashing tersebut ke variabel `$hashedPassword`.",
+  starterCode: "<?php\nuse Illuminate\\Support\\Facades\\Hash;\n\n// Hash kata sandi rahasia123 di sini\n",
+  language: "text",
+  tests: [
+    {
+      pattern: "\\$hashedPassword\\s*=\\s*Hash::make\\s*\\(\\s*['\"]rahasia123['\"]\\s*\\);",
+      message: "Panggil Hash::make('rahasia123') dan simpan hasilnya ke variabel $hashedPassword."
+    }
+  ],
+  solution: "<?php\nuse Illuminate\\Support\\Facades\\Hash;\n\n$hashedPassword = Hash::make('rahasia123');",
+  susunKode: {
+    question: "Susun pembentukan hash kata sandi yang aman menggunakan Facade Hash di Laravel.",
+    potongan: [
+      "$hashedPassword =",
+      " Hash::make('rahasia123');"
+    ],
+    pengecoh: [
+      "$plainPassword =",
+      " md5('rahasia123');"
+    ],
+    pemisah: "",
+    explanation: "Facade Hash::make mengimplementasikan algoritma Bcrypt atau Argon2 berstandar industri dengan pengacakan salt otomatis. Keping md5 keliru karena algoritma tersebut rentan dan tidak layak untuk menyimpan password. Keping $plainPassword menggoda tetapi tidak menyimpan ke nama variabel yang diminta."
+  }
+},
         {
           kind: "step",
           id: "laravel-6-2",
@@ -3114,7 +3519,7 @@ export const laravelTrack: Track = {
                 "Route yang dilindungi diletakkan di dalam `->group(function () { ... })`. Fungsi inilah yang menampung daftar route-nya — perhatikan kurung dan titik koma penutupnya di akhir, karena `});` yang kurang satu karakter menghasilkan error parse yang menunjuk baris terakhir berkas.",
             },
             {
-              pattern: "Route::get\\s*\\(\\s*['\"]/profile['\"]",
+              pattern: "Route::get\\s*\\(\\s*['\"]/?profile['\"]",
               message:
                 "Route `/profile` harus berada DI DALAM badan grup itu. Menuliskannya di luar kurung kurawal grup membuatnya tetap terbuka untuk umum, dan tidak ada peringatan apa pun yang memberitahumu.",
             },
@@ -3141,74 +3546,48 @@ export const laravelTrack: Track = {
           },
         },
         {
-          kind: "step",
-          id: "laravel-6-4",
-          title: "Otorisasi Hak Akses dengan Policy",
-          explanation:
-            "Policy adalah kelas berisi aturan \"siapa boleh melakukan apa\" terhadap **satu Model**, dengan satu method per aksi: `view`, `update`, `delete`, dan seterusnya. Setiap method menerima pengguna yang sedang login beserta objek yang disentuh, lalu mengembalikan `true` atau `false` — misalnya `return $user->id === $post->user_id;` yang berarti \"hanya penulisnya yang boleh menyunting\". Kenapa dipisahkan dari Controller: aturan yang sama dibutuhkan di banyak tempat — Controller, tampilan Blade (`@can('update', $post)`), dan API Resource — dan menuliskannya berulang berarti suatu hari satu tempat lupa diperbarui. Beda dengan Gate: Gate untuk izin yang tidak terikat objek (\"boleh membuka dashboard admin\"), Policy untuk izin yang bergantung pada baris data tertentu. Laravel menemukan Policy-nya secara otomatis lewat konvensi nama `<Model>Policy`, itulah sebabnya flag `--model` saat membuatnya penting. Jebakan yang selalu muncul: menyembunyikan tombol Edit di Blade **bukan** otorisasi — tanpa `Gate::authorize('update', $post)` di Controller, siapa pun masih bisa mengirim permintaan `PUT` langsung dan menyunting milik orang lain. Catatan versi yang menyelamatkanmu dari tutorial lama: sejak Laravel 11, kelas `Controller` bawaan tidak lagi menyertakan trait `AuthorizesRequests`, sehingga `$this->authorize(...)` melempar `Call to undefined method` — pakai `Gate::authorize(...)`, `$request->user()->can(...)`, atau middleware `->can('update', 'post')`.",
-          example: {
-            code:
-              "// app/Policies/PostPolicy.php\n" +
-              "class PostPolicy {\n" +
-              "    public function update(User $user, Post $post): bool {\n" +
-              "        return $user->id === $post->user_id;\n" +
-              "    }\n" +
-              "}\n\n" +
-              "// app/Http/Controllers/PostController.php\n" +
-              "use Illuminate\\Support\\Facades\\Gate;\n\n" +
-              "public function update(Request $request, Post $post) {\n" +
-              "    Gate::authorize('update', $post);   // 403 kalau Policy menolak\n" +
-              "    $post->update($request->validated());\n" +
-              "}",
-            output:
-              "# penulis artikel itu sendiri (user id 3, post.user_id 3):\n" +
-              "PUT /posts/12  ->  HTTP/1.1 302 Found   Location: /posts/12\n\n" +
-              "# pengguna lain (user id 9, post.user_id 3):\n" +
-              "PUT /posts/12  ->  HTTP/1.1 403 Forbidden\n" +
-              "  This action is unauthorized.\n\n" +
-              "# di Blade:\n" +
-              "@can('update', $post)  ->  tombol Edit dirender\n" +
-              "@endcan                    (untuk user lain, tombolnya tidak ada sama sekali)",
-            note: "Dua lapisan itu saling melengkapi: `@can` mengatur apa yang TERLIHAT, `Gate::authorize()` mengatur apa yang BOLEH TERJADI. Yang kedua tidak boleh ditinggalkan, karena permintaan HTTP bisa dikirim tanpa membuka halamannya. Catatan jujur: panel latihan tidak menjalankan Laravel, jadi keluaran ini tidak akan muncul di sini; yang diperiksa adalah kode yang kamu tulis.",
-          },
-          instruction:
-            "Tuliskan perintah Artisan terminal untuk membuat Policy `ProductPolicy` yang terikat ke Model `Product`.",
-          starterCode: "# Tulis perintah make:policy di sini\n",
-          language: "text",
-          tests: [
-                      {
-                        "pattern": "php\\s+artisan\\s+make:policy",
-                        "message": "Semua generator Laravel dijalankan lewat `php artisan make:<jenis>`. Jenisnya ditulis setelah tanda titik dua, tanpa spasi. Untuk aturan otorisasi per model, jenisnya `policy`."
-                      },
-                      {
-                        "pattern": "ProductPolicy",
-                        "message": "Konvensinya `<Model>Policy`."
-                      },
-                      {
-                        "pattern": "--model=Product",
-                        "message": "Sertakan flag penunjuk modelnya supaya Laravel mengisi kerangka method (`view`, `update`, `delete`) beserta tipe parameternya. Tanpa itu kamu mendapat kelas kosong."
-                      }
-                    ],
-          solution: "php artisan make:policy ProductPolicy --model=Product",
-          susunKode: {
-            question:
-              "Rangkai perintah Artisan untuk membuat kelas Policy ProductPolicy yang terhubung ke model Product.",
-            potongan: [
-              "php",
-              "artisan",
-              "make:policy",
-              "ProductPolicy",
-              "--model=Product",
-            ],
-            pengecoh: [
-              "make:gate",
-              "--for-model=Product",
-            ],
-            pemisah: " ",
-            explanation:
-              "Perintah make:policy membuat kelas otorisasi dengan opsi --model=Product untuk menggenerasi metode CRUD Policy bawaan. Keping make:gate keliru karena Gate didefinisikan di service provider, bukan berkas kelas tersendiri. Keping --for-model adalah nama flag fiktif.",
-          },
-        },
+  kind: "step",
+  id: "laravel-6-4",
+  title: "Pengecekan Izin di Blade Menggunakan Direktif @can",
+  explanation: "Direktif Blade `@can('kemampuan', $model)` mengevaluasi Policy model dan hanya merender blok HTML di dalamnya jika pengguna yang sedang aktif memiliki izin sah. Dengan menyembunyikan tombol aksi seperti tombol edit atau hapus dari pengguna yang tidak berhak, antarmuka aplikasi menjadi bersih dan mencegah pengunjung biasa mengalami layar 403 saat mengeklik tombol. Kenapa ini standar antarmuka aplikasi: memberikan pengalaman pengguna yang intuitif (*clean UX*) sekaligus menyelaraskan izin visual di sisi klien dengan aturan keamanan backend. Kapan dipakai: pada seluruh menu navigasi, tombol tindakan tabel, dan tautan administratif di template Blade. Jebakan umum: mengira bahwa menyembunyikan tombol dengan `@can` sudah cukup aman — penyerang tetap bisa mengirim permintaan HTTP langsung, sehingga proteksi Controller `$this->authorize()` di backend tetap mutlak wajib terpasang.",
+  example: {
+    code: "@can('delete', $post)\n    <button class=\"btn-danger\">Hapus Artikel</button>\n@endcan",
+    output: "# Jika user adalah penulis artikel:\n<button class=\"btn-danger\">Hapus Artikel</button>\n# Jika user adalah pengunjung lain:\n(Elemen tombol tidak dirender ke HTML)",
+    note: "Blade otomatis memeriksa autentikasi user saat ini terhadap metode delete pada PostPolicy."
+  },
+  instruction: "Gunakan direktif Blade `@can` untuk menampilkan elemen tombol `<button>Edit Produk</button>` hanya jika pengguna memiliki izin `'update'` terhadap objek `$product`.",
+  starterCode: "{{-- Tampilkan tombol edit hanya jika diizinkan @can di sini --}}\n",
+  language: "text",
+  tests: [
+    {
+      pattern: "@can\\s*\\(\\s*['\"]update['\"]\\s*,\\s*\\$product\\s*\\)",
+      message: "Buka pemeriksaan izin dengan direktif @can('update', $product)."
+    },
+    {
+      pattern: "<button>Edit Produk</button>",
+      message: "Tampilkan tombol <button>Edit Produk</button> di dalam blok otorisasi."
+    },
+    {
+      pattern: "@endcan",
+      message: "Tutup blok otorisasi Blade dengan direktif @endcan."
+    }
+  ],
+  solution: "@can('update', $product)\n    <button>Edit Produk</button>\n@endcan",
+  susunKode: {
+    question: "Susun kondisional tampilan tombol edit produk berbasis evaluasi izin Policy @can.",
+    potongan: [
+      "@can('update', $product)",
+      "    <button>Edit Produk</button>",
+      "@endcan"
+    ],
+    pengecoh: [
+      "@if(Auth::check())",
+      "@endif"
+    ],
+    pemisah: "\n",
+    explanation: "Direktif @can dipasangkan dengan @endcan untuk mengevaluasi hak akses spesifik terhadap instans model. Keping @if(Auth::check()) keliru karena hanya memeriksa status sudah login tanpa memastikan apakah user adalah pemilik produk yang berhak mengedit. Keping @endif adalah penutup percabangan if biasa."
+  }
+},
         {
           kind: "step",
           id: "laravel-6-5",
@@ -3345,82 +3724,156 @@ export const laravelTrack: Track = {
           },
         },
         {
+  kind: "step",
+  id: "laravel-6-7",
+  title: "Menulis Aturan Izin Akses pada Method Policy",
+  explanation: "Policy di Laravel mengorganisasikan logika otorisasi seputar model tertentu. Setiap method di dalam Policy (seperti `view`, `create`, `update`, `delete`) menerima instans `User` yang sedang login sebagai argumen pertama dan instans model yang hendak diakses sebagai argumen kedua. Aturan otorisasi mengembalikan nilai boolean: `true` jika diizinkan, dan `false` jika ditolak. Kenapa Policy sangat disukai tim pengembang: logika hak akses terpusat di satu tempat dan tidak berceceran di berbagai Controller maupun view. Kapan dipakai: saat aplikasi memiliki data milik pengguna (*multi-tenant* atau *user-owned resources*) yang tidak boleh diubah sembarangan oleh pengguna lain. Jebakan umum: pemula lupa bahwa Laravel otomatis menyuntikkan user yang sedang login — jika aksi boleh dilakukan oleh tamu yang belum login, tipe parameter User harus dideklarasikan opsional (`?User $user`).",
+  example: {
+    code: "public function delete(User $user, Article $article): bool {\n    return $user->id === $article->user_id;\n}",
+    output: "# Saat user id 2 mencoba menghapus artikel milik user id 1:\nHTTP/1.1 403 Forbidden\nThis action is unauthorized.",
+    note: "Policy otomatis menolak permintaan dan melempar AuthorizationException dengan status 403."
+  },
+  instruction: "Di dalam kelas `ProductPolicy`, lengkapi method `update` agar mengembalikan `true` hanya jika `id` milik `$user` sama persis dengan kolom `user_id` milik `$product`.",
+  starterCode: "<?php\nnamespace App\\Policies;\nuse App\\Models\\Product;\nuse App\\Models\\User;\n\nclass ProductPolicy {\n    public function update(User $user, Product $product): bool {\n        // Kembalikan perbandingan kepemilikan di sini\n    }\n}",
+  language: "text",
+  tests: [
+    {
+      pattern: "public\\s+function\\s+update\\s*\\(\\s*User\\s+\\$user\\s*,\\s*Product\\s+\\$product\\s*\\)\\s*:\\s*bool",
+      message: "Tuliskan deklarasi signature method update dengan return type bool."
+    },
+    {
+      pattern: "return\\s+\\$user->id\\s*===\\s*\\$product->user_id;",
+      message: "Bandingkan kesamaan kepemilikan: $user->id === $product->user_id dan kembalikan hasilnya."
+    }
+  ],
+  solution: "<?php\nnamespace App\\Policies;\nuse App\\Models\\Product;\nuse App\\Models\\User;\n\nclass ProductPolicy {\n    public function update(User $user, Product $product): bool {\n        return $user->id === $product->user_id;\n    }\n}",
+  susunKode: {
+    question: "Susun method policy update yang memeriksa apakah pengguna adalah pemilik produk.",
+    potongan: [
+      "    public function update(User $user, Product $product): bool {",
+      "        return $user->id === $product->user_id;",
+      "    }"
+    ],
+    pengecoh: [
+      "    public function update(User $user, Product $product): void {",
+      "        return $user->id !== $product->user_id;"
+    ],
+    pemisah: "\n",
+    explanation: "Method Policy mengembalikan nilai boolean untuk menentukan izin aksi pembaruan data berdasarkan id pemilik. Keping void keliru karena Policy wajib mengembalikan nilai boolean true atau false. Keping !== menggoda karena menggunakan operator ketat tetapi membalikkan logika sehingga orang lain yang diberi akses."
+  }
+},
+{
+  kind: "step",
+  id: "laravel-6-8",
+  title: "Memproteksi Aksi Controller dengan $this->authorize()",
+  explanation: "Metode `$this->authorize('kemampuan', $model)` pada Controller adalah jembatan pemanggil Policy. Jika pemeriksaan Policy menghasilkan `true`, Controller melanjutkan eksekusi baris berikutnya secara normal; namun jika menghasilkan `false`, Laravel langsung melempar `AuthorizationException` yang diterjemahkan menjadi respon HTTP 403 Forbidden tanpa menjalankan kode bisnis di bawahnya. Kenapa metode ini wajib dipakai: ini adalah gerbang pertahanan lapis kedua setelah autentikasi untuk memastikan pengguna hanya memanipulasi data miliknya sendiri. Kapan dipakai: di awal metode `edit`, `update`, dan `destroy` pada Controller sebelum eksekusi mutasi data dimulai. Jebakan umum: lupa memanggil otorisasi di method `update` karena merasa method `edit` sudah diproteksi — penyerang bisa langsung menembak permintaan HTTP PUT tanpa membuka halaman form edit.",
+  example: {
+    code: "public function destroy(Post $post) {\n    $this->authorize('delete', $post);\n    $post->delete();\n    return redirect()->route('posts.index');\n}",
+    output: "# Akses sah:\nArtikel berhasil dihapus dan diarahkan ke index.\n# Akses ilegal:\n403 | THIS ACTION IS UNAUTHORIZED.",
+    note: "Otorisasi menghentikan eksekusi sebelum baris penghapusan data sempat dijalankan."
+  },
+  instruction: "Di dalam method `edit(Product $product)` pada Controller, panggil pemeriksaan otorisasi untuk kemampuan `'update'` terhadap objek `$product` tersebut sebelum merender tampilan edit.",
+  starterCode: "<?php\npublic function edit(Product $product) {\n    // Periksa otorisasi update di sini\n    return view('products.edit', compact('product'));\n}",
+  language: "text",
+  tests: [
+    {
+      pattern: "public\\s+function\\s+edit\\s*\\(\\s*Product\\s+\\$product\\s*\\)",
+      message: "Deklarasikan method edit yang menerima parameter model Product $product."
+    },
+    {
+      pattern: "\\$this->authorize\\s*\\(\\s*['\"]update['\"]\\s*,\\s*\\$product\\s*\\);",
+      message: "Panggil $this->authorize('update', $product) di baris pertama method Controller."
+    }
+  ],
+  solution: "<?php\npublic function edit(Product $product) {\n    $this->authorize('update', $product);\n    return view('products.edit', compact('product'));\n}",
+  susunKode: {
+    question: "Susun pemanggilan otorisasi Policy di dalam method edit Controller.",
+    potongan: [
+      "public function edit(Product $product) {",
+      "    $this->authorize('update', $product);",
+      "    return view('products.edit', compact('product'));",
+      "}"
+    ],
+    pengecoh: [
+      "public function edit(Product $item) {",
+      "    $this->authorize('view', $product);"
+    ],
+    pemisah: "\n",
+    explanation: "Metode $this->authorize('update', $product) di Controller memicu evaluasi Policy dan langsung melempar 403 Forbidden bila otorisasi gagal. Keping Product $item keliru karena mengubah nama variabel parameter yang dipakai di baris bawah. Keping 'view' menggoda tetapi izin yang diuji pada halaman edit adalah hak pembaruan update."
+  }
+},
+        {
           kind: "quiz",
           id: "laravel-6-kuis",
-          title: "Kuis: Autentikasi & Otorisasi",
+          title: "Kuis: Autentikasi, Middleware, & Otorisasi",
           questions: [
             {
               id: "l6-q1",
               type: "pilihan-ganda",
-              question: "Apakah perbedaan mendasar antara Autentikasi dan Otorisasi?",
+              question: "Apakah perbedaan mendasar antara Autentikasi dan Otorisasi dalam keamanan sistem aplikasi?",
               choices: [
-                "Autentikasi memverifikasi identitas pengguna (login), sedangkan Otorisasi memeriksa hak akses terhadap tindakan spesifik",
-                "Autentikasi digunakan untuk mengunggah gambar, Otorisasi untuk mengunduh PDF",
-                "Autentikasi dilakukan di database, Otorisasi dilakukan di file CSS",
-                "Tidak ada perbedaan, keduanya adalah kata sinonim",
+                "Autentikasi memverifikasi identitas pengguna (siapa kamu), sedangkan Otorisasi memeriksa izin terhadap tindakan tertentu (apa yang boleh kamu lakukan)",
+                "Autentikasi dijalankan di browser, sedangkan Otorisasi dijalankan di server database",
+                "Autentikasi memeriksa tipe data masukan form, sedangkan Otorisasi mengenkripsi password",
+                "Autentikasi khusus untuk API, sedangkan Otorisasi khusus untuk aplikasi web berbasis Blade"
               ],
               answerIndex: 0,
-              explanation:
-                "Autentikasi menjawab \"siapa kamu\" (login), otorisasi menjawab \"apa yang boleh kamu lakukan\" (Gate dan Policy). Pilihan \"tidak ada perbedaan\" menggoda karena keduanya sering disingkat sama-sama \"auth\" di kode dan nama middleware. Konsekuensinya nyata: pengguna yang sudah login tetap bisa ditolak, dan bedanya terlihat di status HTTP — 401 berarti \"silakan login\", 403 berarti \"sudah login, tetapi tetap tidak berhak\".",
+              explanation: "Autentikasi menjawab 'Siapa kamu?' (misal login dengan kredensial email & password). Otorisasi menjawab 'Apakah kamu berhak melakukan tindakan ini?' (misal: apakah user yang sedang login berhak menghapus artikel ID 42)."
             },
             {
               id: "l6-q2",
               type: "pilihan-ganda",
-              question: "Paket starter kit resmi apakah dari Laravel yang menyediakan perancangan fitur Login dan Register siap pakai berbasis Blade/Tailwind?",
+              question: "Paket starter kit resmi apakah dari Laravel yang menyediakan perancangan fitur Login, Register, dan Reset Password berbasis Blade atau Tailwind?",
               choices: [
-                "Laravel Sanctum",
-                "Laravel Breeze",
                 "Laravel Horizon",
                 "Laravel Passport",
+                "Laravel Cashier",
+                "Laravel Breeze"
               ],
-              answerIndex: 1,
-              explanation:
-                "Laravel Breeze menuliskan halaman login, registrasi, reset password, dan verifikasi email ke dalam proyekmu sebagai berkas biasa yang bebas kamu ubah. Pilihan Sanctum sangat menggoda karena juga urusan autentikasi — tetapi Sanctum menangani token API, bukan halaman web. Passport pun soal autentikasi, tetapi untuk OAuth2 penuh yang jauh lebih rumit, sedangkan Horizon sama sekali berbeda urusan: dashboard pemantau antrean.",
+              answerIndex: 3,
+              explanation: "Laravel Breeze adalah starter kit autentikasi resmi yang minimalis dan elegan, menyediakan scaffolding auth siap pakai berbasis Blade, Inertia React, atau Inertia Vue."
             },
             {
               id: "l6-q3",
               type: "pilihan-ganda",
-              question: "Manakah metode otorisasi yang paling tepat digunakan jika kamu ingin membatasi hak akses pengeditan data terikat pada satu Model tertentu?",
+              question: "Manakah komponen otorisasi Laravel yang paling tepat digunakan jika kamu ingin mengatur aturan izin hak akses yang terpusat pada satu Model tertentu?",
               choices: [
                 "Gate",
                 "Policy",
-                "Migration",
-                "Seeder",
+                "Middleware",
+                "Form Request"
               ],
               answerIndex: 1,
-              explanation:
-                "Policy dirancang untuk izin yang bergantung pada satu baris data: \"apakah pengguna ini boleh menyunting artikel INI\". Pilihan Gate menggoda karena juga alat otorisasi dan sintaksnya mirip — bedanya Gate tidak menerima objek target, jadi ia cocok untuk izin umum seperti \"boleh membuka dashboard admin\". Patokan praktisnya: begitu jawabannya bergantung pada objek Eloquent tertentu, yang kamu butuhkan adalah Policy.",
+              explanation: "Policy diorganisir mengelilingi model tertentu (seperti `PostPolicy` untuk model `Post`), menyediakan metode `view`, `create`, `update`, dan `delete` yang terstruktur rapi. Gate lebih cocok untuk aksi umum yang tidak terikat pada model tunggal."
             },
             {
               id: "l6-q4",
               type: "pilihan-ganda",
-              question: "Direktif Blade apakah yang digunakan untuk menyembunyikan atau menampilkan elemen HTML berdasarkan hasil evaluasi Gate/Policy?",
+              question: "Direktif Blade apakah yang digunakan untuk menyembunyikan atau menampilkan elemen antarmuka berdasarkan evaluasi izin Policy atau Gate?",
               choices: [
                 "@ifauth ... @endif",
-                "@can('action', $model) ... @endcan",
-                "@gate('action') ... @endgate",
                 "@role('admin') ... @endrole",
+                "@can('action', $model) ... @endcan",
+                "@gate('action') ... @endgate"
               ],
-              answerIndex: 1,
-              explanation:
-                "`@can('action', $model)` menjalankan Gate atau Policy yang sesuai dan hanya merender blok di dalamnya bila diizinkan. Pilihan `@role('admin')` sangat menggoda karena banyak paket pihak ketiga (seperti Spatie Permission) memang menyediakan direktif seperti itu — tetapi ia bukan bawaan Laravel. Yang wajib diingat: `@can` hanya mengatur apa yang TERLIHAT; tanpa `Gate::authorize()` di Controller, permintaan tetap bisa dikirim langsung tanpa membuka halamannya.",
+              answerIndex: 2,
+              explanation: "`@can('update', $post)` mengevaluasi policy secara deklaratif di template Blade dan hanya merender konten di dalamnya jika pengguna yang sedang aktif memiliki izin sah terhadap model tersebut."
             },
             {
               id: "l6-q5",
               type: "pilihan-ganda",
-              question: "Middleware apakah yang otomatis mengalihkan pengunjung anonim yang belum login kembali ke halaman login?",
+              question: "Middleware bawaan apakah yang otomatis mengalihkan pengunjung anonim yang belum login ke halaman login saat mencoba mengakses halaman privat?",
               choices: [
-                "guest",
                 "auth",
+                "guest",
                 "verified",
-                "throttle",
+                "throttle"
               ],
-              answerIndex: 1,
-              explanation:
-                "Middleware `auth` memeriksa apakah ada pengguna yang login dan mengalihkan pengunjung anonim ke halaman login. Pilihan `guest` menggoda karena namanya berhubungan dengan pengunjung — padahal fungsinya kebalikannya: ia memblokir pengguna yang SUDAH login agar tidak membuka halaman login lagi. `verified` menuntut email terkonfirmasi (dipakai bersama `auth`), sedangkan `throttle` mengurus pembatasan jumlah permintaan.",
-            },
-          ],
-        },
+              answerIndex: 0,
+              explanation: "Middleware `auth` memeriksa apakah permintaan dikirimkan oleh pengguna yang sudah terotentikasi. Jika belum login, middleware otomatis mengalihkan pengguna ke route bernilai nama `login`."
+            }
+          ]
+        }
       ],
     },
     {
@@ -3488,6 +3941,9 @@ export const laravelTrack: Track = {
             "1. **Lupa Header `Accept: application/json`:** Saat menguji API menggunakan Postman atau Bruno, jika kamu lupa menambahkan header `Accept: application/json`, saat terjadi error validasi Laravel akan mengembalikan halaman HTML 302 redirect alih-alih respon JSON 422.\n" +
             "2. **Memaparkan Password Hash di JSON:** Lupa menyembunyikan kolom sensitif (`password`, `remember_token`) di Model atau API Resource. Pastikan kolom sensitif terdaftar di `$hidden` pada Model.\n" +
             "3. **Token Sanctum Tidak Pernah Expire:** Menerbitkan token Sanctum tanpa mengatur batas kadaluarsa (*expiration time*) di `config/sanctum.php` dapat menjadi celah keamanan jika token pengguna tercuri.\n\n" +
+            "## Inisialisasi API di Laravel 11 (php artisan install:api)\n\n" +
+            "Di Laravel 11, untuk membuat ukuran proyek tetap ringan, berkas `routes/api.php` tidak disertakan secara default jika proyek hanya ditujukan sebagai web aplikasi biasa. Untuk mulai membangun REST API:\n" +
+            "Jalankan perintah `php artisan install:api`. Perintah ini akan secara otomatis membuat berkas `routes/api.php`, mengonfigurasi middleware API di `bootstrap/app.php`, serta memasang migrasi Personal Access Token dari paket Laravel Sanctum.\n\n" +
             "## Kaitan ke Dunia Kerja\n\n" +
             "Kemampuan merancang RESTful API yang konsisten dengan otentikasi Sanctum serta pembuatan dokumentasi OpenAPI/Swagger adalah keahlian utama yang paling dicari untuk posisi Backend API Engineer.",
         },
@@ -3521,7 +3977,7 @@ export const laravelTrack: Track = {
           language: "text",
           tests: [
             {
-              pattern: "Route::get\\s*\\(\\s*['\"]/users['\"]",
+              pattern: "Route::get\\s*\\(\\s*['\"]/?users['\"]",
               message:
                 "Jalur yang kamu tulis di `routes/api.php` TIDAK perlu memuat awalan `/api` — Laravel menambahkannya sendiri. Menuliskannya membuat alamat sesungguhnya menjadi `/api/api/users`.",
             },
@@ -3558,64 +4014,42 @@ export const laravelTrack: Track = {
           },
         },
         {
-          kind: "step",
-          id: "laravel-7-2",
-          title: "API Resource untuk Membentuk Respon JSON",
-          explanation:
-            "API Resource adalah lapisan penerjemah antara Model dan JSON: satu method `toArray()` yang menentukan bidang apa saja yang keluar dan dalam bentuk apa. Kenapa tidak `return $user;` saja? Karena itu mengirim **seluruh kolom tabel** apa adanya — termasuk `remember_token`, `email_verified_at`, dan kolom internal yang belum tentu kamu ingin publikasikan. Yang lebih berbahaya, struktur JSON-mu jadi terikat pada struktur database: mengganti nama kolom `harga` menjadi `price` di migration akan diam-diam merusak semua aplikasi mobile yang sudah beredar. Dengan Resource, nama bidang di API adalah keputusan sadar yang terpisah dari nama kolom. Tempat ini juga cocok untuk memformat data sekali untuk semua klien — `'price_formatted' => 'Rp ' . number_format($this->price)` — supaya frontend web dan mobile tidak menulis logika format yang bisa berbeda. Kapan dipakai: setiap endpoint yang mengembalikan Model. Jebakan yang perlu diwaspadai: menyentuh relasi di dalam `toArray()` (`$this->category->name`) memicu N+1 persis seperti di Blade — untuk itu ada `whenLoaded('category')` yang hanya menyertakannya bila relasinya memang sudah dimuat lebih awal.",
-          example: {
-            code:
-              "// app/Http/Resources/ProductResource.php\n" +
-              "public function toArray($request): array {\n" +
-              "    return [\n" +
-              "        'id' => $this->id,\n" +
-              "        'name' => $this->name,\n" +
-              "        'price_formatted' => 'Rp ' . number_format($this->price, 0, ',', '.'),\n" +
-              "    ];\n" +
-              "}\n\n" +
-              "// di Controller:\n" +
-              "return new ProductResource(Product::find(1));",
-            output:
-              "# TANPA Resource — `return Product::find(1);`\n" +
-              '{"id":1,"name":"Kopi Gayo","price":25000,"supplier_cost":18000,\n' +
-              ' "created_at":"2026-07-28T04:31:02.000000Z","updated_at":"2026-07-28T04:31:02.000000Z"}\n\n' +
-              "# DENGAN Resource:\n" +
-              '{"data":{"id":1,"name":"Kopi Gayo","price_formatted":"Rp 25.000"}}',
-            note: "Bandingkan keduanya: versi tanpa Resource membocorkan `supplier_cost` — harga modal — ke siapa pun yang membuka endpoint itu. Perhatikan juga pembungkus `data` yang ditambahkan Resource secara bawaan. Catatan jujur: panel latihan tidak menjalankan Laravel, jadi keluaran ini tidak akan muncul di sini; yang diperiksa adalah kode yang kamu tulis.",
-          },
-          instruction:
-            "Tuliskan perintah Artisan terminal untuk membuat API Resource `UserResource`.",
-          starterCode: "# Tulis perintah make:resource di sini\n",
-          language: "text",
-          tests: [
-                      {
-                        "pattern": "php\\s+artisan\\s+make:resource",
-                        "message": "Semua generator Laravel dijalankan lewat `php artisan make:<jenis>`. Jenisnya ditulis setelah tanda titik dua, tanpa spasi. Untuk pembentuk respons JSON, jenisnya `resource`."
-                      },
-                      {
-                        "pattern": "make:resource\\s+UserResource\\b",
-                        "message": "Konvensinya `<Model>Resource`. Gunanya menentukan field mana yang keluar ke API — tanpa lapisan ini, `return $user` ikut mengirim seluruh kolom, termasuk yang tidak seharusnya dilihat klien."
-                      }
-                    ],
-          solution: "php artisan make:resource UserResource",
-          susunKode: {
-            question:
-              "Rangkai perintah Artisan untuk membuat kelas API Resource bernama UserResource.",
-            potongan: [
-              "php",
-              "artisan",
-              "make:resource",
-              "UserResource",
-            ],
-            pengecoh: [
-              "make:api-resource",
-              "UserTransformer",
-            ],
-            pemisah: " ",
-            explanation:
-              "Perintah make:resource membuat kelas transformasi JSON API di folder app/Http/Resources. Keping make:api-resource keliru sub-perintah Artisan. Keping UserTransformer menggoda bagi pengembang paket Fractal/Fractalizer.",
-          },
-        },
+  kind: "step",
+  id: "laravel-7-2",
+  title: "Mengembalikan Single Resource di Controller",
+  explanation: "Untuk membungkus satu rekaman Model tunggal sebelum dikembalikan ke klien API, instansiasi kelas Resource secara langsung menggunakan `return new UserResource($user)`. Laravel akan secara otomatis mengeksekusi metode transformasi `toArray()` pada resource tersebut, membungkus payload ke dalam struktur standar `{\"data\": { ... }}`, menyetel header HTTP `Content-Type: application/json`, dan mengembalikan status 200 OK. Kenapa cara ini penting: kamu membedakan dengan jelas penanganan rekaman tunggal (`new UserResource($user)`) dan koleksi banyak rekaman (`UserResource::collection($users)`). Kapan dipakai: pada endpoint detail entitas seperti `GET /api/users/{id}`. Jebakan umum pemula: menulis `UserResource::collection($user)` untuk satu rekaman model tunggal — ini melempar error *Attempt to read property on non-collection* karena method `collection()` mengharapkan iterable/array.",
+  example: {
+    code: "public function show(Product $product) {\n    return new ProductResource($product);\n}",
+    output: "HTTP/1.1 200 OK\nContent-Type: application/json\n\n{\n  \"data\": {\n    \"id\": 42,\n    \"name\": \"Espresso\"\n  }\n}",
+    note: "Model tunggal dibungkus rapi ke dalam envelope properti data secara otomatis."
+  },
+  instruction: "Di dalam method `show(User $user)` pada `UserController`, kembalikan respon satu objek pengguna yang dibungkus oleh kelas `UserResource`.",
+  starterCode: "<?php\nnamespace App\\Http\\Controllers;\nuse App\\Http\\Resources\\UserResource;\nuse App\\Models\\User;\n\nclass UserController extends Controller {\n    public function show(User $user) {\n        // Kembalikan UserResource di sini\n    }\n}",
+  language: "text",
+  tests: [
+    {
+      pattern: "return\\s+new\\s+UserResource\\s*\\(\\s*\\$user\\s*\\);",
+      message: "Kembalikan instansiasi baru UserResource: return new UserResource($user);."
+    }
+  ],
+  solution: "<?php\nnamespace App\\Http\\Controllers;\nuse App\\Http\\Resources\\UserResource;\nuse App\\Models\\User;\n\nclass UserController extends Controller {\n    public function show(User $user) {\n        return new UserResource($user);\n    }\n}",
+  susunKode: {
+    question: "Susun pengembalian model tunggal yang dibungkus UserResource pada method show Controller.",
+    potongan: [
+      "class UserController extends Controller {",
+      "    public function show(User $user) {",
+      "        return new UserResource($user);",
+      "    }",
+      "}"
+    ],
+    pengecoh: [
+      "        return UserResource::collection($user);",
+      "        return response($user);"
+    ],
+    pemisah: "\n",
+    explanation: "Model tunggal dibungkus dengan instansiasi new UserResource($user). Keping UserResource::collection keliru karena metode collection khusus untuk banyak baris data koleksi. Keping response($user) menggoda tetapi memotong lapisan transformasi resource sehingga seluruh kolom mentah bocor."
+  }
+},
         {
           kind: "step",
           id: "laravel-7-3",
@@ -3865,140 +4299,221 @@ export const laravelTrack: Track = {
           },
         },
         {
-          kind: "step",
-          id: "laravel-7-7",
-          title: "Dokumentasi API dengan Scramble",
-          explanation:
-            "Dokumentasi API adalah kontrak antara kamu dan siapa pun yang memakai endpoint-mu — dan masalah utamanya bukan menulisnya, melainkan menjaganya tetap benar. Dokumen yang ditulis manual selalu tertinggal satu-dua perubahan di belakang kode, dan dokumentasi yang salah lebih merugikan daripada tidak ada dokumentasi sama sekali karena tim frontend membangun di atas informasi keliru. Scramble menyelesaikannya dengan **membaca kodemu**: ia mengambil daftar route, tipe parameter, aturan di Form Request, dan bentuk API Resource, lalu menghasilkan berkas OpenAPI beserta halaman dokumentasi interaktif di `/docs/api`. Konsekuensinya menarik: makin rapi type hint dan Form Request-mu, makin lengkap dokumentasinya — jadi kualitas kode dan kualitas dokumen bergerak bersama. Kapan ini muncul di kerja nyata: hampir setiap tim yang punya aplikasi mobile meminta dokumentasi OpenAPI, karena dari berkas itu klien HTTP bisa dihasilkan otomatis. Yang perlu dijaga: halaman dokumentasi memaparkan seluruh permukaan API-mu, jadi di produksi ia harus dibatasi — Scramble menyediakan gate `viewApiDocs` untuk itu.",
-          example: {
-            code: "# Di terminal, di akar proyek Laravel:\ncomposer require dedoc/scramble",
-            output:
-              "  - Installing dedoc/scramble (v0.12.10): Extracting archive\n" +
-              "Generating optimized autoload files\n\n" +
-              "$ php artisan route:list --path=docs\n" +
-              "  GET|HEAD   docs/api ........... Dedoc\\Scramble › ...\n" +
-              "  GET|HEAD   docs/api.json ...... Dedoc\\Scramble › ...\n\n" +
-              "$ curl -s http://127.0.0.1:8000/docs/api.json | head -12\n" +
-              "{\n" +
-              '  "openapi": "3.1.0",\n' +
-              '  "info": { "title": "BiLearn API", "version": "0.0.1" },\n' +
-              '  "paths": {\n' +
-              '    "/api/products": {\n' +
-              '      "get": { "summary": "Daftar produk", "responses": { "200": { ... } } }\n' +
-              "    }\n" +
-              "  }\n" +
-              "}",
-            note: "Tidak ada satu pun berkas dokumentasi yang kamu tulis — seluruh isi itu dibaca dari route, Form Request, dan Resource yang sudah ada. Catatan jujur: panel latihan tidak menjalankan terminal, jadi keluaran ini tidak akan muncul di sini; yang diperiksa adalah perintah yang kamu tulis.",
-          },
-          instruction:
-            "Tuliskan perintah terminal composer untuk mengunduh paket `dedoc/scramble`.",
-          starterCode: "# Tulis perintah composer require scramble di sini\n",
-          language: "text",
-          tests: [
-                      {
-                        "pattern": "composer\\s+require",
-                        "message": "Paket dipasang lewat `composer require`."
-                      },
-                      {
-                        "pattern": "dedoc/scramble",
-                        "message": "Nama paketnya berbentuk `vendor/nama`. Scramble membaca type hint dan Form Request-mu lalu menghasilkan dokumentasi OpenAPI otomatis — jadi dokumentasi tidak lagi basi tiap kali kode berubah."
-                      }
-                    ],
-          solution: "composer require dedoc/scramble",
-          susunKode: {
-            question:
-              "Rangkai perintah Composer untuk menginstal paket dokumentasi API dedoc/scramble.",
-            potongan: [
-              "composer",
-              "require",
-              "dedoc/scramble",
-            ],
-            pengecoh: [
-              "composer install",
-              "laravel/scramble",
-            ],
-            pemisah: " ",
-            explanation:
-              "Dokumentasi API otomatis Scramble diinstal melalui paket dedoc/scramble dengan perintah composer require. Keping composer install keliru perintah. Keping laravel/scramble menggoda tetapi vendor paket resminya adalah dedoc.",
-          },
-        },
+  kind: "step",
+  id: "laravel-7-7",
+  title: "Format Respon JSON API Konsisten (Envelope Pattern)",
+  explanation: "Pola amplop respon (*Response Envelope Pattern*) adalah arsitektur respon API standar di mana setiap respon HTTP JSON memiliki struktur seragam: status boolean `success`, string keterangan `message`, dan payload data `data`. Dengan kontrak yang konsisten ini, tim pengembang front-end (React, Vue, iOS, Android) dapat membangun satu interceptor jaringan universal yang menangani seluruh respon API tanpa perlu menebak-nebak format data yang berbeda antar-endpoint. Kenapa ini standar industri: mempermudah standardisasi error handling, pesan notifikasi popup aplikasi, dan status keberhasilan transaksi. Kapan dipakai: pada seluruh endpoint API kustom atau service response backend. Jebakan umum: mengembalikan array datar tanpa status — klien tidak dapat membedakan dengan cepat apakah permintaan berhasil atau gagal sebelum membaca status HTTP header.",
+  example: {
+    code: "return response()->json([\n    'success' => true,\n    'message' => 'Profil berhasil diperbarui',\n    'data' => $profile,\n]);",
+    output: "{\n  \"success\": true,\n  \"message\": \"Profil berhasil diperbarui\",\n  \"data\": { \"id\": 1, \"name\": \"Bimo\" }\n}",
+    note: "Format amplop menyajikan status, pesan notifikasi, dan data dalam satu struktur seragam."
+  },
+  instruction: "Kembalikan respon JSON dengan tiga properti standar: `'success'` bernilai `true`, `'message'` bernilai `'Data berhasil diambil'`, dan `'data'` berisi variabel `$users`.",
+  starterCode: "<?php\n// Kembalikan response json dengan envelope standar di sini\n",
+  language: "text",
+  tests: [
+    {
+      pattern: "return\\s+response\\s*\\(\\s*\\)->json\\s*\\(",
+      message: "Gunakan helper response()->json(...) untuk mengembalikan respon JSON."
+    },
+    {
+      pattern: "['\"]success['\"]\\s*=>\\s*true",
+      message: "Sertakan properti 'success' => true di dalam array respon."
+    },
+    {
+      pattern: "['\"]message['\"]\\s*=>\\s*['\"]Data berhasil diambil['\"]",
+      message: "Sertakan properti 'message' => 'Data berhasil diambil'."
+    },
+    {
+      pattern: "['\"]data['\"]\\s*=>\\s*\\$users",
+      message: "Sertakan properti 'data' => $users di dalam array respon."
+    }
+  ],
+  solution: "<?php\nreturn response()->json([\n    'success' => true,\n    'message' => 'Data berhasil diambil',\n    'data' => $users,\n]);",
+  susunKode: {
+    question: "Susun respon JSON API berformat amplop standar industri dengan properti success, message, dan data.",
+    potongan: [
+      "return response()->json([",
+      "    'success' => true,",
+      "    'message' => 'Data berhasil diambil',",
+      "    'data' => $users,",
+      "]);"
+    ],
+    pengecoh: [
+      "return response([",
+      "    'status' => 200,"
+    ],
+    pemisah: "\n",
+    explanation: "Helper response()->json() memastikan header Content-Type diatur ke application/json. Keping response() biasa keliru karena mengembalikan teks polos tanpa format JSON otomatis. Keping 'status' => 200 menggoda tetapi kode status HTTP berada di argumen respon terpisah, bukan di dalam payload amplop."
+  }
+},
+        {
+  kind: "step",
+  id: "laravel-7-8",
+  title: "Menyusun Transformasi Payload JSON di API Resource",
+  explanation: "Method `toArray($request): array` di dalam kelas `JsonResource` bertindak sebagai lapisan transformasi data (*Data Transformation Layer*) antara Model database dan respon JSON yang diterima klien. Di sini kamu menentukan kolom apa saja yang dipublikasikan, mengganti nama kunci properti, melakukan *type-casting* (misalnya memastikan harga bertipe integer murni), dan menyembunyikan kolom sensitif internal seperti `password` atau `deleted_at`. Kenapa ini standar industri: struktur tabel database tidak boleh bocor langsung ke konsumen API; perubahan nama kolom di database tidak akan merusak kontrak API publik. Kapan dipakai: pada seluruh endpoint RESTful API di lingkungan kerja. Jebakan umum: memanggil properti relasi di `toArray()` tanpa eager loading yang memicu Masalah N+1 di endpoint API — gunakan `$this->whenLoaded('relasi')` untuk menyertakan relasi secara aman.",
+  example: {
+    code: "public function toArray($request): array {\n    return [\n        'id' => $this->id,\n        'title' => $this->title,\n        'category' => $this->whenLoaded('category', fn() => $this->category->name),\n    ];\n}",
+    output: "{\n  \"data\": {\n    \"id\": 1,\n    \"title\": \"Belajar Laravel Modern\",\n    \"category\": \"Backend\"\n  }\n}",
+    note: "Data dibungkus rapi dalam properti data standar JSON:API."
+  },
+  instruction: "Di dalam kelas `ProductResource`, lengkapi method `toArray($request)` agar mengembalikan array dengan format JSON yang rapi: kolom `id`, `name`, dan `price` yang dicasting ke tipe `(int)` dari properti model.",
+  starterCode: "<?php\nnamespace App\\Http\\Resources;\nuse Illuminate\\Http\\Resources\\Json\\JsonResource;\n\nclass ProductResource extends JsonResource {\n    public function toArray($request): array {\n        // Kembalikan pemetaan atribut JSON di sini\n    }\n}",
+  language: "text",
+  tests: [
+    {
+      pattern: "public\\s+function\\s+toArray\\s*\\([^)]*\\)\\s*:\\s*array",
+      message: "Deklarasikan method toArray dengan return type array."
+    },
+    {
+      pattern: "['\"]id['\"]\\s*=>\\s*\\$this->id",
+      message: "Petakan kunci 'id' ke properti $this->id."
+    },
+    {
+      pattern: "['\"]name['\"]\\s*=>\\s*\\$this->name",
+      message: "Petakan kunci 'name' ke properti $this->name."
+    },
+    {
+      pattern: "['\"]price['\"]\\s*=>\\s*\\(int\\)\\s*\\$this->price",
+      message: "Petakan kunci 'price' dengan casting integer: (int) $this->price."
+    }
+  ],
+  solution: "<?php\nnamespace App\\Http\\Resources;\nuse Illuminate\\Http\\Resources\\Json\\JsonResource;\n\nclass ProductResource extends JsonResource {\n    public function toArray($request): array {\n        return [\n            'id' => $this->id,\n            'name' => $this->name,\n            'price' => (int) $this->price,\n        ];\n    }\n}",
+  susunKode: {
+    question: "Susun method toArray pada API Resource untuk memformat respon produk.",
+    potongan: [
+      "    public function toArray($request): array {",
+      "        return [",
+      "            'id' => $this->id,",
+      "            'name' => $this->name,",
+      "            'price' => (int) $this->price,",
+      "        ];",
+      "    }"
+    ],
+    pengecoh: [
+      "    public function toResponse($request): array {",
+      "            'price' => (string) $this->price,"
+    ],
+    pemisah: "\n",
+    explanation: "Method toArray pada API Resource memetakan properti model menjadi pasangan kunci nilai JSON terstruktur. Keping toResponse keliru karena metode transformasi data di JsonResource bernama toArray. Keping (string) $this->price menggoda bagi pemula tetapi instruksi mewajibkan casting ke integer murni."
+  }
+},
+{
+  kind: "step",
+  id: "laravel-7-9",
+  title: "Memproteksi Endpoint API Menggunakan auth:sanctum",
+  explanation: "Middleware `auth:sanctum` memvalidasi keberadaan dan keabsahan Bearer Token yang dikirimkan oleh klien API di dalam header HTTP `Authorization: Bearer <token>`. Jika token valid dan belum dicabut, Laravel mengidentifikasi pemilik token dan menyuntikkannya ke objek permintaan (`$request->user()`); jika token salah atau tidak disertakan, server otomatis menolak permintaan dengan status HTTP 401 Unauthorized. Kenapa Sanctum menjadi standar: ia sangat ringan, tidak membutuhkan konfigurasi server OAuth2 yang rumit, dan dapat mengamankan Single Page Application (SPA) maupun aplikasi mobile. Kapan dipakai: pada seluruh rute API yang membutuhkan otentikasi pengguna. Jebakan klasik pemula: klien mengirim permintaan tanpa header `Accept: application/json` — akibatnya saat token tidak ada, Laravel mencoba mengarahkan pengguna ke halaman HTML `/login` (302 redirect) alih-alih mengembalikan JSON 401.",
+  example: {
+    code: "Route::middleware('auth:sanctum')->get('/cart', function (Request $request) {\n    return $request->user()->cartItems;\n});",
+    output: "# Permintaan tanpa header Authorization:\nHTTP/1.1 401 Unauthorized\n{\n  \"message\": \"Unauthenticated.\"\n}\n\n# Permintaan dengan Bearer Token sah:\nHTTP/1.1 200 OK\n[{\"id\": 10, \"item\": \"Kopi Arabika\"}]",
+    note: "Middleware otomatis mencegat permintaan tanpa token sebelum menyentuh closure penangan."
+  },
+  instruction: "Di dalam berkas `routes/api.php`, bungkus route GET `/me` yang mengembalikan `$request->user()` di dalam middleware pengawal token `auth:sanctum`.",
+  starterCode: "<?php\nuse Illuminate\\Http\\Request;\nuse Illuminate\\Support\\Facades\\Route;\n\n// Lindungi route /me dengan middleware auth:sanctum di sini\n",
+  language: "text",
+  tests: [
+    {
+      pattern: "Route::middleware\\s*\\(\\s*['\"]auth:sanctum['\"]\\s*\\)",
+      message: "Gunakan Route::middleware('auth:sanctum') untuk melindungi rute API."
+    },
+    {
+      pattern: "->get\\s*\\(\\s*['\"]/me['\"]",
+      message: "Daftarkan endpoint GET '/me' yang dilindungi middleware."
+    },
+    {
+      pattern: "return\\s+\\$request->user\\(\\);",
+      message: "Kembalikan data pengguna terotentikasi via $request->user()."
+    }
+  ],
+  solution: "<?php\nuse Illuminate\\Http\\Request;\nuse Illuminate\\Support\\Facades\\Route;\n\nRoute::middleware('auth:sanctum')->get('/me', function (Request $request) {\n    return $request->user();\n});",
+  susunKode: {
+    question: "Susun rute API terproteksi token Sanctum yang mengembalikan pengguna aktif.",
+    potongan: [
+      "Route::middleware('auth:sanctum')",
+      "    ->get('/me', function (Request $request) {",
+      "        return $request->user();",
+      "    });"
+    ],
+    pengecoh: [
+      "Route::middleware('auth:web')",
+      "        return Auth::guest();"
+    ],
+    pemisah: "\n",
+    explanation: "Middleware auth:sanctum memvalidasi Bearer Token API dan menyuntikkan pengguna aktif ke objek Request. Keping auth:web keliru karena menggunakan guard session berbasis cookie peramban, bukan token API. Keping Auth::guest() menggoda karena sama-sama helper autentikasi tetapi hanya memeriksa status anonim."
+  }
+},
         {
           kind: "quiz",
           id: "laravel-7-kuis",
-          title: "Kuis: RESTful API & Sanctum",
+          title: "Kuis: REST API & API Resource",
           questions: [
             {
               id: "l7-q1",
               type: "pilihan-ganda",
-              question: "Apakah awalan prefix URL default yang diberikan secara otomatis untuk semua route yang didaftarkan di `routes/api.php`?",
+              question: "Apakah awalan prefix URL default yang diberikan oleh Laravel untuk semua route yang didaftarkan di dalam berkas `routes/api.php`?",
               choices: [
                 "/web/",
                 "/api/",
                 "/v1/",
-                "/rest/",
+                "/rest/"
               ],
               answerIndex: 1,
-              explanation:
-                "Semua route di `routes/api.php` otomatis berawalan `/api/`, jadi `Route::get('/users', ...)` di sana melayani `/api/users`. Pilihan `/v1/` menggoda karena versi API memang lazim ditaruh di URL — tetapi itu harus kamu tambahkan sendiri lewat `prefix('v1')`, bukan bawaan. Kesalahan paling sering di modul ini: menuliskan `/api/users` di berkas itu, yang menghasilkan alamat `/api/api/users` dan berujung 404 yang membingungkan.",
+              explanation: "Semua rute di `routes/api.php` secara otomatis diberi prefix `/api` dan disematkan middleware group `api` (stateless, throttle, dan tanpa verifikasi session CSRF cookie)."
             },
             {
               id: "l7-q2",
               type: "pilihan-ganda",
-              question: "Apakah fungsi utama dari kelas API Resource di Laravel?",
+              question: "Apakah fungsi utama dari kelas Eloquent API Resource di Laravel?",
               choices: [
-                "Mengubah struktur data Eloquent Model menjadi payload objek JSON yang rapi dan terfilter",
-                "Menjalankan kompilasi CSS Tailwind secara otomatis",
-                "Menghapus database MySQL setiap kali ada request masuk",
-                "Mengirimkan pesan SMS ke nomor telepon pengembang",
+                "Mengubah struktur data model Eloquent menjadi format respon JSON terstruktur dan terfilter sebelum dikirim ke klien",
+                "Mengatur rute URL endpoint API dan membatasi kuota request pengguna per menit",
+                "Menjalankan migrasi tabel database secara otomatis saat endpoint API diakses",
+                "Menyimpan cache respon API ke dalam memori Redis server"
               ],
               answerIndex: 0,
-              explanation:
-                "API Resource adalah lapisan yang menentukan bidang apa saja yang keluar ke JSON dan dalam bentuk apa, terpisah dari struktur tabel. Pilihan \"mengompilasi CSS\" jelas keliru, tetapi kesalahpahaman yang lebih nyata adalah menganggapnya opsional dan cukup `return $user`. Itulah yang membocorkan kolom internal seperti harga modal atau `remember_token`, sekaligus mengikat bentuk JSON-mu pada nama kolom database.",
+              explanation: "API Resource bertindak sebagai transformer layer antara model database dan klien API, mencegah bocornya kolom sensitif (seperti password hash) dan menyelaraskan format properti JSON respon."
             },
             {
               id: "l7-q3",
               type: "pilihan-ganda",
-              question: "Paket bawaan Laravel apakah yang digunakan untuk menyediakan otentikasi API berbasis Personal Access Token (Bearer Token)?",
+              question: "Paket bawaan Laravel apakah yang menyediakan otentikasi API ringan berbasis Personal Access Token (Bearer Token) untuk SPA dan mobile?",
               choices: [
-                "Laravel Breeze",
-                "Laravel Sanctum",
                 "Laravel Horizon",
                 "Laravel Passport",
+                "Laravel Sanctum",
+                "Laravel Socialite"
               ],
-              answerIndex: 1,
-              explanation:
-                "Sanctum menerbitkan Personal Access Token yang dikirim klien di header `Authorization: Bearer <token>`, cocok untuk aplikasi mobile dan SPA milikmu sendiri. Pilihan Passport sangat menggoda karena juga paket autentikasi API resmi — tetapi ia mengimplementasikan OAuth2 penuh, yang dibutuhkan hanya bila pihak ketiga perlu meminta izin atas nama penggunamu. Breeze mengurus halaman login web, dan Horizon sama sekali bukan urusan autentikasi.",
+              answerIndex: 2,
+              explanation: "Laravel Sanctum menyediakan sistem otentikasi token sederhana namun kuat untuk SPA, aplikasi mobile, dan API token sederhana. Laravel Passport digunakan untuk arsitektur server OAuth2 lengkap."
             },
             {
               id: "l7-q4",
               type: "pilihan-ganda",
-              question: "HTTP Status Code berapakah yang secara standar dikembalikan saat pembuatan data baru berhasil dilakukan melalui API?",
+              question: "HTTP Status Code berapakah yang secara standar industri dikembalikan saat operasi pembuatan entitas data baru berhasil di API?",
               choices: [
                 "200 OK",
-                "201 Created",
-                "400 Bad Request",
-                "500 Server Error",
+                "204 No Content",
+                "301 Moved Permanently",
+                "201 Created"
               ],
-              answerIndex: 1,
-              explanation:
-                "`201 Created` menyatakan sumber daya baru berhasil dibuat, dan itulah jawaban yang tepat untuk `POST` yang menyimpan data. Pilihan `200 OK` sangat menggoda karena permintaannya memang berhasil — tetapi 200 tidak memberi tahu klien bahwa ada sesuatu yang baru terbentuk. Bedanya bukan kosmetik: kode klien dan alat pemantauan mengambil keputusan berdasarkan status, jadi endpoint yang selalu menjawab 200 memaksa setiap klien menebak dari isi JSON.",
+              answerIndex: 3,
+              explanation: "Status `201 Created` menandakan bahwa permintaan berhasil dan entitas sumber daya baru berhasil diciptakan di server. Status `200 OK` umumnya untuk pengambilan atau modifikasi data biasa."
             },
             {
               id: "l7-q5",
               type: "pilihan-ganda",
-              question: "Apa yang terjadi jika klien API melebihi batas jumlah request per menit yang diatur oleh middleware Rate Limiting (`throttle`)?",
+              question: "Apa yang terjadi jika klien API melebihi batas jumlah request per menit yang diatur oleh middleware Rate Limiting (`throttle:60,1`)?",
               choices: [
-                "Server mengembalikan status HTTP 429 Too Many Requests",
-                "Server otomatis merestart database",
-                "Aplikasi akan mengirimkan email ke pengguna",
-                "Request akan dialihkan ke halaman Google",
+                "Server mengembalikan respon 500 Server Error dan memblokir alamat IP pengguna",
+                "Server mengabaikan request berlebih tanpa mengirimkan respon apa pun ke klien",
+                "Server mengalihkan request secara otomatis ke halaman login utama aplikasi",
+                "Server mengembalikan status HTTP 429 Too Many Requests disertai header Retry-After"
               ],
-              answerIndex: 0,
-              explanation:
-                "Melewati batas throttle menghasilkan `429 Too Many Requests` beserta header `Retry-After` yang memberitahu klien kapan boleh mencoba lagi. Pilihan \"mengirim email ke pengguna\" menggoda karena terdengar seperti perilaku aplikasi yang ramah, padahal pembatas laju bekerja jauh sebelum kode aplikasimu berjalan. Yang perlu diingat saat menguji di lokal: hitungannya disimpan di cache, sehingga dengan driver `array` batasnya seolah tidak pernah tercapai.",
-            },
-          ],
-        },
+              answerIndex: 3,
+              explanation: "Rate Limiting melindungi API dari serangan flooding dan spamming dengan mengembalikan respon status `429 Too Many Requests` jika jumlah permintaan melebihi kuota per menit yang ditentukan."
+            }
+          ]
+        }
       ],
     },
     {
@@ -4057,63 +4572,46 @@ export const laravelTrack: Track = {
             "Penguasaan antrean Redis Queue, penanganan pesan Mail/Notification, serta optimasi caching adalah kriteria utama untuk posisi Senior Laravel Developer dan DevOps Engineer.",
         },
         {
-          kind: "step",
-          id: "laravel-8-1",
-          title: "Queue & Job Async",
-          explanation:
-            "Job adalah satu pekerjaan yang dititipkan ke antrean untuk dikerjakan **setelah** respons dikirim ke pengguna. Alurnya: Controller memanggil `SendWelcomeEmailJob::dispatch($user)`, Laravel menyimpan pekerjaan itu ke antrean (tabel `jobs` atau Redis), lalu langsung membalas pengguna — dan proses terpisah bernama *worker* (`php artisan queue:work`) yang mengambil dan menjalankannya. Kenapa layak dilakukan: koneksi ke server SMTP bisa memakan dua sampai lima detik, dan selama itu pengguna menatap tombol yang berputar untuk pekerjaan yang tidak ia pedulikan. Selain email, yang biasa dipindahkan ke antrean adalah pembuatan PDF, pengolahan gambar, dan panggilan ke API pihak ketiga — semua yang lambat dan boleh selesai belakangan. Jebakan pertama, dan hampir semua orang mengalaminya: di `.env` bawaan `QUEUE_CONNECTION=sync`, yang berarti job tetap dikerjakan seketika — jadi \"antreannya seolah tidak bekerja\" padahal memang belum dinyalakan. Jebakan kedua yang lebih mahal: worker memuat kode ke memori saat dijalankan, sehingga setelah deploy ia **masih menjalankan kode versi lama** sampai `php artisan queue:restart` dipanggil. Dan karena job berjalan di luar permintaan HTTP, kegagalannya tidak terlihat di layar siapa pun — ia mendarat di tabel `failed_jobs`, yang wajib kamu pantau.",
-          example: {
-            code:
-              "// app/Http/Controllers/RegisterController.php\n" +
-              "$user = User::create($request->validated());\n" +
-              "SendWelcomeEmailJob::dispatch($user);   // dititipkan, bukan dikerjakan\n" +
-              "return redirect('/dashboard');",
-            output:
-              "# baris yang masuk ke tabel `jobs` sesaat setelah tombol daftar ditekan:\n" +
-              "id | queue   | payload (disingkat)              | available_at\n" +
-              "1  | default | App\\Jobs\\SendWelcomeEmailJob ... | 1785294312\n\n" +
-              "# waktu tunggu yang dirasakan pengguna:\n" +
-              "tanpa queue : 3.4 s   (menunggu SMTP)\n" +
-              "dengan queue: 0.12 s\n\n" +
-              "# di terminal terpisah yang menjalankan worker:\n" +
-              "$ php artisan queue:work\n" +
-              "  2026-07-28 05:40:12 App\\Jobs\\SendWelcomeEmailJob ......... RUNNING\n" +
-              "  2026-07-28 05:40:15 App\\Jobs\\SendWelcomeEmailJob ......... 3.02s DONE",
-            note: "Perhatikan dua terminal yang berbeda: satu melayani web, satu menjalankan worker. Kalau worker-nya tidak dihidupkan, barisnya tetap tersimpan di tabel `jobs` selamanya dan emailnya tidak pernah terkirim — tanpa satu pun pesan error. Catatan jujur: panel latihan tidak menjalankan terminal maupun Laravel, jadi keluaran ini tidak akan muncul di sini; yang diperiksa adalah perintah yang kamu tulis.",
-          },
-          instruction:
-            "Tuliskan perintah Artisan terminal untuk membuat kelas Job `ProcessPodcast`.",
-          starterCode: "# Tulis perintah make:job di sini\n",
-          language: "text",
-          tests: [
-                      {
-                        "pattern": "php\\s+artisan\\s+make:job",
-                        "message": "Semua generator Laravel dijalankan lewat `php artisan make:<jenis>`. Jenisnya ditulis setelah tanda titik dua, tanpa spasi. Untuk pekerjaan yang dijalankan di latar belakang, jenisnya `job`."
-                      },
-                      {
-                        "pattern": "ProcessPodcast",
-                        "message": "Nama kelas job memakai kata kerja + objeknya, PascalCase. Ingat: job hanya benar-benar berjalan kalau ada worker (`php artisan queue:work`) yang hidup — di lokal, lupa menyalakannya membuat job seolah hilang."
-                      }
-                    ],
-          solution: "php artisan make:job ProcessPodcast",
-          susunKode: {
-            question:
-              "Rangkai perintah Artisan untuk membuat kelas Queue Job bernama ProcessPodcast.",
-            potongan: [
-              "php",
-              "artisan",
-              "make:job",
-              "ProcessPodcast",
-            ],
-            pengecoh: [
-              "make:queue-job",
-              "HandlePodcast",
-            ],
-            pemisah: " ",
-            explanation:
-              "Perintah make:job membuat kelas antrean pekerjaan di folder app/Jobs. Keping make:queue-job keliru nama sub-perintah Artisan. Keping HandlePodcast menggoda tetapi instruksi meminta nama kelas ProcessPodcast.",
-          },
-        },
+  kind: "step",
+  id: "laravel-8-1",
+  title: "Menulis Logika Pemrosesan di Method Job handle()",
+  explanation: "Method `handle(): void` adalah jantung dari sebuah kelas Job yang dieksekusi secara otomatis oleh *queue worker* ketika tugas tersebut diambil dari antrean. Di dalam method ini, seluruh logika intensif — seperti manipulasi file, pemanggilan webhook, atau kalkulasi analitik — dijalankan di proses terpisah di server. Objek Model yang disimpan ke properti publik konstruktor secara otomatis dimuat ulang dari database saat `handle()` berjalan berkat trait `SerializesModels`. Kenapa pemisahan ini penting: jika tugas memakan waktu 10 detik, proses tersebut berjalan di latar belakang tanpa membuat pengguna menunggu di browser. Kapan dipakai: setiap kali membuat tugas latar belakang yang dapat diantrekan (*queueable job*). Jebakan umum: lupa menangani kemungkinan kegagalan di dalam `handle()` — jika model yang sedang diproses ternyata sudah dihapus oleh pengguna lain sebelum job sempat dieksekusi, gunakan `$this->podcast->exists` atau trait `deleteWhenMissingModels`.",
+  example: {
+    code: "public function handle(): void {\n    $this->order->update(['status' => 'settled']);\n    Log::info('Order settled: ' . $this->order->id);\n}",
+    output: "# Log worker antrean di terminal:\n[2026-10-06 09:00:01] Processing: App\\Jobs\\SettleOrder\n[2026-10-06 09:00:02] Processed:  App\\Jobs\\SettleOrder",
+    note: "Worker terminal mengeksekusi method handle() secara independen dari siklus web request."
+  },
+  instruction: "Di dalam kelas Job `ProcessPodcast`, lengkapi method `handle(): void` untuk memperbarui status podcast dengan memanggil `$this->podcast->update(['status' => 'processed']);`.",
+  starterCode: "<?php\nnamespace App\\Jobs;\n\nclass ProcessPodcast implements ShouldQueue {\n    public function __construct(public Podcast $podcast) {}\n\n    public function handle(): void {\n        // Proses pembaruan status podcast di sini\n    }\n}",
+  language: "text",
+  tests: [
+    {
+      pattern: "public\\s+function\\s+handle\\s*\\(\\s*\\)\\s*:\\s*void",
+      message: "Deklarasikan method publik handle dengan tipe balik void."
+    },
+    {
+      pattern: "\\$this->podcast->update\\s*\\(\\s*\\[\\s*['\"]status['\"]\\s*=>\\s*['\"]processed['\"]\\s*\\]\\s*\\);",
+      message: "Panggil $this->podcast->update(['status' => 'processed']); di dalam method handle."
+    }
+  ],
+  solution: "<?php\nnamespace App\\Jobs;\n\nclass ProcessPodcast implements ShouldQueue {\n    public function __construct(public Podcast $podcast) {}\n\n    public function handle(): void {\n        $this->podcast->update(['status' => 'processed']);\n    }\n}",
+  susunKode: {
+    question: "Susun method handle pada kelas Job untuk mengeksekusi pembaruan status podcast di antrean.",
+    potongan: [
+      "class ProcessPodcast implements ShouldQueue {",
+      "    public function handle(): void {",
+      "        $this->podcast->update(['status' => 'processed']);",
+      "    }",
+      "}"
+    ],
+    pengecoh: [
+      "    public function execute(): void {",
+      "        $this->podcast->update(['status' => 'pending']);"
+    ],
+    pemisah: "\n",
+    explanation: "Kernel antrean Laravel secara khusus memanggil method bernama handle() saat mengeksekusi job. Keping execute() keliru karena nama method tersebut bukan standar eksekusi Job di Laravel. Keping status pending menggoda tetapi skenario instruksi meminta status processed."
+  }
+},
         {
           kind: "step",
           id: "laravel-8-2",
@@ -4232,255 +4730,311 @@ export const laravelTrack: Track = {
           },
         },
         {
-          kind: "step",
-          id: "laravel-8-4",
-          title: "Mail & Notifications Facade",
-          explanation:
-            "Mailable adalah kelas yang mewakili satu jenis email: isinya menentukan subjek, tampilan Blade yang dipakai, dan data yang dikirim ke tampilan itu. Pengirimannya lewat facade `Mail::to($alamat)->send(new InvoiceMail($order))`. Kenapa dibungkus kelas, bukan dipanggil langsung: email faktur dikirim dari beberapa tempat (setelah pembayaran, saat pengguna meminta ulang, dari panel admin), dan satu kelas berarti satu tempat mengubah isinya. Tujuan pengirimannya sepenuhnya urusan konfigurasi `.env` — `MAIL_MAILER=log` di lokal, `smtp` atau layanan seperti Mailgun di produksi — jadi kodemu tidak berubah saat berpindah penyedia. Yang penting dipahami: `->send()` memblokir permintaan sampai server SMTP menjawab; untuk email yang tidak ditunggu pengguna, `Mail::to(...)->queue(...)` atau `implements ShouldQueue` pada Mailable-nya memindahkannya ke antrean yang baru saja kamu pelajari. Jebakan pertama seseorang selalu sama: di lokal dengan `MAIL_MAILER=log`, emailnya tidak benar-benar terkirim melainkan tercatat di `storage/logs/laravel.log` — banyak orang mengira fiturnya rusak. Jebakan kedua: alamat pengirim diambil dari `MAIL_FROM_ADDRESS`; membiarkannya berisi `hello@example.com` membuat email produksimu ditandai spam.",
-          example: {
-            code:
-              "use Illuminate\\Support\\Facades\\Mail;\n" +
-              "use App\\Mail\\WelcomeMail;\n\n" +
-              "Mail::to($user->email)->send(new WelcomeMail($user));\n\n" +
-              "// versi yang tidak menahan respons pengguna:\n" +
-              "Mail::to($user->email)->queue(new WelcomeMail($user));",
-            output:
-              "# dengan MAIL_MAILER=log — isi storage/logs/laravel.log:\n" +
-              "[2026-07-28 05:52:31] local.DEBUG: Message-ID: <a91c...@bilearn.id>\n" +
-              "From: BiLearn <hello@bilearn.id>\n" +
-              "To: bimo@example.com\n" +
-              "Subject: Selamat datang di BiLearn\n\n" +
-              "  Halo Bimo, akunmu sudah aktif.\n\n" +
-              "# dengan MAIL_MAILER=smtp — waktu yang dirasakan pengguna:\n" +
-              "->send()   : 2.8 s   (menunggu jawaban server SMTP)\n" +
-              "->queue()  : 0.05 s  (dititipkan ke worker)",
-            note: "Blok pertama adalah yang paling sering dicari orang saat menguji email di lokal: emailnya ada, hanya tidak di kotak masuk. Catatan jujur: panel latihan tidak menjalankan terminal maupun Laravel, jadi keluaran ini tidak akan muncul di sini; yang diperiksa adalah perintah yang kamu tulis.",
-          },
-          instruction:
-            "Tuliskan perintah Artisan terminal untuk membuat kelas Mailable `InvoiceMail`.",
-          starterCode: "# Tulis perintah make:mail di sini\n",
-          language: "text",
-          tests: [
-                      {
-                        "pattern": "php\\s+artisan\\s+make:mail",
-                        "message": "Semua generator Laravel dijalankan lewat `php artisan make:<jenis>`. Jenisnya ditulis setelah tanda titik dua, tanpa spasi. Untuk kelas email, jenisnya `mail`."
-                      },
-                      {
-                        "pattern": "make:mail\\s+InvoiceMail\\b",
-                        "message": "Konvensinya `<Konteks>Mail`. Untuk pengiriman yang tidak boleh menahan respons pengguna, kirim lewat queue (`Mail::queue(...)`) — mengirim langsung membuat request menunggu server SMTP."
-                      }
-                    ],
-          solution: "php artisan make:mail InvoiceMail",
-          susunKode: {
-            question:
-              "Rangkai perintah Artisan untuk membuat kelas pengiriman surel Mailable bernama InvoiceMail.",
-            potongan: [
-              "php",
-              "artisan",
-              "make:mail",
-              "InvoiceMail",
-            ],
-            pengecoh: [
-              "make:email",
-              "SendInvoiceMail",
-            ],
-            pemisah: " ",
-            explanation:
-              "Perintah make:mail membuat kelas pengirim email baru di folder app/Mail. Keping make:email keliru nama sub-perintah Artisan. Keping SendInvoiceMail menggoda tetapi instruksi mewajibkan nama kelas InvoiceMail.",
-          },
-        },
+  kind: "step",
+  id: "laravel-8-4",
+  title: "Mendefinisikan Envelope & Subject di Mailable",
+  explanation: "Sejak Laravel 9 dan 10, arsitektur kelas Mailable diperbarui menggunakan metode deklaratif modern: `envelope()` untuk mengonfigurasi metadata email (subjek, pengirim, tag), `content()` untuk menentukan template tampilan Blade, dan `attachments()` untuk berkas lampiran. Method `envelope(): Envelope` mengembalikan instansiasi kelas `Envelope` yang membawa argumen bernama (*named argument*) `subject: '...'`. Kenapa pendekatan baru ini disukai: kode menjadi sangat bersih, tidak lagi mencampuradukkan konfigurasi SMTP header dengan perenderan HTML, dan sepenuhnya mematuhi prinsip tanggung jawab tunggal (*Single Responsibility*). Kapan dipakai: pada seluruh pembuatan kelas email transaksional modern. Jebakan umum: masih menggunakan method `build()` kuno gaya Laravel 8 — meskipun masih didukung demi kompatibilitas lama, template Mailable modern bawaan Artisan kini sepenuhnya menggunakan `envelope()` dan `content()`.",
+  example: {
+    code: "public function envelope(): Envelope {\n    return new Envelope(\n        subject: 'Selamat Datang di Layanan Kami',\n    );\n}",
+    output: "# Metadata email yang dihasilkan di header SMTP:\nSubject: Selamat Datang di Layanan Kami\nFrom: halo@bilearn.id",
+    note: "Kelas Envelope menyusun header subjek dan pengirim secara terpisah dari konten isi pesan."
+  },
+  instruction: "Di dalam kelas Mailable `InvoiceMail`, lengkapi method `envelope(): Envelope` agar mengembalikan objek `Envelope` baru dengan subjek `'Tagihan Pembayaran Pesanan'`.",
+  starterCode: "<?php\nnamespace App\\Mail;\nuse Illuminate\\Mail\\Mailables\\Envelope;\n\nclass InvoiceMail extends Mailable {\n    public function envelope(): Envelope {\n        // Kembalikan Envelope baru dengan subjek di sini\n    }\n}",
+  language: "text",
+  tests: [
+    {
+      pattern: "public\\s+function\\s+envelope\\s*\\(\\s*\\)\\s*:\\s*Envelope",
+      message: "Deklarasikan method envelope dengan return type Envelope."
+    },
+    {
+      pattern: "return\\s+new\\s+Envelope\\s*\\(\\s*subject:\\s*['\"]Tagihan Pembayaran Pesanan['\"]",
+      message: "Kembalikan new Envelope(subject: 'Tagihan Pembayaran Pesanan')."
+    }
+  ],
+  solution: "<?php\nnamespace App\\Mail;\nuse Illuminate\\Mail\\Mailables\\Envelope;\n\nclass InvoiceMail extends Mailable {\n    public function envelope(): Envelope {\n        return new Envelope(\n            subject: 'Tagihan Pembayaran Pesanan',\n        );\n    }\n}",
+  susunKode: {
+    question: "Susun method envelope pada Mailable InvoiceMail untuk menentukan subjek pesan.",
+    potongan: [
+      "    public function envelope(): Envelope {",
+      "        return new Envelope(",
+      "            subject: 'Tagihan Pembayaran Pesanan',",
+      "        );",
+      "    }"
+    ],
+    pengecoh: [
+      "    public function build() {",
+      "            title: 'Tagihan Pembayaran Pesanan',"
+    ],
+    pemisah: "\n",
+    explanation: "Arsitektur Mailable modern di Laravel menggunakan method envelope() untuk mengonfigurasi subjek. Keping build() keliru karena itu adalah sintaks lawas Laravel 8. Keping title menggoda karena terdengar sinonim dengan subjek, tetapi nama parameter resmi pada konstruktor Envelope adalah subject."
+  }
+},
         {
-          kind: "step",
-          id: "laravel-8-5",
-          title: "Event & Listener Pattern",
-          explanation:
-            "Event adalah pengumuman bahwa sesuatu telah terjadi (`OrderProcessed`), dan Listener adalah pihak yang menanggapinya (kirim email, catat log, kurangi stok). Yang melempar event tidak tahu — dan tidak perlu tahu — siapa saja yang menanggapi. Kenapa itu berguna: tanpa pola ini, method `store()` di Controller pesanan lama-lama menampung sepuluh urusan yang tidak berhubungan, dan menambah satu fitur baru berarti menyunting berkas yang sama berulang kali sambil berharap tidak merusak yang lain. Dengan event, fitur baru cukup menambah satu Listener tanpa menyentuh kode pemesanan sama sekali. Kapan **tidak** dipakai: untuk alur yang cuma punya satu penanggap dan memang urut, memanggil kelasnya langsung lebih jujur — event yang dipakai berlebihan membuat alur program sulit dilacak, karena membaca Controller tidak lagi memberitahumu apa yang sebenarnya terjadi. Konvensi penamaan membantu di sini: event dinamai dalam bentuk lampau (`OrderProcessed`, `UserRegistered`) karena ia melaporkan sesuatu yang **sudah** terjadi, sementara Job dinamai perintah (`ProcessPodcast`). Jebakan yang perlu diingat: listener berjalan serempak secara bawaan, sehingga listener lambat tetap menahan respons — jadikan ia `implements ShouldQueue` agar ikut masuk antrean.",
-          example: {
-            code:
-              "// melempar pengumumannya:\n" +
-              "OrderProcessed::dispatch($order);\n\n" +
-              "// app/Listeners/SendOrderInvoice.php\n" +
-              "class SendOrderInvoice implements ShouldQueue {\n" +
-              "    public function handle(OrderProcessed $event): void {\n" +
-              "        Mail::to($event->order->user->email)->send(new InvoiceMail($event->order));\n" +
-              "    }\n" +
-              "}",
-            output:
-              "$ php artisan event:list\n" +
-              "  App\\Events\\OrderProcessed ......... App\\Listeners\\SendOrderInvoice\n" +
-              "  App\\Events\\OrderProcessed ......... App\\Listeners\\ReduceStock\n\n" +
-              "# satu dispatch, dua listener berjalan:\n" +
-              "[05:58:02] OrderProcessed dilempar untuk order #114\n" +
-              "[05:58:02]   → ReduceStock ............ 12ms DONE\n" +
-              "[05:58:02]   → SendOrderInvoice ....... masuk antrean (ShouldQueue)",
-            note: "`php artisan event:list` memperlihatkan siapa saja yang mendengarkan sebuah event — pemeriksaan pertama saat sebuah listener terasa tidak berjalan. Catatan jujur: panel latihan tidak menjalankan terminal maupun Laravel, jadi keluaran ini tidak akan muncul di sini; yang diperiksa adalah perintah yang kamu tulis.",
-          },
-          instruction:
-            "Tuliskan perintah Artisan terminal untuk membuat Event `OrderProcessed`.",
-          starterCode: "# Tulis perintah make:event di sini\n",
-          language: "text",
-          tests: [
-                      {
-                        "pattern": "php\\s+artisan\\s+make:event",
-                        "message": "Semua generator Laravel dijalankan lewat `php artisan make:<jenis>`. Jenisnya ditulis setelah tanda titik dua, tanpa spasi. Untuk kejadian sistem, jenisnya `event`."
-                      },
-                      {
-                        "pattern": "OrderProcessed",
-                        "message": "Nama event memakai bentuk lampau (`OrderProcessed`, `UserRegistered`), karena ia melaporkan sesuatu yang SUDAH terjadi. Pasangannya listener, yang dibuat dengan `make:listener`."
-                      }
-                    ],
-          solution: "php artisan make:event OrderProcessed",
-          susunKode: {
-            question:
-              "Rangkai perintah Artisan untuk membuat kelas Event bernama OrderProcessed.",
-            potongan: [
-              "php",
-              "artisan",
-              "make:event",
-              "OrderProcessed",
-            ],
-            pengecoh: [
-              "make:listener",
-              "OrderCreated",
-            ],
-            pemisah: " ",
-            explanation:
-              "Perintah make:event menghasilkan berkas Event di folder app/Events. Keping make:listener keliru karena listener adalah pendengar kejadian, bukan event-nya. Keping OrderCreated menggoda tetapi menyalahi nama kelas yang diminta.",
-          },
-        },
+  kind: "step",
+  id: "laravel-8-5",
+  title: "Mentrigger Event di Logika Bisnis (Event::dispatch)",
+  explanation: "Arsitektur berbasis kejadian (*Event-Driven Architecture*) memisahkan aksi inti dari dampak ikutannya. Saat pesanan berhasil diproses, alih-alih memanggil pengiriman email, pemotongan stok, dan pembuatan invoice langsung di Controller secara beruntun, kamu cukup memicu kejadian `OrderProcessed::dispatch($order)`. Berbagai Listener independen dapat didaftarkan untuk mendengarkan kejadian tersebut dan berjalan secara asinkron di antrean tanpa memperlambat alur utama. Kenapa ini standar arsitektur tingkat lanjut: sistem menjadi sangat fleksibel dan modular — kamu bisa menambah fitur baru (seperti kirim notifikasi WhatsApp) hanya dengan membuat Listener baru tanpa menyentuh satu baris pun kode Controller yang sudah ada. Kapan dipakai: pada peristiwa penting aplikasi seperti `UserRegistered`, `OrderProcessed`, atau `PaymentFailed`. Jebakan umum: menaruh logika berat langsung di dalam konstruktor Event — kelas Event harus murni berfungsi sebagai kurir data pembawa instans model.",
+  example: {
+    code: "use App\\Events\\UserRegistered;\n\n$user = User::create($data);\nUserRegistered::dispatch($user);",
+    output: "# Listener yang otomatis aktif saat event dipicu:\n1. SendWelcomeNotification -> dikirim\n2. CreateDefaultProfile    -> dibuat\n3. NotifyAdminSlack        -> terkirim",
+    note: "Event mendistribusikan satu aksi ke banyak listener secara terpisah."
+  },
+  instruction: "Picu event `OrderProcessed` dengan membawa objek `$order` menggunakan metode dispatching statis pada kelas Event.",
+  starterCode: "<?php\nuse App\\Events\\OrderProcessed;\n\n// Picu event OrderProcessed di sini\n",
+  language: "text",
+  tests: [
+    {
+      pattern: "OrderProcessed::dispatch\\s*\\(\\s*\\$order\\s*\\);",
+      message: "Panggil metode statis OrderProcessed::dispatch($order) untuk memicu event."
+    }
+  ],
+  solution: "<?php\nuse App\\Events\\OrderProcessed;\n\nOrderProcessed::dispatch($order);",
+  susunKode: {
+    question: "Susun pemanggilan event OrderProcessed menggunakan metode dispatch.",
+    potongan: [
+      "OrderProcessed::",
+      "dispatch($order);"
+    ],
+    pengecoh: [
+      "OrderEvent::",
+      "fire($order);"
+    ],
+    pemisah: "",
+    explanation: "Metode statis ::dispatch($order) adalah sintaks modern untuk memicu event di Laravel. Keping OrderEvent keliru karena nama kelas event adalah OrderProcessed. Keping ::fire menggoda karena merupakan sintaks usang Laravel lawas yang sudah ditinggalkan."
+  }
+},
         {
-          kind: "step",
-          id: "laravel-8-6",
-          title: "Logging & Debugging Produksi (Laravel Telescope)",
-          explanation:
-            "Telescope adalah dashboard yang merekam apa yang benar-benar terjadi di aplikasimu: setiap permintaan HTTP beserta payload-nya, setiap query beserta waktu eksekusinya, setiap job, email, exception, dan panggilan cache. Kenapa ini mengubah cara kerjamu: masalah seperti N+1 query tidak pernah terlihat dari membaca kode — tetapi sangat kentara begitu satu halaman menampilkan 101 query berjajar di layar. Begitu pula \"kenapa email tidak terkirim\" dan \"kenapa job-nya gagal\", yang jawabannya ada di rekaman, bukan di tebakan. Kapan dipakai: di lokal dan di *staging*, dipasang sebagai `--dev`. Peringatan keamanan yang tidak boleh dianggap remeh: Telescope menyimpan payload permintaan — termasuk isi formulir dan header otentikasi — jadi memasangnya di produksi tanpa proteksi berarti siapa pun yang membuka `/telescope` bisa membaca data penggunamu. Kalau memang dibutuhkan di produksi, batasi lewat gate `viewTelescope` dan nyalakan pemangkasan datanya. Untuk kebutuhan yang lebih ringan, `php artisan pail` menampilkan aliran log secara langsung di terminal tanpa memasang apa pun.",
-          example: {
-            code: "# Di terminal, di akar proyek Laravel:\ncomposer require laravel/telescope --dev\nphp artisan telescope:install\nphp artisan migrate",
-            output:
-              "  - Installing laravel/telescope (v5.2.6): Extracting archive\n" +
-              "   INFO  Telescope scaffolding installed successfully.\n\n" +
-              "$ php artisan migrate\n" +
-              "  2018_08_08_100000_create_telescope_entries_table ..... 41ms DONE\n\n" +
-              "# yang terlihat di http://127.0.0.1:8000/telescope saat /produk dibuka:\n" +
-              "Requests  GET /produk .................. 200 ... 1.24s\n" +
-              "Queries   101 queries (total 980ms)\n" +
-              "          select * from `products`                          4ms\n" +
-              "          select * from `categories` where `id` = 3 limit 1 2ms\n" +
-              "          select * from `categories` where `id` = 5 limit 1 2ms\n" +
-              "          ... 98 baris serupa\n" +
-              "Slow      1 query > 100ms",
-            note: "Baris \"101 queries\" itulah wujud nyata masalah N+1 yang kamu pelajari di modul Eloquent — terlihat jelas di sini, tak terlihat sama sekali saat membaca kode. Catatan jujur: panel latihan tidak menjalankan terminal maupun Laravel, jadi keluaran ini tidak akan muncul di sini; yang diperiksa adalah perintah yang kamu tulis.",
-          },
-          instruction:
-            "Tuliskan perintah terminal composer untuk mengunduh paket `laravel/telescope` sebagai dev dependency.",
-          starterCode: "# Tulis perintah composer require telescope di sini\n",
-          language: "text",
-          tests: [
-                      {
-                        "pattern": "composer\\s+require\\s+laravel/telescope",
-                        "message": "Paket debugging resmi dipasang dengan `composer require laravel/telescope`."
-                      },
-                      {
-                        "pattern": "--dev",
-                        "message": "Wajib pakai flag pengembangan. Telescope mencatat setiap request, query, dan job — memasangnya di produksi tanpa proteksi berarti membocorkan isi database dan payload pengguna ke siapa pun yang membuka `/telescope`."
-                      }
-                    ],
-          solution: "composer require laravel/telescope --dev",
-          susunKode: {
-            question:
-              "Rangkai perintah Composer untuk menginstal Laravel Telescope sebagai alat debugging produksi di lingkungan dev.",
-            potongan: [
-              "composer",
-              "require",
-              "laravel/telescope",
-              "--dev",
-            ],
-            pengecoh: [
-              "composer install",
-              "--save-dev",
-            ],
-            pemisah: " ",
-            explanation:
-              "Laravel Telescope diinstal sebagai dependensi pengembangan dengan composer require laravel/telescope --dev. Keping composer install keliru perintah. Keping --save-dev menggoda pengembang JS tetapi bukan flag resmi Composer.",
-          },
-        },
+  kind: "step",
+  id: "laravel-8-6",
+  title: "Mencatat Log Aplikasi dengan Konteks Data (Facade Log)",
+  explanation: "Mencatat aktivitas dan kegagalan aplikasi menggunakan Facade `Log::warning('pesan', ['konteks' => $data])` adalah standar observabilitas sistem di lingkungan produksi. Berbeda dari fungsi `error_log()` biasa, sistem logging Laravel berbasis pustaka Monolog yang mendukung level keparahan standar RFC 5424 (debug, info, notice, warning, error, critical, alert, emergency) dan saluran penyimpanan beragam (file harian, Slack, Papertrail, Sentry). Mengoper array asosiatif sebagai argumen kedua menambahkan metadata berharga sehingga developer dapat melacak pengguna atau transaksi mana yang mengalami masalah tanpa menebak-nebak. Kenapa ini wajib di dunia kerja: aplikasi tanpa log terstruktur ibarat mengemudi mobil di malam hari dengan lampu mati saat terjadi insiden di server. Kapan dipakai: saat terjadi pengecualian (*exception catch*), kegagalan pembayaran, atau peristiwa audit penting. Jebakan umum: memasukkan data sensitif seperti nomor kartu kredit atau password plaintext ke dalam konteks log.",
+  example: {
+    code: "use Illuminate\\Support\\Facades\\Log;\n\nLog::error('Koneksi payment gateway timeout', [\n    'gateway' => 'midtrans',\n    'invoice' => 'INV-2026-001',\n]);",
+    output: "# Catatan di storage/logs/laravel-2026-10-06.log:\n[2026-10-06 09:15:00] local.ERROR: Koneksi payment gateway timeout {\"gateway\":\"midtrans\",\"invoice\":\"INV-2026-001\"}",
+    note: "Array konteks otomatis diformat menjadi JSON terstruktur oleh formatter Monolog."
+  },
+  instruction: "Catat sebuah log tingkat peringatan (`warning`) dengan pesan `'Percobaan pembayaran gagal'` beserta konteks array `['order_id' => $order->id]` menggunakan Facade `Log`.",
+  starterCode: "<?php\nuse Illuminate\\Support\\Facades\\Log;\n\n// Catat log warning dengan context order_id di sini\n",
+  language: "text",
+  tests: [
+    {
+      pattern: "Log::warning\\s*\\(\\s*['\"]Percobaan pembayaran gagal['\"]\\s*,\\s*\\[\\s*['\"]order_id['\"]\\s*=>\\s*\\$order->id\\s*\\]\\s*\\);",
+      message: "Panggil Log::warning('Percobaan pembayaran gagal', ['order_id' => $order->id]);."
+    }
+  ],
+  solution: "<?php\nuse Illuminate\\Support\\Facades\\Log;\n\nLog::warning('Percobaan pembayaran gagal', ['order_id' => $order->id]);",
+  susunKode: {
+    question: "Susun pencatatan log tingkat warning dengan data konteks order_id menggunakan Facade Log.",
+    potongan: [
+      "Log::warning(",
+      "'Percobaan pembayaran gagal', ['order_id' => $order->id]);"
+    ],
+    pengecoh: [
+      "Log::info(",
+      "'Percobaan pembayaran gagal');"
+    ],
+    pemisah: "",
+    explanation: "Log::warning mencatat peristiwa bermasalah dengan tingkat keparahan peringatan dan mendukung array konteks pelengkap. Keping Log::info keliru karena tingkat info hanya untuk kejadian normal. Keping tanpa konteks array menggoda tetapi melewatkan metadata order_id yang diminta instruksi."
+  }
+},
+        {
+  kind: "step",
+  id: "laravel-8-7",
+  title: "Mendispatch Antrean Job Asinkron (dispatch)",
+  explanation: "Metode statis `JobClass::dispatch($data)` mendorong tugas pemrosesan berat ke dalam antrean (*queue*) di latar belakang, sehingga siklus respon HTTP kepada pengguna selesai seketika tanpa terhambat. Data objek yang dioper ke method `dispatch()` akan diserialisasi ke dalam tabel basis data atau antrean Redis, untuk kemudian dieksekusi secara asinkron oleh proses pekerja (*queue worker*). Kenapa ini krusial di dunia kerja: operasi lambat seperti konversi video, ekspor spreadsheet ribuan baris, atau integrasi pihak ketiga tidak boleh membuat peramban pengguna menunggu berputar (*loading*). Kapan dipakai: pada seluruh proses latar belakang yang memakan waktu lebih dari beberapa ratus milidetik. Jebakan umum: mengoper objek Model Eloquent yang sangat besar ke constructor Job — sebaiknya oper hanya instans Model biasa karena Laravel otomatis merampingkannya menjadi ID lewat trait `SerializesModels`.",
+  example: {
+    code: "use App\\Jobs\\SendWelcomeEmail;\n\nSendWelcomeEmail::dispatch($user);\nreturn response()->json(['message' => 'Registrasi berhasil']);",
+    output: "# Respon HTTP ke browser pengguna:\nSelesai dalam 14ms (user tidak merasakan jeda pengiriman email)\n\n# Terminal worker queue:\n[2026-10-06 08:10:00][Job-42] Processing: App\\Jobs\\SendWelcomeEmail\n[2026-10-06 08:10:03][Job-42] Processed:  App\\Jobs\\SendWelcomeEmail",
+    note: "Job langsung masuk antrean dan dieksekusi di proses terminal terpisah."
+  },
+  instruction: "Kirimkan job `ProcessPodcast` ke dalam sistem antrean latar belakang dengan membawa objek `$podcast` menggunakan metode dispatching statis.",
+  starterCode: "<?php\nuse App\\Jobs\\ProcessPodcast;\n\n// Kirim job ke antrean di sini\n",
+  language: "text",
+  tests: [
+    {
+      pattern: "use\\s+App\\\\Jobs\\\\ProcessPodcast;",
+      message: "Impor kelas Job dengan deklarasi use App\\Jobs\\ProcessPodcast;."
+    },
+    {
+      pattern: "ProcessPodcast::\\s*dispatch\\s*\\(\\s*\\$podcast\\s*\\);",
+      message: "Panggil metode statis ProcessPodcast::dispatch($podcast) untuk mengirim job ke antrean."
+    }
+  ],
+  solution: "<?php\nuse App\\Jobs\\ProcessPodcast;\n\nProcessPodcast::dispatch($podcast);",
+  susunKode: {
+    question: "Susun pengiriman job ProcessPodcast ke antrean asinkron.",
+    potongan: [
+      "use App\\Jobs\\ProcessPodcast;",
+      "ProcessPodcast::",
+      "dispatch($podcast);"
+    ],
+    pengecoh: [
+      "use App\\Events\\ProcessPodcast;",
+      "handle($podcast);"
+    ],
+    pemisah: "\n",
+    explanation: "Metode statis dispatch pada kelas Job mengirim tugas ke antrean pemrosesan asinkron di latar belakang. Keping App\\Events keliru karena namespace Events untuk pola kejadian, bukan antrean pekerjaan. Keping handle($podcast) menggoda karena itu nama method pelaksananya, tetapi memanggilnya langsung akan mengeksekusi secara sinkron."
+  }
+},
+{
+  kind: "step",
+  id: "laravel-8-8",
+  title: "Menyimpan Cache Data Kueri dengan Cache::remember",
+  explanation: "`Cache::remember('kunci', $durasi, closure)` adalah metode serbaguna untuk mengambil data dari memori cache berkecepatan tinggi (seperti Redis atau Memcached). Jika kunci cache sudah tersedia, datanya langsung dikembalikan tanpa menyentuh database; namun jika kuncinya belum ada (*cache miss*), closure akan dieksekusi untuk mengambil data dari database, hasilnya otomatis disimpan ke cache selama durasi yang ditentukan dalam satuan detik, lalu dikembalikan ke aplikasi. Kenapa fitur ini wajib di produksi: kueri berat yang diakses ribuan pengguna bersamaan (seperti katalog beranda) akan membebani database jika tidak dicache. Kapan dipakai: untuk data kueri yang sering dibaca tetapi jarang berubah. Jebakan umum: lupa menghapus cache dengan `Cache::forget('kunci')` saat ada perubahan data di tabel terkait, sehingga pengguna tetap melihat data usang (*stale data*).",
+  example: {
+    code: "use App\\Models\\Category;\nuse Illuminate\\Support\\Facades\\Cache;\n\n$categories = Cache::remember('all_categories', 86400, fn() => Category::all());",
+    output: "# Akses pertama (Cache MISS):\nDatabase query dieksekusi -> waktu respon 65ms\n\n# Akses kedua dan seterusnya (Cache HIT):\nData dibaca instan dari Redis memori -> waktu respon 1.5ms",
+    note: "Beban query ke database berkurang drastis dengan adanya lapisan cache memori."
+  },
+  instruction: "Gunakan `Cache::remember` untuk menyimpan hasil query produk terlaris dengan kunci `'top_products'` selama `3600` detik. Jika cache belum ada, jalankan closure yang mengambil `Product::popular()->get()`.",
+  starterCode: "<?php\nuse App\\Models\\Product;\nuse Illuminate\\Support\\Facades\\Cache;\n\n// Ambil atau simpan cache produk terlaris di sini\n",
+  language: "text",
+  tests: [
+    {
+      pattern: "Cache::remember\\s*\\(\\s*['\"]top_products['\"]\\s*,\\s*3600\\s*,\\s*(function|fn)",
+      message: "Panggil Cache::remember dengan kunci 'top_products', durasi 3600 detik, dan closure kueri."
+    },
+    {
+      pattern: "Product::popular\\(\\)->get\\(\\)",
+      message: "Jalankan Product::popular()->get() di dalam closure cadangan cache."
+    }
+  ],
+  solution: "<?php\nuse App\\Models\\Product;\nuse Illuminate\\Support\\Facades\\Cache;\n\n$products = Cache::remember('top_products', 3600, function () {\n    return Product::popular()->get();\n});",
+  susunKode: {
+    question: "Susun query caching data produk populer selama satu jam menggunakan Cache::remember.",
+    potongan: [
+      "$products = Cache::remember(",
+      "    'top_products',",
+      "    3600,",
+      "    function () {",
+      "        return Product::popular()->get();",
+      "    }",
+      ");"
+    ],
+    pengecoh: [
+      "$products = Cache::forever(",
+      "        return Product::all();"
+    ],
+    pemisah: "\n",
+    explanation: "Cache::remember membaca data dari cache atau mengeksekusi closure kueri selama durasi waktu dalam detik. Keping Cache::forever keliru karena menyimpan data secara permanen tanpa durasi kedaluwarsa. Keping Product::all() menggoda karena mengambil data produk tetapi mengabaikan scope popular yang diminta."
+  }
+},
+{
+  kind: "step",
+  id: "laravel-8-9",
+  title: "Mengirim Email Transaksional via Facade Mail",
+  explanation: "Facade `Mail::to($penerima)->send(new MailableClass($data))` adalah antarmuka resmi Laravel untuk mengirimkan email HTML dan notifikasi transaksional melalui driver SMTP, Mailgun, Postmark, atau Amazon SES. Kelas Mailable merangkum data dan tampilan Blade email, sedangkan Facade Mail mengelola koneksi soket jaringan ke penyedia pengirim email. Kenapa ini standar industri: template email terpisah dari logika bisnis Controller, pengujian dapat dimock tanpa mengirim email sungguhan, dan pengiriman dapat dialihkan ke antrean asinkron hanya dengan mengganti method `->send()` menjadi `->queue()`. Kapan dipakai: pada notifikasi registrasi, tagihan faktur, konfirmasi pesanan, dan tautan reset kata sandi. Jebakan umum: mencoba mengirim email langsung di thread web sinkron pada server yang koneksi SMTP-nya lambat — halaman web pengguna akan membeku selama 3–5 detik menunggu respon dari server mail.",
+  example: {
+    code: "use App\\Mail\\WelcomeMail;\nuse Illuminate\\Support\\Facades\\Mail;\n\nMail::to('member@bilearn.id')->send(new WelcomeMail());",
+    output: "# Log pengiriman email di storage/logs/laravel.log (driver: log):\n[2026-10-06 08:20:00] local.INFO: Sent message: Welcome to BiLearn to member@bilearn.id",
+    note: "Seluruh konfigurasi kredensial SMTP dikelola terpusat di berkas .env dan config/mail.php."
+  },
+  instruction: "Kirim email tagihan kepada penerima `$user` menggunakan Facade `Mail` dengan menginstansiasi Mailable `InvoiceMail` yang membawa objek `$order`.",
+  starterCode: "<?php\nuse App\\Mail\\InvoiceMail;\nuse Illuminate\\Support\\Facades\\Mail;\n\n// Kirim email tagihan ke pengguna di sini\n",
+  language: "text",
+  tests: [
+    {
+      pattern: "use\\s+App\\\\Mail\\\\InvoiceMail;",
+      message: "Impor kelas Mailable dengan deklarasi use App\\Mail\\InvoiceMail;."
+    },
+    {
+      pattern: "Mail::to\\s*\\(\\s*\\$user\\s*\\)",
+      message: "Tentukan penerima email dengan memanggil Mail::to($user)."
+    },
+    {
+      pattern: "->send\\s*\\(\\s*new\\s+InvoiceMail\\s*\\(\\s*\\$order\\s*\\)\\s*\\);",
+      message: "Rantaikan metode ->send(new InvoiceMail($order)) untuk mengeksekusi pengiriman email."
+    }
+  ],
+  solution: "<?php\nuse App\\Mail\\InvoiceMail;\nuse Illuminate\\Support\\Facades\\Mail;\n\nMail::to($user)->send(new InvoiceMail($order));",
+  susunKode: {
+    question: "Susun perintah pengiriman email tagihan menggunakan Mail::to dan Mailable InvoiceMail.",
+    potongan: [
+      "use App\\Mail\\InvoiceMail;",
+      "Mail::to($user)",
+      "    ->send(new InvoiceMail($order));"
+    ],
+    pengecoh: [
+      "use App\\Notifications\\InvoiceMail;",
+      "    ->queue(new InvoiceMail());"
+    ],
+    pemisah: "\n",
+    explanation: "Facade Mail::to mengarahkan pengiriman email ke pengguna dan method send mengeksekusi pengiriman Mailable. Keping App\\Notifications keliru karena Mailable berada di namespace App\\Mail. Keping tanpa argumen order menggoda tetapi objek pesanan wajib dioper ke konstruktor mailable agar invoice memiliki data."
+  }
+},
         {
           kind: "quiz",
           id: "laravel-8-kuis",
-          title: "Kuis: Fitur Skalabilitas Produksi",
+          title: "Kuis: Queue, Task Scheduler, & Performa Produksi",
           questions: [
             {
               id: "l8-q1",
               type: "pilihan-ganda",
               question: "Apakah keuntungan utama memindahkan proses pengiriman email ke dalam Queue Job di Laravel?",
               choices: [
-                "Email akan sampai dalam hitungan 0.001 milidetik ke penerima",
-                "Pengguna mendapatkan respon HTTP secara instan tanpa perlu menunggu proses koneksi server SMTP email selesai",
-                "Warna email otomatis berubah menjadi hitam putih",
-                "Server tidak memerlukan koneksi internet untuk mengirim email",
+                "Menghindari biaya kuota pengiriman email dari penyedia layanan SMTP",
+                "Pengguna mendapatkan respon HTTP secara instan tanpa terhambat oleh proses koneksi lambat ke server SMTP email",
+                "Memastikan email otomatis tersimpan di tabel log tanpa benar-benar dikirimkan",
+                "Menghapus antrean tugas yang gagal secara otomatis tanpa notifikasi"
               ],
               answerIndex: 1,
-              explanation:
-                "Memindahkan pengiriman email ke antrean membuat respons HTTP kembali seketika, karena pengguna tidak lagi menunggu koneksi ke server SMTP selesai. Pilihan \"email sampai dalam 0,001 milidetik\" menggoda karena antrean memang terasa \"lebih cepat\" — padahal yang dipercepat adalah respons ke pengguna; emailnya sendiri justru sampai sedikit lebih lambat. Itu pertukaran yang sepadan: pengguna peduli tombolnya responsif, bukan emailnya tiba pada detik yang sama.",
+              explanation: "Koneksi ke server SMTP email dapat memakan waktu 1–3 detik. Memindahkannya ke antrean (Queue) memungkinkan respon HTTP kembali ke pengguna seketika, sementara pengiriman email diproses di latar belakang oleh queue worker."
             },
             {
               id: "l8-q2",
               type: "pilihan-ganda",
-              question: "Perintah Artisan apakah yang harus selalu dijalankan di latar belakang server untuk memproses pekerjaan di antrean Queue?",
+              question: "Perintah Artisan apakah yang harus selalu berjalan sebagai daemon di latar belakang server untuk memproses pekerjaan di antrean Queue?",
               choices: [
                 "php artisan queue:work",
-                "php artisan job:start",
-                "composer run-queue",
-                "php artisan serve",
+                "php artisan job:dispatch",
+                "php artisan schedule:run",
+                "php artisan queue:listen --once"
               ],
               answerIndex: 0,
-              explanation:
-                "`php artisan queue:work` adalah proses worker yang terus berjalan mengambil dan mengeksekusi job dari antrean. Pilihan `php artisan serve` menggoda karena juga proses yang \"dijalankan terus di terminal\" — tetapi itu server web, dan menyalakannya tidak memproses satu job pun. Gejala saat worker lupa dinyalakan sangat khas: barisnya tersimpan rapi di tabel `jobs`, emailnya tidak pernah terkirim, dan tidak ada satu pun pesan error.",
+              explanation: "`php artisan queue:work` adalah proses worker daemon yang terus berjalan mengambil dan mengeksekusi job dari antrean. Di lingkungan server produksi, proses ini umumnya diawasi oleh process manager seperti Supervisor."
             },
             {
               id: "l8-q3",
               type: "pilihan-ganda",
-              question: "Mengapa kamu harus menjalankan `php artisan queue:restart` setelah melakukan deploy pembaruan kode baru di server?",
+              question: "Mengapa kamu harus menjalankan `php artisan queue:restart` setelah melakukan deploy pembaruan kode baru di server produksi?",
               choices: [
-                "Agar database MySQL terhapus secara otomatis",
-                "Karena worker queue menyimpan kode lama di memori RAM; merestartnya memaksa worker memuat ulang versi kode program terbaru",
-                "Agar nama variabel di file .env diperbarui secara publik",
-                "Untuk menghapus seluruh berkas gambar pengguna",
+                "Untuk menghapus seluruh riwayat data job yang tersimpan di basis data",
+                "Untuk mengaktifkan mode pemeliharaan (maintenance mode) secara otomatis",
+                "Untuk mereset password koneksi database driver antrean aplikasi",
+                "Karena queue worker menyimpan kode lama di memori RAM, sehingga worker perlu diinstruksikan berhenti agar dimuat ulang dengan versi kode terbaru"
               ],
-              answerIndex: 1,
-              explanation:
-                "Worker memuat kode aplikasi ke memori saat dijalankan, jadi setelah deploy ia masih menjalankan versi lama sampai `queue:restart` memberitahunya untuk berhenti dan dimuat ulang. Pilihan yang menyebut database atau berkas gambar jelas keliru, tetapi kesalahpahaman yang nyata adalah mengira `git pull` di server sudah cukup. Akibatnya jahat: bug yang baru saja kamu perbaiki tetap muncul di job, dan log menunjuk baris kode yang sudah tidak ada.",
+              answerIndex: 3,
+              explanation: "`queue:work` adalah proses jangka panjang yang menyimpan kode aplikasi di RAM. Tanpa `queue:restart`, worker akan terus mengeksekusi versi kode lama meskipun file di server sudah diperbarui via git pull."
             },
             {
               id: "l8-q4",
               type: "pilihan-ganda",
-              question: "Berapa banyak baris cronjob OS yang wajib didaftarkan di server Linux untuk menjalankan seluruh Task Scheduler Laravel?",
+              question: "Berapa banyak baris entri cronjob sistem operasi Linux yang wajib didaftarkan di server untuk menjalankan seluruh Task Scheduler Laravel?",
               choices: [
-                "10 baris cronjob per jam",
-                "Tepat 1 baris cronjob utama yang memanggil php artisan schedule:run",
-                "1 baris untuk setiap Controller di aplikasi",
-                "Tidak membutuhkan cronjob sama sekali",
+                "Satu baris per jam untuk setiap perintah Artisan yang ingin dijadwalkan",
+                "Satu baris terpisah untuk setiap Controller dan Model di aplikasi",
+                "Tepat 1 baris cronjob utama yang memanggil php artisan schedule:run setiap menit",
+                "Tidak memerlukan entri cronjob sama sekali karena PHP berjalan otomatis di background"
               ],
-              answerIndex: 1,
-              explanation:
-                "Laravel hanya butuh satu baris cron yang menjalankan `php artisan schedule:run` setiap menit; Laravel sendiri yang memutuskan tugas mana yang jatuh tempo. Pilihan \"tidak butuh cronjob sama sekali\" sangat menggoda karena semua jadwal memang sudah ditulis di kode PHP — dan justru itu jebakannya: tanpa satu baris pembangun itu, seluruh jadwalmu tidak pernah berjalan tanpa satu pun pesan kesalahan.",
+              answerIndex: 2,
+              explanation: "Laravel mengonsolidasikan seluruh penjadwalan ke dalam tepat 1 entri cron OS Linux: `* * * * * cd /path-to-project && php artisan schedule:run >> /dev/null 2>&1`. Framework yang akan mengevaluasi tugas mana yang jatuh tempo."
             },
             {
               id: "l8-q5",
               type: "pilihan-ganda",
-              question: "Perintah Artisan apakah yang digunakan untuk menggabungkan seluruh berkas konfigurasi menjadi 1 berkas cache cepat di produksi?",
+              question: "Perintah Artisan apakah yang digunakan untuk menggabungkan seluruh berkas konfigurasi menjadi 1 berkas cache cepat di lingkungan produksi?",
               choices: [
                 "php artisan config:cache",
                 "php artisan make:config",
                 "composer config-optimize",
-                "php artisan env:build",
+                "php artisan optimize:env"
               ],
               answerIndex: 0,
-              explanation:
-                "`php artisan config:cache` menggabungkan seluruh berkas `config/` menjadi satu berkas terkompilasi supaya booting lebih cepat. Pilihan `env:build` menggoda karena yang dibaca memang berasal dari `.env`, tetapi perintah itu tidak ada. Efek samping yang wajib diingat: setelah cache terbentuk, `.env` berhenti dibaca sehingga setiap `env()` di luar folder `config/` mengembalikan null — penyebab klasik \"jalan di lokal, error di produksi\".",
-            },
-          ],
-        },
+              explanation: "`php artisan config:cache` menggabungkan seluruh berkas di folder `config/` menjadi satu berkas cache terkompilasi, mempercepat proses booting aplikasi di server produksi secara signifikan."
+            }
+          ]
+        }
       ],
     },
     {
@@ -4598,66 +5152,49 @@ export const laravelTrack: Track = {
           },
         },
         {
-          kind: "step",
-          id: "laravel-9-2",
-          title: "Feature Test: HTTP Request & Assert Response",
-          explanation:
-            "Feature test menguji aplikasimu dari luar: ia mengirim permintaan HTTP tiruan, membiarkan route, middleware, Controller, Model, dan tampilan bekerja seperti biasa, lalu memeriksa hasilnya — status respons, isi halaman, atau baris yang berubah di database. Bedanya dengan unit test: unit test memeriksa satu fungsi terisolasi, feature test memeriksa bahwa semuanya benar-benar tersambung. Kenapa untuk aplikasi web pemula sebaiknya mulai dari feature test: bug yang benar-benar merugikan jarang berupa fungsi yang salah hitung, melainkan route yang lupa dijaga, validasi yang tidak terpasang, atau data yang tidak tersimpan — dan hanya feature test yang menangkap ketiganya. Berkasnya dibuat dengan `php artisan make:test NamaTest --pest`; tanpa `--pest` yang lahir adalah berkas bergaya PHPUnit berbentuk kelas, dan mencampur dua gaya di satu proyek membingungkan. Secara bawaan berkasnya masuk ke `tests/Feature`; `--unit` memindahkannya ke `tests/Unit`. Jebakan yang perlu diingat: feature test menyentuh database sungguhan sesuai konfigurasi `phpunit.xml` — pastikan di sana `DB_CONNECTION=sqlite` dan `DB_DATABASE=:memory:`, karena kalau tidak, test-mu akan mengaduk-aduk database pengembanganmu sendiri.",
-          example: {
-            code: "# Di terminal, di akar proyek Laravel:\nphp artisan make:test ProductTest --pest",
-            output:
-              "   INFO  Test [tests/Feature/ProductTest.php] created successfully.\n\n" +
-              "# isi berkas yang dihasilkan:\n" +
-              "<?php\n" +
-              "test('example', function () {\n" +
-              "    $response = $this->get('/');\n" +
-              "    $response->assertStatus(200);\n" +
-              "});\n\n" +
-              "$ php artisan test --filter=ProductTest\n" +
-              "   PASS  Tests\\Feature\\ProductTest\n" +
-              "  ✓ example                                              0.38s\n\n" +
-              "  Tests:    1 passed (1 assertions)\n" +
-              "  Duration: 0.51s",
-            note: "Tanpa flag `--pest`, isi berkasnya berupa kelas `class ProductTest extends TestCase` dengan method `public function test_example()`. Keduanya berjalan, tetapi pilih satu gaya dan konsisten. Catatan jujur: panel latihan tidak menjalankan terminal, jadi keluaran ini tidak akan muncul di sini; yang diperiksa adalah perintah yang kamu tulis.",
-          },
-          instruction:
-            "Tuliskan perintah Artisan terminal untuk membuat Feature test `UserTest` berbasis Pest (`--pest`).",
-          starterCode: "# Tulis perintah make:test --pest di sini\n",
-          language: "text",
-          tests: [
-                      {
-                        "pattern": "php\\s+artisan\\s+make:test",
-                        "message": "Semua generator Laravel dijalankan lewat `php artisan make:<jenis>`. Jenisnya ditulis setelah tanda titik dua, tanpa spasi. Untuk berkas pengujian, jenisnya `test`."
-                      },
-                      {
-                        "pattern": "make:test\\s+UserTest\\b",
-                        "message": "Nama kelas test berakhiran `Test` — itu yang dicari test runner."
-                      },
-                      {
-                        "pattern": "--pest",
-                        "message": "Tambahkan flag untuk gaya Pest bila proyekmu memakainya; tanpa flag itu yang dibuat berkas gaya PHPUnit. Secara bawaan berkasnya masuk ke `tests/Feature`, dan `--unit` memindahkannya ke `tests/Unit`."
-                      }
-                    ],
-          solution: "php artisan make:test UserTest --pest",
-          susunKode: {
-            question:
-              "Rangkai perintah Artisan untuk membuat berkas pengujian Feature Test bernama UserTest dengan kerangka Pest.",
-            potongan: [
-              "php",
-              "artisan",
-              "make:test",
-              "UserTest",
-              "--pest",
-            ],
-            pengecoh: [
-              "make:pest-test",
-              "--unit",
-            ],
-            pemisah: " ",
-            explanation:
-              "Perintah make:test UserTest dengan opsi --pest menghasilkan file pengujian berformat Pest PHP. Keping make:pest-test keliru nama perintah. Keping --unit keliru karena secara bawaan make:test membuat Feature test.",
-          },
-        },
+  kind: "step",
+  id: "laravel-9-2",
+  title: "Feature Test: Menguji Status & Respon JSON API",
+  explanation: "Pengujian endpoint API pada Pest menggunakan metode `$this->getJson('/url')` atau `$this->postJson('/url', $data)` yang secara otomatis menyertakan header HTTP `Accept: application/json`. Hal ini memastikan server memperlakukan permintaan sebagai klien API murni tanpa melakukan pengalihan browser 302 jika terjadi kegagalan. Asersi `$response->assertOk()` memverifikasi status HTTP 200, dan asersi ini dapat dirantai dengan pemeriksaan struktur atau isi data JSON. Kenapa pengujian API wajib: API adalah antarmuka yang dikonsumsi oleh aplikasi mobile dan frontend web; kerusakan pada format respon dapat melumpuhkan seluruh platform klien secara bersamaan. Kapan dipakai: pada setiap endpoint RESTful API sebelum fitur diluncurkan ke produksi. Jebakan umum: menggunakan `$this->get('/api/...')` alih-alih `getJson()` — jika route membutuhkan autentikasi dan token belum disertakan, `$this->get()` menerima redirect HTML login alih-alih respon JSON 401.",
+  example: {
+    code: "test('katalog artikel mengembalikan status 200', function () {\n    $this->getJson('/api/articles')->assertOk();\n});",
+    output: "   PASS  Tests\\Feature\\Api\\ArticleApiTest\n  ✓ katalog artikel mengembalikan status 200              0.35s\n\n  Tests:    1 passed (1 assertions)",
+    note: "getJson() otomatis mengirim header Accept: application/json sehingga respon dijamin JSON murni."
+  },
+  instruction: "Tulis pengujian Pest berjudul `'daftar produk mengembalikan json sukses'` yang mengirim permintaan GET berformat JSON ke `/api/products` dan memastikan responnya sukses berstatus 200 menggunakan `assertOk()`.",
+  starterCode: "<?php\n// Tulis pengujian endpoint API di sini\n",
+  language: "text",
+  tests: [
+    {
+      pattern: "test\\s*\\(\\s*['\"]daftar produk mengembalikan json sukses['\"]",
+      message: "Tulis deklarasi test Pest dengan judul 'daftar produk mengembalikan json sukses'."
+    },
+    {
+      pattern: "\\$this->getJson\\s*\\(\\s*['\"]/?api/products['\"]\\s*\\)",
+      message: "Kirim permintaan JSON menggunakan $this->getJson('/api/products')."
+    },
+    {
+      pattern: "->assertOk\\s*\\(\\s*\\);",
+      message: "Verifikasi status sukses 200 dengan asersi ->assertOk()."
+    }
+  ],
+  solution: "<?php\ntest('daftar produk mengembalikan json sukses', function () {\n    $this->getJson('/api/products')->assertOk();\n});",
+  susunKode: {
+    question: "Susun pengujian Pest yang memverifikasi endpoint API produk merespon status 200 OK.",
+    potongan: [
+      "test('daftar produk mengembalikan json sukses', function () {",
+      "    $this->getJson('/api/products')",
+      "        ->assertOk();",
+      "});"
+    ],
+    pengecoh: [
+      "test('daftar produk gagal diakses', function () {",
+      "        ->assertStatus(404);"
+    ],
+    pemisah: "\n",
+    explanation: "Helper getJson('/api/products') mengirim permintaan API dengan header JSON dan assertOk() memverifikasi status 200. Keping 'daftar produk gagal diakses' keliru karena membalik maksud pengujian. Keping assertStatus(404) menggoda jika ingin menguji endpoint tidak ditemukan, tetapi kita menguji jalur sukses produk."
+  }
+},
         {
           kind: "step",
           id: "laravel-9-3",
@@ -4942,82 +5479,164 @@ export const laravelTrack: Track = {
           },
         },
         {
+  kind: "step",
+  id: "laravel-9-7",
+  title: "Menguji Kegagalan Validasi Form dengan assertSessionHasErrors",
+  explanation: "`$response->assertSessionHasErrors(['field'])` memeriksa apakah pengiriman formulir dengan data tidak lengkap atau cacat berhasil dicegat oleh lapisan validasi Laravel dan menghasilkan pesan kesalahan di sesi pengguna. Pengujian tidak hanya memastikan alur berhasil (*happy path*), melainkan juga menjamin bahwa data rusak tidak akan pernah lolos masuk ke basis data. Kenapa pengujian validasi sama pentingnya dengan fitur utama: jika aturan validasi diubah tanpa sengaja di masa depan, test ini akan langsung gagal di pipeline CI/CD sebelum bug bocor ke produksi. Kapan dipakai: pada seluruh Feature test yang menguji aksi pengiriman formulir POST/PUT. Jebakan umum: hanya memeriksa status respon `assertStatus(302)` tanpa memeriksa `assertSessionHasErrors()` — pengalihan 302 juga bisa terjadi jika otentikasi ditolak atau terjadi error server lain.",
+  example: {
+    code: "test('email wajib diisi saat login', function () {\n    $this->post('/login', [])->assertSessionHasErrors('email');\n});",
+    output: "   PASS  Tests\\Feature\\Auth\\LoginTest\n  ✓ email wajib diisi saat login                         0.28s\n\n  Tests:    1 passed (1 assertions)",
+    note: "Pengujian memvalidasi bahwa sesi benar-benar membawa galat untuk atribut email."
+  },
+  instruction: "Tulis pengujian Pest berjudul `nama wajib diisi saat registrasi` yang mengirim permintaan POST ke `/register` dengan array kosong `[]`, lalu pastikan sesi menyimpan pesan error validasi untuk field `'name'`.",
+  starterCode: "<?php\n// Tulis pengujian validasi Pest di sini\n",
+  language: "text",
+  tests: [
+    {
+      pattern: "test\\s*\\(\\s*['\"]nama wajib diisi saat registrasi['\"]",
+      message: "Tulis deklarasi test Pest dengan judul 'nama wajib diisi saat registrasi'."
+    },
+    {
+      pattern: "\\$this->post\\s*\\(\\s*['\"]/register['\"]\\s*,\\s*\\[\\]\\s*\\)",
+      message: "Kirimkan permintaan $this->post('/register', [])."
+    },
+    {
+      pattern: "->assertSessionHasErrors\\s*\\(\\s*['\"]name['\"]\\s*\\);",
+      message: "Rantaikan asersi penjamin error validasi ->assertSessionHasErrors('name')."
+    }
+  ],
+  solution: "<?php\ntest('nama wajib diisi saat registrasi', function () {\n    $this->post('/register', [])\n        ->assertSessionHasErrors('name');\n});",
+  susunKode: {
+    question: "Susun pengujian Pest yang memverifikasi kegagalan validasi nama kosong pada registrasi.",
+    potongan: [
+      "test('nama wajib diisi saat registrasi', function () {",
+      "    $this->post('/register', [])",
+      "        ->assertSessionHasErrors('name');",
+      "});"
+    ],
+    pengecoh: [
+      "test('nama boleh kosong saat registrasi', function () {",
+      "        ->assertSessionHasNoErrors();"
+    ],
+    pemisah: "\n",
+    explanation: "assertSessionHasErrors('name') memverifikasi bahwa pengiriman data formulir kosong menghasilkan galat validasi pada sesi. Keping 'nama boleh kosong' keliru karena membalik judul skenario uji. Keping assertSessionHasNoErrors menggoda jika salah membaca maksud tes, tetapi akan langsung gagal karena data kosong pasti ditolak validasi."
+  }
+},
+{
+  kind: "step",
+  id: "laravel-9-8",
+  title: "Menguji Pengiriman Email via Mail::fake & assertSent",
+  explanation: "`Mail::fake()` mengganti layanan pengiriman email dengan mock tiruan di memori selama sesi pengujian berlangsung. Dengan demikian, tidak ada email sungguhan yang terkirim ke internet, pengujian berjalan super cepat, dan kamu dapat memverifikasi secara presisi apakah kelas Mailable tertentu benar-benar dieksekusi menggunakan `Mail::assertSent(MailableClass::class)`. Kenapa teknik faking ini standar industri: menguji pengiriman email nyata akan menghabiskan kuota penyedia SMTP, memperlambat automated test, dan berisiko mengirim email spam uji ke alamat pengguna sungguhan jika database pengujian bocor. Kapan dipakai: pada seluruh test registrasi, pemesanan faktur, dan reset kata sandi. Jebakan umum: memanggil `Mail::fake()` setelah aksi Controller dipicu — faking harus dideklarasikan di awal test sebelum aksi yang memicu email dijalankan.",
+  example: {
+    code: "test('email verifikasi terkirim setelah registrasi', function () {\n    Mail::fake();\n    $this->post('/register', ['email' => 'member@test.com']);\n    Mail::assertSent(VerifyEmail::class);\n});",
+    output: "   PASS  Tests\\Feature\\RegistrationTest\n  ✓ email verifikasi terkirim setelah registrasi         0.24s\n\n  Tests:    1 passed (1 assertions)",
+    note: "Pengujian membuktikan email terkirim tanpa menyentuh server SMTP eksternal."
+  },
+  instruction: "Gunakan `Mail::fake()` untuk memalsukan pengirim email, lakukan permintaan `$this->post('/orders', ['item_id' => 1]);`, lalu pastikan mailable `InvoiceMail` benar-benar terkirim menggunakan `Mail::assertSent()`.",
+  starterCode: "<?php\nuse App\\Mail\\InvoiceMail;\nuse Illuminate\\Support\\Facades\\Mail;\n\ntest('email invoice terkirim setelah order', function () {\n    // Pasang Mail fake, kirim post, dan periksa assertSent di sini\n});",
+  language: "text",
+  tests: [
+    {
+      pattern: "Mail::fake\\s*\\(\\s*\\);",
+      message: "Pasang Mail::fake() di baris awal test untuk mencegah pengiriman email nyata."
+    },
+    {
+      pattern: "\\$this->post\\s*\\(\\s*['\"]/orders['\"]\\s*,\\s*\\[\\s*['\"]item_id['\"]\\s*=>\\s*1\\s*\\]\\s*\\);",
+      message: "Eksekusi permintaan $this->post('/orders', ['item_id' => 1])."
+    },
+    {
+      pattern: "Mail::assertSent\\s*\\(\\s*InvoiceMail::class\\s*\\);",
+      message: "Pastikan email terkirim dengan memanggil Mail::assertSent(InvoiceMail::class)."
+    }
+  ],
+  solution: "<?php\nuse App\\Mail\\InvoiceMail;\nuse Illuminate\\Support\\Facades\\Mail;\n\ntest('email invoice terkirim setelah order', function () {\n    Mail::fake();\n    $this->post('/orders', ['item_id' => 1]);\n    Mail::assertSent(InvoiceMail::class);\n});",
+  susunKode: {
+    question: "Susun pengujian pengiriman email InvoiceMail menggunakan Mail::fake dan assertSent.",
+    potongan: [
+      "    Mail::fake();",
+      "    $this->post('/orders', ['item_id' => 1]);",
+      "    Mail::assertSent(InvoiceMail::class);"
+    ],
+    pengecoh: [
+      "    Queue::fake();",
+      "    Mail::assertNotSent(InvoiceMail::class);"
+    ],
+    pemisah: "\n",
+    explanation: "Mail::fake memalsukan sistem pengiriman email di memori dan Mail::assertSent membuktikan mailable terkirim. Keping Queue::fake keliru karena memalsukan antrean umum alih-alih pengirim surat Mail. Keping assertNotSent menggoda karena memiliki struktur serupa tetapi justru memastikan email tidak terkirim."
+  }
+},
+        {
           kind: "quiz",
           id: "laravel-9-kuis",
-          title: "Kuis: Automated Testing dengan Pest",
+          title: "Kuis: Testing Modern dengan Pest PHP",
           questions: [
             {
               id: "l9-q1",
               type: "pilihan-ganda",
-              question: "Apakah nama testing framework modern bertata bahasa expressive yang menjadi standar baru pengujian di ekosistem Laravel?",
+              question: "Apakah nama framework pengujian modern bertata bahasa ekspresif yang menjadi standar default pengujian di ekosistem Laravel?",
               choices: [
-                "JUnit",
-                "Pest PHP",
                 "Jest",
-                "RSpec",
+                "Pest PHP",
+                "Mocha",
+                "PHPUnit Standard Class"
               ],
               answerIndex: 1,
-              explanation:
-                "Pest PHP berjalan di atas PHPUnit dengan gaya penulisan berbasis fungsi `test('...', function () { ... })` dan menjadi pilihan bawaan proyek Laravel baru. Pilihan Jest menggoda karena namanya mirip dan gaya penulisannya memang terinspirasi darinya — tetapi Jest untuk JavaScript. JUnit untuk Java dan RSpec untuk Ruby; ketiganya kerabat konseptual, bukan alat yang bisa kamu jalankan di proyek PHP.",
+              explanation: "Pest PHP adalah framework testing modern untuk PHP dengan sintaks ringkas berbasis fungsi (`test('...', function () { ... })`), dibangun di atas PHPUnit dan menjadi standar baru di proyek Laravel modern."
             },
             {
               id: "l9-q2",
               type: "pilihan-ganda",
-              question: "Apakah fungsi dari trait `RefreshDatabase` saat digunakan di dalam berkas pengujian?",
+              question: "Apakah fungsi dari trait `RefreshDatabase` saat digunakan di dalam berkas pengujian aplikasi Laravel?",
               choices: [
-                "Menghapus instalasi PHP dari sistem pengembang",
-                "Mereset dan membersihkan database pengujian sebelum dan sesudah setiap test dijalankan",
-                "Mengubah password database produksi",
-                "Membuat 1000 controller secara acak",
+                "Menghapus seluruh tabel dan membuat ulang database dari nol untuk setiap pengujian tanpa transaksi",
+                "Mengisi database pengujian dengan data dummy dari semua Seeder yang terdaftar",
+                "Mencegah eksekusi query penulisan ke database agar status database tetap bersih",
+                "Membungkus setiap pengujian di dalam transaksi database yang otomatis di-rollback setelah pengujian selesai agar status database selalu bersih"
               ],
-              answerIndex: 1,
-              explanation:
-                "`RefreshDatabase` membungkus setiap test dalam transaksi yang dibatalkan setelahnya, sehingga setiap test mulai dari keadaan yang sama persis. Pilihan \"mengubah password database produksi\" jelas keliru, tetapi kesalahpahaman yang nyata adalah menganggap trait ini opsional. Gejalanya khas dan membingungkan: test-mu lulus saat dijalankan sendirian tetapi gagal saat dijalankan bersama yang lain — atau sebaliknya, lulus karena data sisa test sebelumnya.",
+              answerIndex: 3,
+              explanation: "`RefreshDatabase` mengisolasi perubahan data per-test: ia menjalankan migrasi di awal, lalu membungkus setiap pengujian dalam transaksi database (`begin` & `rollback`), sehingga data uji tidak mencemari pengujian lainnya."
             },
             {
               id: "l9-q3",
               type: "pilihan-ganda",
-              question: "Metode apakah yang digunakan untuk mensimulasikan login pengguna di dalam test sebelum melakukan HTTP Request?",
+              question: "Metode apakah yang digunakan di dalam Feature Test untuk mensimulasikan login pengguna sebelum mengirimkan permintaan HTTP?",
               choices: [
-                "->$this->loginAs($user)",
-                "->$this->actingAs($user)",
-                "->$this->authUser($user)",
-                "->$this->setSession($user)",
+                "$this->loginAs($user)",
+                "$this->actingAs($user)",
+                "$this->authenticate($user)",
+                "$this->withSessionUser($user)"
               ],
               answerIndex: 1,
-              explanation:
-                "`$this->actingAs($user)` menyetel pengguna yang dianggap login untuk permintaan berikutnya, tanpa melewati formulir login sama sekali. Pilihan `loginAs()` sangat menggoda karena namanya lebih intuitif dan memang ada di beberapa framework lain. Yang perlu diperhatikan: urutannya penting — `actingAs()` harus dirantai SEBELUM `get()`, dan test negatif tanpa `actingAs` sama pentingnya untuk membuktikan penjagaannya bekerja.",
+              explanation: "`$this->actingAs($user)` mensimulasikan sesi pengguna yang sedang login untuk HTTP request berikutnya di lingkungan testing tanpa perlu mengirim kredensial login manual melalui formulir."
             },
             {
               id: "l9-q4",
               type: "pilihan-ganda",
-              question: "Mengapa kita menggunakan `Http::fake()` saat menguji fitur yang berhubungan dengan API pihak ketiga?",
+              question: "Mengapa pengembang menggunakan `Http::fake()` saat menguji fitur yang berinteraksi dengan API eksternal pihak ketiga (misalnya Payment Gateway)?",
               choices: [
-                "Agar pengujian tidak tergantung jaringan luar, lebih cepat, dan tidak mengikis kuota/biaya API asli",
-                "Agar API pihak ketiga bangkrut",
-                "Karena Pest PHP tidak mendukung koneksi jaringan internet",
-                "Agar password database dapat diubah via API",
+                "Agar pengujian tidak bergantung pada koneksi internet luar, berjalan instan, deterministik, dan tidak menghabiskan kuota transaksi nyata",
+                "Untuk mengunduh respon API asli dan menyimpannya secara permanen ke file konfigurasi",
+                "Karena framework testing Laravel menolak segala bentuk koneksi HTTP eksternal secara sepihak",
+                "Agar API eksternal otomatis melakukan transfer dana di lingkungan sandbox"
               ],
               answerIndex: 0,
-              explanation:
-                "`Http::fake()` mencegat panggilan keluar dan menjawabnya dengan respons yang kamu tentukan, sehingga test cepat, deterministik, dan tidak menghabiskan kuota API berbayar. Pilihan \"Pest tidak mendukung koneksi internet\" menggoda karena terdengar seperti keterbatasan teknis, padahal Pest bisa saja memanggil API asli — hanya saja test seperti itu gagal ketika internet mati, dan kegagalannya tidak memberitahumu apa pun tentang kodemu sendiri.",
+              explanation: "`Http::fake()` mencegat request HTTP keluar dan mengembalikan respons tiruan yang kita definisikan. Pengujian menjadi cepat, dapat diandalkan tanpa koneksi internet, dan terhindar dari pemotongan saldo atau efek samping di server eksternal."
             },
             {
               id: "l9-q5",
               type: "pilihan-ganda",
-              question: "Perintah Artisan terminal apakah yang digunakan untuk mengeksekusi seluruh pengujian aplikasi Laravel?",
+              question: "Perintah Artisan terminal apakah yang digunakan untuk mengeksekusi seluruh pengujian otomatis di proyek Laravel?",
               choices: [
-                "php artisan test",
-                "composer run-tests",
-                "php artisan execute:test",
+                "composer run-test",
                 "laravel test:run",
+                "php artisan test",
+                "php artisan test:all"
               ],
-              answerIndex: 0,
-              explanation:
-                "`php artisan test` menjalankan Pest atau PHPUnit sesuai proyeknya dan menampilkan hasilnya dengan format yang mudah dibaca. Pilihan `composer run-tests` menggoda karena beberapa proyek memang mendaftarkan skrip serupa di `composer.json` — tetapi itu kebiasaan tiap tim, bukan perintah standar. Yang berguna dihafal berikutnya adalah opsinya: `--filter` untuk menjalankan sebagian, dan `--coverage` untuk melihat berkas mana yang belum tersentuh test.",
-            },
-          ],
-        },
+              answerIndex: 2,
+              explanation: "`php artisan test` mengeksekusi runner Pest atau PHPUnit dengan antarmuka terminal yang rapi, ringkasan durasi, dan pelaporan status per-pengujian yang jelas."
+            }
+          ]
+        }
       ],
     },
   ],

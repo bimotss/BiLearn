@@ -74,7 +74,7 @@ export const javascriptTrack: Track = {
             "| **Network** | permintaan ke server | nanti, saat belajar `fetch` |\n" +
             "| **Sources** | berkas & breakpoint | saat butuh menghentikan kode di satu baris |\n\n" +
             "Membukanya: `F12`, atau `Ctrl+Shift+I` (Windows/Linux), atau `Cmd+Option+I` (macOS).\n\n" +
-            "## Analogi Dunia Nyata\n\n" +
+            "## JavaScript di Luar Browser: Node.js dan Terminal\n\nHari ini, JavaScript tidak hanya hidup di dalam browser. Melalui **Node.js** (dan runtime modern seperti Bun atau Deno), JavaScript bisa kamu jalankan langsung di terminal komputermu tanpa membutuhkan file HTML:\n\n```text\nterminal:\n$ node app.js\nHalo dari terminal server!\n```\n\n| Lingkungan | Wilayah Kerja Utama | Objek Global Khas |\n|---|---|---|\n| **Browser (Client)** | Manipulasi antarmuka, DOM, menangani klik pengguna | `window`, `document`, `localStorage` |\n| **Node.js (Server/CLI)** | Web server API, automasi terminal, membaca database | `process`, `global`, modul bawaan `fs` |\n\nPemisahan ini penting dipahami sejak awal agar kamu tidak kaget saat menemukan error `ReferenceError: document is not defined` ketika kode manipulasi halaman web dijalankan di lingkungan backend Node.js.\n\n## Analogi Dunia Nyata\n\n" +
             "Bayangkan sebuah toko. **HTML** adalah rak, meja kasir, dan papan namanya. **CSS** adalah warna dinding dan penataan lampunya. **JavaScript** adalah **pegawainya**: ia yang menghitung total belanja, menolak kartu yang kedaluwarsa, dan mengganti label \"stok habis\" saat barang terakhir terjual.\n\n" +
             "Karena itu urutan belajarnya begini: pegawai tidak bisa bekerja di toko yang raknya belum ada.\n\n" +
             "## Membaca Pesan Error Tanpa Panik\n\n" +
@@ -202,7 +202,7 @@ export const javascriptTrack: Track = {
           instruction:
             "Panel keluaran di bawah masih kosong. Buat satu variabel bernama `pesan` yang berisi teks `Halo BiLearn`, lalu cetak **isi variabel itu** ke konsol — bukan tulisan `pesan`.",
           starterCode: "// tulis kodenya di bawah ini\n",
-          language: "js",
+          language: "text",
           tests: [
             {
               pattern: "(const|let)\\s+pesan\\s*=\\s*['\"]Halo BiLearn['\"]",
@@ -516,7 +516,7 @@ export const javascriptTrack: Track = {
             "| `for (const item of daftar)` | hanya butuh isinya — **paling sering tepat** |\n" +
             "| `while (kondisi)` | jumlah putaran tidak diketahui, berhenti karena kondisi |\n\n" +
             "Dua kesalahan batas yang klasik: menulis `i <= daftar.length` (kelebihan satu putaran, hasilnya `undefined`), dan lupa mengubah kondisi di dalam `while` sehingga perulangannya tidak pernah berhenti dan tab browser membeku.\n\n" +
-            "## Analogi Dunia Nyata\n\n" +
+            "## Manipulasi String Harian yang Sering Digunakan\n\nTeks (string) adalah tipe data yang paling sering kamu olah dari input pengguna. Berikut method bawaan string yang wajib kamu kenali di dunia kerja:\n\n| Method | Fungsi | Contoh Hasil |\n|---|---|---|\n| `teks.trim()` | membuang spasi kosong di awal dan akhir teks | `' halo '.trim() -> 'halo'` |\n| `teks.toLowerCase()` | mengubah seluruh huruf menjadi kecil | `'ADMIN'.toLowerCase() -> 'admin'` |\n| `teks.toUpperCase()` | mengubah seluruh huruf menjadi kapital | `'sukses'.toUpperCase() -> 'SUKSES'` |\n| `teks.includes('kata')` | memeriksa apakah kata ada di dalam teks | `'kopi susu'.includes('kopi') -> true` |\n| `teks.slice(awal, akhir)` | mengambil potongan teks berdasarkan indeks | `'JavaScript'.slice(0, 4) -> 'Java'` |\n| `teks.split(',')` | memecah teks menjadi array berdasarkan pemisah | `'a,b,c'.split(',') -> ['a', 'b', 'c']` |\n| `teks.replace('a', 'b')` | mengganti kemunculan teks dengan teks baru | `'Rp10.000'.replace('Rp', '') -> '10.000'` |\n\n## Analogi Dunia Nyata\n\n" +
             "Program itu seperti **resep masakan**. Variabel adalah bahan yang sudah ditakar dan diberi label. Kondisi adalah instruksi bercabang — \"kalau kuahnya kurang asin, tambahkan garam\". Perulangan adalah \"aduk sepuluh kali\". Dan resep dibaca dari atas ke bawah: langkah kelima tidak bisa memakai bahan yang baru disiapkan di langkah kesembilan. Itu sebabnya urutan penulisan kode benar-benar menentukan.\n\n" +
             "## Jebakan yang Sering Terjadi\n\n" +
             "1. **Memakai `==`.** Konversi diam-diamnya membuat `0 == ''` bernilai benar.\n" +
@@ -632,7 +632,7 @@ export const javascriptTrack: Track = {
           id: "js-1-3",
           title: "=== bukan ==",
           explanation:
-            "`==` melakukan konversi tipe diam-diam: `'5' == 5` bernilai `true`, dan `0 == ''` juga `true`. Ini sumber bug yang sulit dilacak. `===` membandingkan **nilai dan tipe** tanpa konversi, jadi `'5' === 5` bernilai `false`. Aturannya sederhana dan hampir tanpa pengecualian: **selalu pakai `===`**.",
+            "Operator `==` melakukan konversi tipe diam-diam (type coercion) sebelum membandingkan: `'5' == 5` bernilai `true`, dan `0 == ''` atau `false == '0'` juga menghasilkan `true`. Ini sumber bug legendaris di JavaScript yang sangat sulit dilacak saat aplikasi membesar. Sebaliknya, operator `===` (strict equality) membandingkan **nilai sekaligus tipe data** tanpa pemaksaan konversi apa pun, sehingga `'5' === 5` langsung bernilai `false`. Di dunia kerja profesional, aturan linter seperti `eqeqeq` di ESLint mewajibkan penggunaan `===` hampir tanpa pengecualian demi mencegah celah logika tak terduga.",
           example: {
             code: "console.log(1 == '1');    // konversi dulu\nconsole.log(1 === '1');   // bandingkan apa adanya\nconsole.log(0 == false);\nconsole.log(0 === false);",
             output: "true\nfalse\ntrue\nfalse",
@@ -780,7 +780,7 @@ export const javascriptTrack: Track = {
           id: "js-1-6",
           title: "Truthy dan falsy",
           explanation:
-            "Di dalam `if`, JavaScript mengubah nilai apa pun menjadi true/false. Yang **falsy** hanya ada enam: `false`, `0`, `''` (string kosong), `null`, `undefined`, `NaN`. Sisanya truthy — termasuk `'0'`, `'false'`, `[]`, dan `{}`. Array kosong bernilai truthy adalah jebakan yang sering mengejutkan pemula.",
+            "Setiap nilai di JavaScript secara otomatis dievaluasi menjadi boolean saat ditaruh di dalam pengujian kondisi seperti `if`. Hanya ada **enam nilai falsy** di JavaScript: `false`, `0`, `''` (string kosong tanpa spasi), `null`, `undefined`, dan `NaN`. **Semua nilai di luar keenam nilai ini adalah truthy** — termasuk string `'0'`, array kosong `[]`, dan object kosong `{}`. Ini sumber jebakan klasik bagi pemula: memeriksa ketersediaan daftar dengan `if (daftar)` akan selalu bernilai true meskipun daftarnya kosong melompong; gunakan `if (daftar.length > 0)` untuk memeriksa array secara aman di kode nyata.",
           example: {
             code: "console.log(Boolean('teks'));   // string berisi\nconsole.log(Boolean(null));\nconsole.log(Boolean('0'));      // string '0', bukan angka!\nconsole.log(Boolean({}));       // object kosong",
             output: "true\nfalse\ntrue\ntrue",
@@ -946,6 +946,96 @@ export const javascriptTrack: Track = {
             pemisah: "\n",
             explanation:
               "Ternary membaca seperti kalimat: syarat, tanda tanya, hasil bila benar, titik dua, hasil bila salah. Urutan itu tetap dan tidak boleh dibalik. Keping yang menukar kedua hasilnya adalah kekeliruan yang sering lolos dari mata karena bentuknya tetap rapi — programnya jalan, hanya jawabannya terbalik, dan baru ketahuan saat ada yang protes. Keping tanpa tanda kutip mengubah kedua hasil menjadi nama variabel yang tidak pernah dibuat sehingga muncul `ReferenceError`. Kedua keping ber-`if` menggoda karena itulah bentuk yang paling kamu kenal, tapi `if` adalah pernyataan yang tidak menghasilkan nilai: ia tidak bisa mengisi sebuah `const`, dan versi yang langsung mencetak membuat hasilnya tidak tersimpan di mana pun untuk dipakai lagi.",
+          },
+        },
+        {
+          kind: "step",
+          id: "js-1-9",
+          title: "Manipulasi String: Membersihkan Input Teks",
+          explanation:
+            "Data yang diinputkan pengguna melalui formulir web hampir selalu 'kotor': mengandung spasi tidak sengaja di awal atau akhir kata, serta kombinasi huruf besar dan kecil yang tidak seragam. Method `trim()` menghapus karakter spasi kosong di kedua ujung string tanpa mengubah karakter di tengah. Dipadukan dengan `toLowerCase()` untuk menyeragamkan huruf kecil, teknik sanitasi string ini wajib diterapkan sebelum kamu mencocokkan email, username, atau kode kupon diskon ke database agar pencarian data tidak gagal akibat perbedaan sepele spasi dan kapitalisasi.",
+          example: {
+            code: "const inputUser = \"   Halo Dunia!   \\n\";\nconst bersih = inputUser.trim().toLowerCase();\nconsole.log(bersih);",
+            output: "halo dunia!",
+            note: "Method string mengembalikan string baru (tidak memutasi string aslinya).",
+          },
+          instruction:
+            "Diberikan variabel `emailInput` berisi `'   Admin@BiLearn.id   '`. Bersihkan spasi di awal/akhirnya dan ubah seluruh hurufnya menjadi huruf kecil menggunakan perantaian method (`trim().toLowerCase()`), lalu simpan ke variabel `emailBersih` dan cetak dengan `console.log`.",
+          starterCode: "const emailInput = '   Admin@BiLearn.id   ';\n// bersihkan dan simpan ke emailBersih di bawah\n\n",
+          language: "js",
+          tests: [
+            {
+              pattern: "const\\s+emailBersih\\s*=\\s*emailInput\\.trim\\(\\)\\.toLowerCase\\(\\)|const\\s+emailBersih\\s*=\\s*emailInput\\.toLowerCase\\(\\)\\.trim\\(\\)",
+              message: "Gunakan emailInput.trim().toLowerCase() dan simpan ke const emailBersih.",
+            },
+            {
+              pattern: "console\\.log\\(\\s*emailBersih\\s*\\)",
+              message: "Tampilkan hasilnya dengan console.log(emailBersih);",
+            },
+          ],
+          solution:
+            "const emailInput = '   Admin@BiLearn.id   ';\nconst emailBersih = emailInput.trim().toLowerCase();\nconsole.log(emailBersih);",
+          susunKode: {
+            question:
+              "Susun pembersihan input email pengguna dengan menghapus spasi liar dan menstandarkan huruf kecil, lalu cetak hasilnya.",
+            potongan: [
+              "const emailInput = '   Admin@BiLearn.id   ';",
+              "const emailBersih = emailInput.trim().toLowerCase();",
+              "console.log(emailBersih);",
+            ],
+            pengecoh: [
+              "const emailBersih = emailInput.strip().lower();",
+              "const emailBersih = emailInput.toLowerCase();",
+              "console.log(emailInput);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "JavaScript menggunakan method `trim()` untuk memangkas spasi dan `toLowerCase()` untuk huruf kecil. Keping `.strip().lower()` adalah jebakan sintaks Python yang menghasilkan `TypeError` di JavaScript. Keping yang melewatkan `trim()` keliru karena menyisakan spasi di awal dan akhir yang merusak pencarian email. Keping `console.log(emailInput)` keliru mencetak string kotor aslinya alih-alih data yang telah dibersihkan.",
+          },
+        },
+        {
+          kind: "step",
+          id: "js-1-10",
+          title: "Konversi Eksplisit: Mengubah Tipe Data Secara Sadar",
+          explanation:
+            "Input dari elemen formulir HTML (`<input>`) selalu dibaca oleh JavaScript sebagai tipe `string`, meskipun pengguna mengetikkan angka. Jika kamu langsung menjumlahkannya dengan operator `+`, JavaScript akan melakukan penggabungan string (concatenation) bukannya penjumlahan matematika: `'50' + 10` menghasilkan `'5010'`! Untuk menghindari bug kalkulasi fatal ini, biasakan melakukan konversi tipe data secara eksplisit menggunakan fungsi `Number()` untuk angka dan `String()` untuk teks. Ini menjamin tipe datamu dapat diprediksi tanpa mengandalkan implicit type coercion yang berbahaya.",
+          example: {
+            code: "const teksHarga = \"25000\";\nconst angkaHarga = Number(teksHarga);\nconsole.log(angkaHarga + 5000);",
+            output: "30000",
+            note: "Jika string tidak valid berisi angka, Number() menghasilkan NaN (Not a Number).",
+          },
+          instruction:
+            "Diberikan `const inputQty = '25'`. Ubah nilainya menjadi angka menggunakan konversi eksplisit `Number(inputQty)` dan simpan ke variabel `const jumlah`. Tampilkan nilai `jumlah + 5` dengan `console.log`.",
+          starterCode: "const inputQty = '25';\n// konversi secara eksplisit di sini\n\n",
+          language: "js",
+          tests: [
+            {
+              pattern: "const\\s+jumlah\\s*=\\s*Number\\(\\s*inputQty\\s*\\)",
+              message: "Konversikan inputQty ke tipe angka dengan const jumlah = Number(inputQty);",
+            },
+            {
+              pattern: "console\\.log\\(\\s*jumlah\\s*\\+\\s*5\\s*\\)",
+              message: "Cetak hasil penjumlahan dengan console.log(jumlah + 5);",
+            },
+          ],
+          solution:
+            "const inputQty = '25';\nconst jumlah = Number(inputQty);\nconsole.log(jumlah + 5);",
+          susunKode: {
+            question:
+              "Susun konversi string input angka formulir menjadi bilangan bulat dan tambahkan nilainya dengan 5.",
+            potongan: [
+              "const inputQty = '25';",
+              "const jumlah = Number(inputQty);",
+              "console.log(jumlah + 5);",
+            ],
+            pengecoh: [
+              "const jumlah = String(inputQty);",
+              "const jumlah = inputQty + 5;",
+              "console.log(inputQty + 5);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Fungsi `Number(nilai)` mengubah string menjadi angka murni sebelum operasi aritmetika dilakukan. Keping `String()` keliru arah konversi karena justru mempertahankan tipe teks. Keping `inputQty + 5` adalah jebakan penggabungan teks yang menghasilkan string \"255\" bukannya angka 30. Keping `console.log(inputQty + 5)` juga menghasilkan string akibat type coercion liar.",
           },
         },
         {
@@ -1538,6 +1628,56 @@ export const javascriptTrack: Track = {
           },
         },
         {
+          kind: "step",
+          id: "js-2-8",
+          title: "Arrow Function: Return Implisit vs Kurung Kurawal",
+          explanation:
+            "Arrow function memiliki fitur ringkas bernama *implicit return*: jika fungsi hanya berupa satu baris ekspresi tanpa kurung kurawal, nilainya otomatis dikembalikan tanpa kata kunci `return`, contohnya `(a, b) => a + b`. Namun, jebakan terbesar bagi pemula terjadi saat menambahkan tanda kurung kurawal `{}`: begitu kurung kurawal dibuka, fungsi berubah menjadi blok biasa dan pengembalian otomatis langsung hilang! Jika kamu menulis `(a, b) => { a + b }` tanpa kata kunci `return`, fungsi tersebut akan mengembalikan `undefined`. Ini adalah sumber bug nomor satu yang sering ditemui pemula di React saat merender komponen atau melakukan transformasi array.",
+          example: {
+            code: "const kaliBenar = (n) => n * 2;          // implicit return\nconst kaliSalah = (n) => { n * 2 };       // ❌ mengembalikan undefined!\nconst kaliBlok  = (n) => { return n * 2 }; // ✅ explicit return\n\nconsole.log(kaliBenar(5));\nconsole.log(kaliSalah(5));",
+            output: "10\nundefined",
+            note: "Kurung kurawal {} membatalkan implicit return; kamu wajib mengetik return secara eksplisit.",
+          },
+          instruction:
+            "Tulis fungsi arrow `hitungDiskon` yang menerima parameter `harga`. Di dalam blok kurung kurawal `{ ... }`, lakukan perhitungan dan kembalikan nilainya secara eksplisit memakai kata kunci `return`: kembalikan `harga * 0.8`. Tampilkan hasil pemanggilan `hitungDiskon(100000)`.",
+          starterCode: "// tulis fungsi arrow hitungDiskon di sini\n",
+          language: "js",
+          tests: [
+            {
+              pattern: "const\\s+hitungDiskon\\s*=\\s*\\(?\\s*harga\\s*\\)?\\s*=>\\s*\\{",
+              message: "Deklarasikan const hitungDiskon = (harga) => { ... } dengan blok kurung kurawal.",
+            },
+            {
+              pattern: "return\\s+harga\\s*\\*\\s*0\\.8",
+              message: "Di dalam kurung kurawal, wajib gunakan kata kunci return harga * 0.8;",
+            },
+            {
+              pattern: "console\\.log\\(\\s*hitungDiskon\\(\\s*100000\\s*\\)\\s*\\)",
+              message: "Tampilkan console.log(hitungDiskon(100000));",
+            },
+          ],
+          solution:
+            "const hitungDiskon = (harga) => {\n  return harga * 0.8;\n};\n\nconsole.log(hitungDiskon(100000));",
+          susunKode: {
+            question:
+              "Susun fungsi arrow dengan blok kurung kurawal yang mengembalikan harga setelah diskon 20% secara eksplisit, lalu uji fungsinya.",
+            potongan: [
+              "const hitungDiskon = (harga) => {",
+              "  return harga * 0.8;",
+              "};",
+              "console.log(hitungDiskon(100000));",
+            ],
+            pengecoh: [
+              "  console.log(harga * 0.8);",
+              "function hitungDiskon(harga) => {",
+              "console.log(hitungDiskon);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Ketika arrow function menggunakan kurung kurawal `{}`, kata kunci `return` wajib ditulis eksplisit. Keping `console.log(harga * 0.8);` adalah jebakan klasik pemula: mencetak ke konsol di dalam fungsi bukanlah mengembalikan (*return*) nilai, sehingga pemanggil fungsi tetap menerima `undefined`. Keping `function ... =>` keliru karena mencampur sintaks fungsi konvensional dengan tanda panah arrow. Keping `console.log(hitungDiskon)` mencetak definisi fungsi bukannya hasil pemanggilannya.",
+          },
+        },
+        {
           kind: "quiz",
           id: "js-2-kuis",
           title: "Kuis: Fungsi",
@@ -1822,7 +1962,7 @@ export const javascriptTrack: Track = {
           id: "js-3-3",
           title: "filter: menyaring elemen",
           explanation:
-            "`filter` mengembalikan array baru berisi elemen yang callback-nya bernilai **true**. Panjangnya bisa lebih pendek dari aslinya. Perbedaan mendasar dengan `map`: filter memilih, map mengubah. Kalau kamu butuh keduanya, rantaikan: `.filter(...).map(...)`.",
+            "`filter` menelusuri array dan mengembalikan **array baru** yang hanya berisi elemen-elemen saat fungsi callback-nya menghasilkan nilai `true`. Array asli sama sekali tidak berubah (tidak bermutasi), dan panjang array baru bisa lebih pendek atau bahkan kosong jika tidak ada yang cocok. Perbedaan mendasarnya dari `map`: `map` selalu menghasilkan jumlah elemen yang persis sama dengan mentransformasi nilai, sedangkan `filter` menyeleksi atau menyaring tanpa mengubah bentuk nilainya. Di dunia kerja, kedua method ini sangat lazim dirangkai bersama: `.filter(...).map(...)` untuk menyaring data lalu memformat tampilannya.",
           example: {
             code: "const nilai = [45, 80, 92, 60];\n\nconst lulus = nilai.filter((n) => n >= 70);\n\nconsole.log(lulus);\nconsole.log(lulus.length);   // panjangnya bisa berbeda dari aslinya",
             output: "[80,92]\n2",
@@ -1872,7 +2012,7 @@ export const javascriptTrack: Track = {
           id: "js-3-4",
           title: "reduce: meringkas jadi satu nilai",
           explanation:
-            "`reduce` memampatkan array menjadi **satu nilai**. Dua argumen callback-nya: nilai terkumpul (accumulator) dan elemen saat ini. Argumen kedua reduce adalah nilai awal — **selalu tulis nilai awalnya**, karena reduce pada array kosong tanpa nilai awal akan melempar error. Ini pertanyaan interview yang sangat umum.",
+            "`reduce` memproses array dari kiri ke kanan untuk meringkasnya menjadi **satu nilai akhir tunggal** — bisa berupa angka akumulasi, string gabungan, atau bahkan object baru. Callback `reduce` menerima dua parameter utama: akumulator (nilai terkumpul sejauh ini) dan elemen saat ini. Argumen kedua setelah fungsi callback adalah **nilai awal** (initial value). Selalu berikan nilai awal secara eksplisit (seperti `0` untuk penjumlahan atau `{}` untuk pengelompokan), karena memanggil `reduce` pada array kosong tanpa nilai awal akan langsung melempar error fatal `TypeError: Reduce of empty array with no initial value` di aplikasi produksi.",
           example: {
             code: "const angka = [5, 10, 15];\n\n// (terkumpul, elemenSaatIni) => hasil baru,  nilai awal 0\nconst jumlah = angka.reduce((total, n) => total + n, 0);\n\nconsole.log(jumlah);\n// jalannya: 0+5=5 → 5+10=15 → 15+15=30",
             output: "30",
@@ -1984,7 +2124,7 @@ export const javascriptTrack: Track = {
           id: "js-3-6",
           title: "Destructuring",
           explanation:
-            "Destructuring mengambil beberapa nilai sekaligus: `const { nama, umur } = user`. Sangat sering dipakai untuk props di React dan hasil API. Untuk array, urutannya yang menentukan: `const [pertama, kedua] = arr`. Nama variabel pada object harus **cocok dengan nama key**.",
+            "Destructuring memungkinkanmu membongkar properti object atau elemen array langsung ke dalam variabel individual dalam satu baris ringkas: `const { nama, umur } = user`. Sintaks ini menjadi standar baku di industri, terutama saat menerima `props` komponen di React dan memproses respons data dari API backend. Pada object destructuring, nama variabel **wajib cocok dengan nama properti** (key), meskipun kamu bisa memberi alias baru dengan titik dua seperti `{ nama: namaPengguna }`. Sementara pada array destructuring, pencocokan ditentukan murni oleh urutan posisi indeksnya: `const [pertama, kedua] = daftar`.",
           example: {
             code: "const produk = { nama: 'Kopi', harga: 85000, stok: 4 };\n\n// cara panjang\nconst nama1 = produk.nama;\n\n// destructuring: ambil beberapa sekaligus\nconst { nama, harga } = produk;\nconsole.log(nama, harga);\n\n// array pakai urutan, bukan nama\nconst [pertama, kedua] = ['a', 'b'];\nconsole.log(pertama, kedua);",
             output: "Kopi 85000\na b",
@@ -2268,6 +2408,199 @@ export const javascriptTrack: Track = {
             pemisah: "\n",
             explanation:
               "Object disimpan sebagai rujukan, jadi menyalinnya butuh pembuatan object baru — dan tiga titik spread itulah yang menyalin isinya, lalu properti yang kamu sebut sesudahnya menimpa nilai lama. Keping `{ pesanan, jumlah: 5 }` tanpa tiga titik adalah kekeliruan yang sering terjadi karena bentuknya nyaris sama: hasilnya object bersarang, `pesananBaru.produk` menjadi `undefined`, dan tidak ada error yang menunjukkannya. Keping `pesanan.jumlah = 5;` menggoda karena paling pendek dan langsung berhasil di layar, padahal ia merusak object yang justru diminta tetap utuh — pola yang sering menjadi bug di aplikasi yang datanya dipakai banyak bagian sekaligus. Keping `{ jumlah: 5 }` membuat object baru tapi kehilangan `produk`.",
+          },
+        },
+        {
+          kind: "step",
+          id: "js-3-11",
+          title: "JSON: parse dan stringify",
+          explanation:
+            "`JSON` (JavaScript Object Notation) adalah format teks universal untuk pertukaran data antara browser dan server web. Method `JSON.stringify(data)` mengubah object atau array JavaScript menjadi teks JSON yang siap dikirim lewat jaringan. Sebaliknya, `JSON.parse(teks)` mengubah kembali teks JSON yang diterima dari server menjadi object JavaScript nyata yang bisa diakses propertinya. Jebakan umum: teks JSON **wajib memakai tanda kutip ganda** `\"` untuk nama properti dan nilai string, serta tidak mendukung fungsi atau nilai `undefined`. Di dunia kerja, kamu akan memakai kedua method ini setiap hari saat berkomunikasi dengan REST API dan menyimpan data ke penyimpanan lokal.",
+          example: {
+            code: "const produk = { id: 101, judul: 'Buku', harga: 50000 };\nconst jsonTeks = JSON.stringify(produk);\nconsole.log(typeof jsonTeks);\nconst balikObj = JSON.parse(jsonTeks);\nconsole.log(balikObj.judul);",
+            output: "string\nBuku",
+            note: "JSON.stringify menghasilkan string, sedangkan JSON.parse mengembalikannya jadi object.",
+          },
+          instruction:
+            "Ubah object `transaksi` menjadi teks JSON memakai `JSON.stringify` dan simpan di `const teksJson`. Lalu ubah kembali `teksJson` menjadi object memakai `JSON.parse` dan simpan di `const hasilObj`. Tampilkan kedua variabel tersebut.",
+          starterCode: "const transaksi = { id: 'TRX-01', total: 150000 };\n\n",
+          language: "js",
+          tests: [
+            {
+              pattern: "const\\s+teksJson\\s*=\\s*JSON\\.stringify\\(\\s*transaksi\\s*\\)",
+              message: "Gunakan JSON.stringify(transaksi) untuk membuat teks JSON.",
+            },
+            {
+              pattern: "const\\s+hasilObj\\s*=\\s*JSON\\.parse\\(\\s*teksJson\\s*\\)",
+              message: "Gunakan JSON.parse(teksJson) untuk mengubah kembali menjadi object.",
+            },
+            {
+              pattern: "console\\.log\\(\\s*teksJson\\s*\\)",
+              message: "Tampilkan teksJson.",
+            },
+            {
+              pattern: "console\\.log\\(\\s*hasilObj\\s*\\)",
+              message: "Tampilkan hasilObj.",
+            },
+          ],
+          solution:
+            "const transaksi = { id: 'TRX-01', total: 150000 };\n\nconst teksJson = JSON.stringify(transaksi);\nconst hasilObj = JSON.parse(teksJson);\nconsole.log(teksJson);\nconsole.log(hasilObj);",
+          susunKode: {
+            question:
+              "Susun kode yang mengubah object `transaksi` menjadi string JSON, mengembalikannya lagi menjadi object, lalu mencetak keduanya.",
+            potongan: [
+              "const teksJson = JSON.stringify(transaksi);",
+              "const hasilObj = JSON.parse(teksJson);",
+              "console.log(teksJson);",
+              "console.log(hasilObj);",
+            ],
+            pengecoh: [
+              "const teksJson = JSON.parse(transaksi);",
+              "const hasilObj = JSON.stringify(teksJson);",
+              "console.log(transaksi.toString());",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`JSON.stringify` mengubah object menjadi teks, sedangkan `JSON.parse` membedah teks kembali menjadi object. Keping `JSON.parse(transaksi)` adalah kekeliruan yang sangat sering terjadi karena namanya terbalik: mem-parse object langsung akan mengubahnya jadi string `[object Object]` lalu melempar `SyntaxError`. Keping `JSON.stringify(teksJson)` menggoda karena urutannya mirip, tapi ia malah membungkus string menjadi string berlapis kutip dua ganda. Keping `transaksi.toString()` keliru karena hasilnya hanya teks `[object Object]` yang tidak memuat data properti aslinya.",
+          },
+        },
+        {
+          kind: "step",
+          id: "js-3-12",
+          title: "Set: Menghapus Duplikat Seketika",
+          explanation:
+            "`Set` adalah struktur data bawaan JavaScript yang hanya menyimpan nilai-nilai unik tanpa duplikasi. Jika kamu memasukkan nilai yang sudah ada sebelumnya ke dalam `Set`, nilai duplikat tersebut akan diabaikan secara otomatis. Pola industri paling populer untuk membuang duplikasi dari sebuah array adalah menggabungkan `new Set(array)` dengan operator spread: `[...new Set(array)]`. Cara ini jauh lebih cepat dan ringkas dibanding menyaring manual dengan perulangan atau kombinasi `filter` dan `indexOf`. Di dunia kerja, teknik ini dipakai setiap kali membersihkan data kategori produk, daftar email pengguna, atau tag artikel yang dikirim backend.",
+          example: {
+            code: "const angkaAcak = [1, 2, 2, 3, 4, 4, 5];\nconst unik = [...new Set(angkaAcak)];\nconsole.log(unik);\nconsole.log(unik.length);",
+            output: "[1,2,3,4,5]\n5",
+            note: "new Set otomatis membuang duplikat, dan spread [...] mengubah Set kembali menjadi array.",
+          },
+          instruction:
+            "Buat `const tagUnik` yang berisi daftar tag tanpa duplikat dengan memanfaatkan `new Set` dan operator spread `[...]`. Tampilkan `tagUnik`.",
+          starterCode: "const tagArtikel = ['html', 'css', 'javascript', 'css', 'html'];\n\n",
+          language: "js",
+          tests: [
+            {
+              pattern: "const\\s+tagUnik\\s*=\\s*\\[\\s*\\.\\.\\.\\s*new\\s+Set\\(\\s*tagArtikel\\s*\\)\\s*\\]",
+              message: "Gunakan const tagUnik = [...new Set(tagArtikel)]; untuk membuang data duplikat.",
+            },
+            {
+              pattern: "console\\.log\\(\\s*tagUnik\\s*\\)",
+              message: "Tampilkan tagUnik dengan console.log(tagUnik);",
+            },
+          ],
+          solution:
+            "const tagArtikel = ['html', 'css', 'javascript', 'css', 'html'];\n\nconst tagUnik = [...new Set(tagArtikel)];\nconsole.log(tagUnik);",
+          susunKode: {
+            question:
+              "Susun kode yang membuang elemen duplikat dari array `tagArtikel` memakai `new Set` dan mengembalikannya ke bentuk array, lalu mencetaknya.",
+            potongan: [
+              "const tagArtikel = ['html', 'css', 'javascript', 'css', 'html'];",
+              "const tagUnik = [...new Set(tagArtikel)];",
+              "console.log(tagUnik);",
+            ],
+            pengecoh: [
+              "const tagUnik = new Set(tagArtikel);",
+              "const tagUnik = [...tagArtikel];",
+              "console.log(tagArtikel);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`new Set` mengumpulkan nilai unik, lalu kurung siku dan titik tiga spread `[...new Set(...)]` merangkainya kembali menjadi array normal. Keping tanpa kurung siku pembungkus menggoda karena instans `Set` memang sudah membuang duplikat, tetapi ia tetap bertipe `Set` yang tidak memiliki method array seperti `.map()` atau `.slice()`. Keping `[...tagArtikel]` adalah kekeliruan yang sering terjadi karena hanya menyalin array tanpa membuang duplikatnya sama sekali. Keping `console.log(tagArtikel)` adalah jebakan lalai yang mencetak array asli yang masih memuat duplikat.",
+          },
+        },
+        {
+          kind: "step",
+          id: "js-3-13",
+          title: "slice vs splice: Salinan Aman vs Mutasi Merusak",
+          explanation:
+            "Dua method array ini memiliki nama yang sangat mirip namun memiliki sifat yang bertolak belakang secara drastis. Method `arr.slice(awal, akhir)` mengambil potongan elemen dan mengembalikannya sebagai **array baru** tanpa mengubah array aslinya sama sekali (non-mutating). Sebaliknya, `arr.splice(indeks, jumlah)` memotong dan membuang elemen langsung dari **array aslinya di tempat** (mutating). Di dunia kerja modern — khususnya saat mengelola state di React atau Redux — kamu **dilarang keras** memutasi data asli secara langsung. Memahami perbedaan `slice` yang aman dan `splice` yang memutasi adalah fondasi arsitektur data immutable.",
+          example: {
+            code: "const angka = [10, 20, 30, 40];\nconst salinan = angka.slice(1, 3); // salinan aman: [20, 30]\nconsole.log(salinan);\nconsole.log(angka);               // angka asli tetap utuh: [10, 20, 30, 40]",
+            output: "[20, 30]\n[10, 20, 30, 40]",
+            note: "slice tidak mengubah array asli; splice merombak array aslinya.",
+          },
+          instruction:
+            "Diberikan `const antrean = ['Ali', 'Budi', 'Citra', 'Dewi']`. Gunakan `slice(0, 2)` untuk mengambil dua orang terdepan tanpa merusak array asli, simpan ke `const depan`, lalu cetak `depan`.",
+          starterCode: "const antrean = ['Ali', 'Budi', 'Citra', 'Dewi'];\n// potong 2 orang pertama tanpa merusak antrean asli\n\n",
+          language: "js",
+          tests: [
+            {
+              pattern: "const\\s+depan\\s*=\\s*antrean\\.slice\\(\\s*0\\s*,\\s*2\\s*\\)",
+              message: "Gunakan const depan = antrean.slice(0, 2);",
+            },
+            {
+              pattern: "console\\.log\\(\\s*depan\\s*\\)",
+              message: "Tampilkan hasilnya dengan console.log(depan);",
+            },
+          ],
+          solution:
+            "const antrean = ['Ali', 'Budi', 'Citra', 'Dewi'];\nconst depan = antrean.slice(0, 2);\nconsole.log(depan);",
+          susunKode: {
+            question:
+              "Susun pengambilan 2 elemen terdepan dari antrean menggunakan method non-mutasi slice.",
+            potongan: [
+              "const antrean = ['Ali', 'Budi', 'Citra', 'Dewi'];",
+              "const depan = antrean.slice(0, 2);",
+              "console.log(depan);",
+            ],
+            pengecoh: [
+              "const depan = antrean.splice(0, 2);",
+              "const depan = antrean.slice(2);",
+              "console.log(antrean);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`slice(0, 2)` menyalin 2 elemen pertama ke array baru secara murni. Keping `splice(0, 2)` menggoda karena mengembalikan potongan yang sama, tetapi ia merusak array antrean asli dengan menghapus isinya secara permanen. Keping `slice(2)` keliru memotong dari indeks ke-2 hingga akhir. Keping `console.log(antrean)` salah mencetak array awal bukan variabel hasil potongannya.",
+          },
+        },
+        {
+          kind: "step",
+          id: "js-3-14",
+          title: "some dan every: Memeriksa Syarat Kumpulan Data",
+          explanation:
+            "Ketika memvalidasi sekumpulan data, kamu sering perlu tahu: 'Apakah ada minimal satu item yang memenuhi syarat?' atau 'Apakah seluruh item tanpa kecuali memenuhi syarat?'. Di JavaScript, kamu tidak perlu membuat loop `for` manual dengan flag boolean. Method `arr.some(fn)` mengembalikan `true` jika **minimal satu** elemen lolos pengujian. Sebaliknya, `arr.every(fn)` hanya mengembalikan `true` jika **seluruh** elemen lolos. Di dunia kerja nyata, `some` sering dipakai untuk mendeteksi apakah keranjang belanja memiliki barang pecah belah, sedangkan `every` dipakai untuk memvalidasi bahwa semua kolom input formulir telah diisi sebelum tombol checkout aktif.",
+          example: {
+            code: "const nilai = [80, 85, 90, 45];\nconst adaYangRemedial = nilai.some(n => n < 60);\nconst semuaLulus = nilai.every(n => n >= 60);\nconsole.log(adaYangRemedial); // true\nconsole.log(semuaLulus);       // false",
+            output: "true\nfalse",
+            note: "some berhenti mengecek begitu menemukan satu true; every berhenti begitu menemukan satu false.",
+          },
+          instruction:
+            "Diberikan array umur pengunjung `const usiaPengunjung = [18, 22, 16, 25]`. Gunakan method `some` untuk memeriksa apakah ada pengunjung di bawah 17 tahun (`u < 17`), simpan hasilnya ke variabel `const adaAnakKecil`, dan cetak nilainya dengan `console.log`.",
+          starterCode: "const usiaPengunjung = [18, 22, 16, 25];\n// periksa dengan method some di sini\n\n",
+          language: "js",
+          tests: [
+            {
+              pattern: "const\\s+adaAnakKecil\\s*=\\s*usiaPengunjung\\.some\\(",
+              message: "Gunakan usiaPengunjung.some(...) dan simpan ke const adaAnakKecil.",
+            },
+            {
+              pattern: "<\\s*17",
+              message: "Periksa kondisi pengunjung di bawah 17 tahun (u < 17).",
+            },
+            {
+              pattern: "console\\.log\\(\\s*adaAnakKecil\\s*\\)",
+              message: "Cetak hasilnya dengan console.log(adaAnakKecil);",
+            },
+          ],
+          solution:
+            "const usiaPengunjung = [18, 22, 16, 25];\nconst adaAnakKecil = usiaPengunjung.some((u) => u < 17);\nconsole.log(adaAnakKecil);",
+          susunKode: {
+            question:
+              "Susun pengecekan apakah sekumpulan pengunjung memuat minimal satu orang yang berusia di bawah 17 tahun menggunakan method some.",
+            potongan: [
+              "const usiaPengunjung = [18, 22, 16, 25];",
+              "const adaAnakKecil = usiaPengunjung.some((u) => u < 17);",
+              "console.log(adaAnakKecil);",
+            ],
+            pengecoh: [
+              "const adaAnakKecil = usiaPengunjung.every((u) => u < 17);",
+              "const adaAnakKecil = usiaPengunjung.find((u) => u < 17);",
+              "console.log(usiaPengunjung);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`some` mengembalikan boolean `true` jika setidaknya ada satu elemen yang lolos kondisi `u < 17`. Keping `every` keliru karena menuntut semua pengunjung harus di bawah 17 tahun. Keping `find` mengembalikan elemen angka itu sendiri (16) alih-alih boolean status pengecekan. Keping `console.log(usiaPengunjung)` salah mencetak array data awal bukannya hasil evaluasi kondisinya.",
           },
         },
         {
@@ -2877,6 +3210,107 @@ export const javascriptTrack: Track = {
           },
         },
         {
+          kind: "step",
+          id: "js-4-8",
+          title: "querySelectorAll: Mengatur Banyak Elemen",
+          explanation:
+            "`document.querySelectorAll(selektor)` memilih **semua** elemen yang cocok dengan selektor CSS dan mengembalikannya sebagai koleksi `NodeList`. Berbeda dari `querySelector` yang hanya mengambil elemen pertama, `NodeList` dapat ditelusuri langsung menggunakan method `.forEach()`. Jebakan terbesar bagi pemula adalah mencoba memanggil method elemen tunggal langsung pada koleksi, misalnya `querySelectorAll('.item').classList.add('aktif')`, yang akan melempar error `TypeError: classList is undefined` karena `NodeList` adalah wadah daftar, bukan satu elemen. Kamu wajib melakukan iterasi pada setiap elemen di dalamnya sebelum memodifikasi teks, atribut, atau kelas tampilannya.",
+          example: {
+            code: "const semuaParagraf = document.querySelectorAll('p');\nsemuaParagraf.forEach((p) => {\n  p.classList.add('teks-rapi');\n});\nconsole.log(semuaParagraf.length);",
+            output: "2",
+            note: "NodeList memiliki method forEach bawaan untuk mengubah setiap elemen satu per satu.",
+          },
+          instruction:
+            "Telusuri koleksi `lencana` menggunakan `forEach`. Di dalam callback, tambahkan class `'aktif'` ke setiap elemen menggunakan `classList.add('aktif')`. Tampilkan panjang koleksi `lencana.length` dengan `console.log`.",
+          starterCode: "const lencana = document.querySelectorAll('.badge');\n\n",
+          language: "js",
+          tests: [
+            {
+              pattern: "lencana\\.forEach\\(",
+              message: "Gunakan lencana.forEach(...) untuk menelusuri setiap elemen di NodeList.",
+            },
+            {
+              pattern: "lencana\\.classList",
+              mustNotMatch: true,
+              message: "NodeList tidak memiliki properti classList — gunakan variabel elemen di dalam forEach.",
+            },
+            {
+              pattern: "classList\\.add\\(\\s*['\"]aktif['\"]\\s*\\)",
+              message: "Tambahkan class 'aktif' dengan classList.add('aktif').",
+            },
+            {
+              pattern: "console\\.log\\(\\s*lencana\\.length\\s*\\)",
+              message: "Tampilkan lencana.length.",
+            },
+          ],
+          solution:
+            "const lencana = document.querySelectorAll('.badge');\n\nlencana.forEach((el) => {\n  el.classList.add('aktif');\n});\nconsole.log(lencana.length);",
+          susunKode: {
+            question:
+              "Susun kode yang menambahkan kelas `aktif` ke seluruh elemen di dalam koleksi `lencana`, lalu mencetak jumlah total elemennya.",
+            potongan: [
+              "const lencana = document.querySelectorAll('.badge');",
+              "lencana.forEach((el) => {",
+              "  el.classList.add('aktif');",
+              "});",
+              "console.log(lencana.length);",
+            ],
+            pengecoh: [
+              "lencana.classList.add('aktif');",
+              "  el.classList.remove('aktif');",
+              "console.log(lencana.size);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`NodeList` hasil `querySelectorAll` harus ditelusuri satu per satu dengan `forEach`. Keping `lencana.classList.add(...)` tanpa loop adalah jebakan paling sering bagi pemula: memanggil method elemen tunggal pada koleksi daftar menghasilkan `TypeError` karena NodeList bukan elemen DOM. Keping `classList.remove` menggoda tapi justru menghapus kelas alih-alih menambahkannya. Keping `lencana.size` keliru karena NodeList memakai properti `.length`, bukan `.size` seperti Set atau Map.",
+          },
+        },
+        {
+          kind: "step",
+          id: "js-4-9",
+          title: "Menghapus Elemen dengan remove()",
+          explanation:
+            "Untuk membuang elemen dari tampilan halaman web secara permanen, method modern `elemen.remove()` adalah solusi paling langsung dan bersih. Sebelum method ini distandardisasi, pengembang harus naik ke parent elemen dulu lalu memanggil `parent.removeChild(child)`. Method `.remove()` dipanggil langsung pada elemen yang ingin dimusnahkan dari struktur dokumen (DOM tree). Di dunia nyata, method ini dipakai saat pengguna mengklik tombol 'Hapus' pada item keranjang belanja, menutup banner notifikasi promosi, atau membuang pesan error setelah pengguna memperbaiki inputnya.",
+          example: {
+            code: "const notifikasi = document.querySelector('#banner-iklan');\nif (notifikasi) {\n  notifikasi.remove();\n  console.log('Banner dihapus');\n}",
+            output: "Banner dihapus",
+            note: "elemen.remove() langsung memusnahkan elemen tersebut dari struktur DOM.",
+          },
+          instruction:
+            "Hapus elemen `itemBatal` dari halaman menggunakan method `remove()`, lalu tampilkan `'Item berhasil dihapus'` ke konsol.",
+          starterCode: "const itemBatal = document.querySelector('#item-3');\n\n",
+          language: "js",
+          tests: [
+            {
+              pattern: "itemBatal\\.remove\\(\\s*\\)",
+              message: "Panggil itemBatal.remove() untuk menghapus elemen.",
+            },
+            {
+              pattern: "console\\.log\\(\\s*['\"]Item berhasil dihapus['\"]\\s*\\)",
+              message: "Tampilkan 'Item berhasil dihapus' dengan console.log.",
+            },
+          ],
+          solution:
+            "const itemBatal = document.querySelector('#item-3');\n\nitemBatal.remove();\nconsole.log('Item berhasil dihapus');",
+          susunKode: {
+            question:
+              "Susun kode yang menghapus elemen `itemBatal` dari pohon DOM, lalu mencetak pesan bahwa penghapusan berhasil.",
+            potongan: [
+              "const itemBatal = document.querySelector('#item-3');",
+              "itemBatal.remove();",
+              "console.log('Item berhasil dihapus');",
+            ],
+            pengecoh: [
+              "itemBatal.delete();",
+              "itemBatal.style.display = 'none';",
+              "console.log('Item batal');",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`elemen.remove()` menghapus elemen dari struktur DOM. Keping `itemBatal.delete()` adalah jebakan yang sering terjadi karena kata 'delete' adalah operator penghapusan properti di JS, bukan method DOM. Keping `itemBatal.style.display = 'none'` menggoda karena elemennya tampak hilang dari layar, tapi elemen itu sebetulnya masih ada di DOM dan tetap mengonsumsi memori serta terbaca oleh screen reader. Keping `console.log('Item batal')` salah mencetak teks yang berbeda dari instruksi.",
+          },
+        },
+        {
           kind: "quiz",
           id: "js-4-kuis",
           title: "Kuis: DOM",
@@ -3065,7 +3499,7 @@ export const javascriptTrack: Track = {
           id: "js-5-1",
           title: "Optional chaining (?.)",
           explanation:
-            "Data dari API sering tidak lengkap. `user.alamat.kota` akan melempar error kalau `alamat` tidak ada. `user.alamat?.kota` menghentikan evaluasi dan mengembalikan `undefined` alih-alih error. Ini menggantikan rantai pemeriksaan `user && user.alamat && user.alamat.kota` yang panjang.",
+            "Data respons dari API backend di dunia nyata sangat sering memiliki properti bersarang yang hilang atau bernilai `null`/`undefined`. Mengakses `user.alamat.kota` secara langsung akan melempar error fatal `TypeError: Cannot read properties of undefined` saat `alamat` tidak ditemukan, yang berisiko membuat aplikasi web crash. Operator Optional Chaining `?.` menghentikan pembacaan properti lebih lanjut dan secara aman mengembalikan `undefined` tanpa memicu error. Fitur ini menggantikan pola lama pemeriksaan bertingkat `user && user.alamat && user.alamat.kota` yang melelahkan dan rawan salah ketik.",
           example: {
             code: "const data = { profil: { nama: 'Ana' } };\n\nconsole.log(data.profil?.nama);      // ada\nconsole.log(data.toko?.nama);        // toko tidak ada → undefined\n// console.log(data.toko.nama);      // ❌ TypeError, aplikasi berhenti",
             output: "Ana\nundefined",
@@ -3324,7 +3758,7 @@ export const javascriptTrack: Track = {
           id: "js-5-6",
           title: "Module: import dan export",
           explanation:
-            "Module memecah kode jadi file terpisah. `export` menyediakan, `import` memakai. Ada dua bentuk: **named export** (bisa banyak per file, nama harus cocok) dan **default export** (satu per file, nama saat import bebas). Konvensi umum: named export untuk utilitas, default untuk komponen utama file itu.",
+            "Sistem modul (ES Modules) memecah basis kode besar menjadi file-file kecil yang terisolasi dan mudah dikelola. Kata kunci `export` menyediakan fungsi atau variabel, sedangkan `import` mengonsumsinya di file lain. Terdapat dua bentuk utama: **named export** (bisa banyak dalam satu file, namanya harus cocok persis di dalam kurung kurawal `{}`) dan **default export** (hanya boleh satu per file, nama saat diimpor bebas tanpa kurung kurawal). Di arsitektur modern seperti React dan Next.js, named export sangat dianjurkan untuk kumpulan fungsi utilitas agar mempermudah auto-import di IDE serta mendukung optimasi *tree shaking* (membuang kode yang tidak terpakai saat build produksi).",
           example: {
             code: "// ── file: hitung.js ──\nexport const PPN = 0.11;                 // named\nexport function pajak(x) { return x * PPN; }  // named\nexport default pajak;                    // default (satu per file)\n\n// ── file lain ──\n// import pajak, { PPN } from './hitung.js';\n// nama default bebas, nama named harus cocok",
             output:
@@ -3366,6 +3800,115 @@ export const javascriptTrack: Track = {
             pemisah: "\n",
             explanation:
               "Named export menempelkan kata `export` di depan deklarasinya sehingga berkas lain bisa memanggilnya dengan nama, sedangkan default export ditulis terpisah dan hanya boleh ada **satu** per berkas. Keping `export default function luas(...)` menggoda karena terasa seperti menggabungkan dua permintaan soal sekaligus, padahal ia menjadikan fungsinya default saja — dan begitu baris `export default luas;` juga ikut terpasang, berkasnya gagal karena ada dua default dalam satu modul. Keping `module.exports` berasal dari CommonJS; mencampurnya di berkas ES Module adalah kekeliruan yang sering terjadi saat menyalin jawaban lama dari internet, dan hasilnya `module is not defined`. Keping `default export` membalik urutan kata kuncinya.",
+          },
+        },
+        {
+          kind: "step",
+          id: "js-5-7",
+          title: "Short-circuit && dan || untuk Nilai Kondisional",
+          explanation:
+            "Operator logika di JavaScript bekerja secara *short-circuit* (evaluasi pintas): evaluasi berhenti begitu hasilnya sudah dapat dipastikan. Ekspresi `A && B` mengevaluasi `A` lebih dulu; jika `A` bernilai truthy, ia mengembalikan `B` — jika falsy, ia langsung mengembalikan `A`. Sebaliknya, `A || B` mengembalikan nilai truthy pertama yang ditemukannya, atau fallback `B` jika `A` falsy. Di dunia kerja dan ekosistem React, pola `isLoggedIn && <Dashboard />` adalah cara standar nomor satu untuk conditional rendering, sedangkan `nama || 'Anonim'` menyediakan nilai cadangan cepat saat variabel awal kosong.",
+          example: {
+            code: "const peran = 'admin';\nconst izinAkses = peran === 'admin' && 'Akses Penuh';\nconsole.log(izinAkses);\nconst namaInput = '';\nconst namaTampil = namaInput || 'Tamu';\nconsole.log(namaTampil);",
+            output: "Akses Penuh\nTamu",
+            note: "&& mengembalikan sisi kanan jika kiri truthy, || mengembalikan sisi kanan jika kiri falsy.",
+          },
+          instruction:
+            "Buat `const hakAkses` yang mengevaluasi `role === 'editor' && 'Dapat Mengedit'`. Lalu buat `const kotaFinal` yang mengevaluasi `inputKota || 'Jakarta'`. Tampilkan kedua variabel tersebut.",
+          starterCode: "const role = 'editor';\nconst inputKota = '';\n\n",
+          language: "js",
+          tests: [
+            {
+              pattern: "const\\s+hakAkses\\s*=\\s*role\\s*===\\s*['\"]editor['\"]\\s*&&\\s*['\"]Dapat Mengedit['\"]",
+              message: "Gunakan short-circuit: const hakAkses = role === 'editor' && 'Dapat Mengedit';",
+            },
+            {
+              pattern: "const\\s+kotaFinal\\s*=\\s*inputKota\\s*\\|\\|\\s*['\"]Jakarta['\"]",
+              message: "Gunakan short-circuit: const kotaFinal = inputKota || 'Jakarta';",
+            },
+            {
+              pattern: "console\\.log\\(\\s*hakAkses\\s*\\)",
+              message: "Tampilkan hakAkses.",
+            },
+            {
+              pattern: "console\\.log\\(\\s*kotaFinal\\s*\\)",
+              message: "Tampilkan kotaFinal.",
+            },
+          ],
+          solution:
+            "const role = 'editor';\nconst inputKota = '';\n\nconst hakAkses = role === 'editor' && 'Dapat Mengedit';\nconst kotaFinal = inputKota || 'Jakarta';\nconsole.log(hakAkses);\nconsole.log(kotaFinal);",
+          susunKode: {
+            question:
+              "Susun kode evaluasi pintas yang memberikan teks `'Dapat Mengedit'` jika peran sesuai, dan cadangan `'Jakarta'` jika input kota kosong.",
+            potongan: [
+              "const hakAkses = role === 'editor' && 'Dapat Mengedit';",
+              "const kotaFinal = inputKota || 'Jakarta';",
+              "console.log(hakAkses);",
+              "console.log(kotaFinal);",
+            ],
+            pengecoh: [
+              "const hakAkses = role === 'editor' || 'Dapat Mengedit';",
+              "const kotaFinal = inputKota && 'Jakarta';",
+              "console.log(inputKota);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`&&` meneruskan ke nilai kanan jika kondisi kiri benar, sedangkan `||` mengambil cadangan kanan jika nilai kiri falsy. Keping `role === 'editor' || 'Dapat Mengedit'` menggoda karena operatornya mirip, tapi pada `||` nilai kiri yang sudah bernilai `true` langsung dikembalikan tanpa pernah membaca teks hak akses di sisi kanan. Keping `inputKota && 'Jakarta'` keliru terbalik karena string kosong di sisi kiri bersifat falsy sehingga evaluasi langsung berhenti dan mengembalikan string kosong. Keping `console.log(inputKota)` adalah jebakan lalai yang mencetak variabel mentah sebelum cadangan.",
+          },
+        },
+        {
+          kind: "step",
+          id: "js-5-8",
+          title: "structuredClone: Salinan Mendalam (Deep Copy)",
+          explanation:
+            "Operator spread `{ ...obj }` dan `[...arr]` hanya melakukan *shallow copy* (salinan dangkal) pada tingkat pertama saja. Jika object memiliki properti bersarang (*nested object* atau array di dalam object), referensi tingkat dalam tersebut masih menunjuk ke alamat memori yang sama. Akibatnya, mengubah `salinan.alamat.kota` akan ikut merusak data pada object asli! JavaScript modern menyediakan fungsi global resmi `structuredClone(obj)` untuk membuat salinan mendalam (*deep copy*) yang sepenuhnya terputus dari objek aslinya. Di dunia kerja, `structuredClone` menggantikan trik usang `JSON.parse(JSON.stringify(obj))` yang lambat dan merusak tipe data khusus seperti Date, Set, atau Map.",
+          example: {
+            code: "const asli = { user: 'Bimo', lokasi: { kota: 'Bandung' } };\nconst salinan = structuredClone(asli);\nsalinan.lokasi.kota = 'Surabaya';\nconsole.log(asli.lokasi.kota);\nconsole.log(salinan.lokasi.kota);",
+            output: "Bandung\nSurabaya",
+            note: "structuredClone menyalin seluruh tingkat kedalaman tanpa membagikan referensi memori.",
+          },
+          instruction:
+            "Buat `const akunKloning` memakai `structuredClone(akun)`. Ubah `akunKloning.pengaturan.tema` menjadi `'terang'`. Tampilkan `akun.pengaturan.tema` dan `akunKloning.pengaturan.tema` untuk membuktikan aslinya tidak berubah.",
+          starterCode:
+            "const akun = {\n  nama: 'Siti',\n  pengaturan: { tema: 'gelap', notifikasi: true },\n};\n\n",
+          language: "js",
+          tests: [
+            {
+              pattern: "const\\s+akunKloning\\s*=\\s*structuredClone\\(\\s*akun\\s*\\)",
+              message: "Gunakan const akunKloning = structuredClone(akun); untuk deep clone.",
+            },
+            {
+              pattern: "akunKloning\\.pengaturan\\.tema\\s*=\\s*['\"]terang['\"]",
+              message: "Ubah akunKloning.pengaturan.tema = 'terang';",
+            },
+            {
+              pattern: "console\\.log\\(\\s*akun\\.pengaturan\\.tema\\s*\\)",
+              message: "Tampilkan akun.pengaturan.tema.",
+            },
+            {
+              pattern: "console\\.log\\(\\s*akunKloning\\.pengaturan\\.tema\\s*\\)",
+              message: "Tampilkan akunKloning.pengaturan.tema.",
+            },
+          ],
+          solution:
+            "const akun = {\n  nama: 'Siti',\n  pengaturan: { tema: 'gelap', notifikasi: true },\n};\n\nconst akunKloning = structuredClone(akun);\nakunKloning.pengaturan.tema = 'terang';\nconsole.log(akun.pengaturan.tema);\nconsole.log(akunKloning.pengaturan.tema);",
+          susunKode: {
+            question:
+              "Susun kode salinan mendalam dari `akun` dengan `structuredClone`, ubah tema pada kloningan, lalu cetak nilai tema kedua objek tersebut.",
+            potongan: [
+              "const akunKloning = structuredClone(akun);",
+              "akunKloning.pengaturan.tema = 'terang';",
+              "console.log(akun.pengaturan.tema);",
+              "console.log(akunKloning.pengaturan.tema);",
+            ],
+            pengecoh: [
+              "const akunKloning = { ...akun };",
+              "akun.pengaturan.tema = 'terang';",
+              "console.log(akunKloning.nama);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`structuredClone` menduplikat setiap cabang objek bersarang sehingga tidak ada alamat memori yang dibagi. Keping `const akunKloning = { ...akun }` adalah jebakan paling berbahaya di JavaScript: spread hanya menyalin level terluar, sementara sub-objek `pengaturan` tetap menunjuk ke memori yang sama sehingga mengubah tema di kloningan akan ikut merusak data akun asli. Keping `akun.pengaturan.tema = 'terang'` salah sasaran karena mengubah objek aslinya langsung alih-alih objek kloningan. Keping `console.log(akunKloning.nama)` keliru mencetak nama pengguna padahal soal meminta memverifikasi tema.",
           },
         },
         {
@@ -3604,7 +4147,7 @@ export const javascriptTrack: Track = {
           id: "js-6-2",
           title: "Promise: janji hasil di masa depan",
           explanation:
-            "Promise adalah object yang mewakili hasil yang **belum ada**. Ia punya tiga keadaan: pending, fulfilled (berhasil), rejected (gagal). `.then()` menangani keberhasilan, `.catch()` menangani kegagalan. Hampir semua API modern mengembalikan Promise.",
+            "Promise adalah object standar yang mewakili sebuah nilai yang belum tersedia saat ini namun akan selesai di masa depan (asynchronous). Sebuah Promise selalu berada di salah satu dari tiga keadaan (*state*): **pending** (sedang berjalan), **fulfilled** (sukses diselesaikan dengan nilai), atau **rejected** (gagal karena kesalahan). Kamu mengonsumsi nilainya menggunakan method `.then()` untuk menangani hasil sukses dan `.catch()` untuk menangkap error kegagalan. Hampir seluruh API web modern — mulai dari `fetch`, database client, hingga modul filesystem di Node.js — mengembalikan Promise sebagai fondasi komunikasi asinkron.",
           example: {
             code: "const janji = new Promise((resolve, reject) => {\n  const berhasil = true;\n  setTimeout(() => {\n    if (berhasil) resolve('Data diterima');\n    else reject(new Error('Koneksi gagal'));\n  }, 400);\n});\n\njanji\n  .then((hasil) => console.log('OK: ' + hasil))\n  .catch((err) => console.log('Gagal: ' + err.message));",
             output: "OK: Data diterima",
@@ -3870,6 +4413,118 @@ export const javascriptTrack: Track = {
             pemisah: "\n",
             explanation:
               "`Promise.all` menerima **satu array** berisi janji-janji, menunggu semuanya selesai, lalu mengembalikan array hasil dengan urutan yang sama seperti masukannya. Keping tanpa kurung siku adalah kekeliruan yang sering terjadi karena kita terbiasa mengirim argumen berderet; argumen kedua diabaikan dan hasilnya tidak lengkap. Keping `[await a, await b]` menggoda karena hasil akhirnya identik, tapi ia menunggu berurutan sehingga totalnya 500 ms alih-alih 300 ms — inilah perbedaan yang sering ditanyakan saat interview. Keping `Promise.race` hanya mengembalikan janji yang selesai **paling cepat**, jadi hasilnya cuma satu nilai.",
+          },
+        },
+        {
+          kind: "step",
+          id: "js-6-7",
+          title: "fetch POST: Mengirim Data JSON ke Server",
+          explanation:
+            "Metode bawaan `fetch(url)` secara default melakukan HTTP GET (hanya mengambil data). Untuk mengirim atau membuat data baru di server, kamu wajib menyertakan opsi konfigurasi: tentukan `method: 'POST'`, tambahkan header `'Content-Type': 'application/json'` agar server tahu format data yang dikirim, dan ubah payload data menjadi string JSON memakai `body: JSON.stringify(data)`. Jebakan paling fatal: lupa menambahkan header `Content-Type` atau lupa memanggil `JSON.stringify` pada body. Tanpa keduanya, backend akan mengabaikan data kirimanmu atau mengembalikan status `400 Bad Request`. Di dunia kerja, pola inilah yang kamu gunakan saat pengguna mengirim form pendaftaran, checkout pesanan, atau menyimpan komentar.",
+          example: {
+            code: "async function kirimPesan() {\n  const res = await fetch('https://jsonplaceholder.typicode.com/posts', {\n    method: 'POST',\n    headers: { 'Content-Type': 'application/json' },\n    body: JSON.stringify({ judul: 'Halo', pesan: 'Tes kirim' }),\n  });\n  if (!res.ok) return;\n  console.log(res.status);\n}\nkirimPesan();",
+            output: "201",
+            note: "method POST mengirim data, headers menyatakan format JSON, dan body adalah string hasil JSON.stringify.",
+          },
+          instruction:
+            "Di dalam `buatPost`, panggil `fetch` ke `'https://jsonplaceholder.typicode.com/posts'` dengan `method: 'POST'`, header `'Content-Type': 'application/json'`, dan body `JSON.stringify(payload)`. Simpan response di `res`, periksa `if (!res.ok) return;`, lalu tampilkan `res.status`.",
+          starterCode:
+            "async function buatPost() {\n  const payload = { title: 'Belajar JS', body: 'Latihan Fetch POST', userId: 1 };\n\n}\n\nbuatPost();",
+          language: "js",
+          tests: [
+            {
+              pattern: "await\\s+fetch\\(\\s*['\"]https://jsonplaceholder\\.typicode\\.com/posts['\"]",
+              message: "Panggil await fetch('https://jsonplaceholder.typicode.com/posts', ...);",
+            },
+            {
+              pattern: "method\\s*:\\s*['\"]POST['\"]",
+              message: "Tentukan method: 'POST'.",
+            },
+            {
+              pattern: "['\"]Content-Type['\"]\\s*:\\s*['\"]application/json['\"]",
+              message: "Sertakan headers: { 'Content-Type': 'application/json' }.",
+            },
+            {
+              pattern: "body\\s*:\\s*JSON\\.stringify\\(\\s*payload\\s*\\)",
+              message: "Gunakan body: JSON.stringify(payload).",
+            },
+            {
+              pattern: "console\\.log\\(\\s*res\\.status\\s*\\)",
+              message: "Tampilkan res.status.",
+            },
+          ],
+          solution:
+            "async function buatPost() {\\n  const payload = { title: 'Belajar JS', body: 'Latihan Fetch POST', userId: 1 };\\n\\n  const res = await fetch('https://jsonplaceholder.typicode.com/posts', {\\n    method: 'POST',\\n    headers: { 'Content-Type': 'application/json' },\\n    body: JSON.stringify(payload),\\n  });\\n\\n  if (!res.ok) return;\\n  console.log(res.status);\\n}\\n\\nbuatPost();",
+          susunKode: {
+            question:
+              "Susun konfigurasi pengiriman data JSON dengan `fetch` POST ke API publik dan tampilkan kode status hasilnya.",
+            potongan: [
+              "  const res = await fetch('https://jsonplaceholder.typicode.com/posts', {",
+              "    method: 'POST',",
+              "    headers: { 'Content-Type': 'application/json' },",
+              "    body: JSON.stringify(payload),",
+              "  });",
+              "  if (!res.ok) return;",
+              "  console.log(res.status);",
+            ],
+            pengecoh: [
+              "    method: 'GET',",
+              "    body: payload,",
+              "  console.log(res.json());",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`fetch` POST membutuhkan penegasan method, header format data, dan string JSON pada body. Keping `method: 'GET'` menggoda karena merupakan method bawaan, tapi GET tidak mengirimkan body data ke server. Keping `body: payload` adalah kesalahan yang paling sering terjadi: mengirim objek mentah tanpa `JSON.stringify` akan membuat browser mengirim string `\"[object Object]\"` sehingga server menolaknya dengan error 400. Keping `console.log(res.json())` keliru karena method `.json()` bersifat asinkron dan mengembalikan Promise pending.",
+          },
+        },
+        {
+          kind: "step",
+          id: "js-6-8",
+          title: "Promise.allSettled: Menunggu Tanpa Takut Gagal Total",
+          explanation:
+            "Kelemahan terbesar `Promise.all` adalah sifatnya yang *fail-fast*: jika satu saja Promise gagal (rejected), seluruh operasi langsung dibatalkan dan masuk ke `catch`, membuang hasil dari Promise lain yang sebenarnya sukses. Di dunia nyata, sering kali kita ingin menjalankan beberapa permintaan independen — misalnya mengambil profil user, memuat notifikasi, dan mengambil banner diskon. `Promise.allSettled(daftarPromise)` menunggu **seluruh** Promise selesai tanpa peduli apakah statusnya sukses atau gagal. Hasilnya berupa array of object berisi status (`'fulfilled'` atau `'rejected'`), nilai hasil jika sukses (`value`), atau alasan kesalahan jika gagal (`reason`).",
+          example: {
+            code: "const p1 = Promise.resolve('Data User');\nconst p2 = Promise.reject(new Error('Gagal Koneksi'));\n\nasync function muatDashboard() {\n  const hasil = await Promise.allSettled([p1, p2]);\n  console.log(hasil[0].status);\n  console.log(hasil[1].status);\n}\nmuatDashboard();",
+            output: "fulfilled\nrejected",
+            note: "allSettled tidak pernah melempar error penolakan, memudahkan kamu memproses data parsial.",
+          },
+          instruction:
+            "Di dalam fungsi `jalankan`, gunakan `Promise.allSettled` untuk menunggu `reqA` dan `reqB`. Simpan hasilnya di `const hasil`, lalu tampilkan `hasil[0].status` dan `hasil[1].status`.",
+          starterCode:
+            "const reqA = Promise.resolve('Data A');\nconst reqB = Promise.reject(new Error('Server B Error'));\n\nasync function jalankan() {\n\n}\n\njalankan();",
+          language: "js",
+          tests: [
+            {
+              pattern: "await\\s+Promise\\.allSettled\\(\\s*\\[\\s*reqA\\s*,\\s*reqB\\s*\\]\\s*\\)",
+              message: "Gunakan const hasil = await Promise.allSettled([reqA, reqB]);",
+            },
+            {
+              pattern: "console\\.log\\(\\s*hasil\\[0\\]\\.status\\s*\\)",
+              message: "Tampilkan hasil[0].status.",
+            },
+            {
+              pattern: "console\\.log\\(\\s*hasil\\[1\\]\\.status\\s*\\)",
+              message: "Tampilkan hasil[1].status.",
+            },
+          ],
+          solution:
+            "const reqA = Promise.resolve('Data A');\nconst reqB = Promise.reject(new Error('Server B Error'));\n\nasync function jalankan() {\n  const hasil = await Promise.allSettled([reqA, reqB]);\n  console.log(hasil[0].status);\n  console.log(hasil[1].status);\n}\n\njalankan();",
+          susunKode: {
+            question:
+              "Susun pemanggilan `Promise.allSettled` untuk dua janji asinkron dan cetak status akhir masing-masing permintaan.",
+            potongan: [
+              "  const hasil = await Promise.allSettled([reqA, reqB]);",
+              "  console.log(hasil[0].status);",
+              "  console.log(hasil[1].status);",
+            ],
+            pengecoh: [
+              "  const hasil = await Promise.all([reqA, reqB]);",
+              "  const hasil = await Promise.race([reqA, reqB]);",
+              "  console.log(hasil[0].pending);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`Promise.allSettled` mengembalikan status penyelesaian setiap permintaan tanpa menggugurkan yang lain. Keping `Promise.all` adalah jebakan klasik: karena `reqB` ditolak, `Promise.all` langsung melempar error dan kode berikutnya tak pernah dieksekusi. Keping `Promise.race` keliru karena hanya mengambil permintaan yang paling cepat merespons, bukan menunggu keduanya. Keping `hasil[0].pending` keliru karena status yang valid adalah `fulfilled` atau `rejected`, bukan pending.",
           },
         },
         {
@@ -4217,7 +4872,7 @@ export const javascriptTrack: Track = {
           id: "js-7-4",
           title: "console lebih dari log",
           explanation:
-            "`console.table` menampilkan array of object sebagai tabel — sangat membantu saat memeriksa data API. `console.time`/`timeEnd` mengukur durasi. `console.error` dan `console.warn` memberi warna dan stack trace. Memakainya menghemat waktu dibanding menyebar `console.log` di mana-mana.",
+            "`console.table` merender array of object menjadi format tabel interaktif yang rapi di DevTools, sehingga kamu bisa membandingkan baris dan kolom data respons API tanpa perlu membuka puluhan dropdown object secara manual. Pasangan `console.time('loop')` dan `console.timeEnd('loop')` mengukur durasi eksekusi kode secara presisi dalam satuan milidetik untuk melacak operasi yang lambat. Selain itu, `console.warn` dan `console.error` memberikan penanda visual khusus warna kuning/merah beserta jejak *stack trace* pemanggilan. Memanfaatkan method-method khusus ini mempercepat investigasi bug harian dibanding menyebarkan `console.log` mentah di sembarang baris.",
           example: {
             code: "const data = [{ id: 1, nama: 'Ana' }, { id: 2, nama: 'Budi' }];\n\nconsole.table(data);            // tampilkan sebagai tabel\nconsole.warn('Ini peringatan');\nconsole.error('Ini error');\n\nconsole.time('hitung');\nlet s = 0;\nfor (let i = 0; i < 100000; i++) s += i;\nconsole.timeEnd('hitung');     // tampilkan durasinya",
             output:
@@ -4312,6 +4967,59 @@ export const javascriptTrack: Track = {
             pemisah: "\n",
             explanation:
               "Indeks terakhir selalu `panjang - 1` karena penomorannya dimulai dari nol — array berisi tiga elemen memakai indeks 0, 1, dan 2. Keping `arr[arr.length]` adalah bug aslinya dan kesalahan pagar yang paling sering terjadi dalam pemrograman: ia menunjuk satu langkah melewati ujung dan mengembalikan `undefined` tanpa error, sehingga bug ini bisa menyelinap jauh ke dalam aplikasi. Keping `arr[-1]` menggoda karena di Python itulah cara mengambil elemen terakhir; di JavaScript kurung siku bernilai negatif dianggap nama properti biasa yang tidak ada, dan hasilnya juga `undefined`. Keping tanpa tanda kurung mencetak isi fungsinya, bukan hasil pemanggilannya.",
+          },
+        },
+        {
+          kind: "step",
+          id: "js-7-6",
+          title: "Custom Error: Membuat Kelas Error Sendiri",
+          explanation:
+            "Di aplikasi skala besar, melempar pesan string polos atau sekadar `new Error('gagal')` menyulitkan penanganan error karena catch block tidak tahu jenis kegagalan apa yang terjadi. Pola standar industri adalah membuat kelas error turunan (*custom error*) dengan mewarisi kelas bawaan `class ValidationError extends Error`. Dengan cara ini, kode penangkap di blok `catch (err)` dapat memanfaatkan operator `instanceof` untuk membedakan perlakuan: apakah kesalahan ini murni karena input form tidak valid (tampilkan pesan ramah ke pengguna) ataukah kegagalan koneksi database (catat ke log server dan beri tanda bahaya).",
+          example: {
+            code: "class InputError extends Error {\n  constructor(pesan) {\n    super(pesan);\n    this.name = 'InputError';\n  }\n}\n\ntry {\n  throw new InputError('Email tidak valid');\n} catch (err) {\n  if (err instanceof InputError) {\n    console.log('Validasi gagal:', err.message);\n  }\n}",
+            output: "Validasi gagal: Email tidak valid",
+            note: "Memanggil super(pesan) wajib dilakukan agar stack trace dan properti bawaan Error terinisialisasi.",
+          },
+          instruction:
+            "Buat custom error class `SaldoKurangError` yang meng-extends `Error`. Di constructor-nya, panggil `super(pesan)`. Kemudian di dalam blok `try`, lemparkan error tersebut dengan `throw new SaldoKurangError('Saldo tidak cukup')`. Di blok `catch (err)`, cek `if (err instanceof SaldoKurangError)` lalu cetak `err.message`.",
+          starterCode: "// buat class SaldoKurangError dan tangani di try/catch\n\n",
+          language: "js",
+          tests: [
+            {
+              pattern: "class\\s+SaldoKurangError\\s+extends\\s+Error\\s*\\{",
+              message: "Deklarasikan class SaldoKurangError extends Error.",
+            },
+            {
+              pattern: "super\\(\\s*pesan\\s*\\)",
+              message: "Panggil super(pesan) di dalam constructor.",
+            },
+            {
+              pattern: "throw\\s+new\\s+SaldoKurangError\\(\\s*['\"]Saldo tidak cukup['\"]\\s*\\)",
+              message: "Lemparkan throw new SaldoKurangError('Saldo tidak cukup') di try.",
+            },
+            {
+              pattern: "err\\s+instanceof\\s+SaldoKurangError",
+              message: "Periksa tipe error dengan if (err instanceof SaldoKurangError).",
+            },
+          ],
+          solution:
+            "class SaldoKurangError extends Error {\n  constructor(pesan) {\n    super(pesan);\n    this.name = 'SaldoKurangError';\n  }\n}\n\ntry {\n  throw new SaldoKurangError('Saldo tidak cukup');\n} catch (err) {\n  if (err instanceof SaldoKurangError) {\n    console.log(err.message);\n  }\n}",
+          susunKode: {
+            question:
+              "Susun pendefinisian custom error kelas SaldoKurangError, lemparkan error di blok try, dan tangkap secara spesifik dengan instanceof di blok catch.",
+            potongan: [
+              "class SaldoKurangError extends Error {\n  constructor(pesan) {\n    super(pesan);\n    this.name = 'SaldoKurangError';\n  }\n}",
+              "try {\n  throw new SaldoKurangError('Saldo tidak cukup');",
+              "} catch (err) {\n  if (err instanceof SaldoKurangError) {\n    console.log(err.message);\n  }\n}",
+            ],
+            pengecoh: [
+              "class SaldoKurangError {\n  constructor(pesan) {\n    this.message = pesan;\n  }\n}",
+              "} catch (err) {\n  if (typeof err === 'SaldoKurangError') {\n    console.log(err.message);\n  }\n}",
+              "try {\n  return new SaldoKurangError('Saldo tidak cukup');",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Custom error wajib meng-extends `Error` dan memanggil `super(pesan)`. Keping class tanpa `extends Error` adalah jebakan karena objek tersebut tidak mewarisi sifat error dan stack trace sistem. Keping `typeof err === 'SaldoKurangError'` keliru karena `typeof` instans objek selalu menghasilkan string \"object\"; pengecekan class harus menggunakan `instanceof`. Keping `return new ...` salah karena untuk memicu aliran catch kamu wajib menggunakan kata kunci `throw`, bukan `return`.",
           },
         },
         {
@@ -4909,6 +5617,107 @@ export const javascriptTrack: Track = {
           },
         },
         {
+          kind: "step",
+          id: "js-8-7",
+          title: "Mengikat Konteks dengan bind()",
+          explanation:
+            "Di JavaScript, nilai kata kunci `this` ditentukan oleh **bagaimana dan di mana fungsi dipanggil**, bukan di mana ia didefinisikan. Jika sebuah method objek dipisahkan dari induknya — misalnya diteruskan sebagai callback event listener atau fungsi timer — ikatan objeknya akan terlepas dan `this` berubah menjadi `undefined` (atau window di non-strict mode). Method `fungsi.bind(konteks)` memecahkan masalah ini dengan cara 'mengunci' nilai `this` secara permanen dan mengembalikan fungsi baru yang aman dipanggil kapan pun tanpa khawatir konteks objeknya hilang. Ini adalah pola fundamental dalam OOP JavaScript dan komponen React berbasis class.",
+          example: {
+            code: "const bot = {\n  nama: 'BiBot',\n  sapa() { return `Halo, saya ${this.nama}`; }\n};\n\nconst sapaLepas = bot.sapa;\n// console.log(sapaLepas()); // ❌ TypeError: Cannot read property of undefined\n\nconst sapaAman = bot.sapa.bind(bot);\nconsole.log(sapaAman());     // ✅ 'Halo, saya BiBot'",
+            output: "Halo, saya BiBot",
+            note: "bind mengembalikan fungsi baru, tidak langsung mengeksekusinya saat itu juga.",
+          },
+          instruction:
+            "Diberikan objek `kalkulator` dengan properti `faktor: 10` dan method `tambah(x) { return x + this.faktor; }`. Gunakan method `kalkulator.tambah.bind(kalkulator)` untuk mengunci nilai `this`, simpan fungsi baru tersebut ke `const hitungTerikat`, lalu cetak hasil pemanggilan `hitungTerikat(5)`.",
+          starterCode: "const kalkulator = {\n  faktor: 10,\n  tambah(x) { return x + this.faktor; }\n};\n// ikat method tambah ke kalkulator di sini\n\n",
+          language: "js",
+          tests: [
+            {
+              pattern: "const\\s+hitungTerikat\\s*=\\s*kalkulator\\.tambah\\.bind\\(\\s*kalkulator\\s*\\)",
+              message: "Ikat konteks dengan kalkulator.tambah.bind(kalkulator);",
+            },
+            {
+              pattern: "console\\.log\\(\\s*hitungTerikat\\(\\s*5\\s*\\)\\s*\\)",
+              message: "Tampilkan console.log(hitungTerikat(5));",
+            },
+          ],
+          solution:
+            "const kalkulator = {\n  faktor: 10,\n  tambah(x) { return x + this.faktor; }\n};\n\nconst hitungTerikat = kalkulator.tambah.bind(kalkulator);\nconsole.log(hitungTerikat(5));",
+          susunKode: {
+            question:
+              "Susun pengikatan konteks method objek menggunakan bind dan panggil fungsi hasil ikatannya.",
+            potongan: [
+              "const kalkulator = {\n  faktor: 10,\n  tambah(x) { return x + this.faktor; }\n};",
+              "const hitungTerikat = kalkulator.tambah.bind(kalkulator);",
+              "console.log(hitungTerikat(5));",
+            ],
+            pengecoh: [
+              "const hitungTerikat = kalkulator.tambah(kalkulator);",
+              "const hitungTerikat = kalkulator.tambah.call(kalkulator);",
+              "console.log(hitungTerikat);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`bind()` menghasilkan fungsi baru yang siap dipanggil kapan saja dengan `this` yang terkunci. Keping `kalkulator.tambah(kalkulator)` keliru karena langsung memanggil fungsinya dengan argumen objek, bukan mengikat konteksnya. Keping `call()` menggoda karena sama-sama menetapkan `this`, tetapi `call()` **langsung mengeksekusi** fungsi saat itu juga alih-alih mengembalikan fungsi baru. Keping `console.log(hitungTerikat)` salah mencetak referensi fungsi bukannya memanggilnya dengan angka 5.",
+          },
+        },
+        {
+          kind: "step",
+          id: "js-8-8",
+          title: "Private Field: Enkapsulasi Nyata dengan Tanda Pagar #",
+          explanation:
+            "Sebelum standar modern ES2022, JavaScript tidak memiliki mekanisme privat bawaan: pengembang hanya memakai konvensi tanda garis bawah `_saldo` yang sebetulnya masih bisa diakses dan diubah bebas dari luar. Sekarang, JavaScript mendukung **private class fields** resmi menggunakan awalan tanda pagar `#`. Properti yang dideklarasikan dengan `#` (seperti `#saldo`) **secara fisik tidak bisa diakses maupun dimodifikasi** dari luar badan class — mencoba membacanya dari luar akan langsung memicu error kompilasi keras `SyntaxError`. Di industri perbankan dan logika bisnis krusial, ini adalah satu-satunya cara menjamin enkapsulasi data agar tidak dimanipulasi tanpa melalui method validasi.",
+          example: {
+            code: "class Dompet {\n  #saldo = 0;              // privat sejati!\n  constructor(awal) { this.#saldo = awal; }\n  cekSaldo() { return this.#saldo; }\n}\nconst d = new Dompet(50000);\nconsole.log(d.cekSaldo());  // 50000\n// console.log(d.#saldo);   // ❌ SyntaxError: Private field must be declared",
+            output: "50000",
+            note: "Tanda pagar # wajib dideklarasikan di level class dan hanya bisa dibaca dari method internal class.",
+          },
+          instruction:
+            "Lengkapi class `Rekening`: deklarasikan field privat `#pin;` di level class, inisialisasi nilainya di constructor, dan buat method `cekPin()` yang mengembalikan nilai `this.#pin`. Buat instance `const r = new Rekening('1234')` lalu cetak `r.cekPin()`.",
+          starterCode: "class Rekening {\n  // deklarasikan field privat #pin di sini\n\n  constructor(pin) {\n    this.#pin = pin;\n  }\n}\n\n",
+          language: "text",
+          tests: [
+            {
+              pattern: "class\\s+Rekening\\s*\\{\\s*#pin\\s*;\\s*constructor",
+              message: "Deklarasikan field privat #pin; di badan class Rekening sebelum constructor.",
+            },
+            {
+              pattern: "cekPin\\(\\s*\\)\\s*\\{\\s*return\\s+this\\.#pin;?\\s*\\}",
+              message: "Buat method cekPin() yang mengembalikan this.#pin.",
+            },
+            {
+              pattern: "const\\s+r\\s*=\\s*new\\s+Rekening\\(\\s*['\"]1234['\"]\\s*\\)",
+              message: "Buat const r = new Rekening('1234');",
+            },
+            {
+              pattern: "console\\.log\\(\\s*r\\.cekPin\\(\\s*\\)\\s*\\)",
+              message: "Tampilkan r.cekPin().",
+            },
+          ],
+          solution:
+            "class Rekening {\n  #pin;\n\n  constructor(pin) {\n    this.#pin = pin;\n  }\n\n  cekPin() {\n    return this.#pin;\n  }\n}\n\nconst r = new Rekening('1234');\nconsole.log(r.cekPin());",
+          susunKode: {
+            question:
+              "Susun deklarasi field privat `#pin` pada class `Rekening`, lengkapi method pembacanya, dan cetak hasilnya lewat instance.",
+            potongan: [
+              "class Rekening {",
+              "  #pin;",
+              "  constructor(pin) {\n    this.#pin = pin;\n  }",
+              "  cekPin() {\n    return this.#pin;\n  }\n}",
+              "const r = new Rekening('1234');",
+              "console.log(r.cekPin());",
+            ],
+            pengecoh: [
+              "  _pin;",
+              "  cekPin() {\n    return this.pin;\n  }\n}",
+              "console.log(r.#pin);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Private field dideklarasikan dengan awalan `#` di badan class dan diakses dengan `this.#nama`. Keping `_pin;` adalah konvensi lama yang tidak menghasilkan enkapsulasi privat sejati. Keping `this.pin` tanpa tanda pagar mencari properti publik biasa yang bernilai `undefined`. Keping `console.log(r.#pin)` di luar class adalah jebakan fatal karena mencoba mengakses private field dari luar dan langsung melempar SyntaxError.",
+          },
+        },
+        {
           kind: "quiz",
           id: "js-8-kuis",
           title: "Kuis: OOP & Functional",
@@ -5322,6 +6131,112 @@ export const javascriptTrack: Track = {
             pemisah: "\n",
             explanation:
               "`new FormData(form)` membaca **seluruh** kolom form sekaligus berdasarkan atribut `name` masing-masing, jadi kamu tidak perlu memanggil `querySelector` satu per satu. Keping `new FormData()` tanpa argumen menggoda karena tetap berjalan tanpa error, tapi isinya kosong — dan inilah kekeliruan yang sering membuat orang menyangka form-nya bermasalah. Keping `JSON.stringify(data)` adalah jebakan yang sangat sering terjadi: FormData bukan object biasa, sehingga hasilnya `{}` dan datanya seolah lenyap. Keping `Object.entries` bekerja pada properti object biasa, bukan pada isi FormData, jadi hasilnya array kosong; pengubahnya adalah `Object.fromEntries`.",
+          },
+        },
+        {
+          kind: "step",
+          id: "js-9-5",
+          title: "IntersectionObserver: Mengamati Elemen Masuk Layar",
+          explanation:
+            "Sebelum ada `IntersectionObserver`, developer mendeteksi apakah elemen terlihat di layar dengan memasang event listener pada `window.scroll` lalu menghitung koordinat `getBoundingClientRect()`. Cara lama ini sangat berat karena memicu perhitungan reflow browser di setiap piksel guliran layar dan membuat antarmuka tersendat-sendat (*laggy*). `IntersectionObserver` adalah API modern yang dioptimalkan secara native oleh browser untuk memantau kapan sebuah elemen memotong (beririsan dengan) area pandang viewport. Di dunia kerja, API ini menjadi standar mutlak pembuatan fitur *infinite scrolling* dan *lazy loading* gambar agar menghemat bandwidth data pengguna secara drastis.",
+          example: {
+            code: "const target = document.querySelector('#target');\nconst pengamat = new IntersectionObserver((entries) => {\n  entries.forEach((entry) => {\n    if (entry.isIntersecting) {\n      console.log('Elemen tampak di layar');\n    }\n  });\n});\nif (target) pengamat.observe(target);",
+            output: "Elemen tampak di layar",
+            note: "entry.isIntersecting bernilai true saat elemen target masuk ke dalam area pandang.",
+          },
+          instruction:
+            "Buat `const observer = new IntersectionObserver(callback)`. Di dalam callback, periksa `entry.isIntersecting` pada `entries[0]`, jika true tampilkan `'Footer terlihat'`. Lalu aktifkan pengamatan dengan `observer.observe(footer)`.",
+          starterCode: "const footer = document.querySelector('#footer');\n\n",
+          language: "js",
+          tests: [
+            {
+              pattern: "const\\s+observer\\s*=\\s*new\\s+IntersectionObserver\\(",
+              message: "Buat const observer = new IntersectionObserver(...);",
+            },
+            {
+              pattern: "isIntersecting",
+              message: "Periksa properti isIntersecting.",
+            },
+            {
+              pattern: "console\\.log\\(\\s*['\"]Footer terlihat['\"]\\s*\\)",
+              message: "Tampilkan 'Footer terlihat'.",
+            },
+            {
+              pattern: "observer\\.observe\\(\\s*footer\\s*\\)",
+              message: "Panggil observer.observe(footer);",
+            },
+          ],
+          solution:
+            "const footer = document.querySelector('#footer');\n\nconst observer = new IntersectionObserver((entries) => {\n  if (entries[0].isIntersecting) {\n    console.log('Footer terlihat');\n  }\n});\n\nobserver.observe(footer);",
+          susunKode: {
+            question:
+              "Susun kode `IntersectionObserver` yang memantau elemen `footer` dan mencetak pesan saat elemen tersebut beririsan dengan viewport.",
+            potongan: [
+              "const footer = document.querySelector('#footer');",
+              "const observer = new IntersectionObserver((entries) => {",
+              "  if (entries[0].isIntersecting) {",
+              "    console.log('Footer terlihat');",
+              "  }",
+              "});",
+              "observer.observe(footer);",
+            ],
+            pengecoh: [
+              "window.addEventListener('scroll', () => {",
+              "  if (entries[0].isVisible) {",
+              "footer.observe(observer);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`IntersectionObserver` mengawasi perpotongan elemen viewport secara asinkron dan efisien. Keping `window.addEventListener('scroll')` adalah pola lama yang justru dihindari karena membebani thread rendering utama browser. Keping `entries[0].isVisible` menggoda karena namanya terdengar alami, tapi nama properti standar spesifikasi web adalah `isIntersecting`. Keping `footer.observe(observer)` keliru membalik pemanggil: instans observer yang mengamati elemen footer, bukan sebaliknya.",
+          },
+        },
+        {
+          kind: "step",
+          id: "js-9-6",
+          title: "sessionStorage: Penyimpanan Sementara Satu Sesi",
+          explanation:
+            "Browser menyediakan dua ruang penyimpanan lokal berbasis key-value: `localStorage` dan `sessionStorage`. Method pemanggilannya persis sama (`setItem`, `getItem`, `removeItem`), namun batas masa hidupnya (*lifecycle*) sangat berbeda. Data di `localStorage` bertahan selamanya sampai dihapus secara manual, sedangkan data di `sessionStorage` **terhapus secara otomatis begitu tab atau jendela browser ditutup**. Di dunia kerja nyata, `sessionStorage` adalah tempat ideal untuk menyimpan status sementara formulir multi-langkah (*multi-step wizard*) atau token verifikasi OTP sekali pakai agar tidak tertinggal permanen di komputer publik.",
+          example: {
+            code: "sessionStorage.setItem('langkahAktif', '2');\nconst langkah = sessionStorage.getItem('langkahAktif');\nconsole.log(langkah); // '2'\n// Begitu tab ditutup oleh pengguna, data langkahAktif musnah otomatis.",
+            output: "2",
+            note: "sessionStorage terisolasi per tab dan otomatis terhapus saat tab browser ditutup.",
+          },
+          instruction:
+            "Simpan teks `'tahap-1'` ke dalam `sessionStorage` dengan key `'statusForm'`, lalu baca kembali nilainya dengan `sessionStorage.getItem('statusForm')` dan tampilkan dengan `console.log`.",
+          starterCode: "// gunakan sessionStorage di sini\n\n",
+          language: "js",
+          tests: [
+            {
+              pattern: "sessionStorage\\.setItem\\(\\s*['\"]statusForm['\"]\\s*,\\s*['\"]tahap-1['\"]\\s*\\)",
+              message: "Simpan dengan sessionStorage.setItem('statusForm', 'tahap-1');",
+            },
+            {
+              pattern: "sessionStorage\\.getItem\\(\\s*['\"]statusForm['\"]\\s*\\)",
+              message: "Baca kembali dengan sessionStorage.getItem('statusForm');",
+            },
+            {
+              pattern: "console\\.log\\(\\s*(status|sessionStorage\\.getItem)",
+              message: "Tampilkan nilai variabel status dengan console.log(status).",
+            },
+          ],
+          solution:
+            "sessionStorage.setItem('statusForm', 'tahap-1');\n\nconst status = sessionStorage.getItem('statusForm');\nconsole.log(status);",
+          susunKode: {
+            question:
+              "Susun kode penyimpanan sementara pada `sessionStorage` dan baca kembali datanya untuk ditampilkan ke konsol.",
+            potongan: [
+              "sessionStorage.setItem('statusForm', 'tahap-1');",
+              "const status = sessionStorage.getItem('statusForm');",
+              "console.log(status);",
+            ],
+            pengecoh: [
+              "localStorage.setItem('statusForm', 'tahap-1');",
+              "sessionStorage.set('statusForm', 'tahap-1');",
+              "console.log('statusForm');",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`sessionStorage.setItem(kunci, nilai)` menyimpan data ke penyimpanan sementara sesi tab. Keping `localStorage` menggoda karena method-nya sama persis, tapi ia menyimpan data permanen alih-alih sementara untuk satu sesi. Keping `.set()` keliru nama method karena method Web Storage adalah `setItem`, bukan `set` seperti pada Map. Keping `console.log('statusForm')` adalah jebakan yang hanya mencetak string nama key bukannya isi data nilainya.",
           },
         },
         {
@@ -5782,6 +6697,114 @@ export const javascriptTrack: Track = {
             pemisah: "\n",
             explanation:
               "Untuk menguji error, yang dikirim ke `expect` harus berupa **fungsi**, bukan hasil pemanggilannya — supaya test runner yang menjalankannya sendiri di dalam pengaman. Keping `expect(bagi(10, 0))` adalah kekeliruan yang sangat sering terjadi: errornya meledak sebelum `expect` sempat berjalan, jadi testnya gagal dengan pesan error asli dan seolah-olah kodenya yang salah, padahal justru itu perilaku yang diinginkan. Keping `toBe(Error)` menggoda karena menyebut kelas errornya, tapi yang dibandingkan adalah fungsi dengan class — selalu gagal. Keping `bagi(0, 10)` menukar urutan argumen sehingga pembaginya sah dan tidak ada error yang terpicu.",
+          },
+        },
+        {
+          kind: "step",
+          id: "js-10-6",
+          title: "Mock dasar dengan vi.fn()",
+          explanation:
+            "Dalam pengujian unit (*unit testing*), kamu sering kali perlu menguji fungsi yang menerima callback atau fungsi yang memicu efek samping (seperti mengirim email atau logging) tanpa benar-benar ingin efek samping tersebut dieksekusi sungguhan. Vitest menyediakan `vi.fn()` untuk membuat **fungsi tiruan (mock function)**. Fungsi mock ini mencatat setiap kali ia dipanggil, berapa kali dipanggil, dan argumen apa saja yang diterimanya. Matcher seperti `expect(mockFn).toHaveBeenCalled()` dan `expect(mockFn).toHaveBeenCalledWith(argumen)` memastikan bahwa alur kerja kode berjalan sesuai kontrak. Ini adalah salah satu keterampilan paling sering diuji dalam tes teknis wawancara kerja developer junior.",
+          example: {
+            code: "const aksi = vi.fn();\nfunction jalankanSekali(callback) {\n  callback('selesai');\n}\njalankanSekali(aksi);\nexpect(aksi).toHaveBeenCalled();\nexpect(aksi).toHaveBeenCalledWith('selesai');",
+            output: "Assertion lulus: fungsi tiruan dipanggil tepat 1 kali dengan argumen 'selesai'.",
+            note: "vi.fn() adalah mata-mata yang mengawasi pemanggilan fungsi tanpa menjalankan logika aslinya.",
+          },
+          instruction:
+            "Buat `const callbackMock = vi.fn()`. Panggil `kirimNotif('Halo', callbackMock)`. Lalu tulis dua pengujian: `expect(callbackMock).toHaveBeenCalled()` dan `expect(callbackMock).toHaveBeenCalledWith('Terkirim: Halo')`.",
+          starterCode:
+            "function kirimNotif(pesan, callback) {\n  callback('Terkirim: ' + pesan);\n}\n\n",
+          language: "js",
+          tests: [
+            {
+              pattern: "const\\s+callbackMock\\s*=\\s*vi\\.fn\\(\\s*\\)",
+              message: "Buat const callbackMock = vi.fn();",
+            },
+            {
+              pattern: "kirimNotif\\(\\s*['\"]Halo['\"]\\s*,\\s*callbackMock\\s*\\)",
+              message: "Panggil kirimNotif('Halo', callbackMock);",
+            },
+            {
+              pattern: "expect\\(\\s*callbackMock\\s*\\)\\.toHaveBeenCalled\\(\\s*\\)",
+              message: "Uji pemanggilan dengan expect(callbackMock).toHaveBeenCalled();",
+            },
+            {
+              pattern: "expect\\(\\s*callbackMock\\s*\\)\\.toHaveBeenCalledWith\\(\\s*['\"]Terkirim: Halo['\"]\\s*\\)",
+              message: "Uji argumen dengan expect(callbackMock).toHaveBeenCalledWith('Terkirim: Halo');",
+            },
+          ],
+          solution:
+            "function kirimNotif(pesan, callback) {\n  callback('Terkirim: ' + pesan);\n}\n\nconst callbackMock = vi.fn();\nkirimNotif('Halo', callbackMock);\n\nexpect(callbackMock).toHaveBeenCalled();\nexpect(callbackMock).toHaveBeenCalledWith('Terkirim: Halo');",
+          susunKode: {
+            question:
+              "Susun pengujian fungsi callback menggunakan `vi.fn()` dan uji pemanggilan beserta argumen yang diterimanya.",
+            potongan: [
+              "const callbackMock = vi.fn();",
+              "kirimNotif('Halo', callbackMock);",
+              "expect(callbackMock).toHaveBeenCalled();",
+              "expect(callbackMock).toHaveBeenCalledWith('Terkirim: Halo');",
+            ],
+            pengecoh: [
+              "const callbackMock = () => {};",
+              "expect(callbackMock).toBe('Terkirim: Halo');",
+              "expect(callbackMock).toBeCalledTimes(0);",
+            ],
+            pemisah: "\n",
+            explanation:
+              "`vi.fn()` membuat mock function yang merekam interaksi pemanggilan. Keping `() => {}` menggoda karena berupa fungsi kosong yang tidak error saat dipanggil, tapi fungsi panah biasa tidak punya kemampuan introspeksi Vitest sehingga pemanggilan `.toHaveBeenCalled()` akan melempar TypeError. Keping `expect(callbackMock).toBe('Terkirim: Halo')` adalah jebakan klasik yang membandingkan objek mock dengan string argumen alih-alih memakai matcher `toHaveBeenCalledWith`. Keping `toBeCalledTimes(0)` keliru karena fungsi tersebut justru dipanggil 1 kali.",
+          },
+        },
+        {
+          kind: "step",
+          id: "js-10-7",
+          title: "Testing Fungsi Asynchronous",
+          explanation:
+            "Di dunia kerja nyata, mayoritas fungsi bisnis bersifat asinkron — mulai dari mengambil data API, membaca database, hingga memproses antrean pesan. Jika kamu menguji fungsi asinkron tanpa kata kunci `async` dan `await` di dalam blok `it(...)` atau `test(...)`, pengujianmu akan langsung selesai dan dianggap sukses padahal Promise di dalamnya bahkan belum selesai dieksekusi (atau error yang dilempar terlewatkan begitu saja). Vitest mendukung fungsi callback pengujian bertipe `async () => { ... }`. Di dalamnya, kamu menggunakan `await` pada pemanggilan fungsi yang diuji, lalu mencocokkan hasil datanya memakai `expect(data).toEqual(...)` atau `toBe(...)`.",
+          example: {
+            code: "async function ambilUser(id) {\n  return { id, status: 'aktif' };\n}\n\nit('mengembalikan data user aktif', async () => {\n  const user = await ambilUser(1);\n  expect(user.status).toBe('aktif');\n});",
+            output: "Test suite lulus: Promise ditunggu hingga selesai sebelum assertion dievaluasi.",
+            note: "Selalu pasang kata kunci async pada callback test/it saat menguji kode yang mengembalikan Promise.",
+          },
+          instruction:
+            "Lengkapi blok `it`: panggil `await hitungDiskonAsync(100)`, simpan di `const hasil`, lalu buat assertion `expect(hasil).toBe(90)`.",
+          starterCode:
+            "async function hitungDiskonAsync(harga) {\n  return harga * 0.9;\n}\n\nit('menghitung potongan harga async', async () => {\n\n});",
+          language: "js",
+          tests: [
+            {
+              pattern: "it\\([^,]+,\\s*async\\s*\\(",
+              message: "Callback pengujian it wajib menggunakan kata kunci async: it('...', async () => { ... });",
+            },
+            {
+              pattern: "const\\s+hasil\\s*=\\s*await\\s+hitungDiskonAsync\\(\\s*100\\s*\\)",
+              message: "Panggil const hasil = await hitungDiskonAsync(100);",
+            },
+            {
+              pattern: "expect\\(\\s*hasil\\s*\\)\\.toBe\\(\\s*90\\s*\\)",
+              message: "Buat assertion expect(hasil).toBe(90);",
+            },
+          ],
+          solution:
+            "async function hitungDiskonAsync(harga) {\n  return harga * 0.9;\n}\n\nit('menghitung potongan harga async', async () => {\n  const hasil = await hitungDiskonAsync(100);\n  expect(hasil).toBe(90);\n});",
+          susunKode: {
+            question:
+              "Susun pengujian fungsi asinkron dengan menunggu hasil Promise menggunakan `await` sebelum mencocokkan nilainya.",
+            potongan: [
+              "async function hitungDiskonAsync(harga) {",
+              "  return harga * 0.9;\n}",
+              "it('menghitung potongan harga async', async () => {",
+              "  const hasil = await hitungDiskonAsync(100);",
+              "  expect(hasil).toBe(90);",
+              "});",
+            ],
+            pengecoh: [
+              "  const hasil = hitungDiskonAsync(100);",
+              "  expect(hasil).toBe(100);",
+              "it('menghitung potongan harga async', () => {",
+            ],
+            pemisah: "\n",
+            explanation:
+              "Fungsi async wajib ditunggu dengan `await` di dalam callback test bertanda `async`. Keping `const hasil = hitungDiskonAsync(100)` tanpa `await` adalah jebakan nomor satu pengujian async bagi pemula: variabel `hasil` memegang `Promise { <pending> }`, bukan angka 90, sehingga assertion `toBe(90)` gagal. Keping `expect(hasil).toBe(100)` salah angka ekspektasi karena 100 dikali 0.9 adalah 90. Keping `it(...)` tanpa kata kunci `async` keliru karena kata kunci `await` di dalamnya akan menyebabkan SyntaxError.",
           },
         },
         {

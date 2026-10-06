@@ -2,7 +2,6 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { PemilihModeAwal } from "@/components/ModeBelajarBar";
 import { HeaderNav } from "@/components/HeaderNav";
 import "./globals.css";
 
@@ -12,7 +11,7 @@ export const metadata: Metadata = {
     "Platform belajar coding interaktif kurikulum berbasis lowongan kerja nyata Indonesia. Mode ngetik langsung dan susun logika kode dengan feedback otomatis.",
   icons: {
     icon: "/logo.svg",
-    apple: "/logo.jpg",
+    apple: "/logo.svg",
   },
 };
 
@@ -47,16 +46,14 @@ export default function RootLayout({
               href="/"
               className="group flex items-center gap-2 sm:gap-2.5 text-lg sm:text-xl font-bold tracking-tight cursor-pointer shrink-0"
             >
-              <div className="relative flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 shadow-[0_0_16px_rgba(245,158,11,0.35)] transition-transform duration-200 group-hover:scale-105">
-                <Image
-                  src="/logo.svg"
-                  alt="BiLearn logo"
-                  width={22}
-                  height={22}
-                  priority
-                  className="rounded-lg sm:w-6 sm:h-6"
-                />
-              </div>
+              <Image
+                src="/logo.svg"
+                alt="BiLearn logo"
+                width={32}
+                height={32}
+                priority
+                className="h-7 w-7 sm:h-8 sm:w-8 rounded-xl object-contain shadow-[0_0_14px_rgba(184,134,11,0.3)] transition-transform duration-200 group-hover:scale-105"
+              />
               <span className="text-slate-900 dark:text-white transition-colors">
                 Bi
                 <span className="bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-500 bg-clip-text text-transparent">
@@ -75,10 +72,6 @@ export default function RootLayout({
         <main className="mx-auto w-full max-w-6xl min-w-0 flex-1 px-4 py-8 sm:px-6">
           {children}
         </main>
-
-        <Suspense fallback={null}>
-          <PemilihModeAwal />
-        </Suspense>
 
         {/* Polished Modern Footer */}
         <footer className="mt-16 border-t border-slate-200 bg-slate-100/80 py-8 text-sm text-slate-600 dark:border-white/[0.08] dark:bg-[#020617]/70 dark:text-slate-400 transition-colors">
