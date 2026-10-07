@@ -10,6 +10,15 @@ interface FlashcardSessionViewProps {
   initialCards: JapaneseFlashcardItem[];
 }
 
+function shuffleArray<T>(items: T[]): T[] {
+  const result = [...items];
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+}
+
 export function FlashcardSessionView({
   part,
   initialCards,
@@ -20,6 +29,7 @@ export function FlashcardSessionView({
   const [queue, setQueue] = useState<JapaneseFlashcardItem[]>(initialCards);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnswerShown, setIsAnswerShown] = useState(false);
+  const [isShuffled, setIsShuffled] = useState(false);
   const [roundRatings, setRoundRatings] = useState<
     Record<string, "memorized" | "not-memorized">
   >({});
@@ -54,6 +64,16 @@ export function FlashcardSessionView({
     setAnnouncement(`Jawaban dibuka untuk kata ${currentCard.term}.`);
   }, [currentCard]);
 
+  const handlePrevCard = useCallback(() => {
+    if (currentIndex <= 0) return;
+    const prevIndex = currentIndex - 1;
+    setCurrentIndex(prevIndex);
+    setIsAnswerShown(false);
+    setAnnouncement(
+      `Kembali ke kartu ${prevIndex + 1} dari ${queue.length}: ${queue[prevIndex].term}`
+    );
+  }, [currentIndex, queue]);
+
   const handleRate = useCallback(
     (status: "memorized" | "not-memorized") => {
       if (!isAnswerShown || !currentCard) return;
@@ -77,6 +97,24 @@ export function FlashcardSessionView({
     [isAnswerShown, currentCard, markCard, currentIndex, queue]
   );
 
+  const handleShuffle = useCallback(() => {
+    setQueue((prevQueue) => shuffleArray(prevQueue));
+    setCurrentIndex(0);
+    setIsAnswerShown(false);
+    setIsShuffled(true);
+    setRoundRatings({});
+    setAnnouncement("Urutan kartu berhasil diacak.");
+  }, []);
+
+  const handleResetOrder = useCallback(() => {
+    setQueue(initialCards);
+    setCurrentIndex(0);
+    setIsAnswerShown(false);
+    setIsShuffled(false);
+    setRoundRatings({});
+    setAnnouncement("Urutan kartu dikembalikan ke urutan asli.");
+  }, [initialCards]);
+
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
       const target = e.target as HTMLElement | null;
@@ -89,6 +127,15 @@ export function FlashcardSessionView({
       }
 
       if (isRoundComplete) return;
+
+      // Navigasi kartu sebelumnya
+      if (e.key === "Backspace" || e.key === "ArrowUp") {
+        if (currentIndex > 0) {
+          e.preventDefault();
+          handlePrevCard();
+          return;
+        }
+      }
 
       if (!isAnswerShown) {
         if (target?.closest("a, button, summary, select")) {
@@ -112,23 +159,33 @@ export function FlashcardSessionView({
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isRoundComplete, isAnswerShown, handleRevealAnswer, handleRate]);
+  }, [isRoundComplete, isAnswerShown, handleRevealAnswer, handleRate, currentIndex, handlePrevCard]);
 
-  const handleRepeatUnmemorized = () => {
+  const handleRepeatUnmemorized = (shuffle = false) => {
     if (unmemorizedCards.length === 0) return;
-    setQueue(unmemorizedCards);
+    const cardsToUse = shuffle ? shuffleArray(unmemorizedCards) : unmemorizedCards;
+    setQueue(cardsToUse);
     setCurrentIndex(0);
     setIsAnswerShown(false);
+    setIsShuffled(shuffle);
     setRoundRatings({});
-    setAnnouncement(`Memulai putaran ulang dengan ${unmemorizedCards.length} kartu.`);
+    setAnnouncement(
+      `Memulai putaran ulang dengan ${unmemorizedCards.length} kartu ${shuffle ? "secara acak" : ""}.`
+    );
   };
 
-  const handleRepeatAll = () => {
-    setQueue(initialCards);
+  const handleRepeatAll = (shuffle = false) => {
+    const cardsToUse = shuffle ? shuffleArray(initialCards) : initialCards;
+    setQueue(cardsToUse);
     setCurrentIndex(0);
     setIsAnswerShown(false);
+    setIsShuffled(shuffle);
     setRoundRatings({});
-    setAnnouncement("Memulai putaran ulang semua 10 kartu.");
+    setAnnouncement(
+      shuffle
+        ? "Memulai putaran ulang semua 10 kartu dengan urutan acak."
+        : "Memulai putaran ulang semua 10 kartu."
+    );
   };
 
   return (
@@ -147,12 +204,13 @@ export function FlashcardSessionView({
       )}
 
       {/* Header & Navigasi */}
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 dark:border-white/[0.08] pb-3">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 dark:border-white/[0.08] pb-3">
         <Link
           href="/flashcards/jepang"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-amber-600 dark:hover:text-amber-300 transition-colors cursor-pointer"
+          className="inline-flex items-center gap-2 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-800/80 px-3.5 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 shadow-2xs hover:bg-slate-100 dark:hover:bg-slate-700 hover:border-slate-300 dark:hover:border-white/20 transition cursor-pointer"
         >
-          <span aria-hidden="true">←</span> Kembali ke Daftar Bagian
+          <span aria-hidden="true" className="text-sm font-bold">←</span>
+          <span>Kembali ke Daftar Bagian</span>
         </Link>
         <span className="text-xs font-semibold text-rose-600 dark:text-rose-400 uppercase tracking-wider">
           JLPT N5 — Vol. 1 · {part.title}
@@ -161,14 +219,54 @@ export function FlashcardSessionView({
 
       {!isRoundComplete && currentCard ? (
         <div className="space-y-4">
-          {/* Posisi & Bar Progress Sesi */}
-          <div className="flex items-center justify-between text-xs font-medium text-slate-500 dark:text-slate-400">
-            <span>
-              Kartu {currentIndex + 1} dari {queue.length}
-            </span>
-            <span className="text-slate-700 dark:text-slate-300">
-              Hafal di Bagian Ini: {partMemorizedCount}/10
-            </span>
+          {/* Posisi, Aksi Acak & Bar Progress Sesi */}
+          <div className="flex flex-wrap items-center justify-between gap-2 text-xs font-medium text-slate-500 dark:text-slate-400">
+            <div className="flex items-center gap-2">
+              {currentIndex > 0 && (
+                <button
+                  type="button"
+                  onClick={handlePrevCard}
+                  className="cursor-pointer inline-flex items-center gap-1 rounded-lg border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-800 px-2.5 py-1 text-[11px] font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white transition shadow-2xs"
+                  title="Kembali ke kartu sebelumnya (Backspace / ↑)"
+                >
+                  <span aria-hidden="true">←</span>
+                  <span>Sebelumnya</span>
+                </button>
+              )}
+              <span>
+                Kartu {currentIndex + 1} dari {queue.length}
+              </span>
+              {isShuffled && (
+                <span className="rounded-full bg-purple-500/10 border border-purple-500/30 px-2 py-0.5 text-[10px] font-bold text-purple-700 dark:text-purple-300">
+                  Acak
+                </span>
+              )}
+            </div>
+
+            <div className="flex items-center gap-2 sm:gap-3">
+              <button
+                type="button"
+                onClick={handleShuffle}
+                className="cursor-pointer inline-flex items-center gap-1.5 rounded-lg border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-800 px-2.5 py-1 text-[11px] font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-purple-600 dark:hover:text-purple-300 transition shadow-2xs"
+                title="Acak urutan kartu di bagian ini"
+              >
+                <span aria-hidden="true">🔀</span>
+                <span>{isShuffled ? "Acak Ulang" : "Acak Kartu"}</span>
+              </button>
+              {isShuffled && (
+                <button
+                  type="button"
+                  onClick={handleResetOrder}
+                  className="cursor-pointer text-[11px] font-medium text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 underline transition"
+                  title="Kembalikan urutan sesuai nomor asli"
+                >
+                  Urutan Asli
+                </button>
+              )}
+              <span className="text-slate-700 dark:text-slate-300">
+                Hafal di Bagian Ini: {partMemorizedCount}/10
+              </span>
+            </div>
           </div>
           <div className="h-2 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-800">
             <div
@@ -200,7 +298,21 @@ export function FlashcardSessionView({
                 <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-sm">
                   Coba ingat arti dan cara bacanya, lalu buka jawaban di bawah.
                 </p>
-                <div className="pt-2">
+                <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
+                  {currentIndex > 0 && (
+                    <button
+                      type="button"
+                      onClick={handlePrevCard}
+                      className="cursor-pointer inline-flex items-center gap-1.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-slate-800 px-4 py-3 text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white transition shadow-2xs"
+                      title="Kembali ke kartu sebelumnya (Backspace / ↑)"
+                    >
+                      <span aria-hidden="true">←</span>
+                      <span>Sebelumnya</span>
+                      <span className="hidden sm:inline text-xs opacity-60 font-mono">
+                        (↑)
+                      </span>
+                    </button>
+                  )}
                   <button
                     type="button"
                     onClick={handleRevealAnswer}
@@ -283,8 +395,8 @@ export function FlashcardSessionView({
                 </details>
 
                 {/* Tombol Penilaian Diri */}
-                <div className="pt-2 border-t border-slate-200 dark:border-white/[0.08]">
-                  <p className="text-xs font-medium text-slate-500 dark:text-slate-400 text-center mb-3">
+                <div className="pt-2 border-t border-slate-200 dark:border-white/[0.08] space-y-3">
+                  <p className="text-xs font-medium text-slate-500 dark:text-slate-400 text-center">
                     Bagaimana ingatanmu tentang kata ini?
                   </p>
                   <div className="grid grid-cols-2 gap-3">
@@ -313,6 +425,22 @@ export function FlashcardSessionView({
                       </span>
                     </button>
                   </div>
+                  {currentIndex > 0 && (
+                    <div className="text-center pt-1">
+                      <button
+                        type="button"
+                        onClick={handlePrevCard}
+                        className="cursor-pointer inline-flex items-center gap-1.5 text-xs font-medium text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition py-1"
+                        title="Kembali ke kartu sebelumnya"
+                      >
+                        <span aria-hidden="true">←</span>
+                        <span>Kembali ke kartu sebelumnya</span>
+                        <span className="hidden sm:inline font-mono text-[10px] text-slate-400 dark:text-slate-500">
+                          (Backspace / ↑)
+                        </span>
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             )}
@@ -388,7 +516,7 @@ export function FlashcardSessionView({
             {unmemorizedCards.length > 0 ? (
               <button
                 type="button"
-                onClick={handleRepeatUnmemorized}
+                onClick={() => handleRepeatUnmemorized(false)}
                 className="cursor-pointer w-full rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 py-3 text-sm font-bold text-slate-950 shadow-md shadow-amber-500/20 transition-all hover:from-amber-300 hover:to-amber-400"
               >
                 Ulangi yang Belum Hafal ({unmemorizedCards.length} Kartu)
@@ -401,17 +529,26 @@ export function FlashcardSessionView({
 
             <button
               type="button"
-              onClick={handleRepeatAll}
+              onClick={() => handleRepeatAll(true)}
+              className="cursor-pointer w-full rounded-xl border border-purple-300 dark:border-purple-500/30 bg-purple-50 dark:bg-purple-950/30 py-3 text-sm font-bold text-purple-700 dark:text-purple-300 transition hover:bg-purple-100 dark:hover:bg-purple-900/40"
+            >
+              🔀 Ulangi Semua dengan Urutan Acak
+            </button>
+
+            <button
+              type="button"
+              onClick={() => handleRepeatAll(false)}
               className="cursor-pointer w-full rounded-xl border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-slate-800/80 py-3 text-sm font-bold text-slate-700 dark:text-slate-200 transition hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white"
             >
-              Ulangi Semua (10 Kartu)
+              Ulangi Semua (Urutan Asli)
             </button>
 
             <Link
               href="/flashcards/jepang"
-              className="block w-full text-center rounded-xl py-2.5 text-xs sm:text-sm font-semibold text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition"
+              className="cursor-pointer inline-flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-800/80 py-3 text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition"
             >
-              Kembali ke Daftar Bagian
+              <span aria-hidden="true">←</span>
+              <span>Kembali ke Daftar Bagian</span>
             </Link>
           </div>
         </div>

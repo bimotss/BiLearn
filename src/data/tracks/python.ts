@@ -110,9 +110,9 @@ export const pythonTrack: Track = {
           language: "text",
           tests: [
             {
-              pattern: "python3\\s+(--version|-V)",
+              pattern: "(python3?|py)\\s+(--version|-V)",
               message:
-                "Di macOS/Linux nama programnya `python3` (dengan angka 3), lalu flag versi. Ada dua bentuk flag yang diterima: yang panjang berawalan dua tanda minus, atau yang pendek berhuruf besar.",
+                "Gunakan perintah Python (`python3`, `python`, atau `py`) diikuti dengan flag versi `--version` atau `-V`.",
             },
           ],
           solution: "python3 --version",
@@ -151,8 +151,8 @@ export const pythonTrack: Track = {
             "```\n\n" +
             "## Eksekusi Script vs REPL Interaktif\n\n" +
             "Ada dua cara utama kamu menjalankan Python:\n" +
-            "- **REPL (Read-Eval-Print Loop)**: Ketik `python` di terminal untuk membuka konsol interaktif. Sangat cocok untuk menguji 1--2 baris kode dengan cepat.\n" +
-            "- **Berkas Script (`.py`)**: Tulis seluruh logika program di dalam berkas teks `.py`, lalu jalankan dari terminal dengan perintah `python nama_file.py`.\n\n" +
+            "- **REPL (Read-Eval-Print Loop)**: Ketik `python3` di terminal untuk membuka konsol interaktif. Sangat cocok untuk menguji 1–2 baris kode dengan cepat.\n" +
+            "- **Berkas Script (`.py`)**: Tulis seluruh logika program di dalam berkas teks `.py`, lalu jalankan dari terminal dengan perintah `python3 nama_file.py`.\n\n" +
             "## Rujukan Tipe Data Dasar Python\n\n" +
             "| Tipe Data | Kode | Contoh Nilai | Penjelasan Ringkas |\n" +
             "|---|---|---|---|\n" +
@@ -161,8 +161,31 @@ export const pythonTrack: Track = {
             "| **String** | `str` | `\"Halo\"`, `'BiLearn'` | Teks yang dibungkus petik tunggal atau ganda. |\n" +
             "| **Boolean** | `bool` | `True`, `False` | Nilai kebenaran logika (wajib kapital awal). |\n" +
             "| **NoneType** | `NoneType` | `None` | Merepresentasikan ketiadaan nilai (spesial di Python). |\n\n" +
+            "## Operasi String & f-string Esensial\n\n" +
+            "Manipulasi teks adalah tugas harian pengembang Python. Python menyediakan metode bawaan yang sangat kaya:\n\n" +
+            "| Operasi / Method | Contoh Kode | Hasil | Kasus Dunia Kerja |\n" +
+            "|---|---|---|---|\n" +
+            "| `f-string` | `f\"User: {nama.upper()}\"` | `\"User: BUDI\"` | Templating pesan log dan query dinamis |\n" +
+            "| `.strip()` | `\"  halo@mail.com  \".strip()` | `\"halo@mail.com\"` | Sanitasi spasi liar dari data input user |\n" +
+            "| `.lower()` / `.upper()` | `\"Admin\".lower()` | `\"admin\"` | Normalisasi teks sebelum pencarian / perbandingan |\n" +
+            "| `.split(sep)` | `\"apel,jeruk,mangga\".split(\",\")` | `['apel', 'jeruk', 'mangga']` | Mengurai baris data teks menjadi list |\n" +
+            "| `.replace(old, new)` | `\"Rp 10.000\".replace(\"Rp \", \"\")` | `\"10.000\"` | Pembersihan simbol mata uang dari scraping |\n\n" +
+            "## Alur Kendali: Percabangan & Perulangan (while, for, break, continue)\n\n" +
+            "Python membedakan perulangan terhitung (`for` dengan `range`) dan perulangan berbasis kondisi (`while`):\n\n" +
+            "```text\n" +
+            "+-----------------------------------+    +-----------------------------------+\n" +
+            "| for item in koleksi:              |    | while kondisi_benar:              |\n" +
+            "|   # Berulang untuk tiap elemen    |    |   # Berulang sampai kondisi False |\n" +
+            "|   # Gunakan 'continue' utk lewati |    |   # Hati-hati infinite loop!      |\n" +
+            "|   # Gunakan 'break' utk berhenti  |    |   # Gunakan 'break' utk interupsi |\n" +
+            "+-----------------------------------+    +-----------------------------------+\n" +
+            "```\n\n" +
+            "- **`break`**: Menghentikan perulangan secara paksa dan langsung melompat keluar dari blok loop.\n" +
+            "- **`continue`**: Menghentikan iterasi saat ini dan langsung melompat ke iterasi berikutnya tanpa mengeksekusi sisa baris di bawahnya.\n\n" +
             "## Jebakan & Kesalahan Umum\n\n" +
-            "- **Error Tipe saat Penggabungan Teks (Type Error)**: Di Python, kamu tidak bisa menggabungkan string dengan angka secara langsung menggunakan operator `+` (`\"Tahun \" + 2026` memicu `TypeError`). Kamu harus mengonversi angka ke string dengan `str(2026)` atau menggunakan **f-string** (`f\"Tahun {2026}\"`).\n" +
+            "- **String Bersifat Immutable**: Memanggil `teks.strip()` tidak mengubah isi variabel `teks` asli. Kamu wajib menampung hasilnya kembali: `teks = teks.strip()`.\n" +
+            "- **Infinite Loop pada `while`**: Lupa memperbarui variabel counter/status di dalam loop `while` akan membuat program macet dan memakan 100% CPU server.\n" +
+            "- **Error Tipe saat Penggabungan Teks (TypeError)**: Di Python, kamu tidak bisa menggabungkan string dengan angka secara langsung menggunakan operator `+` (`\"Tahun \" + 2026` memicu `TypeError`). Kamu harus mengonversi angka ke string dengan `str(2026)` atau menggunakan **f-string** (`f\"Tahun {2026}\"`).\n" +
             "- **Kesalahan Indentasi (IndentationError)**: Python tidak memakai kurung kurawal `{}` untuk penanda blok kode. Python memaksamu menggunakan indentasi (4 spasi). Mencampur Tab dan Spasi akan membuat kode gagal berjalan!\n" +
             "- **Kapitalisasi Kata Kunci**: Kata kunci seperti `True`, `False`, dan `None` wajib menggunakan huruf kapital di awal. Menggunakan `true` atau `false` akan memicu `NameError`.\n\n" +
             "## Kaitan ke Dunia Kerja\n\n" +
@@ -339,9 +362,9 @@ export const pythonTrack: Track = {
           tests: [
             {
               pattern:
-                "if\\s+score\\s*>=\\s*75\\s*:\\s*\\n?\\s*print\\(\\s*[\"']Lulus[\"']\\s*\\)",
+                "if\\s*\\(?\\s*score\\s*>=\\s*75\\s*\\)?\\s*:\\s*\\n?[ \\t]*print\\(\\s*[\"']Lulus[\"']\\s*\\)",
               message:
-                "Gunakan if dan periksa apakah score >= 75, lalu panggil print.",
+                "Gunakan if dan periksa apakah score >= 75, lalu panggil print(\"Lulus\").",
             },
           ],
           solution: 'if score >= 75:\n    print("Lulus")',
@@ -372,7 +395,8 @@ export const pythonTrack: Track = {
             output: "Angka 1\nAngka 2\nAngka 3",
             note: "Gunakan break untuk keluar dari perulangan lebih awal.",
           },
-          instruction: "Tulis perulangan `for i in range(5):`.",
+          instruction:
+            "Buat perulangan `for` yang mengiterasi angka dari urutan `range(5)` (dari 0 hingga 4), lalu cetak masing-masing angka tersebut ke layar menggunakan fungsi `print()`.",
           starterCode: "# Tulis perulangan for di sini\n",
           language: "text",
           tests: [
@@ -562,15 +586,30 @@ export const pythonTrack: Track = {
             "Contoh data[1:4]  --> ['B', 'C', 'D'] (Indeks 4 'E' TIDAK ikut!)\n" +
             "Contoh data[-1]   --> 'E' (Elemen paling akhir)\n" +
             "```\n\n" +
-            "## List & Dict Comprehension (Idiom khas Python)\n\n" +
-            "Daripada membuat list kosong dan menambahkannya lewat perulangan `for` 4 baris, Python memungkinkan pembuatan list/dict baru secara deklaratif dalam 1 baris:\n" +
+            "## Operasi Himpunan (Set Operations)\n\n" +
+            "Set sangat ampuh untuk logika himpunan matematika dan deduplikasi data secara instan:\n\n" +
+            "| Operasi | Operator | Metode | Contoh (`a = {1, 2}`, `b = {2, 3}`) | Hasil |\n" +
+            "|---|---|---|---|---|\n" +
+            "| **Irisan** (*Intersection*) | `&` | `a.intersection(b)` | `a & b` | `{2}` (Elemen yang ada di kedua set) |\n" +
+            "| **Gabungan** (*Union*) | `\\|` | `a.union(b)` | `a \\| b` | `{1, 2, 3}` (Semua elemen tanpa duplikat) |\n" +
+            "| **Selisih** (*Difference*) | `-` | `a.difference(b)` | `a - b` | `{1}` (Elemen di a tapi bukan di b) |\n" +
+            "| **Selisih Simetris** | `^` | `a.symmetric_difference(b)` | `a ^ b` | `{1, 3}` (Elemen unik di salah satu set) |\n\n" +
+            "## List/Dict Comprehension & Iterasi Gabungan (`zip`, `sorted`)\n\n" +
+            "Comprehension dan fungsi iterasi bawaan memungkinkan transformasi data tanpa loop manual berbaris-baris:\n\n" +
             "```python\n" +
-            "# List Comprehension\n" +
-            "kuadrat = [x**2 for x in range(5) if x % 2 == 0]  # [0, 4, 16]\n\n" +
-            "# Dict Comprehension\n" +
-            "harga_pajak = {item: harga * 1.1 for item, harga in barang.items()}\n" +
+            "# Comprehension: cepat, ringkas, deklaratif\n" +
+            "kuadrat = [x**2 for x in range(5) if x % 2 == 0]  # [0, 4, 16]\n" +
+            "harga_pajak = {item: harga * 1.1 for item, harga in barang.items()}\n\n" +
+            "# zip: pasangkan dua koleksi paralel\n" +
+            "nama = [\"Ani\", \"Budi\"]\n" +
+            "nilai = [90, 85]\n" +
+            "rekap = dict(zip(nama, nilai))  # {'Ani': 90, 'Budi': 85}\n\n" +
+            "# sorted dengan key lambda: urutkan data kompleks\n" +
+            "siswa = [{\"nama\": \"Budi\", \"skor\": 80}, {\"nama\": \"Ani\", \"skor\": 95}]\n" +
+            "peringkat = sorted(siswa, key=lambda s: s[\"skor\"], reverse=True)\n" +
             "```\n\n" +
             "## Jebakan & Kesalahan Umum\n\n" +
+            "- **Set Tidak Memiliki Indeks**: Menulis `my_set[0]` akan memicu `TypeError: 'set' object is not subscriptable`. Jika urutan posisi penting, gunakan List atau Tuple.\n" +
             "- **`KeyError` saat Akses Dictionary**: Mengakses kunci dengan `dict['key']` akan membuat program crash jika kunci tidak ada. Selalu gunakan `dict.get('key', default)`.\n" +
             "- **Menyalin List secara Salah (Reference Copy)**: `b = a` tidak membuat list baru, melainkan hanya membuat dua nama merujuk ke lokasi memori yang sama. Mengubah `b` akan ikut mengubah `a`! Gunakan `b = a.copy()` atau `b = a[:]`.\n" +
             "- **Mengubah List saat Sedang Di-looping**: Menghapus elemen list di dalam perulangan `for x in my_list:` akan mengacaukan indeks perulangan. Buat list baru via comprehension alih-alih merusak list asli.\n\n" +
@@ -751,9 +790,9 @@ export const pythonTrack: Track = {
           tests: [
             {
               pattern:
-                "squares\\s*=\\s*\\[\\s*\\w+\\s*\\*\\*\\s*2\\s+for\\s+\\w+\\s+in\\s+numbers\\s*\\]",
+                "squares\\s*=\\s*\\[\\s*(\\w+\\s*\\*\\*\\s*2|\\w+\\s*\\*\\s*\\w+)\\s+for\\s+\\w+\\s+in\\s+numbers\\s*\\]",
               message:
-                "Deklarasikan list comprehension untuk memangkatkan angka-angka dari numbers.",
+                "Deklarasikan list comprehension untuk memangkatkan angka-angka dari numbers (misalnya x ** 2 atau x * x).",
             },
           ],
           solution: "squares = [x ** 2 for x in numbers]",
@@ -789,7 +828,7 @@ export const pythonTrack: Track = {
             note: "Menghindari perulangan manual berbasis indeks counter.",
           },
           instruction:
-            "Tuliskan perulangan enumerate `for i, item in enumerate(items):`.",
+            "Gunakan fungsi `enumerate()` pada list `items` untuk mengiterasi indeks (`i`) dan elemennya (`item`) secara bersamaan, lalu cetak pasangan nilai tersebut (`print(i, item)`).",
           starterCode: "# Tulis enumerate di sini\n",
           language: "text",
           tests: [
@@ -828,7 +867,7 @@ export const pythonTrack: Track = {
             note: "Memilih struktur data yang tepat mempermudah penulisan kode.",
           },
           instruction:
-            "Sebagai uji pemahaman, bayangkan kamu mempunyai daftar data absensi karyawan yang butuh pencarian sangat cepat (instan). Buatlah variabel `struktur_pencarian` dan inisialisasi dengan struktur data dictionary kosong.",
+            "Kamu membutuhkan struktur data untuk memetakan ID karyawan agar pencarian berjalan instan dalam kompleksitas $O(1)$. Buatlah variabel bernama `struktur_pencarian` dan inisialisasikan sebagai dictionary kosong.",
           starterCode: "# Buat variabel struktur_pencarian dengan tipe dictionary\n",
           language: "text",
           tests: [
@@ -982,7 +1021,24 @@ export const pythonTrack: Track = {
             "| **`math`** | Perhitungan Matematika Lanjutan | `math.sqrt()`, `math.ceil()`, `math.pi` |\n" +
             "| **`random`** | Acak Angka & Elemen | `random.choice()`, `random.randint()` |\n" +
             "| **`collections`** | Struktur Data Lanjutan | `Counter()`, `defaultdict()` |\n\n" +
+            "## Contoh Praktis `collections` & Fleksibilitas Argumen\n\n" +
+            "Dua fitur pustaka standar yang sangat sering dipakai di proyek profesional:\n\n" +
+            "```python\n" +
+            "from collections import Counter, defaultdict\n\n" +
+            "# 1. Counter: hitung frekuensi data tanpa loop manual\n" +
+            "suara = [\"A\", \"B\", \"A\", \"A\", \"B\"]\n" +
+            "hasil = Counter(suara)  # {'A': 3, 'B': 2}\n\n" +
+            "# 2. *args & **kwargs: fungsi fleksibel serbaguna\n" +
+            "def buat_log(pesan, *tags, **metadata):\n" +
+            "    # tags ditampung sebagai tuple: ('auth', 'warn')\n" +
+            "    # metadata ditampung sebagai dict: {'ip': '127.0.0.1', 'user': 'admin'}\n" +
+            "    pass\n\n" +
+            "# 3. Type Hint Modern (Python 3.10+): gunakan pipa '|' untuk None/Union\n" +
+            "def ambil_profil(user_id: int) -> dict[str, str] | None:\n" +
+            "    return None\n" +
+            "```\n\n" +
             "## Jebakan & Kesalahan Umum\n\n" +
+            "- **Urutan Parameter Default Terbalik**: Parameter ber-default wajib diletakkan SETELAH parameter biasa. `def coba(a=1, b)` memicu `SyntaxError: non-default argument follows default argument`.\n" +
             "- **Mutable Default Argument**: Mendefinisikan fungsi dengan default list `def func(items=[]):` akan membagikan list yang SAMA di setiap pemanggilan fungsi! Gunakan `def func(items=None): if items is None: items = []`.\n" +
             "- **Mengubah Variabel Global (Global Pollution)**: Menggunakan kata kunci `global x` di dalam fungsi membuat state aplikasi sulit dilacak dan rentan terhadap bug. Kirimkan data melalui parameter dan kembalikan via `return`.\n" +
             "- **Lupa Statement Return**: Fungsi yang tidak menuliskan `return` secara eksplisit akan otomatis mengembalikan nilai `None`.\n\n" +
@@ -1011,7 +1067,7 @@ export const pythonTrack: Track = {
           tests: [
             {
               pattern:
-                "def\\s+hitung\\(\\s*a\\s*,\\s*b\\s*=\\s*10\\s*\\)\\s*:\\s*\\n?\\s*return\\s+a\\s*\\+\\s*b",
+                "def\\s+hitung\\(\\s*a(?:\\s*:\\s*\\w+)?\\s*,\\s*b(?:\\s*:\\s*\\w+)?\\s*=\\s*10\\s*\\)(?:\\s*->\\s*\\w+)?\\s*:\\s*\\n?[ \\t]*return\\s+(a\\s*\\+\\s*b|b\\s*\\+\\s*a)",
               message:
                 "Belum cocok. Pastikan tiga hal: nama parameternya `a` dan `b`, parameter kedua punya nilai default (`b=10`), dan baris `return` menjumlahkan keduanya. Ingat titik dua di akhir baris `def` serta indentasi 4 spasi pada baris berikutnya.",
             },
@@ -1049,7 +1105,7 @@ export const pythonTrack: Track = {
             note: "Sangat umum ditemukan pada pembungkusan fungsi (decorator).",
           },
           instruction:
-            "Tuliskan parameter fungsi `def process(*args, **kwargs):`.",
+            "Definisikan fungsi bernama `process` yang mampu menerima sembarang argumen posisi (`*args`) dan argumen kata kunci (`**kwargs`) sekaligus. Di dalam tubuh fungsi, gunakan pernyataan penahan tempat `pass`.",
           starterCode: "# Tulis def process di sini\n",
           language: "text",
           tests: [
@@ -1166,7 +1222,7 @@ export const pythonTrack: Track = {
             note: "Pola standar di seluruh modul dan script Python.",
           },
           instruction:
-            'Tuliskan blok penjaga `if __name__ == "__main__":`.',
+            'Buat blok pengondisian penjaga `__name__` agar pemanggilan fungsi `main()` hanya dijalankan saat berkas ini dieksekusi langsung sebagai program utama via terminal, bukan saat diimpor oleh modul lain.',
           starterCode: "# Tulis if __name__ di sini\n",
           language: "text",
           tests: [
@@ -1248,7 +1304,7 @@ export const pythonTrack: Track = {
             note: "Type hint meningkatkan keamanan kode tanpa mengorbankan sifat dinamis Python.",
           },
           instruction:
-            "Tuliskan fungsi dengan type hint `def greet(name: str) -> str:`.",
+            'Buat fungsi `greet` yang menerima satu parameter teks `name` bertipe `str` dan mengembalikan string sapaan bertipe `str` (seperti format `f"Halo {name}"`). Lengkapi deklarasi fungsi dengan anotasi type hint.',
           starterCode: "# Tulis fungsi dengan type hint di sini\n",
           language: "text",
           tests: [
@@ -1405,10 +1461,32 @@ export const pythonTrack: Track = {
             "| Format | Modul Bawaan | Fungsi Utama | Gunakan Saat |\n" +
             "|---|---|---|---|\n" +
             "| **Teks Polos** | Bawaan `open()` | `read()`, `write()`, `readline()` | Membaca file `.txt` atau log sederhana. |\n" +
-            "| **CSV** | `import csv` | `csv.reader()`, `csv.DictReader()` | Memproses baris tabel spreadsheet `.csv`. |\n" +
-            "| **JSON** | `import json` | `json.loads()` (string), `json.load()` (file) | Mengurai payload respons REST API. |\n" +
-            "| **Path OS** | `from pathlib import Path` | `Path(\"folder\") / \"file.txt\"` | Penanganan path berkas lintas Windows/Mac/Linux. |\n\n" +
+            "| **CSV** | `import csv` | `csv.DictReader()`, `csv.DictWriter()` | Memproses baris tabel spreadsheet `.csv`. |\n" +
+            "| **JSON** | `import json` | `json.loads()`, `json.dump()` (ke berkas) | Mengurai payload respons REST API & konfigurasi. |\n" +
+            "| **Path OS** | `from pathlib import Path` | `Path(\"data\") / \"file.txt\"` | Penanganan path berkas lintas Windows/Mac/Linux. |\n\n" +
+            "## Contoh Menulis Berkas & Custom Exception\n\n" +
+            "Praktik menulis data terstruktur dan merancang exception kustom untuk logika bisnis:\n\n" +
+            "```python\n" +
+            "import csv, json\n" +
+            "from pathlib import Path\n\n" +
+            "# 1. Tulis CSV dengan DictWriter (wajib newline='' di Windows)\n" +
+            "with open(\"output.csv\", \"w\", newline=\"\", encoding=\"utf-8\") as f:\n" +
+            "    writer = csv.DictWriter(f, fieldnames=[\"nama\", \"skor\"])\n" +
+            "    writer.writeheader()\n" +
+            "    writer.writerow({\"nama\": \"Ani\", \"skor\": 100})\n\n" +
+            "# 2. Tulis JSON terformat rapi (indentasi 2 spasi)\n" +
+            "with open(\"app.json\", \"w\", encoding=\"utf-8\") as f:\n" +
+            "    json.dump({\"status\": \"ok\", \"kode\": 200}, f, indent=2)\n\n" +
+            "# 3. Custom Exception: warisi dari Exception standar\n" +
+            "class SaldoKurangError(Exception):\n" +
+            "    \"\"\"Dilempar saat saldo rekening tidak mencukupi.\"\"\"\n" +
+            "    pass\n\n" +
+            "def potong_saldo(saldo, biaya):\n" +
+            "    if biaya > saldo:\n" +
+            "        raise SaldoKurangError(\"Saldo tidak cukup!\")\n" +
+            "```\n\n" +
             "## Jebakan & Kesalahan Umum\n\n" +
+            "- **Lupa `newline=''` saat Menulis CSV**: Pada Windows, membuka file mode `w` tanpa `newline=''` akan menghasilkan baris kosong ganda (blank lines) di antara tiap baris data CSV.\n" +
             "- **`except:` Polos (Bare Except)**: Menulis `except:` tanpa menentukan jenis error akan menangkap semua hal termasuk `KeyboardInterrupt` (Ctrl+C) dan `SystemExit`. Ini menyembunyikan bug asli dan membuat program tidak bisa dihentikan. Selalu tangkap error spesifik seperti `except (FileNotFoundError, ValueError):`.\n" +
             "- **Lupa Parameter `encoding='utf-8'`**: Sistem operasi Windows menggunakan default encoding CP1252. Membaca teks bertulisan bahasa Indonesia yang memuat simbol/emoji tanpa `encoding='utf-8'` akan memicu `UnicodeDecodeError`.\n" +
             "- **Mengabaikan Path Relatif**: Menulis path kaku seperti `C:\\Users\\Budi\\file.txt` membuat skrip gagal saat dijalankan di komputer rekan kerja atau server Linux. Gunakan `pathlib.Path`.\n\n" +
@@ -1429,13 +1507,13 @@ export const pythonTrack: Track = {
             note: "Selalu tentukan encoding='utf-8' untuk mencegah korupsi karakter di Windows.",
           },
           instruction:
-            'Tuliskan pembuka file `with open("app.log", "r", encoding="utf-8") as f:`.',
+            'Buka berkas log bernama `"app.log"` dalam mode baca (`"r"`) dengan pengkodean karakter `"utf-8"` menggunakan context manager `with open` dan alias variabel `f`. Di dalam tubuh blok, cukup gunakan pernyataan `pass`.',
           starterCode: "# Tulis with open di bawah ini\n",
           language: "text",
           tests: [
             {
               pattern:
-                "with\\s+open\\(\\s*[\"']app\\.log[\"']\\s*,\\s*[\"']r[\"']\\s*,\\s*encoding=[\"']utf-8[\"']\\s*\\)\\s+as\\s+f\\s*:",
+                "with\\s+open\\(\\s*[\"']app\\.log[\"']\\s*,\\s*(?:mode\\s*=\\s*)?[\"']r[\"']\\s*,\\s*encoding\\s*=\\s*[\"']utf-8[\"']\\s*\\)\\s+as\\s+f\\s*:",
               message:
                 'Gunakan: with open("app.log", "r", encoding="utf-8") as f:',
             },
@@ -1699,7 +1777,7 @@ export const pythonTrack: Track = {
           tests: [
             {
               pattern:
-                "with\\s+open\\(\\s*['\"]pesan\\.txt['\"]\\s*,\\s*['\"]w['\"]\\s*,\\s*encoding=['\"]utf-8['\"]\\s*\\)\\s+as\\s+",
+                "with\\s+open\\(\\s*['\"]pesan\\.txt['\"]\\s*,\\s*(?:mode\\s*=\\s*)?['\"]w['\"]\\s*,\\s*encoding\\s*=\\s*['\"]utf-8['\"]\\s*\\)\\s+as\\s+",
               message:
                 "Gunakan with open('pesan.txt', 'w', encoding='utf-8') as f:",
             },
@@ -1838,17 +1916,29 @@ export const pythonTrack: Track = {
             "    def sapa(self):                <-- Method (Perilaku Objek)\n" +
             "        return f\"Halo {self.name}\"\n" +
             "```\n\n" +
+            "## Pewarisan (Inheritance) & Pemanggilan `super()`\n\n" +
+            "Kelas anak dapat mewarisi atribut dan metode kelas induk, lalu menambahkan fungsionalitas baru dengan memanggil `super().__init__()`:\n\n" +
+            "```python\n" +
+            "class Karyawan:\n" +
+            "    def __init__(self, nama: str, gaji: int):\n" +
+            "        self.nama = nama\n" +
+            "        self.gaji = gaji\n\n" +
+            "class Manajer(Karyawan):\n" +
+            "    def __init__(self, nama: str, gaji: int, departemen: str):\n" +
+            "        super().__init__(nama, gaji)  # Inisialisasi atribut kelas induk\n" +
+            "        self.departemen = departemen\n" +
+            "```\n\n" +
             "## Parameter `self` dan Metode Khusus (Dunder Methods)\n\n" +
             "Parameter `self` merujuk pada instansi objek spesifik yang sedang dipanggil di memori.\n\n" +
             "Python memiliki metode khusus dengan awalan dan akhiran dua garis bawah (`__dunder__`):\n" +
-            "| Method Dunder | Kegunaan Utama |\n" +
-            "|---|---|\n" +
-            "| **`__init__(self, ...)`** | Constructor untuk menginisialisasi atribut instansi saat objek dibuat. |\n" +
-            "| **`__str__(self)`** | Mengembalikan teks representasi ramah pengguna saat objek di-`print()`. |\n" +
-            "| **`__repr__(self)`** | Mengembalikan representasi resmi bagi developer untuk debugging. |\n" +
-            "| **`__eq__(self, other)`** | Mendefinisikan aturan pembandingan kesamaan dua objek (`obj1 == obj2`). |\n\n" +
+            "| Method Dunder | Kegunaan Utama | Contoh Hasil |\n" +
+            "|---|---|---|\n" +
+            "| **`__init__(self, ...)`** | Constructor untuk inisialisasi atribut saat objek dibuat | Dipanggil otomatis `User('Ani')` |\n" +
+            "| **`__str__(self)`** | Representasi teks ramah pengguna untuk `print()` dan UI | `print(u)` -> `\"Pengguna: Ani\"` |\n" +
+            "| **`__repr__(self)`** | Representasi formal bagi developer / debugger | `repr(u)` -> `\"User(name='Ani')\"` |\n" +
+            "| **`__eq__(self, other)`** | Aturan pembandingan kesamaan nilai objek (`==`) | Membandingkan isi field, bukan ID memori |\n\n" +
             "## Menghapus Boilerplate dengan `@dataclass` (Python 3.7+)\n\n" +
-            "Untuk membuat class penampung data tanpa perlu menulis `__init__` panjang secara manual:\n" +
+            "Untuk membuat class penampung data tanpa perlu menulis `__init__`, `__repr__`, dan `__eq__` secara manual:\n" +
             "```python\n" +
             "from dataclasses import dataclass\n\n" +
             "@dataclass\n" +
@@ -1860,6 +1950,7 @@ export const pythonTrack: Track = {
             "Dekorator `@dataclass` otomatis menghasilkan `__init__`, `__repr__`, dan `__eq__` secara bersih di belakang layar.\n\n" +
             "## Jebakan & Kesalahan Umum\n\n" +
             "- **Tertukar antara Atribut Kelas vs Instansi**: Mendefinisikan list mutable sebagai atribut kelas (`class Keranjang: items = []`) akan membuat SEMUA objek pelanggan berbagi keranjang belanja yang sama! Selalu inisialisasi list di dalam `__init__` via `self.items = []`.\n" +
+            "- **Lupa Memanggil `super().__init__()`**: Di dalam class turunan, lupa memanggil constructor induk membuat atribut yang dimiliki parent tidak terinisialisasi dan memicu `AttributeError` saat diakses.\n" +
             "- **Over-Engineering OOP**: Membungkus fungsi murni yang tidak memiliki state ke dalam class statis. Di Python, cukup gunakan fungsi `def` sederhana.\n" +
             "- **Lupa Parameter `self`**: Mendefinisikan method tanpa parameter pertama `self` akan memicu `TypeError: method takes 0 positional arguments but 1 was given` saat dipanggil dari instance.\n\n" +
             "## Kaitan ke Dunia Kerja\n\n" +
@@ -2114,7 +2205,7 @@ export const pythonTrack: Track = {
             note: "Python mendukung multiparadigma (Procedural, Functional, OOP).",
           },
           instruction:
-            "Mari berlatih merancang struktur. Sebuah skrip data sains sederhana butuh membaca CSV, merubah satu kolom (data transformation), lalu me-return list baru. Apakah kamu perlu membuat sebuah Class penuh untuk ini, atau cukup membuat sebuah fungsi sederhana (Function)? Deklarasikan kerangkanya sesuai pilihan yang tepat (cukup kata kuncinya saja).",
+            "Sebuah skrip manipulasi data hanya butuh membaca baris, mengubah satu kolom, lalu mengembalikan data baru tanpa menyimpan state jangka panjang. Berdasarkan prinsip arsitektur Python, buatlah fungsi sederhana bernama `proses_data()` yang berisi pernyataan penahan tempat `pass`.",
           starterCode: "# Buat kerangka dengan nama proses_data\n",
           language: "text",
           tests: [
@@ -2259,26 +2350,34 @@ export const pythonTrack: Track = {
             "|  +-----------------------+     +-------------------------+  |\n" +
             "+-------------------------------------------------------------+\n" +
             "```\n\n" +
-            "## Alur Kerja Dependensi `requirements.txt`\n\n" +
-            "1. **Buat Environment**: `python -m venv .venv`\n" +
+            "## Alur Kerja Dependensi `requirements.txt` & Tooling Modern (`uv`)\n\n" +
+            "Alur standar mereproduksi dependensi proyek:\n" +
+            "1. **Buat Environment**: `python3 -m venv .venv`\n" +
             "2. **Aktifkan**: `source .venv/bin/activate` (Mac/Linux) atau `.venv\\Scripts\\activate` (Windows)\n" +
             "3. **Simpan Daftar Library**: `pip freeze > requirements.txt`\n" +
             "4. **Rekonstruksi di Mesin Lain**: `pip install -r requirements.txt`\n\n" +
+            "Di ekosistem modern (2024–2026), banyak tim beralih ke **`uv`** (dibuat oleh Astral dengan Rust) dan format standar **`pyproject.toml`**. `uv` dapat menggantikan `venv` dan `pip` dengan kecepatan 10–100x lebih cepat (`uv venv` dan `uv pip install`).\n\n" +
             "## Struktur Folder Proyek Standar PEP 8\n\n" +
             "```text\n" +
             "my_project/\n" +
             "├── .venv/               <-- Virtual Environment (JANGAN di-commit ke Git!)\n" +
             "├── src/                 <-- Source code utama aplikasi (.py)\n" +
             "│   └── app.py\n" +
-            "├── tests/               <-- Berkas Unit Testing\n" +
-            "├── .gitignore           <-- Mengabaikan folder .venv/ dan __pycache__/\n" +
+            "├── tests/               <-- Berkas Unit Testing (pytest)\n" +
+            "├── .gitignore           <-- Mengabaikan .venv/, __pycache__/, .env\n" +
+            "├── pyproject.toml       <-- Konfigurasi modern & metadata proyek\n" +
             "├── requirements.txt     <-- Daftar dependensi library versi terunci\n" +
             "└── README.md            <-- Dokumentasi petunjuk proyek\n" +
             "```\n\n" +
             "## Notebook (.ipynb) vs Script (.py)\n\n" +
             "- **Jupyter Notebook (`.ipynb`)**: Cocok untuk **Eksplorasi Data**, analisis visual sel per sel, dan pembuatan laporan interaktif.\n" +
             "- **Script Python (`.py`)**: Wajib digunakan untuk **Aplikasi Produksi**, otomatisasi background job, REST API server, dan CI/CD pipeline.\n\n" +
+            "## Linter & Formatter Cepat: Ruff\n\n" +
+            "Daripada menginstal linter terpisah (Flake8, Black, isort), gunakan **Ruff** untuk memindai ribuan baris kode dalam hitungan milidetik:\n" +
+            "- Pindai error: `ruff check .`\n" +
+            "- Format otomatis: `ruff format .`\n\n" +
             "## Jebakan & Kesalahan Umum\n\n" +
+            "- **Windows PowerShell ExecutionPolicy Error**: Di Windows, menjalankan `activate` sering ditolak dengan pesan `cannot be loaded because running scripts is disabled`. Solusinya jalankan: `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`.\n" +
             "- **Meng-commit Folder `.venv/` ke Git**: Folder `.venv` berisi ribuan file biner library lokal dan berukuran ratusan MB. Selalu masukkan `.venv/` ke dalam `.gitignore`!\n" +
             "- **Lupa Mengaktifkan Environment**: Menginstall library tanpa mengaktifkan `.venv` akan memasang library ke Python global secara tidak disadari.\n" +
             "- **Tidak Mengunci Versi Library**: Menulis `pandas` tanpa versi di `requirements.txt` bisa memicu error di kemudian hari saat ada breaking changes di versi terbaru.\n\n" +
@@ -2297,7 +2396,8 @@ export const pythonTrack: Track = {
               "Collecting requests\n  Downloading requests-2.32.3-py3-none-any.whl (64 kB)\nSuccessfully installed pandas-2.2.3 requests-2.32.3",
             note: "Selalu gunakan virtual environment saat menginstal paket pip.",
           },
-          instruction: "Tulis perintah pip untuk mengunduh `requests`.",
+          instruction:
+            "Kamu membutuhkan pustaka pihak ketiga untuk mengirimkan permintaan HTTP ke API. Tulis perintah terminal pip untuk mengunduh dan memasang paket `requests` ke lingkungan proyek.",
           starterCode: "# Tulis perintah pip di bawah ini\n",
           language: "text",
           tests: [
@@ -2658,8 +2758,34 @@ export const pythonTrack: Track = {
             "1. **Periksa `robots.txt`**: Selalu buka `domain.com/robots.txt` untuk memastikan jalur URL diizinkan di-scrape.\n" +
             "2. **Rate Limiting (Jeda Waktu)**: Gunakan `time.sleep(1)` di antara setiap request HTTP agar tidak membebani server target.\n" +
             "3. **Gunakan Headers User-Agent**: Identifikasi script kamu secara jujur melalui header `User-Agent`.\n\n" +
+            "## Keamanan & Pengelolaan Rahasia (.env & os.environ)\n\n" +
+            "Kredensial email, token bot, dan API Key **JANGAN PERNAH** ditulis langsung (*hardcoded*) di dalam berkas skrip Python! Simpan ke berkas `.env` (yang diabaikan oleh `.gitignore`) dan baca menggunakan pustaka `python-dotenv` atau `os.environ`:\n\n" +
+            "```python\n" +
+            "import os\n" +
+            "from dotenv import load_dotenv\n\n" +
+            "load_dotenv()  # Membaca pasangan KEY=VALUE dari berkas .env lokal\n" +
+            "API_KEY = os.environ.get(\"API_SECRET_KEY\")\n" +
+            "EMAIL_PASS = os.environ.get(\"SMTP_PASSWORD\")\n" +
+            "```\n\n" +
+            "## Resiliensi HTTP di Produksi (`timeout` & `raise_for_status`)\n\n" +
+            "Request HTTP tanpa batas waktu (*timeout*) dapat menggantung selamanya jika server tujuan down:\n\n" +
+            "```python\n" +
+            "import requests\n\n" +
+            "try:\n" +
+            "    res = requests.get(\"https://api.contoh.com/data\", timeout=10)\n" +
+            "    res.raise_for_status()  # Lempar error otomatis jika HTTP 404/500\n" +
+            "    data = res.json()\n" +
+            "except requests.exceptions.Timeout:\n" +
+            "    print(\"Server lambat, waktu tunggu 10 detik habis!\")\n" +
+            "except requests.exceptions.RequestException as err:\n" +
+            "    print(f\"Gangguan jaringan API: {err}\")\n" +
+            "```\n\n" +
+            "## Penjadwalan: `schedule` vs Cron / Task Scheduler\n\n" +
+            "- **Modul `schedule`**: Bagus untuk script daemon yang selalu berjalan terus di latar belakang dalam satu sesi terminal.\n" +
+            "- **OS Cron (Linux/macOS) & Windows Task Scheduler**: Standar industri server sesungguhnya. Menjalankan skrip secara mandiri pada jadwal tertentu (misal tiap jam 8 pagi: `0 8 * * * /app/.venv/bin/python /app/laporan.py`) tanpa perlu proses terminal dibiarkan menggantung.\n\n" +
             "## Jebakan & Kesalahan Umum\n\n" +
             "- **Hardcoding Kredensial Email/Password**: Menyimpan password email langsung di dalam kode script Python. Jika kode ini ter-push ke GitHub publik, akun email akan diretas! Selalu gunakan variabel lingkungan (*environment variable*) atau App Password.\n" +
+            "- **Request Tanpa Timeout**: `requests.get(url)` tanpa argumen `timeout=10` bisa membuat proses otomasi membeku selamanya jika server tujuan lambat merespons.\n" +
             "- **Tidak Memeriksa HTTP Status Code**: Mengasumsikan request API pasti sukses tanpa mengecek `response.raise_for_status()`. Kode akan error di langkah berikutnya jika API return 404/500.\n" +
             "- **Path Windows Backslash Escape Error**: Menulis path `C:\\users\\nama` tanpa awalan raw string `r'...'` akan membuat `\\n` atau `\\t` diartikan sebagai baris baru/tab.\n\n" +
             "## Kaitan ke Dunia Kerja\n\n" +
@@ -2774,7 +2900,8 @@ export const pythonTrack: Track = {
           language: "text",
           tests: [
             {
-              pattern: "res\\s*=\\s*requests\\.get\\(\\s*url\\s*\\)",
+              pattern:
+                "res\\s*=\\s*requests\\.get\\(\\s*url(?:\\s*,\\s*timeout\\s*=\\s*\\d+)?\\s*\\)",
               message: "Panggil requests.get(url) lalu simpan ke variabel res.",
             },
           ],
@@ -3071,24 +3198,38 @@ export const pythonTrack: Track = {
             "           1     | Ani                   | 30\n" +
             "           2     | Cici                  | 22\n" +
             "```\n\n" +
+            "## Membaca & Menyimpan Data (CSV & Excel)\n\n" +
+            "pandas mendukung berbagai format berkas input/output untuk analisis bisnis:\n\n" +
+            "```python\n" +
+            "import pandas as pd\n\n" +
+            "# Membaca dataset CSV dan Excel\n" +
+            "df_csv = pd.read_csv('transaksi.csv')\n" +
+            "df_excel = pd.read_excel('rekap.xlsx', sheet_name='Penjualan')\n\n" +
+            "# Menyimpan hasil olahan bersih (Wajib index=False!)\n" +
+            "df_csv.to_csv('transaksi_bersih.csv', index=False)\n" +
+            "```\n\n" +
             "## Metode Inspeksi Awal Dataset Wajib\n\n" +
-            "Saat pertama kali memuat dataset baru via `pd.read_csv('data.csv')`, selalu jalankan 3 metode inspeksi awal ini:\n" +
+            "Saat pertama kali memuat dataset baru, selalu jalankan 3 metode inspeksi awal ini:\n" +
             "| Metode | Kegunaan Utama |\n" +
             "|---|---|\n" +
             "| **`df.head(5)`** | Mengintip 5 baris pertama data untuk melihat nama kolom dan contoh isi. |\n" +
             "| **`df.info()`** | Memeriksa tipe data tiap kolom (`int64`, `float64`, `object`) dan jumlah nilai kosong. |\n" +
             "| **`df.describe()`** | Menghasilkan ringkasan statistik deskriptif (mean, median, min, max, std). |\n\n" +
-            "## Kekuatan Operasi Vektorized (Vectorized Operations)\n\n" +
-            "Berbeda dari list Python biasa yang mengharuskan perulangan `for` manual, pandas mengeksekusi operasi matematika secara **vektorized** langsung pada seluruh kolom di C-backend yang sangat cepat:\n" +
+            "## Kekuatan Operasi Vektorized & Filter Multi-Kondisi\n\n" +
+            "Operasi baris di pandas dieksekusi secara vektorized serentak tanpa loop manual:\n\n" +
             "```python\n" +
-            "# Memuat kolom baru 'total' dalam 1 baris tanpa loop!\n" +
-            "df['total'] = df['harga'] * df['jumlah']\n" +
+            "# 1. Kolom baru via operasi vektor C-backend super cepat\n" +
+            "df['total'] = df['harga'] * df['jumlah']\n\n" +
+            "# 2. Filter multi-kondisi: WAJIB gunakan & (AND) atau | (OR) dan bungkus kurung ()\n" +
+            "saring = df[(df['harga'] > 50000) & (df['kategori'] == 'Elektronik')]\n" +
             "```\n\n" +
             "## Penanganan Nilai Kosong (Missing Values)\n\n" +
             "- Detect: `df.isna().sum()` (Menghitung jumlah data kosong per kolom)\n" +
             "- Fill: `df['kolom'].fillna(nilai)` (Mengisi data kosong dengan nilai default/rata-rata)\n" +
             "- Drop: `df.dropna()` (Menghapus baris yang mengandung data kosong)\n\n" +
             "## Jebakan & Kesalahan Umum\n\n" +
+            "- **Filter Multi-Kondisi Tanpa Tanda Kurung**: Menulis `df[df['A'] > 10 & df['B'] == 5]` akan memicu error karena presedensi operator bitwise `&`. Kamu WAJIB membungkus tiap kondisi dengan tanda kurung: `df[(df['A'] > 10) & (df['B'] == 5)]` dan gunakan `&`/`|`, bukan kata kunci Python `and`/`or`.\n" +
+            "- **Menyimpan CSV Tanpa `index=False`**: Menyimpan dengan `df.to_csv('hasil.csv')` menyertakan nomor indeks baris ke file. Saat file dibuka ulang di kemudian hari, akan muncul kolom duplikat tak bernama (`Unnamed: 0`).\n" +
             "- **Melakukan Loop Manual (`for index, row in df.iterrows()`)**: Mengiterasi baris DataFrame dengan loop Python biasa sangat lambat (bisa 100x lebih lambat!). Selalu gunakan operasi vektorized pandas.\n" +
             "- **Bahaya `SettingWithCopyWarning`**: Mengubah nilai subset DataFrame tanpa `.copy()` dapat memicu peringatan manipulasi memori bayangan. Gunakan `df.loc[kondisi, 'kolom'] = nilai`.\n" +
             "- **Lupa Re-assign Hasil**: Metode pandas seperti `fillna()` atau `drop()` secara default mengembalikan DataFrame BARU (tidak mengubah yang asli). Kamu harus menimpanya `df = df.fillna(0)` atau gunakan `inplace=True`.\n\n" +
@@ -3196,7 +3337,7 @@ export const pythonTrack: Track = {
           language: "text",
           tests: [
             {
-              pattern: "print\\(\\s*df\\.head\\(\\s*\\)\\s*\\)",
+              pattern: "print\\(\\s*df\\.head\\(\\s*5?\\s*\\)\\s*\\)",
               message: "Panggil fungsi .head() dan gunakan print().",
             },
           ],
@@ -3276,9 +3417,9 @@ export const pythonTrack: Track = {
           tests: [
             {
               pattern:
-                "df\\[\\s*['\"]total['\"]\\s*\\]\\s*=\\s*df\\[\\s*['\"]price['\"]\\s*\\]\\s*\\*\\s*df\\[\\s*['\"]qty['\"]\\s*\\]",
+                "df\\[\\s*['\"]total['\"]\\s*\\]\\s*=\\s*(df\\[\\s*['\"]price['\"]\\s*\\]\\s*\\*\\s*df\\[\\s*['\"]qty['\"]\\s*\\]|df\\[\\s*['\"]qty['\"]\\s*\\]\\s*\\*\\s*df\\[\\s*['\"]price['\"]\\s*\\])",
               message:
-                "Gunakan assignment pada kolom baru dan kalikan dua deret (Series).",
+                "Gunakan assignment pada kolom baru dan kalikan dua deret (Series): df['price'] * df['qty'].",
             },
           ],
           solution: "df['total'] = df['price'] * df['qty']",

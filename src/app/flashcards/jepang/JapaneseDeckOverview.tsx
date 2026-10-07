@@ -31,9 +31,10 @@ export function JapaneseDeckOverview() {
       <div>
         <Link
           href="/bahasa/jepang"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-rose-600 dark:text-slate-400 dark:hover:text-rose-300 transition-colors mb-4 cursor-pointer"
+          className="inline-flex items-center gap-2 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-800/80 px-3.5 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 shadow-2xs hover:bg-slate-100 dark:hover:bg-slate-700 hover:border-slate-300 dark:hover:border-white/20 transition cursor-pointer mb-4"
         >
-          <span aria-hidden="true">←</span> Kembali ke Hub Bahasa Jepang
+          <span aria-hidden="true" className="text-sm font-bold">←</span>
+          <span>Kembali ke Hub Bahasa Jepang</span>
         </Link>
 
         <div className="rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-slate-900/70 p-6 sm:p-8 backdrop-blur-md shadow-xs">

@@ -186,7 +186,12 @@ export const nosqlTrack: Track = {
             "**KAPAN:** Gunakan Document store untuk data yang bentuknya bervariasi atau selalu dibaca utuh bersama induknya, dan gunakan Key-Value untuk cache/sesi.\n\n" +
             "**JEBAKAN:** Salah memilih keluarga NoSQL akan membuat operasi sederhana di aplikasi terasa melawan arus arsitektur database.",
           example: {
-            code: "// dokumen di MongoDB: satu entitas utuh, tanpa JOIN\ndb.produk.insertOne({\n  nama: 'Kopi Gayo',\n  varian: [{ ukuran: '250g', harga: 65000 }],\n});",
+            code:
+              "// dokumen di MongoDB: satu entitas utuh, tanpa JOIN\n" +
+              "db.produk.insertOne({\n" +
+              "  nama: 'Kopi Gayo',\n" +
+              "  varian: [{ ukuran: '250g', harga: 65000 }],\n" +
+              "});",
             output: "{ acknowledged: true, insertedId: ObjectId('66a1...') }",
             note: "Array dan objek bersarang boleh disimpan langsung di satu dokumen — di SQL ini butuh tabel terpisah.",
           },
@@ -235,7 +240,9 @@ export const nosqlTrack: Track = {
             "**KAPAN:** Sangat tepat untuk katalog produk yang propertinya berbeda-beda per kategori, log aktivitas pengguna, atau data profil yang terus berkembang.\n\n" +
             "**JEBAKAN:** Kamu kehilangan jaminan *foreign key* dan transaksi lintas tabel otomatis yang disediakan database relasional.",
           example: {
-            code: "// dokumen katalog: dibaca utuh, bentuk tiap kategori berbeda\ndb.katalog.findOne({ slug: 'kopi-gayo' });",
+            code:
+              "// dokumen katalog: dibaca utuh, bentuk tiap kategori berbeda\n" +
+              "db.katalog.findOne({ slug: 'kopi-gayo' });",
             output: "{ _id: ObjectId('66a1...'), slug: 'kopi-gayo', varian: [ { ukuran: '250g' } ] }",
           },
           instruction:
@@ -283,7 +290,9 @@ export const nosqlTrack: Track = {
             "**KAPAN:** Pilih mode CP untuk data keuangan yang wajib konsisten, dan pilih AP untuk feed berita atau katalog produk yang boleh sedikit tertinggal demi ketersediaan.\n\n" +
             "**JEBAKAN:** Menganggap database NoSQL selalu seragam dalam menerapkan teorema CAP tanpa membaca dokumentasi bawaannya.",
           example: {
-            code: "// membaca dari primary: konsisten, tapi gagal saat primary tidak terjangkau\ndb.saldo.find({ userId: 7 }).readPref('primary');",
+            code:
+              "// membaca dari primary: konsisten, tapi gagal saat primary tidak terjangkau\n" +
+              "db.saldo.find({ userId: 7 }).readPref('primary');",
             output: "[ { _id: ObjectId('66b2...'), userId: 7, jumlah: 250000 } ]",
             note: "Membaca dari secondary menaikkan ketersediaan, tapi datanya bisa tertinggal beberapa saat — itulah harga pilihan AP.",
           },
@@ -302,47 +311,52 @@ export const nosqlTrack: Track = {
             },
           ],
           solution: "db.katalog.find().readPref('secondary');",
-                    susunKode: {
-                      question:
-                        "Susun query MongoDB untuk mengambil dokumen dengan preferensi membaca dari replika sekunder.",
-                      potongan: [
-                        "db.katalog.find()",
-                        ".readPref('secondary');",
-                      ],
-                      pengecoh: [
-                        "db.katalog.query()",
-                        ".readMode('secondary');",
-                      ],
-                      pemisah: "",
-                      explanation:
-                        "Pengaturan preferensi baca dari replika sekunder pada MongoDB menggunakan metode `.readPref('secondary')` setelah `.find()`. Penggunaan kata '.query()' atau '.readMode()' adalah jebakan sintaks fiktif yang sering membingungkan.",
-                    },
-                  },
+          susunKode: {
+            question:
+              "Susun query MongoDB untuk mengambil dokumen dengan preferensi membaca dari replika sekunder.",
+            potongan: [
+              "db.katalog.find()",
+              ".readPref('secondary');",
+            ],
+            pengecoh: [
+              "db.katalog.query()",
+              ".readMode('secondary');",
+            ],
+            pemisah: "",
+            explanation:
+              "Pengaturan preferensi baca dari replika sekunder pada MongoDB menggunakan metode `.readPref('secondary')` setelah `.find()`. Penggunaan kata '.query()' atau '.readMode()' adalah jebakan sintaks fiktif yang sering membingungkan.",
+          },
+        },
         {
           kind: "step",
           id: "nosql-1-4",
           title: "Kesalahan Umum: Memilih NoSQL karena Sedang Ramai",
           explanation:
-            "**APA:** Memilih database NoSQL atas dasar popularitas daripada kesesuaian bentuk data adalah kesalahan arsitektur yang sering berujung kegagalan proyek.\n\n" +
-            "**KENAPA:** Data keuangan dan transaksi memiliki relasi kuat dan membutuhkan transaksi multi-dokumen ACID yang ketat yang lebih alami di RDBMS.\n\n" +
-            "**KAPAN:** Evaluasi alur pembacaan (*read vs write pattern*) sebelum memutuskan apakah data harus disimpan secara relasional atau dokumen.\n\n" +
-            "**JEBAKAN:** Menulis sendiri logika JOIN manual dan *lock* di kode aplikasi Node.js karena memaksa data relasional ke database NoSQL.",
+            "**APA:** Memilih database NoSQL semata karena popularitas daripada analisis bentuk relasi data adalah kesalahan arsitektur klasik yang merugikan jangka panjang.\n\n" +
+            "**KENAPA:** Data keuangan dan transaksi memerlukan integritas ACID multi-dokumen ketat. Di MongoDB kamu harus mengelolanya secara eksplisit lewat session transaksi.\n\n" +
+            "**KAPAN:** Gunakan transaksi `session.startTransaction()` dan `session.commitTransaction()` ketika dua dokumen saling terkait wajib diperbarui bersama atau dibatalkan seluruhnya.\n\n" +
+            "**JEBAKAN:** Menulis sendiri logika penguncian manual di kode backend Node.js karena memaksakan data relasional kompleks ke dalam model document store.",
           example: {
-            code: "// buku besar keuangan: butuh transaksi lintas dokumen\n// di MongoDB kamu harus menulisnya secara eksplisit\nsession.startTransaction();",
-            output: "Transaksi dimulai; tanpa ini, dua penulisan terkait bisa gagal separuh.",
+            code:
+              "// transaksi multi-dokumen di MongoDB wajib menggunakan session eksplisit\n" +
+              "session.startTransaction();\n" +
+              "await db.akun.updateOne({ id: 1 }, { $inc: { saldo: -50000 } }, { session });\n" +
+              "await db.akun.updateOne({ id: 2 }, { $inc: { saldo: 50000 } }, { session });\n" +
+              "session.commitTransaction();",
+            output: "Kedua akun berhasil diperbarui secara atomik dalam satu siklus commit transaksi.",
           },
           instruction:
-            "Untuk mutasi saldo yang harus berhasil bersama, tulis blok transaksi MongoDB: mulai dengan `session.startTransaction();`, lalu akhiri dengan `session.commitTransaction();` pada baris berikutnya.",
-          starterCode: "// Tulis blok transaksi di bawah ini\n",
+            "Dalam arsitektur MongoDB transaksi keuangan, transfer saldo antar rekening harus diapit blok sesi terdistribusi. Tulis urutan pemanggilan sesi transaksi dasar pada objek `session`: mulai transaksi baru di baris pertama, lalu simpan perubahan permanen dengan komit transaksi di baris kedua.",
+          starterCode: "// Tulis manajemen sesi transaksi di bawah ini\n",
           language: "text",
           tests: [
             {
               pattern: "session\\.startTransaction\\(\\s*\\)",
-              message: "Mulai dengan session.startTransaction();",
+              message: "Mulai transaksi dengan memanggil session.startTransaction(); pada baris pertama.",
             },
             {
               pattern: "session\\.commitTransaction\\(\\s*\\)",
-              message: "Akhiri dengan session.commitTransaction();",
+              message: "Akhiri dan tetapkan transaksi dengan memanggil session.commitTransaction(); pada baris kedua.",
             },
           ],
           solution: "session.startTransaction();\nsession.commitTransaction();",
@@ -359,7 +373,7 @@ export const nosqlTrack: Track = {
             ],
             pemisah: "",
             explanation:
-              "Pengelolaan transaksi pada MongoDB session menggunakan pasangan perintah `session.startTransaction();` dan `session.commitTransaction();`. Penggunaan kata 'beginTransaction' (sintaks SQL/ORM) adalah kekeliruan API MongoDB yang jebakan.",
+              "Pengelolaan transaksi pada MongoDB session menggunakan pasangan perintah `session.startTransaction();` dan `session.commitTransaction();`. Penggunaan kata 'beginTransaction' (sintaks SQL/ORM) adalah kekeliruan API MongoDB yang sering mengecoh.",
           },
         },
         {
@@ -372,21 +386,23 @@ export const nosqlTrack: Track = {
             "**KAPAN:** Gunakan Redis untuk sesi login dan cache transient, MongoDB untuk dokumen katalog/log, dan RDBMS untuk persistensi akun/keuangan.\n\n" +
             "**JEBAKAN:** Menambah terlalu banyak jenis database tanpa infrastruktur pemantauan (*monitoring*) dan pembackupan yang memadai.",
           example: {
-            code: "// sesi login di Redis: cepat dan otomatis kedaluwarsa\nSETEX sesi:u7 3600 'token-abc'",
+            code:
+              "// sesi login di Redis: cepat dan otomatis kedaluwarsa\n" +
+              "SETEX sesi:u7 3600 'token-abc'",
             output: "OK",
           },
           instruction:
-            "Simpan sesi login pengguna `u42` di Redis dengan nilai `'token-xyz'` yang otomatis hangus setelah 1800 detik. Tulis perintahnya memakai `SETEX` dengan key `sesi:u42`.",
+            "Pengguna dengan identitas `u42` baru saja berhasil melakukan autentikasi login. Simpan token otentikasinya `'token-xyz'` ke dalam cache Redis dengan nama kunci `sesi:u42` dan atur agar kedaluwarsa otomatis dalam 1800 detik.",
           starterCode: "# Tulis perintah Redis di bawah ini\n",
           language: "text",
           tests: [
             {
               pattern: "SETEX\\s+sesi:u42\\s+1800",
-              message: "Pakai SETEX sesi:u42 1800 diikuti nilainya.",
+              message: "Gunakan SETEX diikuti nama key sesi:u42 dan durasi 1800 detik.",
             },
             {
               pattern: "['\"]?token-xyz['\"]?",
-              message: "Nilainya 'token-xyz'.",
+              message: "Sertakan nilai string token-xyz di argumen terakhir.",
             },
           ],
           solution: "SETEX sesi:u42 1800 'token-xyz'",
@@ -461,6 +477,19 @@ export const nosqlTrack: Track = {
               answerIndex: 0,
               explanation: "Minimnya dependensi Foreign Key dan JOIN pada NoSQL membuat data lebih mandiri, sehingga mudah dipartisi dan disebar ke ribuan server (horizontal scaling).",
             },
+            {
+              id: "q6",
+              type: "pilihan-ganda",
+              question: "Dalam skenario sistem perbankan terdistribusi saat terjadi gangguan jaringan antar data center (Network Partition), pilihan Teorema CAP manakah yang wajib diambil dan apa dampaknya?",
+              choices: [
+                "Memilih CP: transaksi ditolak sementara demi menjaga konsistensi saldo akurat",
+                "Memilih AP: transaksi tetap diproses walau saldo berisiko mengalami double-spending",
+                "Memilih CA: mengabaikan gangguan jaringan dan memaksa seluruh node sinkron",
+                "Memilih No-CAP: teorema CAP tidak berlaku pada aplikasi perbankan modern",
+              ],
+              answerIndex: 0,
+              explanation: "Untuk sistem finansial dan buku besar, konsistensi data mutlak (CP). Lebih aman menolak transaksi sementara daripada mengizinkan mutasi saldo yang belum tersinkronisasi.",
+            },
           ],
         },
       ],
@@ -477,6 +506,8 @@ export const nosqlTrack: Track = {
         "deleteOne/Many & soft delete",
         "Projection & sort/limit/skip",
         "Index di MongoDB",
+        "Compound index & aturan ESR (Equality, Sort, Range)",
+        "Query profiling dengan explain('executionStats') & COLLSCAN vs IXSCAN",
         "Mongoose vs driver native",
       ],
       items: [
@@ -540,7 +571,7 @@ export const nosqlTrack: Track = {
             note: "Setiap dokumen di collection yang sama tidak wajib memiliki struktur kolom yang identik.",
           },
           instruction:
-            "Tulis perintah MongoDB shell untuk memasukkan satu dokumen produk dengan atribut `title: 'Laptop'` dan `price: 1000` ke koleksi `products`.",
+            "Katalog toko online perlu mencatat inventaris baru. Tulis perintah shell MongoDB untuk menyisipkan satu dokumen ke koleksi `products` dengan nama barang (`title`) bernilai `'Laptop'` dan harga (`price`) bernilai `1000`.",
           starterCode: "# Tulis insertOne di bawah ini\n",
           language: "text",
           tests: [
@@ -589,7 +620,7 @@ export const nosqlTrack: Track = {
             note: "Gunakan $regex: /keyword/i untuk pencarian string case-insensitive.",
           },
           instruction:
-            "Tulis query `find` MongoDB pada koleksi `users` untuk mencari dokumen dengan nilai `age` lebih besar dari `18` menggunakan operator `$gt`.",
+            "Untuk menyaring pendaftar yang sudah cukup umur, buat query pencarian pada koleksi `users` yang mengambil seluruh pengguna dengan usia (`age`) di atas 18 tahun memanfaatkan operator pembanding numerik.",
           starterCode: "# Tulis db.users.find di sini\n",
           language: "text",
           tests: [
@@ -638,7 +669,7 @@ export const nosqlTrack: Track = {
             note: "Tanpa $set, updateOne akan mengganti seluruh isi dokumen!",
           },
           instruction:
-            "Tulis perintah `updateOne` pada koleksi `users` yang memperbarui bidang `active` menjadi `true` menggunakan operator `$set`.",
+            "Akun pengguna dengan `_id` perlu diaktifkan kembali setelah verifikasi email. Tulis perintah pembaruan dokumen tunggal pada koleksi `users` untuk dokumen tersebut agar field `active` bernilai `true` tanpa menghapus data field lainnya.",
           starterCode: "# Tulis updateOne di sini\n",
           language: "text",
           tests: [
@@ -683,7 +714,7 @@ export const nosqlTrack: Track = {
             note: "Di aplikasi nyata, pertimbangkan pola Soft Delete (isDeleted: true).",
           },
           instruction:
-            "Tuliskan perintah `deleteOne` pada koleksi `users` untuk menghapus dokumen berdasarkan `_id: userId`.",
+            "Seorang pengguna memutuskan untuk menutup akunnya secara permanen. Tulis perintah pada koleksi `users` untuk menghapus satu dokumen milik pengguna tersebut berdasarkan kecocokan `_id: userId`.",
           starterCode: "# Tulis deleteOne di bawah ini\n",
           language: "text",
           tests: [
@@ -697,22 +728,22 @@ export const nosqlTrack: Track = {
             },
           ],
           solution: "db.users.deleteOne({ _id: userId });",
-                    susunKode: {
-                      question:
-                        "Susun perintah MongoDB deleteOne untuk menghapus dokumen berdasarkan _id.",
-                      potongan: [
-                        "db.users.deleteOne({",
-                        "_id: userId });",
-                      ],
-                      pengecoh: [
-                        "db.users.remove({",
-                        "identifier: userId });",
-                      ],
-                      pemisah: " ",
-                      explanation:
-                        "Penghapusan satu dokumen pada MongoDB shell menggunakan `deleteOne({ _id: ... })`. Metode `remove()` sudah deprecated, dan penulisan field identifier utama pada MongoDB selalu `_id`, bukan `identifier` secara jebakan.",
-                    },
-                  },
+          susunKode: {
+            question:
+              "Susun perintah MongoDB deleteOne untuk menghapus dokumen berdasarkan _id.",
+            potongan: [
+              "db.users.deleteOne({",
+              "_id: userId });",
+            ],
+            pengecoh: [
+              "db.users.remove({",
+              "identifier: userId });",
+            ],
+            pemisah: " ",
+            explanation:
+              "Penghapusan satu dokumen pada MongoDB shell menggunakan `deleteOne({ _id: ... })`. Metode `remove()` sudah deprecated, dan penulisan field identifier utama pada MongoDB selalu `_id`, bukan `identifier` secara jebakan.",
+          },
+        },
         {
           kind: "step",
           id: "nosql-2-5",
@@ -728,7 +759,7 @@ export const nosqlTrack: Track = {
             note: "Nilai 1 pada projection berarti tampilkan, nilai 0 berarti sembunyikan.",
           },
           instruction:
-            "Tuliskan query pencarian `find()` pada koleksi `products` yang diurutkan ascending berdasarkan `price` (nilai `1`) dan dibatasi maksimal `5` dokumen.",
+            "Etalase toko ingin menampilkan 5 produk termurah. Tulis query pencarian pada koleksi `products` yang mengurutkan harga (`price`) dari yang paling murah (ascending) dan membatasi keluaran hanya sebanyak 5 dokumen.",
           starterCode: "# Tulis find sort limit di sini\n",
           language: "text",
           tests: [
@@ -746,24 +777,58 @@ export const nosqlTrack: Track = {
             },
           ],
           solution: "db.products.find().sort({ price: 1 }).limit(5);",
-                    susunKode: {
-                      question:
-                        "Susun query MongoDB find yang diurutkan berdasar harga termurah dan dibatasi 5 dokumen.",
-                      potongan: [
-                        "db.products.find()",
-                        ".sort({ price: 1 })",
-                        ".limit(5);",
-                      ],
-                      pengecoh: [
-                        "db.products.select()",
-                        ".orderBy({ price: 'ASC' })",
-                        ".take(5);",
-                      ],
-                      pemisah: "",
-                      explanation:
-                        "Pengurutan dan pembatasan hasil kueri MongoDB menggunakan chaining method `.sort({ field: 1 })` untuk ascending (atau -1 untuk descending) dan `.limit(n)`. Penggunaan kata '.orderBy' atau '.take' adalah kekeliruan istilah ORM SQL.",
-                    },
-                  },
+          susunKode: {
+            question:
+              "Susun query MongoDB find yang diurutkan berdasar harga termurah dan dibatasi 5 dokumen.",
+            potongan: [
+              "db.products.find()",
+              ".sort({ price: 1 })",
+              ".limit(5);",
+            ],
+            pengecoh: [
+              "db.products.select()",
+              ".orderBy({ price: 'ASC' })",
+              ".take(5);",
+            ],
+            pemisah: "",
+            explanation:
+              "Pengurutan dan pembatasan hasil kueri MongoDB menggunakan chaining method `.sort({ field: 1 })` untuk ascending (atau -1 untuk descending) dan `.limit(n)`. Penggunaan kata '.orderBy' atau '.take' adalah kekeliruan istilah ORM SQL.",
+          },
+        },
+        {
+          kind: "materi",
+          id: "nosql-2-m2",
+          title: "Strategi Indexing MongoDB & Analisis Query Lambat",
+          body:
+            "# Strategi Indexing & Optimasi Query MongoDB\n\n" +
+            "Ketika data di dalam koleksi bertambah dari ribuan menjadi jutaan dokumen, query tanpa indeks akan memicu bencana performa: **Collection Scan (COLLSCAN)**. Pada mode COLLSCAN, mesin penyimpanan WiredTiger terpaksa membaca seluruh blok disk dokumen dari awal sampai akhir, membebani CPU hingga 100% dan membuat latensi API melonjak drastis.\n\n" +
+            "Indeks di MongoDB menggunakan struktur data **B-Tree** yang tersimpan di RAM. Dengan indeks, waktu pencarian terpangkas dari linear $O(N)$ menjadi logaritmik $O(\\log N)$.\n\n" +
+            "## Perbandingan Strategi Indeks\n\n" +
+            "| Jenis Indeks | Sintaks Pembuatan | Kasus Penggunaan Ideal |\n" +
+            "|---|---|---|\n" +
+            "| **Single Field** | `db.users.createIndex({ email: 1 })` | Pencarian kunci unik atau filter tunggal |\n" +
+            "| **Compound Index** | `db.orders.createIndex({ storeId: 1, createdAt: -1 })` | Filter multi-field dan pengurutan berurutan |\n" +
+            "| **TTL Index** | `db.logs.createIndex({ createdAt: 1 }, { expireAfterSeconds: 86400 })` | Pembersihan otomatis data sesi/log kedaluwarsa |\n" +
+            "| **Multikey Index** | `db.posts.createIndex({ tags: 1 })` | Mengindeks elemen di dalam field bertipe array |\n\n" +
+            "## Aturan Emas Compound Index: ESR Rule\n\n" +
+            "Saat merancang compound index untuk query yang menggabungkan filter dan sorting, urutan deklarasi field **wajib** mengikuti aturan **ESR (Equality, Sort, Range)**:\n\n" +
+            "```text\n" +
+            "  1. EQUALITY (=)         2. SORT (Urutan)          3. RANGE (<, >, in)\n" +
+            "  Field filter pasti      Field yang diurutkan      Field rentang nilai\n" +
+            "  [ status: 'paid' ] ──►  [ createdAt: -1 ]   ──►   [ amount: { $gt: 50000 } ]\n" +
+            "```\n\n" +
+            "Jika kamu membalik urutannya (misal menaruh field Range sebelum Sort), MongoDB tidak bisa memanfaatkan B-Tree untuk sorting dan terpaksa melakukan *in-memory sort* yang dibatasi maksimal 32 MB.\n\n" +
+            "## Diagnostik dengan explain('executionStats')\n\n" +
+            "Untuk membuktikan efektivitas indeks, jalankan query dengan suffix `.explain('executionStats')`. Perhatikan dua metrik kritis:\n\n" +
+            "- `stage`: Jika tertulis `COLLSCAN`, berarti query memindai seluruh database tanpa indeks. Targetmu adalah `IXSCAN` (Index Scan).\n" +
+            "- Rasio `totalDocsExamined` vs `nReturned`: Jika database memeriksa 50.000 dokumen hanya untuk mengembalikan 2 dokumen, indeksmu belum optimal!\n\n" +
+            "## Analogi Dunia Nyata\n\n" +
+            "Query tanpa indeks seperti mencari nama teman di buku telepon tebal 1.000 halaman yang halamannya diacak: kamu harus membaca nama di setiap lembar dari halaman 1 sampai 1.000. **Indeks B-Tree** seperti buku telepon yang sudah diurutkan abjad: kamu langsung melompat ke huruf 'B' dalam hitungan detik.\n\n" +
+            "## Jebakan & Kesalahan Umum\n\n" +
+            "> ⚠️ **Index Overload:** Membuat indeks untuk setiap field secara membabi buta. Setiap kali ada operasi `insertOne()` atau `updateOne()`, seluruh B-Tree indeks terkait harus dihitung ulang. Terlalu banyak indeks akan melumpuhkan performa *write* dan menguras kapasitas RAM server.\n\n" +
+            "## Kaitan ke Dunia Kerja\n\n" +
+            "Dalam code review backend dan evaluasi sistem produksi di AWS/Atlas, menemukan query berstatus `COLLSCAN` adalah insiden prioritas tinggi. Mengetahui cara menggunakan `.explain('executionStats')` dan merancang compound index dengan aturan ESR adalah keahlian mutlak yang diuji saat *technical interview* level Mid-Senior Backend Engineer.",
+        },
         {
           kind: "step",
           id: "nosql-2-6",
@@ -779,7 +844,7 @@ export const nosqlTrack: Track = {
             note: "Meningkatkan kecepatan pencarian dari scan seluruh dokumen ke B-Tree scan.",
           },
           instruction:
-            "Tuliskan perintah pembuatan index pada koleksi `orders` untuk field `userId` secara ascending.",
+            "Pencarian riwayat pesanan berdasarkan pemesan sering dijalankan pelanggan. Tulis perintah pembuatan indeks pada koleksi `orders` untuk field `userId` dengan urutan ascending agar query tidak membaca seluruh dokumen.",
           starterCode: "# Tulis createIndex di bawah ini\n",
           language: "text",
           tests: [
@@ -811,6 +876,100 @@ export const nosqlTrack: Track = {
         },
         {
           kind: "step",
+          id: "nosql-2-8",
+          title: "Compound Index dan Aturan ESR",
+          explanation:
+            "**APA:** Compound Index mengindeks dua atau lebih bidang sekaligus dalam satu struktur B-Tree dengan mengikuti aturan urutan ESR (Equality, Sort, Range).\n\n" +
+            "**KENAPA:** Indeks gabungan memungkinkan MongoDB menyaring filter kesamaan sekaligus mengurutkan hasil secara langsung tanpa alokasi memori tambahan (*in-memory sort*).\n\n" +
+            "**KAPAN:** Gunakan compound index pada query kompleks yang memadukan filter ID spesifik dengan pengurutan kronologis, seperti riwayat pesanan per toko.\n\n" +
+            "**JEBAKAN:** Menempatkan bidang rentang nilai sebelum bidang pengurutan yang menggugurkan kemampuan indeks dalam mengeliminasi operasi sort di memori.",
+          example: {
+            code: "db.transaksi.createIndex({ merchantId: 1, tanggal: -1 });",
+            output: "merchantId_1_tanggal_-1",
+            note: "Aturan ESR menjamin Equality (merchantId) berada di depan Sort (tanggal).",
+          },
+          instruction:
+            "Query aplikasi sering menyaring pesanan berdasarkan toko (`storeId`) lalu mengurutkan hasilnya dari pesanan terbaru (`createdAt` descending). Buat compound index pada koleksi `orders` untuk kedua field tersebut sesuai kaidah urutan Equality lalu Sort.",
+          starterCode: "# Buat compound index sesuai aturan ESR\n",
+          language: "text",
+          tests: [
+            {
+              pattern: "db\\.orders\\.createIndex\\(",
+              message: "Panggil metode db.orders.createIndex(...).",
+            },
+            {
+              pattern: "storeId\\s*:\\s*1",
+              message: "Sertakan field storeId: 1 sebagai Equality.",
+            },
+            {
+              pattern: "createdAt\\s*:\\s*-1",
+              message: "Sertakan field createdAt: -1 untuk pengurutan descending.",
+            },
+          ],
+          solution: "db.orders.createIndex({ storeId: 1, createdAt: -1 });",
+          susunKode: {
+            question:
+              "Susun perintah pembuatan compound index pada koleksi orders.",
+            potongan: [
+              "db.orders.createIndex({",
+              "storeId: 1, createdAt: -1 });",
+            ],
+            pengecoh: [
+              "db.orders.buildIndex({",
+              "storeId: 'EQ', createdAt: 'DESC' });",
+            ],
+            pemisah: " ",
+            explanation:
+              "Compound index pada MongoDB dibuat dengan memanggil `createIndex({ fieldA: 1, fieldB: -1 })` sesuai aturan ESR (Equality, Sort, Range). Pilihan pengecoh 'buildIndex' serta notasi 'EQ' atau 'DESC' merupakan istilah fiktif yang sering keliru digunakan oleh pemula yang terbiasa dengan query builder SQL, sehingga menjadi jebakan sintaks.",
+          },
+        },
+        {
+          kind: "step",
+          id: "nosql-2-9",
+          title: "Query Profiling dengan explain('executionStats')",
+          explanation:
+            "**APA:** Metode `.explain('executionStats')` menganalisis rencana eksekusi query dan mengukur statistik aktual seperti jumlah dokumen yang dipindai serta waktu eksekusi.\n\n" +
+            "**KENAPA:** Perintah ini memberikan bukti konkret apakah query berhasil memanfaatkan indeks (stage `IXSCAN`) atau terperangkap dalam pemindaian lambat (`COLLSCAN`).\n\n" +
+            "**KAPAN:** Jalankan profiling saat menganalisis keluhan API lambat di lingkungan staging atau produksi sebelum memutuskan pembuatan indeks baru.\n\n" +
+            "**JEBAKAN:** Menjalankan explain tanpa argumen `'executionStats'` yang hanya menampilkan prediksi rencana query tanpa metrik waktu dan dokumen riil.",
+          example: {
+            code: "db.users.find({ email: 'budi@test.com' }).explain('executionStats');",
+            output: '{\n  "executionStats": {\n    "executionStages": { "stage": "IXSCAN", "indexName": "email_1" },\n    "totalDocsExamined": 1,\n    "nReturned": 1\n  }\n}',
+            note: "Rasio totalDocsExamined berbanding nReturned idealnya mendekati 1:1.",
+          },
+          instruction:
+            "Query pencarian pesanan yang belum diproses terasa lambat di server produksi. Jalankan evaluasi performa pada query pencarian `status: 'pending'` di koleksi `orders` menggunakan metode penjelas dengan mode statistik eksekusi untuk menganalisis indeks.",
+          starterCode: "# Jalankan profiling executionStats pada query orders\n",
+          language: "text",
+          tests: [
+            {
+              pattern: "db\\.orders\\.find\\(\\s*\\{\\s*status\\s*:\\s*['\"]pending['\"]\\s*\\}\\s*\\)",
+              message: "Tulis query find pada koleksi orders dengan filter status: 'pending'.",
+            },
+            {
+              pattern: "explain\\(\\s*['\"]executionStats['\"]\\s*\\)",
+              message: "Lakukan chaining dengan metode .explain('executionStats').",
+            },
+          ],
+          solution: "db.orders.find({ status: 'pending' }).explain('executionStats');",
+          susunKode: {
+            question:
+              "Susun perintah query find dengan metode explain executionStats.",
+            potongan: [
+              "db.orders.find({ status: 'pending' })",
+              ".explain('executionStats');",
+            ],
+            pengecoh: [
+              "db.orders.query({ status: 'pending' })",
+              ".profile('detailed');",
+            ],
+            pemisah: "",
+            explanation:
+              "Pemeriksaan efisiensi query secara akurat dilakukan dengan menyambungkan metode `.explain('executionStats')` langsung pada akhir query `find()`. Metode fiktif seperti `.profile('detailed')` atau `.query()` adalah jebakan istilah yang sering keliru diucapkan pembelajar, dan tidak dikenali oleh shell resmi MongoDB.",
+          },
+        },
+        {
+          kind: "step",
           id: "nosql-2-7",
           title: "Mongoose ODM atau Driver Native",
           explanation:
@@ -823,7 +982,7 @@ export const nosqlTrack: Track = {
             output: "Dokumen tanpa bidang email ditolak sebelum dikirim ke MongoDB: ValidationError: email is required.",
           },
           instruction:
-            "Buat skema Mongoose bernama `ProductSchema` dengan dua bidang: `title` bertipe `String` dan wajib diisi (`required: true`), serta `price` bertipe `Number`.",
+            "Dalam proyek backend Node.js, definisikan skema Mongoose bernama `ProductSchema` yang memiliki atribut `title` bertipe `String` dan wajib diisi (`required: true`), serta atribut `price` bertipe `Number`.",
           starterCode: "// Tulis skema Mongoose di bawah ini\n",
           language: "text",
           tests: [
@@ -896,18 +1055,31 @@ export const nosqlTrack: Track = {
             {
               id: "q4",
               type: "pilihan-ganda",
-              question: "Apa fungsi dari modifier `$inc` dalam operasi update dokumen MongoDB?",
+              question: "Berdasarkan kaidah ESR (Equality, Sort, Range) dalam perancangan compound index, manakah urutan pembuatan indeks yang paling optimal untuk query filter toko sama, rentang harga, dan urutan tanggal terbaru?",
               choices: [
-                "Mengganti seluruh nilai menjadi nol",
-                "Menambah atau mengurangi nilai pada suatu bidang bertipe angka",
-                "Menghapus bidang tertentu pada dokumen",
-                "Menjadikan sebuah array memiliki nilai acak",
+                "{ storeId: 1, createdAt: -1, price: 1 } (Equality -> Sort -> Range)",
+                "{ price: 1, createdAt: -1, storeId: 1 } (Range -> Sort -> Equality)",
+                "{ createdAt: -1, storeId: 1, price: 1 } (Sort -> Equality -> Range)",
+                "{ storeId: 1, price: 1, createdAt: -1 } (Equality -> Range -> Sort)",
               ],
-              answerIndex: 1,
-              explanation: "Modifier `$inc` menambah atau mengurangi nilai (increment/decrement) numerik secara atomik.",
+              answerIndex: 0,
+              explanation: "Aturan ESR mewajibkan field Equality di depan, diikuti field Sort agar tidak memicu in-memory sorting, dan terakhir field Range.",
             },
             {
               id: "q5",
+              type: "pilihan-ganda",
+              question: "Hasil `.explain('executionStats')` menunjukkan `stage: 'COLLSCAN'` dan `totalDocsExamined: 100000` dengan `nReturned: 5`. Apa arti temuan ini dan tindakannya?",
+              choices: [
+                "Query melakukan scan seluruh koleksi tanpa index; wajib dibuatkan index pada field filter terkait",
+                "Query sudah sangat optimal karena berhasil menemukan 5 dokumen",
+                "Database kehabisan memori RAM sehingga beralih ke SSD",
+                "Koneksi jaringan timeout karena dokumen berukuran terlalu besar",
+              ],
+              answerIndex: 0,
+              explanation: "COLLSCAN berarti pemindaian menyeluruh terhadap 100.000 dokumen untuk mengambil 5 hasil saja. Ini adalah anti-pattern performa yang harus diatasi dengan indeks.",
+            },
+            {
+              id: "q6",
               type: "pilihan-ganda",
               question: "Metode mana yang menghapus semua dokumen yang memenuhi kondisi tertentu tanpa menghapus collection-nya?",
               choices: [
@@ -935,6 +1107,9 @@ export const nosqlTrack: Track = {
         "$lookup (join ala Mongo) & batasannya",
         "Skema validation",
         "Anti-pattern: array tak terbatas, dokumen raksasa",
+        "Agregasi $group: menghitung total dan rata-rata ($sum, $avg)",
+        "Agregasi $unwind: mengurai array sub-dokumen",
+        "Pipeline multi-tahap terpadu ($match, $group, $sort)",
       ],
       items: [
         {
@@ -957,8 +1132,8 @@ export const nosqlTrack: Track = {
             "## Arsitektur Aggregation Pipeline\n\n" +
             "**Aggregation Pipeline** adalah fitur analitis paling ampuh di MongoDB. Data diproses secara beruntun (*sequential stage*) melalui pipa transformasi:\n\n" +
             "```text\n" +
-            "[ Raw Documents ] ──► [ $match ] ──► [ $lookup ] ──► [ $group ] ──► [ $sort / $project ] ──► [ Output Final ]\n" +
-            "                        Filter         JOIN           Agregasi           Format & Urutkan\n" +
+            "[ Raw Documents ] ──► [ $match ] ──► [ $unwind ] ──► [ $group ] ──► [ $sort / $project ] ──► [ Output Final ]\n" +
+            "                        Filter         Urai Array      Agregasi           Format & Urutkan\n" +
             "```\n\n" +
             "### Stage Utama Aggregation Pipeline:\n" +
             "- `$match`: Menyaring dokumen awal (mirip `WHERE` di SQL).\n" +
@@ -971,7 +1146,7 @@ export const nosqlTrack: Track = {
             "## Jebakan & Kesalahan Umum\n\n" +
             "> ⚠️ **Anti-Pattern Unbounded Array:** Menyimpan array komentar yang terus bertambah tanpa batas di satu dokumen artikel. Setiap dokumen BSON memiliki batas keras **16 MB**. Begitu dokumen membengkak, pembacaan artikel biasa akan membebankan RAM secara tidak rasional.\n\n" +
             "## Kaitan ke Dunia Kerja\n\n" +
-            "Di industri ecommerce dan SaaS, Aggregation Pipeline digunakan untuk menghasilkan laporan penjualan harian, menghitung metrik analitik dashboard, dan melakukan pencarian komprehensif. Penguasaan `$match` dan `$group` menjadi pembeda utama antara developer junior dan mid-level backend engineer.",
+            "Di industri ecommerce dan SaaS, Aggregation Pipeline digunakan untuk menghasilkan laporan penjualan harian, menghitung metrik analitik dashboard, dan melakukan pencarian komprehensif. Penguasaan `$match`, `$unwind`, dan `$group` menjadi pembeda utama antara developer junior dan mid-level backend engineer.",
         },
         {
           kind: "step",
@@ -983,11 +1158,16 @@ export const nosqlTrack: Track = {
             "**KAPAN:** Gunakan Embed untuk data berukuran kecil yang selalu dibaca bersama induknya (misal alamat pesanan), dan gunakan Reference untuk data yang terus bertambah tanpa batas.\n\n" +
             "**JEBAKAN:** Menyetujui pola Embed untuk data bertipe *unbounded* (seperti komentar atau log) yang pada akhirnya menembus batas 16 MB per dokumen BSON.",
           example: {
-            code: "// embed: alamat selalu dibaca bersama pesanannya\ndb.pesanan.insertOne({\n  kode: 'INV-1',\n  alamat: { kota: 'Bandung', pos: '40115' },\n});",
+            code:
+              "// embed: alamat selalu dibaca bersama pesanannya\n" +
+              "db.pesanan.insertOne({\n" +
+              "  kode: 'INV-1',\n" +
+              "  alamat: { kota: 'Bandung', pos: '40115' },\n" +
+              "});",
             output: "{ acknowledged: true, insertedId: ObjectId('66c3...') }",
           },
           instruction:
-            "Komentar artikel bisa bertambah tanpa batas, jadi simpan terpisah dengan pola reference. Tulis perintah yang menyimpan satu dokumen ke koleksi `komentar` berisi `artikelId` bernilai `postId` dan `isi` bernilai `'Bermanfaat!'`.",
+            "Komentar pada artikel blog populer berpotensi mencapai jutaan baris sehingga tidak boleh disimpan di dokumen artikel. Tulis perintah untuk menambahkan satu dokumen baru ke koleksi `komentar` dengan referensi `artikelId: postId` dan isi teks komentar `isi: 'Bermanfaat!'`.",
           starterCode: "// Simpan komentar dengan pola reference\n",
           language: "text",
           tests: [
@@ -1031,12 +1211,17 @@ export const nosqlTrack: Track = {
             "**KAPAN:** Gunakan operator `$push` atau `$addToSet` untuk menambah elemen rujukan baru ke dalam bidang berjenis array.\n\n" +
             "**JEBAKAN:** Menggunakan `$push` berulang kali tanpa kontrol yang menyebabkan ID duplikat masuk ke dalam array rujukan.",
           example: {
-            code: "// one-to-many kecil: array di dokumen induk\ndb.user.updateOne(\n  { _id: userId },\n  { $push: { telepon: '0812-1111-2222' } }\n);",
+            code:
+              "// one-to-many kecil: array di dokumen induk\n" +
+              "db.user.updateOne(\n" +
+              "  { _id: userId },\n" +
+              "  { $push: { telepon: '0812-1111-2222' } }\n" +
+              ");",
             output: "{ matchedCount: 1, modifiedCount: 1 }",
             note: "$addToSet mencegah id yang sama masuk dua kali, sedangkan $push selalu menambah.",
           },
           instruction:
-            "Satu produk bisa masuk beberapa kategori. Tulis perintah `updateOne` pada koleksi `produk` yang menambahkan `kategoriId` ke array `kategori` milik dokumen dengan `_id: produkId`, memakai operator penambah elemen array.",
+            "Satu barang dagangan dapat dikaitkan ke beberapa kategori sekaligus. Tulis perintah pembaruan dokumen tunggal pada koleksi `produk` untuk barang dengan `_id: produkId` guna menambahkan `kategoriId` ke dalam array `kategori` tanpa memasukkan nilai duplikat.",
           starterCode: "// Tambahkan kategori ke produk\n",
           language: "text",
           tests: [
@@ -1090,7 +1275,7 @@ export const nosqlTrack: Track = {
             note: "Aggregation pipeline adalah fitur analitis paling ampuh di MongoDB.",
           },
           instruction:
-            "Tuliskan stage `$match` di perintah `aggregate` koleksi `orders` untuk menyaring pesanan dengan `status: 'paid'`.",
+            "Sebagai tahap awal pembuatan laporan keuangan, saring dokumen pesanan pada koleksi `orders` yang sudah lunas (`status: 'paid'`) menggunakan stage penyaringan pada aggregation pipeline.",
           starterCode: "# Tulis aggregate $match di sini\n",
           language: "text",
           tests: [
@@ -1143,7 +1328,7 @@ export const nosqlTrack: Track = {
             note: "Gunakan $lookup secukupnya karena operasi join di NoSQL relatif mahal.",
           },
           instruction:
-            "Tuliskan objek stage `$lookup` untuk menggabungkan koleksi `categories` menggunakan `localField: 'catId'`, `foreignField: '_id'`, dan nama output `category`.",
+            "Dalam pipeline agregasi pesanan, gabungkan dokumen kategori terkait dari koleksi luar. Tulis objek stage `$lookup` yang mengambil data dari koleksi `'categories'`, mencocokkan field lokal `'catId'` dengan field relasi `'_id'`, dan menyimpan hasilnya sebagai array `'category'`.",
           starterCode: "# Tulis $lookup di sini\n",
           language: "text",
           tests: [
@@ -1187,6 +1372,161 @@ export const nosqlTrack: Track = {
         },
         {
           kind: "step",
+          id: "nosql-3-7",
+          title: "Agregasi $group: Menghitung Omset dengan $sum",
+          explanation:
+            "**APA:** Stage `$group` mengelompokkan dokumen berdasarkan nilai field tertentu (disimpan di `_id`) dan menghitung agregasi seperti jumlah `$sum` dan rata-rata `$avg`.\n\n" +
+            "**KENAPA:** Perhitungan agregat di level server database memanfaatkan komputasi paralel dan memangkas ribuan baris data menjadi satu ringkasan ringkas.\n\n" +
+            "**KAPAN:** Gunakan `$group` untuk membuat laporan keuangan bulanan, metrik performa toko, atau ringkasan penjualan per kategori produk.\n\n" +
+            "**JEBAKAN:** Lupa menambahkan tanda dolar sebelum nama field referensi (seperti `$amount`) sehingga akumulator menjumlahkan string literal bukan nilai field.",
+          example: {
+            code: "db.orders.aggregate([{ $group: { _id: '$status', totalItems: { $sum: '$qty' } } }]);",
+            output: '[{ "_id": "delivered", "totalItems": 420 }, { "_id": "canceled", "totalItems": 18 }]',
+            note: "Akumulator $sum: '$qty' menjumlahkan isi field qty untuk setiap grup status pesanan.",
+          },
+          instruction:
+            "Manajemen membutuhkan ringkasan omset penjualan per kategori produk. Tulis query agregasi pada koleksi `sales` yang mengelompokkan dokumen berdasarkan field `category` (sebagai `_id`), lalu menghitung total pendapatan (`totalRevenue`) menggunakan akumulator `$sum` dari field `amount`.",
+          starterCode: "# Tulis aggregate $group di bawah ini\n",
+          language: "text",
+          tests: [
+            {
+              pattern: "db\\.sales\\.aggregate\\(",
+              message: "Gunakan metode db.sales.aggregate([...]).",
+            },
+            {
+              pattern: "\\$group\\s*:\\s*\\{\\s*_id\\s*:\\s*['\"]\\$category['\"]",
+              message: "Gunakan stage $group dengan _id bernilai '$category'.",
+            },
+            {
+              pattern: "totalRevenue\\s*:\\s*\\{\\s*\\$sum\\s*:\\s*['\"]\\$amount['\"]",
+              message: "Hitung totalRevenue dengan akumulator { $sum: '$amount' }.",
+            },
+          ],
+          solution: "db.sales.aggregate([{ $group: { _id: '$category', totalRevenue: { $sum: '$amount' } } }]);",
+          susunKode: {
+            question:
+              "Susun pipeline agregasi untuk mengelompokkan kategori dan menghitung totalRevenue.",
+            potongan: [
+              "db.sales.aggregate([",
+              "{ $group: { _id: '$category',",
+              "totalRevenue: { $sum: '$amount' } } } ]);",
+            ],
+            pengecoh: [
+              "{ $groupBy: { category: 1,",
+              "totalRevenue: { $total: 'amount' } } } ]);",
+            ],
+            pemisah: " ",
+            explanation:
+              "Pengelompokan agregasi di MongoDB selalu menggunakan stage resmi `$group` dengan parameter `_id` dan operator akumulasi seperti `$sum: '$amount'`. Penggunaan nama stage `$groupBy` atau akumulator `$total` adalah bentuk kekeliruan sintaksis yang sering menggoda pemula dan menjadi jebakan umum.",
+          },
+        },
+        {
+          kind: "step",
+          id: "nosql-3-8",
+          title: "Agregasi $unwind: Mengurai Array Sub-dokumen",
+          explanation:
+            "**APA:** Stage `$unwind` mendekonstruksi field bertipe array di dalam dokumen, menghasilkan satu dokumen tiruan untuk setiap elemen array tersebut.\n\n" +
+            "**KENAPA:** MongoDB tidak dapat melakukan `$group` atau penghitungan agregat langsung pada item bersarang di dalam array tanpa memecahnya terlebih dahulu.\n\n" +
+            "**KAPAN:** Gunakan `$unwind` ketika pesanan memiliki array produk `items` dan kamu ingin menganalisis item mana yang paling laku secara individual.\n\n" +
+            "**JEBAKAN:** Menjalankan `$unwind` pada dokumen yang field array-nya bernilai null atau kosong akan membuang dokumen tersebut dari output kecuali opsi `preserveNullAndEmptyArrays: true` diaktifkan.",
+          example: {
+            code: "db.articles.aggregate([{ $unwind: '$tags' }]);",
+            output: '[{ "_id": 101, "title": "NoSQL", "tags": "db" }, { "_id": 101, "title": "NoSQL", "tags": "mongo" }]',
+            note: "Array tags yang berisi 2 string diurai menjadi 2 dokumen mandiri dengan tag individual.",
+          },
+          instruction:
+            "Setiap faktur pesanan menyimpan daftar barang belanjaan di dalam array `items`. Untuk menganalisis penjualan barang secara terpisah, gunakan stage `$unwind` pada aggregation pipeline koleksi `orders` untuk memecah array `items` menjadi baris dokumen individual.",
+          starterCode: "# Tulis aggregate $unwind di sini\n",
+          language: "text",
+          tests: [
+            {
+              pattern: "db\\.orders\\.aggregate\\(",
+              message: "Panggil metode db.orders.aggregate([...]).",
+            },
+            {
+              pattern: "\\$unwind\\s*:\\s*['\"]\\$items['\"]",
+              message: "Gunakan stage { $unwind: '$items' }.",
+            },
+          ],
+          solution: "db.orders.aggregate([{ $unwind: '$items' }]);",
+          susunKode: {
+            question:
+              "Susun pipeline agregasi untuk mengurai array items dengan $unwind.",
+            potongan: [
+              "db.orders.aggregate([",
+              "{ $unwind: '$items' } ]);",
+            ],
+            pengecoh: [
+              "db.orders.pipeline([",
+              "{ $flatten: '$items' } ]);",
+            ],
+            pemisah: " ",
+            explanation:
+              "Dekonstruksi elemen array menjadi baris dokumen terpisah pada MongoDB pipeline menggunakan stage `$unwind: '$items'`. Pemakaian istilah fiktif seperti `.pipeline()` atau operator `$flatten` adalah jebakan keliru yang sering menggoda pembelajar karena mirip fungsi manipulasi array di JavaScript.",
+          },
+        },
+        {
+          kind: "step",
+          id: "nosql-3-9",
+          title: "Pipeline Multi-tahap Terpadu ($match, $group, $sort)",
+          explanation:
+            "**APA:** Aggregation pipeline berdaya guna tinggi mengombinasikan beberapa stage sekuensial: filter awal (`$match`), pengelompokan agregat (`$group`), dan pengurutan (`$sort`).\n\n" +
+            "**KENAPA:** Eksekusi berurutan dalam satu pipeline memangkas beban jaringan dan RAM aplikasi dibanding menarik data mentah untuk diproses di Node.js.\n\n" +
+            "**KAPAN:** Gunakan pipeline lengkap untuk dasbor analitik manajemen bisnis, seperti daftar pelanggan setia dengan akumulasi pembelanjaan terbesar.\n\n" +
+            "**JEBAKAN:** Menaruh filter `$match` setelah `$group` yang mengakibatkan database membuang resource mengelompokkan dokumen yang sebenarnya tidak dibutuhkan.",
+          example: {
+            code:
+              "db.orders.aggregate([\n" +
+              "  { $match: { status: 'completed' } },\n" +
+              "  { $group: { _id: '$customerId', totalBelanja: { $sum: '$total' } } },\n" +
+              "  { $sort: { totalBelanja: -1 } }\n" +
+              "]);",
+            output: '[{ "_id": "C01", "totalBelanja": 1200000 }, { "_id": "C02", "totalBelanja": 850000 }]',
+            note: "Urutan filter -> group -> sort adalah arsitektur pipeline standar industri.",
+          },
+          instruction:
+            "Susun pipeline agregasi 3 tahap pada koleksi `orders`: saring transaksi yang `status: 'completed'` pada stage pertama, kelompokkan berdasarkan `customerId` untuk menjumlahkan `totalBelanja` dengan akumulator `$sum: '$total'` pada stage kedua, lalu urutkan hasilnya dari belanja tertinggi ke terendah (`totalBelanja: -1`) pada stage ketiga.",
+          starterCode: "# Susun pipeline $match, $group, dan $sort di bawah ini\n",
+          language: "text",
+          tests: [
+            {
+              pattern: "db\\.orders\\.aggregate\\(",
+              message: "Gunakan metode db.orders.aggregate([...]).",
+            },
+            {
+              pattern: "\\$match\\s*:\\s*\\{\\s*status\\s*:\\s*['\"]completed['\"]\\s*\\}",
+              message: "Tahap 1 wajib berupa $match dengan status: 'completed'.",
+            },
+            {
+              pattern: "\\$group\\s*:\\s*\\{\\s*_id\\s*:\\s*['\"]\\$customerId['\"]\\s*,\\s*totalBelanja\\s*:\\s*\\{\\s*\\$sum\\s*:\\s*['\"]\\$total['\"]",
+              message: "Tahap 2 wajib berupa $group dengan _id: '$customerId' dan akumulator totalBelanja.",
+            },
+            {
+              pattern: "\\$sort\\s*:\\s*\\{\\s*totalBelanja\\s*:\\s*-1\\s*\\}",
+              message: "Tahap 3 wajib berupa $sort dengan totalBelanja: -1.",
+            },
+          ],
+          solution: "db.orders.aggregate([{ $match: { status: 'completed' } }, { $group: { _id: '$customerId', totalBelanja: { $sum: '$total' } } }, { $sort: { totalBelanja: -1 } }]);",
+          susunKode: {
+            question:
+              "Susun pipeline agregasi 3 tahap ($match -> $group -> $sort).",
+            potongan: [
+              "db.orders.aggregate([",
+              "{ $match: { status: 'completed' } },",
+              "{ $group: { _id: '$customerId', totalBelanja: { $sum: '$total' } } },",
+              "{ $sort: { totalBelanja: -1 } } ]);",
+            ],
+            pengecoh: [
+              "{ $filter: { status: 'completed' } },",
+              "{ $orderBy: { totalBelanja: 'DESC' } } ]);",
+            ],
+            pemisah: " ",
+            explanation:
+              "Pipeline multi-stage pada MongoDB wajib menggunakan tahapan baku `$match` untuk filter, `$group` untuk kalkulasi akumulator, dan `$sort` untuk pengurutan. Mengganti nama stage menjadi `$filter` atau `$orderBy` adalah kesalahan umum yang keliru dan sering menjadi jebakan pemula dari latar belakang SQL.",
+          },
+        },
+        {
+          kind: "step",
           id: "nosql-3-5",
           title: "Schema Validation di Sisi Database",
           explanation:
@@ -1199,7 +1539,7 @@ export const nosqlTrack: Track = {
             output: "{ ok: 1 }",
           },
           instruction:
-            "Buat koleksi `pengguna` beserta validator `$jsonSchema` yang mewajibkan bidang `email` ada di setiap dokumen. Pakai `db.createCollection` dengan opsi `validator`.",
+            "Untuk mencegah masuknya data tanpa identitas kontak, buat koleksi baru bernama `'pengguna'` menggunakan aturan validator `$jsonSchema` yang menetapkan field `'email'` sebagai bidang wajib.",
           starterCode: "// Buat koleksi beserta validatornya\n",
           language: "text",
           tests: [
@@ -1247,11 +1587,16 @@ export const nosqlTrack: Track = {
             "**KAPAN:** Gunakan kombinasi `$push` dengan modifier `$each` dan `$slice: -N` jika kamu hanya ingin mempertahankan *N* item paling baru di dalam dokumen.\n\n" +
             "**JEBAKAN:** Membiarkan array riwayat aktivitas bertambah tanpa batasan hingga menembus batas maksimum dokumen BSON 16 MB.",
           example: {
-            code: "// simpan hanya 5 aktivitas terbaru di dokumen induk\ndb.user.updateOne(\n  { _id: userId },\n  { $push: { aktivitas: { $each: [baru], $slice: -5 } } }\n);",
+            code:
+              "// simpan hanya 5 aktivitas terbaru di dokumen induk\n" +
+              "db.user.updateOne(\n" +
+              "  { _id: userId },\n" +
+              "  { $push: { aktivitas: { $each: [baru], $slice: -5 } } }\n" +
+              ");",
             output: "{ matchedCount: 1, modifiedCount: 1 }",
           },
           instruction:
-            "Batasi array `notifikasi` pada dokumen `user` agar hanya menyimpan 10 item terbaru. Tulis perintah `updateOne` yang menambahkan `pesanBaru` memakai `$push` dengan `$each` dan `$slice: -10`.",
+            "Agar dokumen pengguna tidak membengkak melebihi batas 16 MB, batasi array riwayat notifikasi hanya menyimpan 10 pesan paling baru. Tulis pembaruan dokumen pada koleksi `user` dengan `_id: userId` yang menyisipkan `pesanBaru` ke array `notifikasi` menggunakan pemotongan batas 10 item terbaru.",
           starterCode: "// Tambahkan notifikasi dengan batas jumlah\n",
           language: "text",
           tests: [
@@ -1339,10 +1684,28 @@ export const nosqlTrack: Track = {
             {
               id: "q5",
               type: "pilihan-ganda",
-              question: "Stage Aggregation Pipeline apa yang umumnya dipakai sedini mungkin untuk memfilter dokumen mentah?",
-              choices: ["$group", "$sort", "$match", "$project"],
-              answerIndex: 2,
-              explanation: "Stage `$match` difungsikan untuk memfilter dan memangkas jumlah dokumen awal di pipeline sehingga memori yang dikonsumsi stage `$group` menjadi jauh lebih ringan.",
+              question: "Apa fungsi stage `$unwind` dalam pipeline agregasi MongoDB?",
+              choices: [
+                "Mengurai satu bidang array menjadi beberapa dokumen individual terpisah",
+                "Menggabungkan dua tabel menjadi satu dokumen",
+                "Menghapus spasi kosong pada teks",
+                "Mengurutkan array dari nilai terbesar",
+              ],
+              answerIndex: 0,
+              explanation: "Stage `$unwind` membedah setiap elemen dalam array menjadi dokumen terpisah sehingga dapat dihitung dan dikelompokkan oleh stage `$group` berikutnya.",
+            },
+            {
+              id: "q6",
+              type: "pilihan-ganda",
+              question: "Dalam pipeline analitik data penjualan, mengapa stage `$match` harus ditempatkan sebelum stage `$group`?",
+              choices: [
+                "Untuk memangkas jumlah dokumen awal sedini mungkin sehingga konsumsi memori RAM di stage $group jauh lebih efisien",
+                "Karena MongoDB akan error jika $group ditaruh di awal",
+                "Agar hasil perhitungan $sum bernilai positif",
+                "Supaya dokumen otomatis terkonversi menjadi format CSV",
+              ],
+              answerIndex: 0,
+              explanation: "Menyaring data dengan `$match` di awal pipeline mengurangi volume data yang harus diolah di memori oleh stage `$group`.",
             },
           ],
         },
@@ -1361,6 +1724,10 @@ export const nosqlTrack: Track = {
         "Session store & rate limiter dengan Redis",
         "Pub/sub dasar",
         "Kapan Redis BUKAN jawabannya (data utama, durability)",
+        "Antrean kerja (message queue) dengan Redis List: LPUSH dan RPOP",
+        "Himpunan data unik & relasi bersama dengan Redis Set: SADD dan SINTER",
+        "Papan peringkat (Leaderboard) dengan Sorted Set: ZADD dan ZREVRANGE",
+        "Pencegahan race condition dengan Distributed Lock: SET NX EX",
       ],
       items: [
         {
@@ -1377,8 +1744,8 @@ export const nosqlTrack: Track = {
             "| **String** | `SET`, `GET`, `SETEX`, `INCR` | Cache respons JSON API, token session, rate limiter counter |\n" +
             "| **Hash** | `HSET`, `HGET`, `HGETALL` | Objek user profile, item keranjang belanja sederhana |\n" +
             "| **List** | `LPUSH`, `RPOP`, `LRANGE` | Queue/antrean latar belakang (BullMQ), log aktivitas terbaru |\n" +
-            "| **Set** | `SADD`, `SMEMBERS`, `SISMEMBER` | Daftar ID unik, tagar postingan, pengikut bersama (*mutual*) |\n" +
-            "| **Sorted Set** | `ZADD`, `ZRANGE`, `ZREVRANGE` | Papan peringkat (*Leaderboard* game/skor), prioritas antrean |\n\n" +
+            "| **Set** | `SADD`, `SMEMBERS`, `SINTER` | Daftar ID unik, tagar postingan, pengikut bersama (*mutual*) |\n" +
+            "| **Sorted Set** | `ZADD`, `ZRANGE`, `ZREVRANGE` | Papan peringkat (*Leaderboard* game/skor), rate limiter sliding window |\n\n" +
             "## Pola Arsitektur Cache-Aside (Lazy Loading)\n\n" +
             "Pola caching paling populer untuk REST API backend adalah **Cache-Aside**:\n\n" +
             "```text\n" +
@@ -1412,23 +1779,23 @@ export const nosqlTrack: Track = {
             note: "Redis umumnya digunakan sebagai Lapisan Cache di depan database utama.",
           },
           instruction:
-            "Tulis perintah Redis CLI `SET` untuk menyimpan key `user:1` dengan nilai string `'Budi'`.",
+            "Simpan nama pengguna ke penyimpanan in-memory Redis. Tulis perintah CLI untuk mengaitkan kunci `user:1` dengan nilai string `'Budi'`.",
           starterCode: "# Tulis perintah Redis SET di sini\n",
           language: "text",
           tests: [
-                      {
-                        "pattern": "^\\s*SET\\s",
-                        "message": "Penyimpanan nilai sederhana di Redis memakai perintah `SET <kunci> <nilai>` — semua perintah Redis ditulis HURUF BESAR sesuai konvensi dokumentasinya."
-                      },
-                      {
-                        "pattern": "user:1",
-                        "message": "Konvensi penamaan kunci Redis memakai titik dua sebagai pemisah namespace (`entitas:id`). Redis tidak punya tabel, jadi struktur itu satu-satunya cara menjaga kunci tetap teratur — dan `KEYS user:*` bisa menemukannya."
-                      },
-                      {
-                        "pattern": "['\"]Budi['\"]",
-                        "message": "Nilainya dibungkus tanda kutip bila mengandung spasi atau ingin dipastikan terbaca sebagai satu argumen."
-                      }
-                    ],
+            {
+              pattern: "^\\s*SET\\s",
+              message: "Penyimpanan nilai sederhana di Redis memakai perintah `SET <kunci> <nilai>` — semua perintah Redis ditulis HURUF BESAR sesuai konvensi dokumentasinya.",
+            },
+            {
+              pattern: "user:1",
+              message: "Konvensi penamaan kunci Redis memakai titik dua sebagai pemisah namespace (`entitas:id`). Redis tidak punya tabel, jadi struktur itu satu-satunya cara menjaga kunci tetap teratur — dan `KEYS user:*` bisa menemukannya.",
+            },
+            {
+              pattern: "['\"]Budi['\"]",
+              message: "Nilainya dibungkus tanda kutip bila mengandung spasi atau ingin dipastikan terbaca sebagai satu argumen.",
+            },
+          ],
           solution: "SET user:1 'Budi'",
           susunKode: {
             question:
@@ -1461,19 +1828,19 @@ export const nosqlTrack: Track = {
             note: "Hash sangat cocok untuk menyimpan objek JSON sederhana.",
           },
           instruction:
-            "Tuliskan perintah Redis CLI `HSET` untuk mengeset atribut `name` bernilai `'Budi'` pada key hash `user:1`.",
+            "Profil pengguna memiliki beberapa atribut terpisah. Tulis perintah Redis CLI untuk menyimpan atribut `name` bernilai `'Budi'` ke dalam struktur Hash pada kunci `user:1` agar dapat dibaca tanpa mengurai seluruh JSON.",
           starterCode: "# Tulis HSET di bawah ini\n",
           language: "text",
           tests: [
-                      {
-                        "pattern": "^\\s*HSET\\s",
-                        "message": "Untuk menyimpan beberapa field dalam satu kunci (mirip satu baris tabel), tipe datanya Hash dan perintahnya berawalan huruf H. Keunggulannya: kamu bisa membaca atau mengubah satu field saja tanpa menulis ulang seluruh objek — beda dari menyimpan JSON sebagai string biasa."
-                      },
-                      {
-                        "pattern": "user:1\\s+name\\s+['\"]Budi['\"]",
-                        "message": "Urutan argumennya: kunci, nama field, lalu nilainya. Beberapa pasangan field-nilai boleh ditulis sekaligus dalam satu perintah."
-                      }
-                    ],
+            {
+              pattern: "^\\s*HSET\\s",
+              message: "Untuk menyimpan beberapa field dalam satu kunci (mirip satu baris tabel), tipe datanya Hash dan perintahnya berawalan huruf H. Keunggulannya: kamu bisa membaca atau mengubah satu field saja tanpa menulis ulang seluruh objek — beda dari menyimpan JSON sebagai string biasa.",
+            },
+            {
+              pattern: "user:1\\s+name\\s+['\"]Budi['\"]",
+              message: "Urutan argumennya: kunci, nama field, lalu nilainya. Beberapa pasangan field-nilai boleh ditulis sekaligus dalam satu perintah.",
+            },
+          ],
           solution: "HSET user:1 name 'Budi'",
           susunKode: {
             question:
@@ -1493,32 +1860,160 @@ export const nosqlTrack: Track = {
         },
         {
           kind: "step",
+          id: "nosql-4-8",
+          title: "Antrean Kerja (Queue) dengan Redis List: LPUSH dan RPOP",
+          explanation:
+            "**APA:** Struktur data Redis List adalah antrean dua arah (*doubly linked list*) yang mendukung operasi penyisipan dan pengambilan elemen dari kedua ujungnya.\n\n" +
+            "**KENAPA:** Operasi `LPUSH` (menambahkan di kepala) dan `RPOP` (mengambil dari ekor) berjalan dalam kompleksitas waktu konstan $O(1)$ sehingga sangat andal untuk *message broker*.\n\n" +
+            "**KAPAN:** Gunakan kombinasi `LPUSH` dan `RPOP` (atau `BRPOP` untuk blocking worker) saat membangun antrean pengiriman email atau konversi video di latar belakang.\n\n" +
+            "**JEBAKAN:** Membaca antrean menggunakan `LRANGE 0 -1` pada antrean yang berisi jutaan item yang akan mengunci thread Redis dan menghabiskan bandwidth jaringan.",
+          example: {
+            code: "LPUSH queue:jobs 'job:10'\nRPOP queue:jobs",
+            output: '"job:10"',
+            note: "Pola Producer-Consumer FIFO (First-In, First-Out) dibentuk dari LPUSH di satu sisi dan RPOP di sisi lain.",
+          },
+          instruction:
+            "Sistem pengiriman email notifikasi menggunakan Redis List sebagai antrean tugas latar belakang (*FIFO queue*). Tulis dua perintah Redis CLI: pertama masukkan ID email `'mail:101'` ke ujung kiri antrean `queue:email`, lalu pada baris kedua ambil tugas paling lama dari ujung kanan antrean untuk diproses pekerja.",
+          starterCode: "# Baris 1: masukkan ke antrean. Baris 2: ambil tugas untuk diproses\n",
+          language: "text",
+          tests: [
+            {
+              pattern: "LPUSH\\s+queue:email\\s+['\"]mail:101['\"]",
+              message: "Baris 1 wajib memasukkan tugas dengan perintah LPUSH queue:email 'mail:101'.",
+            },
+            {
+              pattern: "RPOP\\s+queue:email",
+              message: "Baris 2 wajib mengambil tugas dengan perintah RPOP queue:email.",
+            },
+          ],
+          solution: "LPUSH queue:email 'mail:101'\nRPOP queue:email",
+          susunKode: {
+            question:
+              "Susun perintah Redis List untuk pola antrean LPUSH dan RPOP.",
+            potongan: [
+              "LPUSH queue:email 'mail:101'\n",
+              "RPOP queue:email",
+            ],
+            pengecoh: [
+              "ENQUEUE queue:email 'mail:101'\n",
+              "DEQUEUE queue:email",
+            ],
+            pemisah: "",
+            explanation:
+              "Pola antrean FIFO pada Redis menggunakan perintah native `LPUSH` untuk memasukkan data dari sisi kiri antrean dan `RPOP` untuk mengeluarkan tugas tertua dari sisi kanan. Perintah `ENQUEUE` dan `DEQUEUE` adalah istilah konseptual yang sering keliru diketik di CLI dan menjadi jebakan sintaks.",
+          },
+        },
+        {
+          kind: "step",
+          id: "nosql-4-9",
+          title: "Himpunan Unik (Set) dengan SADD dan SINTER",
+          explanation:
+            "**APA:** Redis Set adalah koleksi string acak tak berurut yang menjamin keunikan setiap anggotanya, serta mendukung operasi aljabar himpunan seperti irisan (`SINTER`) dan gabungan (`SUNION`).\n\n" +
+            "**KENAPA:** Operasi interseksi dilakukan langsung di memori Redis dengan kecepatan sangat tinggi tanpa membebani query SQL bertingkat.\n\n" +
+            "**KAPAN:** Gunakan Redis Set untuk menyimpan tag artikel, daftar IP blacklist, dan mencari teman bersama (*mutual friends*) atau kesamaan minat antarpengguna.\n\n" +
+            "**JEBAKAN:** Menjalankan operasi interseksi `SINTER` pada beberapa Set raksasa yang memiliki jutaan anggota tanpa pengujian latensi terlebih dahulu.",
+          example: {
+            code: "SADD minat:user:1 'koding' 'game'\nSADD minat:user:2 'game' 'musik'\nSINTER minat:user:1 minat:user:2",
+            output: '1) "game"',
+            note: "SINTER mengembalikan elemen yang berada di kedua himpunan sekaligus.",
+          },
+          instruction:
+            "Fitur media sosial ingin mencari ketertarikan yang sama antara dua pengguna. Tulis perintah Redis CLI yang mencari irisan elemen unik antara himpunan minat pengguna `minat:user:1` dan `minat:user:2` menggunakan perintah interseksi himpunan.",
+          starterCode: "# Cari irisan minat kedua pengguna di bawah ini\n",
+          language: "text",
+          tests: [
+            {
+              pattern: "SINTER\\s+minat:user:1\\s+minat:user:2",
+              message: "Gunakan perintah SINTER diikuti dua nama key himpunan: minat:user:1 minat:user:2.",
+            },
+          ],
+          solution: "SINTER minat:user:1 minat:user:2",
+          susunKode: {
+            question:
+              "Susun perintah Redis SINTER untuk mencari irisan minat dua pengguna.",
+            potongan: [
+              "SINTER minat:user:1",
+              "minat:user:2",
+            ],
+            pengecoh: [
+              "INTERSECT minat:user:1",
+              "minat:user:99",
+            ],
+            pemisah: " ",
+            explanation:
+              "Perintah Redis untuk menghitung irisan dari dua atau lebih himpunan Set adalah `SINTER key1 key2`. Perintah `INTERSECT` atau mengubah ID key adalah jebakan sintaks SQL yang keliru dan sering menggoda pembelajar yang belum terbiasa dengan singkatan CLI Redis.",
+          },
+        },
+        {
+          kind: "step",
+          id: "nosql-4-10",
+          title: "Papan Peringkat (Leaderboard) dengan Sorted Set: ZADD dan ZREVRANGE",
+          explanation:
+            "**APA:** Sorted Set (ZSet) mengombinasikan keunikan anggota Set dengan skor numerik (*score*), di mana setiap elemen otomatis diurutkan secara real-time menggunakan struktur data SkipList.\n\n" +
+            "**KENAPA:** Pembaruan skor dan penarikan peringkat 10 besar berjalan dalam waktu $O(\\log N)$, menghilangkan kebutuhan query `ORDER BY` yang lambat di database relasional.\n\n" +
+            "**KAPAN:** Gunakan Sorted Set untuk papan peringkat game, trending topik berdasarkan jumlah klik, dan implementasi rate limiter sistem geser (*sliding window*).\n\n" +
+            "**JEBAKAN:** Tertukar menulis urutan argumen antara skor dan nama member; pada `ZADD`, skor selalu ditulis sebelum nama anggotanya.",
+          example: {
+            code: "ZADD leaderboard 100 'userA' 250 'userB'\nZREVRANGE leaderboard 0 1 WITHSCORES",
+            output: '1) "userB"\n2) "250"\n3) "userA"\n4) "100"',
+            note: "ZREVRANGE mengambil daftar dari peringkat nilai tertinggi ke terendah.",
+          },
+          instruction:
+            "Sebuah game online mencatat skor pemain untuk papan peringkat mingguan. Tulis perintah `ZADD` untuk mendaftarkan pemain `'player99'` dengan skor `1500` ke sorted set `leaderboard:weekly`.",
+          starterCode: "# Tulis ZADD untuk mendaftarkan skor pemain di sini\n",
+          language: "text",
+          tests: [
+            {
+              pattern: "ZADD\\s+leaderboard:weekly\\s+1500\\s+['\"]player99['\"]",
+              message: "Gunakan perintah ZADD leaderboard:weekly 1500 'player99' (skor 1500 sebelum nama pemain).",
+            },
+          ],
+          solution: "ZADD leaderboard:weekly 1500 'player99'",
+          susunKode: {
+            question:
+              "Susun perintah Redis ZADD untuk menambahkan skor ke leaderboard.",
+            potongan: [
+              "ZADD leaderboard:weekly",
+              "1500 'player99'",
+            ],
+            pengecoh: [
+              "ADD_SCORE leaderboard:weekly",
+              "'player99' 1500",
+            ],
+            pemisah: " ",
+            explanation:
+              "Perintah `ZADD` menerima parameter nama key, angka skor, lalu nama member (`ZADD key score member`). Menukar posisi member sebelum score atau menggunakan perintah fiktif `ADD_SCORE` merupakan kekeliruan sintaks CLI Redis yang sering menggoda pemula dan menjadi jebakan klasik.",
+          },
+        },
+        {
+          kind: "step",
           id: "nosql-4-3",
           title: "Masa Kedaluwarsa Data (TTL & EXPIRE)",
           explanation:
             "**APA:** Redis menyediakan perintah `EXPIRE key seconds` dan `SETEX key seconds value` untuk memberikan waktu hidup (*Time To Live*) pada kunci data.\n\n" +
             "**KENAPA:** Data sementara seperti OTP atau token sesi harus terhapus secara otomatis dari RAM untuk menjaga kapasitas memori dan keamanan.\n\n" +
             "**KAPAN:** Gunakan `SETEX` saat memasukkan data cache API atau token login agar tidak perlu memanggil perintah `EXPIRE` terpisah.\n\n" +
-            "**JEBAKAN:** Lupa memasang TTL pada kunci cache yang mengakibatkan penggunaan RAM membengkak hingga menyentuh batas *Out Of Memory* (OOM).",
+            "**JEBAKAN:** Lupa memasang TTL pada kunci cache yang mengakibatkan penggunaan RAM membengkak hingga menyentuh batas *Out Of Memory* (OOM).\n\n" +
+            "Pola ini juga menjadi pondasi cache invalidation otomatis agar memori server tidak penuh.",
           example: {
             code: "SETEX session:abc 3600 'userId_100'",
             output: "OK",
             note: "Sangat ideal untuk manajemen data session login dan OTP.",
           },
           instruction:
-            "Tulis perintah Redis CLI `SETEX` untuk menyimpan key `otp:123` selama `60` detik dengan nilai `'998877'`.",
+            "Kode OTP otentikasi dua langkah hanya boleh berlaku selama satu menit. Tulis perintah Redis CLI atomik untuk menyimpan kunci `otp:123` dengan nilai `'998877'` yang otomatis terhapus dalam waktu 60 detik.",
           starterCode: "# Tulis perintah SETEX di sini\n",
           language: "text",
           tests: [
-                      {
-                        "pattern": "^\\s*SETEX\\s",
-                        "message": "Untuk data yang harus hangus sendiri (OTP, sesi, cache), pakai varian `SET` yang sekaligus menetapkan kedaluwarsa — namanya `SET` ditambah tiga huruf. Alternatif dua langkah: `SET` lalu `EXPIRE`, tapi itu tidak atomik dan bisa meninggalkan kunci abadi kalau prosesnya mati di antaranya."
-                      },
-                      {
-                        "pattern": "otp:123\\s+60\\s+['\"]?998877['\"]?",
-                        "message": "Urutan argumennya: kunci, DETIK masa berlaku, lalu nilainya. Satuannya detik — menuliskan 60 berarti satu menit, bukan 60 menit. Periksa sisa waktunya dengan `TTL <kunci>`."
-                      }
-                    ],
+            {
+              pattern: "^\\s*SETEX\\s",
+              message: "Untuk data yang harus hangus sendiri (OTP, sesi, cache), pakai varian `SET` yang sekaligus menetapkan kedaluwarsa — namanya `SET` ditambah tiga huruf. Alternatif dua langkah: `SET` lalu `EXPIRE`, tapi itu tidak atomik dan bisa meninggalkan kunci abadi kalau prosesnya mati di antaranya.",
+            },
+            {
+              pattern: "otp:123\\s+60\\s+['\"]?998877['\"]?",
+              message: "Urutan argumennya: kunci, DETIK masa berlaku, lalu nilainya. Satuannya detik — menuliskan 60 berarti satu menit, bukan 60 menit. Periksa sisa waktunya dengan `TTL <kunci>`.",
+            },
+          ],
           solution: "SETEX otp:123 60 '998877'",
           susunKode: {
             question:
@@ -1550,7 +2045,7 @@ export const nosqlTrack: Track = {
             output: "(nil)\nOK",
           },
           instruction:
-            "Tulis dua perintah Redis CLI berurutan untuk pola cache-aside pada key `artikel:12`: pertama ambil nilainya dari cache, lalu simpan hasil dari database selama 600 detik dengan nilai `'{\"judul\":\"NoSQL\"}'`.",
+            "Tuliskan dua baris perintah CLI untuk mensimulasikan alur cache-aside pada artikel `artikel:12`: baris pertama membaca kunci dari cache, dan baris kedua menyimpan payload hasil query database `'{\"judul\":\"NoSQL\"}'` dengan masa kedaluwarsa 600 detik.",
           starterCode: "# Baris 1: ambil dari cache. Baris 2: simpan beserta masa berlakunya\n",
           language: "text",
           tests: [
@@ -1598,7 +2093,7 @@ export const nosqlTrack: Track = {
             output: "(integer) 1\n(integer) 1",
           },
           instruction:
-            "Batasi permintaan pengguna `u7` menjadi per 60 detik. Tulis dua perintah Redis CLI: naikkan penghitung pada key `limit:u7`, lalu pasang masa berlaku 60 detik pada key yang sama.",
+            "Untuk membatasi frekuensi panggilan API oleh pengguna `u7`, tulis dua perintah berurutan: naikkan penghitung pada key `limit:u7`, kemudian pasang batas kedaluwarsa 60 detik pada key tersebut.",
           starterCode: "# Baris 1: naikkan penghitung. Baris 2: pasang masa berlaku\n",
           language: "text",
           tests: [
@@ -1630,6 +2125,55 @@ export const nosqlTrack: Track = {
         },
         {
           kind: "step",
+          id: "nosql-4-11",
+          title: "Distributed Lock dengan Atomic SET NX EX",
+          explanation:
+            "**APA:** Distributed Lock mencegah proses ganda yang saling bertabrakan (*race condition*) di banyak server dengan mengandalkan perintah atomik `SET key value NX EX seconds`.\n\n" +
+            "**KENAPA:** Parameter `NX` menjamin kunci hanya dibuat jika belum ada orang lain yang memegang, dan `EX` mencegah *deadlock* jika server pemegang kunci tiba-tiba mati.\n\n" +
+            "**KAPAN:** Gunakan distributed lock saat mengeksekusi pembayaran invoice saldo, memproses booking tiket kursi konser, atau menghasilkan laporan batch berkala.\n\n" +
+            "**JEBAKAN:** Menghapus lock dengan `DEL key` biasa tanpa memverifikasi nilai token acak pemegang, yang berisiko menghapus lock milik worker lain yang baru saja masuk.",
+          example: {
+            code: "SET lock:order:12 'worker-99' NX EX 5",
+            output: "OK",
+            note: "Jika kunci sudah dipegang worker lain, Redis akan mengembalikan (nil) sehingga worker harus menunggu.",
+          },
+          instruction:
+            "Untuk mencegah pembayaran ganda pada invoice `inv-404`, pasang kunci terdistribusi pada key `lock:inv:404` dengan token `'worker-A'`. Kunci hanya boleh dipasang jika belum ada yang memegang (opsi NX) dan harus otomatis hangus setelah 10 detik (opsi EX 10).",
+          starterCode: "# Tulis perintah distributed lock atomik di bawah ini\n",
+          language: "text",
+          tests: [
+            {
+              pattern: "SET\\s+lock:inv:404\\s+['\"]worker-A['\"]",
+              message: "Gunakan perintah SET lock:inv:404 'worker-A'.",
+            },
+            {
+              pattern: "\\s+NX\\s+",
+              message: "Sertakan opsi NX agar hanya di-set jika kunci belum ada.",
+            },
+            {
+              pattern: "\\s+EX\\s+10",
+              message: "Sertakan opsi EX 10 untuk masa kedaluwarsa 10 detik.",
+            },
+          ],
+          solution: "SET lock:inv:404 'worker-A' NX EX 10",
+          susunKode: {
+            question:
+              "Susun perintah Redis SET NX EX untuk membuat distributed lock.",
+            potongan: [
+              "SET lock:inv:404",
+              "'worker-A' NX EX 10",
+            ],
+            pengecoh: [
+              "LOCK lock:inv:404",
+              "'worker-A' IF_NOT_EXISTS 10s",
+            ],
+            pemisah: " ",
+            explanation:
+              "Pembuatan distributed lock atomik di Redis menggunakan argumen bawaan `SET key value NX EX seconds`. Perintah fiktif `LOCK` atau parameter `IF_NOT_EXISTS` adalah jebakan istilah yang keliru dan sering menggoda developer yang belum memahami argumen flag atomik pada perintah SET Redis.",
+          },
+        },
+        {
+          kind: "step",
           id: "nosql-4-6",
           title: "Pub/Sub Sederhana di Redis",
           explanation:
@@ -1643,19 +2187,19 @@ export const nosqlTrack: Track = {
             note: "Gunakan untuk fitur obrolan atau notifikasi terdistribusi.",
           },
           instruction:
-            "Tuliskan perintah CLI Redis `PUBLISH` untuk mengirim pesan `'Headline'` ke channel `'news'`.",
+            "Layanan notifikasi perlu menyiarkan pengumuman baru ke semua worker yang sedang mendengarkan. Tulis perintah Redis CLI untuk mempublikasikan pesan `'Headline'` ke channel `'news'`.",
           starterCode: "# Tulis PUBLISH di sini\n",
           language: "text",
           tests: [
-                      {
-                        "pattern": "^\\s*PUBLISH\\s",
-                        "message": "Pengiriman pesan ke seluruh pelanggan sebuah channel memakai perintah `PUBLISH`."
-                      },
-                      {
-                        "pattern": "news\\s+['\"]Headline['\"]",
-                        "message": "Argumennya nama channel lalu isi pesannya. Yang wajib diingat: Pub/Sub Redis bersifat *fire-and-forget* — pesan yang dikirim saat tidak ada subscriber HILANG, tidak ada antrean. Untuk pekerjaan yang tidak boleh hilang, pakai Redis Streams atau BullMQ."
-                      }
-                    ],
+            {
+              pattern: "^\\s*PUBLISH\\s",
+              message: "Pengiriman pesan ke seluruh pelanggan sebuah channel memakai perintah `PUBLISH`.",
+            },
+            {
+              pattern: "news\\s+['\"]Headline['\"]",
+              message: "Argumennya nama channel lalu isi pesannya. Yang wajib diingat: Pub/Sub Redis bersifat *fire-and-forget* — pesan yang dikirim saat tidak ada subscriber HILANG, tidak ada antrean. Untuk pekerjaan yang tidak boleh hilang, pakai Redis Streams atau BullMQ.",
+            },
+          ],
           solution: "PUBLISH news 'Headline'",
           susunKode: {
             question:
@@ -1683,12 +2227,14 @@ export const nosqlTrack: Track = {
             "**KAPAN:** Gunakan Redis sebagai lapisan cache/sesi ephemeral di depan PostgreSQL atau MongoDB, bukan sebagai tempat penyimpanan permanen tunggal.\n\n" +
             "**JEBAKAN:** Lupa melakukan invalidasi cache (`DEL key`) saat data di database utama diperbarui, menyebabkan aplikasi menampilkan data usang.",
           example: {
-            code: "# data utama tetap di database, cache boleh hilang\nDEL produk:7",
+            code:
+              "# data utama tetap di database, cache boleh hilang\n" +
+              "DEL produk:7",
             output: "(integer) 1",
             note: "Membuang cache setelah data berubah disebut cache invalidation — sumber bug klasik kalau terlupa.",
           },
           instruction:
-            "Setelah harga produk berubah di database utama, cache lama harus dibuang agar pengguna tidak melihat harga basi. Tulis perintah Redis CLI yang menghapus key `produk:7`.",
+            "Harga barang baru saja diperbarui di database PostgreSQL utama. Agar pengguna tidak menerima harga lama yang basi, tulis perintah Redis CLI untuk menghapus entri cache pada key `produk:7`.",
           starterCode: "# Buang cache yang sudah tidak berlaku\n",
           language: "text",
           tests: [
@@ -1698,22 +2244,22 @@ export const nosqlTrack: Track = {
             },
           ],
           solution: "DEL produk:7",
-                    susunKode: {
-                      question:
-                        "Susun perintah Redis CLI DEL untuk menghapus key dari cache.",
-                      potongan: [
-                        "DEL",
-                        "produk:7",
-                      ],
-                      pengecoh: [
-                        "REMOVE",
-                        "produk:99",
-                      ],
-                      pemisah: " ",
-                      explanation:
-                        "Perintah menghapus key di Redis adalah `DEL` (atau `UNLINK` untuk penghapusan asinkron). Perintah fiktif 'REMOVE' atau mengganti nama key adalah jebakan kata yang sering terjadi dalam CLI Redis saat mengosongkan cache.",
-                    },
-                  },
+          susunKode: {
+            question:
+              "Susun perintah Redis CLI DEL untuk menghapus key dari cache.",
+            potongan: [
+              "DEL",
+              "produk:7",
+            ],
+            pengecoh: [
+              "REMOVE",
+              "produk:99",
+            ],
+            pemisah: " ",
+            explanation:
+              "Perintah menghapus key di Redis adalah `DEL` (atau `UNLINK` untuk penghapusan asinkron). Perintah fiktif 'REMOVE' atau mengganti nama key adalah jebakan kata yang sering terjadi dalam CLI Redis saat mengosongkan cache.",
+          },
+        },
         {
           kind: "quiz",
           id: "nosql-4-kuis",
@@ -1773,6 +2319,19 @@ export const nosqlTrack: Track = {
               choices: ["Set", "Hash", "List", "Sorted Set"],
               answerIndex: 2,
               explanation: "Perintah push/pop awalan L (Left) dan R (Right) digunakan pada tipe List untuk membikin message queue atau antrean.",
+            },
+            {
+              id: "q6",
+              type: "pilihan-ganda",
+              question: "Bagaimana cara mencegah race condition booking tiket secara atomik di banyak server backend menggunakan Redis?",
+              choices: [
+                "Menggunakan perintah `SET lock:tiket token NX EX 10` (Distributed Lock)",
+                "Memanggil perintah `KEYS lock:*` secara berulang",
+                "Merestart instance Redis sebelum transaksi dimulai",
+                "Mengganti seluruh tipe data string menjadi Pub/Sub",
+              ],
+              answerIndex: 0,
+              explanation: "`SET key value NX EX seconds` menjamin kunci hanya dibuat jika belum ada pemegang lain (NX) dan memiliki TTL otomatis (EX) untuk mencegah deadlock.",
             },
           ],
         },

@@ -146,7 +146,7 @@ export const nodeExpressTrack: Track = {
           title: "Pengenalan Node.js Runtime & Ecosystem",
           body:
             "# Pengenalan Node.js Runtime & Ecosystem\n\n" +
-            " Selama bertahun-tahun, JavaScript hanya dikenal sebagai bahasa yang berjalan di dalam peramban web (browser) untuk memanipulasi tampilan DOM. Node.js lahir saat Ryan Dahl mengekstrak V8 JavaScript Engine milik Google Chrome dan menggabungkannya dengan pustaka C++ berkinerja tinggi bernama `libuv`. Hasilnya adalah sebuah runtime lingkungan eksekusi mandiri yang memungkinkan JavaScript berjalan langsung di server atau komputer lokal tanpa memerlukan peramban web.\n\n" +
+            "Selama bertahun-tahun, JavaScript hanya dikenal sebagai bahasa yang berjalan di dalam peramban web (browser) untuk memanipulasi tampilan DOM. Node.js lahir saat Ryan Dahl mengekstrak V8 JavaScript Engine milik Google Chrome dan menggabungkannya dengan pustaka C++ berkinerja tinggi bernama `libuv`. Hasilnya adalah sebuah runtime lingkungan eksekusi mandiri yang memungkinkan JavaScript berjalan langsung di server atau komputer lokal tanpa memerlukan peramban web.\n\n" +
             "## Perbedaan Utama Node.js vs Browser\n\n" +
             "Di dalam browser, JavaScript dibatasi oleh sandbox keamanan peramban: kamu bisa mengakses `window`, `document`, dan elemen visual UI, namun tidak bisa membaca file di harddisk komputer pengguna secara bebas. Di Node.js, keadaan berbalik total: objek visual seperti `window` dan `document` **tidak ada**, namun kamu mendapatkan akses penuh ke Sistem Operasi (OS) untuk membaca file, berkomunikasi dengan database, mengelola jaringan, dan membaca variabel lingkungan.\n\n" +
             "| Fitur / API | Browser (Client-Side) | Node.js (Server-Side) |\n" +
@@ -156,6 +156,11 @@ export const nodeExpressTrack: Track = {
             "| **Elemen DOM & Visual** | ✅ (`document.getElementById`) | ❌ Tidak ada (Headless Runtime) |\n" +
             "| **Network Communication** | `fetch` / `XMLHttpRequest` | `http`, `https`, `net`, `fetch` |\n" +
             "| **Module System** | ES Modules (`<script type=\"module\">`) | CommonJS (`require`) & ES Modules (`import`) |\n\n" +
+            "## Fitur Bawaan Node.js Modern (LTS 20 & 22)\n\n" +
+            "Di masa lalu, pengembang Node.js harus memasang banyak paket npm pihak ketiga hanya untuk hal-hal mendasar. Pada Node.js LTS modern saat ini, banyak fitur penting yang sudah menjadi standar bawaan:\n\n" +
+            "- **Native Watch Mode (`node --watch index.js`):** Memantau perubahan berkas dan me-restart server secara otomatis tanpa perlu memasang paket eksternal seperti `nodemon`.\n" +
+            "- **Native Env Loader (`node --env-file=.env index.js`):** Membaca berkas `.env` langsung ke `process.env` tanpa perlu pustaka `dotenv`.\n" +
+            "- **Global Web API (`fetch`, `FormData`, `crypto`):** Fungsi jaringan `fetch()` kini tersedia secara global tanpa perlu menginstal `node-fetch` atau `axios` untuk request sederhana.\n\n" +
             "## Model Mental Non-Blocking Asynchronous I/O & Event Loop\n\n" +
             "Node.js menggunakan arsitektur *single-threaded event loop*. Alih-alih membuat thread baru yang berat untuk setiap request pengguna, Node.js menyerahkan tugas lambat (seperti membaca file atau query database) ke latar belakang, lalu melanjutkan mengeksekusi kode lain tanpa menunggu (non-blocking). Setelah tugas latar belakang selesai, event loop akan memicu callback yang sesuai.\n\n" +
             "```text\n" +
@@ -601,12 +606,12 @@ export const nodeExpressTrack: Track = {
             "## Pemisahan Rute Modular dengan `express.Router()`\n\n" +
             "Pada aplikasi skala produksi, menumpuk ratusan rute di dalam berkas `server.ts` tunggal akan menciptakan kode yang berantakan (*spaghetti code*). Pustaka Express menyediakan kelas `express.Router()` untuk memecah kelompok rute menjadi berkas-berkas terpisah (misal `routes/userRoutes.ts` dan `routes/productRoutes.ts`).\n\n" +
             "## Kesalahan Umum & Jebakan (Pitfalls)\n\n" +
-            "- **Lupa `app.use(express.json())`:** Mengakses `req.body` tanpa mengaktifkan middleware pengurai JSON bawaan Express ini akan menghasilkan `undefined`.\n" +
-            "- **Lupa Memanggil `next()` di Middleware:** Jika middleware tidak mengirimkan respon (`res.json`) dan juga tidak memanggil `next()`, permintaan klien akan **gantung (*hanging*)** selamanya hingga mengalami timeout.\n" +
-            "- **Error `ERR_HTTP_HEADERS_SENT`:** Terjadi saat kamu mencoba memanggil `res.json()` atau `res.send()` lebih dari satu kali dalam satu alur request yang sama.\n" +
-            "- **Urutan Middleware 404 & Error Handler:** Tempatkan handler 404 dan Error Handler di bagian **paling bawah** setelah seluruh rute terdaftar.\n\n" +
+            "- **`res.json()` BUKANLAH `return` (Crash `ERR_HTTP_HEADERS_SENT`):** Jebakan nomor satu pemula adalah mengira `res.json()` otomatis keluar dari fungsi. Menulis `if (!user) res.status(404).json(...)` tanpa kata kunci `return` akan membuat baris di bawahnya tetap dieksekusi, sehingga Express mencoba mengirim respon ganda dan server melempar error fatal *Cannot set headers after they are sent to the client*. Selalu gunakan pola `return res.status(...).json(...)`!\n" +
+            "- **Request Gantung (*Hanging*) karena Lupa `next()`:** Jika fungsi middleware tidak mengirim respon (`res.json`) dan juga tidak memanggil `next()`, rantai eksekusi terputus. Browser klien akan loading tanpa henti (*hanging*) sampai mencapai batas *Gateway Timeout*.\n" +
+            "- **Lupa `app.use(express.json())` Sebelum Route:** Mengakses `req.body` tanpa mengaktifkan middleware pengurai JSON bawaan ini — atau meletakkannya *setelah* route didaftarkan — akan menghasilkan nilai `undefined`.\n" +
+            "- **Urutan Middleware 404 & Error Handler:** Tempatkan handler 404 dan Centralized Error Handler (4 argumen) di urutan **paling bawah**, setelah seluruh rute aplikasi terdaftar.\n\n" +
             "## Kaitan ke Dunia Kerja\n\n" +
-            "Kemampuan merancang arsitektur server Express yang modular menggunakan middleware dan pemisahan `Router` adalah keterampilan teknis backend yang diuji pada sesi *coding live interview*. Pemahaman tentang siklus Request-Response memastikan aplikasi backend yang kamu bangun tangguh dan mudah dipelihara oleh tim.",
+            "Kemampuan merancang arsitektur server Express yang modular menggunakan middleware dan pemisahan `Router` adalah keterampilan teknis backend yang diuji pada sesi *coding live interview*. Pemahaman tentang siklus Request-Response memastikan aplikasi backend yang kamu bangun tangguh dan bebas dari bug header ganda di lingkungan produksi.",
         },
         {
           kind: "step",
@@ -1035,52 +1040,67 @@ export const nodeExpressTrack: Track = {
             "  }\n" +
             "}\n" +
             "```\n\n" +
+            "## Standar Industri: Arsitektur Berlapis (Layered Architecture)\n\n" +
+            "Di industri perangkat lunak nyata, kode rute tidak ditumpuk dalam satu fungsi raksasa. Tim profesional membaginya ke dalam 4 lapisan terpisah (*Separation of Concerns*):\n\n" +
+            "1. **Routes (`routes/*.routes.ts`):** Mendaftarkan endpoint URL, method HTTP, dan middleware validasi/auth.\n" +
+            "2. **Controllers (`controllers/*.controller.ts`):** Menerima `req`, mengekstrak parameter masukan, memanggil service, dan memformat respon `res`.\n" +
+            "3. **Services (`services/*.service.ts`):** Menampung logika bisnis murni (kalkulasi harga, validasi aturan bisnis, integrasi pihak ketiga).\n" +
+            "4. **Repositories (`repositories/*.repo.ts` atau Prisma):** Berbicara langsung ke basis data.\n\n" +
             "## Kesalahan Umum & Jebakan (Pitfalls)\n\n" +
+            "- **Mitos CORS (Bisa di Postman, Ditolak di Browser):** Banyak pemula bingung mengapa API mereka sukses saat diuji di Postman/Thunder Client tetapi gagal dengan error CORS di React. Ingat: CORS adalah proteksi yang dipaksakan oleh **Browser**, bukan oleh server atau Postman!\n" +
             "- **Mengaburkan PUT dan PATCH:** `PUT` mengganti **seluruh** bidang objek data (data yang tidak dikirim akan hilang/null), sedangkan `PATCH` hanya memperbarui bidang yang dikirimkan saja (*partial update*).\n" +
             "- **Mengabaikan Pagination:** Membiarkan endpoint `GET /api/v1/products` mengembalikan seluruh jutaan baris data sekaligus tanpa `page` dan `limit` akan membuat server dan aplikasi mobile mengalami crash memori.\n" +
             "- **Tanpa Versioning API:** Tidak memasangkan awalan versi seperti `/api/v1/` akan menyulitkan perombakan API di masa depan karena perubahan rute langsung merusak (*break*) aplikasi klien lama pengguna.\n" +
             "- **Mengembalikan HTTP 200 untuk Error:** Mengirim status 200 OK dengan body `{ status: 400, error: \"Bad Data\" }` merusak standar pengolahan error pada pustaka HTTP client seperti Axios.\n\n" +
             "## Kaitan ke Dunia Kerja\n\n" +
-            "Kemampuan mendesain RESTful API yang mematuhi standar HTTP semantik, idempotency, dan versioning adalah topik diskusi arsitektur wajib dalam tim backend engineer. Konvensi ini memastikan API yang dibangun mudah diintegrasikan dengan aplikasi Frontend (React, Vue) dan aplikasi Mobile (iOS, Android).",
+            "Kemampuan mendesain RESTful API yang mematuhi standar HTTP semantik, idempotency, dan arsitektur berlapis adalah topik diskusi arsitektur wajib dalam tim backend engineer. Konvensi ini memastikan API yang dibangun mudah diintegrasikan dengan aplikasi Frontend (React, Vue) dan aplikasi Mobile (iOS, Android).",
         },
         {
           kind: "step",
           id: "node-3-1",
           title: "Konvensi Penamaan Resource Noun Jamak",
           explanation:
-            "Saat merancang REST API, aturan emas penamaan endpoint adalah menggunakan Kata Benda Jamak (Plural Noun), contoh `/api/v1/users` alih-alih kata kerja seperti `/getUsers` atau `/create_user`. Dalam prinsip REST, URL berfungsi sebagai petunjuk lokasi sumber daya (resource), sedangkan aksinya sudah diwakili oleh kata kerja HTTP Method (GET, POST, DELETE). Konsistensi ini membuat API kamu terasa profesional, rapi, dan mudah ditebak oleh pengembang frontend. Menghindari kata kerja pada URL path mencegah terbentuknya endpoint yang tidak terstruktur. Jebakan umum pemula adalah mencampur kata kerja dalam URL path seperti `/api/v1/updateUser`.",
+            "Saat merancang REST API, aturan emas penamaan endpoint adalah menggunakan Kata Benda Jamak (Plural Noun), contoh `/api/v1/users` alih-alih kata kerja seperti `/getUsers`. Untuk relasi data hierarkis atau sub-resource, kita menyusun URL bersarang seperti `/:userId/posts` untuk mengambil seluruh postingan milik pengguna tertentu. Aksi manipulasi data ditentukan sepenuhnya oleh HTTP Method (GET untuk membaca, POST untuk membuat), bukan dengan menuliskan kata kerja pada path. Pola penamaan ini membuat antarmuka API kamu terstruktur, intuitif, dan mudah dipahami oleh tim frontend. Jebakan umum pemula adalah menyisipkan kata kerja di URL seperti `/:userId/getPosts`.",
           example: {
-            code: "function getEndpoint(resource) {\n  return `/api/v1/${resource}`;\n}\nconsole.log(getEndpoint('users'));",
-            output: "/api/v1/users",
-            note: "Aksi (action) ditentukan oleh HTTP Method, bukan nama URL path. Catatan jujur: panel preview tidak menjalankan Node.js (kode ini butuh server dan modul bawaan Node), jadi tidak ada keluaran yang muncul di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus.",
+            code: "router.get('/:articleId/comments', getArticleComments);",
+            output: "Endpoint sub-resource GET /:articleId/comments terdaftar",
+            note: "Sub-resource menggunakan kata benda jamak untuk relasi bersarang. Catatan jujur: panel preview tidak menjalankan Node.js (kode ini butuh server dan modul bawaan Node), jadi tidak ada keluaran yang muncul di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus.",
           },
           instruction:
-            "Buat fungsi `getEndpoint(resourceName)` yang mengembalikan string URL RESTful terformat `\"/api/v1/\${resourceName}\"`.",
-          starterCode: "// Tulis fungsi getEndpoint di bawah ini\n",
+            "Definisikan rute GET pada `router` untuk mengambil sub-resource daftar postingan milik pengguna tertentu pada path `'/:userId/posts'` dengan fungsi handler `getUserPosts`.",
+          starterCode: "// Tulis router.get sub-resource di sini\n",
           language: "text",
           tests: [
             {
-              pattern: "`/api/v1/\\$\\{resourceName\\}`|['\"]/api/v1/['\"]\\s*\\+\\s*resourceName",
-              message: "Format URL: `/api/v1/${resourceName}`",
+              pattern: "router\\.get\\(",
+              message: "Gunakan metode HTTP semantik `router.get(...)` untuk membaca data resource.",
+            },
+            {
+              pattern: "['\"]/:userId/posts['\"]",
+              message: "Tentukan path sub-resource bersarang yang rapi: `/:userId/posts`.",
+            },
+            {
+              pattern: ",\\s*getUserPosts\\b",
+              message: "Sematkan fungsi handler `getUserPosts` sebagai pengendali rute.",
             },
           ],
-          solution:
-            "function getEndpoint(resourceName) {\n  return `/api/v1/${resourceName}`;\n}",
+          solution: "router.get('/:userId/posts', getUserPosts);",
           susunKode: {
             question:
-              "Susun fungsi helper yang mengembalikan string URL endpoint versi 1 berawalan /api/v1/.",
+              "Rangkai pendefinisian rute Express GET untuk sub-resource postingan milik pengguna tertentu.",
             potongan: [
-              "function getEndpoint(resourceName) {",
-              "  return `/api/v1/${resourceName}`;",
-              "}",
+              "router.get(",
+              "'/:userId/posts', ",
+              "getUserPosts);",
             ],
             pengecoh: [
-              "  return `/api/v2/${resourceName}`;",
-              "  return `/v1/api/${resourceName}`;",
+              "'/:userId/getPosts', ",
+              "'/:userId/post', ",
+              "router.post(",
             ],
-            pemisah: "\n",
+            pemisah: "",
             explanation:
-              "Konvensi URL REST API menggunakan skema /api/v1/ diawali kata api kemudian versi. Keping /api/v2/ keliru nomor versi yang dipersyaratkan. Keping /v1/api/ menggoda tetapi menyalahi penulisan urutan segmen prefiks URL standar.",
+              "Dalam arsitektur REST, URL path hanya memuat kata benda jamak (posts) untuk sub-resource, bukan kata kerja. Keping '/:userId/getPosts', sangat menggoda bagi pemula, namun menyalahi aturan REST karena aksi pengambilan data sudah diwakili oleh metode HTTP GET. Keping '/:userId/post', keliru karena resource jamak wajib berakhiran plural (posts). Keping router.post( keliru metode karena kita sedang membaca data, bukan membuat resource baru.",
           },
         },
         {
@@ -1088,39 +1108,47 @@ export const nodeExpressTrack: Track = {
           id: "node-3-2",
           title: "HTTP Method Semantik: PUT vs PATCH",
           explanation:
-            "Perbedaan mendasar antara metode HTTP `PUT` dan `PATCH` terletak pada cakupan data yang diperbarui di server. `PUT` digunakan untuk mengganti **seluruh** dokumen data secara utuh, sehingga bidang yang tidak dikirimkan dalam payload akan terhapus atau bernilai null. Sebaliknya, `PATCH` digunakan untuk memperbarui sebagian (*partial update*) bidang data yang dikirim saja tanpa mengganggu bidang lainnya. Menggunakan `PATCH` sangat cocok untuk fitur sederhana seperti mengubah nama pengguna atau status profil. Jebakan klasik pengembang adalah menggunakan `PUT` padahal yang dilakukan hanya mengubah satu kolom data.",
+            "Perbedaan mendasar antara metode HTTP `PUT` dan `PATCH` terletak pada cakupan data yang diperbarui di server. `PUT` digunakan untuk mengganti **seluruh** dokumen data secara utuh, sehingga bidang yang tidak dikirimkan dalam payload akan terhapus atau bernilai null. Sebaliknya, `PATCH` digunakan untuk memperbarui sebagian (*partial update*) bidang data yang dikirim saja tanpa mengganggu bidang lainnya. Menggunakan `router.patch` sangat cocok untuk fitur pembaruan akun, seperti mengganti nama pengguna atau status profil. Jebakan klasik pengembang adalah menggunakan `PUT` padahal klien hanya bermaksud mengubah satu kolom data.",
           example: {
-            code: "function getUpdateMethod(isPartial) {\n  return isPartial ? 'PATCH' : 'PUT';\n}\nconsole.log(getUpdateMethod(true));",
-            output: "PATCH",
+            code: "router.patch('/:id', updateProfile);",
+            output: "Rute PATCH /:id terdaftar untuk pembaruan profil parsial",
             note: "Gunakan PATCH untuk update sebagian bidang data. Catatan jujur: panel preview tidak menjalankan Node.js (kode ini butuh server dan modul bawaan Node), jadi tidak ada keluaran yang muncul di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus.",
           },
           instruction:
-            "Buat fungsi `getUpdateMethod(isPartial)` yang mengembalikan string `'PATCH'` jika `isPartial` bernilai `true` dan `'PUT'` jika `false`.",
-          starterCode: "// Tulis fungsi getUpdateMethod di bawah ini\n",
+            "Daftarkan rute Express pada `router` untuk memperbarui sebagian data pengguna berdasarkan ID pada path `'/:id'` menggunakan metode semantik `patch` dengan fungsi handler `updateUser`.",
+          starterCode: "// Tulis rute PATCH di sini\n",
           language: "text",
           tests: [
             {
-              pattern: "isPartial\\s*\\?\\s*['\"]PATCH['\"]\\s*:\\s*['\"]PUT['\"]",
-              message: "Gunakan: isPartial ? 'PATCH' : 'PUT'",
+              pattern: "router\\.patch\\(",
+              message: "Gunakan `router.patch(...)` khusus untuk operasi pembaruan data secara parsial.",
+            },
+            {
+              pattern: "['\"]/:id['\"]",
+              message: "Tentukan parameter URL unik untuk resource: `/:id`.",
+            },
+            {
+              pattern: ",\\s*updateUser\\b",
+              message: "Sematkan fungsi handler `updateUser` sebagai pengendali rute.",
             },
           ],
-          solution:
-            "function getUpdateMethod(isPartial) {\n  return isPartial ? 'PATCH' : 'PUT';\n}",
+          solution: "router.patch('/:id', updateUser);",
           susunKode: {
             question:
-              "Susun fungsi penentu metode HTTP yang mengembalikan 'PATCH' untuk pembaruan parsial dan 'PUT' untuk pembaruan menyeluruh.",
+              "Rangkai pendaftaran rute Express untuk pembaruan sebagian data pengguna menggunakan metode PATCH.",
             potongan: [
-              "function getUpdateMethod(isPartial) {",
-              "  return isPartial ? 'PATCH' : 'PUT';",
-              "}",
+              "router.patch(",
+              "'/:id', ",
+              "updateUser);",
             ],
             pengecoh: [
-              "  return isPartial ? 'POST' : 'PUT';",
-              "  return isPartial ? 'PUT' : 'PATCH';",
+              "router.put(",
+              "router.post(",
+              "'/:userId', ",
             ],
-            pemisah: "\n",
+            pemisah: "",
             explanation:
-              "Dalam spesifikasi REST HTTP, PATCH digunakan khusus untuk perubahan parsial sedangkan PUT untuk penggantian dokumen utuh. Keping POST keliru metode. Keping penukaran urutan ternary keliru logika pemetaan kondisi isPartial.",
+              "Dalam spesifikasi REST HTTP, PATCH digunakan khusus untuk perubahan parsial sedangkan PUT untuk penggantian dokumen utuh. Keping router.put( keliru metode karena PUT mengganti seluruh bidang data dan menghapus bidang yang tidak disertakan. Keping router.post( keliru metode karena POST dipakai untuk membuat data baru. Keping '/:userId', menggoda tetapi menyimpang dari parameter standar /:id yang ditentukan pada rute ini.",
           },
         },
         {
@@ -1313,42 +1341,43 @@ export const nodeExpressTrack: Track = {
           id: "node-3-7",
           title: "Idempotency di REST API",
           explanation:
-            "Operasi Idempotent dalam HTTP berarti mengeksekusi permintaan yang sama secara berulang-ulang akan menghasilkan status state akhir yang identik pada database server. Metode `GET`, `PUT`, dan `DELETE` dikategorikan sebagai operasi Idempotent karena memanggil `DELETE /users/42` sebanyak 1 kali atau 100 kali akan tetap meninggalkan keadaan akhir yang sama: pengguna ID 42 terhapus. Sebaliknya, `POST` bukan Idempotent karena mengeksekusi `POST /orders` 10 kali akan membuat 10 pesanan baru yang duplikat. Memahami Idempotency membantu pengembang merancang mekanisme pemicu ulang (*retry strategy*) jaringan yang aman. Jebakan umum adalah merancang endpoint `POST` untuk operasi yang seharusnya bersifat idempotent.",
+            "Operasi Idempotent dalam HTTP berarti mengeksekusi permintaan yang sama secara berulang-ulang akan menghasilkan status akhir yang identik pada basis data server. Metode `GET`, `PUT`, dan `DELETE` dikategorikan sebagai operasi Idempotent. Sebaliknya, `POST` bukan Idempotent karena mengirim `POST /orders` 10 kali akan membuat 10 pesanan duplikat. Pada aplikasi produksi (seperti pembayaran perbankan atau e-commerce), pengembang melindungi rute POST dengan memeriksa header `Idempotency-Key` unik dari request untuk mencegah tagihan ganda. Jebakan umum pemula adalah tidak menangani risiko retry jaringan pada endpoint pembayaran yang rawan transaksi dobel.",
           example: {
-            code: "function isIdempotentMethod(method) {\n  return ['GET', 'PUT', 'DELETE'].includes(method.toUpperCase());\n}\nconsole.log(isIdempotentMethod('DELETE'));",
-            output: "true",
-            note: "POST tidak idempotent karena 10x POST akan membuat 10 data baru. Catatan jujur: panel preview tidak menjalankan Node.js (kode ini butuh server dan modul bawaan Node), jadi tidak ada keluaran yang muncul di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus.",
+            code: "const key = req.headers['idempotency-key'];\nif (key) { console.log('Checking cache for key:', key); }",
+            output: "Checking cache for key: a8b9-44fc",
+            note: "Header Idempotency-Key mencegah transaksi ganda akibat jaringan putus-nyambung. Catatan jujur: panel preview tidak menjalankan Node.js (kode ini butuh server dan modul bawaan Node), jadi tidak ada keluaran yang muncul di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus.",
           },
           instruction:
-            "Buat fungsi `isIdempotentMethod(httpMethod)` yang mengembalikan `true` bila metode yang diterima termasuk salah satu dari `'GET'`, `'PUT'`, atau `'DELETE'`. Susun ketiganya sebagai array literal, lalu periksa keanggotaannya dengan metode array `.includes()`.",
-          starterCode: "// Tulis fungsi isIdempotentMethod di bawah ini\n",
+            "Ekstrak header kunci idempotensi dari objek `req.headers` menggunakan nama header standar `'idempotency-key'` dan simpan ke dalam konstanta `idempotencyKey`.",
+          starterCode: "// Tulis ekstraksi idempotencyKey di sini\n",
           language: "text",
           tests: [
             {
-              pattern: "\\[\\s*['\"]GET['\"]\\s*,\\s*['\"]PUT['\"]\\s*,\\s*['\"]DELETE['\"]\\s*\\]\\.includes\\(\\s*httpMethod\\s*\\)",
-              message: "Gunakan: ['GET', 'PUT', 'DELETE'].includes(httpMethod)",
+              pattern: "const\\s+idempotencyKey\\s*=",
+              message: "Deklarasikan konstanta penampung `const idempotencyKey = ...`.",
+            },
+            {
+              pattern: "req\\.headers\\[['\"]idempotency-key['\"]\\]",
+              message: "Akses properti header Express dengan notasi kurung siku: `req.headers['idempotency-key']`.",
             },
           ],
-          solution:
-            "function isIdempotentMethod(httpMethod) {\n  return ['GET', 'PUT', 'DELETE'].includes(httpMethod);\n}",
+          solution: "const idempotencyKey = req.headers['idempotency-key'];",
           susunKode: {
             question:
-              "Susun fungsi pemeriksaan metode idempotensi HTTP yang mengembalikan true untuk GET, PUT, dan DELETE.",
+              "Rangkai kode Express untuk mengekstrak header idempotency-key dari request pengguna.",
             potongan: [
-              "function isIdempotentMethod(httpMethod) {\n",
-              "  return ",
-              "['GET', 'PUT', 'DELETE']",
-              ".includes(httpMethod);",
-              "\n}",
+              "const idempotencyKey = ",
+              "req.headers",
+              "['idempotency-key'];",
             ],
             pengecoh: [
-              "['POST', 'PUT', 'DELETE']",
-              "['GET', 'POST', 'DELETE']",
-              ".contains(httpMethod);",
+              "req.body",
+              "['idempotent-key'];",
+              "['x-idempotency'];",
             ],
             pemisah: "",
             explanation:
-              "Metode HTTP yang idempotent (GET, PUT, DELETE) menjamin bahwa eksekusi berulang meninggalkan keadaan akhir yang sama di server. Keping berisi POST sangat keliru karena POST justru membuat data baru setiap dipanggil, sehingga sepuluh kali retry menghasilkan sepuluh baris duplikat. Keping yang membuang PUT juga keliru: PUT mengganti dokumen secara utuh, jadi mengirimnya berulang menghasilkan isi yang sama persis. Keping .contains( menggoda bagi pendatang dari Java atau Python, tetapi metode pencarian anggota array di JavaScript bernama .includes( — .contains( menghasilkan TypeError saat dijalankan.",
+              "Pada standar REST API modern, pencegahan eksekusi ganda pada operasi non-idempotent (seperti pembayaran) dilakukan dengan memeriksa header 'idempotency-key'. Keping req.body keliru karena kunci idempotensi dikirimkan via HTTP request headers, bukan melalui payload body JSON. Keping ['idempotent-key'] menggoda karena kata dasarnya mirip, tetapi konvensi nama header standar industri menggunakan bentuk kata benda idempotency-key. Kesalahan nama header membuat server gagal mengenali kunci unik yang dikirim klien.",
           },
         },
         {
@@ -1449,16 +1478,20 @@ export const nodeExpressTrack: Track = {
             "Express Controller  ===>  UserRepository  ===>  Prisma Client  ===>  PostgreSQL Database\n" +
             "(Handle HTTP Req/Res)     (Logika Database)     (Type-Safe ORM)       (Penyimpanan Fisik)\n" +
             "```\n\n" +
+            "## Dua Model Transaksi: Batch vs Interaktif\n\n" +
+            "Prisma menyediakan dua mekanisme transaksi atomik (ACID):\n" +
+            "1. **Batch Array (`prisma.$transaction([ ... ])`):** Menerima daftar kueri independen yang harus berhasil bersama-sama (misal hapus keranjang sekaligus buat order).\n" +
+            "2. **Interactive Transaction (`prisma.$transaction(async (tx) => { ... })`):** Menerima callback asinkron saat operasi kedua bergantung pada nilai pembacaan operasi pertama (misal: cek stok barang cukup sebelum memotong saldo).\n\n" +
             "## Visualisasi & Seeding Data: Prisma Studio\n\n" +
             "- **Prisma Studio (`npx prisma studio`):** Meluncurkan antarmuka GUI peramban instan untuk melihat, menambah, dan mengedit data tabel database tanpa memerlukan software database client eksternal.\n" +
             "- **Database Seeding (`prisma/seed.ts`):** Skrip otomatis untuk mengisi database pengembangan dengan data awal dummy agar penguji tidak mulai dari tabel kosong.\n\n" +
             "## Kesalahan Umum & Jebakan (Pitfalls)\n\n" +
+            "- **Multiple Instance Prisma Client (Connection Exhaustion):** Membuat `new PrismaClient()` berulang kali di setiap berkas akan menghabiskan batas *connection pool* PostgreSQL (\"Too many clients already open\"). Selalu ekspor satu instansi tunggal (*Singleton*) yang digunakan bersama di seluruh proyek.\n" +
             "- **Lupa Menjalankan Migrasi:** Mengubah model di `schema.prisma` tanpa menjalankan `npx prisma migrate dev` menyebabkan database fisik dan Prisma Client tidak sinkron.\n" +
             "- **Problem N+1 Query:** Melakukan kueri relasi di dalam perulangan `map` alih-alih memanfaatkan atribut `include: { profile: true }` bawaan Prisma.\n" +
-            "- **Lupa Klausa `where` pada Update/Delete:** Memanggil `deleteMany()` tanpa menyertakan `where` akan **menghapus seluruh isi tabel** database produksi secara tidak sengaja.\n" +
-            "- **Multiple Instance Prisma Client:** Membuat `new PrismaClient()` berulang kali di setiap berkas akan menghabiskan batas *connection pool* database. Selalu gunakan pola *Singleton*.\n\n" +
+            "- **Lupa Klausa `where` pada Update/Delete:** Memanggil `deleteMany()` tanpa menyertakan `where` akan **menghapus seluruh isi tabel** database produksi secara tidak sengaja.\n\n" +
             "## Kaitan ke Dunia Kerja\n\n" +
-            "Penguasaan Prisma ORM dan penulisan skema migrasi database adalah standar wajib pada lowongan backend TypeScript modern. Memahami pola Repository dan transaksi database memastikan data aplikasi perusahaan tetap konsisten dan bebas dari kebocoran koneksi.",
+            "Penguasaan Prisma ORM, penulisan skema migrasi database, dan arsitektur transaksi atomik adalah standar wajib pada lowongan backend TypeScript modern. Memahami pola Repository dan pencegahan kebocoran koneksi memastikan sistem database perusahaan tetap stabil dan bebas dari korupsi data.",
         },
         {
           kind: "step",
@@ -1597,49 +1630,49 @@ export const nodeExpressTrack: Track = {
           id: "node-4-4",
           title: "Prisma Transactions ($transaction)",
           explanation:
-            "Fitur `prisma.$transaction()` digunakan untuk memastikan serangkaian operasi database dieksekusi secara *atomic* (memenuhi prinsip ACID). Jika ada satu kueri yang mengalami kesalahan di tengah proses transaksi, seluruh perubahan kueri sebelumnya akan secara otomatis dibatalkan (*rollback*). Fitur ini sangat krusial untuk fitur-fitur sensitif seperti transaksi keuangan atau pemotongan stok barang di mana integritas data adalah harga mati. Membungkus array kueri ke dalam `$transaction([])` memberikan jaminan keamanan data tingkat tinggi di server backend. Jebakan utama adalah menjalankan beberapa kueri terpisah tanpa transaksi pada alur bisnis yang saling bergantung.",
+            "Fitur `prisma.$transaction()` digunakan untuk memastikan serangkaian operasi database dieksekusi secara *atomic* (memenuhi prinsip ACID). Jika ada satu kueri yang mengalami kesalahan di tengah proses transaksi, seluruh perubahan kueri sebelumnya akan secara otomatis dibatalkan (*rollback*). Fitur ini sangat krusial untuk alur checkout pesanan di mana data keranjang harus dihapus dan data order dibuat bersamaan: jika pembuatan order gagal, item keranjang belanja tidak boleh hilang. Membungkus array kueri ke dalam `$transaction([ ... ])` memberikan jaminan integritas data tingkat tinggi. Jebakan utama adalah menjalankan beberapa kueri terpisah tanpa transaksi pada alur bisnis yang saling bergantung.",
           example: {
-            code: "const prisma = { $transaction: async (arr) => 'Transaction Success' };\nconsole.log(await prisma.$transaction([]));",
-            output: "Transaction Success",
-            note: "Menjamin prinsip ACID pada transaksi keuangan.",
+            code: "await prisma.$transaction([\n  prisma.user.update({ where: { id: 1 }, data: { balance: { decrement: 50 } } }),\n  prisma.user.update({ where: { id: 2 }, data: { balance: { increment: 50 } } })\n]);",
+            output: "Kedua update dieksekusi secara atomic dalam satu transaksi",
+            note: "Menjamin prinsip ACID pada mutasi data yang saling terkait. Catatan jujur: panel preview tidak menjalankan Node.js (kode ini butuh server dan modul bawaan Node), jadi tidak ada keluaran yang muncul di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus.",
           },
           instruction:
-            "Bungkus sekumpulan perintah database di dalam fungsi transaksi atomic `prisma.$transaction()` yang menerima array kosong `[]` sebagai argumen dasar.",
-          starterCode: "// Tulis $transaction di bawah ini\n",
+            "Jalankan transaksi atomik `prisma.$transaction` yang menerima array berisi dua operasi: pembersihan item `prisma.cart.deleteMany({ where: { userId } })` dan pembuatan pesanan `prisma.order.create({ data })`. Gunakan kata kunci `await`.",
+          starterCode: "// Tulis prisma.$transaction di bawah ini\n",
           language: "text",
           tests: [
-                      {
-                        "pattern": "prisma\\.\\$transaction\\(",
-                        "message": "Beberapa operasi yang harus berhasil bersama dibungkus `prisma.$transaction(...)`. Kalau satu gagal, semuanya dibatalkan."
-                      },
-                      {
-                        "pattern": "\\[\\s*\\]",
-                        "message": "Bentuk array menerima daftar operasi yang dijalankan berurutan. (Ada juga bentuk callback `$transaction(async (tx) => ...)` untuk logika yang butuh hasil operasi sebelumnya.)"
-                      },
-                      {
-                        "pattern": "await\\s",
-                        "message": "Tunggu dengan `await` — tanpa itu transaksinya belum tentu selesai saat kamu mengirim respons."
-                      }
-                    ],
-          solution: "await prisma.$transaction([]);",
+            {
+              pattern: "await\\s+prisma\\.\\$transaction\\(",
+              message: "Panggil transaksi atomik dengan `await prisma.$transaction(...)`.",
+            },
+            {
+              pattern: "prisma\\.cart\\.deleteMany\\(\\s*\\{\\s*where:\\s*\\{\\s*userId\\s*\\}\\s*\\}\\s*\\)",
+              message: "Sertakan operasi pertama: `prisma.cart.deleteMany({ where: { userId } })`.",
+            },
+            {
+              pattern: "prisma\\.order\\.create\\(\\s*\\{\\s*data\\s*\\}\\s*\\)",
+              message: "Sertakan operasi kedua: `prisma.order.create({ data })`.",
+            },
+          ],
+          solution:
+            "await prisma.$transaction([\n  prisma.cart.deleteMany({ where: { userId } }),\n  prisma.order.create({ data }),\n]);",
           susunKode: {
             question:
-              "Rangkai pemanggilan transaksi berurutan Prisma Client menggunakan metode $transaction.",
+              "Rangkai pemanggilan transaksi berurutan Prisma Client untuk membersihkan keranjang dan membuat order.",
             potongan: [
-              "await ",
-              "prisma",
-              ".$transaction(",
-              "[]",
-              ");",
+              "await prisma.$transaction([\n",
+              "  prisma.cart.deleteMany({ where: { userId } }),\n",
+              "  prisma.order.create({ data }),\n",
+              "]);",
             ],
             pengecoh: [
-              ".transaction(",
-              ".startTransaction(",
-              "{}",
+              "await prisma.transaction([\n",
+              "  prisma.cart.delete({ where: { userId } }),\n",
+              "  prisma.order.upsert({ data }),\n",
             ],
             pemisah: "",
             explanation:
-              "Transaksi atomik pada Prisma dijalankan lewat metode bawaan yang namanya sengaja diawali tanda dollar untuk membedakan API tingkat klien dari nama modelmu. Keping .transaction( sangat menggoda karena tanda dollar mudah terlewat saat mengetik, padahal tanpa tanda itu Prisma melempar TypeError karena propertinya tidak ada. Keping .startTransaction( keliru — itu gaya penamaan driver database lain, bukan Prisma. Keping {} keliru karena bentuk berurutan menerima ARRAY operasi yang dijalankan satu per satu, sedangkan objek kosong bukan daftar dan langsung ditolak.",
+              "Metode $transaction pada Prisma memastikan kedua operasi database berhasil bersama atau dibatalkan seluruhnya jika salah satu gagal. Keping await prisma.transaction([ menggoda karena tanda dollar $ sering terlewat saat mengetik cepat, padahal tanda dollar wajib disertakan untuk membedakan API klien internal Prisma. Keping prisma.cart.delete keliru karena delete menuntut kunci unik tunggal, sedangkan menghapus seluruh item keranjang milik user memerlukan deleteMany. Keping order.upsert keliru metode karena membuat pesanan baru menggunakan create.",
           },
         },
         {
@@ -1824,13 +1857,29 @@ export const nodeExpressTrack: Track = {
             "- **`httpOnly: true`:** Mencegah skrip jahat JavaScript peramban (XSS) membaca isi token cookie.\n" +
             "- **`sameSite: 'strict'`:** Mencegah ancaman serangan pemalsuan permintaan antar situs (CSRF).\n" +
             "- **Middleware RBAC:** Memeriksa peran pengguna (seperti `req.user.role === 'admin'`) sebelum memberikan izin akses ke rute terproteksi.\n\n" +
+            "## TypeScript Tip: Declaration Merging untuk `req.user`\n\n" +
+            "Saat memasang middleware auth yang menyematkan objek pengguna ke `req.user`, kompilator TypeScript akan melempar error: `Property 'user' does not exist on type 'Request'`. Solusi standar industri adalah menambahkan deklarasi tipe di berkas `src/types/express.d.ts`:\n\n" +
+            "```typescript\n" +
+            "declare global {\n" +
+            "  namespace Express {\n" +
+            "    interface Request {\n" +
+            "      user?: { id: number; email: string; role: string };\n" +
+            "    }\n" +
+            "  }\n" +
+            "}\n" +
+            "export {};\n" +
+            "```\n\n" +
+            "## Strategi Produksi: Access Token + Refresh Token Rotation\n\n" +
+            "Alih-alih membuat token JWT berumur panjang (misal 30 hari), standar industri membagi token menjadi dua:\n" +
+            "1. **Access Token:** Berumur sangat pendek (15 menit), digunakan untuk mengakses endpoint API sehari-hari.\n" +
+            "2. **Refresh Token:** Berumur panjang (7-30 hari), disimpan di database/Redis atau cookie HttpOnly. Ketika access token kedaluwarsa, klien memanggil `/api/v1/auth/refresh` untuk menukar refresh token lama dengan sepasang token baru (*Token Rotation*).\n\n" +
             "## Kesalahan Umum & Jebakan (Pitfalls)\n\n" +
+            "- **Mitos JWT Terenkripsi:** Payload JWT hanya di-encode Base64Url (BUKAN dienkripsi). Siapa pun dapat membaca data payload di `jwt.io` tanpa password. Jangan pernah menyimpan password atau data rahasia kartu di payload JWT!\n" +
             "- **Menyimpan JWT di LocalStorage:** Menyimpan token autentikasi di `localStorage` peramban membuat token sangat rentan dicuri melalui serangan XSS.\n" +
-            "- **Menyimpan Rahasia di Payload JWT:** Payload JWT hanya di-encode Base64 (BUKAN dienkripsi). Siapa pun dapat membaca isinya, jadi jangan simpan kata sandi di payload.\n" +
             "- **JWT Masa Kadaluarsa Abadi:** Menerbitkan JWT tanpa opsi `expiresIn` membuat token yang tercuri dapat digunakan selamanya oleh penyerang.\n" +
             "- **Lupa Pembatalan Cookie saat Logout:** Hanya menghapus token di sisi klien tanpa memanggil `res.clearCookie()` atau memasukkannya ke denylist.\n\n" +
             "## Kaitan ke Dunia Kerja\n\n" +
-            "Merancang arsitektur autentikasi yang aman dengan penanganan token JWT dan Cookie HttpOnly adalah persyaratan utama di industri SaaS, Fintech, dan e-Commerce. Pemahaman ini memastikan backend yang kamu bangun memenuhi standar audit keamanan informasi.",
+            "Merancang arsitektur autentikasi yang aman dengan penanganan token JWT, Refresh Token Rotation, dan Cookie HttpOnly adalah persyaratan utama di industri SaaS, Fintech, dan e-Commerce. Pemahaman ini memastikan backend yang kamu bangun memenuhi standar audit keamanan informasi.",
         },
         {
           kind: "step",
@@ -2209,6 +2258,20 @@ export const nodeExpressTrack: Track = {
             "## Custom Error Class (`AppError`) & Logging Terstruktur (`pino`)\n\n" +
             "- **`AppError extends Error`:** Kelas turunan error kustom untuk menyuntikkan `statusCode` semantik pada setiap exception.\n" +
             "- **Pino Logger:** Pengganti `console.log` yang mencatat log dalam format JSON terstruktur untuk diproses oleh sistem pemantau log (seperti Datadog / Elasticsearch).\n\n" +
+            "## Evolusi Penanganan Async Error: Express 4 vs Express 5\n\n" +
+            "Pada Express v4, error yang terjadi di dalam fungsi `async (req, res) => { ... }` tidak otomatis ditangkap oleh Express dan memicu *UnhandledPromiseRejection* kecuali dibungkus dengan wrapper `Promise.resolve(fn(req, res, next)).catch(next)` atau pustaka `express-async-errors`. Namun pada **Express v5**, Express sudah mendukung penanganan Promise asinkron secara *native* — setiap penolakan asinkron langsung dialirkan otomatis ke Centralized Error Handler tanpa butuh kode pembungkus tambahan!\n\n" +
+            "## Pola Reusable Middleware Validasi Zod\n\n" +
+            "Alih-alih memanggil `UserSchema.parse(req.body)` manual di dalam tiap controller, standar industri menggunakan fungsi pembantu *middleware factory*:\n\n" +
+            "```typescript\n" +
+            "export const validate = (schema: z.ZodSchema) => async (req: Request, res: Response, next: NextFunction) => {\n" +
+            "  try {\n" +
+            "    req.body = await schema.parseAsync(req.body);\n" +
+            "    next();\n" +
+            "  } catch (error) {\n" +
+            "    next(error); // Error Zod mengalir ke error handler terpusat\n" +
+            "  }\n" +
+            "};\n" +
+            "```\n\n" +
             "## Kesalahan Umum & Jebakan (Pitfalls)\n\n" +
             "- **Middleware Error Kurang Parameter:** Menuliskan `(err, req, res)` dengan 3 parameter akan membuat Express memperlakukannya sebagai middleware biasa, sehingga error tidak tertangkap.\n" +
             "- **Membocorkan Stacktrace di Produksi:** Mengirimkan `err.stack` ke respon JSON di server produksi membeberkan struktur folder internal yang bisa dieksploitasi peretas.\n" +
@@ -2923,42 +2986,43 @@ export const nodeExpressTrack: Track = {
           id: "node-8-1",
           title: "Unit vs Integration Test di Backend",
           explanation:
-            "Pengujian perangkat lunak backend terbagi menjadi Unit Test dan Integration Test. Unit Test berfokus menguji satu fungsi atau helper terisolasi tanpa dependensi luar. Sebaliknya, Integration Test menggunakan pustaka seperti `supertest` untuk menguji alur penuh endpoint API dari penerimaan rute HTTP, verifikasi middleware, hingga kueri database fisik. Integration Test memberikan jaminan rasa aman paling tinggi bagi pengembang saat melakukan refactoring kode backend. Memahami kapan harus menulis unit test dan kapan menggunakan integration test menjaga efisiensi alur kerja pengujian. Jebakan utama pemula adalah hanya menulis unit test tanpa pernah menguji alur integrasi database.",
+            "Pengujian perangkat lunak backend terbagi menjadi Unit Test dan Integration Test. Unit Test berfokus menguji satu fungsi murni terisolasi, sedangkan Integration Test menggunakan test runner (seperti Vitest atau Jest) dan `supertest` untuk menguji alur penuh endpoint API. Dalam pengujian integrasi otomatis, setiap skenario pengujian didefinisikan di dalam blok `it('deskripsi skenario', async () => {})`. Menulis fungsi pengujian asinkron dengan kata kunci `async` adalah kewajiban mutlak karena panggilan HTTP dan kueri database selalu bersifat asinkron. Jebakan utama pemula adalah lupa menyertakan kata kunci `async` pada blok tes sehingga penolakan Promise tidak tertangkap test runner.",
           example: {
-            code: "function getTestType(isFullFlow) {\n  return isFullFlow ? 'integration' : 'unit';\n}\nconsole.log(getTestType(true));",
-            output: "integration",
-            note: "Integration test memberi rasa aman paling tinggi saat refactoring. Catatan jujur: panel preview tidak menjalankan Node.js (kode ini butuh server dan modul bawaan Node), jadi tidak ada keluaran yang muncul di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus.",
+            code: "it('mengembalikan status 404 jika id tidak ditemukan', async () => {\n  const res = await request(app).get('/api/v1/users/999');\n  expect(res.status).toBe(404);\n});",
+            output: "✓ mengembalikan status 404 jika id tidak ditemukan (42ms)",
+            note: "Integration test menguji skenario positif dan skenario batas/error. Catatan jujur: panel preview tidak menjalankan Node.js (kode ini butuh server dan modul bawaan Node), jadi tidak ada keluaran yang muncul di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus.",
           },
           instruction:
-            "Buat fungsi `getTestType(isFullFlow)` yang mengembalikan `'integration'` jika `isFullFlow` bernilai `true` dan `'unit'` jika `false`.",
-          starterCode: "// Tulis fungsi getTestType di bawah ini\n",
+            "Buat blok pengujian endpoint menggunakan fungsi `it` dengan judul `'mengembalikan status 200 dan data user'`, yang di dalamnya menjalankan fungsi asinkron (`async () => {}`).",
+          starterCode: "// Tulis blok pengujian it di sini\n",
           language: "text",
           tests: [
             {
-              pattern: "isFullFlow\\s*\\?\\s*['\"]integration['\"]\\s*:\\s*['\"]unit['\"]",
-              message: "Gunakan: isFullFlow ? 'integration' : 'unit'",
+              pattern: "\\bit\\(\\s*['\"]mengembalikan status 200 dan data user['\"]",
+              message: "Gunakan fungsi pengujian `it('mengembalikan status 200 dan data user', ...)`.",
+            },
+            {
+              pattern: "async\\s*\\(\\s*\\)\\s*=>\\s*\\{\\s*\\}",
+              message: "Gunakan handler fungsi asinkron `async () => {}` karena pengujian API memerlukan await.",
             },
           ],
-          solution:
-            "function getTestType(isFullFlow) {\n  return isFullFlow ? 'integration' : 'unit';\n}",
+          solution: "it('mengembalikan status 200 dan data user', async () => {});",
           susunKode: {
             question:
-              "Susun fungsi penentu tipe pengujian yang mengembalikan string 'integration' jika flows utuh dan 'unit' jika komponen terisolasi.",
+              "Rangkai pendefinisian blok pengujian integrasi asinkron untuk endpoint user.",
             potongan: [
-              "function getTestType(isFullFlow) {\n",
-              "  return isFullFlow",
-              " ? 'integration'",
-              " : 'unit';",
-              "\n}",
+              "it(",
+              "'mengembalikan status 200 dan data user', ",
+              "async () => {});",
             ],
             pengecoh: [
-              " ? 'e2e'",
-              " ? 'unit'",
-              " : 'e2e';",
+              "testCase(",
+              "'status 200', ",
+              "(done) => {});",
             ],
             pemisah: "",
             explanation:
-              "Integration test menguji alur gabungan antar komponen backend, sedangkan unit test menguji satu fungsi secara terisolasi. Keping 'e2e' menggoda karena istilahnya memang ada di dunia nyata, tetapi end-to-end test menjalankan aplikasi lengkap beserta antarmukanya — bukan yang sedang dibedakan di sini. Keping ? 'unit' keliru karena menukar cabang ternary: kondisi isFullFlow yang bernilai true justru menandakan alur penuh, jadi cabang pertama harus integration. Jebakan ini sering lolos dari mata karena kodenya tetap berjalan tanpa error, hanya hasilnya terbalik.",
+              "Pengujian integrasi endpoint pada Vitest dan Jest dibungkus dalam blok it() dengan callback fungsi async karena pengujian memanggil network request asinkron. Keping testCase( keliru karena API pengujian standar runner bernama it atau test. Keping 'status 200' menggoda namun tidak menjelaskan kontrak perilaku bisnis secara lengkap. Keping (done) => {}); keliru karena pengujian modern berbasis async/await tidak lagi menggunakan callback done manual yang rentan unhandled rejection.",
           },
         },
         {
@@ -3254,12 +3318,15 @@ export const nodeExpressTrack: Track = {
             "```\n\n" +
             "## Checklist Keamanan Pre-Deploy Backend\n\n" +
             "1. ✅ **Matikan Stacktrace:** Pastikan `NODE_ENV=production` aktif.\n" +
-            "2. ✅ **Sembunyikan Rahasia:** Pastikan berkas `.env` ada di `.gitignore`.\n" +
-            "3. ✅ **Aktifkan Helmet & CORS Whitelist.**\n" +
-            "4. ✅ **Bcrypt Password:** Gunakan salt rounds minimal 10.\n" +
-            "5. ✅ **Rate Limiting:** Pasang pembatas jumlah request pada rute autentikasi.\n\n" +
+            "2. ✅ **Sembunyikan Rahasia:** Pastikan berkas `.env` ada di `.gitignore` dan lakukan validasi fail-fast saat server booting.\n" +
+            "3. ✅ **Matikan Fingerprint Server:** Panggil `app.disable('x-powered-by')` agar peretas tidak tahu framework yang digunakan.\n" +
+            "4. ✅ **Aktifkan Helmet & CORS Whitelist.**\n" +
+            "5. ✅ **Bcrypt Password:** Gunakan salt rounds minimal 10.\n" +
+            "6. ✅ **Rate Limiting:** Pasang pembatas jumlah request pada rute autentikasi.\n" +
+            "7. ✅ **Graceful Shutdown & Health Check:** Tangani event `SIGTERM` untuk menutup koneksi database secara bersih, dan sediakan rute `/healthz` untuk container liveness probe.\n\n" +
             "## Kesalahan Umum & Jebakan (Pitfalls)\n\n" +
-            "- **Menggabungkan String Query SQL:** Menggabungkan variabel input pengguna secara langsung ke string `SELECT * FROM users WHERE email = '` + input + `'` yang membuka celah SQL Injection.\n" +
+            "- **Sanitasi XSS dengan Regex:** Mencoba membersihkan input HTML menggunakan regex manual seperti `replace(/<script>/gi, '')` adalah anti-pattern berbahaya yang mudah ditembus dengan `<img onerror=...>` atau tag bersarang. Gunakan encoding entitas HTML (`validator.escape`) atau library sanitasi teruji.\n" +
+            "- **Menggabungkan String Query SQL:** Menggabungkan variabel input pengguna secara langsung ke string `SELECT * FROM users WHERE email = '` + input + `'` yang membuka celah SQL Injection. Selalu gunakan *parameterized query* atau tagged template literal `prisma.$queryRaw`.\n" +
             "- **`cors({ origin: '*' })` dengan Credentials:** Peramban modern akan menolak mengirimkan cookie jika origin diatur wildcard `*`.\n" +
             "- **Mengabaikan Rate Limiting:** Membiarkan endpoint `POST /api/v1/login` tanpa pembatas request per detik.\n" +
             "- **Menyimpan Kunci Rahasia di Git:** Terlanjur melakukan commit berkas `.env` yang berisi rahasia ke repositori GitHub publik.\n\n" +
@@ -3271,39 +3338,43 @@ export const nodeExpressTrack: Track = {
           id: "node-9-1",
           title: "Mencegah SQL Injection",
           explanation:
-            "SQL Injection adalah ancaman keamanan di mana penyerang menyuntikkan perintah SQL jahat melalui kolom input pengguna akibat penggabungan string query mentah secara langsung. Menggunakan ORM seperti Prisma atau kueri terparameter (*parameterized query*) mencegah ancaman ini karena input pengguna diperlakukan secara ketat sebagai nilai data literal, bukan sebagai kode executable SQL. Mengamankan kueri database merupakan langkah wajib pertama dalam pengamanan backend. Selalu hindari penggabungan string langsung saat menyusun kueri database. Jebakan utama pemula adalah menggabungkan variabel string pengguna langsung ke dalam perintah SQL mentah.",
+            "SQL Injection adalah ancaman keamanan di mana penyerang menyuntikkan perintah SQL jahat melalui kolom input pengguna akibat penggabungan string query mentah secara langsung. Saat kamu harus menjalankan kueri SQL mentah di Prisma, jangan pernah menggabungkan string biasa! Gunakan tagged template literal `prisma.$queryRaw` bawaan Prisma. Prisma secara otomatis memisahkan variabel di dalam `${...}` menjadi parameter terikat (*parameterized query*) di tingkat database engine sehingga aman dari manipulasi sintaks SQL penyerang. Mengamankan kueri database merupakan langkah wajib pertama dalam pengamanan backend. Jebakan utama pemula adalah memakai penggabungan string (`+`) atau metode tidak aman saat menyusun perintah database.",
           example: {
-            code: "function isSafeQuery(usesORM) {\n  return Boolean(usesORM);\n}\nconsole.log(isSafeQuery(true));",
-            output: "true",
-            note: "Jangan pernah menggabungkan variabel string ke query SQL mentah! Catatan jujur: panel preview tidak menjalankan Node.js (kode ini butuh server dan modul bawaan Node), jadi tidak ada keluaran yang muncul di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus.",
+            code: "const result = await prisma.$queryRaw`SELECT * FROM \"Product\" WHERE price <= ${maxPrice}`;",
+            output: "Kueri SQL dieksekusi dengan parameter terikat aman",
+            note: "Tagged template literal prisma.$queryRaw otomatis melakukan parameterisasi kueri SQL. Catatan jujur: panel preview tidak menjalankan Node.js (kode ini butuh server dan modul bawaan Node), jadi tidak ada keluaran yang muncul di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus.",
           },
           instruction:
-            "Buat fungsi `isSafeQuery(usesORM)` yang mengembalikan nilai boolean dari parameter `usesORM`.",
-          starterCode: "// Tulis fungsi isSafeQuery di bawah ini\n",
+            "Eksekusi kueri mentah yang aman dari SQL Injection menggunakan tagged template literal Prisma `prisma.$queryRaw` untuk mencari pengguna dengan perintah `SELECT * FROM \"User\" WHERE email = ${email}`. Gunakan kata kunci `await`.",
+          starterCode: "// Tulis prisma.$queryRaw di bawah ini\n",
           language: "text",
           tests: [
             {
-              pattern: "Boolean\\s*\\(\\s*usesORM\\s*\\)|return\\s+usesORM",
-              message: "Kembalikan nilai boolean usesORM",
+              pattern: "await\\s+prisma\\.\\$queryRaw`",
+              message: "Gunakan `await prisma.$queryRaw` dengan tagged template literal (menggunakan backtick).",
+            },
+            {
+              pattern: "SELECT \\* FROM [\"']User[\"'] WHERE email = \\$\\{email\\}",
+              message: "Tuliskan klausa SQL parameterized: `SELECT * FROM \"User\" WHERE email = ${email}`.",
             },
           ],
-          solution:
-            "function isSafeQuery(usesORM) {\n  return Boolean(usesORM);\n}",
+          solution: 'await prisma.$queryRaw`SELECT * FROM "User" WHERE email = ${email}`;',
           susunKode: {
             question:
-              "Susun fungsi validator keamanan kueri yang mengembalikan boolean keberadaan pengunaan ORM.",
+              "Rangkai pemanggilan kueri SQL mentah yang aman dari SQL Injection menggunakan Prisma queryRaw.",
             potongan: [
-              "function isSafeQuery(usesORM) {",
-              "  return Boolean(usesORM);",
-              "}",
+              "await prisma.$queryRaw",
+              '`SELECT * FROM "User" WHERE email = ',
+              "${email}`;",
             ],
             pengecoh: [
-              "  return String(usesORM);",
-              "  return Number(usesORM);",
+              "await prisma.$queryRawUnsafe",
+              '`SELECT * FROM "User" WHERE email = \'" + email',
+              "prisma.$executeRaw",
             ],
-            pemisah: "\n",
+            pemisah: "",
             explanation:
-              "Penggunaan ORM seperti Prisma secara otomatis melakukan parameterisasi kueri SQL sehingga aman dari SQL Injection. Keping String(usesORM) keliru karena mengembalikan tipe data string bukan boolean. Keping Number(usesORM) keliru tipe data angka.",
+              "Metode $queryRaw pada Prisma secara otomatis memisahkan variabel template literal menjadi parameter terikat ($1, $2) di level database driver sehingga aman dari SQL Injection. Keping $queryRawUnsafe sangat menggoda namun berbahaya karena metode tersebut tidak melakukan parameterisasi otomatis dan rentan disusupi kode berbahaya. Keping penggabungan string (' + email) adalah jebakan klasik yang menjadi akar kerentanan SQL Injection selama beberapa dekade. Keping $executeRaw keliru karena dipakai untuk mutasi DDL/DML, bukan mengambil baris data SELECT.",
           },
         },
         {
@@ -3311,43 +3382,43 @@ export const nodeExpressTrack: Track = {
           id: "node-9-2",
           title: "Mencegah XSS (Cross-Site Scripting)",
           explanation:
-            "Cross-Site Scripting (XSS) terjadi saat penyerang berhasil menyuntikkan skrip HTML/JavaScript berbahaya (`<script>`) ke dalam masukan aplikasi yang kemudian dirender oleh peramban pengguna lain. Melakukan sanitasi teks masukan menggunakan ekspresi reguler atau pustaka pembersih HTML mencegah skrip eksekusi tersebut berjalan di sisi peramban. Kerangka kerja modern seperti React secara otomatis melakukan *escaping* pada string, namun sanitasi tetap wajib diterapkan di sisi backend. Menjaga kebersihan data tersimpan melindungi sesi pengguna lain dari ancaman pencurian cookie. Jebakan fatal adalah merender teks dari masukan pengguna secara mentah menggunakan `innerHTML`. Satu peringatan penting: latihan ini memakai regex agar mekanismenya terlihat jelas, tetapi **regex bukan sanitasi yang layak produksi** — varian seperti `<scr<script>ipt>` atau `<img onerror=...>` tetap lolos. Di proyek nyata, pakai pustaka teruji seperti `sanitize-html` atau DOMPurify.",
+            "Cross-Site Scripting (XSS) terjadi saat penyerang berhasil menyuntikkan skrip HTML/JavaScript berbahaya ke dalam masukan aplikasi yang kemudian dieksekusi oleh peramban pengguna lain. Menggunakan ekspresi reguler (regex) untuk membersihkan tag `<script>` adalah anti-pattern berbahaya yang sering gagal karena penyerang dapat menyusupkan skrip via atribut onerror pada gambar atau tag SVG. Standar industri yang aman adalah mengonversi karakter berbahaya menjadi entitas HTML (*HTML entity encoding*) menggunakan fungsi teruji seperti `validator.escape(input)`. Karakter `<` diubah menjadi `&lt;` dan `>` menjadi `&gt;` sehingga peramban hanya menampilkannya sebagai teks biasa. Jebakan fatal pemula adalah percaya pada regex buatan sendiri untuk membersihkan XSS.",
           example: {
-            code: "function sanitizeHtmlInput(str) {\n  return str.replace(/<script.*?>.*?<\\/script>/gi, '');\n}\nconsole.log(sanitizeHtmlInput('<script>bad()</script>Hi'));",
-            output: "Hi",
-            note: "React dan template engine modern otomatis melakukan escaping pada output string. Catatan jujur: panel preview tidak menjalankan Node.js (kode ini butuh server dan modul bawaan Node), jadi tidak ada keluaran yang muncul di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus.",
+            code: "import validator from 'validator';\nconst safe = validator.escape('<img src=x onerror=alert(1)>');\nconsole.log(safe);",
+            output: "&lt;img src=x onerror=alert(1)&gt;",
+            note: "HTML entity escaping mengubah karakter tag HTML menjadi entitas teks aman. Catatan jujur: panel preview tidak menjalankan Node.js (kode ini butuh server dan modul bawaan Node), jadi tidak ada keluaran yang muncul di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus.",
           },
           instruction:
-            "Buat fungsi `sanitizeHtmlInput(inputString)` yang menghapus tag `<script>` dari string menggunakan `inputString.replace(/<script.*?>.*?<\\/script>/gi, '')`.",
-          starterCode: "// Tulis fungsi sanitizeHtmlInput di bawah ini\n",
+            "Gunakan fungsi `validator.escape(inputString)` untuk mengubah karakter berisiko XSS (seperti `<`, `>`, dan `&`) menjadi entitas HTML yang aman, lalu simpan hasilnya dalam konstanta `cleanInput`.",
+          starterCode: "// Tulis sanitasi validator.escape di bawah ini\n",
           language: "text",
           tests: [
             {
-              pattern: "replace\\(\\s*/<script\\.\\*\\?>\\.\\*\\?<\\\\/script>/gi\\s*,\\s*['\"]['\"]\\s*\\)",
-              message: "Gunakan replace dengan regex script tag",
+              pattern: "const\\s+cleanInput\\s*=",
+              message: "Deklarasikan konstanta `const cleanInput = ...`.",
+            },
+            {
+              pattern: "validator\\.escape\\(\\s*inputString\\s*\\)",
+              message: "Panggil fungsi sanitasi entitas HTML: `validator.escape(inputString)`.",
             },
           ],
-          solution:
-            "function sanitizeHtmlInput(inputString) {\n  return inputString.replace(/<script.*?>.*?<\\/script>/gi, '');\n}",
+          solution: "const cleanInput = validator.escape(inputString);",
           susunKode: {
             question:
-              "Susun fungsi pembersihan sanitasi tag skrip berbahaya untuk mencegah serangan Cross-Site Scripting (XSS).",
+              "Rangkai pemanggilan fungsi sanitasi entitas HTML menggunakan pustaka validator.",
             potongan: [
-              "function sanitizeHtmlInput(inputString) {\n",
-              "  return inputString",
-              ".replace(",
-              "/<script.*?>.*?<\\/script>/gi",
-              ", '');",
-              "\n}",
+              "const cleanInput = ",
+              "validator.escape(",
+              "inputString);",
             ],
             pengecoh: [
-              ".replaceAll(",
-              "/<script>/gi",
-              "/<script.*?>/gi",
+              "validator.unescape(",
+              "validator.strip(",
+              "inputString.replace(",
             ],
             pemisah: "",
             explanation:
-              "Sanitasi masukan membuang pasangan tag skrip beserta isinya, dengan flag g agar semua kemunculan kena dan i agar SCRIPT huruf besar ikut tertangkap. Keping .replaceAll( menggoda karena namanya terdengar lebih menyeluruh, padahal dengan regex ber-flag g hasilnya sama — dan replaceAll justru melempar TypeError bila regexnya TIDAK ber-flag g. Keping /<script>/gi keliru karena hanya cocok pada tag polos, sehingga <script src=x> lolos. Keping /<script.*?>/gi keliru karena membuang tag pembuka saja dan meninggalkan isi skrip beserta penutupnya di dalam teks.",
+              "Pustaka validator.escape() mengubah karakter berbahaya seperti <, >, &, dan kutip menjadi entitas HTML (&lt;, &gt;) sehingga browser klien tidak akan mengeksekusinya sebagai skrip berbahaya. Keping validator.unescape() keliru fatal karena justru mengembalikan karakter entitas menjadi karakter mentah. Keping validator.strip() keliru karena fungsi tersebut tidak ada di API pustaka validator. Keping inputString.replace( menggoda bagi pemula, namun mencoba membersihkan XSS dengan regex manual adalah anti-pattern berbahaya yang mudah ditembus oleh payload variasi seperti <img onerror=...> atau tag bersarang.",
           },
         },
         {
@@ -3493,37 +3564,43 @@ export const nodeExpressTrack: Track = {
           id: "node-9-6",
           title: "Manajemen Kunci Rahasia (.gitignore)",
           explanation:
-            "Manajemen kredensial rahasia mewajibkan agar berkas konfig `.env` yang menyimpan kata sandi database dan kunci API **SELALU** dicantumkan di dalam berkas `.gitignore`. Jika berkas rahasia ini ter-push ke repositori git publik, bot pemindai peretas dapat langsung mencuri kredensial server milikmu hanya dalam hitungan detik. Gunakan berkas templat `.env.example` tanpa nilai rahasia untuk dibagikan ke anggota tim lain. Menjaga kerahasiaan kredensial adalah aturan keselamatan paling fundamental dalam pengembangan perangkat lunak. Jebakan paling fatal di dunia nyata adalah tidak sengaja men-commit berkas `.env` ke GitHub publik.",
+            "Manajemen kredensial rahasia mewajibkan agar berkas konfig `.env` yang menyimpan kata sandi database dan kunci API **SELALU** dicantumkan di dalam `.gitignore`. Selain mengabaikan berkas di git, aplikasi backend modern menerapkan prinsip **Fail-Fast** saat booting server: jika variabel rahasia wajib seperti `JWT_SECRET` tidak didefinisikan di lingkungan runtime, server harus langsung melempar error dan berhenti beroperasi. Ini mencegah server berjalan dalam keadaan cacat keamanan yang dapat dimanfaatkan penyerang. Jebakan paling fatal di dunia nyata adalah membiarkan server menyala tanpa kunci rahasia yang valid.",
           example: {
-            code: "const ignoredFiles = ['.env', 'node_modules'];\nconsole.log(ignoredFiles.includes('.env'));",
-            output: "true",
-            note: "Gunakan .env.example untuk membagikan templat variabel env tanpa rahasia.",
+            code: "if (!process.env.DATABASE_URL) {\n  throw new Error('DATABASE_URL wajib disetel di .env');\n}",
+            output: "Error: DATABASE_URL wajib disetel di .env",
+            note: "Pola Fail-Fast mencegah server berjalan tanpa konfigurasi rahasia yang lengkap. Catatan jujur: panel preview tidak menjalankan Node.js (kode ini butuh server dan modul bawaan Node), jadi tidak ada keluaran yang muncul di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus.",
           },
           instruction:
-            "Tuliskan nama file environment rahasia `.env` yang wajib dimasukkan ke dalam daftar `.gitignore`.",
-          starterCode: "// Tulis abaikan file rahasia di bawah ini\n",
+            "Di dalam modul konfigurasi rahasia, periksa keberadaan kunci `JWT_SECRET`. Jika `process.env.JWT_SECRET` bernilai falsy, lemparkan error baru dengan pesan `'JWT_SECRET wajib disetel'` menggunakan kata kunci `throw new Error(...)`.",
+          starterCode: "// Tulis pengecekan fail-fast JWT_SECRET di bawah ini\n",
           language: "text",
           tests: [
             {
-              pattern: "\\.env",
-              message: "Tuliskan: .env",
+              pattern: "if\\s*\\(\\s*!process\\.env\\.JWT_SECRET\\s*\\)",
+              message: "Periksa nilai variabel lingkungan: `if (!process.env.JWT_SECRET)`.",
+            },
+            {
+              pattern: "throw\\s+new\\s+Error\\(\\s*['\"]JWT_SECRET wajib disetel['\"]\\s*\\)",
+              message: "Lemparkan exception: `throw new Error('JWT_SECRET wajib disetel')`.",
             },
           ],
-          solution: ".env",
+          solution: "if (!process.env.JWT_SECRET) throw new Error('JWT_SECRET wajib disetel');",
           susunKode: {
             question:
-              "Susun entri berkas .gitignore untuk memastikan file kredensial rahasia .env tidak terikut ke repository Git.",
+              "Rangkai validasi fail-fast saat server booting untuk memastikan variabel JWT_SECRET tersedia.",
             potongan: [
-              ".",
-              "env",
+              "if (!process.env.JWT_SECRET) ",
+              "throw new Error(",
+              "'JWT_SECRET wajib disetel');",
             ],
             pengecoh: [
-              "_",
-              "config",
+              "if (process.env.JWT_SECRET) ",
+              "return new Error(",
+              "'JWT_SECRET opsional');",
             ],
             pemisah: "",
             explanation:
-              "Mencantumkan nama file .env di dalam .gitignore adalah aturan krusial agar kunci rahasia API dan kata sandi database tidak terpublikasi ke repository VCS. Keping garis bawah _ dan config keliru nama berkas kredensial.",
+              "Pola Fail-Fast memastikan server backend langsung berhenti di awal proses booting jika ada kredensial lingkungan wajib yang belum terdefinisi di berkas .env. Keping if (process.env.JWT_SECRET) keliru logika karena justru melempar error saat rahasianya ADA (kondisi terbalik). Keping return new Error( menggoda bagi pemula, namun return tidak menghentikan alur aplikasi melainkan hanya mengembalikan objek Error sebagai nilai — server tetap berjalan dalam keadaan cacat tanpa kunci rahasia. Keping 'JWT_SECRET opsional' keliru pesan penanganan.",
           },
         },
         {
@@ -3531,45 +3608,43 @@ export const nodeExpressTrack: Track = {
           id: "node-9-7",
           title: "Checklist Keamanan Pre-Deploy",
           explanation:
-            "Daftar periksa (*checklist*) keamanan pre-deploy adalah serangkaian verifikasi wajib sebelum backend dirilis ke server produksi: 1. Mematikan rincian stacktrace kesalahan (`NODE_ENV=production`), 2. Mengaktifkan Helmet dan whitelist CORS, 3. Menggunakan bcrypt untuk enkripsi kata sandi, 4. Memasang Rate Limiting, dan 5. Memastikan berkas `.env` aman. Membuat fungsi verifikasi otomatis seperti `checkSecurityReadiness(checksArray)` menggunakan `checksArray.every(c => c === true)` membantu memastikan seluruh prasyarat keamanan terpenuhi. Melakukan audit berkala menjaga integritas sistem backend secara berkelanjutan. Jebakan utama adalah terburu-buru melakukan rilis tanpa memverifikasi checklist keamanan.",
+            "Daftar periksa (*checklist*) keamanan pre-deploy adalah serangkaian verifikasi wajib sebelum backend dirilis ke server produksi. Salah satu langkah terpenting adalah mematikan header default `X-Powered-By: Express` menggunakan perintah `app.disable('x-powered-by')`. Header default tersebut membeberkan teknologi server yang kamu gunakan ke publik, memudahkan bot pemindai peretas untuk mencari celah eksploitasi spesifik versi Express. Menyembunyikan identitas framework (*security through obscurity* sebagai lapisan pelengkap) adalah praktik standar di setiap checklist produksi. Jebakan umum pemula adalah membiarkan header informasi server aktif sehingga target serangan mudah dipetakan.",
           example: {
-            code: "function checkSecurityReadiness(checks) {\n  return checks.every(c => c === true);\n}\nconsole.log(checkSecurityReadiness([true, true, true]));",
-            output: "true",
-            note: "Jalankan pengujian keamanan secara berkala. Catatan jujur: panel preview tidak menjalankan Node.js (kode ini butuh server dan modul bawaan Node), jadi tidak ada keluaran yang muncul di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus.",
+            code: "app.disable('x-powered-by');\nconsole.log('X-Powered-By header disabled');",
+            output: "X-Powered-By header disabled",
+            note: "Matikan fingerprinting server sebelum aplikasi dirilis ke publik. Catatan jujur: panel preview tidak menjalankan Node.js (kode ini butuh server dan modul bawaan Node), jadi tidak ada keluaran yang muncul di sini — yang diperiksa adalah kode yang kamu tulis, dan tesnya tetap bisa lulus.",
           },
           instruction:
-            "Buat fungsi `checkSecurityReadiness(checksArray)` yang mengembalikan `true` hanya bila SELURUH elemen boolean di dalam `checksArray` bernilai `true`. Pakai metode array yang menguji semua elemen sekaligus, lalu kembalikan hasilnya.",
-          starterCode: "// Tulis fungsi checkSecurityReadiness di bawah ini\n",
+            "Sebelum aplikasi di-deploy ke server produksi, matikan header informasi teknologi server yang membeberkan Express ke publik menggunakan metode `app.disable('x-powered-by')`.",
+          starterCode: "// Tulis penonaktifan x-powered-by di bawah ini\n",
           language: "text",
           tests: [
             {
-              pattern: "checksArray\\.every\\(",
-              message:
-                "Metode array yang menuntut SEMUA elemen memenuhi syarat adalah `.every()`. Jangan tertukar dengan `.some()`, yang cukup satu elemen lolos — untuk checklist keamanan, itu artinya rilis dianggap siap padahal empat dari lima syarat belum terpenuhi.",
+              pattern: "app\\.disable\\(",
+              message: "Gunakan metode Express `app.disable(...)` untuk menonaktifkan fitur internal.",
             },
             {
-              pattern: "return\\s+checksArray\\.every\\(",
-              message:
-                "Kembalikan hasilnya dengan `return`. `.every()` sudah menghasilkan boolean, jadi tidak perlu dibungkus `if` lagi.",
+              pattern: "['\"]x-powered-by['\"]",
+              message: "Tentukan nama konfigurasi header yang dimatikan: `'x-powered-by'`.",
             },
           ],
-          solution:
-            "function checkSecurityReadiness(checksArray) {\n  return checksArray.every(c => c === true);\n}",
+          solution: "app.disable('x-powered-by');",
           susunKode: {
             question:
-              "Susun fungsi verifikasi kesiapan checklist keamanan pre-deploy yang memastikan seluruh pemeriksaan bernilai true.",
+              "Rangkai penonaktifan header informasi framework Express menggunakan metode disable.",
             potongan: [
-              "function checkSecurityReadiness(checksArray) {",
-              "  return checksArray.every(c => c === true);",
-              "}",
+              "app",
+              ".disable(",
+              "'x-powered-by');",
             ],
             pengecoh: [
-              "  return checksArray.some(c => c === true);",
-              "  return checksArray.filter(c => c === true);",
+              ".enable(",
+              ".delete(",
+              "'powered-by');",
             ],
-            pemisah: "\n",
+            pemisah: "",
             explanation:
-              "Metode .every() memastikan SEMUA item dalam array memenuhi kriteria keamanan (semua bernilai true). Keping .some keliru karena .some mengembalikan true meskipun hanya satu elemen yang lulus. Keping .filter keliru karena mengembalikan array, bukan boolean.",
+              "Secara default, Express mengirimkan header HTTP X-Powered-By: Express pada setiap balasan server. Informasi ini memberi tahu peretas teknologi apa yang kamu gunakan sehingga mempermudah pencarian celah eksploitasi spesifik versi. Keping .enable( keliru karena justru mengaktifkan kembali header tersebut. Keping .delete( menggoda karena istilah hapus terdengar intuitif, tetapi metode Express untuk mematikan setting bawaan bernama .disable(). Keping 'powered-by' keliru nama konfigurasi karena standar header Express adalah x-powered-by.",
           },
         },
         {
