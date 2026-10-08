@@ -40,7 +40,7 @@ export const sqlTrack: Track = {
             "output": " id |     name     |     email      |       created_at       \n----+--------------+----------------+------------------------\n  1 | Ana Rahma    | ana@test.com   | 2026-07-28 20:10:00+07\n  2 | Budi Santoso | budi@test.com  | 2026-07-28 14:02:00+07\n  3 | Citra Dewi   | citra@test.com | 2026-07-27 09:31:00+07\n(3 rows)",
             "note": "Baris `(3 rows)` di bawah tabel adalah hitungan baris yang dikembalikan — biasakan membacanya, karena itu petunjuk pertama saat hasil query tidak sesuai dugaan. Tanda bintang mengambil SEMUA kolom, termasuk kolom yang belum ada saat kamu menulis query ini."
           },
-          "instruction": "Tulis query SQL sederhana untuk memilih semua data dari tabel `products`.",
+          "instruction": "Sebagai langkah awal eksplorasi katalog di database toko online, ambil seluruh kolom dari tabel `products` untuk memeriksa struktur kolom dan data awal yang tersedia.",
           "starterCode": "-- Tulis query SELECT di sini\n",
           "language": "text",
           "tests": [
@@ -80,7 +80,7 @@ export const sqlTrack: Track = {
             "output": " nama_produk | harga  \n-------------+--------\n Kopi Gayo   |  10000\n Teh Hijau   |  10000\n Kaos Polos  |  75000\n Gula Aren   |  18000\n Headset     | 150000\n(5 rows)",
             "note": "Perhatikan judul kolomnya: yang muncul `nama_produk` dan `harga`, bukan `name` dan `price`. Nama alias inilah yang nanti menjadi kunci di JSON respons API-mu, jadi memberi alias sama dengan menentukan kontrak data untuk tim frontend."
           },
-          "instruction": "Tulis query memilih kolom `name` dan `email` dari tabel `users`.",
+          "instruction": "Layanan notifikasi newsletter hanya membutuhkan nama dan alamat email pengguna untuk mengirimkan email blast. Tampilkan hanya kolom `name` dan `email` dari tabel `users` agar payload data efisien.",
           "starterCode": "-- Tulis query SELECT kolom di sini\n",
           "language": "text",
           "tests": [
@@ -118,7 +118,7 @@ export const sqlTrack: Track = {
             "output": "    name    | category | price \n------------+----------+-------\n Kopi Gayo  | Minuman  | 10000\n Kaos Polos | Fashion  | 75000\n(2 rows)",
             "note": "`BETWEEN` bersifat inklusif — batas 10000 dan 80000 ikut terambil, dan itu sumber selisih satu baris yang sering tidak disadari. `LIKE 'K%'` mencocokkan teks yang DIAWALI huruf K; tanda persen berarti \"boleh diikuti apa saja\"."
           },
-          "instruction": "Tulis perintah untuk mencari produk yang nilai harganya persis sama dengan 10000.",
+          "instruction": "Pelanggan di aplikasi sedang memfilter katalog untuk mencari item promo dengan harga pas 10000. Ambil seluruh data produk dari tabel `products` yang harganya tepat 10000.",
           "starterCode": "-- Tulis query WHERE di bawah ini\n",
           "language": "text",
           "tests": [
@@ -158,7 +158,7 @@ export const sqlTrack: Track = {
             "output": " id |     name     | status | age \n----+--------------+--------+-----\n  1 | Ana Rahma    | active |  27\n  2 | Budi Santoso | active |  31\n(2 rows)",
             "note": "Citra tidak muncul walau statusnya cocok, karena umurnya 16 — `AND` menuntut KEDUA syarat benar. Kalau kata itu diganti `OR`, ia ikut terambil, dan perbedaan satu kata inilah yang membedakan daftar yang benar dari daftar yang bocor."
           },
-          "instruction": "Ketikkan query untuk memfilter pengguna yang berstatus 'active' sekaligus berperan sebagai 'admin'.",
+          "instruction": "Sistem audit keamanan memerlukan daftar akun staf internal yang berhak masuk ke panel admin. Filter tabel `users` agar hanya menampilkan pengguna yang kolom `status`-nya bernilai 'active' sekaligus memiliki `role` bernilai 'admin'.",
           "starterCode": "-- Tulis query AND di sini\n",
           "language": "text",
           "tests": [
@@ -202,7 +202,7 @@ export const sqlTrack: Track = {
             "output": "    name    | price  \n------------+--------\n Headset    | 150000\n Kaos Polos |  75000\n Gula Aren  |  18000\n(3 rows)",
             "note": "Database mengurutkan SELURUH tabel dulu, baru memotong tiga teratas — bukan sebaliknya. Karena itu `ORDER BY` pada kolom tanpa index di tabel jutaan baris tetap mahal meski `LIMIT`-nya kecil."
           },
-          "instruction": "Ambil 10 pengguna terbaru dengan mengurutkan kolom created_at secara menurun.",
+          "instruction": "Halaman ringkasan dasbor admin menampilkan 10 pendaftar paling baru di sistem. Ambil seluruh data dari tabel `users`, urutkan berdasarkan waktu pendaftaran (`created_at`) dari yang paling baru ke paling lama, dan batasi hasilnya tepat 10 baris.",
           "starterCode": "-- Tulis query ORDER BY & LIMIT di sini\n",
           "language": "text",
           "tests": [
@@ -246,7 +246,7 @@ export const sqlTrack: Track = {
             "output": "  category  \n------------\n Makanan\n Elektronik\n Minuman\n Fashion\n(4 rows)",
             "note": "Perhatikan urutannya acak, tidak mengikuti urutan data asli: `DISTINCT` tidak menjanjikan urutan apa pun. Kalau daftar ini dipakai untuk dropdown, tambahkan `ORDER BY category` — kalau tidak, urutannya bisa berubah sendiri saat data bertambah."
           },
-          "instruction": "Ketikkan query untuk menampilkan daftar peran yang unik dari tabel pengguna.",
+          "instruction": "Formulir pendaftaran staf di antarmuka frontend membutuhkan daftar opsi peran unik yang tersedia di sistem tanpa duplikasi. Tampilkan daftar nilai unik dari kolom `role` pada tabel `users`.",
           "starterCode": "-- Tulis query DISTINCT di bawah ini\n",
           "language": "text",
           "tests": [
@@ -286,7 +286,7 @@ export const sqlTrack: Track = {
             "output": " id |     name     | deleted_at \n----+--------------+------------\n  1 | Ana Rahma    | \n  2 | Budi Santoso | \n(2 rows)",
             "note": "Kolom `deleted_at` tampil KOSONG, bukan bertulisan NULL — begitulah psql menampilkannya secara bawaan, dan itu mudah tertukar dengan string kosong. Ganti `IS NULL` menjadi `= NULL` pada query yang sama, hasilnya `(0 rows)` tanpa satu pun pesan error."
           },
-          "instruction": "Tampilkan seluruh pesanan yang nilai waktu pembayarannya tidak kosong (sudah dibayar).",
+          "instruction": "Bagian pergudangan hanya boleh memproses pesanan yang pembayarannya sudah terverifikasi. Ambil seluruh data dari tabel `orders` di mana kolom waktu pembayaran (`paid_at`) tidak kosong (bukan NULL).",
           "starterCode": "-- Tulis query IS NOT NULL di sini\n",
           "language": "text",
           "tests": [
@@ -326,10 +326,10 @@ export const sqlTrack: Track = {
               "type": "pilihan-ganda",
               "question": "Mengapa klausa `= NULL` tidak akan pernah menghasilkan data pada query SQL?",
               "choices": [
-                "Karena NULL di SQL berarti data tidak diketahui (Unknown), sehingga wajib diperiksa dengan `IS NULL`",
-                "Karena NULL adalah kata terlarang",
-                "Karena NULL hanya bisa dibaca oleh Python",
-                "Karena NULL bernilai angka nol"
+                "Karena di SQL, NULL merepresentasikan nilai yang 'tidak diketahui' (UNKNOWN) sehingga perbandingan kesamaan selalu bernilai UNKNOWN/falsy",
+                "Karena kata kunci NULL hanya diizinkan di dalam perintah INSERT",
+                "Karena PostgreSQL otomatis mengonversi NULL menjadi angka 0 saat dievaluasi",
+                "Karena perbandingan nilai kosong wajib menggunakan operator perbandingan =="
               ],
               "answerIndex": 0,
               "explanation": "NULL berarti 'nilainya tidak diketahui', bukan nol dan bukan string kosong. Membandingkan sesuatu yang tidak diketahui dengan nilai apa pun hasilnya juga tidak diketahui — bukan TRUE — sehingga barisnya tidak pernah lolos filter. Karena itu SQL menyediakan operator khusus IS NULL dan IS NOT NULL."
@@ -339,10 +339,10 @@ export const sqlTrack: Track = {
               "type": "pilihan-ganda",
               "question": "Atasanmu minta daftar 10 produk termahal dari tabel `products`. Query mana yang benar?",
               "choices": [
-                "SELECT * FROM products LIMIT 10 ORDER BY price DESC;",
-                "SELECT * FROM products ORDER BY price DESC LIMIT 10;",
-                "SELECT TOP 10 * FROM products ORDER BY price;",
-                "SELECT * FROM products WHERE price = MAX(price) LIMIT 10;"
+                "Untuk mencegah pengembalian kolom berukuran besar yang tidak perlu ke memori aplikasi dan menghemat bandwidth jaringan",
+                "Karena database relasional tidak mengizinkan tanda bintang pada query produksi",
+                "Karena SELECT * secara otomatis menghapus index dari memori server",
+                "Karena tanda bintang hanya bisa digunakan pada tabel yang memiliki kurang dari 5 kolom"
               ],
               "answerIndex": 1,
               "explanation": "Urutannya tetap: ORDER BY dulu, baru LIMIT. Database mengurutkan seluruh baris lebih dulu, baru memotong 10 teratas — kalau LIMIT ditulis duluan, sintaksnya error di MySQL maupun PostgreSQL. Kata kunci DESC dipakai karena termahal berarti dari besar ke kecil; tanpa DESC kamu justru mendapat 10 termurah."
@@ -352,10 +352,10 @@ export const sqlTrack: Track = {
               "type": "pilihan-ganda",
               "question": "Tabel `customers` punya 5.000 baris dan banyak pelanggan berasal dari kota yang sama. Kamu butuh daftar nama kota tanpa pengulangan. Query mana yang tepat?",
               "choices": [
-                "SELECT city FROM customers;",
-                "SELECT DISTINCT city FROM customers;",
-                "SELECT city FROM customers GROUP BY id;",
-                "SELECT UNIQUE(city) FROM customers;"
+                "DISTINCT",
+                "UNIQUE",
+                "GROUP_FILTER",
+                "DEDUPLICATE"
               ],
               "answerIndex": 1,
               "explanation": "DISTINCT membuang baris kembar dari hasil query sehingga setiap kota hanya muncul sekali. SELECT city biasa mengembalikan 5.000 baris penuh pengulangan, dan UNIQUE() bukan fungsi SQL standar. Alternatif yang juga benar adalah GROUP BY city — biasanya dipakai kalau kamu sekaligus ingin menghitung jumlah pelanggan per kota."
@@ -365,10 +365,10 @@ export const sqlTrack: Track = {
               "type": "pilihan-ganda",
               "question": "Fitur pencarian pelanggan harus menemukan semua nama yang diawali huruf 'Bu' (Budi, Budiman, Bunga). Kondisi WHERE mana yang tepat?",
               "choices": [
-                "WHERE name = 'Bu'",
-                "WHERE name LIKE 'Bu%'",
-                "WHERE name LIKE '%Bu'",
-                "WHERE name IN ('Bu')"
+                "Semua user ber-role admin (termasuk yang banned/inactive) akan ikut terambil karena AND dievaluasi sebelum OR",
+                "Database akan melempar SyntaxError karena melarang penggabungan AND dan OR",
+                "Semua user berstatus active akan otomatis diubah rolenya menjadi admin",
+                "Query akan berjalan lambat karena database melakukan Full Table Scan ganda"
               ],
               "answerIndex": 1,
               "explanation": "Operator LIKE dipakai untuk pencocokan pola, dan tanda % berarti 'karakter apa pun, sebanyak apa pun'. Karena % ditaruh di belakang, polanya berarti diawali 'Bu'. Kalau % ditaruh di depan artinya justru diakhiri 'Bu', sedangkan = 'Bu' hanya cocok untuk nama yang persis dua huruf itu."
@@ -379,10 +379,10 @@ export const sqlTrack: Track = {
               "question": "Query ini seharusnya mengambil buku ATAU alat tulis yang stoknya masih ada, tapi hasilnya ikut memuat buku berstok 0. Kenapa?",
               "code": "SELECT * FROM products\nWHERE kategori = 'buku' OR kategori = 'alat tulis' AND stok > 0;",
               "choices": [
-                "Karena OR tidak boleh dipakai bersama AND",
-                "Karena AND dievaluasi lebih dulu daripada OR, sehingga syarat stok hanya berlaku untuk 'alat tulis'",
-                "Karena kolom stok bertipe angka",
-                "Karena SELECT * tidak boleh dipakai bersama WHERE"
+                "Karena klausa WHERE dieksekusi lebih awal oleh query engine sebelum klausa SELECT dievaluasi",
+                "Karena alias hanya boleh digunakan untuk kolom bertipe data numerik",
+                "Karena nama alias hanya bisa dibaca oleh aplikasi frontend, bukan oleh server",
+                "Karena SQL standar mewajibkan alias diulang di klausa FROM"
               ],
               "answerIndex": 1,
               "explanation": "AND punya prioritas lebih tinggi daripada OR, jadi query itu dibaca sebagai kategori = 'buku' OR (kategori = 'alat tulis' AND stok > 0). Semua buku ikut lolos tanpa memandang stok. Perbaikannya: bungkus bagian OR dengan tanda kurung. Bug senyap seperti ini tidak memunculkan error dan sering lolos sampai production."
@@ -421,7 +421,7 @@ export const sqlTrack: Track = {
             "output": "CREATE TABLE\n\nERROR:  insert or update on table \"orders\" violates foreign key constraint \"orders_user_id_fkey\"\nDETAIL:  Key (user_id)=(999) is not present in table \"users\".",
             "note": "Pesan error itulah bukti FK bekerja. Tanpa klausul FOREIGN KEY, INSERT tadi SUKSES dan kamu baru sadar datanya rusak berbulan-bulan kemudian saat laporan tidak cocok."
           },
-          "instruction": "Buat tabel `profiles` yang memiliki kolom `id` bertipe INT sebagai primary key dan kolom `user_id` bertipe INT sebagai foreign key yang merujuk ke tabel `users` kolom `id`.",
+          "instruction": "Setiap pengguna sistem dapat memiliki profil akun pelengkap. Rancang tabel `profiles` dengan kolom `id` bertipe INT sebagai primary key, dan kolom `user_id` bertipe INT yang terikat sebagai foreign key ke tabel `users(id)`.",
           "starterCode": "-- Tulis query di sini\n",
           "language": "text",
           "tests": [
@@ -471,7 +471,7 @@ export const sqlTrack: Track = {
             "output": "   title    | kategori\n------------+----------\n Kopi Gayo  | Minuman\n Teh Hijau  | Minuman\n Kaos Polos | Fashion\n(3 rows)",
             "note": "Di tabel `products` sebenarnya ada 5 baris; dua di antaranya `category_id`-nya NULL sehingga tidak muncul sama sekali. Selisih jumlah baris seperti ini yang sering disalahartikan sebagai data hilang."
           },
-          "instruction": "Gunakan INNER JOIN untuk mengambil ID pesanan dan nama pengguna yang sesuai.",
+          "instruction": "Dasbor penjualan perlu menampilkan ID pesanan beserta nama pelanggan yang memesannya. Sambungkan tabel `orders` dan `users` menggunakan INNER JOIN berdasarkan kunci penghubung `user_id`, lalu tampilkan `orders.id` dan `users.name`.",
           "starterCode": "-- Tulis query INNER JOIN di bawah ini\n",
           "language": "text",
           "tests": [
@@ -516,7 +516,7 @@ export const sqlTrack: Track = {
             "output": "  name  | rating\n--------+--------\n Ana    |      5\n Ana    |      4\n Budi   |      3\n Citra  | [NULL]\n(4 rows)",
             "note": "Ana muncul dua kali karena punya dua ulasan — LEFT JOIN memang bisa melipatgandakan baris kiri. Citra muncul dengan rating NULL: itu tanda ia belum pernah menulis ulasan, bukan tanda datanya rusak."
           },
-          "instruction": "Gunakan LEFT JOIN untuk menampilkan nama pengguna dan ID pesanannya. Pastikan pengguna tanpa pesanan tetap muncul.",
+          "instruction": "Tim pemasaran ingin melihat daftar semua pelanggan terdaftar beserta ID pesanannya, termasuk pengguna baru yang belum pernah belanja sekalipun. Gunakan LEFT JOIN antara `users` dan `orders` untuk menampilkan `users.name` dan `orders.id` tanpa menghilangkan pelanggan tanpa pesanan.",
           "starterCode": "-- Tulis query LEFT JOIN di sini\n",
           "language": "text",
           "tests": [
@@ -732,10 +732,10 @@ export const sqlTrack: Track = {
               "type": "pilihan-ganda",
               "question": "Jenis JOIN apa yang mengembalikan SELURUH baris dari tabel sebelah kiri, meskipun tidak ada pasangan data yang cocok di tabel kanan?",
               "choices": [
-                "INNER JOIN",
-                "LEFT JOIN",
-                "RIGHT JOIN",
-                "FULL JOIN"
+                "INNER JOIN hanya mengembalikan baris yang cocok di kedua tabel, sedangkan LEFT JOIN mempertahankan seluruh baris tabel kiri meski tidak ada pasangan",
+                "INNER JOIN hanya bisa menggabungkan maksimal 2 tabel, sedangkan LEFT JOIN tidak terbatas",
+                "LEFT JOIN secara otomatis mengurutkan hasil data dari kecil ke besar",
+                "INNER JOIN mengunci tabel selama query berjalan, sedangkan LEFT JOIN tidak"
               ],
               "answerIndex": 1,
               "explanation": "LEFT JOIN mempertahankan seluruh baris tabel kiri dan mengisi NULL pada kolom kanan yang tidak berpasangan. Ini yang kamu pakai saat ingin 'semua pelanggan, beserta pesanannya kalau ada'. INNER JOIN akan diam-diam membuang pelanggan yang belum pernah memesan."
@@ -745,10 +745,10 @@ export const sqlTrack: Track = {
               "type": "pilihan-ganda",
               "question": "Tabel `orders` punya kolom `user_id` yang menunjuk ke kolom `id` di tabel `users`. Apa sebutan kolom itu, dan apa untungnya dideklarasikan resmi ke database?",
               "choices": [
-                "Primary key — agar setiap pesanan punya identitas unik",
-                "Foreign key — database ikut menolak pesanan yang menunjuk user tidak ada",
-                "Index — semata-mata agar query lebih cepat",
-                "Alias — supaya nama kolom lebih pendek"
+                "Kondisi WHERE membuang baris yang bernilai NULL dari tabel kanan, sehingga secara tidak sengaja mengubah hasil menjadi setara INNER JOIN",
+                "Database otomatis membatalkan eksekusi query karena pelanggaran sintaks ANSI SQL",
+                "Semua baris tabel kiri otomatis digandakan sebanyak dua kali",
+                "Query akan mengalami deadlock jika dijalankan di dalam transaksi"
               ],
               "answerIndex": 1,
               "explanation": "Kolom yang menunjuk ke primary key tabel lain disebut foreign key. Kalau dideklarasikan dengan FOREIGN KEY (user_id) REFERENCES users(id), database ikut menjaga integritas data: pesanan dengan user_id yang tidak ada akan ditolak, dan user yang masih punya pesanan tidak bisa dihapus sembarangan. Tanpa itu, data yatim bisa masuk tanpa ketahuan."
@@ -758,10 +758,10 @@ export const sqlTrack: Track = {
               "type": "pilihan-ganda",
               "question": "Laporan penjualan memakai `orders INNER JOIN users`. Ada 120 pesanan, 8 di antaranya dari akun tamu sehingga `user_id`-nya NULL. Berapa baris yang muncul di laporan?",
               "choices": [
-                "120 baris, karena INNER JOIN mengambil semua pesanan",
-                "112 baris, karena pesanan tanpa pasangan di tabel users tidak ikut",
-                "128 baris",
-                "0 baris, karena ada NULL"
+                "Menghubungkan tabel ke dirinya sendiri (Self Join) untuk membandingkan baris pada tabel yang sama",
+                "Membuat backup duplikat tabel secara otomatis",
+                "Menggabungkan dua database yang berbeda pada satu server",
+                "Membuat indeks sekunder otomatis pada foreign key"
               ],
               "answerIndex": 1,
               "explanation": "INNER JOIN hanya mengembalikan baris yang punya pasangan di KEDUA tabel, jadi 8 pesanan tamu itu hilang dari laporan tanpa peringatan apa pun dan angka penjualanmu jadi lebih kecil dari kenyataan. Kalau semua pesanan harus ikut, pakai LEFT JOIN dari orders."
@@ -771,10 +771,10 @@ export const sqlTrack: Track = {
               "type": "pilihan-ganda",
               "question": "Tim marketing minta daftar pelanggan yang BELUM PERNAH memesan sama sekali. Pola query mana yang tepat?",
               "choices": [
-                "INNER JOIN orders lalu WHERE orders.id IS NULL",
-                "LEFT JOIN orders lalu WHERE orders.id IS NULL",
-                "RIGHT JOIN orders lalu WHERE customers.id IS NULL",
-                "INNER JOIN orders lalu ORDER BY orders.id"
+                "Tabel junction (penghubung) yang menyimpan pasangan foreign key dari kedua tabel entitas",
+                "Menambahkan 10 kolom foreign key terpisah di tabel utama",
+                "Menyimpan seluruh ID relasi dalam bentuk string teks dipisah tanda koma",
+                "Menggunakan database NoSQL terpisah khusus untuk relasi tersebut"
               ],
               "answerIndex": 1,
               "explanation": "Polanya disebut anti-join: LEFT JOIN membawa semua pelanggan, lalu pelanggan tanpa pasangan pesanan akan berkolom NULL — itulah yang disaring dengan WHERE orders.id IS NULL. INNER JOIN mustahil dipakai di sini karena ia justru membuang pelanggan tanpa pesanan sejak awal."
@@ -784,10 +784,10 @@ export const sqlTrack: Track = {
               "type": "pilihan-ganda",
               "question": "Satu buku bisa ditulis banyak penulis, dan satu penulis bisa menulis banyak buku. Bagaimana relasi ini dimodelkan dengan benar?",
               "choices": [
-                "Tambah kolom author_id di tabel books",
-                "Tambah kolom book_id di tabel authors",
-                "Buat tabel perantara book_authors berisi book_id dan author_id",
-                "Simpan daftar nama penulis dalam satu kolom teks dipisah koma"
+                "Terjadi duplikasi baris tabel kiri karena satu baris kiri cocok dengan beberapa baris kanan (Cartesian multiplication pada relasi 1:N)",
+                "Database otomatis menghapus baris yang memiliki nilai kembar",
+                "Fungsi SUM() otomatis menghitung nilai baris yang bernilai NULL",
+                "Hasil query mengalami pemotongan data akibat batas memori buffer"
               ],
               "answerIndex": 2,
               "explanation": "Relasi many-to-many butuh junction table yang menyimpan pasangan id dari kedua sisi. Satu kolom author_id di books hanya memuat satu penulis per buku, sedangkan menyimpan nama dipisah koma membuat data mustahil di-JOIN, difilter, atau dihitung — pelanggaran bentuk normal pertama yang sering ditemukan di database warisan."
@@ -826,7 +826,7 @@ export const sqlTrack: Track = {
             "output": " baris | punya_telepon | rerata_umur\n-------+---------------+-------------\n    50 |            38 |        27.4\n(1 row)",
             "note": "Selisih 50 dan 38 bukan bug: 12 pengguna kolom `phone`-nya NULL. Kalau kamu melaporkan \"38 pengguna\" sebagai jumlah pengguna, angkanya salah 24%."
           },
-          "instruction": "Tulis query untuk menjumlahkan seluruh amount pada tabel payments dan beri alias total.",
+          "instruction": "Laporan keuangan harian membutuhkan angka total perputaran uang. Hitung jumlah total nilai pembayaran dari kolom `amount` pada tabel `payments`, dan beri label kolom hasilnya sebagai `total`.",
           "starterCode": "-- Tulis query SUM di bawah ini\n",
           "language": "text",
           "tests": [
@@ -868,7 +868,7 @@ export const sqlTrack: Track = {
             "output": "  tanggal   | pesanan\n------------+---------\n 2026-07-25 |       4\n 2026-07-26 |      11\n 2026-07-28 |       7\n(3 rows)",
             "note": "Perhatikan 27 Juli tidak ada sama sekali, bukan bernilai 0. Grafik harian yang dibangun langsung dari hasil ini akan melompati tanggal kosong — di aplikasi nyata, deretan tanggalnya dibuat lebih dulu lalu di-LEFT JOIN ke hasil agregasi."
           },
-          "instruction": "Kelompokkan pesanan berdasarkan statusnya dan hitung jumlah masing-masing grup.",
+          "instruction": "Manajer operasional ingin memantau persebaran status pesanan (pending, paid, cancelled). Kelompokkan tabel `orders` berdasarkan kolom `status`, lalu hitung jumlah total pesanan untuk masing-masing status tersebut.",
           "starterCode": "-- Tulis query GROUP BY di sini\n",
           "language": "text",
           "tests": [
@@ -913,7 +913,7 @@ export const sqlTrack: Track = {
             "output": "  category  | jumlah\n------------+--------\n Minuman    |      6\n Fashion    |      3\n(2 rows)",
             "note": "Dua penyaring dipakai bersamaan dan itu memang cara yang benar: `WHERE` membuang produk nonaktif dulu (murah), `HAVING` baru membuang kategori yang isinya sedikit (setelah dihitung)."
           },
-          "instruction": "Query di editor sudah menghitung jumlah pesanan per status. Tambahkan penyaring yang menyisakan hanya status dengan lebih dari 5 pesanan. Perhatikan penyaring ini bekerja pada hasil hitungan, bukan pada baris satu per satu — jadi bukan `WHERE`.",
+          "instruction": "Kueri di editor sudah menghitung jumlah pesanan per status. Bagian logistik hanya ingin memantau status pesanan yang menumpuk banyak. Tambahkan penyaring agregasi yang hanya menyisakan kelompok status dengan jumlah pesanan lebih dari 5.",
           "starterCode": "SELECT status, COUNT(*) AS jumlah\nFROM orders\nGROUP BY status\n-- lengkapi di bawah ini:\n",
           "language": "text",
           "tests": [
@@ -947,7 +947,7 @@ export const sqlTrack: Track = {
             "output": " name  |     email\n-------+----------------\n Ana   | ana@test.com\n Citra | citra@test.com\n(2 rows)\n\n-- kalau IN diganti '=' pada subquery yang sama:\nERROR:  more than one row returned by a subquery used as an expression",
             "note": "Pilih operatornya berdasarkan jumlah baris yang dikembalikan subquery: satu nilai → `>`/`<`/`=`, banyak nilai → `IN`. Baris ERROR di atas adalah keluaran nyata saat aturan itu dilanggar."
           },
-          "instruction": "Ambil produk yang harganya di atas rata-rata harga seluruh produk. Nilai rata-ratanya belum kamu ketahui, jadi harus dihitung di dalam query yang sama sebagai subquery di bagian penyaring.",
+          "instruction": "Katalog ingin menandai produk-produk premium yang harganya di atas rata-rata harga seluruh produk di toko. Ambil `name` dan `price` dari tabel `products` yang harganya melebihi nilai rata-rata harga produk (gunakan subquery untuk menghitung rata-ratanya).",
           "starterCode": "SELECT name, price\nFROM products\n-- lengkapi penyaringnya di bawah ini:\n",
           "language": "text",
           "tests": [
@@ -985,7 +985,7 @@ export const sqlTrack: Track = {
             "output": "    name    | belanja \n------------+---------\n Ana Rahma  | 1550000\n Citra Dewi | 1200000\n(2 rows)",
             "note": "CTE bukan tabel sungguhan: ia hidup hanya selama query ini berjalan. Nilainya ada pada keterbacaan — bagian penghitungan selesai lebih dulu di atas, lalu query utama tinggal memakainya seperti tabel biasa."
           },
-          "instruction": "Tim pemasaran minta daftar pengguna yang total belanjanya melebihi 1.000.000. Susun query bertahap: buat blok bernama `HighSpenders` yang menghitung total `amount` per `user_id` dari tabel `orders` dan hanya menyisakan yang melewati batas itu, lalu ambil data lengkap penggunanya dari tabel `users` berdasarkan blok tersebut.",
+          "instruction": "Program loyalitas ingin mendata pengguna prioritas yang akumulasi belanjanya di atas 1.000.000. Susun kueri bertahap memakai CTE bernama `HighSpenders` untuk mengagregasi `user_id` yang total belanjanya melebihi 1.000.000, lalu di kueri utama ambil data lengkap pengguna dari tabel `users` yang cocok dengan kelompok tersebut.",
           "starterCode": "-- Tulis query bertahap (CTE) di sini\n",
           "language": "text",
           "tests": [
@@ -1034,7 +1034,7 @@ export const sqlTrack: Track = {
             "output": "   name    |  kelas\n-----------+----------\n Laptop    | Premium\n Headset   | Menengah\n Teh Hijau | Ekonomis\n(3 rows)",
             "note": "Kondisi diperiksa dari atas ke bawah, jadi Laptop berhenti di cabang pertama dan tidak pernah diuji ke cabang kedua. Kalau urutannya dibalik (100000 di atas), semua produk mahal akan salah dilabeli 'Menengah'."
           },
-          "instruction": "Tabel `students` punya kolom `score` berisi angka, dan laporan butuh label yang bisa dibaca orang. Tambahkan satu kolom hasil bernama `status` yang bernilai `'Lulus'` bila score minimal 75, dan `'Gagal'` untuk sisanya.",
+          "instruction": "Sistem penilaian akademik perlu mengubah angka ujian menjadi predikat kelulusan. Tampilkan `name` dan `score` dari tabel `students`, serta tambahkan kolom kondisional bernama `status` yang bernilai 'Lulus' jika nilai minimal 75, dan 'Gagal' untuk nilai lainnya.",
           "starterCode": "-- Tambahkan kolom hasil bernama status di query ini\nSELECT name, score\nFROM students;\n",
           "language": "text",
           "tests": [
@@ -1082,7 +1082,7 @@ export const sqlTrack: Track = {
             "output": "   name    | category   | price  | urutan\n-----------+------------+--------+--------\n Laptop    | Elektronik | 850000 |      1\n Headset   | Elektronik | 120000 |      2\n Kopi Gayo | Minuman    |  85000 |      1\n Teh Hijau | Minuman    |  25000 |      2\n(4 rows)",
             "note": "Nomor kembali ke 1 saat kategori berganti — itu efek PARTITION BY. Untuk mengambil hanya juara tiap kategori, taruh query ini di dalam CTE lalu `WHERE urutan = 1` di luarnya; menyaringnya langsung di sini akan ditolak database."
           },
-          "instruction": "Tabel `payments` perlu ditampilkan bernomor urut untuk keperluan halaman bernomor. Tambahkan satu kolom bernama `urutan` yang memberi nomor tiap baris berdasarkan `id` dari kecil ke besar, tanpa mengurangi jumlah baris hasil.",
+          "instruction": "Tampilan daftar mutasi pembayaran butuh penomoran baris berurut tanpa menghilangkan rincian tiap transaksi. Tampilkan `id` dan `amount` dari tabel `payments`, lalu gunakan window function untuk menambahkan kolom bernama `urutan` yang memberi nomor tiap baris terurut berdasarkan `id` secara menaik.",
           "starterCode": "-- Tambahkan kolom penomoran bernama urutan\nSELECT id, amount\nFROM payments;\n",
           "language": "text",
           "tests": [
@@ -1130,10 +1130,10 @@ export const sqlTrack: Track = {
               "type": "pilihan-ganda",
               "question": "Apa perbedaan utama klausa `HAVING` dibanding `WHERE` di SQL?",
               "choices": [
-                "WHERE menyaring data sebelum agregasi, sedangkan HAVING menyaring hasil agregasi (GROUP BY)",
-                "HAVING hanya bisa dipakai di MySQL",
-                "WHERE tidak bisa memfilter string",
-                "Tidak ada perbedaan"
+                "WHERE menyaring baris sebelum pengelompokan data, sedangkan HAVING menyaring hasil kelompok setelah agregasi dihitung",
+                "WHERE hanya bisa digunakan untuk teks, sedangkan HAVING hanya untuk angka",
+                "HAVING dieksekusi lebih dulu oleh database engine dibanding WHERE",
+                "Keduanya identik dan bisa saling menggantikan dalam semua kueri SQL"
               ],
               "answerIndex": 0,
               "explanation": "WHERE bekerja pada baris mentah sebelum dikelompokkan, sementara HAVING bekerja pada hasil kelompok. Karena itu kamu tidak bisa menulis WHERE COUNT(*) > 5 — pada saat WHERE dievaluasi, COUNT belum dihitung. Filter yang tidak melibatkan fungsi agregat sebaiknya tetap ditaruh di WHERE agar barisnya berkurang lebih dulu dan query lebih ringan."
@@ -1143,10 +1143,10 @@ export const sqlTrack: Track = {
               "type": "pilihan-ganda",
               "question": "Tabel `employees` punya 50 baris, tapi 12 karyawan belum mengisi kolom `phone` (NULL). Berapa hasil `COUNT(*)` dan `COUNT(phone)`?",
               "choices": [
-                "Keduanya 50",
-                "COUNT(*) = 50 dan COUNT(phone) = 38",
-                "Keduanya 38",
-                "COUNT(*) = 38 dan COUNT(phone) = 50"
+                "Karena satu user_id bisa memiliki banyak order_date berbeda, sehingga database tidak tahu baris tanggal mana yang harus ditampilkan untuk satu baris agregat",
+                "Karena fungsi SUM() hanya boleh dijalankan pada tabel yang tidak memiliki primary key",
+                "Karena PostgreSQL dan MySQL melarang penggunaan klausa GROUP BY pada kolom integer",
+                "Karena klausa ORDER BY wajib ditulis sebelum GROUP BY"
               ],
               "answerIndex": 1,
               "explanation": "COUNT(*) menghitung baris, sedangkan COUNT(kolom) hanya menghitung baris yang kolomnya TIDAK NULL. Perbedaan ini jadi sumber laporan yang salah: memakai COUNT(phone) untuk 'jumlah karyawan' diam-diam mengecualikan yang datanya belum lengkap. Fungsi agregat lain seperti AVG dan SUM juga mengabaikan NULL."
@@ -1156,10 +1156,10 @@ export const sqlTrack: Track = {
               "type": "pilihan-ganda",
               "question": "Query `SELECT kategori, nama, SUM(harga) FROM produk GROUP BY kategori;` ditolak PostgreSQL. Apa sebabnya?",
               "choices": [
-                "SUM tidak bisa dipakai bersama GROUP BY",
-                "Kolom `nama` tidak diagregasi dan tidak ikut GROUP BY, sehingga nilainya ambigu",
-                "GROUP BY harus ditulis sebelum SELECT",
-                "Nama tabel harus jamak"
+                "COUNT(*) menghitung seluruh baris fisik termasuk yang NULL, sedangkan COUNT(kolom) mengabaikan baris di mana kolom tersebut NULL",
+                "COUNT(*) berjalan jauh lebih lambat karena membaca seluruh kolom ke memori",
+                "COUNT(kolom) otomatis membuang seluruh nilai duplikat pada tabel",
+                "COUNT(*) hanya menghitung baris yang bernilai genap"
               ],
               "answerIndex": 1,
               "explanation": "Aturan emas GROUP BY: setiap kolom di SELECT harus berupa kolom pengelompok atau berada di dalam fungsi agregat. Satu kategori berisi banyak produk, jadi database tidak tahu nama mana yang harus ditampilkan. Solusinya: ikutkan nama ke GROUP BY, atau agregasi (misal MIN(nama)). MySQL versi lama menerima query ini dan diam-diam memilih nilai acak — sumber bug yang sulit dilacak."
@@ -1169,10 +1169,10 @@ export const sqlTrack: Track = {
               "type": "pilihan-ganda",
               "question": "Kamu perlu mengambil pelanggan yang total belanjanya di atas rata-rata seluruh pelanggan. Struktur mana yang paling tepat dan mudah dibaca?",
               "choices": [
-                "Dua query terpisah, lalu angkanya disalin manual ke query kedua",
-                "CTE `WITH total AS (...)` untuk menghitung total per pelanggan, lalu difilter memakai subquery rata-rata",
-                "ORDER BY total DESC lalu ambil separuh teratas",
-                "Menambahkan kolom baru bernama di_atas_rata_rata ke tabel"
+                "Membuat query kompleks lebih terstruktur dan mudah dibaca deklaratif dari atas ke bawah",
+                "Otomatis mengompresi hasil kueri ke dalam format JSON",
+                "Mencegah database server mengalami lonjakan penggunaan CPU",
+                "Menghilangkan kebutuhan klausa WHERE pada kueri utama"
               ],
               "answerIndex": 1,
               "explanation": "CTE (WITH) memberi nama pada hasil antara sehingga query bertingkat tetap terbaca dari atas ke bawah, dan hasilnya selalu terbaru karena dihitung ulang setiap dijalankan. Menyalin angka manual membuat laporan basi begitu ada transaksi baru, dan 'separuh teratas' bukan definisi di atas rata-rata."
@@ -1182,10 +1182,10 @@ export const sqlTrack: Track = {
               "type": "pilihan-ganda",
               "question": "Kamu ingin memberi nomor urut peringkat penjualan per wilayah, dan baris detail tiap transaksi tetap harus tampil. Fitur SQL apa yang tepat?",
               "choices": [
-                "GROUP BY wilayah",
-                "Window function ROW_NUMBER() OVER (PARTITION BY wilayah ORDER BY total DESC)",
-                "DISTINCT wilayah",
-                "HAVING COUNT(*) = 1"
+                "Window function menghitung agregasi baris per baris tanpa meringkas jumlah baris hasil, sedangkan GROUP BY menciutkan baris menjadi ringkasan kelompok",
+                "Window function hanya bisa digunakan pada database SQLite",
+                "GROUP BY tidak mendukung pengurutan dengan ORDER BY",
+                "Window function otomatis menghapus baris yang memiliki nilai kembar"
               ],
               "answerIndex": 1,
               "explanation": "Window function menghitung nilai per kelompok TANPA meringkas barisnya — setiap transaksi tetap muncul, dengan tambahan kolom peringkat. GROUP BY sebaliknya: ia menciutkan banyak baris menjadi satu per wilayah, sehingga detail transaksinya hilang. Inilah alasan window function jadi materi wajib untuk kerja analitik."
@@ -1224,7 +1224,7 @@ export const sqlTrack: Track = {
             "output": "INSERT 0 2",
             "note": "Angka 2 pada keluaran psql adalah jumlah baris yang benar-benar masuk — biasakan membacanya. Kalau email `budi@test.com` sudah ada dan kolomnya UNIQUE, keluarannya berubah menjadi ERROR dan Ana pun tidak tersimpan."
           },
-          "instruction": "Tambahkan data ke tabel categories dengan nama Elektronik.",
+          "instruction": "Katalog baru saja membuka departemen perangkat elektronik. Tambahkan baris data baru ke tabel `categories` dengan nilai kolom `name` adalah 'Elektronik'.",
           "starterCode": "-- Tulis perintah INSERT di bawah ini\n",
           "language": "text",
           "tests": [
@@ -1268,7 +1268,7 @@ export const sqlTrack: Track = {
             "output": " id | stock\n----+-------\n  7 |    12\n(1 row)\n\nUPDATE 1",
             "note": "`UPDATE 1` berarti tepat satu baris berubah. Kalau yang muncul `UPDATE 5000`, kamu baru saja mengubah seluruh tabel — dan itu momen untuk segera menjalankan ROLLBACK bila kamu berada di dalam transaksi."
           },
-          "instruction": "Perbarui price menjadi 20000 untuk tabel products di mana id sama dengan 1.",
+          "instruction": "Harga barang dengan ID 1 mengalami penyesuaian tarif menjadi 20000. Perbarui kolom `price` pada tabel `products` untuk produk yang memiliki `id = 1` tanpa mengubah produk lainnya.",
           "starterCode": "-- Tulis query UPDATE di sini\n",
           "language": "text",
           "tests": [
@@ -1308,7 +1308,7 @@ export const sqlTrack: Track = {
             "output": "BEGIN\nDELETE 18432\nROLLBACK",
             "note": "Angka 18432 muncul SEBELUM keputusan akhir — itulah gunanya membungkus dengan BEGIN. Dengan TRUNCATE kamu tidak mendapat angka ini, dan pada banyak konfigurasi tidak ada yang bisa dibatalkan."
           },
-          "instruction": "Hapus data dari tabel logs di mana created_at lebih kecil dari tanggal 2024-01-01.",
+          "instruction": "Sistem audit membersihkan rekaman data usang sebelum pergantian tahun. Hapus seluruh rekaman dari tabel `logs` yang tanggal pembuatannya (`created_at`) tercatat sebelum tanggal '2024-01-01'.",
           "starterCode": "-- Tulis query DELETE di sini\n",
           "language": "text",
           "tests": [
@@ -1352,8 +1352,8 @@ export const sqlTrack: Track = {
             "output": "BEGIN\nUPDATE 1\nUPDATE 0        <-- akun 99 tidak ada!\n balance\n---------\n    9900\n(1 row)\nROLLBACK",
             "note": "`UPDATE 0` adalah tanda bahaya: uang keluar dari akun 1 tapi tidak masuk ke mana pun. Karena masih di dalam transaksi, `ROLLBACK` memulihkan saldo ke 10.000. Kalau di sini kamu menulis COMMIT, seratus rupiah itu hilang selamanya."
           },
-          "instruction": "Ketikkan perintah untuk membatalkan (rollback) transaksi saat ini.",
-          "starterCode": "-- Tulis perintah pembatalan transaksi di sini\n",
+          "instruction": "Skrip transfer dana mendeteksi saldo pengirim tidak mencukupi setelah pemotongan pertama dieksekusi. Batalkan seluruh perubahan yang belum tersimpan permanen pada blok transaksi aktif dengan perintah TCL yang sesuai.",
+          "starterCode": "-- Transaksi terputus di tengah jalan; batalkan seluruh perubahannya:\n",
           "language": "text",
           "tests": [
             {
@@ -1387,7 +1387,7 @@ export const sqlTrack: Track = {
             "output": "BEGIN\nUPDATE 1\nERROR:  insert or update on table \"order_items\" violates foreign key constraint \"order_items_order_id_fkey\"\nROLLBACK\n\n-- qty kembali seperti semula, tidak berkurang",
             "note": "PostgreSQL menandai transaksi yang error sebagai gagal, sehingga `COMMIT` di akhir justru dijalankan sebagai ROLLBACK. Itu Atomicity yang bekerja: stok tidak berkurang untuk pesanan yang tidak pernah ada."
           },
-          "instruction": "Buat blok transaksi (mulai dengan BEGIN). Kurangi saldo `balance` sebesar 500 dari tabel `accounts` dengan `id` = 1, lalu akhiri dengan COMMIT.",
+          "instruction": "Implementasikan penarikan dana perbankan yang aman: buka transaksi dengan BEGIN, kurangi nilai kolom `balance` sebesar 500 pada tabel `accounts` untuk akun ber-`id = 1`, lalu kunci perubahan secara permanen dengan COMMIT.",
           "starterCode": "-- Mulai transaksi dan update balance\n",
           "language": "text",
           "tests": [
@@ -1400,7 +1400,7 @@ export const sqlTrack: Track = {
               "message": "Kurangi saldo dengan rumus `balance = balance - 500` dan pastikan klausul `WHERE id = 1` disertakan."
             },
             {
-              "pattern": "COMMIT\s*(;)?",
+              "pattern": "COMMIT\\s*(;)?",
               "message": "Tutup blok transaksi dengan `COMMIT` untuk menyimpan perubahan permanen."
             }
           ],
@@ -1431,7 +1431,7 @@ export const sqlTrack: Track = {
             "output": "INSERT 0 1\nINSERT 0 1\n\n  key  | value\n-------+-------\n theme | dark\n(1 row)",
             "note": "Dijalankan dua kali, barisnya tetap satu — itulah sifat yang dicari (*idempotent*). Tanpa ON CONFLICT, perintah kedua berhenti dengan ERROR duplicate key."
           },
-          "instruction": "Skrip impor pengguna dijalankan ulang setiap malam, dan sekarang gagal dengan `duplicate key` begitu menemui email yang sudah ada. Tambahkan klausul PostgreSQL yang membuat bentrok pada kolom `email` dilewati saja tanpa error dan tanpa mengubah baris lama.",
+          "instruction": "Skrip sinkronisasi akun harian sering gagal karena error duplikasi data email yang sudah terdaftar. Sisipkan pengguna bernama 'Ana' dengan email 'ana@test.com' ke tabel `users`, dan tambahkan klausa penanganan konflik PostgreSQL agar operasi dilewati tanpa error (`DO NOTHING`) jika terjadi bentrok pada kolom `email`.",
           "starterCode": "-- Skrip impor harian; kalau email sudah ada, jangan error\nINSERT INTO users (name, email) VALUES ('Ana', 'ana@test.com')\n-- lengkapi di bawah ini:\n",
           "language": "text",
           "tests": [
@@ -1469,7 +1469,7 @@ export const sqlTrack: Track = {
             "output": " id |          created_at\n----+-------------------------------\n 42 | 2026-07-28 09:14:22.881+07\n(1 row)\nINSERT 0 1",
             "note": "Nilai 42 dan waktunya dibuat oleh database, bukan oleh aplikasimu — dan hanya lewat RETURNING kamu mengetahuinya tanpa query tambahan."
           },
-          "instruction": "Sisipkan tags bernama Tech dan gunakan perintah RETURNING untuk mendapatkan seluruh datanya.",
+          "instruction": "Setelah membuat tag artikel baru bernama 'Tech' di tabel `tags`, backend butuh ID dan metadata yang baru saja dibuat oleh database tanpa kueri SELECT kedua. Tulis perintah INSERT yang langsung mengembalikan seluruh baris data yang baru dibuat menggunakan klausul `RETURNING *`.",
           "starterCode": "-- Tulis RETURNING * di bawah ini\n",
           "language": "text",
           "tests": [
@@ -1513,10 +1513,10 @@ export const sqlTrack: Track = {
               "type": "pilihan-ganda",
               "question": "Perintah SQL mana yang membatalkan seluruh perubahan sejak transaksi dimulai (BEGIN)?",
               "choices": [
-                "COMMIT",
-                "ROLLBACK",
-                "RESET",
-                "UNDO"
+                "Seluruh baris di tabel akan terupdate karena tanpa WHERE tidak ada batasan penyaringan",
+                "Database akan otomatis menolak kueri dengan error missing where clause",
+                "Hanya baris pertama yang akan diperbarui nilainya",
+                "Database akan otomatis membatalkan kueri dan melakukan rollback"
               ],
               "answerIndex": 1,
               "explanation": "ROLLBACK mengembalikan kondisi database seperti sebelum transaksi dimulai. Selama belum COMMIT, perubahanmu hanya terlihat di sesi sendiri — inilah jaring pengaman saat kamu menjalankan UPDATE besar di production."
@@ -1526,10 +1526,10 @@ export const sqlTrack: Track = {
               "type": "pilihan-ganda",
               "question": "Kamu perlu mengosongkan tabel `logs` berisi 10 juta baris di server development. Apa perbedaan penting DELETE dan TRUNCATE di sini?",
               "choices": [
-                "Keduanya identik, hanya beda nama",
-                "TRUNCATE jauh lebih cepat karena tidak menghapus baris satu per satu, tapi tidak bisa memakai WHERE dan tidak bisa di-rollback di sebagian database",
-                "DELETE menghapus struktur tabel, TRUNCATE hanya isinya",
-                "TRUNCATE hanya bekerja pada tabel kosong"
+                "Atomicity (Semua berhasil atau semua dibatalkan sekaligus)",
+                "Consistency",
+                "Isolation",
+                "Durability"
               ],
               "answerIndex": 1,
               "explanation": "DELETE menghapus baris satu per satu dan mencatat semuanya di log transaksi, sehingga lambat untuk tabel besar tapi bisa disaring dengan WHERE dan dibatalkan. TRUNCATE mengosongkan tabel sekaligus, jauh lebih cepat, mereset AUTO_INCREMENT, tapi tidak menerima WHERE. Keduanya berbeda dari DROP TABLE yang ikut menghapus struktur tabelnya."
@@ -1539,10 +1539,10 @@ export const sqlTrack: Track = {
               "type": "pilihan-ganda",
               "question": "Kamu menjalankan `UPDATE users SET status = 'aktif';` di production dan lupa klausa WHERE. Apa yang terjadi dan apa kebiasaan yang mencegahnya?",
               "choices": [
-                "Database menolak query tanpa WHERE secara otomatis",
-                "Seluruh baris ikut berubah; biasakan jalankan SELECT dulu dengan filter yang sama, dan bungkus dalam BEGIN sebelum COMMIT",
-                "Hanya baris pertama yang berubah",
-                "Perubahan otomatis kembali setelah 5 menit"
+                "TRUNCATE mengosongkan tabel secara instan pada level storage tanpa mencatat log per baris, sedangkan DELETE menghapus baris satu per satu dengan logging",
+                "DELETE tidak bisa menggunakan klausa WHERE",
+                "TRUNCATE hanya bisa digunakan pada tabel yang berukuran di bawah 10 MB",
+                "Keduanya memiliki kecepatan dan cara kerja internal yang identik"
               ],
               "answerIndex": 1,
               "explanation": "UPDATE tanpa WHERE mengenai SEMUA baris dan tidak ada peringatan apa pun. Dua kebiasaan yang menyelamatkan: jalankan dulu SELECT dengan kondisi yang sama untuk melihat baris mana yang akan terkena, lalu bungkus perubahan dalam BEGIN ... COMMIT agar masih bisa ROLLBACK saat jumlah baris terpengaruh terlihat janggal."
@@ -1552,10 +1552,10 @@ export const sqlTrack: Track = {
               "type": "pilihan-ganda",
               "question": "Aplikasi menyimpan setelan pengguna: kalau barisnya sudah ada, perbarui; kalau belum, buat baru. Cara SQL mana yang paling aman dari race condition?",
               "choices": [
-                "SELECT dulu, lalu putuskan INSERT atau UPDATE di kode aplikasi",
-                "UPSERT dalam satu perintah: INSERT ... ON CONFLICT DO UPDATE (PostgreSQL) atau ON DUPLICATE KEY UPDATE (MySQL)",
-                "DELETE lalu INSERT ulang setiap kali",
-                "TRUNCATE tabel setelan sebelum menyimpan"
+                "Mengembalikan data baris yang baru disisipkan atau diubah secara langsung tanpa perlu kueri SELECT tambahan",
+                "Membatalkan seluruh perubahan jika terjadi galat tipe data",
+                "Mengirimkan notifikasi webhook ke server aplikasi",
+                "Membuat cadangan tabel otomatis ke skema public"
               ],
               "answerIndex": 1,
               "explanation": "Pola SELECT-lalu-putuskan punya celah waktu: dua request bersamaan bisa sama-sama melihat 'belum ada' lalu sama-sama INSERT sehingga terjadi error atau data ganda. UPSERT menyelesaikannya dalam satu perintah atomik yang dijaga oleh constraint unik. DELETE lalu INSERT juga berisiko karena data sempat hilang dan id-nya berubah."
@@ -1565,10 +1565,10 @@ export const sqlTrack: Track = {
               "type": "pilihan-ganda",
               "question": "Transfer saldo memotong 500 dari rekening A lalu menambahkannya ke rekening B. Server mati tepat setelah perintah pertama. Sifat ACID apa yang menjamin uang itu tidak menguap?",
               "choices": [
-                "Atomicity — seluruh transaksi dianggap satu kesatuan, gagal sebagian berarti dibatalkan semua",
-                "Consistency — data selalu konsisten antar server",
-                "Isolation — transaksi lain tidak melihat perubahan yang belum di-commit",
-                "Durability — data tetap tersimpan setelah listrik mati"
+                "Menggunakan soft delete (menandai kolom deleted_at dengan waktu penghapusan) agar data historis dan audit trail tetap terjaga",
+                "Menghapus baris fisik secara permanen menggunakan DELETE FROM",
+                "Mengosongkan tabel setiap tengah malam menggunakan TRUNCATE",
+                "Mengubah nilai primary key menjadi angka minus"
               ],
               "answerIndex": 0,
               "explanation": "Atomicity berarti transaksi bersifat semua-atau-tidak-sama-sekali: karena COMMIT belum sempat dijalankan, potongan saldo A otomatis dibatalkan saat database pulih. Isolation dan Durability juga sifat ACID, tapi keduanya menjawab pertanyaan berbeda — siapa yang boleh melihat perubahan, dan apakah data bertahan setelah di-commit."
@@ -1607,7 +1607,7 @@ export const sqlTrack: Track = {
             "output": "CREATE TABLE\n\n-- ganti nama departemen sesudah normalisasi:\nUPDATE departments SET dept_name = 'Teknologi' WHERE dept_id = 3;\nUPDATE 1        <-- satu baris saja\n\n-- sebelum normalisasi, perubahan yang sama:\nUPDATE 214      <-- 214 baris, dan cukup satu yang luput untuk merusak laporan",
             "note": "Angka 1 lawan 214 itulah inti normalisasi. Bukan soal keindahan skema, tapi soal berapa banyak tempat yang harus benar setiap kali satu fakta berubah."
           },
-          "instruction": "Buat tabel `categories` (kolom: `id` INT PRIMARY KEY, `name` VARCHAR(50)) agar data kategori produk memenuhi aturan 3NF.",
+          "instruction": "Agar tabel produk memenuhi normalisasi 3NF, pisahkan data kategori ke tabel tersendiri. Buat tabel `categories` dengan kolom `id` (INT PRIMARY KEY) dan kolom `name` (VARCHAR(50)).",
           "starterCode": "-- Tulis query pembuatan tabel 3NF di sini\n",
           "language": "text",
           "tests": [
@@ -1652,7 +1652,7 @@ export const sqlTrack: Track = {
             "output": " order_id | customer_name | total_price\n----------+---------------+-------------\n     1001 | Ana Rahma     |      150000\n     1002 | Budi Santoso  |       75000\n(2 rows)\nTime: 1.902 ms\n\n-- versi normal (JOIN ke customers) pada data yang sama:\nTime: 12.431 ms",
             "note": "Selisih waktunya nyata tapi kecil pada data kecil; ia baru berarti pada jutaan baris. Perhatikan juga `customer_name` di sini adalah salinan — kalau Ana mengganti namanya, struk lama tetap menyebut nama lama, dan untuk dokumen keuangan itu justru yang diinginkan."
           },
-          "instruction": "Lakukan query SELECT untuk mengambil `id`, `product_name`, dan `price` dari tabel denormalisasi `denormalized_sales` di mana `price` lebih dari 1000.",
+          "instruction": "Dasbor performa analitik membaca data dari tabel pelaporan yang sudah didenormalisasi (`denormalized_sales`) agar tidak membebani server dengan JOIN jutaan baris pada jam sibuk. Ambil kolom `id`, `product_name`, dan `price` untuk produk yang memiliki nilai harga di atas 1000.",
           "starterCode": "-- Tulis query SELECT denormalisasi di sini\n",
           "language": "text",
           "tests": [
@@ -1696,7 +1696,7 @@ export const sqlTrack: Track = {
             "output": "CREATE TABLE\n\n-- diagram di atas terwujud sebagai constraint nyata:\n\\d comments\n  Column  |  Type   | Nullable\n----------+---------+----------\n id       | integer | not null\n post_id  | integer |\nForeign-key constraints:\n    \"comments_post_id_fkey\" FOREIGN KEY (post_id) REFERENCES posts(id)",
             "note": "Perintah `\\d nama_tabel` di psql adalah cara memeriksa apakah skema nyata benar-benar sesuai diagram. Kolom `post_id` di sini masih boleh NULL — kalau setiap komentar wajib punya post, tambahkan `NOT NULL`."
           },
-          "instruction": "Buat tabel `reviews` yang memiliki kolom `id` (INT PRIMARY KEY) dan `product_id` (INT) sebagai constraint foreign key yang mereferensikan `products(id)`.",
+          "instruction": "Sistem ulasan produk membutuhkan relasi banyak-ke-satu dengan katalog produk. Buat tabel `reviews` yang memiliki kolom `id` (INT PRIMARY KEY) dan kolom `product_id` (INT) yang bertindak sebagai FOREIGN KEY mereferensikan kolom `id` pada tabel `products`.",
           "starterCode": "-- Tulis query pembuatan tabel dengan FK di sini\n",
           "language": "text",
           "tests": [
@@ -1744,7 +1744,7 @@ export const sqlTrack: Track = {
             "output": "CREATE TABLE\n\nERROR:  new row for relation \"products\" violates check constraint \"products_price_check\"\nDETAIL:  Failing row contains (1, KOPI-01, -5000).",
             "note": "Harga negatif ditolak di lapisan paling dalam, jadi bug di form manapun tidak bisa menyelundupkannya. Perhatikan nama constraint `products_price_check` pada pesan error — nama itulah yang kamu pakai di kode aplikasi untuk mengenali pelanggaran dan menampilkan pesan yang ramah."
           },
-          "instruction": "Buat tabel accounts dengan kolom balance yang tidak boleh kurang dari 0 menggunakan CHECK constraint.",
+          "instruction": "Untuk mencegah saldo rekening bernilai negatif di tingkat database, buat tabel `accounts` dengan kolom `balance` bertipe INT yang dilindungi oleh constraint `CHECK` agar nilainya selalu lebih besar atau sama dengan 0 (`balance >= 0`).",
           "starterCode": "-- Tulis CREATE TABLE CHECK di sini\n",
           "language": "text",
           "tests": [
@@ -1788,7 +1788,7 @@ export const sqlTrack: Track = {
             "output": "CREATE INDEX\nTime: 42.118 ms",
             "note": "Primary Key dan kolom UNIQUE otomatis diberi index oleh database."
           },
-          "instruction": "Buat index bernama idx_orders_user_id pada kolom user_id di tabel orders.",
+          "instruction": "Pencarian pesanan berdasarkan pemilik akun sering mengalami Full Table Scan. Percepat kueri tersebut dengan membuat indeks B-Tree bernama `idx_orders_user_id` pada kolom `user_id` di tabel `orders`.",
           "starterCode": "-- Tulis CREATE INDEX di sini\n",
           "language": "text",
           "tests": [
@@ -1827,7 +1827,7 @@ export const sqlTrack: Track = {
             "output": "CREATE INDEX\nTime: 128.402 ms\n\nINSERT 0 1\nTime: 1.740 ms      <-- tabel dengan 1 index\nTime: 4.902 ms      <-- tabel yang sama dengan 6 index",
             "note": "Setiap index harus ikut diperbarui pada setiap INSERT, UPDATE, dan DELETE. Itu sebabnya \"tambahkan index pada semua kolom\" adalah saran yang salah: baca menjadi cepat, tulis menjadi lambat."
           },
-          "instruction": "Laporan bulanan menyaring `orders` berdasarkan rentang tanggal dan mulai melambat. Buat index bernama `idx_orders_created_at` pada kolom yang membuat penyaringan itu selektif — bukan kolom `status` yang isinya cuma beberapa nilai berulang.",
+          "instruction": "Laporan berkala yang memfilter transaksi berdasarkan rentang tanggal mulai melambat karena tabel semakin besar. Buat indeks B-Tree bernama `idx_orders_created_at` pada kolom `created_at` di tabel `orders` agar pencarian rentang waktu bersifat selektif.",
           "starterCode": "-- Tulis query pembuatan index di sini\n",
           "language": "text",
           "tests": [
@@ -1867,7 +1867,7 @@ export const sqlTrack: Track = {
             "output": "Index Scan using idx_users_email on users  (cost=0.28..8.30 rows=1 width=72)\n                                          (actual time=0.041..0.043 rows=1 loops=1)\n  Index Cond: (email = 'budi@test.com'::text)\nPlanning Time: 0.132 ms\nExecution Time: 0.071 ms\n\n-- tanpa index pada kolom email:\nSeq Scan on users  (cost=0.00..1834.00 rows=1 width=72)\n                   (actual time=12.884..38.201 rows=1 loops=1)\nExecution Time: 38.244 ms",
             "note": "Dua kata yang wajib kamu cari: `Seq Scan` berarti seluruh tabel dibaca satu per satu, `Index Scan` berarti index dipakai. Bandingkan juga `rows=` perkiraan dengan `rows=` aktual — selisih jauh menandakan statistik tabel sudah basi (`ANALYZE` perlu dijalankan)."
           },
-          "instruction": "Ketikkan EXPLAIN ANALYZE sebelum query SELECT seluruh data dari products.",
+          "instruction": "Sebelum melakukan deployment query baru ke produksi, kamu perlu memeriksa rencana eksekusi dan biaya kalkulasi query secara aktual. Jalankan analisis rencana eksekusi dengan EXPLAIN ANALYZE pada kueri `SELECT * FROM products`.",
           "starterCode": "-- Tulis EXPLAIN ANALYZE di bawah ini\n",
           "language": "text",
           "tests": [
@@ -1906,10 +1906,10 @@ export const sqlTrack: Track = {
               "type": "pilihan-ganda",
               "question": "Apa efek samping memasang terlalu banyak index pada sebuah tabel?",
               "choices": [
-                "Ukuran database menjadi 0 byte",
-                "Mempercepat perintah INSERT dan DELETE",
-                "Memperlambat penulisan data (INSERT/UPDATE/DELETE) karena setiap index ikut diperbarui",
-                "Menghapus Primary Key"
+                "Memperlambat penulisan data (INSERT/UPDATE/DELETE) karena setiap indeks harus ikut diperbarui pada struktur pohonnya di disk",
+                "Membatasi jumlah kolom yang boleh dibuat di tabel",
+                "Menonaktifkan fitur transaksi ACID pada database",
+                "Mengharuskan database di-restart setiap hari"
               ],
               "answerIndex": 2,
               "explanation": "Index mempercepat pembacaan tapi harus ikut diperbarui setiap kali data berubah, jadi tabel dengan belasan index akan terasa berat saat menulis. Index juga memakan ruang disk. Aturan praktisnya: pasang index berdasarkan query yang benar-benar sering dijalankan, lalu buktikan manfaatnya dengan EXPLAIN."
@@ -1919,10 +1919,10 @@ export const sqlTrack: Track = {
               "type": "pilihan-ganda",
               "question": "Tabel `orders` menyimpan kolom `kota_id`, `kota_nama`, dan `kota_provinsi`. Aturan normalisasi mana yang dilanggar, dan kenapa itu berbahaya?",
               "choices": [
-                "1NF — karena ada kolom bertipe teks",
                 "3NF — kota_nama dan kota_provinsi bergantung pada kota_id, bukan pada primary key pesanan, sehingga data kota terduplikasi dan bisa tidak sinkron",
-                "Tidak melanggar apa pun",
-                "2NF — karena tabel punya lebih dari tiga kolom"
+                "1NF — kolom nama kota melanggar aturan atomik",
+                "2NF — kolom kota_id tidak memiliki indeks unik",
+                "Tidak melanggar aturan normalisasi apa pun"
               ],
               "answerIndex": 1,
               "explanation": "3NF melarang kolom yang bergantung pada kolom non-key (transitive dependency). Nama kota diulang di ribuan baris pesanan; saat sebuah kota berganti nama, kamu harus memperbarui semuanya dan satu baris terlewat sudah cukup membuat laporan tidak konsisten. Solusinya: simpan kota di tabelnya sendiri dan sisakan kota_id sebagai foreign key."
@@ -1932,10 +1932,10 @@ export const sqlTrack: Track = {
               "type": "pilihan-ganda",
               "question": "Kamu ingin memastikan tidak ada dua akun dengan email sama, sekalipun ada bug di aplikasi. Apa yang harus dipasang di database?",
               "choices": [
-                "Cukup validasi di form pendaftaran",
                 "Constraint UNIQUE pada kolom email",
-                "Kolom email dijadikan TEXT",
-                "Index biasa (non-unique) pada kolom email"
+                "Pemeriksaan if-else di kode JavaScript saja",
+                "Membuat indeks B-Tree tanpa batasan unik",
+                "Mengubah tipe data email menjadi INT"
               ],
               "answerIndex": 1,
               "explanation": "Constraint UNIQUE membuat database sendiri menolak baris kedua dengan email sama, apa pun jalur masuknya — form, API, atau query manual. Validasi aplikasi tetap perlu demi pesan error yang ramah, tapi ia bisa dilewati dan punya celah race condition. Index biasa hanya mempercepat pencarian tanpa mencegah duplikat."
@@ -1945,10 +1945,10 @@ export const sqlTrack: Track = {
               "type": "pilihan-ganda",
               "question": "Kolom `created_at` sudah diindeks, tapi query `WHERE YEAR(created_at) = 2026` tetap lambat dan EXPLAIN menunjukkan full scan. Kenapa?",
               "choices": [
-                "Index tidak berlaku untuk kolom tanggal",
                 "Karena kolom dibungkus fungsi, database harus menghitung YEAR() di setiap baris sehingga index tidak bisa dipakai",
-                "Karena tahun 2026 belum lewat",
-                "Karena index hanya bekerja pada kolom angka"
+                "Karena B-Tree index tidak bisa dibuat pada tipe data waktu",
+                "Karena nilai tahun 2026 belum ada di dalam kalender database",
+                "Karena fungsi YEAR() otomatis mengubah tipe data menjadi teks"
               ],
               "answerIndex": 1,
               "explanation": "Index menyimpan nilai kolom apa adanya dalam keadaan terurut. Begitu kolom dibungkus fungsi, nilai yang dicari tidak lagi cocok dengan yang tersimpan di index sehingga database terpaksa memindai seluruh tabel. Perbaikannya: ubah menjadi rentang — created_at >= '2026-01-01' AND created_at < '2027-01-01' — atau buat expression index khusus."
@@ -1958,10 +1958,10 @@ export const sqlTrack: Track = {
               "type": "pilihan-ganda",
               "question": "Kamu membuat index gabungan `(user_id, created_at)`. Query mana yang TIDAK bisa memanfaatkan index tersebut secara efisien?",
               "choices": [
-                "WHERE user_id = 7",
-                "WHERE user_id = 7 AND created_at > '2026-01-01'",
                 "WHERE created_at > '2026-01-01'",
-                "WHERE user_id = 7 ORDER BY created_at"
+                "WHERE user_id = 42",
+                "WHERE user_id = 42 AND created_at > '2026-01-01'",
+                "WHERE user_id = 42 ORDER BY created_at DESC"
               ],
               "answerIndex": 2,
               "explanation": "Index gabungan bekerja seperti daftar isi yang diurutkan mulai dari kolom paling kiri (leftmost prefix). Kamu bisa memakainya dengan user_id saja, atau user_id ditambah created_at, tapi tidak bisa melompat langsung ke created_at tanpa menyebut user_id. Karena itu urutan kolom saat membuat index adalah keputusan desain, bukan selera."
@@ -2002,7 +2002,7 @@ export const sqlTrack: Track = {
             "output": "psql (16.1)\nType \"help\" for help.\n\ntoko_online=#",
             "note": "Gunakan \\q di dalam prompt psql untuk keluar dari sesi CLI."
           },
-          "instruction": "Tuliskan perintah CLI psql untuk terhubung ke database bernama 'aplikasi_db' sebagai user 'admin_user'.",
+          "instruction": "Buka sesi terminal interaktif untuk mengelola PostgreSQL: tulis perintah CLI `psql` untuk terhubung ke database bernama 'aplikasi_db' menggunakan akun pengguna 'admin_user'.",
           "starterCode": "# Tulis perintah psql di sini\n",
           "language": "text",
           "tests": [
@@ -2046,7 +2046,7 @@ export const sqlTrack: Track = {
             "output": "CREATE TABLE",
             "note": "gen_random_uuid() menghasilkan nilai UUID v4 otomatis tanpa membutuhkan ekstensi luar."
           },
-          "instruction": "Tabel `events` butuh kolom `id` yang nilainya tidak bisa ditebak berurutan dari luar (supaya `/events/1`, `/events/2` tidak bisa dijelajahi orang lain) dan terisi sendiri saat baris dibuat. Definisikan kolom itu beserta pembangkit nilai bawaannya.",
+          "instruction": "Tabel `events` memerlukan kunci utama yang tidak dapat ditebak secara berurutan oleh pengguna luar demi alasan keamanan. Definisikan kolom `id` bertipe UUID sebagai PRIMARY KEY dengan nilai default otomatis menggunakan fungsi `gen_random_uuid()`.",
           "starterCode": "-- Tulis definisi kolom id di sini\n",
           "language": "text",
           "tests": [
@@ -2090,7 +2090,7 @@ export const sqlTrack: Track = {
             "output": "   kota\n----------\n Jakarta\n Surabaya",
             "note": "Gunakan ->> saat ingin melakukan perbandingan string atau penyaringan WHERE."
           },
-          "instruction": "Tabel `logs` menyimpan satu kolom JSONB bernama `payload` yang di dalamnya ada field `name` dan `role`. Ambil nama pengguna sebagai TEKS biasa, hanya untuk baris yang field perannya bernilai `admin`. Perhatikan pilihan operatornya: perbandingan teks di `WHERE` hanya bekerja kalau nilainya sudah keluar dari bungkus JSON-nya.",
+          "instruction": "Tabel audit `logs` menyimpan dokumen konfigurasi pada kolom JSONB bernama `payload`. Ekstrak nilai field `name` sebagai teks murni (gunakan operator `->>`) untuk baris data yang memiliki field `role` bernilai 'admin'.",
           "starterCode": "-- Tulis query JSONB di bawah ini\n",
           "language": "text",
           "tests": [
@@ -2134,7 +2134,7 @@ export const sqlTrack: Track = {
             "output": " id |   title    \n----+------------\n  2 | Resep Kopi\n(1 row)",
             "note": "Yang cocok hanya baris yang KATA-nya benar-benar ada setelah dinormalkan, bukan sekadar mengandung potongan huruf — beda mendasar dengan `LIKE '%kopi%'`. Perhatikan juga argumen bahasa pada `to_tsvector`: kalau dokumen dinormalkan dengan aturan bahasa yang berbeda dari kata pencariannya, hasilnya bisa kosong tanpa satu pun pesan error."
           },
-          "instruction": "Tabel `articles` punya kolom teks panjang `body`. Tambahkan penyaring pencarian teks penuh PostgreSQL yang mengubah `body` menjadi bentuk terindeks, lalu mencocokkannya dengan kata pencarian `database` memakai operator pencocokan khusus milik full-text search.",
+          "instruction": "Fitur pencarian artikel blog membutuhkan pencocokan teks penuh tanpa dependensi tool luar. Tampilkan `title` dari tabel `articles` menggunakan operator pencocokan teks `@@` dengan mencocokkan dokumen teks `to_tsvector(body)` terhadap kata kunci kueri `to_tsquery('database')`.",
           "starterCode": "SELECT title\nFROM articles\n-- lengkapi penyaringnya di bawah ini:\n",
           "language": "text",
           "tests": [
@@ -2178,7 +2178,7 @@ export const sqlTrack: Track = {
             "output": "CREATE TABLE",
             "note": "Identity column mencegah penyisipan nilai ID manual yang tidak disengaja."
           },
-          "instruction": "Kamu merancang tabel baru di PostgreSQL 16 dan butuh kolom `id` bilangan bulat yang nomornya dibuat otomatis oleh database serta menjadi primary key. Pakai bentuk standar SQL yang menggantikan `SERIAL` sejak PostgreSQL 10 — yang menolak penyisipan id manual, bukan yang membuat sequence terpisah.",
+          "instruction": "Sesuai standar SQL modern pada PostgreSQL 16+, rancang kolom identitas nomor urut otomatis yang aman dari intervensi manual: definisikan kolom `id` bertipe INT dengan atribut `GENERATED ALWAYS AS IDENTITY` sebagai PRIMARY KEY.",
           "starterCode": "-- Tulis kolom IDENTITY di bawah ini\n",
           "language": "text",
           "tests": [
@@ -2222,7 +2222,7 @@ export const sqlTrack: Track = {
             "output": "GRANT",
             "note": "Prinsip Least Privilege: berikan izin minimal yang dibutuhkan oleh aplikasi."
           },
-          "instruction": "Berikan hak akses SELECT dan INSERT pada tabel 'orders' kepada user 'app_reporter'.",
+          "instruction": "Layanan pelaporan analitik hanya membutuhkan akses baca dan pencatatan log baru pada data pesanan. Terapkan prinsip least-privilege dengan memberikan izin hak akses SELECT dan INSERT pada tabel `orders` kepada pengguna 'app_reporter'.",
           "starterCode": "-- Tulis perintah GRANT di sini\n",
           "language": "text",
           "tests": [
@@ -2269,7 +2269,7 @@ export const sqlTrack: Track = {
                 "->>",
                 "->",
                 "#>",
-                "=>"
+                "@>"
               ],
               "answerIndex": 0,
               "explanation": "Operator `->>` mengembalikan bidang JSON sebagai string teks biasa, sedangkan `->` mengembalikan objek JSON."
@@ -2280,9 +2280,9 @@ export const sqlTrack: Track = {
               "question": "Mengapa tipe data JSONB di PostgreSQL lebih direkomendasikan dibanding tipe JSON biasa untuk penyimpanan dokumen fleksibel?",
               "choices": [
                 "Karena JSONB disimpan dalam bentuk biner terurai yang jauh lebih cepat di-index dan di-query",
-                "Karena JSONB mengompres teks menjadi file zip otomatis",
-                "Karena JSON biasa tidak mengizinkan penulisan angka desimal",
-                "Karena JSONB hanya bisa dibaca oleh bahasa Python"
+                "Karena JSON biasa tidak mengizinkan penulisan angka desimal atau teks panjang",
+                "Karena JSONB secara otomatis membuat tabel terpisah untuk setiap kunci JSON",
+                "Karena PostgreSQL menghapus format JSON biasa di versi terbarunya"
               ],
               "answerIndex": 0,
               "explanation": "JSONB mengurai dokumen JSON ke format biner terstruktur saat disimpan sehingga pencarian bidang dan indeks GIN berjalan sangat kencang."
@@ -2295,7 +2295,7 @@ export const sqlTrack: Track = {
                 "\\dt",
                 "\\l",
                 "\\d",
-                "\\q"
+                "\\du"
               ],
               "answerIndex": 0,
               "explanation": "\\dt (display tables) menampilkan seluruh daftar tabel pada schema aktif."
@@ -2305,10 +2305,10 @@ export const sqlTrack: Track = {
               "type": "pilihan-ganda",
               "question": "Kamu membuat tabel baru di PostgreSQL 18 dan butuh kolom id yang naik otomatis. Mana yang direkomendasikan sekarang, dan kenapa?",
               "choices": [
-                "SERIAL, karena paling singkat ditulis",
                 "GENERATED ALWAYS AS IDENTITY, karena sesuai standar SQL dan mencegah id diisi manual sehingga sequence tidak jadi tidak sinkron",
-                "Kolom TEXT berisi angka",
-                "Tidak perlu id sama sekali"
+                "SERIAL, karena tipe SERIAL tidak membutuhkan memori disk sama sekali",
+                "Kolom VARCHAR acak, agar tidak ada batasan jumlah baris",
+                "Membuat sequence manual tanpa mengikatnya ke kolom tabel"
               ],
               "answerIndex": 1,
               "explanation": "SERIAL masih bekerja, tapi ia hanya gula sintaks lama yang membuat sequence terpisah dan tetap mengizinkan aplikasi menyisipkan id manual. Kalau itu terjadi, sequence tertinggal dan INSERT berikutnya gagal karena id-nya bentrok — jebakan yang sering muncul setelah restore data. GENERATED ALWAYS AS IDENTITY adalah bentuk standar SQL yang menutup celah itu."
@@ -2319,9 +2319,9 @@ export const sqlTrack: Track = {
               "question": "Satu database dipakai banyak tenant, dan setiap tenant hanya boleh melihat barisnya sendiri walaupun mengakses lewat koneksi SQL langsung. Fitur PostgreSQL apa yang menegakkan aturan itu di level database?",
               "choices": [
                 "Row Level Security (RLS) dengan policy per tabel",
-                "Menambahkan WHERE tenant_id di setiap query aplikasi",
-                "Membuat index pada kolom tenant_id",
-                "Menyimpan data tenant di file terpisah"
+                "Menulis kondisi filter tenant_id secara manual di setiap kueri aplikasi",
+                "Membuat database server fisik terpisah untuk setiap tenant pengguna",
+                "Mengenkripsi seluruh baris data menggunakan kunci AES"
               ],
               "answerIndex": 0,
               "explanation": "RLS memasang aturan penyaringan di tabel itu sendiri, sehingga siapa pun yang mengakses — termasuk lewat psql atau tool BI — otomatis hanya melihat baris yang diizinkan. Mengandalkan WHERE di aplikasi tetap perlu, tapi satu query yang lupa filter langsung membocorkan data tenant lain. Index hanya soal kecepatan, bukan keamanan."
@@ -2362,8 +2362,8 @@ export const sqlTrack: Track = {
             "output": "Query OK, 0 rows affected",
             "note": "InnoDB adalah storage engine bawaan MySQL sejak versi 5.5."
           },
-          "instruction": "Tambahkan klausa penentuan storage engine InnoDB pada akhir perintah pembuatan tabel.",
-          "starterCode": "-- Tulis klausul ENGINE di sini\n",
+          "instruction": "Tabel transaksi keuangan `accounts` membutuhkan dukungan transaksi ACID dan baris kunci otomatis. Lengkapi pembuatan tabel di editor dengan menentukan storage engine standar modern MySQL yang mendukung transaksi.",
+          "starterCode": "-- Lengkapi pembuatan tabel dengan engine InnoDB:\nCREATE TABLE accounts (id INT PRIMARY KEY)\n-- lengkapi di bawah ini:\n",
           "language": "text",
           "tests": [
             {
@@ -2398,7 +2398,7 @@ export const sqlTrack: Track = {
             "output": "Query OK, 1 row affected",
             "note": "utf8mb4_unicode_ci memberikan akurasi pengurutan teks lintas bahasa terbaik."
           },
-          "instruction": "Ubah tabel 'comments' agar menggunakan CHARACTER SET utf8mb4.",
+          "instruction": "Tabel komentar pengguna sering mengalami galat saat menerima emoji dari smartphone. Ubah pengaturan karakter tabel `comments` agar mendukung penuh karakter 4-byte menggunakan perintah ALTER TABLE dengan `CHARACTER SET utf8mb4`.",
           "starterCode": "-- Tulis klausa CHARACTER SET di bawah ini\n",
           "language": "text",
           "tests": [
@@ -2438,8 +2438,8 @@ export const sqlTrack: Track = {
             "output": "Query OK, 1 row affected (0.01 sec)\n\n+------------------+\n| LAST_INSERT_ID() |\n+------------------+\n|               42 |\n+------------------+\n1 row in set (0.00 sec)",
             "note": "Perhatikan bentuk tabelnya: MySQL membingkai hasil dengan garis `+---+`, berbeda dari psql yang memakai garis putus-putus. Nilai 42 itu milik KONEKSI-mu sendiri — pengguna lain yang menyisipkan baris pada detik yang sama tetap mendapat nilainya masing-masing."
           },
-          "instruction": "Tulis query untuk mengambil nilai ID auto-increment yang baru saja disisipkan pada koneksi aktif.",
-          "starterCode": "-- Tulis query LAST_INSERT_ID di sini\n",
+          "instruction": "Setelah menyisipkan baris baru ke tabel dengan primary key AUTO_INCREMENT, backend perlu mengetahui ID yang baru saja dihasilkan oleh MySQL pada koneksi tersebut. Jalankan fungsi bawaan MySQL untuk mengambil nilai ID terakhir yang baru dibuat.",
+          "starterCode": "-- Ambil ID auto-increment terakhir pada koneksi aktif:\n",
           "language": "text",
           "tests": [
             {
@@ -2473,7 +2473,7 @@ export const sqlTrack: Track = {
             "output": "Query OK, 0 rows affected (0.03 sec)\nQuery OK, 1 row affected (0.01 sec)\n\n+----+---------------+---------------------+\n| id | judul         | updated_at          |\n+----+---------------+---------------------+\n|  1 | Draft pertama | 2026-07-29 13:31:02 |\n+----+---------------+---------------------+\n1 row in set (0.00 sec)",
             "note": "Kolom `updated_at` terisi sendiri tanpa disebut di `INSERT` — itulah kerja `DEFAULT CURRENT_TIMESTAMP`, dan `ON UPDATE` membuatnya ikut berubah setiap baris diperbarui. Nilai yang tersimpan adalah UTC; angka yang kamu lihat sudah dikonversi ke zona waktu sesi, jadi dua pengguna di zona berbeda melihat angka berbeda untuk baris yang sama."
           },
-          "instruction": "Definisikan kolom 'created_at' bertipe TIMESTAMP yang nilai utamanya (DEFAULT) adalah CURRENT_TIMESTAMP.",
+          "instruction": "Sistem aplikasi global melayani pengguna di berbagai belahan dunia. Definisikan kolom `created_at` bertipe TIMESTAMP yang otomatis mengisi waktu saat ini (`CURRENT_TIMESTAMP`) sebagai nilai default dan otomatis terkonversi mengikuti zona waktu UTC.",
           "starterCode": "-- Tulis kolom TIMESTAMP di bawah ini\n",
           "language": "text",
           "tests": [
@@ -2513,7 +2513,7 @@ export const sqlTrack: Track = {
             "output": "Enter password:\n-rw-r--r--  1 bimo  staff   4.2M Jul 29 13:35 backup_toko.sql\n-- MySQL dump 10.13  Distrib 8.4.2, for macos14 (arm64)\n--\n-- Host: localhost    Database: toko_db",
             "note": "`mysqldump` menulis SQL ke keluaran standar, jadi saat dialihkan dengan `>` terminalnya justru DIAM — tidak ada tulisan \"backup berhasil\". Satu-satunya cara memastikan adalah memeriksa ukuran berkas dan barisnya; berkas 0 byte berarti backup gagal meski perintahnya seolah selesai."
           },
-          "instruction": "Tulis perintah terminal mysqldump untuk mengekspor database bernama 'production_db' oleh user 'root' (dengan prompt password -p) ke berkas 'dump.sql'.",
+          "instruction": "Sebelum melakukan pemeliharaan server database, buat cadangan data secara lengkap. Tulis perintah terminal `mysqldump` untuk mengekspor database bernama 'production_db' oleh pengguna 'root' dengan prompt password (`-p`), lalu alihkan keluarannya ke berkas 'dump.sql'.",
           "starterCode": "# Tulis perintah mysqldump di sini\n",
           "language": "text",
           "tests": [
@@ -2549,10 +2549,10 @@ export const sqlTrack: Track = {
               "type": "pilihan-ganda",
               "question": "Mengapa sebaiknya menggunakan charset `utf8mb4` dibanding `utf8` standar pada database MySQL?",
               "choices": [
-                "Karena utf8mb4 membuat file database lebih kecil",
                 "Karena charset utf8 lama di MySQL tidak mendukung karakter 4-byte seperti Emoji (😊)",
-                "Karena utf8mb4 hanya berjalan di Linux",
-                "Karena utf8mb4 menghapus password user"
+                "Karena utf8mb4 mengompres data teks sehingga ukuran database menjadi lebih kecil",
+                "Karena charset utf8 lama otomatis menolak karakter angka desimal",
+                "Karena MySQL 8 menghapus dukungan terhadap semua jenis teks Latin"
               ],
               "answerIndex": 1,
               "explanation": "Charset `utf8mb4` mendukung penuh penyimpan 4-byte UTF-8 termasuk karakter emoji internasional."
@@ -2563,9 +2563,9 @@ export const sqlTrack: Track = {
               "question": "Mengapa InnoDB lebih direkomendasikan dibanding MyISAM sebagai Storage Engine utama di MySQL?",
               "choices": [
                 "InnoDB mendukung transaksi ACID dan klausa Foreign Key untuk integritas data",
-                "InnoDB memformat tabel dalam file CSV murni",
-                "MyISAM membutuhkan RAM 100x lebih besar",
-                "InnoDB tidak bisa menyimpan angka desimal"
+                "InnoDB hanya mengunci seluruh tabel saat operasi tulis sehingga lebih cepat",
+                "MyISAM tidak mengizinkan penulisan kueri SELECT bertingkat",
+                "InnoDB secara otomatis membuat backup tabel ke file CSV setiap jam"
               ],
               "answerIndex": 0,
               "explanation": "InnoDB menyediakan dukungan transaksi penuh (ACID), pemulihan crash otomatis, serta penegakan integritas data relasional via Foreign Key."
@@ -2577,8 +2577,8 @@ export const sqlTrack: Track = {
               "choices": [
                 "LAST_INSERT_ID()",
                 "GET_LAST_ID()",
-                "NEW_AUTO_ID()",
-                "MAX(id)"
+                "MAX(id)",
+                "AUTO_INCREMENT_VALUE()"
               ],
               "answerIndex": 0,
               "explanation": "LAST_INSERT_ID() mengembalikan ID auto-increment yang terlahir pada sesi koneksi aktif pengirim query."
@@ -2588,10 +2588,10 @@ export const sqlTrack: Track = {
               "type": "pilihan-ganda",
               "question": "Aplikasimu melayani pengguna di beberapa zona waktu dan menyimpan waktu kejadian di MySQL. Apa beda praktis DATETIME dan TIMESTAMP?",
               "choices": [
-                "Tidak ada bedanya",
                 "TIMESTAMP dikonversi ke UTC saat disimpan dan dikembalikan mengikuti time_zone koneksi, sedangkan DATETIME disimpan apa adanya tanpa konversi",
-                "DATETIME hanya bisa menyimpan tanggal tanpa jam",
-                "TIMESTAMP tidak bisa dipakai di InnoDB"
+                "DATETIME otomatis menghapus nilai detik saat disimpan di memori",
+                "TIMESTAMP hanya bisa digunakan pada storage engine MyISAM",
+                "Tidak ada perbedaan praktis sama sekali dalam pengelolaan zona waktu"
               ],
               "answerIndex": 1,
               "explanation": "TIMESTAMP sadar zona waktu: nilainya disimpan sebagai UTC lalu dikonversi mengikuti pengaturan koneksi, sehingga cocok untuk mencatat kapan sesuatu terjadi. DATETIME menyimpan angka jam apa adanya — tepat untuk hal yang memang tidak boleh bergeser seperti jadwal acara lokal. Salah pilih membuat catatan waktu meleset berjam-jam saat server dan pengguna beda zona."
@@ -2601,10 +2601,10 @@ export const sqlTrack: Track = {
               "type": "pilihan-ganda",
               "question": "Di hosting lama, `INSERT` dengan tanggal '0000-00-00' dan teks yang lebih panjang dari kolom diterima begitu saja tanpa error. Apa penyebabnya?",
               "choices": [
-                "Versi MySQL-nya tidak punya validasi sama sekali",
                 "sql_mode belum memakai STRICT_TRANS_TABLES, sehingga MySQL memotong atau mengubah data invalid dan hanya memberi warning",
-                "Kolomnya bertipe JSON",
-                "Karena tabelnya memakai InnoDB"
+                "Database MySQL belum mengaktifkan plugin InnoDB",
+                "Tabel tersebut tidak memiliki constraint PRIMARY KEY",
+                "Koneksi jaringan menggunakan protokol non-enkripsi"
               ],
               "answerIndex": 1,
               "explanation": "MySQL non-strict berusaha 'menolong' dengan memotong string yang kepanjangan dan menerima tanggal nol, lalu hanya mencatat warning — data rusak masuk tanpa disadari. MySQL 8 mengaktifkan STRICT_TRANS_TABLES secara default sehingga query semacam itu ditolak. Saat memindahkan aplikasi dari hosting lama, perbedaan sql_mode inilah yang sering memunculkan error yang sebelumnya tidak pernah terlihat."
@@ -2960,9 +2960,9 @@ export const sqlTrack: Track = {
               "question": "Apa perbedaan utama antara perintah `EXPLAIN` dan `EXPLAIN ANALYZE` pada PostgreSQL?",
               "choices": [
                 "EXPLAIN biasa hanya mengestimasi rencana eksekusi, sedangkan EXPLAIN ANALYZE benar-benar mengeksekusi query dan mencatat durasi waktu aktual",
-                "EXPLAIN ANALYZE menghapus data dari tabel",
-                "EXPLAIN biasa hanya bisa digunakan di MySQL",
-                "EXPLAIN ANALYZE mengubah urutan kolom di database"
+                "EXPLAIN ANALYZE hanya bisa dijalankan pada database yang sedang offline",
+                "EXPLAIN biasa otomatis membuat indeks baru jika kueri terdeteksi lambat",
+                "EXPLAIN ANALYZE tidak menampilkan estimasi biaya cost"
               ],
               "answerIndex": 0,
               "explanation": "EXPLAIN ANALYZE mengeksekusi kueri secara riil di database sehingga menampilkan jumlah baris dan durasi waktu eksekusi yang sesungguhnya (actual time)."
@@ -2973,9 +2973,9 @@ export const sqlTrack: Track = {
               "question": "Mengapa fitur autovacuum / perintah VACUUM sangat krusial dalam operasional database PostgreSQL?",
               "choices": [
                 "Untuk membersihkan tuple/baris mati (dead tuples) bekas UPDATE/DELETE sehingga tidak menyebabkan table bloat",
-                "Untuk mengubah password user postgres secara berkala",
-                "Untuk memformat ulang harddisk server",
-                "Untuk mengonversi file SQL menjadi format JSON"
+                "Untuk mereset password pengguna database secara otomatis setiap 30 hari",
+                "Untuk membersihkan cache memori browser dari pengguna web",
+                "Untuk mengompresi struktur tabel menjadi format NoSQL"
               ],
               "answerIndex": 0,
               "explanation": "PostgreSQL menggunakan MVCC di mana operasi UPDATE/DELETE meninggalkan baris lama sebagai dead tuple. VACUUM mengklaim kembali ruang tersebut agar tabel tidak menggelembung (bloat)."
@@ -2986,9 +2986,9 @@ export const sqlTrack: Track = {
               "question": "Kapan jenis indeks GIN (Generalized Inverted Index) di PostgreSQL paling tepat digunakan?",
               "choices": [
                 "Untuk kolom tipe data JSONB, pencarian teks (Full-Text Search), atau array",
-                "Untuk kolom bertipe INTEGER yang nilainya selalu naik",
-                "Untuk kolom tanggal lahir",
-                "Untuk kolom yang nilainya kosong"
+                "Untuk kolom primary key berurutan bertipe BIGINT",
+                "Untuk kolom tanggal yang sering dicari menggunakan rentang waktu BETWEEN",
+                "Untuk tabel berukuran kecil yang memiliki kurang dari 50 baris"
               ],
               "answerIndex": 0,
               "explanation": "GIN Index sangat efisien memetakan elemen-elemen internal di dalam dokumen biner JSONB, teks tsvector, maupun array."
@@ -3013,8 +3013,8 @@ export const sqlTrack: Track = {
               "choices": [
                 "VACUUM FULL",
                 "DELETE FROM orders",
-                "DROP TABLE orders",
-                "TRUNCATE orders"
+                "ANALYZE orders",
+                "REINDEX TABLE orders"
               ],
               "answerIndex": 0,
               "explanation": "VACUUM FULL menulis ulang seluruh isi tabel ke file baru tanpa dead tuple, mengklaim kembali ruang disk secara penuh. Namun ia mengunci tabel secara eksklusif selama prosesnya."
@@ -3337,7 +3337,7 @@ export const sqlTrack: Track = {
                 "ALL",
                 "ref",
                 "eq_ref",
-                "const"
+                "range"
               ],
               "answerIndex": 0,
               "explanation": "Tipe `ALL` berarti MySQL harus memindai seluruh baris tabel tanpa bantuan indeks, yang sangat lambat pada dataset besar."
@@ -3348,9 +3348,9 @@ export const sqlTrack: Track = {
               "question": "Mengapa pemanggilan fungsi pada kolom di klausul WHERE (seperti `WHERE YEAR(created_at) = 2026`) membatalkan penggunaan B-Tree Index?",
               "choices": [
                 "Karena MySQL harus mengeksekusi fungsi tersebut pada setiap baris data sehingga tidak bisa memanfaatkan pencarian urut di B-Tree Index",
-                "Karena YEAR() adalah fungsi khusus PostgreSQL",
-                "Karena B-Tree index hanya menyimpan nilai string",
-                "Karena fungsi YEAR() menghapus index dari memori server"
+                "Karena fungsi waktu secara otomatis menghapus index dari memori server",
+                "Karena B-Tree index di MySQL hanya bisa dibuat pada kolom bertipe data teks",
+                "Karena fungsi YEAR() mengembalikan nilai bertipe boolean"
               ],
               "answerIndex": 0,
               "explanation": "Fungsi membungkus kolom mencegah pencarian range biner di B-tree index, memaksa MySQL melakukan evaluasi fungsi per baris (Full Table Scan)."
@@ -3361,9 +3361,9 @@ export const sqlTrack: Track = {
               "question": "Apa kegunaan klausul `FOR UPDATE` saat memilih baris data di dalam transaksi InnoDB MySQL?",
               "choices": [
                 "Memasang exclusive row lock agar transaksi lain tidak bisa memodifikasi baris tersebut hingga transaksi di-commit",
-                "Mengubah data secara permanen tanpa perlu perintah UPDATE",
-                "Menghapus baris yang terpilih dari tabel secara otomatis",
-                "Membuat backup snapshot ke file .sql"
+                "Otomatis mengubah level isolasi transaksi menjadi READ UNCOMMITTED",
+                "Membuat cadangan baris data ke tabel sementara di disk",
+                "Mengeksekusi perintah UPDATE tanpa memerlukan klausa WHERE"
               ],
               "answerIndex": 0,
               "explanation": "FOR UPDATE mengunci baris data secara eksklusif untuk mencegah race condition (misal perebutan stok barang / saldo rekening)."
@@ -3373,10 +3373,10 @@ export const sqlTrack: Track = {
               "type": "pilihan-ganda",
               "question": "Di MySQL, primary key pada tabel InnoDB disimpan bersama data baris dalam satu struktur yang disebut Clustered Index. Apa konsekuensi buruk jika kamu menggunakan UUID (36 karakter acak) sebagai primary key pada tabel bertrafik tinggi?",
               "choices": [
-                "Tidak ada dampak buruk sama sekali",
                 "Data baris harus terus-menerus diurutkan ulang secara fisik karena UUID tidak berurutan, menyebabkan page split berlebihan dan fragmentasi",
-                "MySQL akan otomatis mengonversi UUID menjadi integer",
-                "UUID membuat kolom lain tidak bisa diindeks"
+                "MySQL otomatis menolak tipe data teks acak pada kolom primary key",
+                "UUID menyebabkan secondary index tidak bisa membaca kolom foreign key",
+                "Kapasitas tabel menjadi terbatas maksimal 10.000 baris"
               ],
               "answerIndex": 1,
               "explanation": "Clustered Index InnoDB menyimpan data secara fisik terurut berdasarkan primary key. UUID yang acak menyebabkan penyisipan baris ke tengah-tengah halaman (page split), menurunkan performa INSERT dan memperbesar ukuran indeks."
@@ -3678,9 +3678,9 @@ export const sqlTrack: Track = {
               "question": "Bagaimanakah penanganan tipe data Boolean yang berbeda antara PostgreSQL dan MySQL?",
               "choices": [
                 "PostgreSQL mendukung tipe BOOLEAN sejati (TRUE/FALSE), sedangkan MySQL mengonversinya menjadi TINYINT(1) (1/0)",
-                "MySQL menggunakan VARCHAR untuk boolean",
-                "PostgreSQL tidak mendukung nilai FALSE",
-                "Kedua database menggunakan format teks 'YES/NO'"
+                "MySQL mendukung BOOLEAN sejati, sedangkan PostgreSQL menyimpannya sebagai VARCHAR(5)",
+                "Kedua database menyimpan boolean dalam representasi floating point",
+                "PostgreSQL hanya mengizinkan nilai boolean bernilai TRUE"
               ],
               "answerIndex": 0,
               "explanation": "PostgreSQL menyediakan tipe data `BOOLEAN` asli, sedangkan MySQL memperlakukan `BOOLEAN` sebagai alias untuk `TINYINT(1)`."
@@ -3692,8 +3692,8 @@ export const sqlTrack: Track = {
               "choices": [
                 "pgloader",
                 "mysqldump",
-                "certbot",
-                "npm"
+                "pg_dump",
+                "docker-compose"
               ],
               "answerIndex": 0,
               "explanation": "pgloader secara otomatis mengonversi skema DDL, memetakan tipe data, dan memindahkan isi data dari MySQL ke PostgreSQL secara cepat."
@@ -3704,9 +3704,9 @@ export const sqlTrack: Track = {
               "question": "Manakah skenario di mana PostgreSQL jauh lebih unggul dibanding MySQL secara arsitektural?",
               "choices": [
                 "Aplikasi yang membutuhkan query JSONB ter-index kompleks, pencarian teks tingkat lanjut, dan analisis query relasional berat",
-                "Web blog sederhana yang hanya butuh hosting murah Rp 15rb/bulan",
-                "Aplikasi yang hanya berjalan di server Windows 98",
-                "Aplikasi tanpa database"
+                "Aplikasi CMS blog statis yang hanya membutuhkan hosting shared berbiaya rendah",
+                "Sistem yang hanya membutuhkan penyimpanan dokumen key-value sederhana",
+                "Aplikasi mobile tanpa koneksi internet"
               ],
               "answerIndex": 0,
               "explanation": "PostgreSQL sangat unggul pada fitur data modern seperti JSONB ter-index GIN, ekstensi PostGIS, pencarian tsvector, serta optimasi query analitik."
@@ -3717,9 +3717,9 @@ export const sqlTrack: Track = {
               "question": "Saat melakukan migrasi dari MySQL ke PostgreSQL, kamu menemukan kolom TINYINT(1) yang dipakai sebagai boolean. Apa yang harus diperhatikan dalam proses konversi ini?",
               "choices": [
                 "Kolom TINYINT(1) MySQL harus dikonversi ke tipe BOOLEAN asli PostgreSQL, dan nilai 0/1 dipetakan ke FALSE/TRUE",
-                "Tidak perlu diubah karena keduanya identik",
-                "Cukup ganti nama kolom saja",
-                "TINYINT(1) harus diubah menjadi VARCHAR"
+                "Kolom tersebut wajib diubah menjadi tipe TEXT berformat 'TRUE'/'FALSE'",
+                "Konversi tidak diperlukan karena PostgreSQL otomatis mengenali angka 1 sebagai boolean sejati di semua kueri",
+                "Kolom tersebut harus dihapus dan dibuat ulang secara manual"
               ],
               "answerIndex": 0,
               "explanation": "MySQL menyimpan boolean sebagai TINYINT(1) (angka 0 atau 1), sedangkan PostgreSQL memiliki tipe BOOLEAN asli. Tool migrasi seperti pgloader biasanya menangani konversi ini otomatis."
@@ -3729,10 +3729,10 @@ export const sqlTrack: Track = {
               "type": "pilihan-ganda",
               "question": "Ketika seorang interviewer bertanya 'Kenapa timmu memilih PostgreSQL dibanding MySQL?', jawaban mana yang paling kuat secara teknis?",
               "choices": [
-                "Karena PostgreSQL lebih populer di Google Trends",
                 "Karena kebutuhan kami pada JSONB ter-index untuk API fleksibel, full-text search bawaan, dan dukungan ekstensi seperti PostGIS untuk data geospasial",
-                "Karena MySQL tidak gratis",
-                "Karena PostgreSQL lebih mudah di-install"
+                "Karena PostgreSQL memiliki maskot gajah yang lebih menarik",
+                "Karena MySQL tidak mendukung penggunaan klausa JOIN",
+                "Karena PostgreSQL tidak memerlukan memori RAM sama sekali"
               ],
               "answerIndex": 1,
               "explanation": "Jawaban interview yang baik selalu menyebutkan fitur teknis spesifik yang menjadi kebutuhan proyek, bukan opini umum. Sebutkan fitur konkret yang tidak dimiliki alternatifnya."
@@ -3770,7 +3770,7 @@ export const sqlTrack: Track = {
             "output": "1 1 0",
             "note": "Tiga angka itu berturut-turut: koneksi yang terbuka, yang menganggur, dan permintaan yang MENUNGGU giliran. Angka ketiga yang terus bertambah adalah tanda pool-mu terlalu kecil atau ada query yang lupa dilepas — gejalanya di produksi: API melambat padahal CPU database santai."
           },
-          "instruction": "Buat objek instance Pool baru dari driver pg yang membatasi koneksi maksimal sebanyak 10.",
+          "instruction": "Aplikasi backend Node.js bertrafik tinggi membutuhkan pengelolaan koneksi database yang efisien. Inisialisasi instance `Pool` baru dari driver `pg` dengan konfigurasi batas koneksi maksimal sebanyak 10 (`max: 10`).",
           "starterCode": "// Tulis instance Pool di sini\n",
           "language": "text",
           "tests": [
@@ -3812,7 +3812,7 @@ export const sqlTrack: Track = {
             "output": "0 []",
             "note": "Nol baris — persis yang seharusnya, karena tidak ada pengguna yang beralamat email `' OR 1=1 --`. Teks jahat itu diperlakukan sebagai DATA, bukan perintah. Kalau query-nya disusun dengan menempel string, kondisi `1=1` ikut dieksekusi dan SELURUH tabel pengguna terkirim ke penyerang."
           },
-          "instruction": "Tulis panggilan pool.query asinkron untuk menyaring data pengguna dari tabel 'users' di mana kolom 'id' sama dengan parameter $1, lalu lewatkan variabel [id] dalam array.",
+          "instruction": "Cegah celah keamanan SQL Injection saat mengambil data profil: panggil `pool.query` secara asinkron untuk mengambil data dari tabel `users` di mana `id` dicocokkan dengan placeholder terparameter `$1`, lalu lewatkan nilai variabel `id` di dalam array parameter.",
           "starterCode": "// Tulis pool.query terparameter di sini\n",
           "language": "text",
           "tests": [
@@ -3860,7 +3860,7 @@ export const sqlTrack: Track = {
             "output": "[\n  { id: 1, email: 'ana@test.com' },\n  { id: 2, email: 'budi@test.com' }\n]",
             "note": "ORM mengembalikan array objek JavaScript yang siap dikirim sebagai JSON — itulah kenyamanan yang dibelinya. Perhatikan `select`: tanpa itu, Prisma mengambil SEMUA kolom termasuk `password_hash`, dan objek itu gampang sekali ikut terkirim ke klien."
           },
-          "instruction": "Gunakan Prisma Client untuk mengambil seluruh data pengguna dari tabel 'user' yang memiliki kolom 'role' bernilai 'admin'.",
+          "instruction": "Gunakan Prisma Client untuk mengambil seluruh data pengguna dari model `user` yang memiliki kriteria penyaringan kolom `role` bernilai 'admin'.",
           "starterCode": "// Tulis query Prisma findMany di sini\n",
           "language": "text",
           "tests": [
@@ -3902,7 +3902,7 @@ export const sqlTrack: Track = {
             "output": "-- log query Prisma TANPA include (10 user):\nSELECT * FROM \"User\";\nSELECT * FROM \"Profile\" WHERE \"userId\" = 1;\nSELECT * FROM \"Profile\" WHERE \"userId\" = 2;\n... 8 baris serupa lagi        <-- inilah N+1: 1 + 10 query\n\n-- log query DENGAN include:\nSELECT * FROM \"User\";\nSELECT * FROM \"Profile\" WHERE \"userId\" IN (1,2,3,4,5,6,7,8,9,10);\n(2 query total)",
             "note": "Cara mendeteksinya bukan dengan menebak: nyalakan log query ORM (`new PrismaClient({ log: ['query'] })`) lalu hitung barisnya. Di data lokal yang cuma 10 baris, N+1 hampir tidak terasa — di produksi dengan 5.000 baris, halaman yang sama menunggu ribuan query."
           },
-          "instruction": "Endpoint daftar user memicu satu query tambahan untuk setiap user demi mengambil postingannya. Tulis ulang pemanggilan `prisma.user.findMany()` agar relasi `posts` ikut diambil dalam pengambilan yang sama (eager loading), sehingga jumlah query tidak lagi tumbuh mengikuti jumlah user.",
+          "instruction": "Endpoint daftar artikel memicu masalah N+1 query karena mengambil data profil penulis satu per satu di dalam perulangan. Tulis ulang pemanggilan `prisma.user.findMany()` menggunakan teknik Eager Loading agar relasi `posts` ikut diambil sekaligus dalam kueri yang sama.",
           "starterCode": "// Tulis query Eager Loading Prisma di sini\n",
           "language": "text",
           "tests": [
@@ -3944,8 +3944,8 @@ export const sqlTrack: Track = {
             "output": "1 migration created and applied: 20260727_add_profile",
             "note": "Jalankan migrate deploy pada langkah deployment CI/CD otomatis."
           },
-          "instruction": "Ketikkan perintah CLI Prisma untuk mengeksekusi migrasi tertunda pada lingkungan produksi (migrate deploy).",
-          "starterCode": "# Tulis perintah migrate deploy di sini\n",
+          "instruction": "Dalam pipeline deployment CI/CD ke server produksi, eksekusi seluruh berkas migrasi skema Prisma yang tertunda secara otomatis tanpa meminta interaksi konfirmasi terminal.",
+          "starterCode": "# Jalankan migrasi skema produksi tertunda:\n",
           "language": "text",
           "tests": [
             {
@@ -3982,7 +3982,7 @@ export const sqlTrack: Track = {
             "output": "                                                        QUERY PLAN                                                        \n--------------------------------------------------------------------------------------------------------------------------\n Index Scan using idx_big_email on users  (cost=0.41..8.43 rows=1 width=39) (actual time=0.024..0.025 rows=1 loops=1)\n   Index Cond: (email = 'user42@test.com'::text)\n Planning Time: 0.340 ms\n Execution Time: 0.048 ms\n(4 rows)",
             "note": "Baris `Index Cond:` adalah tanda index benar-benar dipakai untuk mempersempit pencarian; kalau yang muncul `Filter:` beserta `Rows Removed by Filter`, mesin membaca banyak baris lalu membuangnya. Urutan diagnosis query lambat selalu sama: jalankan `EXPLAIN ANALYZE`, cari simpul dengan `actual time` terbesar, baru putuskan perlu index atau perlu query yang ditulis ulang."
           },
-          "instruction": "Tuliskan perintah EXPLAIN ANALYZE untuk menganalisis rencana eksekusi query 'SELECT * FROM orders WHERE user_id = 42;'.",
+          "instruction": "Laporan APM menunjukkan endpoint rincian pesanan pelanggan #42 mengalami perlambatan. Jalankan analisis rencana eksekusi dan catat waktu eksekusi riil dari kueri `SELECT * FROM orders WHERE user_id = 42;` menggunakan perintah `EXPLAIN ANALYZE`.",
           "starterCode": "-- Tulis perintah EXPLAIN ANALYZE di bawah ini\n",
           "language": "text",
           "tests": [
@@ -4021,9 +4021,9 @@ export const sqlTrack: Track = {
               "question": "Cara paling aman dan ampuh untuk mencegah serangan SQL Injection saat mengeksekusi Raw Query dari aplikasi backend adalah?",
               "choices": [
                 "Menggunakan Parameterized Query dengan placeholder (seperti $1 atau ?)",
-                "Mengubah semua huruf SQL menjadi KAPITAL",
-                "Menghapus kata kunci SELECT",
-                "Menyimpan password di file TXT"
+                "Menyaring kata kunci SQL dengan fungsi string replace di backend",
+                "Mengenkripsi parameter URL menggunakan Base64 sebelum dikirim",
+                "Mengubah semua huruf kueri SQL menjadi huruf kapital"
               ],
               "answerIndex": 0,
               "explanation": "Parameterized Query memisahkan perintah SQL dan variabel data sehingga input pengguna tidak pernah dievaluasi sebagai kode perintah SQL."
@@ -4034,9 +4034,9 @@ export const sqlTrack: Track = {
               "question": "Apa tujuan utama penggunaan Connection Pool pada aplikasi backend bertrafik tinggi?",
               "choices": [
                 "Mendaur ulang koneksi database aktif yang ada agar tidak membebankan pembuatan koneksi baru per HTTP request",
-                "Mempercepat proses kompilasi kode JavaScript",
-                "Menyimpan cache HTML di browser",
-                "Menghapus tabel otomatis setiap jam"
+                "Menyimpan cache respons HTML dari server web",
+                "Mengompresi data transaksi sebelum disimpan ke disk",
+                "Mencegah pengguna mengirimkan lebih dari 10 request per detik"
               ],
               "answerIndex": 0,
               "explanation": "Connection Pool mendaur ulang koneksi yang sudah terbuka sehingga server tidak kewalahan dan tidak kehabisan RAM akibat membuka koneksi TCP berulang."
@@ -4047,9 +4047,9 @@ export const sqlTrack: Track = {
               "question": "Apakah yang dimaksud dengan masalah N+1 dalam konteks penggunaan ORM/Database?",
               "choices": [
                 "Kondisi saat aplikasi memanggil 1 query utama lalu secara tidak efisien mengeksekusi N query tambahan di dalam loop",
-                "Kesalahan tipe data angka yang ditambah 1",
-                "Bug di mana database kekurangan 1 kolom",
-                "Syntax error pada klausa ORDER BY"
+                "Bug di mana database kekurangan 1 kolom primary key",
+                "Kondisi di mana query SQL menghasilkan N baris ditambah 1 baris kosong",
+                "Keterlambatan replikasi sebesar N detik ditambah 1 detik toleransi"
               ],
               "answerIndex": 0,
               "explanation": "Masalah N+1 terjadi ketika pengambil data relasi dilakukan di dalam perulangan N baris, memicu N+1 kali kueri ke server yang seharusnya cukup diselesaikan dalam 1 kueri JOIN/Eager Loading."
@@ -4060,9 +4060,9 @@ export const sqlTrack: Track = {
               "question": "Dalam proyek nyata, kapan sebaiknya kamu memilih menggunakan Raw SQL Query daripada ORM?",
               "choices": [
                 "Ketika query sangat kompleks (multiple JOIN, window function, CTE) dan ORM malah menghasilkan query tidak optimal",
-                "Selalu, karena ORM tidak aman",
-                "Tidak pernah, karena ORM selalu lebih baik",
-                "Hanya saat database tidak mendukung ORM"
+                "Setiap kali aplikasi melayani pengguna baru",
+                "Hanya saat database server tidak memiliki koneksi internet",
+                "Ketika tabel database memiliki lebih dari 100 baris data"
               ],
               "answerIndex": 0,
               "explanation": "Raw SQL cocok untuk query analitik atau multi-join kompleks di mana abstraksi ORM justru menghasilkan SQL yang tidak efisien. Namun tetap gunakan parameterized query untuk keamanan."
@@ -4073,9 +4073,9 @@ export const sqlTrack: Track = {
               "question": "Apa fungsi utama dari Database Migration dalam siklus pengembangan aplikasi?",
               "choices": [
                 "Mencatat setiap perubahan skema database secara berversi sehingga bisa di-apply dan rollback secara konsisten di semua environment",
-                "Memindahkan data dari satu server ke server lain",
-                "Mengenkripsi seluruh isi database",
-                "Menghapus database lama dan membuat yang baru"
+                "Menyalin seluruh data produksi ke server lokal untuk pengujian",
+                "Mengubah format database dari relasional menjadi dokumen NoSQL",
+                "Membuat cadangan fisik harddisk server secara berkala"
               ],
               "answerIndex": 0,
               "explanation": "Migration berfungsi sebagai version control untuk skema database, memastikan struktur tabel konsisten antara environment development, staging, dan production."

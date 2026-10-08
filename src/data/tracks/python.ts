@@ -237,9 +237,14 @@ export const pythonTrack: Track = {
           explanation:
             "Python menerapkan sistem Dynamic Typing, artinya kamu cukup menuliskan nama variabel dan mengisikan nilainya tanpa perlu mendeklarasikan tipe datanya secara manual. Tipe data dasar yang paling sering digunakan meliputi `int` (bilangan bulat), `float` (bilangan desimal), `str` (teks), dan `bool` (`True` atau `False`). Nama variabel bersifat case-sensitive (membedakan huruf besar dan kecil) dan disarankan menggunakan konvensi snake_case sesuai standar PEP 8. Jebakan umum terjadi ketika variabel dipanggil sebelum dideklarasikan, yang akan memicu `NameError` saat program dijalankan.",
           example: {
-            code: 'nama = "Budi"\numur = 25\ntinggi = 175.5\nis_active = True',
-            output: "Empat variabel ber-tipe data berbeda dibuat.",
-            note: "Tipe data di Python bersifat dinamik (Dynamic Typing).",
+            code:
+              'nama = "Budi"\n' +
+              'umur = 25\n' +
+              'tinggi = 175.5\n' +
+              'is_active = True\n' +
+              'print(f"{nama} ({type(nama).__name__}), {umur} ({type(umur).__name__})")',
+            output: "Budi (str), 25 (int)",
+            note: "Tipe data di Python bersifat dinamik (Dynamic Typing); kamu bisa memeriksa tipenya dengan type().",
           },
           instruction:
             'Programmu membutuhkan data umur pengguna. Buatlah sebuah variabel bernama `age` dan isikan dengan angka 20.',
@@ -313,12 +318,15 @@ export const pythonTrack: Track = {
           explanation:
             "Fungsi `input()` digunakan untuk menerima masukan teks dari pengguna via terminal keyboard. Hal paling krusial yang harus diingat adalah bahwa fungsi `input()` selalu mengembalikan data ber-tipe string (`str`), meskipun pengguna mengetikkan angka. Jika kamu ingin melakukan perhitungan aritmetika pada masukan tersebut, kamu wajib mengonversinya secara eksplisit ke bilangan bulat menggunakan `int()` atau desimal menggunakan `float()`. Lupa melakukan konversi tipe data akan memicu `TypeError` atau penggabungan teks yang salah (misalnya `'20' + '5'` menjadi `'205'`).",
           example: {
-            code: 'umur_str = input("Masukkan umur: ")\numur = int(umur_str)',
-            output: "Variabel umur dikonversi menjadi integer.",
+            code:
+              'teks_angka = "100"\n' +
+              'nilai = int(teks_angka)\n' +
+              'print(f"Nilai: {nilai}, Tipe: {type(nilai).__name__}")',
+            output: "Nilai: 100, Tipe: int",
             note: "Lupa mengonversi string ke int akan menyebabkan TypeError saat operasi aritmetika.",
           },
           instruction:
-            "Kita menerima input umur dalam bentuk string pada variabel `input_str`. Konversikan nilainya menjadi bilangan bulat (integer) lalu simpan ke variabel bernama `score`.",
+            "Kita menerima input nilai ujian berupa teks pada variabel `input_str`. Konversikan nilainya menjadi bilangan bulat (integer) lalu simpan ke variabel bernama `score`.",
           starterCode: "# Konversikan input_str ke int di sini\n",
           language: "text",
           tests: [
@@ -497,7 +505,7 @@ export const pythonTrack: Track = {
                 "Menjalankan perulangan lebih cepat",
                 "Menyelipkan nilai variabel langsung ke dalam teks (string)",
                 "Mengonversi teks menjadi huruf kapital",
-                "Mencetak file ke printer",
+                "Mengonversi seluruh string menjadi format bytes",
               ],
               answerIndex: 1,
               explanation:
@@ -527,7 +535,7 @@ export const pythonTrack: Track = {
                 "Menghentikan program seutuhnya",
                 "Menghentikan iterasi dan keluar dari perulangan",
                 "Melanjutkan ke iterasi berikutnya",
-                "Menghapus variabel di dalam loop",
+                "Mengulang iterasi saat ini dari baris awal",
               ],
               answerIndex: 1,
               explanation:
@@ -701,8 +709,8 @@ export const pythonTrack: Track = {
           explanation:
             "Tuple adalah struktur data berurut yang bersifat immutable (tidak dapat diubah, ditambah, atau dihapus setelah dibuat) dengan sintaks `(10, 20)`. Fitur Unpacking memungkinkan kamu mengekstrak isi elemen tuple secara langsung ke beberapa variabel terpisah dalam satu baris kode, seperti `x, y = point`. Tuple mengeksekusi operasi lebih cepat dan hemat memori dibanding List. Jebakan umum terjadi jika jumlah variabel di sebelah kiri tidak sama dengan jumlah elemen tuple di sebelah kanan, yang memicu `ValueError: too many values to unpack`.",
           example: {
-            code: "point = (10, 20)\nx, y = point",
-            output: "x bernilai 10 dan y bernilai 20.",
+            code: "point = (10, 20)\nx, y = point\nprint(f\"x: {x}, y: {y}\")",
+            output: "x: 10, y: 20",
             note: "Tuple sangat cepat dan hemat memori dibanding List.",
           },
           instruction:
@@ -860,11 +868,14 @@ export const pythonTrack: Track = {
           id: "python-2-7",
           title: "Memilih Struktur Data yang Tepat",
           explanation:
-            "Memilih struktur data yang tepat menentukan efisiensi dan kerapian kode aplikasi. Gunakan **List** untuk urutan data fleksibel yang bisa berubah, **Tuple** untuk kumpulan data tetap seperti koordinat, **Dictionary** untuk pencarian data berpasangan berbasis kunci unik, dan **Set** untuk pengujian keberadaan nilai unik tanpa duplikat. Keputusan yang salah — misalnya menggunakan List untuk pencarian jutaan record — akan membuat aplikasi melambat drastis karena pencarian list membutuhkan iterasi $O(n)$, sedangkan Dictionary/Set hanya butuh $O(1)$.",
+            "Memilih struktur data yang tepat menentukan efisiensi dan kerapian kode aplikasi. Gunakan **List** untuk urutan data fleksibel yang bisa berubah, **Tuple** untuk kumpulan data tetap seperti koordinat, **Dictionary** untuk pencarian data berpasangan berbasis kunci unik, dan **Set** untuk pengujian keberadaan nilai unik tanpa duplikat. Keputusan yang salah — misalnya menggunakan List untuk pencarian jutaan record — akan membuat aplikasi melambat drastis karena pencarian list membutuhkan iterasi $O(n)$, sedangkan Dictionary/Set hanya butuh $O(1)$. Jebakan yang sering ditemui adalah menggunakan list sebagai kunci dictionary, padahal Python mewajibkan kunci dictionary bersifat immutable (hashable).",
           example: {
-            code: "# dict: pencarian instan lewat kunci\nharga = {'kopi': 25000}\nprint(harga['kopi'])",
-            output: "Optimasi algoritma dan efisiensi memori program.",
-            note: "Memilih struktur data yang tepat mempermudah penulisan kode.",
+            code:
+              "# dict: pencarian instan lewat kunci O(1)\n" +
+              "harga = {'kopi': 25000}\n" +
+              "print(harga['kopi'])",
+            output: "25000",
+            note: "Dictionary dan Set mencari nilai dalam waktu konstan O(1) tanpa perlu loop iterasi seluruh data.",
           },
           instruction:
             "Kamu membutuhkan struktur data untuk memetakan ID karyawan agar pencarian berjalan instan dalam kompleksitas $O(1)$. Buatlah variabel bernama `struktur_pencarian` dan inisialisasikan sebagai dictionary kosong.",
@@ -1139,8 +1150,14 @@ export const pythonTrack: Track = {
           explanation:
             "Cakupan variabel (scope) menentukan di mana sebuah variabel dapat diakses di dalam program. Variabel yang dibuat di dalam fungsi bersifat Lokal dan akan dihapus dari memori begitu eksekusi fungsi selesai. Sebaliknya, variabel di tingkat luar berstatus Global. Hindari menggunakan kata kunci `global` untuk mengubah variabel luar dari dalam fungsi, karena praktik ini merusak isolasi data dan membuat pencarian bug menjadi sangat sulit di aplikasi besar.",
           example: {
-            code: "x = 10\ndef test():\n    x = 5 # Variabel lokal x yang berbeda dari global x",
-            output: "Variabel lokal terisolasi dari lingkup luar.",
+            code:
+              "x = 10\n" +
+              "def ubah():\n" +
+              "    x = 5\n" +
+              '    print("Di dalam fungsi:", x)\n\n' +
+              "ubah()\n" +
+              'print("Di luar fungsi:", x)',
+            output: "Di dalam fungsi: 5\nDi luar fungsi: 10",
             note: "Operkan variabel via parameter fungsi daripada mengandalkan variabel global.",
           },
           instruction:
@@ -1177,10 +1194,13 @@ export const pythonTrack: Track = {
           id: "python-3-4",
           title: "Lambda (Fungsi Anonim)",
           explanation:
-            "Fungsi Lambda adalah fungsi anonim (tanpa nama) ringkas yang ditulis dalam satu baris ekspresi dengan sintaks `lambda param: ekspresi`. Lambda umumnya digunakan sebagai argumen sementara fungsi lain, seperti Kunci Pengurutan pada `sort(key=lambda x: x[1])` atau transformasi data pendek. Karena keterbatasan hanya mendukung 1 baris ekspresi, jangan paksakan logika kompleks ke dalam lambda — gunakan fungsi `def` biasa agar kode tetap mudah dibaca.",
+            "Fungsi Lambda adalah fungsi anonim (tanpa nama) ringkas yang ditulis dalam satu baris ekspresi dengan sintaks `lambda param: ekspresi`. Lambda umumnya digunakan sebagai argumen sementara fungsi lain, seperti Kunci Pengurutan pada `sort(key=lambda x: x[1])` atau transformasi data pendek. Karena keterbatasan hanya mendukung 1 baris ekspresi, jangan paksakan logika kompleks ke dalam lambda — gunakan fungsi `def` biasa agar kode tetap mudah dibaca. Jebakan yang sering ditemui adalah menuliskan statement `return` di dalam tubuh lambda, padahal ekspresi lambda otomatis mengembalikan nilai hasil evaluasinya tanpa kata kunci `return`.",
           example: {
-            code: 'users = [("Budi", 25), ("Asep", 20)]\nusers.sort(key=lambda x: x[1])',
-            output: "Mengurutkan daftar user berdasarkan umur (elemen indeks ke-1).",
+            code:
+              'users = [("Budi", 25), ("Asep", 20)]\n' +
+              "users.sort(key=lambda x: x[1])\n" +
+              "print(users)",
+            output: "[('Asep', 20), ('Budi', 25)]",
             note: "Lambda hanya bisa memuat 1 baris ekspresi.",
           },
           instruction:
@@ -1215,7 +1235,7 @@ export const pythonTrack: Track = {
           id: "python-3-5",
           title: "Penjaga Eksekusi Script: __name__ == '__main__'",
           explanation:
-            "Pemeriksaan `if __name__ == '__main__':` adalah idiom wajib di Python untuk memisahkan kode utama yang dieksekusi dengan kode modul yang di-import. Saat berkas dijalankan langsung via terminal (`python app.py`), variabel `__name__` bernilai `'__main__'`. Namun jika berkas tersebut di-import oleh berkas lain, `__name__` diisi nama modulnya sehingga blok utama di dalamnya tidak akan terkesekusi tanpa sengaja saat di-import.",
+            "Pemeriksaan `if __name__ == '__main__':` adalah idiom wajib di Python untuk memisahkan kode utama yang dieksekusi dengan kode modul yang di-import. Saat berkas dijalankan langsung via terminal (`python app.py`), variabel `__name__` bernilai `'__main__'`. Namun jika berkas tersebut di-import oleh berkas lain, `__name__` diisi nama modulnya sehingga blok utama di dalamnya tidak akan terkesekusi tanpa sengaja saat di-import. Jebakan klasik pemula adalah meletakkan pemanggilan fungsi berat atau koneksi database langsung di level root berkas tanpa pelindung ini, sehingga modul pengimpor ikut mengeksekusi operasi tersebut tanpa terkontrol.",
           example: {
             code: 'def main():\n    print("Jalan")\n\nif __name__ == "__main__":\n    main()',
             output: "Jalan",
@@ -1253,7 +1273,7 @@ export const pythonTrack: Track = {
           id: "python-3-6",
           title: "Standard Library (datetime & math)",
           explanation:
-            "Python kaya akan pustaka bawaan (Standard Library) yang siap pakai tanpa perlu mengunduh apa pun. Modul `math` menyediakan operasi matematika tingkat lanjut seperti akar dan trigonometri, `datetime` menangani kalkulasi tanggal dan waktu, sementara `random` menghasilkan angka acak. Menguasai modul bawaan ini menghemat waktu pengembangan dan mencegah ketergantungan berlebih pada library pihak ketiga.",
+            "Python kaya akan pustaka bawaan (Standard Library) yang siap pakai tanpa perlu mengunduh apa pun. Modul `math` menyediakan operasi matematika tingkat lanjut seperti akar dan trigonometri, `datetime` menangani kalkulasi tanggal dan waktu, sementara `random` menghasilkan angka acak. Menguasai modul bawaan ini menghemat waktu pengembangan dan mencegah ketergantungan berlebih pada library pihak ketiga. Jebakan yang sering terjadi adalah menamai berkas skrip sendiri sama dengan nama modul standar, seperti membuat berkas `math.py` atau `datetime.py`, yang mengakibatkan circular import error saat skrip dijalankan.",
           example: {
             code:
               'import math\nimport datetime\n\n' +
@@ -1294,13 +1314,15 @@ export const pythonTrack: Track = {
           id: "python-3-7",
           title: "Type Hinting Dasar & Docstrings",
           explanation:
-            "Type Hinting seperti `def hitung(a: int, b: int) -> int:` dan Docstring `\"\"\"...\"\"\"` digunakan untuk mendokumentasikan tipe data serta penjelasan fungsi di Python. Meskipun Python tidak membatasi tipe data secara ketat saat runtime (Dynamic Typing), Type Hinting sangat membantu editor IDE seperti VS Code untuk memberikan auto-complete yang akurat dan deteksi bug lebih awal via static analyzer (seperti mypy).",
+            "Type Hinting seperti `def hitung(a: int, b: int) -> int:` dan Docstring `\"\"\"...\"\"\"` digunakan untuk mendokumentasikan tipe data serta penjelasan fungsi di Python. Meskipun Python tidak membatasi tipe data secara ketat saat runtime (Dynamic Typing), Type Hinting sangat membantu editor IDE seperti VS Code untuk memberikan auto-complete yang akurat dan deteksi bug lebih awal via static analyzer (seperti mypy). Docstrings diletakkan tepat di baris pertama badan fungsi menggunakan tanda petik tiga untuk menjelaskan tujuan fungsi, parameter, serta nilai kembaliannya. Jebakan umum pemula adalah mengira anotasi tipe akan melempar TypeError otomatis jika diberi tipe yang salah saat runtime, padahal Python tetap mengizinkannya kecuali diverifikasi oleh validator eksternal.",
           example: {
             code:
               'def tambah(a: int, b: int) -> int:\n' +
               '    """Menjumlahkan dua angka integer."""\n' +
-              "    return a + b",
-            output: "Petunjuk tipe data terlihat jelas di IDE.",
+              "    return a + b\n\n" +
+              "print(tambah(5, 7))\n" +
+              "print(tambah.__doc__)",
+            output: "12\nMenjumlahkan dua angka integer.",
             note: "Type hint meningkatkan keamanan kode tanpa mengorbankan sifat dinamis Python.",
           },
           instruction:
@@ -1501,9 +1523,11 @@ export const pythonTrack: Track = {
             "Saat programmu membuka file, sistem operasi akan 'mengunci' file tersebut. Jika lupa menutupnya, file bisa rusak (corrupt) atau terkunci. Python punya fitur brilian bernama Context Manager lewat blok `with open('data.txt') as f:`. Bayangkan ini seperti pintu otomatis: ia membukakan file, lalu otomatis menutupnya setelah blok kode selesai — bahkan jika terjadi error di tengah jalan! Jebakan pengguna Windows: selalu tambahkan `encoding='utf-8'` agar karakter khusus tidak berubah jadi simbol aneh.",
           example: {
             code:
-              'with open("data.txt", "r", encoding="utf-8") as f:\n' +
-              "    content = f.read()",
-            output: "Isi berkas data.txt dibaca aman.",
+              'with open("log.txt", "w", encoding="utf-8") as f:\n' +
+              '    f.write("Status: OK\\nCode: 200")\n' +
+              'with open("log.txt", "r", encoding="utf-8") as f:\n' +
+              '    print(f.read())',
+            output: "Status: OK\nCode: 200",
             note: "Selalu tentukan encoding='utf-8' untuk mencegah korupsi karakter di Windows.",
           },
           instruction:
@@ -1540,7 +1564,7 @@ export const pythonTrack: Track = {
           id: "python-4-2",
           title: "Membaca File CSV dengan csv.DictReader",
           explanation:
-            "Modul `csv` menyediakan kelas `csv.DictReader(file)` untuk membaca tabel CSV dan mengonversi setiap barisnya menjadi objek Dictionary secara otomatis, di mana nama header kolom digunakan sebagai kunci dictionary. Pendekatan ini jauh lebih aman dibanding `csv.reader()` biasa berbasis indeks angka, karena kode kamu tidak akan patah jika urutan kolom pada file CSV berubah. Jebakan utama pemula adalah lupa bahwa seluruh nilai yang dibaca dari CSV ber-tipe string, sehingga angka harus dikonversi manual.",
+            "Modul `csv` menyediakan kelas `csv.DictReader(file)` untuk membaca tabel CSV dan mengonversi setiap barisnya menjadi objek Dictionary secara otomatis, di mana nama header kolom digunakan sebagai kunci dictionary. Pendekatan ini jauh lebih aman dibanding `csv.reader()` biasa berbasis indeks angka, karena kode kamu tidak akan patah jika urutan kolom pada file CSV berubah. Kapan dipakai: gunakan DictReader saat memproses file tabular yang memiliki header jelas dan kamu ingin mengakses data berdasarkan nama kolom secara ekspresif. Jebakan utama pemula adalah lupa bahwa seluruh nilai yang dibaca dari CSV ber-tipe string, sehingga angka harus dikonversi manual.",
           example: {
             code:
               'import csv\n' +
@@ -1625,13 +1649,13 @@ export const pythonTrack: Track = {
           id: "python-4-4",
           title: "Manajemen Path Modern dengan pathlib",
           explanation:
-            "Modul `pathlib` menyediakan kelas `Path` yang merupakan pendekatan berorientasi objek modern untuk mengelola lokasi direktori dan berkas secara lintas platform (OS-agnostic). Menggunakan `Path(\"folder\") / \"file.txt\"` memanfaatkan operator `/` yang otomatis menyesuaikan backslash (`\\`) di Windows atau forward slash (`/`) di Linux/Mac. Pendekatan ini jauh lebih bersih dan minim error dibanding manipulasi string `os.path.join()` lama.",
+            "Modul `pathlib` menyediakan kelas `Path` yang merupakan pendekatan berorientasi objek modern untuk mengelola lokasi direktori dan berkas secara lintas platform (OS-agnostic). Menggunakan `Path(\"folder\") / \"file.txt\"` memanfaatkan operator `/` yang otomatis menyesuaikan backslash (`\\`) di Windows atau forward slash (`/`) di Linux/Mac. Objek `Path` juga menyediakan metode praktis bawaan seperti `.name`, `.suffix`, `.parent`, dan `.exists()` tanpa perlu mengimpor modul `os` terpisah. Pendekatan ini jauh lebih bersih dan minim error dibanding manipulasi string `os.path.join()` lama. Jebakan pemula adalah menggabungkan path dengan string concatenation manual memakai tanda plus `+` yang rawan memicu inkonsistensi tanda slash di Windows.",
           example: {
             code:
               'from pathlib import Path\n' +
-              'file_path = Path("data") / "users.csv"\n' +
-              "if file_path.exists(): print(file_path.read_text())",
-            output: "Operator / otomatis menangani slash '/' atau '\\' di Windows/Linux.",
+              'p = Path("laporan/2026/rekap.csv")\n' +
+              'print(p.name, p.suffix, p.parent)',
+            output: "rekap.csv .csv laporan/2026",
             note: "pathlib adalah standar penanganan path di Python modern.",
           },
           instruction:
@@ -1718,14 +1742,18 @@ export const pythonTrack: Track = {
           id: "python-4-6",
           title: "Melempar Exception (raise)",
           explanation:
-            "Selain menangkap error, kamu juga bisa sengaja melempar error menggunakan kata kunci `raise ValueError(\"pesan\")` ketika terjadi pelanggaran aturan bisnis atau masukan data yang invalid. Melempar exception adalah cara standar untuk menghentikan alur program abnormal dan memberi tahu pemanggil fungsi bahwa terjadi masalah. Kamu juga bisa membuat kelas Exception kustom sendiri dengan membuat subclass turunan dari kelas bawaan `Exception`.",
+            "Selain menangkap error, kamu juga bisa sengaja melempar error menggunakan kata kunci `raise ValueError(\"pesan\")` ketika terjadi pelanggaran aturan bisnis atau masukan data yang invalid. Melempar exception adalah cara standar untuk menghentikan alur program abnormal dan memberi tahu pemanggil fungsi bahwa terjadi masalah. Kamu juga bisa membuat kelas Exception kustom sendiri dengan membuat subclass turunan dari kelas bawaan `Exception`. Jebakan yang sering ditemui adalah melempar exception umum `raise Exception()` tanpa tipe yang jelas, yang menyulitkan penanganan error spesifik di sisi pemanggil fungsi.",
           example: {
             code:
-              "def set_age(age):\n" +
-              "    if age < 0:\n" +
-              '        raise ValueError("Umur tidak boleh negatif")\n' +
-              "    return age",
-            output: "Exception ValueError dilempar jika umur < 0.",
+              "def validasi_skor(skor):\n" +
+              "    if skor < 0 or skor > 100:\n" +
+              '        raise ValueError("Skor harus 0-100")\n' +
+              "    return skor\n\n" +
+              "try:\n" +
+              "    validasi_skor(150)\n" +
+              "except ValueError as err:\n" +
+              '    print("Validasi gagal:", err)',
+            output: "Validasi gagal: Skor harus 0-100",
             note: "Dapat membuat custom Exception class turunan dari Exception.",
           },
           instruction:
@@ -1762,11 +1790,15 @@ export const pythonTrack: Track = {
           id: "python-4-7",
           title: "Jebakan File Encoding UTF-8",
           explanation:
-            "Pengkodean Karakter (Character Encoding) menterjemahkan bit biner komputer menjadi huruf teks. Sistem operasi Windows sering menggunakan default encoding lama seperti CP1252 yang akan merusak tulisan ber-karakter bahasa Indonesia, aksen, atau emoji. Karena itu, selalu cantumkan argumen eksplisit `encoding='utf-8'` saat memanggil fungsi `open()` baik mode baca maupun tulis agar data tersimpan sempurna di semua sistem operasi.",
+            "Pengkodean Karakter (Character Encoding) menterjemahkan bit biner komputer menjadi huruf teks. Sistem operasi Windows sering menggunakan default encoding lama seperti CP1252 yang akan merusak tulisan ber-karakter bahasa Indonesia, aksen, atau emoji. Karena itu, selalu cantumkan argumen eksplisit `encoding='utf-8'` saat memanggil fungsi `open()` baik mode baca maupun tulis agar data tersimpan sempurna di semua sistem operasi. Jebakan paling sering terjadi saat aplikasi membaca file yang disimpan di server Linux berformat UTF-8 di mesin Windows lokal tanpa parameter ini, yang langsung memicu UnicodeDecodeError.",
           example: {
             code:
-              'with open("file.txt", "w", encoding="utf-8") as f:\n    f.write("Kopi ☕")',
-            output: "Karakter emoji dan simbol internasional tersimpan sempurna.",
+              'teks = "Halo Dunia ☕"\n' +
+              'with open("pesan.txt", "w", encoding="utf-8") as f:\n' +
+              '    f.write(teks)\n' +
+              'with open("pesan.txt", "r", encoding="utf-8") as f:\n' +
+              '    print(f.read())',
+            output: "Halo Dunia ☕",
             note: "Default encoding di Windows adalah CP1252 yang sering merusak teks.",
           },
           instruction:
@@ -1811,10 +1843,10 @@ export const pythonTrack: Track = {
               question:
                 "Mengapa sangat direkomendasikan membuka file menggunakan perintah `with open(...) as f:` di Python?",
               choices: [
-                "Karena berkas otomatis ditutup (closed) secara aman setelah selesai eksekusi, bahkan jika terjadi error",
-                "Karena file otomatis ter-kompresi menjadi ZIP",
-                "Karena dengan 'with' file tidak memakan memori",
-                "Karena 'with' menghapus file otomatis",
+                "Karena berkas otomatis ditutup (closed) secara aman setelah blok selesai dieksekusi, bahkan jika terjadi error",
+                "Karena membuka file dalam mode read-only secara default untuk menghemat alokasi buffer I/O",
+                "Karena mengunci berkas secara permanen di sistem operasi agar tidak dapat diakses proses lain",
+                "Karena otomatis mengonversi format teks menjadi binary buffer sebelum dibaca",
               ],
               answerIndex: 0,
               explanation:
@@ -1841,10 +1873,10 @@ export const pythonTrack: Track = {
               question:
                 "Mengapa disarankan menspesifikasikan jenis Exception spesifik (misal `except ValueError:`) daripada hanya menggunakan `except:` kosong?",
               choices: [
-                "Except spesifik menghemat RAM komputer",
+                "Except spesifik meningkatkan kecepatan kompilasi bytecode CPython",
                 "Except kosong (bare except) akan menangkap semua error termasuk SystemExit atau KeyboardInterrupt, menyembunyikan bug yang tidak terduga",
-                "Python tidak mendukung bare except mulai versi 3",
-                "Agar sintaks kode lebih panjang",
+                "Python memblokir eksekusi bare except pada runtime level produksi",
+                "Karena PEP 8 melarang blok try tanpa klausa else pendamping",
               ],
               answerIndex: 1,
               explanation:
@@ -2007,14 +2039,18 @@ export const pythonTrack: Track = {
           id: "python-5-2",
           title: "Atribut Instansi vs Atribut Kelas",
           explanation:
-            "Di Python, Atribut Instansi (`self.nama`) bersifat unik untuk tiap objek dan didaftarkan di dalam constructor `__init__`. Sebaliknya, Atribut Kelas dideklarasikan langsung di badan kelas di luar method, dan nilainya dibagikan bersama oleh seluruh instansi objek. Mengubah nilai atribut kelas secara langsung (`User.species = 'Alien'`) akan memengaruhi nilai spesies di seluruh objek turunan, sedangkan mengubah `self.species` hanya memengaruhi objek itu sendiri.",
+            "Di Python, Atribut Instansi (`self.nama`) bersifat unik untuk tiap objek dan didaftarkan di dalam constructor `__init__`. Sebaliknya, Atribut Kelas dideklarasikan langsung di badan kelas di luar method, dan nilainya dibagikan bersama oleh seluruh instansi objek. Mengubah nilai atribut kelas secara langsung (`User.species = 'Alien'`) akan memengaruhi nilai spesies di seluruh objek turunan, sedangkan mengubah `self.species` hanya memengaruhi objek itu sendiri. Jebakan fatal pemula adalah mendeklarasikan list atau dictionary sebagai atribut kelas, yang menyebabkan modifikasi data pada satu objek ikut mengubah data di semua objek lain secara tidak disengaja.",
           example: {
             code:
               "class User:\n" +
-              "    species = 'Homo Sapiens' # Atribut Kelas\n" +
+              "    species = 'Homo Sapiens'\n" +
               "    def __init__(self, name):\n" +
-              "        self.name = name    # Atribut Instansi",
-            output: "Atribut species bernilai sama bagi seluruh objek User.",
+              "        self.name = name\n\n" +
+              "u1 = User('Budi')\n" +
+              "u2 = User('Siti')\n" +
+              "print(u1.species, u2.species)\n" +
+              "print(u1.name, u2.name)",
+            output: "Homo Sapiens Homo Sapiens\nBudi Siti",
             note: "Perubahan atribut kelas akan mempengaruhi seluruh instansi objek.",
           },
           instruction:
@@ -2022,11 +2058,12 @@ export const pythonTrack: Track = {
           starterCode: "# Deklarasikan atribut kelas di sini\n",
           language: "text",
           tests: [
-                      {
-                        "pattern": "species\\s*=\\s*['\"]Human['\"]",
-                        "message": "Atribut KELAS ditulis langsung di dalam badan class, sejajar dengan definisi method dan TANPA `self`. Nilainya dibagikan semua instance — beda dari atribut instance (`self.nama`) yang dibuat di dalam `__init__` dan berbeda untuk setiap objek. Jebakan besarnya: atribut kelas bertipe list atau dict akan dibagi bersama, sehingga `append` dari satu objek ikut terlihat di semua objek lain."
-                      }
-                    ],
+            {
+              pattern: "species\\s*=\\s*['\"]Human['\"]",
+              message:
+                "Atribut KELAS ditulis langsung di dalam badan class, sejajar dengan definisi method dan TANPA `self`. Nilainya dibagikan semua instance — beda dari atribut instance (`self.nama`) yang dibuat di dalam `__init__` dan berbeda untuk setiap objek. Jebakan besarnya: atribut kelas bertipe list atau dict akan dibagi bersama, sehingga `append` dari satu objek ikut terlihat di semua objek lain.",
+            },
+          ],
           solution: "species = 'Human'",
           susunKode: {
             question:
@@ -2049,14 +2086,19 @@ export const pythonTrack: Track = {
           id: "python-5-3",
           title: "Pewarisan (Inheritance) & super()",
           explanation:
-            "Pewarisan (Inheritance) memungkinkan kelas anak (*subclass*) mengambil atribut dan method dari kelas induk (*parent class*) dengan sintaks `class Child(Parent):`. Fungsi bawaan `super()` digunakan di dalam constructor kelas anak untuk memanggil constructor kelas induk `super().__init__(...)`. Teknik ini mencegah duplikasi kode inisialisasi dan memastikan bahwa logika dasar kelas induk tetap tereksekusi sempurna.",
+            "Pewarisan (Inheritance) memungkinkan kelas anak (*subclass*) mengambil atribut dan method dari kelas induk (*parent class*) dengan sintaks `class Child(Parent):`. Fungsi bawaan `super()` digunakan di dalam constructor kelas anak untuk memanggil constructor kelas induk `super().__init__(...)`. Teknik ini mencegah duplikasi kode inisialisasi dan memastikan bahwa logika dasar kelas induk tetap tereksekusi sempurna. Jebakan umum adalah lupa memanggil `super().__init__()` di baris pertama constructor anak, sehingga atribut dasar milik induk tidak pernah dibuat dan memicu AttributeError saat diakses.",
           example: {
             code:
+              "class User:\n" +
+              "    def __init__(self, name):\n" +
+              "        self.name = name\n\n" +
               "class Admin(User):\n" +
               "    def __init__(self, name, role):\n" +
               "        super().__init__(name)\n" +
-              "        self.role = role",
-            output: "Kelas Admin mewarisi nama dari kelas User.",
+              "        self.role = role\n\n" +
+              "adm = Admin('Dewi', 'Superadmin')\n" +
+              "print(f'{adm.name}: {adm.role}')",
+            output: "Dewi: Superadmin",
             note: "super() memanggil method dari kelas induk.",
           },
           instruction:
@@ -2064,15 +2106,17 @@ export const pythonTrack: Track = {
           starterCode: "# Panggil constructor parent class di bawah ini\n",
           language: "text",
           tests: [
-                      {
-                        "pattern": "super\\(\\s*\\)\\.__init__\\(",
-                        "message": "Constructor kelas induk dipanggil lewat `super().__init__(...)`. Tanpa pemanggilan ini, atribut yang seharusnya disiapkan induk tidak pernah ada, dan pemakaiannya nanti memicu `AttributeError` yang jauh dari sumber masalahnya."
-                      },
-                      {
-                        "pattern": "__init__\\(\\s*name\\s*\\)",
-                        "message": "Teruskan argumen yang dibutuhkan induk. Letakkan pemanggilan ini di BARIS PERTAMA `__init__` anak, sebelum atribut tambahan milik anak diisi."
-                      }
-                    ],
+            {
+              pattern: "super\\(\\s*\\)\\.__init__\\(",
+              message:
+                "Constructor kelas induk dipanggil lewat `super().__init__(...)`. Tanpa pemanggilan ini, atribut yang seharusnya disiapkan induk tidak pernah ada, dan pemakaiannya nanti memicu `AttributeError` yang jauh dari sumber masalahnya.",
+            },
+            {
+              pattern: "__init__\\(\\s*name\\s*\\)",
+              message:
+                "Teruskan argumen yang dibutuhkan induk. Letakkan pemanggilan ini di BARIS PERTAMA `__init__` anak, sebelum atribut tambahan milik anak diisi.",
+            },
+          ],
           solution: "super().__init__(name)",
           susunKode: {
             question:
@@ -2102,14 +2146,11 @@ export const pythonTrack: Track = {
               "    def __init__(self, title):\n" +
               "        self.title = title\n" +
               "    def __str__(self):\n" +
-              '        return f"Buku: {self.title}"',
-            output:
+              '        return f"Buku: {self.title}"\n\n' +
               "book = Book('Python 101')\n" +
-              "print(book)\n" +
-              "→ Buku: Python 101\n\n" +
-              "book        # di REPL, tanpa __repr__\n" +
-              "→ <__main__.Book object at 0x7f3c1a2b40>",
-            note: "Baris terakhir itu penyebab kebingungan yang sering terjadi: `print(obj)` sudah rapi, tapi menampilkan objek di dalam list (`print([book])`) tetap memunculkan alamat memori — karena list memakai __repr__, bukan __str__.",
+              "print(book)",
+            output: "Buku: Python 101",
+            note: "print(obj) otomatis memanggil __str__, sedangkan representasi di dalam list print([book]) menggunakan __repr__.",
           },
           instruction:
             "Class `Pengguna` menyimpan nama pemakai di atribut `self.name`, dan saat ini `print(user)` mencetak alamat memori. Tambahkan method dunder yang dipakai `print()` untuk mewakili objek sebagai teks, dan kembalikan nilai atribut `name` apa adanya.",
@@ -2201,7 +2242,7 @@ export const pythonTrack: Track = {
           example: {
             code:
               "# cukup fungsi: transformasi sederhana tanpa state\ndef diskon(harga):\n    return harga * 0.9\n\nprint(diskon(100000))",
-            output: "Struktur kode pragmatis khas pengembang Python profesional.",
+            output: "90000.0",
             note: "Python mendukung multiparadigma (Procedural, Functional, OOP).",
           },
           instruction:
@@ -2258,10 +2299,10 @@ export const pythonTrack: Track = {
               question:
                 "Apa tujuan utama dari method Dunder seperti `__str__` atau `__repr__` dalam sebuah kelas Python?",
               choices: [
-                "Untuk mengenkripsi data di dalam kelas",
+                "Untuk mendefinisikan destructor yang membersihkan alokasi memori objek secara manual",
                 "Untuk memberikan representasi teks (string) yang ramah dibaca manusia ketika objek dicetak menggunakan print()",
-                "Untuk menghapus objek dari memori secara permanen",
-                "Untuk menduplikasi objek menjadi dua",
+                "Untuk mengonversi objek menjadi format JSON biner secara otomatis",
+                "Untuk membatasi akses atribut agar menjadi private dan tidak dapat diwariskan",
               ],
               answerIndex: 1,
               explanation:
@@ -2428,13 +2469,13 @@ export const pythonTrack: Track = {
           id: "python-6-2",
           title: "Virtual Environment (python -m venv .venv)",
           explanation:
-            "Virtual Environment membuat lingkungan terisolasi untuk tiap proyek Python kamu. Perintah `python -m venv .venv` akan membuat folder `.venv` yang memuat salinan interpreter Python dan direktori pustaka mandiri. Setelah dibuat, lingkungan tersebut wajib diaktifkan via terminal (`source .venv/bin/activate` di Linux/Mac atau `.venv\\Scripts\\activate` di Windows) sebelum menginstal paket pip agar versi pustaka antar proyek tidak bentrok.",
+            "Virtual Environment membuat lingkungan terisolasi untuk tiap proyek Python kamu. Perintah `python -m venv .venv` akan membuat folder `.venv` yang memuat salinan interpreter Python dan direktori pustaka mandiri. Setelah dibuat, lingkungan tersebut wajib diaktifkan via terminal (`source .venv/bin/activate` di Linux/Mac atau `.venv\\Scripts\\activate` di Windows) sebelum menginstal paket pip agar versi pustaka antar proyek tidak bentrok. Jebakan yang sering dialami pengguna Windows adalah eksekusi script diblokir oleh PowerShell ExecutionPolicy, yang dapat diatasi dengan menjalankan perintah `Set-ExecutionPolicy RemoteSigned`.",
           example: {
             code:
               "python -m venv .venv\n" +
-              "source .venv/bin/activate # Linux/Mac\n" +
-              ".venv\\Scripts\\activate # Windows",
-            output: "Virtual environment terisolasi di folder .venv.",
+              "source .venv/bin/activate\n" +
+              "which python",
+            output: "/home/user/my_project/.venv/bin/python",
             note: "Jangan lupa mengaktifkan venv sebelum menginstal dependensi.",
           },
           instruction:
@@ -2470,13 +2511,12 @@ export const pythonTrack: Track = {
           id: "python-6-3",
           title: "Mengelola Dependensi dengan requirements.txt",
           explanation:
-            "File `requirements.txt` berfungsi sebagai manifes pencatat seluruh nama dan versi spesifik pustaka yang dibutuhkan oleh proyek Python. Perintah `pip freeze > requirements.txt` mengekspor seluruh pustaka yang aktif saat ini, sedangkan `pip install -r requirements.txt` memungkinkan rekan satu tim atau server produksi memasang seluruh dependensi identik hanya dalam satu perintah. Praktik ini menjamin reproduksibilitas lingkungan aplikasi secara sempurna.",
+            "File `requirements.txt` berfungsi sebagai manifes pencatat seluruh nama dan versi spesifik pustaka yang dibutuhkan oleh proyek Python. Perintah `pip freeze > requirements.txt` mengekspor seluruh pustaka yang aktif saat ini, sedangkan `pip install -r requirements.txt` memungkinkan rekan satu tim atau server produksi memasang seluruh dependensi identik hanya dalam satu perintah. Praktik ini menjamin reproduksibilitas lingkungan aplikasi secara sempurna. Jebakan yang sering terjadi adalah memasang library tanpa mencatat versinya di requirements.txt, sehingga ketika library tersebut diperbarui dengan breaking changes di masa depan, proyek tiba-tiba gagal dijalankan.",
           example: {
-            code:
-              "pip freeze > requirements.txt\n" +
-              "pip install -r requirements.txt",
-            output: "Seluruh tim menginstal versi library yang identik.",
-            note: "Sangat krusial agar tidak ada bug 'di laptopku bisa'.",
+            code: "pip freeze > requirements.txt",
+            output:
+              "Pustaka aktif (requests==2.32.3, pandas==2.2.3) berhasil diekspor ke requirements.txt",
+            note: "Gunakan pip freeze untuk mencatat seluruh versi library proyek.",
           },
           instruction:
             "Rekan timmu baru saja menambahkan library baru ke proyek dan mencatatnya. Jalankan perintah instalasi paket secara masif dengan membaca file `requirements.txt` dari direktori saat ini.",
@@ -2511,16 +2551,14 @@ export const pythonTrack: Track = {
           id: "python-6-4",
           title: "Struktur Folder Proyek Python Standar",
           explanation:
-            "Mengorganisir direktori proyek sesuai standar industri memudahkan navigasi kode dan kolaborasi tim. Struktur standar umumnya terdiri dari folder `src/` (untuk seluruh source code utama), `tests/` (untuk berkas unit test), file `requirements.txt` (daftar dependensi), `.gitignore` (mencegah folder `.venv` ter-commit), dan `README.md` (dokumentasi). Menjaga struktur yang rapi sejak awal mencegah kekacauan impor modul saat aplikasi membesar.",
+            "Mengorganisir direktori proyek sesuai standar industri memudahkan navigasi kode dan kolaborasi tim. Struktur standar umumnya terdiri dari folder `src/` (untuk seluruh source code utama), `tests/` (untuk berkas unit test), file `requirements.txt` (daftar dependensi), `.gitignore` (mencegah folder `.venv` ter-commit), dan `README.md` (dokumentasi). Menjaga struktur yang rapi sejak awal mencegah kekacauan impor modul saat aplikasi membesar. Jebakan pemula yang fatal adalah lupa menambahkan `.venv` ke file `.gitignore`, sehingga ribuan file dependensi lokal berukuran ratusan megabyte ikut terunggah ke repositori GitHub tim.",
           example: {
             code:
-              "my_project/\n" +
-              "  .venv/\n" +
-              "  src/\n" +
-              "    app.py\n" +
-              "  tests/\n" +
-              "  requirements.txt",
-            output: "Struktur proyek terorganisir bersih.",
+              "mkdir -p src tests\n" +
+              "touch requirements.txt src/app.py tests/test_app.py\n" +
+              "ls -R",
+            output:
+              ".:\nrequirements.txt  src  tests\n\n./src:\napp.py\n\n./tests:\ntest_app.py",
             note: "Pastikan folder .venv dicantumkan di .gitignore.",
           },
           instruction:
@@ -2555,13 +2593,11 @@ export const pythonTrack: Track = {
           id: "python-6-5",
           title: "Jupyter Notebook vs Script (.py)",
           explanation:
-            "Pilihlah lingkungan eksekusi yang sesuai dengan tujuan pekerjaan kamu. Gunakan **Jupyter Notebook** (`.ipynb`) saat melakukan eksplorasi data, eksperimen model Machine Learning, dan pemrosesan visual sel demi sel karena tampilannya kaya grafik. Namun saat kode siap dijalankan secara otomatis di lingkungan produksi, backend API, atau cron job, wajib konversikan kode tersebut menjadi **Script Python** (`.py`) agar dapat dieksekusi secara headless tanpa UI browser.",
+            "Pilihlah lingkungan eksekusi yang sesuai dengan tujuan pekerjaan kamu. Gunakan **Jupyter Notebook** (`.ipynb`) saat melakukan eksplorasi data, eksperimen model Machine Learning, dan pemrosesan visual sel demi sel karena tampilannya kaya grafik. Namun saat kode siap dijalankan secara otomatis di lingkungan produksi, backend API, atau cron job, wajib konversikan kode tersebut menjadi **Script Python** (`.py`) agar dapat dieksekusi secara headless tanpa UI browser. Jebakan umum di tim data adalah mencoba menjalankan file notebook mentah di dalam pipeline otomatis server produksi, padahal format JSON notebook rentan mengalami konflik merge di git dan sulit didebug tanpa antarmuka grafis.",
           example: {
-            code:
-              "# notebook: eksplorasi bertahap, sel per sel\n" +
-              "# script .py: dijalankan sekali lewat terminal\n" +
-              "python src/laporan.py",
-            output: "Pemilihan lingkungan eksekusi yang tepat.",
+            code: "python src/app.py",
+            output:
+              "[INFO] Memuat modul aplikasi...\n[SUCCESS] Server berjalan pada http://localhost:8000",
             note: "Ubah notebook menjadi script .py jika ingin di-deploy ke server.",
           },
           instruction:
@@ -2598,11 +2634,11 @@ export const pythonTrack: Track = {
           id: "python-6-6",
           title: "Linting & Formatting Otomatis dengan Ruff",
           explanation:
-            "Menjaga konsistensi gaya penulisan kode sesuai standar PEP 8 kini sangat mudah dengan alat linter modern seperti `Ruff`. Perintah `ruff check .` memindai seluruh berkas Python secara rekursif untuk menemukan potensi bug dan kesalahan sintaks, sedangkan `ruff format .` merapikan indentasi dan spasi secara otomatis hingga 100x lebih cepat dibanding linter tradisional berbasis Python murni (seperti Flake8 atau Black).",
+            "Menjaga konsistensi gaya penulisan kode sesuai standar PEP 8 kini sangat mudah dengan alat linter modern seperti `Ruff`. Perintah `ruff check .` memindai seluruh berkas Python secara rekursif untuk menemukan potensi bug dan kesalahan sintaks, sedangkan `ruff format .` merapikan indentasi dan spasi secara otomatis hingga 100x lebih cepat dibanding linter tradisional berbasis Python murni (seperti Flake8 atau Black). Alat ini ditulis dengan bahasa Rust sehingga proses linting pada repositori besar selesai dalam hitungan milidetik sebelum kamu membuat commit git. Kapan dipakai: jalankan Ruff secara rutin di tahap pre-commit atau CI/CD pipeline untuk memastikan seluruh anggota tim mematuhi pedoman gaya kode yang konsisten. Jebakan pemula adalah mengabaikan peringatan linter hingga menumpuk ratusan error, yang membuat proses refactoring menjadi jauh lebih berat di kemudian hari.",
           example: {
-            code: "ruff check .\nruff format .",
-            output: "Kode terformat rapi sesuai standar PEP 8.",
-            note: "Standar formatter Python paling cepat di ekosistem modern.",
+            code: "ruff format .",
+            output: "1 file reformatted, 2 files left unchanged",
+            note: "Ruff format merapikan gaya penulisan kode sesuai PEP 8 secara instan.",
           },
           instruction:
             "Sebelum kita simpan dan commit kode kita, pastikan kita memindainya. Jalankan linter dan checker populer `ruff` untuk mendeteksi error pada seluruh direktori proyek ini secara rekursif (`.`).",
@@ -2643,9 +2679,9 @@ export const pythonTrack: Track = {
                 "Mengapa kita Wajib menggunakan Virtual Environment (`python -m venv .venv`) saat membuat proyek Python baru?",
               choices: [
                 "Untuk mengisolasi versi library antar proyek agar tidak saling bentrok di komputer local",
-                "Agar script Python berjalan 100x lebih cepat",
-                "Untuk menghapus virus komputer",
-                "Virtual environment diwajibkan oleh Windows",
+                "Karena interpreter Python menolak mengeksekusi script pihak ketiga tanpa folder .venv",
+                "Untuk mengompilasi kode Python menjadi file biner mesin mandiri yang lebih cepat",
+                "Untuk membatasi konsumsi memori RAM skrip agar tidak melebihi alokasi sistem operasi",
               ],
               answerIndex: 0,
               explanation:
@@ -2686,10 +2722,10 @@ export const pythonTrack: Track = {
               type: "pilihan-ganda",
               question: "Apa yang dimaksud dengan `.whl` (Wheel) di ekosistem PyPI?",
               choices: [
-                "Sebuah virus",
+                "Format arsip source code mentah yang wajib dikompilasi ulang oleh compiler C lokal",
                 "Format paket distribusi library Python pra-kompilasi agar instalasi lebih cepat",
-                "Logo manajer paket",
-                "Mesin virtual Python",
+                "Ekstensi file konfigurasi permission direktori paket Python",
+                "Virtual machine container yang mengisolasi proses pip",
               ],
               answerIndex: 1,
               explanation:
@@ -2796,13 +2832,13 @@ export const pythonTrack: Track = {
           id: "python-7-1",
           title: "Membaca Banyak Berkas Sekaligus (modul glob)",
           explanation:
-            "Modul bawaan `glob` mempermudah pencarian berkas di dalam sistem direktori menggunakan pencocokan pola karakter liar (*wildcard*). Misalnya, `glob.glob('data/*.csv')` mengembalikan daftar seluruh nama file ber-ekstensi `.csv` yang ada di folder `data/`. Fitur ini adalah langkah pertama yang sangat penting dalam pipeline otomasi untuk mengumpulkan puluhan berkas laporan bulanan sebelum digabungkan secara otomatis.",
+            "Modul bawaan `glob` mempermudah pencarian berkas di dalam sistem direktori menggunakan pencocokan pola karakter liar (*wildcard*). Misalnya, `glob.glob('data/*.csv')` mengembalikan daftar seluruh nama file ber-ekstensi `.csv` yang ada di folder `data/`. Fitur ini adalah langkah pertama yang sangat penting dalam pipeline otomasi untuk mengumpulkan puluhan berkas laporan bulanan sebelum digabungkan secara otomatis. Jebakan yang sering ditemui adalah lupa bahwa `glob.glob()` tidak mencari berkas secara rekursif ke subfolder terdalam kecuali kamu menyematkan argumen `recursive=True` bersama pola bintang ganda `**/*`.",
           example: {
             code:
               'import glob\n' +
               'files = glob.glob("reports/*.csv")\n' +
               "print(files)",
-            output: "['reports/jan.csv', 'reports/feb.csv']  (jika folder reports berisi kedua file itu)",
+            output: "['reports/jan.csv', 'reports/feb.csv']",
             note: "Memudahkan pemrosesan otomatis puluhan berkas laporan sekaligus.",
           },
           instruction:
@@ -2839,15 +2875,16 @@ export const pythonTrack: Track = {
           id: "python-7-2",
           title: "Otomasi Berkas Excel dengan openpyxl",
           explanation:
-            "Pustaka pihak ketiga `openpyxl` memungkinkan script Python kamu membaca, mengedit, memformat sel, hingga membuat berkas spreadsheet Microsoft Excel (`.xlsx`) secara otomatis tanpa perlu membuka aplikasi Excel. Fungsi `openpyxl.load_workbook('file.xlsx')` memuat seluruh struktur workbook ke dalam memori, lalu kamu dapat mengakses lembar kerja aktif via `wb.active` dan mengubah nilai sel seperti `sheet['A1'] = 'Nilai Baru'`. Selalu panggil `.save()` di akhir script untuk menyimpan perubahan.",
+            "Pustaka pihak ketiga `openpyxl` memungkinkan script Python kamu membaca, mengedit, memformat sel, hingga membuat berkas spreadsheet Microsoft Excel (`.xlsx`) secara otomatis tanpa perlu membuka aplikasi Excel. Fungsi `openpyxl.load_workbook('file.xlsx')` memuat seluruh struktur workbook ke dalam memori, lalu kamu dapat mengakses lembar kerja aktif via `wb.active` dan mengubah nilai sel seperti `sheet['A1'] = 'Nilai Baru'`. Selalu panggil `.save()` di akhir script untuk menyimpan perubahan. Jebakan yang sering mengacaukan skrip adalah mencoba membaca atau menyimpan berkas yang sedang dibuka oleh program Microsoft Excel di komputer, yang memicu PermissionError pada sistem operasi.",
           example: {
             code:
-              'import openpyxl\n' +
-              'wb = openpyxl.load_workbook("data.xlsx")\n' +
+              'import openpyxl\n\n' +
+              "wb = openpyxl.Workbook()\n" +
               "sheet = wb.active\n" +
-              'sheet["A1"] = "Hasil Otomasi"\n' +
-              'wb.save("data.xlsx")',
-            output: "Sel A1 di berkas Excel terupdate otomatis.",
+              'sheet.title = "Penjualan"\n' +
+              'sheet["B2"] = 150000\n' +
+              'print(f"Sheet: {sheet.title}, B2: {sheet[\'B2\'].value}")',
+            output: "Sheet: Penjualan, B2: 150000",
             note: "Otomatiskan pengisian formulir Excel yang berulang.",
           },
           instruction:
@@ -2927,13 +2964,14 @@ export const pythonTrack: Track = {
           id: "python-7-4",
           title: "Web Scraping Dasar dengan BeautifulSoup",
           explanation:
-            "Pustaka `BeautifulSoup` (dari paket `bs4`) digunakan untuk memparsing struktur dokumen dokumen HTML dan mengekstrak informasi elemen web tertentu secara otomatis. Dengan meneruskan string teks HTML dan nama parser `html.parser`, kamu dapat mencari tag HTML tertentu menggunakan metode `.find('h1')` atau `.find_all('a')` serta mengambil isi teksnya via `.text`. Ingatlah untuk selalu mematuhi etika web scraping dengan tidak membebani server target secara berlebihan.",
+            "Pustaka `BeautifulSoup` (dari paket `bs4`) digunakan untuk memparsing struktur dokumen dokumen HTML dan mengekstrak informasi elemen web tertentu secara otomatis. Dengan meneruskan string teks HTML dan nama parser `html.parser`, kamu dapat mencari tag HTML tertentu menggunakan metode `.find('h1')` atau `.find_all('a')` serta mengambil isi teksnya via `.text`. Ingatlah untuk selalu mematuhi etika web scraping dengan tidak membebani server target secara berlebihan. Jebakan umum pemula adalah langsung memanggil `.text` pada hasil `.find()` tanpa memeriksa apakah elemen tersebut ditemukan, yang dapat memicu AttributeError jika tag yang dicari tidak ada di halaman.",
           example: {
             code:
-              'from bs4 import BeautifulSoup\n' +
+              'from bs4 import BeautifulSoup\n\n' +
+              'html_doc = "<html><body><h1>Berita Utama</h1></body></html>"\n' +
               'soup = BeautifulSoup(html_doc, "html.parser")\n' +
-              'title = soup.find("h1").text',
-            output: "Mengekstrak teks dari elemen tag h1.",
+              'print(soup.find("h1").text)',
+            output: "Berita Utama",
             note: "Hormati aturan etika web scraping.",
           },
           instruction:
@@ -2970,14 +3008,15 @@ export const pythonTrack: Track = {
           id: "python-7-5",
           title: "Mengirim Email Otomatis (smtplib)",
           explanation:
-            "Modul bawaan `smtplib` bersama `email.message.EmailMessage` memungkinkan skrip Python kamu mengirimkan laporan notifikasi email secara otomatis via protokol SMTP. Kamu dapat mengatur pengirim, penerima, subjek email via `msg['Subject'] = ...`, serta isi teks pesan melalui `msg.set_content(...)`. Saat menghubungkan ke penyedia email seperti Gmail, gunakan App Password alih-alih password utama akun demi menjaga keamanan kredensial.",
+            "Modul bawaan `smtplib` bersama `email.message.EmailMessage` memungkinkan skrip Python kamu mengirimkan laporan notifikasi email secara otomatis via protokol SMTP. Kamu dapat mengatur pengirim, penerima, subjek email via `msg['Subject'] = ...`, serta isi teks pesan melalui `msg.set_content(...)`. Saat menghubungkan ke penyedia email seperti Gmail, gunakan App Password alih-alih password utama akun demi menjaga keamanan kredensial. Jebakan fatal adalah menyimpan kredensial email dan kata sandi langsung di dalam kode program, sehingga rawan bocor saat kode diunggah ke repositori publik; selalu simpan kata sandi dalam variabel lingkungan (.env).",
           example: {
             code:
-              'from email.message import EmailMessage\n' +
+              'from email.message import EmailMessage\n\n' +
               "msg = EmailMessage()\n" +
-              'msg["Subject"] = "Laporan Harian"\n' +
-              'msg.set_content("Terlampir laporan harian")',
-            output: "Pesan email terformat siap dikirim via SMTP.",
+              'msg["Subject"] = "Laporan Mingguan"\n' +
+              'msg["To"] = "manager@perusahaan.com"\n' +
+              'print(f"{msg[\'Subject\']} -> {msg[\'To\']}")',
+            output: "Laporan Mingguan -> manager@perusahaan.com",
             note: "Gunakan App Password saat menghubungkan akun Gmail.",
           },
           instruction:
@@ -3014,12 +3053,15 @@ export const pythonTrack: Track = {
           id: "python-7-6",
           title: "Penjadwalan Script Otomatis (Schedule / Cron)",
           explanation:
-            "Script otomasi tidak akan maksimal jika masih harus dipicu secara manual setiap hari. Kamu dapat menggunakan library `schedule` untuk menjadwalkan eksekusi fungsi Python pada waktu spesifik dengan sintaks yang ramah dibaca manusia: `schedule.every().day.at(\"08:00\").do(job)`. Di lingkungan server produksi Linux, kamu juga bisa memanfaatkan alat penjadwal OS native seperti Cron Job (`crontab -e`) untuk mengeksekusi script secara background.",
+            "Script otomasi tidak akan maksimal jika masih harus dipicu secara manual setiap hari. Kamu dapat menggunakan library `schedule` untuk menjadwalkan eksekusi fungsi Python pada waktu spesifik dengan sintaks yang ramah dibaca manusia: `schedule.every().day.at(\"08:00\").do(job)`. Di lingkungan server produksi Linux, kamu juga bisa memanfaatkan alat penjadwal OS native seperti Cron Job (`crontab -e`) untuk mengeksekusi script secara background. Jebakan umum saat menggunakan pustaka `schedule` adalah lupa membuat loop tak terhingga `while True: schedule.run_pending()` dengan jeda `time.sleep(1)`, sehingga program langsung selesai sebelum jadwal tugas sempat terpicu.",
           example: {
             code:
-              'import schedule\n' +
-              'schedule.every().day.at("08:00").do(job)',
-            output: "Fungsi job otomatis dijalankan setiap jam 8 pagi.",
+              'import schedule\n\n' +
+              "def sinkronisasi():\n" +
+              "    pass\n\n" +
+              'job = schedule.every().day.at("08:00").do(sinkronisasi)\n' +
+              'print(f"Job: {job.job_func.__name__}, unit: {job.unit}")',
+            output: "Job: sinkronisasi, unit: days",
             note: "Menghilangkan kebutuhan memicu script secara manual.",
           },
           instruction:
@@ -3151,10 +3193,10 @@ export const pythonTrack: Track = {
               question:
                 "Saat menulis string yang berisi nama path direktori di sistem Windows `C:\\Users\\Data`, kita harus berhati-hati karena backslash (`\\`) akan dianggap sebagai escape character oleh Python. Cara paling rapi untuk menyelesaikannya adalah?",
               choices: [
-                "Menggunakan Raw String literal `r'C:\\Users\\Data'`",
-                "Menggunakan modul requests",
-                "Mengganti ke Linux",
-                "Menggunakan file JSON",
+                "Menggunakan Raw String literal `r'C:\\Users\\Data'` atau kelas Path dari modul pathlib",
+                "Menghapus seluruh tanda kutip dari deklarasi variabel string path",
+                "Menyimpan string ke dalam tuple sebelum dieksekusi interpreter",
+                "Mengganti tanda backslash dengan spasi ganda tanpa memeriksa OS",
               ],
               answerIndex: 0,
               explanation:
@@ -3241,7 +3283,7 @@ export const pythonTrack: Track = {
           id: "python-8-1",
           title: "Mental Model pandas: Series vs DataFrame",
           explanation:
-            "Library `pandas` diimpor dengan konvensi nama singkatan `import pandas as pd`. Dua struktur data utamanya adalah **Series** (array 1 dimensi untuk satu kolom data) dan **DataFrame** (tabel 2 dimensi yang terdiri dari kumpulan Series sejajar yang berbagi indeks sama). Memahami mental model tabel ini mempermudah manipulasi data skala besar secara deklaratif tanpa perlu perulangan manual.",
+            "Library `pandas` diimpor dengan konvensi nama singkatan `import pandas as pd`. Dua struktur data utamanya adalah Series (array 1 dimensi berlabel untuk satu kolom data) dan DataFrame (tabel 2 dimensi yang terdiri dari kumpulan Series sejajar yang berbagi indeks baris sama). Setiap kolom pada DataFrame hakikatnya adalah satu objek Series yang berdiri sendiri. Memahami mental model tabel ini mempermudah manipulasi data skala besar secara deklaratif tanpa perulangan manual. Jebakan pemula yang paling umum adalah mencoba mengulang baris dengan loop `for`, padahal pandas dirancang untuk komputasi tervektorisasi yang puluhan kali lebih cepat.",
           example: {
             code:
               'import pandas as pd\n' +
@@ -3282,10 +3324,15 @@ export const pythonTrack: Track = {
           id: "python-8-2",
           title: "Membaca Berkas CSV ke DataFrame (read_csv)",
           explanation:
-            "Fungsi `pd.read_csv('file.csv')` mengurai berkas teks tabel CSV dan mengonversinya langsung menjadi objek DataFrame di memori. pandas secara otomatis mendeteksi baris pertama sebagai nama header kolom dan mengasumsikan tipe data tiap kolom (seperti integer atau float). Untuk membaca berkas Excel, gunakan `pd.read_excel('file.xlsx')`. Jebakan umum adalah FileNotFoundError jika path nama berkas salah.",
+            "Fungsi `pd.read_csv('file.csv')` mengurai berkas teks tabel CSV dan mengonversinya langsung menjadi objek DataFrame di memori. pandas secara otomatis mendeteksi baris pertama sebagai nama header kolom dan mengasumsikan tipe data tiap kolom (seperti integer atau float). Kapan dipakai: gunakan fungsi ini di baris pertama pipeline pengolahan data tabular apa pun untuk memuat data mentah ke dalam memori. Untuk membaca berkas Excel, gunakan `pd.read_excel('file.xlsx')`. Jebakan umum adalah FileNotFoundError jika path nama berkas salah.",
           example: {
-            code: "df = pd.read_csv('penjualan.csv')",
-            output: "Berkas CSV terurai otomatis ke dalam DataFrame.",
+            code:
+              "import pandas as pd\n\n" +
+              "data = {'id': [1, 2], 'produk': ['Buku', 'Pena'], 'harga': [15000, 5000]}\n" +
+              "df = pd.DataFrame(data)\n" +
+              "print(df.shape)\n" +
+              "print(list(df.columns))",
+            output: "(2, 3)\n['id', 'produk', 'harga']",
             note: "Gunakan pd.read_excel('file.xlsx') untuk berkas Excel.",
           },
           instruction:
@@ -3321,7 +3368,7 @@ export const pythonTrack: Track = {
           id: "python-8-3",
           title: "Inspeksi Awal Data (head, info, describe)",
           explanation:
-            "Langkah pertama yang wajib dilakukan saat menerima dataset baru adalah menginspeksi strukturnya. Metode `df.head(5)` mencetak 5 baris pertama untuk mengintip sampel data, `df.info()` menampilkan tipe data tiap kolom beserta jumlah nilai non-null, dan `df.describe()` menghitung statistik deskriptif (seperti rerata, nilai minimum, dan maksimum) untuk seluruh kolom angka. Inspeksi ini membantu menemukan data kosong atau format yang salah sejak awal.",
+            "Langkah pertama yang wajib dilakukan saat menerima dataset baru adalah menginspeksi strukturnya. Metode `df.head(5)` mencetak 5 baris pertama untuk mengintip sampel data, `df.info()` menampilkan tipe data tiap kolom beserta jumlah nilai non-null, dan `df.describe()` menghitung statistik deskriptif (seperti rerata, nilai minimum, dan maksimum) untuk seluruh kolom angka. Inspeksi ini membantu menemukan data kosong atau format yang salah sejak awal. Jebakan pemula adalah langsung melakukan kalkulasi tanpa inspeksi, sehingga operasi matematika error atau menghasilkan angka aneh akibat kolom harga tersimpan sebagai string.",
           example: {
             code:
               "import pandas as pd\n" +
@@ -3363,11 +3410,14 @@ export const pythonTrack: Track = {
           id: "python-8-4",
           title: "Seleksi Kolom & Filter Baris",
           explanation:
-            "Mengakses satu kolom dilakukan dengan sintaks `df['nama_kolom']` yang mengembalikan objek Series. Untuk menyaring baris berdasarkan kondisi tertentu (*boolean indexing*), bungkus ekspresi kondisi logika di dalam kurung siku DataFrame, contohnya `df[df['harga'] > 1000]`. Ekspresi `df['harga'] > 1000` menghasilkan Series boolean (`True`/`False`), dan DataFrame hanya akan menampilkan baris yang bernilai `True`.",
+            "Mengakses satu kolom dilakukan dengan sintaks `df['nama_kolom']` yang mengembalikan objek Series. Untuk menyaring baris berdasarkan kondisi tertentu (*boolean indexing*), bungkus ekspresi kondisi logika di dalam kurung siku DataFrame, contohnya `df[df['harga'] > 1000]`. Ekspresi `df['harga'] > 1000` menghasilkan Series boolean (`True`/`False`), dan DataFrame hanya akan menampilkan baris yang bernilai `True`. Jebakan yang sering ditemui saat membuat filter multi-kondisi adalah menggunakan kata kunci `and`/`or` bawaan Python alih-alih operator bitwise `&`/`|`, serta lupa membungkus tiap kondisi dengan tanda kurung buka-tutup.",
           example: {
-            code: "adults = df[df['age'] >= 18]",
-            output:
-              "DataFrame baru berisi baris pengguna berumur 18 tahun ke atas.",
+            code:
+              "import pandas as pd\n\n" +
+              "df = pd.DataFrame({'nama': ['Ani', 'Budi', 'Cici'], 'skor': [60, 85, 92]})\n" +
+              "lulus = df[df['skor'] >= 80]\n" +
+              "print(list(lulus['nama']))",
+            output: "['Budi', 'Cici']",
             note: "Kondisi boolean menyaring baris secara vektor.",
           },
           instruction:
@@ -3404,10 +3454,14 @@ export const pythonTrack: Track = {
           id: "python-8-5",
           title: "Membuat Kolom Baru & Operasi Vektor",
           explanation:
-            "Perhitungan matematika di pandas dieksekusi secara vektorized (serentak pada seluruh baris) di C-backend yang sangat cepat tanpa perlu menulis loop `for` manual. Kamu cukup membuat nama kolom baru di sebelah kiri penugasan `=` dan mengalikan dua Series di sebelah kanan: `df['total'] = df['harga'] * df['qty']`. Hasil perkalian tiap baris akan langsung terisi otomatis ke kolom baru.",
+            "Perhitungan matematika di pandas dieksekusi secara vektorized (serentak pada seluruh baris) di C-backend yang sangat cepat tanpa perlu menulis perulangan `for` manual. Kamu cukup membuat nama kolom baru di sebelah kiri tanda penugasan `=` dan mengalikan dua Series di sebelah kanan seperti `df['total'] = df['harga'] * df['qty']`. Hasil kalkulasi tiap baris akan langsung terisi otomatis ke kolom baru secara efisien. Kapan dipakai: gunakan operasi vektor ini untuk seluruh rekayasa fitur baru seperti menghitung diskon, pajak, atau margin keuntungan. Jebakan umum pemula adalah lupa bahwa kedua kolom harus memiliki tipe data numerik yang valid atau panjang indeks yang cocok.",
           example: {
-            code: "df['total'] = df['harga'] * df['jumlah']",
-            output: "Kolom baru 'total' dibuat dengan hasil perkalian tiap baris.",
+            code:
+              "import pandas as pd\n\n" +
+              "df = pd.DataFrame({'harga': [1000, 2000], 'qty': [3, 2]})\n" +
+              "df['total'] = df['harga'] * df['qty']\n" +
+              "print(list(df['total']))",
+            output: "[3000, 4000]",
             note: "Operasi vektor di pandas dieksekusi sangat cepat di C backend.",
           },
           instruction:
@@ -3446,8 +3500,12 @@ export const pythonTrack: Track = {
           explanation:
             "Nilai kosong pada DataFrame diwakili oleh simbol `NaN` (Not a Number). Kamu dapat menghitung jumlah data kosong per kolom dengan `df.isna().sum()`. Untuk membersihkannya, kamu bisa mengisi nilai kosong dengan nilai default atau rata-rata memakai `df['kolom'].fillna(nilai)`, atau membuang seluruh baris yang mengandung data kosong menggunakan `df.dropna()`. Ingatlah untuk menimpa kembali variabel kolom atau DataFrame agar perubahan tersimpan.",
           example: {
-            code: "df['umur'] = df['umur'].fillna(df['umur'].mean())",
-            output: "Nilai umur yang kosong diisi dengan angka rata-rata umur.",
+            code:
+              "import pandas as pd\n\n" +
+              "s = pd.Series([80.0, None, 90.0])\n" +
+              "s_bersih = s.fillna(0.0)\n" +
+              "print(list(s_bersih))",
+            output: "[80.0, 0.0, 90.0]",
             note: "Pembersihan missing value sangat krusial sebelum analisis statistik.",
           },
           instruction:
@@ -3484,10 +3542,14 @@ export const pythonTrack: Track = {
           id: "python-8-7",
           title: "Pengelompokan Data Pertama (groupby)",
           explanation:
-            "Metode `df.groupby('kategori')` mengelompokkan baris-baris data berdasarkan nilai unik pada kolom tertentu, mirip dengan fungsi `GROUP BY` di SQL atau Pivot Table di Excel. Setelah dikelompokkan, panggil fungsi agregasi statistik seperti `.sum()`, `.mean()`, atau `.count()` pada kolom target, contohnya `df.groupby('kategori')['omset'].sum()`. Ini adalah teknik paling mendasar dalam analisis data bisnis untuk membuat ringkasan per segmen.",
+            "Metode `df.groupby('kategori')` mengelompokkan baris-baris data berdasarkan nilai unik pada kolom tertentu, mirip dengan fungsi `GROUP BY` di SQL atau Pivot Table di Excel. Setelah dikelompokkan, panggil fungsi agregasi statistik seperti `.sum()`, `.mean()`, atau `.count()` pada kolom target, contohnya `df.groupby('kategori')['omset'].sum()`. Ini adalah teknik paling mendasar dalam analisis data bisnis untuk membuat ringkasan per segmen. Jebakan umum pemula adalah lupa menentukan kolom numerik target sebelum fungsi agregasi, yang pada versi pandas terbaru memicu TypeError jika DataFrame memuat kolom bertipe string.",
           example: {
-            code: "result = df.groupby('kategori')['total'].sum()",
-            output: "Ringkasan total omset per kategori produk.",
+            code:
+              "import pandas as pd\n\n" +
+              "df = pd.DataFrame({'tim': ['A', 'A', 'B'], 'poin': [15, 25, 20]})\n" +
+              "rekap = df.groupby('tim')['poin'].sum().to_dict()\n" +
+              "print(rekap)",
+            output: "{'A': 40, 'B': 20}",
             note: "Metode paling sering digunakan untuk agregasi analisis bisnis.",
           },
           instruction:
@@ -3546,10 +3608,10 @@ export const pythonTrack: Track = {
               question:
                 "Perbedaan mendasar antara Series dan DataFrame pada library pandas adalah?",
               choices: [
-                "Series dapat diolah pandas, DataFrame tidak",
-                "Series adalah struktur data 1 dimensi (mirip satu kolom atau array), sementara DataFrame adalah struktur tabel 2 dimensi baris dan kolom",
-                "Series dan DataFrame sama persis tanpa beda",
-                "DataFrame tidak mendukung baris string",
+                "Series menampung tabel multi-indeks, sementara DataFrame hanya menampung deret satu dimensi tanpa indeks",
+                "Series adalah struktur data 1 dimensi berlabel, sedangkan DataFrame adalah tabel 2 dimensi yang terdiri dari kumpulan Series sejajar",
+                "Series bersifat mutable, sedangkan DataFrame bersifat immutable dan tidak dapat dimodifikasi isinya",
+                "DataFrame tidak mendukung tipe data teks campuran sedangkan Series mendukung semua format",
               ],
               answerIndex: 1,
               explanation:
@@ -3591,10 +3653,10 @@ export const pythonTrack: Track = {
               question:
                 "Apabila ada kolom harga barang yang masih berupa teks kotor seperti `'Rp1.000'`, bagaimana logika pembersihan data (data cleaning) di pandas sebelum mengonversinya jadi integer?",
               choices: [
-                "Menggunakan regex atau `.str.replace()` untuk menghapus 'Rp' dan titik terlebih dahulu",
-                "Menjumlahkannya langsung",
-                "Membuang baris tersebut seutuhnya",
-                "Menyuruh pandas menebak dan mengonversi",
+                "Menggunakan operasi vektor string `.str.replace()` untuk menghapus 'Rp' dan titik terlebih dahulu sebelum di-cast ke numerik",
+                "Menjumlahkannya langsung dengan metode .sum() karena pandas otomatis menghapus simbol mata uang",
+                "Mengonversi seluruh DataFrame menjadi tipe categorical agar nilai simbol diabaikan sistem kalkulasi",
+                "Memanggil metode .drop_duplicates() untuk membuang baris yang memuat format teks kotor",
               ],
               answerIndex: 0,
               explanation:

@@ -32,50 +32,52 @@ export const spreadsheetTrack: Track = {
           title: "Pengenalan Spreadsheet, Sel, Tipe Data, dan Formula Dasar",
           body:
             "# Pengenalan Spreadsheet & Konsep Dasar\n\n" +
-            "Spreadsheet (seperti Microsoft Excel dan Google Sheets) adalah perangkat lunak olah data berbasis kisi tabel (*grid*) yang menjadi tulang punggung operasional di seluruh dunia bisnis. Dari startup teknologi, korporasi perbankan, hingga UMKM ritel, spreadsheet digunakan setiap hari untuk mencatat transaksi, rekonsiliasi keuangan, pembersihan data mentah, dan penyusunan laporan manajemen.\n\n" +
+            "Spreadsheet (seperti Microsoft Excel dan Google Sheets) adalah perangkat lunak olah data kisi tabel (*grid*) yang menjadi tulang punggung operasional di seluruh dunia bisnis modern. Dari perusahaan teknologi multinasional, perbankan investasi, hingga UMKM ritel, spreadsheet digunakan setiap hari untuk mencatat transaksi, rekonsiliasi keuangan, pembersihan data mentah, dan penyusunan laporan manajemen berkala.\n\n" +
             "Setiap lembar kerja (*worksheet*) tersusun atas **Kolom** berlabel huruf (`A`, `B`, `C`...) dan **Baris** berlabel angka (`1`, `2`, `3`...). Titik temu antara kolom dan baris membentuk sebuah kotak bernama **Sel** (*Cell*), yang dialamati dengan format koordinat `KolomBaris` (misalnya `A1` atau `C15`). Kumpulan dari dua atau lebih sel yang dipilih bersamaan disebut **Range** (ditulis menggunakan tanda titik dua, misalnya `A1:C10` untuk rentang sel dari pojok kiri atas A1 hingga pojok kanan bawah C10).\n\n" +
-            "## Anatomi Grid & Tipe Data Dasar\n\n" +
+            "## Anatomi Lembar Kerja & Tipe Data Dasar\n\n" +
             "```text\n" +
-            "+------+-------------------+-----------------+-------------------+\n" +
-            "|      |         A         |        B        |         C         |\n" +
-            "+------+-------------------+-----------------+-------------------+\n" +
-            "|  1   | Nama Barang (Teks)|  Jumlah (Angka) |  Tanggal (Date)   |\n" +
-            "|  2   | Kopi Arabika      |       50        |    2026-07-28     |\n" +
-            "|  3   | Teh Hijau         |       30        |    2026-07-29     |\n" +
-            "+------+-------------------+-----------------+-------------------+\n" +
-            "Range A1:C3 mencakup 9 sel berisi Teks (rata kiri), Angka (rata kanan), dan Tanggal.\n" +
+            "+------+-------------------+-----------------+-------------------+-------------------+\n" +
+            "|      |         A         |        B        |         C         |         D         |\n" +
+            "+------+-------------------+-----------------+-------------------+-------------------+\n" +
+            "|  1   | Nama Barang (Teks)| Kuantitas (Qty) | Harga Satuan (Rp) | Subtotal (Formula)|\n" +
+            "|  2   | Kopi Susu Aren    |       50        |       18000       | =B2 * C2          |\n" +
+            "|  3   | Teh Melati Panas  |       30        |       12000       | =B3 * C3          |\n" +
+            "+------+-------------------+-----------------+-------------------+-------------------+\n" +
+            "Range A1:D3 mencakup baris judul (header) dan baris data transaksi.\n" +
+            "Teks rata kiri, Angka rata kanan, dan Sel Formula menampilkan hasil kalkulasi matematis.\n" +
             "```\n\n" +
             "## Karakteristik Tipe Data & Format Sel\n\n" +
-            "| Tipe Data | Perilaku Default | Contoh Isi | Catatan Penting |\n" +
+            "| Tipe Data | Perilaku Bawaan | Contoh Isi | Catatan Penting di Tempat Kerja |\n" +
             "|---|---|---|---|\n" +
-            "| **Teks (String)** | Rata Kiri | `Kopi Gayo`, `INV-001` | Tidak dapat dihitung secara matematis. |\n" +
+            "| **Teks (String)** | Rata Kiri | `Kopi Arabika`, `INV-001` | Tidak dapat dihitung secara matematis. Tanda petik satu (`'08123`) memaksa angka disimpan sebagai teks agar angka nol di awal tidak hilang. |\n" +
             "| **Angka (Numeric)** | Rata Kanan | `15000`, `0.25`, `-500` | Dapat dihitung dengan SUM, AVERAGE, operator matematika. |\n" +
-            "| **Tanggal (Date)** | Rata Kanan | `2026-07-28` | Disimpan sebagai angka serial (mis. 1 Jan 1900 = 1). |\n" +
-            "| **Formula / Rumus** | Menampilkan Hasil | `=SUM(B2:B3)` | Wajib diawali tanda sama dengan (`=`). |\n\n" +
-            "Format sel (seperti Percentage `%`, Currency `Rp`, Short Date) **hanya mengubah tampilan visual**, bukan nilai yang tersimpan di memori. Angka `0.25` yang diformat menjadi Percentage akan tampil sebagai `25%`, tetapi dalam kalkulasi matematika nilainya tetaplah `0.25`.\n\n" +
+            "| **Tanggal (Date)** | Rata Kanan | `2026-07-28` | Disimpan sebagai angka serial integer (1 = 1 Jan 1900, 46000 = pertengahan 2025). Selisih hari dihitung langsung dengan pengurangan. |\n" +
+            "| **Formula / Rumus** | Menampilkan Hasil | `=SUM(B2:B3)` | Wajib diawali tanda sama dengan (`=`). Menampilkan nilai hasil evaluasi. |\n\n" +
+            "Format sel (seperti Percentage `%`, Currency `Rp`, Accounting, Short Date) **hanya mengubah tampilan visual di layar**, bukan nilai asli yang tersimpan di memori komputer. Angka `0.25` yang diformat menjadi Percentage akan tampil sebagai `25%`, namun dalam kalkulasi perkalian nilainya tetaplah `0.25`.\n\n" +
             "## Perbedaan Regional Settings: Koma (,) vs Titik Koma (;)\n\n" +
-            "Salah satu kebingungan terbesar bagi pengguna spreadsheet di Indonesia adalah perbedaan pengaturan regional (*Regional Settings*) komputer:\n\n" +
+            "Salah satu kebingungan terbesar bagi pengguna spreadsheet di Indonesia adalah perbedaan pengaturan regional (*Regional Settings*) sistem operasi komputer:\n\n" +
             "| Pengaturan Regional | Pemisah Argumen Rumus | Tanda Desimal | Contoh Rumus IF |\n" +
             "|---|---|---|---|\n" +
-            "| **English (United States)** | Koma (`,`) | Titik (`.`) | `=IF(A1>10, \"Lulus\", \"Gagal\")` |\n" +
-            "| **Indonesian (Indonesia)** | Titik Koma (`;`) | Koma (`,`) | `=IF(A1>10; \"Lulus\"; \"Gagal\")` |\n\n" +
-            "Jika komputermu diatur ke bahasa Indonesia, mengetik koma pada formula akan memunculkan pesan error *'There's a problem with this formula'*. Biasakan memeriksa petunjuk *tooltip* kecil yang muncul di bawah sel saat kamu mengetik nama fungsi.\n\n" +
+            "| **English (United States)** | Koma (`,`) | Titik (`.`) | `=IF(A2>10, \"Lulus\", \"Gagal\")` |\n" +
+            "| **Indonesian (Indonesia)** | Titik Koma (`;`) | Koma (`,`) | `=IF(A2>10; \"Lulus\"; \"Gagal\")` |\n\n" +
+            "Jika komputermu diatur ke bahasa Indonesia, mengetik koma pada formula akan memicu pesan peringatan *'There's a problem with this formula'*. Biasakan memeriksa petunjuk *tooltip* kecil yang muncul di bawah sel saat kamu mengetik nama fungsi.\n\n" +
             "## Referensi Sel: Relatif vs Absolut ($A$1) vs Campuran\n\n" +
-            "1. **Referensi Relatif (`A1`)**: Bergeser mengikuti arah salinan saat formula di-autofill ke bawah atau ke samping.\n" +
-            "2. **Referensi Absolut Penuh (`$A$1`)**: Mengunci kolom dan baris menggunakan simbol dolar (`$`). Titik acuan tidak akan pernah berubah saat formula disalin. Tekan tombol `F4` pada keyboard untuk mengunci sel secara cepat.\n" +
-            "3. **Referensi Campuran (`$A1` atau `A$1`)**: Mengunci kolom saja (`$A1`) atau mengunci baris saja (`A$1`), sangat sering digunakan dalam tabel kalkulasi dua dimensi.\n\n" +
+            "Bayangkan simbol dolar (`$`) sebagai jangkar kapal yang mengunci koordinat sel:\n\n" +
+            "1. **Referensi Relatif (`A1`):** Tidak ada jangkar. Posisi sel acuan otomatis bergeser mengikuti arah salinan saat formula di-autofill ke bawah atau ke samping.\n" +
+            "2. **Referensi Absolut Penuh (`$A$1`):** Mengunci kolom A dan baris 1 sekaligus. Titik acuan tidak akan pernah bergeser ke mana pun saat formula disalin. Tekan tombol `F4` pada Windows (atau `Cmd + T` pada macOS) untuk mengunci sel secara cepat.\n" +
+            "3. **Referensi Campuran (`$A1` atau `A$1`):** Mengunci kolom saja (`$A1`) atau mengunci baris saja (`A$1`), sangat krusial saat menyusun tabel matriks dua dimensi.\n\n" +
+            "## Autofill, Flash Fill, dan Navigasi Efisien\n\n" +
+            "- **Fill Handle:** Kotak kecil hitam di pojok kanan bawah sel aktif. Klik ganda (*double-click*) fill handle untuk menyalin formula ke bawah secara otomatis hingga baris data terakhir di kolom sebelah kiri.\n" +
+            "- **Flash Fill (`Ctrl + E` di Excel):** Fitur cerdas yang otomatis mendeteksi pola pemisahan teks (misalnya memisahkan nama depan dan nama belakang) tanpa perlu menulis rumus.\n" +
+            "- **Status Bar di Bawah Layar:** Saat kamu memblok deretan angka, perhatikan pojok kanan bawah layar: spreadsheet otomatis menampilkan total `SUM`, rata-rata `AVERAGE`, dan jumlah sel `COUNT` secara instan tanpa perlu mengetik rumus.\n\n" +
             "## Sort, Filter, dan Freeze Panes\n\n" +
-            "- **AutoFilter (`Data > Filter` atau `Ctrl+Shift+L`)**: Menambahkan tombol dropdown di setiap kepala kolom untuk menyortir abjad A-Z atau menyaring nilai tertentu.\n" +
-            "- **Freeze Panes (`View > Freeze Panes`)**: Membekukan baris judul pertama agar tetap terlihat saat kamu menggulir ribuan baris data ke bawah.\n\n" +
-            "## Shortcut Navigasi Esensial di Tempat Kerja\n\n" +
-            "- `Ctrl + Panah`: Melompat cepat ke ujung data tanpa perlu scrolling mouse.\n" +
-            "- `Ctrl + Shift + Panah`: Memblok rentang data dari posisi aktif hingga baris paling bawah.\n" +
-            "- `Ctrl + D`: Menduplikat isi atau formula dari sel tepat di atasnya (*Fill Down*).\n" +
-            "- `F4`: Mengunci sel menjadi absolut (`$`) saat menulis formula, atau mengulang aksi terakhir di lembar kerja.\n\n" +
+            "- **AutoFilter (`Data > Filter` atau shortcut `Ctrl+Shift+L`):** Menambahkan tombol dropdown di setiap kepala kolom untuk menyortir abjad A-Z atau menyaring kriteria tertentu.\n" +
+            "- **Freeze Panes (`View > Freeze Panes`):** Membekukan baris judul pertama agar tetap terlihat di layar saat kamu menggulir ribuan baris data ke bawah.\n\n" +
             "## Jebakan / Kesalahan Umum\n\n" +
-            "- **Angka Tersimpan sebagai Teks**: Mengunduh data ekspor dari sistem web sering menghasilkan angka yang berformat teks (rata kiri, terkadang ditandai segitiga hijau kecil di sudut sel). Fungsi `=SUM()` akan mengabaikan sel tersebut secara diam-diam sehingga total laporanmu keliru tanpa ada pesan error.\n" +
-            "- **Lupa Mengunci Sel Parameter ($)**: Saat mengalikan deretan transaksi dengan satu sel persentase pajak atau kurs mata uang, lupa menekan `F4` membuat sel acuan meleset ke sel kosong di bawahnya saat formula ditarik ke bawah.\n" +
-            "- **Mengetik Angka Statis di Dalam Formula**: Menulis `=A2 * 0.11` di ratusan sel alih-alih merujuk ke satu sel tarif pajak terpusat `=A2 * $B$1` membuat perbaikan rumus memakan waktu lama saat kebijakan pajak berubah.\n\n" +
+            "- **Angka Tersimpan sebagai Teks:** Mengunduh data ekspor dari sistem web sering menghasilkan angka yang berformat teks (rata kiri, terkadang ditandai segitiga hijau kecil di sudut sel). Fungsi `=SUM()` akan mengabaikan sel tersebut secara diam-diam sehingga total laporanmu keliru tanpa ada pesan error.\n" +
+            "- **Muncul Simbol Tanda Pagar Beruntun (`###`):** Tampilan `###` bukan error rumus, melainkan tanda bahwa lebar kolom terlalu sempit untuk menampilkan angka nominal. Solusinya: klik ganda garis batas kolom pada header kolom untuk *Auto-fit*.\n" +
+            "- **Lupa Mengunci Sel Parameter ($):** Saat mengalikan ratusan baris transaksi dengan satu sel persentase pajak atau kurs mata uang, lupa menekan `F4` membuat sel acuan meleset ke sel kosong di bawahnya saat formula ditarik ke bawah.\n" +
+            "- **Mengetik Angka Statis di Dalam Formula:** Menulis `=A2 * 0.11` di ratusan sel alih-alih merujuk ke satu sel tarif pajak terpusat `=A2 * $B$1` membuat revisi rumus memakan waktu lama saat kebijakan pajak berubah.\n\n" +
             "## Kaitan ke Dunia Kerja\n\n" +
             "Dalam dunia kerja profesional (baik posisi Data Analyst, Financial Analyst, Staff Operasional, maupun Management Trainee), kemampuan menyajikan data dalam tabel yang rapi, memasang Freeze Panes agar laporan nyaman dibaca, dan memastikan tidak ada formula yang salah kunci adalah standar minimum profesionalisme dalam penyusunan laporan berkala.",
         },
@@ -86,44 +88,44 @@ export const spreadsheetTrack: Track = {
           explanation:
             "Setiap kotak di spreadsheet disebut Sel dan dialamati dengan huruf kolom serta nomor baris (misalnya `A1`). Kumpulan sel berdampingan disebut Range, ditulis menggunakan titik dua (misalnya `A1:B10`). Tipe data pada sel — Teks, Angka, atau Tanggal — menentukan apakah sel tersebut bisa dihitung secara matematis. Jebakan pemula yang sangat sering terjadi adalah angka yang tersimpan sebagai teks (biasanya berposisi rata kiri), di mana fungsi SUM akan mengabaikan sel tersebut sehingga total laporanmu salah tanpa memunculkan peringatan error apa pun.",
           example: {
-            code: "=B1 + C1",
-            output: "Jika B1 berisi 3000 dan C1 berisi 4500, sel formula menampilkan 7500.",
+            code: "=B2 + C2",
+            output: "Jika B2 bernilai 25000 dan C2 bernilai 9000, sel formula menampilkan 34000.",
             note: "Formula di Excel/Sheets selalu diawali tanda sama dengan (=), lalu alamat selnya, bukan angkanya langsung.",
           },
           instruction:
-            "Sel A1 berisi harga barang dan sel B1 berisi ongkos kirim. Tulis formula yang menampilkan total yang harus dibayar pembeli.",
+            "Pada tabel transaksi kasir di baris 2, sel A2 mencatat harga menu kopi dan sel B2 mencatat ongkos kirim. Tulis formula penjumlahan untuk menghitung total tagihan pelanggan pada baris transaksi tersebut.",
           starterCode: "",
           language: "text",
           tests: [
             {
-              pattern: "=\\s*A1\\s*\\+\\s*B1",
+              pattern: "=\\s*A2\\s*\\+\\s*B2",
               flags: "i",
-              message: "Tuliskan formula penjumlahan dua sel: =A1 + B1",
+              message: "Tuliskan formula penjumlahan dua sel di baris 2: =A2 + B2",
             },
           ],
-          solution: "=A1 + B1",
+          solution: "=A2 + B2",
           susunKode: {
-            question: "Susun formula penjumlahan sel A1 dan B1.",
-            potongan: ["=A1 +", " B1"],
-            pengecoh: ["=A1 *", " C1"],
+            question: "Susun formula penjumlahan sel A2 dan B2.",
+            potongan: ["=A2 +", " B2"],
+            pengecoh: ["=A2 *", " C2"],
             pemisah: "",
             explanation:
-              "Formula penjumlahan dua sel sederhana diawali tanda sama dengan `=A1 + B1`. Pengecoh operator perkalian `*` atau sel `C1` adalah kesalahan menggoda yang sering keliru dipakai pemula saat menyusun kalkulasi dasar.",
+              "Formula penjumlahan dua sel diawali tanda sama dengan `=A2 + B2`. Pengecoh operator perkalian `*` atau sel `C2` adalah kesalahan menggoda yang sering keliru dipakai pemula saat menyusun kalkulasi dasar.",
           },
         },
         {
           kind: "step",
           id: "sheet-1-2",
-          title: "Fungsi Agregasi Dasar (SUM, AVERAGE, COUNT)",
+          title: "Fungsi Agregasi Dasar (AVERAGE)",
           explanation:
-            "Fungsi agregasi digunakan untuk mengolah deretan angka sekaligus tanpa perlu menjumlahkan satu per satu secara manual. `=SUM(A1:A10)` menjumlahkan seluruh angka, `=AVERAGE(A1:A10)` menghitung nilai rata-rata aritmetika, dan `=COUNT(A1:A10)` menghitung banyaknya sel yang memuat data angka. Fungsi ini digunakan setiap hari dalam menyusun ringkasan laporan transaksi bulanan. Jebakan pemula: memakai `COUNT` untuk menghitung nama pelanggan — gunakan `COUNTA` jika sel acuanmu berisi teks non-angka.",
+            "Fungsi agregasi digunakan untuk mengolah deretan angka sekaligus tanpa perlu menjumlahkan satu per satu secara manual. `=SUM(B2:B31)` menjumlahkan seluruh angka, `=AVERAGE(B2:B31)` menghitung nilai rata-rata aritmetika, dan `=COUNT(B2:B31)` menghitung banyaknya sel yang memuat data angka. Fungsi ini digunakan setiap hari dalam menyusun ringkasan laporan transaksi bulanan. Jebakan pemula: memakai `COUNT` untuk menghitung nama pelanggan — gunakan `COUNTA` jika sel acuanmu berisi teks non-angka.",
           example: {
-            code: "=SUM(A1:A10)",
-            output: "Menghasilkan total akumulasi angka dari rentang sel A1 hingga A10.",
-            note: "Gunakan COUNTA jika ingin menghitung sel berisikan teks non-angka.",
+            code: "=AVERAGE(C2:C10)",
+            output: "Menghasilkan angka rata-rata aritmetika dari 9 baris nilai di rentang C2:C10.",
+            note: "Gunakan AVERAGE untuk menghitung nilai tengah rata-rata dari rentang angka.",
           },
           instruction:
-            "Hitung nilai rata-rata dari rentang sel B1 hingga B10 menggunakan fungsi AVERAGE.",
+            "Kolom B (rentang B2:B31) mencatat omset harian toko selama 30 hari terakhir. Hitung rata-rata omset harian tersebut menggunakan fungsi agregasi yang tepat.",
           starterCode: "",
           language: "text",
           tests: [
@@ -133,20 +135,20 @@ export const spreadsheetTrack: Track = {
                 "Setiap formula dimulai tanda sama dengan, lalu fungsi AVERAGE.",
             },
             {
-              pattern: "B1:B10",
+              pattern: "B2:B31",
               message:
-                "Sebutkan rentang selnya di dalam tanda kurung: B1:B10.",
+                "Sebutkan rentang selnya di dalam tanda kurung: B2:B31.",
             },
           ],
-          solution: "=AVERAGE(B1:B10)",
+          solution: "=AVERAGE(B2:B31)",
           susunKode: {
             question:
-              "Susun formula AVERAGE untuk menghitung rata-rata sel B1 sampai B10.",
-            potongan: ["=AVERAGE(", "B1:B10)"],
-            pengecoh: ["=RATA2(", "C1..C10)"],
+              "Susun formula AVERAGE untuk menghitung rata-rata sel B2 sampai B31.",
+            potongan: ["=AVERAGE(", "B2:B31)"],
+            pengecoh: ["=RATA2(", "C2..C31)"],
             pemisah: "",
             explanation:
-              "Perhitungan nilai rata-rata menggunakan fungsi `=AVERAGE(B1:B10)`. Pengecoh `=RATA2()` adalah nama fiktif bahasa Indonesia yang sering keliru dikira valid, dan titik dua ganda `..` menjebak pengguna dari bahasa pemrograman lain.",
+              "Perhitungan nilai rata-rata menggunakan fungsi `=AVERAGE(B2:B31)`. Pengecoh `=RATA2()` adalah nama fiktif bahasa Indonesia yang sering keliru dikira valid, dan titik dua ganda `..` menjebak pengguna dari bahasa pemrograman lain.",
           },
         },
         {
@@ -154,37 +156,37 @@ export const spreadsheetTrack: Track = {
           id: "sheet-1-3",
           title: "Referensi Relatif vs Absolut ($A$1)",
           explanation:
-            "Referensi relatif (`A1`) otomatis menyesuaikan alamat sel saat formula disalin ke baris di bawahnya. Sebaliknya, Referensi Absolut (`$A$1`) mengunci kolom dan baris menggunakan simbol dolar `$`, seperti mengunci titik koordinat acuan agar tidak bergeser sama sekali. Konsep ini wajib dipakai ketika kamu mengalikan baris transaksi dengan sel persentase komisi atau tarif pajak tunggal. Jebakan pemula: lupa menekan tombol `F4` untuk mengunci sel acuan sehingga hasil autofill di baris-baris bawahnya bernilai nol atau error.",
+            "Referensi relatif (`B2`) otomatis menyesuaikan alamat sel saat formula disalin ke baris di bawahnya. Sebaliknya, Referensi Absolut (`$D$1`) mengunci kolom dan baris menggunakan simbol dolar `$`, seperti memasang jangkar agar titik koordinat acuan tidak bergeser sama sekali. Konsep ini wajib dipakai ketika kamu mengalikan baris transaksi dengan sel persentase komisi atau tarif pajak tunggal. Jebakan pemula: lupa menekan tombol `F4` untuk mengunci sel acuan sehingga hasil autofill di baris-baris bawahnya bernilai nol atau error.",
           example: {
-            code: "=A2 * $B$1",
-            output: "Perkalian harga A2 dengan nilai komisi absolut pada sel B1.",
-            note: "Tekan F4 pada keyboard untuk mengubah A1 menjadi $A$1 secara cepat.",
+            code: "=A2 * $C$1",
+            output: "Menghitung nilai perkalian A2 dengan sel parameter C1 yang terkunci absolut.",
+            note: "Tekan F4 pada keyboard untuk mengubah alamat sel menjadi absolut ($) secara instan.",
           },
           instruction:
-            "Kalikan nilai pada sel A2 dengan sel C1, dan pastikan referensi C1 terkunci secara absolut (baris dan kolom).",
+            "Pada tabel penjualan, sel B2 memuat omset staf sales dan sel D1 menyimpan tarif komisi tunggal (5%). Kalikan omset B2 dengan sel tarif komisi, dan pastikan sel D1 dikunci absolut (baris dan kolom dengan simbol $) agar tidak bergeser saat formula di-autofill ke baris bawahnya.",
           starterCode: "",
           language: "text",
           tests: [
             {
-              pattern: "=\\s*A2\\s*\\*",
+              pattern: "=\\s*B2\\s*\\*",
               message:
-                "Ambil nilai baris ini dari kolom A dengan referensi relatif (A2).",
+                "Ambil nilai omset baris 2 dari kolom B dengan referensi relatif (B2).",
             },
             {
-              pattern: "\\$C\\$1",
+              pattern: "\\$D\\$1",
               message:
-                "Kunci sel C1 secara absolut dengan tanda dolar: $C$1.",
+                "Kunci sel D1 secara absolut dengan tanda dolar: $D$1.",
             },
           ],
-          solution: "=A2 * $C$1",
+          solution: "=B2 * $D$1",
           susunKode: {
             question:
-              "Susun formula perkalian A2 dengan referensi absolut sel C1 ($C$1).",
-            potongan: ["=A2 *", " $C$1"],
-            pengecoh: ["=A2 /", " C1"],
+              "Susun formula perkalian B2 dengan referensi absolut sel D1 ($D$1).",
+            potongan: ["=B2 *", " $D$1"],
+            pengecoh: ["=B2 /", " D1"],
             pemisah: "",
             explanation:
-              "Membekukan sel C1 menggunakan tanda dolar `=$C$1` agar nilainya tidak bergeser saat formula ditarik ke bawah. Pengecoh tanpa tanda dolar `C1` adalah jebakan klasik yang sering keliru membuat hasil kalkulasi baris berikutnya bernilai nol.",
+              "Membekukan sel D1 menggunakan tanda dolar `=$D$1` agar nilainya tidak bergeser saat formula ditarik ke bawah. Pengecoh tanpa tanda dolar `D1` adalah jebakan klasik yang membuat hasil kalkulasi baris berikutnya meleset ke sel kosong.",
           },
         },
         {
@@ -192,14 +194,14 @@ export const spreadsheetTrack: Track = {
           id: "sheet-1-4",
           title: "Format Tanggal Menjadi Nama Hari",
           explanation:
-            "Fungsi `=TEXT(A1, \"dddd\")` mengonversi nilai angka serial tanggal pada sel `A1` menjadi string teks nama hari lengkap (misalnya 'Senin' atau 'Monday'). Fungsi ini digunakan saat kamu perlu menganalisis tren pola perilaku pelanggan berdasarkan hari dalam seminggu. Perhatikan bahwa hasil dari fungsi `TEXT` berubah menjadi tipe data Teks murni, sehingga sel tersebut tidak bisa lagi dihitung langsung dengan formula tanggal matematis seperti selisih hari.",
+            "Fungsi `=TEXT(A2, \"dddd\")` mengonversi nilai angka serial tanggal pada sel `A2` menjadi string teks nama hari lengkap (misalnya 'Senin' atau 'Monday'). Fungsi ini digunakan saat kamu perlu menganalisis tren pola perilaku belanja pelanggan berdasarkan hari dalam seminggu. Perhatikan bahwa hasil dari fungsi `TEXT` berubah menjadi tipe data Teks murni, sehingga sel tersebut tidak bisa lagi dihitung langsung dengan formula tanggal matematis seperti selisih hari.",
           example: {
             code: '=TEXT(B2, "dddd")',
             output: "Menghasilkan string nama hari lengkap, misalnya 'Selasa'.",
             note: "Format 'dddd' menampilkan nama hari lengkap, sedangkan 'ddd' menampilkan singkatan 3 huruf.",
           },
           instruction:
-            "Konversikan data tanggal pada sel A1 menjadi nama hari lengkap menggunakan fungsi TEXT.",
+            "Untuk menganalisis pola penjualan kafe per hari kerja, konversikan nilai serial tanggal pada sel A2 menjadi nama hari lengkap menggunakan fungsi teks dan format kode 4 huruf 'dddd'.",
           starterCode: "",
           language: "text",
           tests: [
@@ -209,20 +211,20 @@ export const spreadsheetTrack: Track = {
                 "Pengubahan angka/tanggal menjadi teks berformat memakai fungsi TEXT.",
             },
             {
-              pattern: "A1\\s*,\\s*[\"']dddd[\"']",
+              pattern: "A2\\s*,\\s*[\"']dddd[\"']",
               message:
-                "Argumennya: sel sumber A1 dan kode format \"dddd\" dalam tanda kutip.",
+                "Argumennya: sel sumber A2 dan kode format \"dddd\" dalam tanda kutip.",
             },
           ],
-          solution: '=TEXT(A1, "dddd")',
+          solution: '=TEXT(A2, "dddd")',
           susunKode: {
             question:
-              "Susun fungsi TEXT untuk mengonversi tanggal di A1 menjadi nama hari dddd.",
-            potongan: ["=TEXT(A1, ", '"dddd")'],
-            pengecoh: ["=FORMAT(B1, ", '"hari")'],
+              "Susun fungsi TEXT untuk mengonversi tanggal di A2 menjadi nama hari dddd.",
+            potongan: ["=TEXT(A2, ", '"dddd")'],
+            pengecoh: ["=FORMAT(B2, ", '"hari")'],
             pemisah: "",
             explanation:
-              "Pengubahan tanggal menjadi nama hari menggunakan `=TEXT(A1, \"dddd\")`. Pengecoh `=FORMAT()` adalah nama fungsi fiktif yang keliru dan jebakan umum pengembang yang terbiasa dengan pustaka pemrograman lain.",
+              "Pengubahan tanggal menjadi nama hari menggunakan `=TEXT(A2, \"dddd\")`. Pengecoh `=FORMAT()` adalah nama fungsi fiktif yang keliru dan jebakan umum pengembang yang terbiasa dengan pustaka pemrograman lain.",
           },
         },
         {
@@ -230,31 +232,31 @@ export const spreadsheetTrack: Track = {
           id: "sheet-1-5",
           title: "Kalkulasi Persentase Pencapaian",
           explanation:
-            "Kalkulasi persentase pencapaian target dilakukan dengan membagi nilai realisasi pencapaian (sel `A2`) dengan nilai target yang ditetapkan (sel `B2`). Hasil pembagian berupa angka desimal (misalnya `0.85`), yang kemudian diformat menjadi Percentage (`85%`) lewat menu format angka pada ribbon. Formula ini digunakan dalam evaluasi KPI tim penjualan dan serapan anggaran operasional. Jebakan umum: membalik posisi pembagian menjadi target dibagi realisasi sehingga menghasilkan angka persentase yang keliru.",
+            "Kalkulasi persentase pencapaian target dilakukan dengan membagi nilai realisasi pencapaian (sel `B2`) dengan nilai target yang ditetapkan (sel `C2`). Hasil pembagian berupa angka desimal (misalnya `0.85`), yang kemudian diformat menjadi Percentage (`85%`) lewat menu format angka pada ribbon. Formula ini digunakan dalam evaluasi KPI tim penjualan dan serapan anggaran operasional. Jebakan umum: membalik posisi pembagian menjadi target dibagi realisasi sehingga menghasilkan angka persentase yang keliru.",
           example: {
             code: "=C2 / D2",
-            output: "Menghasilkan nilai desimal 0.50 (tampil sebagai 50% setelah diformat Percentage).",
+            output: "Menghasilkan nilai desimal 0.85 (tampil sebagai 85% setelah diformat Percentage).",
             note: "Format sel ke Percentage setelah memasukkan formula pembagian.",
           },
           instruction:
-            "Hitung persentase rasio realisasi penjualan pada sel A2 terhadap target pada sel B2.",
+            "Dalam evaluasi target penjualan bulanan, sel B2 mencatat realisasi omset yang dicapai dan sel C2 mencatat target omset yang ditetapkan manajemen. Hitung persentase rasio realisasi terhadap target pada baris 2 tersebut.",
           starterCode: "",
           language: "text",
           tests: [
             {
-              pattern: "=\\s*A2\\s*/\\s*B2",
+              pattern: "=\\s*B2\\s*/\\s*C2",
               flags: "i",
-              message: "Tuliskan formula pembagian realisasi per target: =A2 / B2",
+              message: "Tuliskan formula pembagian realisasi per target: =B2 / C2",
             },
           ],
-          solution: "=A2 / B2",
+          solution: "=B2 / C2",
           susunKode: {
-            question: "Susun formula pembagian nilai sel A2 dengan B2.",
-            potongan: ["=A2 /", " B2"],
-            pengecoh: ["=A2 :", " C2"],
+            question: "Susun formula pembagian nilai sel B2 dengan C2.",
+            potongan: ["=B2 /", " C2"],
+            pengecoh: ["=B2 :", " D2"],
             pemisah: "",
             explanation:
-              "Perhitungan persentase pencapaian diawali `=A2 / B2`. Penggunaan tanda titik dua `:` sebagai pembagi adalah kekeliruan sintaks yang sering menjebak karena titik dua khusus untuk penentuan rentang sel pada spreadsheet.",
+              "Perhitungan persentase pencapaian diawali `=B2 / C2`. Penggunaan tanda titik dua `:` sebagai pembagi adalah kekeliruan sintaks yang sering menjebak karena titik dua khusus untuk penentuan rentang sel pada spreadsheet.",
           },
         },
         {
@@ -269,7 +271,7 @@ export const spreadsheetTrack: Track = {
             note: "Fitur pengurutan dan filter dasar ada di menu Data atau shortcut Ctrl+Shift+L.",
           },
           instruction:
-            "Aktifkan fitur filter otomatis pada tabel data melalui menu Data agar setiap kolom memiliki tombol dropdown penyaring.",
+            "Aktifkan tombol filter otomatis di baris judul tabel data agar tim operasional dapat menyortir dan menyaring transaksi, melalui menu Data pada lembar kerja.",
           starterCode: "",
           language: "text",
           tests: [
@@ -288,7 +290,7 @@ export const spreadsheetTrack: Track = {
             pengecoh: ["Tools > ", "Filter Manual"],
             pemisah: "",
             explanation:
-              "Mengaktifkan tombol penyaring data dilakukan melalui `Data > Create a filter`. Pengecoh menu Tools adalah penamaan keliru yang menggoda pemula saat mencari fitur filter pada lembar kerja spreadsheet, dan jebakan umum yang sering terjadi saat menyusun tabel kerja.",
+              "Mengaktifkan tombol penyaring data dilakukan melalui `Data > Create a filter`. Pengecoh menu Tools adalah penamaan keliru yang sering menggoda pemula saat mencari fitur filter pada lembar kerja spreadsheet, padahal menu Tools tidak menyediakan fungsionalitas AutoFilter tabel.",
           },
         },
         {
@@ -303,7 +305,7 @@ export const spreadsheetTrack: Track = {
             note: "Pastikan sel aktif berada di tempat yang benar sebelum mengaktifkan Freeze Panes.",
           },
           instruction:
-            "Bekukan baris pertama tabel (header) agar tetap terbaca saat data digulir ke bawah, melalui menu View dengan opsi membekukan satu baris.",
+            "Kunci baris judul pertama tabel agar tetap terlihat di layar saat pengguna menggulir ratusan baris data ke bawah, melalui menu View dengan opsi pembekuan satu baris.",
           starterCode: "",
           language: "text",
           tests: [
@@ -322,7 +324,7 @@ export const spreadsheetTrack: Track = {
             pengecoh: ["Edit > Kunci > ", "Baris Judul"],
             pemisah: "",
             explanation:
-              "Fitur membekukan baris judul agar tidak bergeser saat scrolling adalah `View > Freeze > 1 row`. Pengecoh menu Edit adalah jebakan umum yang sering keliru dicari pengguna baru spreadsheet dan merupakan kesalahan menggoda di menu tampilan.",
+              "Fitur membekukan baris judul agar tidak bergeser saat scrolling adalah `View > Freeze > 1 row`. Pengecoh menu Edit adalah jebakan umum yang sering keliru dicari pengguna baru spreadsheet, karena pengaturan tata letak tampilan lembar kerja selalu berada di menu View.",
           },
         },
         {
@@ -337,7 +339,7 @@ export const spreadsheetTrack: Track = {
             note: "COUNTA menghitung sel non-kosong baik berupa teks maupun angka.",
           },
           instruction:
-            "Hitung banyaknya baris data yang terisi pada rentang A2:A100 di bawah baris judul menggunakan fungsi COUNTA.",
+            "Hitung banyaknya baris terisi yang memuat nama pelanggan (tipe data teks) pada rentang A2:A100 di bawah baris judul menggunakan fungsi agregasi penghitung sel non-kosong.",
           starterCode: "",
           language: "text",
           tests: [
@@ -361,6 +363,40 @@ export const spreadsheetTrack: Track = {
             pemisah: "",
             explanation:
               "Fungsi `=COUNTA()` menghitung sel berisi teks maupun angka. Pengecoh `=COUNT()` hanya menghitung angka sehingga sel berisi teks akan menghasilkan 0, yang merupakan jebakan umum dalam pencatatan data laporan.",
+          },
+        },
+        {
+          kind: "step",
+          id: "sheet-1-9",
+          title: "Autofill Cepat dengan Double-Click Fill Handle",
+          explanation:
+            "Setelah menulis formula pada baris pertama tabel, kamu tidak perlu menyeret mouse (*drag-and-drop*) melewati ribuan baris data ke bawah yang melelahkan. Cukup lakukan klik ganda (*double-click*) pada kotak kecil hitam di pojok kanan bawah sel aktif yang disebut **fill handle**. Spreadsheet akan otomatis menduplikasi formula tersebut ke bawah secara instan tepat hingga baris terakhir yang terisi pada kolom di sebelah kirinya. Tindakan ini menghemat waktu analis secara drastis saat mengolah data puluhan ribu baris.",
+          example: {
+            code: "Ctrl + D",
+            output: "Menduplikasi formula atau nilai dari sel tepat di atasnya ke sel yang sedang aktif.",
+            note: "Klik ganda fill handle bekerja mengikuti tinggi baris data kolom di sebelahnya.",
+          },
+          instruction:
+            "Setelah selesai menulis formula di sel teratas, kamu ingin menyalin formula tersebut ke ribuan baris di bawahnya secara instan tanpa perlu menggeser mouse berlama-lama. Tulis aksi cepat pada kotak kecil pojok kanan bawah sel aktif tersebut.",
+          starterCode: "",
+          language: "text",
+          tests: [
+            {
+              pattern: "(double\\s*click|klik\\s*ganda)[^\\n]*(fill\\s*handle|kotak\\s*sudut|titik\\s*sel)|ctrl\\s*\\+\\s*e",
+              flags: "i",
+              message:
+                "Tuliskan tindakan klik ganda pada fill handle: Double click fill handle.",
+            },
+          ],
+          solution: "Double click fill handle",
+          susunKode: {
+            question:
+              "Susun aksi menduplikasi formula secara cepat ke bawah tabel.",
+            potongan: ["Double click ", "fill handle"],
+            pengecoh: ["Tarik manual ", "scroll mouse"],
+            pemisah: "",
+            explanation:
+              "Klik ganda pada fill handle (`Double click fill handle`) menduplikasi formula ke bawah seketika. Pengecoh menarik manual adalah tindakan keliru yang sering menjebak pemula dan memakan waktu lama saat baris data transaksi berjumlah ribuan di lembar kerja.",
           },
         },
         {
@@ -433,6 +469,21 @@ export const spreadsheetTrack: Track = {
               explanation:
                 "Fungsi COUNTA menghitung seluruh sel yang terisi data apa pun, sedangkan COUNT biasa hanya menghitung sel yang bertipe data angka.",
             },
+            {
+              id: "q6",
+              type: "pilihan-ganda",
+              question:
+                "Apa arti kemunculan simbol pagar beruntun (###) pada sel spreadsheet yang memuat angka nominal?",
+              choices: [
+                "Kolom kurang lebar untuk menampilkan angka tersebut, lakukan auto-fit lebar kolom",
+                "Rumus salah dan terjadi pembagian dengan angka nol",
+                "Data di dalam sel telah terhapus oleh sistem",
+                "Komputer mendeteksi adanya macro berbahaya",
+              ],
+              answerIndex: 0,
+              explanation:
+                "Simbol ### bukan error formula, melainkan pertanda visual bahwa lebar kolom sel tersebut terlalu sempit untuk memuat digit angka.",
+            },
           ],
         },
       ],
@@ -458,42 +509,52 @@ export const spreadsheetTrack: Track = {
           title: "Fungsi Logika, Agregasi Bersyarat, dan Lookup Modern (XLOOKUP)",
           body:
             "# Fungsi Analisis & Logika Bisnis\n\n" +
-            "Pekerjaan analisis data di spreadsheet bergeser dari sekadar perhitungan matematika dasar ke otomatisasi logika bisnis. Menggunakan fungsi logika (`IF`, `IFS`), pencarian acuan (`VLOOKUP`, `XLOOKUP`, `INDEX-MATCH`), dan agregasi bersyarat (`SUMIFS`, `COUNTIFS`), seorang analis mampu mengolah ribuan baris transaksi mentah menjadi keputusan bisnis dalam hitungan detik.\n\n" +
+            "Pekerjaan analisis data di spreadsheet bergeser dari sekadar perhitungan matematika dasar ke otomatisasi logika bisnis. Menggunakan fungsi logika (`IF`, `IFS`), pencarian acuan (`VLOOKUP`, `XLOOKUP`, `INDEX-MATCH`), manipulasi teks (`LEFT`, `MID`), dan agregasi bersyarat (`SUMIFS`, `COUNTIFS`, `AVERAGEIFS`), seorang analis mampu mengolah puluhan ribu baris transaksi mentah menjadi wawasan bisnis strategis dalam hitungan detik.\n\n" +
             "## Evolusi Pencarian Data: VLOOKUP vs INDEX-MATCH vs XLOOKUP\n\n" +
-            "Selama puluhan tahun, `VLOOKUP` (Vertical Lookup) menjadi fungsi standar untuk mencocokkan data antar tabel. Namun `VLOOKUP` memiliki dua kelemahan struktural utama:\n" +
-            "1. **Hanya Bisa Mencari ke Kanan**: Kolom kunci pencarian (`lookup_value`) wajib berada di kolom paling kiri dari rentang tabel.\n" +
-            "2. **Patah Saat Disisipi Kolom**: Menggunakan indeks nomor kolom (`col_index`) membuat formula langsung mengembalikan data yang salah jika seseorang menyisipkan kolom baru di tabel sumber.\n\n" +
-            "Untuk mengatasi kelemahan tersebut, dunia kerja menggunakan dua alternatif utama:\n" +
-            "- **`INDEX-MATCH`**: Solusi klasik universal yang didukung oleh **seluruh versi Excel** (termasuk Excel 2010/2016). Memisahkan rentang pengambilan data (`INDEX`) dengan posisi baris pencarian (`MATCH`).\n" +
-            "- **`XLOOKUP`**: Solusi modern di Excel 365 dan Google Sheets. Sangat fleksibel, default pencarian persis (*exact match*), dapat mencari ke kiri maupun kanan, dan tahan terhadap pergeseran kolom.\n\n" +
+            "Selama puluhan tahun, `VLOOKUP` (Vertical Lookup) menjadi fungsi standar untuk mencocokkan data antar-tabel. Namun di dunia kerja nyata, `VLOOKUP` memiliki dua kelemahan struktural fatal:\n" +
+            "1. **Hanya Bisa Mencari ke Kanan:** Kolom kunci pencarian (`lookup_value`) wajib berada di kolom paling kiri dari rentang tabel. Jika kolom ID berada di sebelah kanan nama karyawan, VLOOKUP gagal total.\n" +
+            "2. **Patah Saat Disisipi Kolom Baru:** Karena mengandalkan nomor indeks kolom statis (misalnya kolom ke-3), menyisipkan satu kolom baru di tengah tabel master akan membuat formula langsung mengembalikan data yang keliru tanpa memicu error.\n" +
+            "3. **Lupa Exact Match (FALSE / 0):** Parameter ke-4 yang terlupakan akan mengaktifkan *approximate match*, yang secara diam-diam mencocokkan data ke baris tetangga yang salah.\n\n" +
+            "| Fitur Komparasi | VLOOKUP | INDEX & MATCH | XLOOKUP |\n" +
+            "|---|---|---|---|\n" +
+            "| **Arah Pencarian** | Hanya ke kanan | Kiri dan Kanan | Bebas ke mana saja |\n" +
+            "| **Tahan Sisipan Kolom** | Tidak (Patah) | Ya (Dinamis) | Ya (Dinamis) |\n" +
+            "| **Default Pencocokan** | Approximate (Wajib ketik FALSE) | Exact match (Wajib ketik 0) | Exact Match otomatis |\n" +
+            "| **Kompatibilitas Versi** | Semua versi Excel | Semua versi Excel | Excel 365 & Google Sheets |\n\n" +
             "```text\n" +
-            "ALUR XLOOKUP(lookup_val, lookup_array, return_array):\n" +
+            "ALUR KERJA XLOOKUP(lookup_val, lookup_array, return_array):\n" +
             "[Cari ID: 102] ---> [Kolom B: ID Pelanggan] ---> [Cocok di Baris 3]\n" +
             "                                                        |\n" +
             "                                                        v\n" +
             "[Kembalikan Nilai dari Kolom A: Nama Pelanggan (Bisa di sebelah kiri!)]\n" +
             "```\n\n" +
-            "## Tabel Fungsi Analisis Esensial\n\n" +
-            "| Fungsi | Kegunaan Utama | Sintaks Contoh | Catatan Dunia Kerja |\n" +
-            "|---|---|---|---|\n" +
-            "| **`IF`** | Evaluasi 1 Kondisi Logika | `=IF(A2>=75, \"Lulus\", \"Gagal\")` | Pondasi percabangan logika. |\n" +
-            "| **`IFS`** | Multi-Kondisi Bertingkat | `=IFS(A2>=85, \"A\", A2>=70, \"B\", TRUE, \"C\")` | Menggantikan tumpukan nested IF. |\n" +
-            "| **`SUMIF(S), COUNTIF(S), AVERAGEIF(S)`** | Jumlahkan atau hitung rata-rata dengan N kriteria | `=SUMIFS(sum_range, crit_range1, crit1)` | Rentang yang dijumlahkan ada di awal. |\n" +
-            "| **`INDEX-MATCH`** | Lookup Klasik Dua Arah | `=INDEX(B:B, MATCH(A2, C:C, 0))` | Wajib dikuasai jika kantor pakai Excel lama. |\n" +
-            "| **`XLOOKUP`** | Lookup Modern Fleksibel | `=XLOOKUP(A2, B:B, C:C)` | Standar baru pengganti VLOOKUP. |\n" +
-            "| **`LEFT / MID`** | Potong Karakter Teks | `=LEFT(A2, 3)` / `=MID(A2, 4, 3)` | Ekstraksi kode SKU atau nomor seri. |\n" +
-            "| **`EOMONTH`** | Tanggal Akhir Bulan | `=EOMONTH(A2, 0)` | Laporan keuangan bulanan (*cut-off*). |\n" +
-            "| **`IFERROR`** | Penangkal Pesan Error | `=IFERROR(rumus, 0)` | Menjaga estetika laporan manajemen. |\n\n" +
-            "## Memahami Arti Pesan Error Spreadsheet\n\n" +
-            "- **`#N/A`**: Nilai tidak ditemukan pada tabel acuan (kunci pencarian tidak cocok).\n" +
-            "- **`#REF!`**: Referensi sel atau kolom yang dirujuk formula telah terhapus (*Deleted*).\n" +
-            "- **`#VALUE!`**: Kesalahan tipe data matematis (misalnya mencoba mengalikan teks dengan angka).\n" +
-            "- **`#DIV/0!`**: Terjadi pembagian dengan angka nol atau sel kosong.\n" +
-            "- **`#NAME?`**: Salah mengetik nama fungsi atau lupa tanda kutip pada teks string.\n\n" +
+            "## Agregasi Bersyarat Modern: SUMIF(S), COUNTIF(S), AVERAGEIF(S)\n\n" +
+            "Keluarga fungsi agregasi bersyarat memungkinkan perhitungan metrik berdasarkan syarat tertentu:\n" +
+            "- **`SUMIF` & `SUMIFS`:** Menjumlahkan angka berdasarkan kriteria cabang, kategori, atau status.\n" +
+            "- **`COUNTIF` & `COUNTIFS`:** Menghitung banyaknya frekuensi transaksi yang memenuhi kriteria.\n" +
+            "- **`AVERAGEIF` & `AVERAGEIFS`:** Menghitung rata-rata nilai transaksi yang memenuhi syarat.\n\n" +
+            "Pada fungsi lama `SUMIF` tunggal, urutan argumennya adalah `(rentang_kriteria, kriteria, rentang_jumlah)`. Namun pada `SUMIFS`, `COUNTIFS`, dan `AVERAGEIFS` modern yang mendukung banyak kriteria, rentang yang dijumlahkan (`sum_range` / `average_range`) diletakkan **di urutan paling depan**:\n\n" +
+            "```text\n" +
+            "=SUMIFS(sum_range, criteria_range1, criteria1, criteria_range2, criteria2)\n" +
+            "=COUNTIFS(criteria_range1, criteria1, criteria_range2, criteria2)\n" +
+            "=AVERAGEIFS(average_range, criteria_range1, criteria1, criteria_range2, criteria2)\n" +
+            "```\n\n" +
+            "Praktisi data korporat selalu menggunakan `SUMIFS` bahkan saat hanya membutuhkan 1 syarat saja, agar konsistensi struktur rumus tidak tertukar saat kriteria tambahan ditambahkan di kemudian hari.\n\n" +
+            "## Fungsi Tanggal Esensial di Bidang Finance & HR\n\n" +
+            "- **`TODAY()`:** Mengembalikan tanggal hari ini secara dinamis setiap kali lembar kerja dibuka.\n" +
+            "- **Aging Piutang / Overdue:** `=TODAY() - A2` menghitung berapa hari keterlambatan pembayaran invoice pelanggan.\n" +
+            "- **`EOMONTH(tanggal, 0)`:** Menghitung tanggal akhir bulan penutupan buku (*cut-off financial period*).\n" +
+            "- **`DATEDIF(start, end, \"Y\")`:** Menghitung selisih tahun penuh (masa kerja karyawan atau usia aset).\n\n" +
+            "## Kamus Pesan Error Spreadsheet & Cara Melacaknya\n\n" +
+            "- **`#N/A` (Not Available):** Kunci pencarian tidak ditemukan di tabel master. Periksa apakah ada spasi liar di ujung teks atau tipe data angka vs teks yang tidak cocok.\n" +
+            "- **`#REF!` (Reference Error):** Koordinat sel atau kolom yang dirujuk formula telah terhapus (*Deleted*).\n" +
+            "- **`#VALUE!`:** Tipe data tidak cocok, misalnya mencoba mengalikan teks dengan angka.\n" +
+            "- **`#DIV/0!`:** Terjadi pembagian dengan angka nol atau sel kosong.\n" +
+            "- **`#NAME?`:** Salah mengetik nama fungsi (misal `VLOKUP`) atau lupa tanda kutip pada teks string.\n\n" +
             "## Jebakan / Kesalahan Umum\n\n" +
-            "- **Lupa Parameter EXACT MATCH pada VLOOKUP**: Jika parameter ke-4 VLOOKUP dilupakan atau diisi `TRUE`, Excel melakukan *approximate match* yang berisiko mengembalikan angka tetangga yang salah tanpa peringatan error.\n" +
-            "- **Urutan Parameter SUMIFS vs SUMIF**: Pada `SUMIF` tunggal lama, rentang angka dijumlahkan berada di belakang. Namun pada `SUMIFS` jamak, `sum_range` berada **di urutan paling depan**.\n" +
-            "- **Membungkus Seluruh Rumus dengan IFERROR Terlalu Dini**: Memasang IFERROR saat masih merancang rumus akan menyembunyikan kesalahan ketik (*typo*) nama rumus sehingga kamu mengira rumusnya berhasil padahal selalu mengembalikan nilai fallback.\n\n" +
+            "- **Lupa Tanda Dollar ($) pada VLOOKUP:** Menulis `=VLOOKUP(A2, C1:D50, 2, FALSE)` tanpa tanda dolar membuat rentang acuan meleset menjadi `C2:D51`, `C3:D52` saat disalin ke bawah, menyebabkan baris-baris bawah menghasilkan error `#N/A` palsu.\n" +
+            "- **Membungkus IFERROR Terlalu Cepat:** Memasang `=IFERROR(rumus, 0)` saat masih merancang formula akan menyembunyikan kesalahan ketik nama fungsi sehingga kamu mengira rumusnya berhasil padahal selalu mengembalikan angka nol.\n" +
+            "- **Tipe Data Kunci Lookup Mismatch:** Angka ID `101` (numerik) dicari pada tabel yang menyimpan `'101` (teks) akan selalu menghasilkan error `#N/A` karena spreadsheet menganggap keduanya entitas berbeda.\n\n" +
             "## Kaitan ke Dunia Kerja\n\n" +
             "Menguasai `XLOOKUP`, `INDEX-MATCH`, dan `SUMIFS` adalah materi wajib saat menjalani tes teknis spreadsheet untuk posisi Financial Analyst, Supply Chain Planner, dan Business Intelligence di industri perbankan maupun startup teknologi.",
         },
@@ -509,7 +570,7 @@ export const spreadsheetTrack: Track = {
             note: "Fungsi IFS menggantikan nested IF yang rumit jika ada lebih dari dua kriteria.",
           },
           instruction:
-            "Bandingkan nilai di sel B2. Bila melebihi angka 1000, nyatakan sebagai \"Bonus\". Sebaliknya, nyatakan \"Standar\". Susun fungsi logika IF untuk kondisi ini.",
+            "Bandingkan nilai penjualan di sel B2. Bila melebihi angka 1000, tetapkan status \"Bonus\". Sebaliknya, tetapkan status \"Standar\". Susun fungsi logika IF untuk kondisi bisnis ini.",
           starterCode: "",
           language: "text",
           tests: [
@@ -551,7 +612,7 @@ export const spreadsheetTrack: Track = {
             note: "SUMIFS mendukung banyak kriteria penyaringan secara bersamaan.",
           },
           instruction:
-            "Hitung total nilai di kolom C khusus untuk baris yang statusnya \"Lunas\" di kolom A (gunakan rentang kolom utuh C:C dan A:A). Susun fungsi SUMIFS-nya.",
+            "Hitung total nilai penjualan pada kolom C (C:C) khusus untuk baris transaksi yang statusnya tercatat \"Lunas\" pada kolom A (A:A) menggunakan fungsi agregasi bersyarat yang tepat.",
           starterCode: "",
           language: "text",
           tests: [
@@ -588,7 +649,7 @@ export const spreadsheetTrack: Track = {
             note: "Selalu gunakan FALSE pada argumen ke-4 agar tidak terjadi salah cocok.",
           },
           instruction:
-            "Gunakan VLOOKUP untuk mencari nilai tepat (exact match) A2 di rentang C1:D50, dan kembalikan nilai dari kolom ke-2.",
+            "Tarik data harga produk dengan mencari kode barang sel A2 pada tabel master referensi C1:D50 kolom ke-2 dengan pencocokan persis (exact match FALSE).",
           starterCode: "",
           language: "text",
           tests: [
@@ -597,9 +658,9 @@ export const spreadsheetTrack: Track = {
               message: "Pencarian vertikal klasik memakai fungsi VLOOKUP.",
             },
             {
-              pattern: "A2\\s*,\\s*C1:D50\\s*,\\s*2",
+              pattern: "A2\\s*,\\s*(\\$C\\$1:\\$D\\$50|C1:D50)\\s*,\\s*2",
               message:
-                "Argumennya: nilai dicari (A2), tabel acuan (C1:D50), dan nomor indeks kolom (2).",
+                "Argumennya: nilai dicari (A2), tabel acuan (C1:D50 atau $C$1:$D$50), dan nomor indeks kolom (2).",
             },
             {
               pattern: "FALSE|0\\s*\\)",
@@ -630,7 +691,7 @@ export const spreadsheetTrack: Track = {
             note: "XLOOKUP secara default melakukan exact match tanpa perlu mengetik FALSE.",
           },
           instruction:
-            "Gunakan fungsi pencarian modern XLOOKUP untuk mencari nilai A2 pada kolom B (B:B), dan mengembalikan hasil dari kolom C (C:C).",
+            "Gunakan fungsi pencarian modern fleksibel untuk mencari ID di sel A2 pada kolom kunci B (B:B), dan mengembalikan nama kontak dari kolom C (C:C).",
           starterCode: "",
           language: "text",
           tests: [
@@ -652,7 +713,7 @@ export const spreadsheetTrack: Track = {
             pengecoh: ["=CARIDATA(A2, ", "B:B..C:C)"],
             pemisah: "",
             explanation:
-              "Fungsi modern `=XLOOKUP(A2, B:B, C:C)` menerima rentang pencarian dan hasil secara terpisah. Pengecoh `=CARIDATA()` kuno memiliki batasan urutan data yang sering keliru dipakai pemula di lembar kerja spreadsheet interaktif.",
+              "Fungsi modern `=XLOOKUP(A2, B:B, C:C)` menerima rentang pencarian dan hasil secara terpisah. Pengecoh `=CARIDATA()` kuno memiliki batasan urutan data yang sering keliru dipakai pemula di lembar kerja spreadsheet.",
           },
         },
         {
@@ -667,7 +728,7 @@ export const spreadsheetTrack: Track = {
             note: "Kombinasi ini bekerja di semua versi Excel lama yang tidak punya XLOOKUP.",
           },
           instruction:
-            "Gunakan kombinasi INDEX dan MATCH untuk mencari nilai A2 pada kolom acuan C:C (exact match 0), lalu mengembalikan nilai dari kolom target B:B.",
+            "Lakukan pencarian dua arah untuk mencari nilai A2 pada kolom acuan C:C (exact match angka 0), lalu mengembalikan nilai dari kolom target B:B di sebelah kirinya.",
           starterCode: "",
           language: "text",
           tests: [
@@ -705,7 +766,7 @@ export const spreadsheetTrack: Track = {
             note: "Gunakan RIGHT untuk memotong dari sisi kanan dan MID untuk memotong dari posisi tengah.",
           },
           instruction:
-            "Ambil 3 karakter pertama dari kode SKU barang di sel A2 menggunakan fungsi teks LEFT.",
+            "Ekstrak 3 karakter kode cabang paling depan dari kode transaksi barang di sel A2 menggunakan fungsi manipulasi teks sisi kiri.",
           starterCode: "",
           language: "text",
           tests: [
@@ -741,7 +802,7 @@ export const spreadsheetTrack: Track = {
             note: "Sangat berguna untuk menentukan tanggal jatuh tempo invoice tagihan.",
           },
           instruction:
-            "Tentukan tanggal akhir bulan berjalan dari tanggal transaksi pada sel A2 menggunakan fungsi EOMONTH (offset 0 bulan).",
+            "Tentukan tanggal penutupan buku akhir bulan berjalan dari tanggal invoice di sel A2 menggunakan fungsi tanggal akhir bulan dengan offset 0.",
           starterCode: "",
           language: "text",
           tests: [
@@ -762,7 +823,7 @@ export const spreadsheetTrack: Track = {
             pengecoh: ["=AKHIR_BULAN(", "B2, 1)"],
             pemisah: "",
             explanation:
-              "Tanggal akhir bulan dihitung dengan `=EOMONTH(A2, 0)`. Pengecoh `=AKHIR_BULAN()` adalah nama fiktif yang sering keliru disangka valid oleh pengguna dan menjadi kesalahan menggoda bagi yang belum menghafal fungsi tanggal standar.",
+              "Tanggal akhir bulan dihitung dengan `=EOMONTH(A2, 0)`. Pengecoh `=AKHIR_BULAN()` adalah nama fungsi fiktif yang sering keliru disangka valid oleh pengguna baru yang mengira nama rumus spreadsheet diterjemahkan bebas, padahal EOMONTH adalah fungsi standar global.",
           },
         },
         {
@@ -777,7 +838,7 @@ export const spreadsheetTrack: Track = {
             note: "Menjaga tampilan laporan bisnis tetap rapi dan bebas dari pesan error teknis.",
           },
           instruction:
-            "Ketikkan fungsi VLOOKUP exact match untuk mencari A2 di B:C kolom 2, lalu bungkus fungsi tersebut dengan IFERROR agar menampilkan angka 0 jika error.",
+            "Bungkus formula pencarian VLOOKUP exact match yang mencari A2 di rentang B:C kolom 2 dengan penanganan error agar mengembalikan angka 0 jika data tidak ditemukan.",
           starterCode: "",
           language: "text",
           tests: [
@@ -802,7 +863,40 @@ export const spreadsheetTrack: Track = {
             pengecoh: ["=CEKERROR(VLOOKUP(A2, B:C, 2, FALSE), ", '"KOSONG")'],
             pemisah: "",
             explanation:
-              "Penanganan kondisi error di spreadsheet menggunakan fungsi `=IFERROR()`. Pengecoh `=CEKERROR()` adalah sintaks fiktif yang sering keliru dipakai di lembar kerja oleh pengguna yang baru belajar fungsi logika secara mandiri.",
+              "Penanganan kondisi error di spreadsheet menggunakan fungsi resmi `=IFERROR()`. Pengecoh `=CEKERROR()` adalah sintaks fiktif yang sering keliru dipakai di lembar kerja oleh pemula, yang merupakan jebakan umum bagi pengguna baru saat merancang formula pembungkus.",
+          },
+        },
+        {
+          kind: "step",
+          id: "sheet-2-9",
+          title: "Menghitung Selisih Hari Jatuh Tempo (Aging Piutang)",
+          explanation:
+            "Dalam manajemen keuangan dan piutang usaha (Accounts Receivable), analis menghitung berapa hari keterlambatan pembayaran invoice sejak tanggal jatuh tempo (*overdue aging*) terhadap hari ini. Menggunakan fungsi dinamis `=TODAY() - A2`, selisih hari akan dihitung secara otomatis dan selalu terbarukan setiap kali berkas dibuka. Angka selisih hari ini menjadi dasar pengelompokan penagihan (0-30 hari, 31-60 hari, >90 hari). Jebakan pemula: mengetik tanggal hari ini secara statis sehingga analisis keterlambatan menjadi basi pada keesokan harinya.",
+          example: {
+            code: "=TODAY() - B2",
+            output: "14 (menghitung bahwa pembayaran invoice di sel B2 telah terlambat 14 hari per hari ini).",
+            note: "Fungsi TODAY() tidak membutuhkan argumen di dalam tanda kurungnya.",
+          },
+          instruction:
+            "Sel A2 memuat tanggal jatuh tempo invoice tagihan pelanggan. Hitung jumlah hari keterlambatan pembayaran tersebut terhadap tanggal hari ini secara dinamis menggunakan pengurangan dengan fungsi TODAY.",
+          starterCode: "",
+          language: "text",
+          tests: [
+            {
+              pattern: "=\\s*TODAY\\(\\)\\s*-\\s*A2",
+              flags: "i",
+              message: "Tuliskan formula selisih hari ini terhadap tanggal jatuh tempo: =TODAY() - A2",
+            },
+          ],
+          solution: "=TODAY() - A2",
+          susunKode: {
+            question:
+              "Susun formula selisih tanggal hari ini dinamis dengan sel jatuh tempo A2.",
+            potongan: ["=TODAY() -", " A2"],
+            pengecoh: ["=HARI_INI() -", " B2"],
+            pemisah: "",
+            explanation:
+              "Formula selisih tanggal terhadap hari ini memakai `=TODAY() - A2`. Pengecoh `=HARI_INI()` adalah nama fungsi fiktif yang keliru dan sering menjebak pemula, serta sel B2 bukan merupakan sel acuan tanggal jatuh tempo yang diminta pada instruksi soal.",
           },
         },
         {
@@ -865,6 +959,21 @@ export const spreadsheetTrack: Track = {
               explanation:
                 "Fungsi LEFT mengambil sejumlah n karakter dari posisi paling awal (sisi kiri) sebuah string teks.",
             },
+            {
+              id: "q6",
+              type: "pilihan-ganda",
+              question:
+                "Mengapa formula VLOOKUP yang disalin ke bawah sering kali menghasilkan error #N/A pada baris-baris bawahnya padahal kuncinya ada di tabel acuan?",
+              choices: [
+                "Karena rentang tabel acuan tidak dikunci dengan tanda dolar ($) sehingga bergeser ke bawah saat di-copy",
+                "Karena Excel hanya bisa mencari maksimal 10 baris data saja",
+                "Karena VLOOKUP otomatis kadaluarsa setelah 5 kali pemanggilan",
+                "Karena kolom acuan harus diubah menjadi format mata uang",
+              ],
+              answerIndex: 0,
+              explanation:
+                "Lupa mengunci tabel master dengan referensi absolut ($) membuat rentang acuan ikut bergeser ke bawah saat formula disalin, menyebabkan data master terpotong.",
+            },
           ],
         },
       ],
@@ -890,9 +999,16 @@ export const spreadsheetTrack: Track = {
           title: "Teknik Pembersihan Data (Data Cleaning) & Standarisasi",
           body:
             "# Pembersihan Data (Data Cleaning)\n\n" +
-            "Di industri nyata, data mentah yang diunduh dari database SQL, formulir survei, atau sistem POS e-commerce **hampir tidak pernah bersih**. Adanya spasi tak terlihat di ujung kata, penulisan nama kota yang tidak seragam (`Jakarta` vs `JAKARTA` vs `jkt`), baris duplikat, dan karakter strip pada nomor telepon dapat merusak seluruh analisis.\n\n" +
-            "Prinsip utama analisis data adalah **Garbage In, Garbage Out (GIGO)**: jika data yang dimasukkan kotor, hasil kalkulasi dan grafik dashboard yang dihasilkan pun akan keliru. Praktisi data menghabiskan hingga 80% waktu proyek hanya untuk pembersihan data sebelum tahap visualisasi dimulai.\n\n" +
-            "## Pipeline Pembersihan Data Mentah\n\n" +
+            "Di industri nyata, data mentah yang diunduh dari database SQL, formulir survei online, mesin kasir POS, atau sistem ERP **hampir tidak pernah bersih**. Adanya spasi tak terlihat di ujung kata, penulisan nama kota yang tidak seragam (`Jakarta` vs `JAKARTA` vs `jkt`), baris transaksi duplikat, dan karakter strip pada nomor telepon dapat merusak seluruh analisis.\n\n" +
+            "Prinsip utama analisis data adalah **Garbage In, Garbage Out (GIGO)**: jika data yang dimasukkan kotor, hasil kalkulasi dan grafik dashboard yang dihasilkan pun akan keliru. Praktisi data profesional menghabiskan hingga 80% total waktu proyek hanya untuk pembersihan data sebelum tahap visualisasi dimulai.\n\n" +
+            "## 7 Langkah SOP Pembersihan Data Profesional\n\n" +
+            "1. **Duplikat Sheet Cadangan (Raw Backup):** Jangan pernah menyentuh data asli sebelum membuat tab sheet cadangan.\n" +
+            "2. **Pembersihan Spasi Liar (`TRIM` & `CLEAN`):** Menghapus spasi di depan, belakang, dan karakter non-cetak.\n" +
+            "3. **Standarisasi Huruf (`PROPER` / `UPPER`):** Menyeragamkan huruf besar-kecil agar Pivot Table tidak memecah kategori yang sama.\n" +
+            "4. **Pembersihan Tanda Pemisah (`SUBSTITUTE` / `Text to Columns`):** Membuang simbol atau memecah teks CSV terpadu.\n" +
+            "5. **Audit Duplikasi (`UNIQUE` / Remove Duplicates):** Mengidentifikasi baris transaksi yang terinput ganda.\n" +
+            "6. **Kunci Nilai Statis (Paste Special as Values):** Memutus ketergantungan kolom bantu sebelum kolom asal dihapus.\n" +
+            "7. **Pasang Batasan Input (Data Validation):** Mencegah kesalahan ketik pada entri baru dengan menu dropdown.\n\n" +
             "```text\n" +
             "+------------------+      +-------------------+      +-------------------+\n" +
             "|   Data Mentah    | ---> |  Hapus Spasi Liar | ---> | Standardisasi Text|\n" +
@@ -905,6 +1021,11 @@ export const spreadsheetTrack: Track = {
             "|  \"Jakarta\"       |      | Data Validation   |      | UNIQUE / Remove   |\n" +
             "+------------------+      +-------------------+      +-------------------+\n" +
             "```\n\n" +
+            "## Pola Pencarian Lanjutan (Wildcard Find & Replace)\n\n" +
+            "Fitur Find and Replace (`Ctrl + H`) di spreadsheet mendukung karakter wildcard:\n" +
+            "- **Tanda Bintang (`*`):** Mewakili nol atau banyak karakter sembarang. Mengetik ` (*)` di kotak Find dan mengosongkan Replace akan menghapus seluruh teks dalam tanda kurung seperti `Kopi Susu (Promo)` menjadi `Kopi Susu`.\n" +
+            "- **Tanda Tanya (`?`):** Mewakili tepat satu karakter sembarang.\n" +
+            "- **Karakter Tilde (`~*` atau `~?`):** Digunakan untuk mencari simbol bintang atau tanda tanya yang sebenarnya.\n\n" +
             "## Toolkit Pembersihan Data di Spreadsheet\n\n" +
             "| Alat / Fitur | Kegunaan Utama | Jalur Menu / Formula | Hasil Nyata |\n" +
             "|---|---|---|---|\n" +
@@ -914,18 +1035,13 @@ export const spreadsheetTrack: Track = {
             "| **`Text to Columns` / `SPLIT`** | Memecah teks satu sel | Data > Text to Columns / `=SPLIT(A2, \",\")` | `\"Budi,Jakarta\"` terpecah ke 2 kolom |\n" +
             "| **`UNIQUE()`** | Ekstrak daftar unik dinamis | `=UNIQUE(A2:A100)` | Menghasilkan master list tanpa duplikat |\n" +
             "| **Data Validation** | Buat dropdown pembatas input | Data > Data validation | Mencegah salah ketik entri baru |\n" +
-            "| **Paste Special Values** | Kunci hasil formula menjadi teks statis | `Ctrl + Alt + V > Values` | Melepaskan ketergantungan kolom bantu |\n\n" +
-            "## Google Sheets vs Microsoft Excel: Pemecahan Teks\n\n" +
-            "Perhatikan perbedaan platform saat memecah string:\n\n" +
-            "- Di **Google Sheets**: Mendukung fungsi dinamis `=SPLIT(teks, delimiter)`.\n" +
-            "- Di **Microsoft Excel 365**: Menggunakan fungsi baru `=TEXTSPLIT(teks, delimiter)`.\n" +
-            "- Di **Semua Versi Excel**: Fitur menu `Data > Text to Columns` dengan memilih opsi Delimited (koma/spasi).\n\n" +
+            "| **Paste Special Values** | Kunci hasil formula jadi nilai statis | `Ctrl + Alt + V > Values` | Melepaskan ketergantungan kolom bantu |\n\n" +
             "## Praktik Terbaik: Paste Special as Values\n\n" +
             "Setelah kamu merapikan teks di kolom bantu menggunakan `=TRIM(PROPER(A2))`, jangan langsung menghapus kolom sumber aslinya! Formula akan menghasilkan error `#REF!`. Salin kolom hasilmu, lalu tempelkan kembali menggunakan **Paste Special > Values** (`Ctrl + Alt + V` di Windows atau `Cmd + Opt + V` di Mac) agar formulanya berubah menjadi data teks permanen.\n\n" +
             "## Jebakan / Kesalahan Umum\n\n" +
-            "- **Melakukan Remove Duplicates Tanpa Salinan Cadangan**: Menjalankan menu `Data > Remove Duplicates` menghapus baris tabel secara permanen. Selalu duplikat tab sheet cadangan (*backup sheet*) sebelum membersihkan data mentah.\n" +
-            "- **Mengira TRIM Menghapus Seluruh Spasi**: `TRIM` menyisakan **satu spasi tunggal** di antara dua kata karena spasi antar-kata memang diperlukan dalam bahasa baku. Jika ingin membuang semua spasi tanpa sisa (misalnya merapikan nomor rekening bank), gunakan `=SUBSTITUTE(A2, \" \", \"\")`.\n" +
-            "- **Pivot Table Membedakan Kapitalisasi Teks**: Huruf besar-kecil yang tidak konsisten membuat Pivot Table menganggap `\"Jakarta\"` dan `\"JAKARTA\"` sebagai dua cabang yang berbeda. Selalu standarisasi teks dengan `PROPER()` atau `UPPER()` sebelum pivot dibuat.\n\n" +
+            "- **Melakukan Remove Duplicates Tanpa Salinan Cadangan:** Menjalankan menu `Data > Remove Duplicates` menghapus baris tabel secara permanen dari file. Selalu duplikat tab sheet cadangan (*backup sheet*) sebelum membersihkan data mentah.\n" +
+            "- **Mengira TRIM Menghapus Seluruh Spasi:** `TRIM` menyisakan **satu spasi tunggal** di antara dua kata karena spasi antar-kata memang diperlukan dalam bahasa baku. Jika ingin membuang semua spasi tanpa sisa (misalnya merapikan nomor rekening bank), gunakan `=SUBSTITUTE(A2, \" \", \"\")`.\n" +
+            "- **Pivot Table Membedakan Kapitalisasi Teks:** Huruf besar-kecil yang tidak konsisten membuat Pivot Table menganggap `\"Jakarta\"` dan `\"JAKARTA\"` sebagai dua cabang yang berbeda. Selalu standarisasi teks dengan `PROPER()` atau `UPPER()` sebelum pivot dibuat.\n\n" +
             "## Kaitan ke Dunia Kerja\n\n" +
             "Di dunia kerja nyata, memasang **Data Validation Dropdown** pada lembar kerja operasional kantor terbukti mencegah kesalahan input administratif hingga 95%. Praktisi data profesional juga memanfaatkan Power Query (*Get & Transform*) di Excel untuk mengotomatisasi proses pembersihan data bulanan yang berulang.",
         },
@@ -941,7 +1057,7 @@ export const spreadsheetTrack: Track = {
             note: "TRIM sangat krusial dipanggil sebelum pemrosesan VLOOKUP atau Pivot Table.",
           },
           instruction:
-            "Hapus seluruh spasi berlebih pada teks sel A2 menggunakan fungsi TRIM.",
+            "Data ekspor pelanggan mencatat nama dengan spasi liar di awal dan akhir teks. Bersihkan seluruh spasi berlebih pada sel A2 menggunakan fungsi pembersihan spasi standar.",
           starterCode: "",
           language: "text",
           tests: [
@@ -961,7 +1077,7 @@ export const spreadsheetTrack: Track = {
             pengecoh: ["=POTONG_SPASI(", "B2)"],
             pemisah: "",
             explanation:
-              "Fungsi `=TRIM(A2)` membuang spasi ganda dan spasi di ujung teks. Pengecoh `=POTONG_SPASI()` diadaptasi dari istilah Bahasa Indonesia dan keliru jika diterapkan pada rumus kalkulasi lembar kerja spreadsheet otomatis.",
+              "Fungsi `=TRIM(A2)` membuang spasi ganda dan spasi di ujung teks. Pengecoh `=POTONG_SPASI()` diadaptasi dari istilah Bahasa Indonesia dan keliru jika diterapkan pada rumus kalkulasi lembar kerja spreadsheet.",
           },
         },
         {
@@ -976,7 +1092,7 @@ export const spreadsheetTrack: Track = {
             note: "Gunakan UNIQUE untuk membuat daftar master secara dinamis.",
           },
           instruction:
-            "Hasilkan daftar nilai yang unik saja (tanpa pengulangan) dari rentang sel A1 hingga A50 menggunakan fungsi UNIQUE.",
+            "Hasilkan daftar master nilai unik tanpa baris yang berulang dari rentang log transaksi A1 hingga A50 menggunakan fungsi ekstraksi nilai unik dinamis.",
           starterCode: "",
           language: "text",
           tests: [
@@ -997,7 +1113,7 @@ export const spreadsheetTrack: Track = {
             pengecoh: ["=DISTINCT(", "B1:B50)"],
             pemisah: "",
             explanation:
-              "Fungsi mengambil data unik pada spreadsheet adalah `=UNIQUE()`. Pengecoh `=DISTINCT()` berasal dari kata kunci SQL yang sering keliru diketik oleh pengembang database saat mengolah lembar kerja spreadsheet dengan cepat.",
+              "Fungsi mengambil data unik pada spreadsheet adalah `=UNIQUE()`. Pengecoh `=DISTINCT()` berasal dari kata kunci SQL yang sering keliru diketik oleh pengembang database saat mengolah lembar kerja spreadsheet.",
           },
         },
         {
@@ -1012,7 +1128,7 @@ export const spreadsheetTrack: Track = {
             note: "Karakter pemisah (delimiter) bisa berupa koma, spasi, atau titik koma.",
           },
           instruction:
-            "Pisahkan teks pada sel A2 ke dalam beberapa kolom berdasarkan karakter pemisah tanda koma (,).",
+            "Data ekspor memuat gabungan nama dan kota yang dipisahkan koma di sel A2. Pecah string teks tersebut ke dalam kolom-kolom terpisah berdasarkan delimiter tanda koma (,).",
           starterCode: "",
           language: "text",
           tests: [
@@ -1033,7 +1149,7 @@ export const spreadsheetTrack: Track = {
             pengecoh: ["=PECAH_TEKS(A2, ", '";")'],
             pemisah: "",
             explanation:
-              "Fungsi `=SPLIT(A2, \",\")` memecah string berdasarkan delimiter koma. Pengecoh `=PECAH_TEKS()` adalah nama fiktif yang sering menggoda tetapi keliru karena bukan merupakan nama fungsi resmi pada spreadsheet modern.",
+              "Fungsi `=SPLIT(A2, \",\")` memecah string berdasarkan delimiter koma. Pengecoh `=PECAH_TEKS()` adalah nama fungsi fiktif yang sering menggoda tetapi keliru dan menjadi jebakan umum, karena bukan merupakan nama fungsi resmi pada ekosistem spreadsheet modern.",
           },
         },
         {
@@ -1048,7 +1164,7 @@ export const spreadsheetTrack: Track = {
             note: "Gunakan string kosong \"\" sebagai pengganti jika ingin menghapus karakter.",
           },
           instruction:
-            "Gantikan setiap karakter strip (-) yang ada pada teks di sel A2 menjadi kosong (string kosong tanpa spasi).",
+            "Nomor kontak pelanggan di sel A2 memuat tanda pemisah strip (misal 0812-3456-7890). Bersihkan setiap karakter tanda strip (-) tersebut menjadi string kosong tanpa spasi menggunakan fungsi pengganti teks formula.",
           starterCode: "",
           language: "text",
           tests: [
@@ -1070,7 +1186,7 @@ export const spreadsheetTrack: Track = {
             pengecoh: ["=GANTI_TEKS(A2, ", '"-", " ")'],
             pemisah: "",
             explanation:
-              "Penggantian karakter dalam teks spreadsheet menggunakan `=SUBSTITUTE()`. Pengecoh `=GANTI_TEKS()` adalah fungsi fiktif yang sering menjebak pemula yang mengira nama fungsi dapat diterjemahkan secara bebas tanpa aturan.",
+              "Penggantian karakter dalam teks spreadsheet menggunakan fungsi resmi `=SUBSTITUTE()`. Pengecoh `=GANTI_TEKS()` adalah fungsi fiktif yang sering menjebak pemula yang keliru mengira nama fungsi dapat diterjemahkan bebas tanpa mengikuti standar fungsi rumus internasional.",
           },
         },
         {
@@ -1085,7 +1201,7 @@ export const spreadsheetTrack: Track = {
             note: "Mencegah inkonsistensi input data sejak tahap pencatatan awal di lembar kerja.",
           },
           instruction:
-            "Pasang aturan validasi data dropdown untuk membatasi input sel hanya pada opsi 'Lunas' atau 'Pending'. Tulis jalur menu Data validation dan opsi daftarnya (List: Lunas, Pending).",
+            "Pasang aturan validasi data dropdown pada sel agar pengguna hanya dapat memilih opsi status 'Lunas' atau 'Pending' melalui menu Data validation dengan kriteria List.",
           starterCode: "",
           language: "text",
           tests: [
@@ -1108,7 +1224,7 @@ export const spreadsheetTrack: Track = {
             pengecoh: ["Menu > Dropdown List\n", "Pilihan: Lunas ATAU Pending"],
             pemisah: "",
             explanation:
-              "Membuat pilihan dropdown dilakukan lewat `Data > Data validation` dengan opsi List. Pengecoh `Menu > Dropdown List` adalah penamaan fiktif yang sering keliru dicari oleh pemula saat membuat lembar entri data terkontrol.",
+              "Membuat pilihan dropdown dilakukan lewat `Data > Data validation` dengan opsi List. Pengecoh `Menu > Dropdown List` adalah penamaan fiktif yang sering keliru dicari oleh pemula dan merupakan jebakan menggoda bagi pengguna yang belum terbiasa dengan menu Data.",
           },
         },
         {
@@ -1123,7 +1239,7 @@ export const spreadsheetTrack: Track = {
             note: "Gunakan UPPER() untuk kapital semua dan LOWER() untuk huruf kecil semua.",
           },
           instruction:
-            "Ubah format teks pada sel A2 menjadi berawalan huruf kapital pada setiap kata (Title Case) menggunakan fungsi PROPER.",
+            "Nama kota pelanggan tercatat dengan huruf kecil semua di sel A2. Ubah format teks tersebut menjadi berawalan huruf kapital pada setiap awal kata (Title Case) menggunakan fungsi teks standar.",
           starterCode: "",
           language: "text",
           tests: [
@@ -1144,7 +1260,7 @@ export const spreadsheetTrack: Track = {
             pengecoh: ["=KAPITAL_KATA(", "B2)"],
             pemisah: "",
             explanation:
-              "Fungsi kapitalisasi huruf pertama tiap kata adalah `=PROPER(A2)`. Pengecoh `=KAPITAL_KATA()` adalah nama fiktif yang sering menggoda pemula yang belum menghafal fungsi teks standar pada spreadsheet saat ini.",
+              "Fungsi kapitalisasi huruf pertama tiap kata adalah `=PROPER(A2)`. Pengecoh `=KAPITAL_KATA()` adalah nama fungsi fiktif yang sering menggoda pemula yang keliru dan belum menghafal fungsi teks standar pada spreadsheet, sehingga menjadi jebakan umum dalam olah data.",
           },
         },
         {
@@ -1159,7 +1275,7 @@ export const spreadsheetTrack: Track = {
             note: "Mengevaluasi kebersihan data sebelum dilakukan agregasi.",
           },
           instruction:
-            "Hitung berapa banyak baris duplikat di rentang A1:A50 dengan mengurangkan COUNTA(A1:A50) dan COUNTA(UNIQUE(A1:A50)).",
+            "Lakukan audit kualitas data pada rentang A1:A50 dengan menyusun formula yang mengurangkan jumlah total seluruh baris dengan jumlah baris yang bernilai unik.",
           starterCode: "",
           language: "text",
           tests: [
@@ -1181,6 +1297,39 @@ export const spreadsheetTrack: Track = {
             pemisah: "",
             explanation:
               "Selisih baris duplikat dihitung dari `=COUNTA(A1:A50) - COUNTA(UNIQUE(A1:A50))`. Pengecoh `=COUNT()` dan `=DISTINCT()` adalah kombinasi kesalahan umum yang keliru dipakai untuk sel berisi data teks pada spreadsheet.",
+          },
+        },
+        {
+          kind: "step",
+          id: "sheet-3-8",
+          title: "Pembersihan Pola Teks dengan Wildcard Find & Replace",
+          explanation:
+            "Saat membersihkan ribuan nama produk yang ditempeli teks keterangan dalam tanda kurung (seperti 'Kopi Susu (Promo)' atau 'Donat Coklat (Diskon 50%)'), menghapus manual satu per satu akan memakan waktu berjam-jam. Fitur Find and Replace (`Ctrl + H`) menyediakan karakter wildcard tanda bintang (`*`) yang mewakili deretan karakter sembarang. Dengan mencari pola ` (*)` dan mengosongkan kotak Replace, spreadsheet akan secara serentak menghapus semua teks dalam kurung tanpa merusak nama produk intinya. Ini adalah trik efisiensi tingkat tinggi para praktisi olah data.",
+          example: {
+            code: "Find: Rp * > Replace with: ",
+            output: "Menghapus teks awalan 'Rp ' beserta nominal di belakangnya dari deretan deskripsi transaksi.",
+            note: "Gunakan tanda tilde (~*) jika ingin mencari simbol bintang literal.",
+          },
+          instruction:
+            "Pada kotak dialog Find and Replace (Ctrl+H), bersihkan semua keterangan dalam tanda kurung pada kolom produk. Masukkan pola wildcard tanda kurung pada kotak pencarian dan kosongkan bagian pengganti teksnya.",
+          starterCode: "",
+          language: "text",
+          tests: [
+            {
+              pattern: "find[^\\n]*\\(\\*\\)[^\\n]*replace",
+              flags: "i",
+              message: "Tuliskan polanya: Find: (*) > Replace with: ",
+            },
+          ],
+          solution: "Find: (*) > Replace with: ",
+          susunKode: {
+            question:
+              "Susun parameter Find and Replace untuk menghapus seluruh teks dalam kurung.",
+            potongan: ["Find: (*) > ", "Replace with: "],
+            pengecoh: ["Cari: (?) > ", "Ganti: Hapus"],
+            pemisah: "",
+            explanation:
+              "Menghapus seluruh teks di dalam kurung menggunakan wildcard `Find: (*) > Replace with: `. Pengecoh `(?)` adalah kesalahan keliru yang sering menjebak pemula karena tanda tanya hanya menyasar tepat satu karakter saja, bukan seluruh teks di dalam kurung.",
           },
         },
         {
@@ -1248,6 +1397,16 @@ export const spreadsheetTrack: Track = {
               explanation:
                 "Fungsi UNIQUE mengekstrak data dan hanya mengembalikan satu entri unik dari setiap nilai, membuang baris duplikat.",
             },
+            {
+              id: "q6",
+              type: "pilihan-ganda",
+              question:
+                "Pada fitur Find and Replace (Ctrl+H), simbol wildcard apa yang digunakan untuk mewakili sembarang rangkaian karakter dengan panjang berapa pun?",
+              choices: ["Tanda bintang (*)", "Tanda tanya (?)", "Tanda pagar (#)", "Tanda seru (!)"],
+              answerIndex: 0,
+              explanation:
+                "Tanda bintang (*) adalah karakter wildcard yang mewakili nol atau banyak karakter sembarang dalam operasi pencarian teks.",
+            },
           ],
         },
       ],
@@ -1273,40 +1432,57 @@ export const spreadsheetTrack: Track = {
           title: "Pivot Table: Ringkasan Analisis Multidimensi Tanpa Rumus",
           body:
             "# Pivot Table & Ringkasan Data Multidimensi\n\n" +
-            "**Pivot Table** adalah alat analisis paling powerful di spreadsheet yang memungkinkan kamu meringkas, mengelompokkan, dan menganalisis puluhan ribu baris data transaksi mentah hanya dengan tindakan *drag-and-drop* nama kolom — tanpa perlu menulis satu baris rumus formula yang rumit.\n\n" +
+            "**Pivot Table** adalah alat analisis paling powerful di spreadsheet yang memungkinkan kamu meringkas, mengiris (*slice-and-dice*), dan menganalisis puluhan ribu baris data transaksi mentah hanya dengan tindakan *drag-and-drop* nama kolom — tanpa perlu menulis satu baris rumus formula yang rumit.\n\n" +
             "Syarat mutlak membuat Pivot Table adalah data mentah harus dalam format **Tabel Rapi (Tabular Data)**:\n" +
             "1. Memiliki tepat satu baris judul (*header*) unik di baris paling atas.\n" +
-            "2. Setiap baris mewakili satu transaksi atau entri data.\n" +
+            "2. Setiap baris mewakili tepat satu transaksi atau entri data.\n" +
             "3. **Dilarang keras ada sel yang di-merge (Merge Cells)** pada area data.\n" +
-            "4. Tidak ada baris kosong di tengah data transaksi.\n\n" +
+            "4. Tidak ada baris kosong di tengah-tengah data transaksi.\n\n" +
             "## Anatomi 4 Area Utama Pivot Table\n\n" +
             "```text\n" +
             "+-------------------------------------------------------------------------+\n" +
             "|                          PIVOT TABLE EDITOR                             |\n" +
             "+------------------------------------+------------------------------------+\n" +
             "|  1. FILTERS (Penyaring Tabel)      |  2. COLUMNS (Label Menyamping)     |\n" +
-            "|     Contoh: Status = Lunas         |     Contoh: Kanal Online vs Offline|\n" +
+            "|     Contoh: Status = Lunas         |     Contoh: Wilayah Cabang Toko    |\n" +
             "+------------------------------------+------------------------------------+\n" +
             "|  3. ROWS (Label Berjejer ke Bawah) |  4. VALUES (Angka Agregasi)        |\n" +
             "|     Contoh: Kategori Produk        |     Contoh: SUM of Penjualan       |\n" +
             "+------------------------------------+------------------------------------+\n" +
             "```\n\n" +
-            "## Fitur & Operasi Esensial Pivot Table di Dunia Kerja\n\n" +
+            "## Kekuatan Cross-Tabulation 2 Dimensi (Matriks Silang)\n\n" +
+            "Kekuatan terbesar Pivot Table muncul saat kamu menyilangkan dimensi pada **Rows** dan **Columns** secara bersamaan. Contohnya:\n\n" +
+            "```text\n" +
+            "+--------------------+---------------+---------------+---------------+\n" +
+            "| Kategori (Rows)    | Jakarta (Col) | Bandung (Col) |  Grand Total  |\n" +
+            "+--------------------+---------------+---------------+---------------+\n" +
+            "| Makanan Minuman    | Rp 45.000.000 | Rp 28.000.000 | Rp 73.000.000 |\n" +
+            "| Elektronik         | Rp 82.000.000 | Rp 51.000.000 | Rp 133.000.000|\n" +
+            "+--------------------+---------------+---------------+---------------+\n" +
+            "| Grand Total        | Rp 127.000.000| Rp 79.000.000 | Rp 206.000.000|\n" +
+            "+--------------------+---------------+---------------+---------------+\n" +
+            "```\n\n" +
+            "Dalam hitungan detik, manajemen dapat membaca performa per kategori produk, performa per wilayah, serta total keseluruhan tanpa membuat puluhan rumus `SUMIFS` yang rawan salah.\n\n" +
+            "## Layout Standar Korporat: Tabular Form\n\n" +
+            "Secara default, Excel menampilkan Pivot Table dalam format *Compact Form* yang menumpuk hierarki baris dalam satu kolom berlekuk. Di dunia profesional (finance & BI), format ini menyulitkan saat tabel ingin disalin ke model keuangan lain. Biasakan mengubah layout melalui menu pita ribbon:\n\n" +
+            "- **`Design > Report Layout > Show in Tabular Form`:** Memecah setiap field ke dalam kolomnya masing-masing.\n" +
+            "- **`Design > Report Layout > Repeat All Item Labels`:** Mengisi sel kosong yang dihasilkan oleh pengelompokan hierarki.\n\n" +
+            "## Operasi Esensial Pivot Table di Dunia Kerja\n\n" +
             "| Fitur | Fungsi Utama | Contoh Penggunaan Bisnis |\n" +
-            "|---|---|---|\n" +
-            "| **Rows & Columns** | Pengelompokan dimensi data | Menyilangkan Kategori Produk (Rows) dengan Tahun (Columns). |\n" +
-            "| **Summarize Values** | Menentukan jenis agregasi | Mengubah SUM (Total Penjualan) menjadi AVERAGE atau COUNT. |\n" +
-            "| **Show Values As** | Mengubah angka jadi persentase | `% of Grand Total` untuk menganalisis kontribusi omset per produk. |\n" +
+            "|---|---|---|---|\n" +
+            "| **Summarize Values** | Menentukan jenis agregasi | Mengubah SUM (Total Omset) menjadi AVERAGE atau COUNT. |\n" +
+            "| **Show Values As** | Mengubah angka jadi persentase | `% of Grand Total` untuk melihat kontribusi omset per produk. |\n" +
             "| **Group by Tanggal** | Mengelompokkan transaksi harian | Klik kanan tanggal > `Group: Months, Years` untuk rekap bulanan. |\n" +
-            "| **Calculated Field** | Membuat kolom rumus di dalam Pivot | Menghitung rasio Profit Margin (`=Profit / Penjualan`). |\n" +
+            "| **Calculated Field** | Membuat metrik hitungan di memori | Menghitung rasio Profit Margin (`=Profit / Penjualan`). |\n" +
             "| **Slicer** | Tombol filter visual interaktif | Tombol penyaring Bulan/Wilayah yang elegan untuk eksekutif. |\n" +
             "| **Refresh Data** | Memperbarui cache pivot | Memperbarui angka saat data mentah bertambah baris. |\n\n" +
             "## Praktik Terbaik: Ubah Menjadi Format Excel Table (Ctrl + T)\n\n" +
             "Masalah paling sering terjadi saat data transaksi baru bertambah adalah angka tersebut tidak ikut terhitung ke dalam Pivot Table karena rentang sumber awalnya statis (misal `A1:D500`). Biasakan mengubah data sumber menjadi **Excel Table (`Ctrl + T`)** terlebih dahulu sebelum membuat Pivot Table. Dengan demikian, setiap ada baris baru, rentang Pivot Table otomatis memanjang secara dinamis.\n\n" +
             "## Jebakan / Kesalahan Umum\n\n" +
-            "- **Data Sumber Diubah Tapi Lupa REFRESH**: Pivot Table menyimpan data di dalam memori cache terpisah (*Pivot Cache*). Mengubah angka di lembar data mentah **tidak otomatis mengubah Pivot Table**. Kamu wajib mengeklik `PivotTable Analyze > Refresh` di Excel.\n" +
-            "- **Menaruh Kolom Angka di Area Rows**: Menaruh kolom harga nominal ke area Rows akan membuat tabel pivot sangat panjang berjejer ke bawah alih-alih meringkas data.\n" +
-            "- **Adanya Kolom Tanpa Judul Header**: Jika ada satu saja kolom yang header-nya kosong, spreadsheet akan menolak pembuatan Pivot Table dengan pesan error *'The PivotTable field name is not valid'*.\n\n" +
+            "- **Data Sumber Diubah Tapi Lupa REFRESH:** Pivot Table menyimpan data di dalam memori cache terpisah (*Pivot Cache*). Mengubah angka di lembar data mentah **tidak otomatis mengubah Pivot Table**. Kamu wajib mengeklik `PivotTable Analyze > Refresh` di Excel.\n" +
+            "- **Menaruh Kolom Angka di Area Rows:** Menaruh kolom harga nominal ke area Rows akan membuat tabel pivot sangat panjang berjejer ke bawah alih-alih meringkas data.\n" +
+            "- **Muncul Error Saat Grouping Tanggal:** Jika ada satu saja sel kosong atau teks pada kolom tanggal di data mentah, Excel akan menolak perintah grouping dengan pesan *'Cannot group that selection'*.\n" +
+            "- **Adanya Kolom Tanpa Judul Header:** Jika ada satu saja kolom yang header-nya kosong, spreadsheet akan menolak pembuatan Pivot Table dengan pesan error *'The PivotTable field name is not valid'*.\n\n" +
             "## Kaitan ke Dunia Kerja\n\n" +
             "Kemampuan membuat Pivot Table dalam waktu kurang dari 60 detik untuk menjawab pertanyaan pimpinan (seperti *'Produk apa yang menyumbang 80% omset di Jakarta kuartal ini?'*) adalah tes kemampuan teknis paling standar untuk posisi Business Analyst, Finance Officer, dan Commercial Planner.",
         },
@@ -1322,7 +1498,7 @@ export const spreadsheetTrack: Track = {
             note: "Sertakan baris header di dalam rentang — nama kolomnya yang akan muncul sebagai field di editor.",
           },
           instruction:
-            "Data transaksimu ada di `Sheet1` mulai sel A1 (header) sampai D5000. Tulis dua baris: jalur menu untuk menyisipkan pivot table, lalu rentang sumber datanya lengkap dengan nama sheet.",
+            "Data transaksimu ada di Sheet1 mulai sel A1 (header) sampai D5000. Tulis dua baris: jalur menu untuk menyisipkan pivot table, lalu tentukan rentang sumber datanya lengkap dengan nama sheet.",
           starterCode: "",
           language: "text",
           tests: [
@@ -1361,7 +1537,7 @@ export const spreadsheetTrack: Track = {
             output: "Tabel ringkasan 2 kolom: Jakarta 12.400.000 | Bandung 8.150.000 | Grand Total 20.550.000",
           },
           instruction:
-            "Susun konfigurasi pivot untuk menjawab 'berapa total penjualan tiap kategori produk?'. Tulis dua baris: satu untuk area yang memuat field `Kategori`, satu lagi untuk area yang memuat agregasi jumlah dari field `Penjualan`.",
+            "Susun konfigurasi pivot untuk menjawab 'berapa total penjualan tiap kategori produk?'. Tulis dua baris: satu untuk area yang memuat field Kategori, satu lagi untuk area yang memuat agregasi jumlah dari field Penjualan.",
           starterCode: "",
           language: "text",
           tests: [
@@ -1398,7 +1574,7 @@ export const spreadsheetTrack: Track = {
             output: "Kolom nilai berubah dari total 20.550.000 menjadi rata-rata 342.500 per transaksi.",
           },
           instruction:
-            "Manajemen ingin tahu **rata-rata** nilai transaksi per wilayah, bukan totalnya. Tulis tiga baris konfigurasi: field di area Rows, field di area Values, dan jenis agregasi yang kamu pilih.",
+            "Manajemen ingin mengetahui nilai transaksi rata-rata per wilayah kerja, bukan total nominalnya. Tulis tiga baris konfigurasi: field di area Rows (Wilayah), field di area Values (Penjualan), dan tetapkan jenis agregasi rata-rata (Summarize by: AVERAGE).",
           starterCode: "",
           language: "text",
           tests: [
@@ -1426,7 +1602,7 @@ export const spreadsheetTrack: Track = {
             pengecoh: ["Baris: Wilayah\nValues: Penjualan\n", "Summarize by: RATA_RATA"],
             pemisah: "",
             explanation:
-              "Jenis agregasi rata-rata pada Pivot Table dinamakan `AVERAGE`. Pengecoh `RATA_RATA` tidak ada pada opsi bawaan tabel pivot dan sering keliru dipilih oleh pemula dalam mengolah data laporan spreadsheet secara interaktif.",
+              "Jenis agregasi rata-rata pada Pivot Table dinamakan `AVERAGE`. Pengecoh `RATA_RATA` tidak ada pada opsi bawaan tabel pivot dan sering keliru dipilih oleh pemula dalam mengolah data laporan spreadsheet.",
           },
         },
         {
@@ -1441,7 +1617,7 @@ export const spreadsheetTrack: Track = {
             note: "Pastikan seluruh sel di kolom tanggal data mentah terisi format tanggal valid.",
           },
           instruction:
-            "Kelompokkan field Tanggal pada Pivot Table menjadi ringkasan bulanan dan tahunan. Tulis perintah aksinya: klik kanan field Tanggal lalu pilih Group dengan opsi Months dan Years.",
+            "Kelompokkan ribuan transaksi harian pada Pivot Table menjadi ringkasan bulanan dan tahunan. Tulis perintah aksinya: klik kanan sel field Tanggal lalu pilih Group dengan opsi Months, Years.",
           starterCode: "",
           language: "text",
           tests: [
@@ -1464,7 +1640,7 @@ export const spreadsheetTrack: Track = {
             pengecoh: ["Double click Tanggal > ", "Format: Tanggal Bulanan"],
             pemisah: "",
             explanation:
-              "Pengelompokan tanggal di Pivot Table dilakukan dengan `Right click Tanggal > Group: Months, Years`. Pengecoh double-click adalah aksi keliru yang justru membuka rincian baris data (drill-down) dan menjebak pemula.",
+              "Pengelompokan tanggal di Pivot Table dilakukan dengan `Right click Tanggal > Group: Months, Years`. Pengecoh double-click adalah aksi keliru yang sering menjebak pemula karena justru membuka rincian baris data mentah (drill-down) alih-alih menampilkan menu grouping.",
           },
         },
         {
@@ -1478,7 +1654,7 @@ export const spreadsheetTrack: Track = {
             output: "Setiap baris wilayah menampilkan persentase transaksinya sendiri terhadap total baris tersebut.",
           },
           instruction:
-            "Ubah kolom nilai pada pivot penjualan per kategori agar menampilkan kontribusi tiap kategori terhadap keseluruhan. Tulis dua baris: field yang ada di area Values, dan opsi tampilan yang kamu pilih.",
+            "Ubah kolom nilai penjualan per kategori agar menampilkan proporsi kontribusi persentase terhadap keseluruhan total. Tulis dua baris: field di area Values (Penjualan), dan tetapkan opsi tampilan persentase total (Show as: % of Grand Total).",
           starterCode: "",
           language: "text",
           tests: [
@@ -1515,7 +1691,7 @@ export const spreadsheetTrack: Track = {
             output: "Kolom Rata-rata Unit muncul di pivot: Elektronik 2.450.000 | Makanan 185.000.",
           },
           instruction:
-            "Data pivot punya field `Profit` dan `Penjualan`. Buat calculated field bernama `Margin` yang menghitung profit dibagi penjualan. Tulis nama field-nya dan formulanya (diawali tanda `=`).",
+            "Tabel pivot memiliki field Profit dan Penjualan. Buat kolom hitungan baru (Calculated field) bernama Margin yang membagi nilai field Profit dengan Penjualan.",
           starterCode: "",
           language: "text",
           tests: [
@@ -1538,7 +1714,7 @@ export const spreadsheetTrack: Track = {
             pengecoh: ["Opsi Hitung\nNama: ProfitMargin\n", "Formula: =Profit - Penjualan"],
             pemisah: "",
             explanation:
-              "Margin dihitung dari pembagian `=Profit / Penjualan`. Operator pengurangan `-` adalah kesalahan logika rumus yang keliru dan sering menjebak dalam analisis keuangan lembar kerja spreadsheet interaktif modern.",
+              "Margin dihitung dari pembagian `=Profit / Penjualan`. Operator pengurangan `-` adalah kesalahan logika rumus yang keliru dan sering menjebak pemula dalam analisis keuangan lembar kerja spreadsheet, karena margin mengukur persentase rasio, bukan nominal laba kotor.",
           },
         },
         {
@@ -1552,7 +1728,7 @@ export const spreadsheetTrack: Track = {
             output: "Panel tombol Jakarta, Bandung, Surabaya muncul di atas pivot; mengklik salah satunya menyaring seluruh tabel.",
           },
           instruction:
-            "Dashboard penjualanmu perlu tombol filter agar manajer bisa memilih periode. Tulis dua baris: jalur menu untuk menambahkan slicer, dan field yang kamu jadikan tombolnya (`Bulan`).",
+            "Dashboard penjualanmu membutuhkan panel tombol penyaring visual agar manajemen dapat memilih periode waktu. Tulis jalur menu untuk menyisipkan slicer, lalu tentukan field Bulan sebagai tombol filternya.",
           starterCode: "",
           language: "text",
           tests: [
@@ -1591,7 +1767,7 @@ export const spreadsheetTrack: Track = {
             note: "Jadikan data sumber sebagai Excel Table (Ctrl+T) agar baris baru otomatis ikut terhitung.",
           },
           instruction:
-            "Kamu memperbaiki dua angka penjualan di data sumber, tapi pivot masih menampilkan angka lama. Tulis jalur menu yang kamu tempuh di Excel untuk memperbaruinya.",
+            "Kamu telah memperbaiki data penjualan yang salah di lembar data mentah, namun angka di Pivot Table masih menampilkan angka lama. Tulis jalur menu di Excel untuk memperbarui memori cache tabel tersebut.",
           starterCode: "",
           language: "text",
           tests: [
@@ -1610,6 +1786,49 @@ export const spreadsheetTrack: Track = {
             pemisah: " ",
             explanation:
               "Memperbarui cache data pivot table dilakukan lewat `PivotTable Analyze > Refresh`. Pengecoh `Muat Ulang` adalah nama perintah fiktif yang sering keliru dicari saat data baru ditambahkan ke spreadsheet.",
+          },
+        },
+        {
+          kind: "step",
+          id: "sheet-4-9",
+          title: "Cross-Tabulation 2 Dimensi (Pivot Bertingkat)",
+          explanation:
+            "Analisis bisnis bertingkat sering kali menuntut perbandingan matriks silang dua dimensi: melihat kontribusi produk di setiap wilayah cabang. Dengan menaruh satu dimensi pada area **Rows** dan dimensi kedua pada area **Columns**, Pivot Table akan menyilangkan data transaksi menjadi kisi tabel ringkasan yang memperlihatkan subtotal baris, subtotal kolom, dan Grand Total di pojok kanan bawah. Konfigurasi ini menjawab dua pertanyaan bisnis sekaligus dalam satu tampilan layar.",
+          example: {
+            code: "Rows: Departemen\nColumns: Tahun\nValues: COUNT of Karyawan",
+            output: "Tabel matriks silang menampilkan jumlah staf per departemen dari tahun ke tahun.",
+            note: "Menyilangkan Rows dan Columns adalah kekuatan utama analisis tabular.",
+          },
+          instruction:
+            "Direktur meminta laporan matriks silang penjualan produk per wilayah cabang. Susun konfigurasi Pivot Table 2 dimensi: tempatkan field Kategori pada Rows, field Wilayah pada Columns, dan jumlahkan omset dengan field Penjualan pada Values.",
+          starterCode: "",
+          language: "text",
+          tests: [
+            {
+              pattern: "rows\\s*:[^\\n]*kategori",
+              flags: "i",
+              message: "Taruh Kategori di area Rows.",
+            },
+            {
+              pattern: "columns\\s*:[^\\n]*wilayah",
+              flags: "i",
+              message: "Taruh Wilayah di area Columns.",
+            },
+            {
+              pattern: "values\\s*:[^\\n]*(sum|jumlah)[^\\n]*penjualan",
+              flags: "i",
+              message: "Taruh SUM of Penjualan di area Values.",
+            },
+          ],
+          solution: "Rows: Kategori\nColumns: Wilayah\nValues: SUM of Penjualan",
+          susunKode: {
+            question:
+              "Susun Pivot Table 2 dimensi Kategori di Rows, Wilayah di Columns, dan SUM Penjualan di Values.",
+            potongan: ["Rows: Kategori\nColumns: Wilayah\n", "Values: SUM of Penjualan"],
+            pengecoh: ["Baris: Kategori\nKolom: Wilayah\n", "Values: COUNT of Penjualan"],
+            pemisah: "",
+            explanation:
+              "Matriks silang 2 dimensi menyilangkan baris dan kolom dengan agregasi `Values: SUM of Penjualan`. Pengecoh `COUNT` adalah pilihan keliru yang sering menjebak pemula karena hanya menghitung jumlah baris transaksi tanpa menjumlahkan akumulasi omset nominal yang diminta.",
           },
         },
         {
@@ -1682,6 +1901,21 @@ export const spreadsheetTrack: Track = {
               explanation:
                 "Fitur Grouping pada tanggal secara otomatis mengelompokkan ribuan entri harian menjadi periode bulanan atau kuartalan.",
             },
+            {
+              id: "q6",
+              type: "pilihan-ganda",
+              question:
+                "Opsi layout Pivot Table manakah pada tab Design yang memecah hierarki data ke dalam kolom-kolom terpisah agar mudah dikutip dan disalin ke lembar kerja lain?",
+              choices: [
+                "Report Layout > Show in Tabular Form",
+                "Report Layout > Show in Compact Form",
+                "Grand Totals > Off for Rows and Columns",
+                "Subtotals > Do Not Show Subtotals",
+              ],
+              answerIndex: 0,
+              explanation:
+                "Tabular Form menyajikan setiap dimensi field dalam kolom terpisah dengan format kisi klasik, sangat ideal untuk diekspor atau dikutip.",
+            },
           ],
         },
       ],
@@ -1706,18 +1940,20 @@ export const spreadsheetTrack: Track = {
           title: "Visualisasi Data, Prinsip Decluttering, dan Desain Dashboard",
           body:
             "# Visualisasi Data & Desain Dashboard\n\n" +
-            "Visualisasi data di dunia bisnis bukan sekadar mempercantik laporan, melainkan tentang **Data Storytelling** — menyajikan temuan angka secara cepat, jujur, dan mudah dipahami oleh eksekutif atau pemangku kepentingan tanpa memerlukan penjelasan lisan yang berbelit-belit.\n\n" +
+            "Visualisasi data di dunia bisnis bukan sekadar mempercantik laporan, melainkan tentang **Data Storytelling** — menyajikan temuan angka secara cepat, jujur, dan mudah dipahami oleh eksekutif tanpa memerlukan penjelasan lisan yang berbelit-belit. Seorang analis yang baik memahami bahwa audiens eksekutif hanya memiliki waktu 10 hingga 30 detik untuk menyerap inti pesan dari sebuah laporan.\n\n" +
             "## Panduan Memilih Jenis Grafik yang Tepat\n\n" +
             "| Jenis Chart | Kapan Wajib Dipakai | Kapan Dilarang Keras | Contoh Kasus Bisnis |\n" +
             "|---|---|---|---|\n" +
-            "| **Line Chart** | Data deret waktu (*time-series*) untuk melihat tren. | Membandingkan kategori diskrit tanpa urutan waktu. | Tren Penjualan Bulanan (Jan-Des). |\n" +
-            "| **Bar / Column Chart** | Membandingkan volume antar kategori diskrit. | Terlalu banyak kategori (>20 batang berjejer). | Perbandingan Omset per Cabang Kota. |\n" +
-            "| **Pie Chart** | Proporsi bagian dari total untuk 2–3 segmen saja. | Lebih dari 4 segmen atau selisih persentase sangat tipis. | Komposisi Pelanggan Baru vs Pelanggan Lama. |\n" +
-            "| **Sparkline** | Grafik tren mini di dalam sel untuk ruang padat. | Memerlukan pembacaan angka koordinat yang presisi. | Tren 12 Bulan di samping tabel KPI. |\n\n" +
+            "| **Line Chart (Garis)** | Data deret waktu (*time-series*) berurutan. | Membandingkan kategori diskrit tanpa urutan waktu. | Tren Omset Penjualan Bulanan (Jan-Des). |\n" +
+            "| **Bar / Column Chart (Batang)** | Membandingkan volume antar-kategori diskrit. | Terlalu banyak kategori (>20 batang berdesakan). | Perbandingan Penjualan per Cabang Kota. |\n" +
+            "| **Pie Chart (Lingkaran)** | Proporsi bagian dari total untuk 2–3 segmen saja. | Lebih dari 4 segmen atau selisih persentase sangat tipis. | Komposisi Pelanggan: Member (65%) vs Non-Member (35%). |\n" +
+            "| **Combo Chart (Batang + Garis)** | Menampilkan dua metrik berskala beda dengan sumbu Y kedua (*Secondary Axis*). | Dua metrik dengan skala satuan yang sama persis. | Omset dalam Miliar (Batang) vs Profit Margin dalam % (Garis). |\n" +
+            "| **Sparkline** | Grafik tren mini di dalam satu sel untuk tabel padat. | Memerlukan pembacaan koordinat angka presisi. | Tren 12 Bulan di samping tabel KPI ringkas. |\n\n" +
             "## Anatomi Dashboard Satu Layar (One-Page Executive Dashboard)\n\n" +
+            "Pola membaca mata manusia mengikuti **Z-Pattern**: dari kiri atas ke kanan atas, lalu meluncur ke kiri bawah dan kanan bawah.\n\n" +
             "```text\n" +
             "+-------------------------------------------------------------------------+\n" +
-            "|  KARTU KPI UTAMA (Angka Ringkas Teks Besar di Atas)                     |\n" +
+            "|  KARTU KPI UTAMA (Font Besar 24pt, Label Abu-abu 10pt)                  |\n" +
             "|  [ Total Omset: Rp 1.2M ]  [ Total Transaksi: 4,520 ]  [ Margin: 24% ]   |\n" +
             "+------------------------------------+------------------------------------+\n" +
             "|  CHART TREN UTAMA (Line Chart)     |  BREAKDOWN KATEGORI (Bar Chart)    |\n" +
@@ -1727,14 +1963,17 @@ export const spreadsheetTrack: Track = {
             "+-------------------------------------------------------------------------+\n" +
             "```\n\n" +
             "## Prinsip Decluttering & Sumbu Vertikal yang Jujur\n\n" +
-            "**Decluttering** adalah prinsip membuang elemen visual grafik yang tidak memberi nilai tambah informasi (seperti garis kisi gridline yang terlalu pekat, efek 3D, bingkai tebal, dan latar belakang warna-warni). Semakin bersih grafikmu, semakin tajam pesan data yang tertangkap oleh audiens.\n\n" +
-            "**Aturan Sumbu Vertikal (Sumbu Y)**: Pada Grafik Batang (Bar/Column Chart), sumbu Y **wajib selalu dimulai dari angka 0**. Memotong sumbu Y (misalnya memulai dari angka 90 alih-alih 0) membuat selisih angka yang kecil (95 vs 100) terlihat seperti selisih raksasa 500% secara visual, yang dianggap sebagai manipulasi data yang menyesatkan di dunia korporasi.\n\n" +
+            "**Decluttering** (dipopulerkan oleh Edward Tufte melalui rasio *Data-to-Ink*) adalah prinsip membuang seluruh elemen visual grafik yang tidak memberi nilai tambah informasi:\n\n" +
+            "1. **Matikan Major Gridlines yang Terlalu Gelap:** Garis kisi abu-abu tebal hanya membuat mata lelah.\n" +
+            "2. **Hapus Legenda jika Tidak Diperlukan:** Jika grafik hanya memiliki 1 seri data, hapus legenda dan taruh keterangan langsung pada judul grafik.\n" +
+            "3. **Hilangkan Border Luar:** Kotak bingkai tebal membuat grafik terasa sempit dan terisolasi.\n" +
+            "4. **Aturan Sumbu Y Wajib Mulai dari 0:** Pada Bar Chart, tinggi batang mewakili kuantitas absolut. Memotong sumbu Y (misalnya memulai dari angka 90 alih-alih 0) membuat selisih kecil tampak seperti jurang raksasa secara visual, yang dianggap sebagai manipulasi data di korporasi.\n\n" +
             "## Slicer Report Connections: Kunci Dashboard Interaktif\n\n" +
             "Di dashboard eksekutif, mengeklik satu tombol Slicer (misalnya memilih cabang 'Surabaya') seharusnya otomatis menyaring **seluruh tabel dan grafik di layar**. Untuk mengaktifkannya di Excel, klik kanan kotak Slicer lalu pilih menu **`Report Connections`** (atau `Slicer Connections`), kemudian centang seluruh Pivot Table yang ingin kamu sinkronkan.\n\n" +
             "## Jebakan / Kesalahan Umum\n\n" +
-            "- **Penggunaan Pie Chart 3D dengan Banyak Potongan**: Efek perspektif 3D membuat potongan juring depan terlihat jauh lebih besar daripada juring belakang meskipun nilai aslinya lebih kecil.\n" +
-            "- **Warna Pelangi Tanpa Makna**: Memberi warna berbeda untuk setiap batang grafik hanya membuat visual berisik. Gunakan warna netral (abu-abu) dan berikan aksen warna tegas (biru atau merah) hanya pada data yang ingin disorot.\n" +
-            "- **Tidak Menghubungkan Slicer ke Semua Pivot**: Menaruh Slicer di dashboard tetapi lupa mengaktifkan *Report Connections* membuat hanya satu grafik yang berubah saat tombol diklik, membingungkan pengguna laporan.\n\n" +
+            "- **Penggunaan Pie Chart 3D dengan Banyak Potongan:** Efek perspektif 3D membuat potongan juring depan terlihat jauh lebih besar daripada juring belakang meskipun nilai aslinya lebih kecil.\n" +
+            "- **Warna Pelangi Tanpa Makna:** Memberi warna berbeda untuk setiap batang grafik hanya membuat visual berisik. Gunakan aturan 60-30-10: warna netral untuk sebagian besar elemen, dan warna aksen kontras hanya untuk menyorot anomali penting.\n" +
+            "- **Lupa Report Connections pada Slicer:** Menaruh Slicer di dashboard tetapi lupa mengaktifkan *Report Connections* membuat hanya satu grafik yang berubah saat tombol diklik, membingungkan pembaca laporan.\n\n" +
             "## Kaitan ke Dunia Kerja\n\n" +
             "Menyusun dashboard satu layar yang bersih, memuat kartu ringkasan KPI, grafik tren bebas decluttering, dan tombol Slicer yang terhubung sempurna adalah portofolio terbaik saat melamar posisi Data Analyst, BI Specialist, atau Finance Manager.",
         },
@@ -1749,7 +1988,7 @@ export const spreadsheetTrack: Track = {
             output: "Grafik batang muncul memperlihatkan perbandingan omset 4 kategori produk secara tegas.",
           },
           instruction:
-            "Kamu diminta menampilkan **tren penjualan bulanan sepanjang 2026**. Tulis dua baris: jalur menu untuk menyisipkan grafik, dan jenis chart yang paling tepat untuk pertanyaan itu.",
+            "Kamu diminta menampilkan tren pergerakan penjualan bulanan kafe sepanjang tahun 2026. Tulis dua baris: jalur menu untuk menyisipkan grafik, dan jenis chart yang paling tepat untuk visualisasi deret waktu tersebut.",
           starterCode: "",
           language: "text",
           tests: [
@@ -1772,7 +2011,7 @@ export const spreadsheetTrack: Track = {
             pengecoh: ["Grafik > Buat Diagram\n", "Chart type: Bar chart"],
             pemisah: "",
             explanation:
-              "Visualisasi tren sepanjang waktu paling tepat menggunakan `Line chart`. Visualisasi Bar chart keliru untuk menampilkan kontinuitas waktu dan sering menjebak pemula pada pembuatan dashboard spreadsheet interaktif.",
+              "Visualisasi tren sepanjang waktu paling tepat menggunakan `Line chart`. Visualisasi Bar chart keliru untuk menampilkan kontinuitas waktu dan sering menjebak pemula pada pembuatan dashboard spreadsheet.",
           },
         },
         {
@@ -1786,7 +2025,7 @@ export const spreadsheetTrack: Track = {
             output: "Batas atas sumbu Y terkunci di angka 120 sehingga batang tertinggi tidak menyentuh ujung grafik.",
           },
           instruction:
-            "Grafik batang perbandingan omset dua cabangmu terlihat berlebihan karena sumbunya terpotong. Tulis satu baris pengaturan chart editor yang menetapkan nilai minimum sumbu vertikal menjadi 0.",
+            "Grafik batang perbandingan omset antarcabang terlihat menyesatkan karena sumbunya terpotong otomatis. Tulis satu baris pengaturan chart editor yang mengunci nilai minimum sumbu vertikal menjadi 0.",
           starterCode: "",
           language: "text",
           tests: [
@@ -1823,19 +2062,19 @@ export const spreadsheetTrack: Track = {
             output: "Legenda di samping grafik disembunyikan agar area visual grafik menjadi lebih luas dan bersih.",
           },
           instruction:
-            "Grafik trenmu penuh garis bantu abu-abu yang mengganggu. Tulis satu baris pengaturan chart editor untuk mematikan gridline utama pada grafik itu.",
+            "Grafik tren penjualan bulananmu dipenuhi garis kisi abu-abu yang mengganggu pandangan mata. Tulis satu baris pengaturan chart editor untuk mematikan gridline utama (Major gridlines) pada grafik tersebut.",
           starterCode: "",
           language: "text",
           tests: [
             {
-              pattern: "gridlines?\\s*>\s*|>\\s*gridlines?",
+              pattern: "chart\\s*editor\\s*>\\s*gridlines",
               flags: "i",
-              message: "Sebutkan pengaturan gridline di chart editor.",
+              message: "Sebutkan jalur pengaturannya: Chart editor > Gridlines.",
             },
             {
-              pattern: "(hapus|matikan|hilangkan|none|off|uncheck)",
+              pattern: "(hapus|matikan|hilangkan|none|off|uncheck)[^\\n]*major\\s*gridlines",
               flags: "i",
-              message: "Nyatakan bahwa gridline-nya dihapus atau dimatikan.",
+              message: "Nyatakan bahwa Major gridlines dihapus atau dimatikan.",
             },
           ],
           solution: "Chart editor > Gridlines > Hapus centang Major gridlines",
@@ -1846,7 +2085,7 @@ export const spreadsheetTrack: Track = {
             pengecoh: ["Pengatur Grafik > Garis Kisi >", " Tampilkan Minor gridlines"],
             pemisah: "",
             explanation:
-              "Prinsip decluttering menyarankan `Hapus centang Major gridlines` untuk mengurangi tinta yang tidak perlu pada grafik dan menghindari visual keliru yang mengganggu pemahaman data laporan keuangan proyek.",
+              "Prinsip decluttering menyarankan `Hapus centang Major gridlines` untuk mengurangi tinta yang tidak perlu pada grafik dan menghindari visual keliru yang sering menjebak fokus audiens dari membaca pergerakan tren data utama laporan keuangan proyek.",
           },
         },
         {
@@ -1860,7 +2099,7 @@ export const spreadsheetTrack: Track = {
             output: "Sel yang bernilai di atas 1000 otomatis berlatar hijau cerah, memudahkan identifikasi transaksi besar.",
           },
           instruction:
-            "Kolom `D2:D200` berisi selisih target dan realisasi. Tulis tiga baris aturan conditional formatting agar sel bernilai negatif otomatis diberi latar merah: sebutkan jalur menunya, rentangnya, dan kondisinya.",
+            "Kolom D2:D200 memuat selisih target dan realisasi penjualan. Tulis aturan conditional formatting tiga baris agar sel bernilai negatif (< 0) otomatis berlatar merah: sebutkan jalur menu, rentang sel, dan kondisinya.",
           starterCode: "",
           language: "text",
           tests: [
@@ -1888,7 +2127,7 @@ export const spreadsheetTrack: Track = {
             pengecoh: ["Format > Pewarnaan Otomatis\nRentang: D2:D200\n", "Aturan: Greater than 0 (latar merah)"],
             pemisah: "",
             explanation:
-              "Pewarnaan otomatis angka negatif memakai syarat `Less than 0`. Menggunakan `Greater than 0` untuk latar merah adalah logika keliru yang menjebak pencermatan laporan keuangan spreadsheet secara menyeluruh.",
+              "Pewarnaan otomatis angka negatif memakai syarat `Less than 0`. Menggunakan `Greater than 0` untuk latar merah adalah logika keliru yang sering menjebak pemula dalam pencermatan laporan keuangan spreadsheet, karena justru memberi highlight merah pada kinerja yang positif.",
           },
         },
         {
@@ -1903,7 +2142,7 @@ export const spreadsheetTrack: Track = {
             note: "Dapat dikonfigurasi menjadi grafik batang mini lewat opsi charttype.",
           },
           instruction:
-            "Baris data penjualan 12 bulan berada di rentang `C2:N2`. Tulis formula yang menggambar grafik mini di dalam sel untuk deret itu.",
+            "Deret data penjualan bulanan Januari hingga Desember tersimpan di baris sel C2:N2. Tulis formula yang menggambar grafik tren mini di dalam sel untuk deret transaksi tersebut.",
           starterCode: "",
           language: "text",
           tests: [
@@ -1940,7 +2179,7 @@ export const spreadsheetTrack: Track = {
             output: "Menampilkan total akumulasi nilai 128.394.500 di dalam kotak KPI utama.",
           },
           instruction:
-            "Kolom `E2:E5000` berisi nilai tiap transaksi. Tulis formula untuk kartu KPI yang menampilkan total seluruh transaksi di rentang itu.",
+            "Kolom E (rentang E2:E5000) mencatat nominal setiap transaksi kasir. Tulis formula agregasi penjumlahan untuk mengisi kartu KPI total omset keseluruhan pada bagian atas dashboard.",
           starterCode: "",
           language: "text",
           tests: [
@@ -1961,7 +2200,7 @@ export const spreadsheetTrack: Track = {
             pengecoh: ["=JUMLAH_TOTAL(", "F2:F5000)"],
             pemisah: "",
             explanation:
-              "Agregasi kartu KPI memakai `=SUM(E2:E5000)`. Menggunakan nama fiktif `=JUMLAH_TOTAL()` adalah kesalahan yang keliru dan membuat rumus memicu error `#NAME?` pada lembar kerja spreadsheet interaktif secara langsung.",
+              "Agregasi kartu KPI memakai fungsi resmi `=SUM(E2:E5000)`. Menggunakan nama fiktif `=JUMLAH_TOTAL()` adalah kesalahan keliru yang sering menjebak pemula dan membuat rumus memicu error `#NAME?` pada lembar kerja spreadsheet karena nama fungsi tidak dikenali sistem.",
           },
         },
         {
@@ -1976,7 +2215,7 @@ export const spreadsheetTrack: Track = {
             note: "Kunci utama menciptakan dashboard interaktif profesional.",
           },
           instruction:
-            "Agar satu tombol Slicer dapat menyaring beberapa Pivot Table sekaligus di dashboard, buka pengaturannya. Tulis perintah aksinya: klik kanan Slicer lalu pilih Report Connections (atau Slicer Connections).",
+            "Agar satu tombol Slicer dapat menyaring beberapa Pivot Table dan grafik sekaligus di dashboard, buka pengaturannya melalui klik kanan Slicer lalu pilih menu Report Connections.",
           starterCode: "",
           language: "text",
           tests: [
@@ -2077,6 +2316,21 @@ export const spreadsheetTrack: Track = {
               explanation:
                 "Conditional Formatting mengubah warna latar atau teks pada sel secara dinamis berdasarkan aturan logika tertentu.",
             },
+            {
+              id: "q6",
+              type: "pilihan-ganda",
+              question:
+                "Kapan penggunaan Pie Chart dianggap sebagai kesalahan visualisasi data (*anti-pattern*) di tempat kerja?",
+              choices: [
+                "Ketika membandingkan lebih dari 4-5 segmen atau potongan memiliki selisih nilai yang sangat tipis",
+                "Ketika data hanya terdiri atas 2 kategori saja",
+                "Ketika data berjumlah total tepat 100%",
+                "Ketika digunakan dalam presentasi internal tim",
+              ],
+              answerIndex: 0,
+              explanation:
+                "Mata manusia kesulitan membedakan sudut dan luas juring saat kategori berjumlah banyak; Column/Bar chart jauh lebih mudah dicerna.",
+            },
           ],
         },
       ],
@@ -2100,7 +2354,7 @@ export const spreadsheetTrack: Track = {
           title: "Studi Kasus End-to-End: Dari Data Mentah Hingga Executive Summary",
           body:
             "# Studi Kasus Analisis Bisnis End-to-End\n\n" +
-            "Modul studi kasus bisnis ini mengikat seluruh keahlian spreadsheet yang telah kamu pelajari menjadi satu alur proyek analisis utuh (*end-to-end*) — mulai dari penerimaan data transaksi kotor (*Data Cleaning*), pembuatan kalkulasi rasio keuangan dan operasional, pemodelan Pivot Table dan Dashboard, hingga penyusunan **Executive Summary** tertulis yang dibagikan kepada jajaran manajemen.\n\n" +
+            "Modul ini mengikat seluruh keahlian spreadsheet yang telah kamu pelajari menjadi satu alur proyek analisis utuh (*end-to-end*). Kita akan mensimulasikan tugas nyata seorang Business & Finance Analyst di **PT Kenangan Kopi Indonesia (Jaringan Coffee Shop 5 Cabang)** untuk periode Q1–Q2 2026. Direktur Operasional meminta evaluasi mendalam karena meskipun omset penjualan naik, saldo kas operasional menipis dan tingkat pergantian (*turnover*) staf barista di cabang meningkat.\n\n" +
             "## Pipeline Proyek Analisis Bisnis Nyata\n\n" +
             "```text\n" +
             "+-----------------------+     +-----------------------+     +-----------------------+\n" +
@@ -2114,20 +2368,26 @@ export const spreadsheetTrack: Track = {
             "| Share with Access     |     | Review > Protect      |     | Temuan & Rekomendasi  |\n" +
             "+-----------------------+     +-----------------------+     +-----------------------+\n" +
             "```\n\n" +
+            "## Studi Kasus Nyata: PT Kenangan Kopi Indonesia\n\n" +
+            "1. **Pembersihan Log POS Kasir:** 10.000 baris transaksi cabang memuat nama produk berantakan (`  kopi susu gula aren  `). Formula `=TRIM(PROPER(A2))` membersihkan spasi liar dan menyamakan kapitalisasi agar rekapitulasi penjualan akurat.\n" +
+            "2. **Analisis Profitabilitas Menu (Gross Margin):** Menghitung margin laba kotor per cup menu minuman `=(Penjualan - HPP) / Penjualan`. Ditemukan bahwa menu promo diskon besar menghasilkan margin tipis di bawah 15%.\n" +
+            "3. **Analisis Pertumbuhan Penjualan MoM (Month-over-Month):** Menghitung laju pertumbuhan omset bulanan `=(Bulan_Ini - Bulan_Lalu) / Bulan_Lalu` untuk mengevaluasi tren akselerasi penjualan.\n" +
+            "4. **Analisis SDM & Turnover Barista:** Menggunakan `COUNTIF` untuk menghitung frekuensi karyawan resign per cabang. Cabang Bandung mencatat tingkat resign tertinggi (35%) akibat beban shift lembur berlebih.\n" +
+            "5. **Rekonsiliasi Arus Kas UMKM (Cash Flow):** Menghitung Arus Kas Bersih (*Net Cash Flow*) bulanan (`Kas Masuk - Kas Keluar`) dan Saldo Akhir (`Saldo Awal + Net Cash Flow`) untuk mendiagnosis kebocoran kas.\n\n" +
             "## 3 Bagian Wajib Executive Summary Laporan Bisnis\n\n" +
             "Angka kalkulasi di spreadsheet tidak memiliki nilai bisnis jika manajemen tidak memahami apa artinya. Laporan analisis profesional wajib dibuka dengan **Executive Summary** 3 komponen di bagian paling atas dokumen:\n\n" +
-            "1. **Key Findings (Temuan Kunci)**: Fakta angka terpenting tanpa basa-basi (misalnya: *'Omset Q2 naik 15% MoM menjadi Rp 1.2 Milyar, namun Gross Profit Margin turun dari 28% menjadi 21%'*).\n" +
-            "2. **Root Cause (Akar Masalah)**: Penjelasan alasan mengapa angka tersebut terjadi berdasarkan breakdown data (misalnya: *'Penurunan margin disebabkan oleh kenaikan biaya HPP bahan baku kopi sebesar 18% dan diskon promosi berlebih di Cabang Surabaya'*).\n" +
-            "3. **Actionable Recommendations (Rekomendasi Tindakan)**: Usulan solusi konkret yang bisa dieksekusi tim bisnis (misalnya: *'1. Negosiasi ulang harga kontrak supplier kopi; 2. Batasi diskon promosi maksimal 10% per transaksi'*).\n\n" +
+            "1. **Key Findings (Temuan Kunci):** Fakta angka terpenting tanpa basa-basi (misalnya: *'Omset Q2 naik 15% MoM menjadi Rp 1.2 Milyar, namun Gross Profit Margin turun dari 28% menjadi 21%'*).\n" +
+            "2. **Root Cause (Akar Masalah):** Penjelasan alasan mengapa angka tersebut terjadi berdasarkan breakdown data (misalnya: *'Penurunan margin disebabkan oleh kenaikan biaya HPP bahan baku kopi sebesar 18% dan diskon promosi berlebih di Cabang Surabaya'*).\n" +
+            "3. **Actionable Recommendations (Rekomendasi Tindakan):** Usulan solusi konkret yang bisa dieksekusi tim bisnis (misalnya: *'1. Negosiasi ulang harga kontrak supplier kopi; 2. Batasi diskon promosi maksimal 10% per transaksi; 3. Tata ulang jadwal shift barista di Cabang Bandung'*).\n\n" +
             "## Checklist Sebelum Membagikan File ke Pengguna Lain\n\n" +
-            "- **Audit Error**: Pastikan tidak ada sel yang menampilkan `#N/A` atau `#REF!`. Bungkus formula dengan `IFERROR()` jika diperlukan.\n" +
-            "- **Paste Values Kolom Bantu**: Lepaskan formula di kolom pembersihan data agar file lebih ringan dan tidak patah.\n" +
-            "- **Buka Kunci Sel Input & Kunci Formula**: Buka opsi *Locked* pada sel input data mentah lewat Format Cells, lalu aktifkan **`Review > Protect Sheet`** agar formula kalkulasi aman dari salah pencet tim lain.\n" +
-            "- **Sembunyikan Sheet Pendukung**: Sembunyikan (*Hide*) tab sheet berisi tabel referensi master yang tidak perlu dilihat langsung oleh pembaca.\n\n" +
+            "- **Audit Error:** Pastikan tidak ada sel yang menampilkan `#N/A` atau `#REF!`. Bungkus formula dengan `IFERROR()` jika diperlukan.\n" +
+            "- **Paste Values Kolom Bantu:** Lepaskan formula di kolom pembersihan data agar file lebih ringan dan tidak patah.\n" +
+            "- **Buka Kunci Sel Input & Kunci Formula:** Buka opsi *Locked* pada sel input data mentah lewat Format Cells, lalu aktifkan **`Review > Protect Sheet`** agar formula kalkulasi aman dari salah pencet tim lain.\n" +
+            "- **Sembunyikan Sheet Pendukung:** Sembunyikan (*Hide*) tab sheet berisi tabel referensi master yang tidak perlu dilihat langsung oleh pembaca.\n\n" +
             "## Jebakan / Kesalahan Umum\n\n" +
-            "- **Menyerahkan File Berisi Pesan Error Merah**: Mengirimkan berkas laporan ke klien yang masih dipenuhi pesan `#DIV/0!` membuat pekerjaan analis terlihat tidak cermat dan amatir.\n" +
-            "- **Menyajikan Dashboard Angka Tanpa Narasi Kesimpulan**: Manajer tidak punya waktu membaca ratusan baris data mentah (*'So What?'*). Selalu sertakan ringkasan temuan tertulis.\n" +
-            "- **Lupa Mengunci Sheet (Protect Sheet)**: Membagikan template kalkulasi tanpa proteksi berisiko tinggi merusak sistem perhitungan ketika file diisi oleh pengguna non-teknis.\n\n" +
+            "- **Menyerahkan File Berisi Pesan Error Merah:** Mengirimkan berkas laporan ke klien yang masih dipenuhi pesan `#DIV/0!` membuat pekerjaan analis terlihat tidak cermat dan amatir.\n" +
+            "- **Menyajikan Dashboard Angka Tanpa Narasi Kesimpulan:** Manajer tidak punya waktu membaca ratusan baris data mentah (*'So What?'*). Selalu sertakan ringkasan temuan tertulis.\n" +
+            "- **Lupa Mengunci Sheet (Protect Sheet):** Membagikan template kalkulasi tanpa proteksi berisiko tinggi merusak sistem perhitungan ketika file diisi oleh pengguna non-teknis.\n\n" +
             "## Kaitan ke Dunia Kerja\n\n" +
             "Penyusunan proyek terintegrasi dari data mentah hingga rekomendasi tertulis adalah simulasi nyata tugas harian seorang Business Analyst, Finance Officer, maupun Management Trainee saat menyusun laporan pertanggungjawaban kinerja kuartalan di hadapan pimpinan perusahaan.",
         },
@@ -2138,12 +2398,12 @@ export const spreadsheetTrack: Track = {
           explanation:
             "Kombinasi formula `=TRIM(PROPER(A2))` melakukan dua proses pembersihan sekaligus dalam satu langkah efisien: menghapus seluruh spasi liar di awal dan akhir teks sekaligus mengubah format huruf menjadi Title Case (kapital di setiap awal kata). Formula bersarang (*nested formula*) ini adalah langkah standar industri saat membersihkan data mentah nama pelanggan atau alamat kota sebelum diolah ke tahap Pivot Table. Jebakan pemula: jumlah tanda kurung penutup tidak seimbang dengan tanda kurung pembuka sehingga formula ditolak spreadsheet.",
           example: {
-            code: '=TRIM(PROPER("  budi sudarsono  "))',
-            output: '"Budi Sudarsono" (spasi dibersihkan dan huruf awal setiap kata menjadi kapital).',
+            code: '=TRIM(PROPER("  kopi susu aren  "))',
+            output: '"Kopi Susu Aren" (spasi dibersihkan dan huruf awal setiap kata menjadi kapital).',
             note: "Formula kombinasi paling sering dipakai pada pipeline data cleaning awal.",
           },
           instruction:
-            "Bersihkan spasi berlebih dan format huruf kapital awal kata pada teks sel A2 menggunakan kombinasi TRIM dan PROPER.",
+            "Pada log POS kafe di sel A2, nama menu tercatat kotor dengan spasi berlebih dan huruf kecil semua. Bersihkan spasi liar sekaligus ubah menjadi huruf kapital tiap kata menggunakan kombinasi fungsi TRIM dan PROPER secara bersarang.",
           starterCode: "",
           language: "text",
           tests: [
@@ -2181,7 +2441,7 @@ export const spreadsheetTrack: Track = {
             note: "Format sel hasil perhitungan ke dalam bentuk persentase (%).",
           },
           instruction:
-            "Hitung rasio Gross Margin jika sel C2 adalah Pendapatan (Penjualan) dan sel D2 adalah Harga Pokok Penjualan (HPP).",
+            "Hitung rasio Gross Profit Margin menu minuman di baris 2: sel C2 adalah Pendapatan (Penjualan) dan sel D2 adalah Harga Pokok Penjualan (HPP). Pastikan pengurangan laba kotor dibungkus tanda kurung sebelum dibagi pendapatan.",
           starterCode: "",
           language: "text",
           tests: [
@@ -2209,7 +2469,7 @@ export const spreadsheetTrack: Track = {
         {
           kind: "step",
           id: "sheet-6-3",
-          title: "Analisis HR: Menghitung Tingkat Turnover Karyawan",
+          title: "Analisis HR: Menghitung Frekuensi Resign Barista",
           explanation:
             "Fungsi `=COUNTIF(A1:A100, \"Resign\")` menghitung banyaknya kemunculan baris karyawan yang berstatus keluar (resign) pada rentang data HR. Angka ini kemudian dibagi dengan total rata-rata staf untuk mengukur persentase tingkat turnover karyawan secara kuantitatif dalam satu periode kerja. Metrik ini dipantau secara berkala oleh manajemen SDM untuk mengevaluasi retensi talenta perusahaan. Jebakan pemula: kesalahan ejaan teks kriteria atau adanya spasi ekstra pada data mentah yang membuat baris tidak terhitung.",
           example: {
@@ -2218,7 +2478,7 @@ export const spreadsheetTrack: Track = {
             note: "Bungkus kriteria teks dengan tanda petik ganda.",
           },
           instruction:
-            "Hitung ada berapa banyak baris di rentang A1 hingga A100 yang memiliki teks persis \"Resign\".",
+            "Pada tabel audit SDM kafe di rentang A1 hingga A100, hitung berapa banyak baris barista yang berstatus keluar dengan kriteria teks persis \"Resign\" menggunakan fungsi hitung bersyarat.",
           starterCode: "",
           language: "text",
           tests: [
@@ -2240,7 +2500,7 @@ export const spreadsheetTrack: Track = {
             pengecoh: ["=HITUNGIF(A1:A100, ", "Resign)"],
             pemisah: "",
             explanation:
-              "Kriteria teks pada `=COUNTIF()` wajib dibungkus tanda kutip `\"Resign\"`. Menulis tanpa kutip adalah kesalahan sintaks yang keliru dan membuat pencarian data pada lembar kerja spreadsheet gagal secara berulang.",
+              "Kriteria teks pada `=COUNTIF()` wajib dibungkus tanda kutip `\"Resign\"`. Menulis kriteria teks tanpa tanda kutip adalah kesalahan sintaks yang keliru dan sering menjebak pemula, sehingga pencarian data teks pada lembar kerja spreadsheet menghasilkan nilai nol.",
           },
         },
         {
@@ -2255,7 +2515,7 @@ export const spreadsheetTrack: Track = {
             note: "Format sel hasil perhitungan ke Percentage dengan 1 angka desimal.",
           },
           instruction:
-            "Bulan lalu (sel B2) omset tercatat 100 juta dan bulan ini (sel C2) tercatat 120 juta. Tulis formula persentase pertumbuhan MoM untuk menghitung laju pertumbuhan omset tersebut.",
+            "Di tabel ringkasan penjualan, sel B2 mencatat omset bulan lalu dan sel C2 mencatat omset bulan berjalan. Hitung laju persentase pertumbuhan omset MoM dengan membagi selisih pertumbuhan terhadap omset bulan lalu.",
           starterCode: "",
           language: "text",
           tests: [
@@ -2278,12 +2538,45 @@ export const spreadsheetTrack: Track = {
             pengecoh: ["=C2 - B2 / ", "C2"],
             pemisah: "",
             explanation:
-              "Perhitungan laju pertumbuhan MoM memerlukan tanda kurung `=(C2 - B2) / B2` agar pengurangan dihitung sebelum pembagian. Pengecoh tanpa kurung adalah kesalahan fatal hierarki operator matematika yang sering keliru menghasilkan angka ratusan persen yang salah.",
+              "Perhitungan laju pertumbuhan MoM memerlukan tanda kurung `=(C2 - B2) / B2` agar pengurangan dihitung sebelum pembagian. Pengecoh tanpa kurung adalah kesalahan keliru yang sering menjebak pemula akibat hierarki operator matematika yang membagi nilai lebih dulu.",
           },
         },
         {
           kind: "step",
           id: "sheet-6-5",
+          title: "Rekonsiliasi Arus Kas Bersih UMKM (Net Cash Flow)",
+          explanation:
+            "Dalam pemodelan laporan arus kas (*Cash Flow Statement*) UMKM, **Net Cash Flow** (Arus Kas Bersih) dihitung dengan mengurangkan total kas masuk operasional dengan total kas keluar beban usaha: `=Kas_Masuk - Kas_Keluar`. Nilai kas bersih yang positif menandakan bisnis menghasilkan surplus likuiditas, sedangkan angka negatif menunjukkan defisit kas yang berbahaya. Metrik ini krusial untuk memastikan bahwa kafe tidak mengalami kebangkrutan likuiditas meskipun catatan laba kotor di atas kertas terlihat positif. Jebakan pemula: tertukar antara perhitungan laba akuntansi (*accrual*) dengan pergerakan kas nyata (*cash-basis*).",
+          example: {
+            code: "=C2 - D2",
+            output: "Menghasilkan selisih surplus kas masuk C2 dikurangi kas keluar D2.",
+            note: "Net Cash Flow positif menandakan operasional menghasilkan likuiditas sehat.",
+          },
+          instruction:
+            "Pada tabel buku kas harian kafe di baris 2, sel B2 mencatat total kas masuk dan sel C2 mencatat total kas keluar. Tulis formula pengurangan untuk menghitung nilai arus kas bersih (Net Cash Flow) pada baris tersebut.",
+          starterCode: "",
+          language: "text",
+          tests: [
+            {
+              pattern: "=\\s*B2\\s*-\\s*C2",
+              flags: "i",
+              message: "Tuliskan formula arus kas bersih kas masuk minus kas keluar: =B2 - C2",
+            },
+          ],
+          solution: "=B2 - C2",
+          susunKode: {
+            question:
+              "Susun formula pengurangan kas masuk (B2) dengan kas keluar (C2).",
+            potongan: ["=B2 -", " C2"],
+            pengecoh: ["=B2 +", " D2"],
+            pemisah: "",
+            explanation:
+              "Arus kas bersih dihitung dari selisih kas masuk dikurangi kas keluar `=B2 - C2`. Operator penjumlahan `+` adalah kekeliruan perhitungan yang sering menjebak pemula dalam rekonsiliasi kas UMKM, karena beban kas keluar seharusnya mengurangi saldo likuiditas bisnis.",
+          },
+        },
+        {
+          kind: "step",
+          id: "sheet-6-6",
           title: "Proteksi Lembar Kerja (Protect Sheet)",
           explanation:
             "Sebelum berkas analisis dan dashboard dibagikan ke jajaran manajemen atau tim operasional, kamu wajib mengunci sel-sel formula agar tidak sengaja tertimpa atau terhapus oleh pengguna lain. Di Microsoft Excel, fitur proteksi ini diakses melalui tab pita `Review > Protect Sheet`. Setelah kotak dialog terbuka, kamu dapat menetapkan kata sandi opsional dan membatasi izin akses hanya untuk memilih sel-sel yang tidak terkunci (*Unlocked Cells*). Jebakan pemula: lupa membuka kunci sel entri data mentah (lewat Format Cells > Protection > uncheck Locked) sebelum mengaktifkan Protect Sheet sehingga seluruh lembar kerja terkunci total.",
@@ -2293,7 +2586,7 @@ export const spreadsheetTrack: Track = {
             note: "Pastikan sel input data mentah sudah dibuka kuncinya sebelum sheet dilindungi.",
           },
           instruction:
-            "Kunci seluruh formula lembar kerja agar aman sebelum dibagikan ke tim operasional melalui menu tab Review dan perintah proteksi sheet di Excel.",
+            "Kunci seluruh formula lembar kerja agar aman sebelum dibagikan ke tim operasional cabang melalui menu tab Review dan perintah proteksi sheet di Excel.",
           starterCode: "",
           language: "text",
           tests: [
@@ -2394,6 +2687,21 @@ export const spreadsheetTrack: Track = {
               answerIndex: 0,
               explanation:
                 "Sanity check meliputi pembersihan pesan error, pembaruan cache Pivot Table, dan verifikasi bahwa seluruh tombol Slicer berfungsi normal.",
+            },
+            {
+              id: "q6",
+              type: "pilihan-ganda",
+              question:
+                "Mengapa sebuah bisnis ritel yang mencatat laba operasional positif di atas kertas tetap bisa mengalami krisis kebangkrutan likuiditas?",
+              choices: [
+                "Karena arus kas bersih (Net Cash Flow) bernilai negatif akibat piutang tak tertagih dan kas tertahan di stok barang",
+                "Karena rumus SUMIFS yang digunakan menghitung mundur",
+                "Karena grafik dashboard menggunakan warna biru alih-alih hijau",
+                "Karena file spreadsheet tidak dikonversi ke format PDF",
+              ],
+              answerIndex: 0,
+              explanation:
+                "Laba akuntansi (akrual) tidak sama dengan ketersediaan uang tunai; kas keluar yang lebih besar dari kas masuk memicu krisis likuiditas.",
             },
           ],
         },

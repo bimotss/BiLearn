@@ -29,54 +29,112 @@ export const deploymentTrack: Track = {
         {
           kind: "materi",
           id: "deploy-1-m1",
-          title: "Persiapan Environment, Terminal, dan Sistem Operasi Server",
+          title: "Persiapan Environment, Instalasi Terminal, dan Sistem Operasi Server",
           body:
-            "# Pengertian: Mengapa Server Menggunakan Linux?\n\n" +
-            "Hampir seluruh infrastruktur cloud modern (AWS, Google Cloud, DigitalOcean) berjalan di atas sistem operasi **Linux** (khususnya distribusi seperti Ubuntu Server atau Debian). Berbeda dengan laptop harianmu yang dilengkapi antarmuka grafis (GUI) seperti Windows atau macOS, server produksi umumnya **headless** — artinya tidak ada layar desktop, mouse, atau tombol klik.\n\n" +
-            "Satu-satunya cara berkomunikasi dan mengendalikan server tersebut adalah melalui **Terminal** (Command Line Interface / CLI). Di modul ini, kamu akan mempelajari perintah-perintah navigasi, manipulasi berkas, pengoperasian proses, hak akses pengguna, serta cara masuk ke server remote melalui SSH.\n\n" +
+            "# Pengertian: Mengapa Server Produksi Menggunakan Linux?\n\n" +
+            "Hampir 100% infrastruktur cloud modern (AWS, Google Cloud, DigitalOcean, Hetzner) menjalankan beban kerjanya di atas sistem operasi **Linux** (terutama distribusi Debian dan Ubuntu Server). Berbeda dengan laptop harianmu yang menggunakan antarmuka grafis (GUI) seperti Windows atau macOS dengan jendela klik, server produksi umumnya bersifat **headless** — artinya tidak memiliki monitor desktop, keyboard fisik, atau mouse.\n\n" +
+            "Satu-satunya jembatan kendali antara developer dan server adalah **Terminal** (Command Line Interface / CLI). Melalui baris perintah teks, kamu mengunduh dependensi, menyalakan service, memeriksa log crash, mengatur firewall jaringan, hingga merilis versi aplikasi terbaru.\n\n" +
+            "---\n\n" +
+            "## Panduan Instalasi & Persiapan Environment (Berdasarkan OS)\n\n" +
+            "Sebelum kamu mengelola server sungguhan di internet, kamu wajib memiliki lingkungan terminal Linux dan Docker di komputer lokalmu:\n\n" +
+            "### 1. Pengguna Windows (Gunakan WSL 2)\n" +
+            "- Buka **PowerShell as Administrator**, lalu ketik: `wsl --install -d Ubuntu`\n" +
+            "- Restart komputer jika diminta, lalu buka aplikasi **Ubuntu** dari Start Menu dan tentukan username serta password barumu.\n" +
+            "- Unduh dan instal **Docker Desktop for Windows**. Pada menu pengaturan (*Settings*), pastikan opsi **Use the WSL 2 based engine** tercentang.\n" +
+            "- Verifikasi instalasi di terminal Ubuntu dengan perintah: `uname -a` dan `docker --version`.\n\n" +
+            "### 2. Pengguna macOS\n" +
+            "- macOS sudah berbasis UNIX (Darwin). Buka aplikasi bawaan **Terminal** atau instal **iTerm2**.\n" +
+            "- Pasang Homebrew (package manager Mac) via terminal:\n" +
+            "  ```bash\n" +
+            '  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"\n' +
+            "  ```\n" +
+            "- Instal Docker Desktop for Mac (pilih varian Apple Silicon atau Intel), atau gunakan alternatif ringan berbasis CLI: `brew install colima docker && colima start`.\n\n" +
+            "### 3. Pengguna Linux (Ubuntu/Debian)\n" +
+            "- Buka terminal dan pasang Docker Engine resmi:\n" +
+            "  ```bash\n" +
+            "  sudo apt update && sudo apt install -y ca-certificates curl gnupg\n" +
+            "  sudo install -m 0755 -d /etc/apt/keyrings\n" +
+            "  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg\n" +
+            "  sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin\n" +
+            "  ```\n" +
+            "- Tambahkan akun user-mu ke grup docker agar tidak perlu mengetik `sudo` setiap saat: `sudo usermod -aG docker $USER` (lalu relogin sesi).\n\n" +
+            "### 4. Alternatif Sandbox Online Gratis (Tanpa Instalasi Laptop)\n" +
+            "Jika laptopmu memiliki spesifikasi terbatas (RAM < 8GB), kamu bisa langsung berlatih menggunakan cloud playground gratis:\n" +
+            "- **Play with Docker (PWD):** `labs.play-with-docker.com` (gratis environment Docker 4 jam per sesi langsung di browser).\n" +
+            "- **GitHub Codespaces:** Menyediakan mesin Linux Ubuntu di cloud gratis 60 jam/bulan per akun GitHub.\n" +
+            "- **Killercoda:** Lingkungan Linux headless interaktif untuk simulasi server dan Docker.\n\n" +
             "---\n\n" +
             "## Mental Model: Struktur Filesystem Linux vs Windows\n\n" +
-            "Di Windows, drive dipisah menjadi `C:\\`, `D:\\`, dan seterusnya. Di Linux, semua direktori bermula dari satu akar utama yang disebut **root directory (`/`)**.\n\n" +
+            "Di Windows, partisi penyimpanan dipisahkan menjadi huruf drive terisolasi seperti `C:\\`, `D:\\`. Di Linux, seluruh direktori bermula dari satu akar tunggal yang disebut **root directory (`/`)**.\n\n" +
             "```text\n" +
             "/\n" +
-            "├── bin/        ← Eksekutabel perintah sistem dasar (ls, cd, cp)\n" +
-            "├── etc/        ← Berkas konfigurasi sistem & service (nginx, sshd)\n" +
-            "├── home/       ← Folder personal user biasa (/home/ubuntu, /home/bimo)\n" +
+            "├── bin/        ← Eksekutabel perintah sistem dasar (ls, cd, cp, cat)\n" +
+            "├── etc/        ← Berkas konfigurasi sistem & service (nginx.conf, sshd_config)\n" +
+            "├── home/       ← Direktori personal user biasa (/home/ubuntu, /home/deployer)\n" +
             "├── var/        ← Data dinamis yang sering berubah (/var/log, /var/www/html)\n" +
-            "└── tmp/        ← Berkas sementara (otomatis dibersihkan saat reboot)\n" +
+            "└── tmp/        ← Berkas sementara (otomatis dibersihkan saat server reboot)\n" +
             "```\n\n" +
+            "### Jebakan Fatal: Jalur Absolut vs Jalur Relatif\n" +
+            "- **Jalur Absolut:** Selalu diawali garis miring `/`. Menunjuk lokasi pasti dari akar sistem, misal `/var/www/html`. Dari direktori mana pun kamu berada, `cd /var/www/html` akan selalu berhasil.\n" +
+            "- **Jalur Relatif:** Tidak diawali garis miring. Menunjuk lokasi berdasarkan posisi folder saat ini. Jika kamu berada di `/home/ubuntu`, mengetik `cd var/www` akan gagal dengan pesan eror *No such file or directory* karena sistem mencari `/home/ubuntu/var/www`.\n\n" +
             "---\n\n" +
-            "## Tabel Rujukan Perintah Utama Linux\n\n" +
-            "| Kategori | Perintah | Fungsi Utama | Contoh Penggunaan |\n" +
+            "## Editor Berkas di Terminal Headless: nano dan vim\n\n" +
+            "Di server tanpa GUI, kamu tidak bisa mengklik dua kali file untuk membukanya di VS Code. Dua editor bawaan yang wajib kamu kuasai:\n\n" +
+            "1. **nano (Ramah Pemula):**\n" +
+            "   - Buka file: `nano config.env`\n" +
+            "   - Simpan perubahan: Tekan `Ctrl + O`, lalu tekan `Enter`.\n" +
+            "   - Keluar dari editor: Tekan `Ctrl + X`.\n" +
+            "2. **vim (Standar Server):**\n" +
+            "   - Buka file: `vim config.env`\n" +
+            "   - Masuk mode ketik: Tekan tombol huruf `i` (Insert mode).\n" +
+            "   - Simpan dan keluar: Tekan tombol `Esc`, ketik `:wq` (write & quit), lalu tekan `Enter`.\n\n" +
+            "---\n\n" +
+            "## Otentikasi Remote SSH Berbasis Kunci (Key-Based Authentication)\n\n" +
+            "Di lingkungan industri, login ke server menggunakan password teks biasa dilarang karena rentan serangan brute-force. Standar industri menggunakan pasangan kunci kriptografi **SSH Keypair**:\n\n" +
+            "```text\n" +
+            "Laptop Developer (Private Key: ~/.ssh/id_ed25519) [RAHASIA - JANGAN DIBAGIKAN]\n" +
+            "                  │\n" +
+            "                  │ Mengirim tantangan enkripsi SSH\n" +
+            "                  ▼\n" +
+            "Server VPS (Public Key: ~/.ssh/authorized_keys)   [TERPASANG DI SERVER]\n" +
+            "```\n\n" +
+            "- Buat keypair di laptop: `ssh-keygen -t ed25519 -C \"dev@perusahaan.com\"`\n" +
+            "- Kirim public key ke VPS: `ssh-copy-id deployer@203.0.113.195`\n" +
+            "- Hubungkan koneksi: `ssh deployer@203.0.113.195`\n\n" +
+            "---\n\n" +
+            "## Tabel Rujukan Perintah Operasional Linux\n\n" +
+            "| Kategori | Perintah | Fungsi Utama | Contoh Kasus Nyata |\n" +
             "|---|---|---|---|\n" +
             "| **Navigasi** | `pwd` | Menampilkan direktori kerja saat ini | `pwd` → `/var/www/html` |\n" +
-            "| **Navigasi** | `ls -la` | Melihat seluruh isi folder (termasuk hidden file) | `ls -la /var/log` |\n" +
-            "| **Navigasi** | `cd` | Berpindah lokasi direktori | `cd /var/www/html` |\n" +
-            "| **File** | `mkdir -p` | Membuat folder baru (termasuk induknya) | `mkdir -p app/src` |\n" +
-            "| **File** | `cp` / `mv` | Menyalin (`cp`) atau memindahkan/rename (`mv`) file | `mv app.js server.js` |\n" +
-            "| **File** | `rm -rf` | Menghapus file/folder secara rekursif & paksa | `rm -rf dist/` |\n" +
-            "| **File** | `cat` / `less` | Membaca isi berkas teks di terminal | `less /var/log/nginx/error.log` |\n" +
-            "| **Akses** | `chmod` | Mengubah permission (rwx) file/folder | `chmod 755 script.sh` |\n" +
-            "| **Akses** | `chown` | Mengubah pemilik (owner:group) file | `sudo chown -R www-data:www-data /var/www` |\n" +
-            "| **Akses** | `sudo` | Menjalankan perintah dengan hak akses administrator (root) | `sudo systemctl restart nginx` |\n" +
-            "| **Stream** | `\|` & `grep` | Mengoper output dan menyaring teks tertentu | `ps aux \| grep node` |\n" +
-            "| **Stream** | `>` / `>>` | Redirect ke file: timpa (`>`) vs append (`>>`) | `cat log.txt >> all_logs.txt` |\n" +
-            "| **Proses** | `ps aux` / `htop`| Memantau proses aktif & konsumsi CPU/RAM | `htop` |\n" +
-            "| **Proses** | `kill -9` | Menghentikan proses berdasarkan PID | `kill -9 1234` |\n" +
-            "| **Remote** | `ssh` / `scp` | Masuk ke server remote & menyalin berkas | `ssh root@203.0.113.1` |\n" +
-            "| **Service** | `apt` / `systemctl`| Package manager Ubuntu & pengendali background service | `sudo systemctl status nginx` |\n\n" +
+            "| **Navigasi** | `ls -la` | Menampilkan seluruh isi folder beserta berkas hidden | `ls -la /var/log` |\n" +
+            "| **Navigasi** | `cd` | Berpindah lokasi folder | `cd /var/www/html` |\n" +
+            "| **Berkas** | `mkdir -p` | Membuat folder bertingkat tanpa eror jika sudah ada | `mkdir -p app/storage/logs` |\n" +
+            "| **Berkas** | `cp` / `mv` | Menyalin (`cp`) atau memindahkan/rename (`mv`) berkas | `mv .env.example .env` |\n" +
+            "| **Berkas** | `rm -rf` | Menghapus folder dan berkas secara rekursif | `rm -rf dist/` |\n" +
+            "| **Berkas** | `cat` / `less` | Membaca isi berkas teks langsung di terminal | `less /var/log/nginx/error.log` |\n" +
+            "| **Hak Akses** | `chmod` | Mengubah izin akses berkas (rwx / oktal) | `chmod 755 deploy.sh` |\n" +
+            "| **Hak Akses** | `chown` | Mengubah kepemilikan user dan grup berkas | `sudo chown -R www-data:www-data /var/www` |\n" +
+            "| **Hak Akses** | `sudo` | Menjalankan perintah dengan izin superuser (root) | `sudo systemctl restart nginx` |\n" +
+            "| **Penyaring** | `|` & `grep` | Mengalirkan output perintah dan menyaring pola teks | `ps aux | grep node` |\n" +
+            "| **Redirect** | `>` / `>>` | Mengalihkan output: timpa (`>`) vs tambahkan (`>>`) | `echo \"PORT=3000\" >> .env` |\n" +
+            "| **Proses** | `ps aux` / `htop` | Memantau daftar proses aktif & konsumsi CPU/RAM | `htop` |\n" +
+            "| **Proses** | `kill -9` | Menghentikan proses macet secara paksa berdasarkan PID | `kill -9 5678` |\n" +
+            "| **Layanan** | `apt` | Package manager instalasi aplikasi Ubuntu/Debian | `sudo apt update && sudo apt install -y nginx` |\n" +
+            "| **Layanan** | `systemctl` | Mengontrol status dan siklus hidup service latar belakang | `sudo systemctl status nginx` |\n\n" +
             "---\n\n" +
             "## Analogi Dunia Nyata: Sistem Operasi sebagai Gedung Perkantoran\n\n" +
-            "Bayangkan Linux sebagai gedung kantor pencakar langit. Root (`/`) adalah lantai dasar. Folder `/home` adalah ruangan karyawan biasa, sedangkan `/etc` adalah ruang server kontrol. Hak akses `sudo` adalah **master key card** milik CEO — hanya boleh dipegang saat perlu mengubah struktur gedung, bukan untuk kegiatan rutin sehari-hari.\n\n" +
+            "Bayangkan server Linux sebagai gedung pencakar langit korporat. Root (`/`) adalah lobi utama gedung. Folder `/home` adalah ruangan kubikel karyawan biasa, sedangkan `/etc` adalah ruang kontrol panel listrik dan server gedung. Akun `sudo` adalah **master keycard** milik manajer fasilitas — hanya ditempelkan ke pintu saat perlu merombak instalasi gedung, bukan dipakai saat sekadar duduk mengetik laporan harian.\n\n" +
             "---\n\n" +
             "## Jebakan & Kesalahan Umum Pemula\n\n" +
-            "1. **Salah memakai `>` alih-alih `>>`:** Simbol `>` akan **menghapus seluruh isi file lama** sebelum menuliskan teks baru, sedangkan `>>` menambahkan baris di bagian paling akhir. Jika kamu salah mengetik `cat log > /etc/nginx/nginx.conf`, file konfigurasi servermu akan terhapus!\n" +
-            "2. **Mengabaikan peringatan `rm -rf`:** Perintah `rm -rf /` atau `rm -rf ./*` saat berada di lokasi folder yang salah tidak memiliki konfirmasi 'Recycle Bin'. Berkas terhapus permanen seketika.\n" +
-            "3. **Lupa memberi izin eksekusi (`chmod +x`):** Script `.sh` yang diunduh tidak akan bisa dijalankan sebelum diberi izin execute (`chmod 755 script.sh` atau `chmod +x script.sh`).\n" +
-            "4. **Menyalakan UFW sebelum membuka port SSH:** Menjalankan `sudo ufw enable` tanpa menjalankan `sudo ufw allow 22/tcp` lebih dulu akan mengunci akses remote-mu ke server selamanya!\n\n" +
+            "1. **Tragedi Operator `>` vs `>>`:** Simbol `>` akan **menghapus bersih isi file lama** sebelum menuliskan teks baru, sedangkan `>>` menambahkan baris di akhir file (*append*). Mengetik `echo \"debug=true\" > /etc/nginx/nginx.conf` akan memusnahkan seluruh isi konfigurasi web servermu!\n" +
+            "2. **Bahaya `rm -rf` Tanpa Konfirmasi:** Terminal Linux tidak memiliki fitur *Recycle Bin*. Menjalankan perintah hapus di direktori yang salah akan menghapus data secara permanen seketika.\n" +
+            "3. **Kebiasaan Buruk Memberi `chmod 777`:** Saat menemui eror *Permission Denied*, pemula sering refleks mengetik `chmod -R 777`. Di server publik, ini adalah celah keamanan fatal karena semua orang dan skrip luar diizinkan menimpa berkas eksekutabel.\n" +
+            "4. **Menyalakan UFW Sebelum Membuka Port SSH:** Menjalankan `sudo ufw enable` sebelum mengeksekusi `sudo ufw allow 22/tcp` akan memutuskan koneksi remote-mu dan mengunci akses ke server untuk selamanya!\n\n" +
             "---\n\n" +
-            "## Kaitan ke Dunia Kerja\n\n" +
-            "Dalam interview kerja untuk posisi Backend Engineer, DevOps, atau Fullstack Developer, kemampuan dasar Linux adalah syarat mutlak. Kamu sering diminta mendebug server yang crash via terminal, membaca log `nginx` atau `pm2`, mengelola hak akses folder upload, serta menyiapkan environment di VPS cloud.",
+            "## Kaitan ke Dunia Kerja & Technical Interview\n\n" +
+            "Dalam technical assessment untuk posisi Backend Engineer, Fullstack, atau DevOps, penguasaan terminal Linux adalah syarat mutlak. Skenario interview yang sangat sering muncul:\n" +
+            "- *\"Aplikasi kamu crash di server produksi dan mengembalikan HTTP 502, apa langkah pertamamu?\"* (Jawab: Buka terminal via SSH, baca log `/var/log/nginx/error.log`, periksa proses `ps aux | grep node`, dan cek sisa memori disk `df -h`).\n" +
+            "- Menyiapkan VPS baru, mengelola izin folder upload, dan menyusun skrip shell otomasi.",
         },
         {
           kind: "step",
@@ -96,32 +154,26 @@ export const deploymentTrack: Track = {
             note: "Flag -la menampilkan rincian hak akses, pemilik, ukuran, serta berkas tersembunyi seperti .env.",
           },
           instruction:
-            "Tulis perintah untuk berpindah ke direktori web server `/var/www/html`.",
-          starterCode: "# Tulis perintah cd di bawah ini\n",
+            "Kamu baru saja login ke server VPS dan perlu masuk ke direktori dokumen utama web server Nginx di `/var/www/html`. Tuliskan perintah untuk berpindah ke direktori absolut tersebut.",
+          starterCode: "# Pindah ke direktori web server di bawah ini\n",
           language: "text",
           tests: [
-                      {
-                        "pattern": "cd\\s+/var/www/html/?$",
-                        "message": "Perpindahan folder memakai `cd` diikuti jalurnya. Karena jalur diawali garis miring, ia bersifat ABSOLUT — berlaku dari mana pun kamu berada. Tanpa garis miring di depan, jalurnya dianggap relatif terhadap posisi sekarang dan biasanya gagal dengan `No such file or directory`."
-                      }
-                    ],
+            {
+              pattern: "cd\\s+/var/www/html/?$",
+              message: "Perpindahan folder memakai `cd` diikuti jalurnya. Karena jalur diawali garis miring, ia bersifat ABSOLUT — berlaku dari mana pun kamu berada. Tanpa garis miring di depan, jalurnya dianggap relatif terhadap posisi sekarang dan biasanya gagal dengan `No such file or directory`.",
+            },
+          ],
           solution: "cd /var/www/html",
-                    susunKode: {
-                      question:
-                        "Susun perintah cd untuk berpindah ke direktori /var/www/html.",
-                      potongan: [
-                        "cd",
-                        "/var/www/html",
-                      ],
-                      pengecoh: [
-                        "goto",
-                        "/usr/share/nginx",
-                      ],
-                      pemisah: " ",
-                      explanation:
-                        "Perintah navigasi direktori di Linux/Unix menggunakan katakunci `cd` diikuti direktori target `/var/www/html`. Penggunaan kata 'goto' atau jalur lain seperti '/usr/share/nginx' adalah kesalahan perintah shell yang sering menggoda pembelajar.",
-                    },
-                  },
+          susunKode: {
+            question:
+              "Susun perintah cd untuk berpindah ke direktori /var/www/html.",
+            potongan: ["cd", "/var/www/html"],
+            pengecoh: ["goto", "/usr/share/nginx"],
+            pemisah: " ",
+            explanation:
+              "Perintah navigasi direktori di Linux/Unix menggunakan katakunci `cd` diikuti direktori target `/var/www/html`. Penggunaan kata 'goto' atau jalur lain seperti '/usr/share/nginx' adalah kesalahan perintah shell yang sering menggoda pembelajar.",
+          },
+        },
         {
           kind: "step",
           id: "deploy-1-2",
@@ -138,32 +190,26 @@ export const deploymentTrack: Track = {
             note: "Gunakan flag -p pada mkdir agar tidak error jika folder induk belum ada.",
           },
           instruction:
-            "Tulis perintah untuk membuat direktori bernama `project`.",
-          starterCode: "# Tulis perintah mkdir di sini\n",
+            "Di dalam home directory server, siapkan sebuah direktori kerja baru bernama `project` untuk menampung kode aplikasi.",
+          starterCode: "# Buat folder baru di bawah ini\n",
           language: "text",
           tests: [
-                      {
-                        "pattern": "mkdir\\s+(-p\\s+)?project/?$",
-                        "message": "Pembuatan folder memakai `mkdir` diikuti namanya. Untuk folder bertingkat sekaligus, tambahkan flag `-p` — flag itu juga membuat perintahnya tidak error kalau foldernya sudah ada, dan itulah sebabnya skrip deploy selalu memakainya."
-                      }
-                    ],
+            {
+              pattern: "mkdir\\s+(-p\\s+)?(\\./)?project/?$",
+              message: "Pembuatan folder memakai `mkdir` diikuti namanya. Untuk folder bertingkat sekaligus, tambahkan flag `-p` — flag itu juga membuat perintahnya tidak error kalau foldernya sudah ada, dan itulah sebabnya skrip deploy selalu memakainya.",
+            },
+          ],
           solution: "mkdir project",
-                    susunKode: {
-                      question:
-                        "Susun perintah mkdir untuk membuat folder project baru.",
-                      potongan: [
-                        "mkdir",
-                        "project",
-                      ],
-                      pengecoh: [
-                        "makedir",
-                        "folder_project",
-                      ],
-                      pemisah: " ",
-                      explanation:
-                        "Perintah pembuatan direktori baru di lingkungan Linux/Unix adalah `mkdir nama_folder`. Sintaks 'makedir' atau mengganti nama direktori menjadi 'folder_project' adalah kekeliruan istilah shell CLI yang jebakan.",
-                    },
-                  },
+          susunKode: {
+            question:
+              "Susun perintah mkdir untuk membuat folder project baru.",
+            potongan: ["mkdir", "project"],
+            pengecoh: ["makedir", "folder_project"],
+            pemisah: " ",
+            explanation:
+              "Perintah pembuatan direktori baru di lingkungan Linux/Unix adalah `mkdir nama_folder`. Sintaks 'makedir' atau mengganti nama direktori menjadi 'folder_project' adalah kekeliruan istilah shell CLI yang jebakan.",
+          },
+        },
         {
           kind: "step",
           id: "deploy-1-3",
@@ -177,36 +223,30 @@ export const deploymentTrack: Track = {
             note: "Angka 755 berarti Owner (rwx), Group (r-x), Others (r-x).",
           },
           instruction:
-            "Tulis perintah chmod untuk memberikan izin `755` pada file `script.sh`.",
-          starterCode: "# Tulis perintah chmod di bawah ini\n",
+            "Skrip otomasi `script.sh` baru saja diunggah ke server. Berikan hak akses oktal agar pemilik berkas (owner) memiliki izin baca-tulis-eksekusi (rwx), sedangkan grup dan pengguna lainnya hanya memiliki izin baca dan eksekusi (r-x).",
+          starterCode: "# Atur hak akses file di bawah ini\n",
           language: "text",
           tests: [
-                      {
-                        "pattern": "chmod\\s+755",
-                        "message": "Hak akses diubah dengan `chmod` diikuti tiga angka: pemilik, grup, lainnya. Nilai 755 berarti pemilik boleh baca-tulis-eksekusi (7), sedangkan grup dan publik hanya baca-eksekusi (5) — pola standar untuk skrip yang boleh dijalankan siapa saja tapi hanya diubah pemiliknya."
-                      },
-                      {
-                        "pattern": "(\\./)?script\\.sh$",
-                        "message": "Sebutkan berkas targetnya di akhir perintah. Hindari 777: itu berarti siapa pun di server boleh MENGUBAH berkasmu, dan pada server publik itu celah keamanan nyata."
-                      }
-                    ],
+            {
+              pattern: "chmod\\s+755",
+              message: "Hak akses diubah dengan `chmod` diikuti tiga angka: pemilik, grup, lainnya. Nilai 755 berarti pemilik boleh baca-tulis-eksekusi (7), sedangkan grup dan publik hanya baca-eksekusi (5) — pola standar untuk skrip yang boleh dijalankan siapa saja tapi hanya diubah pemiliknya.",
+            },
+            {
+              pattern: "(\\./)?script\\.sh$",
+              message: "Sebutkan berkas targetnya di akhir perintah. Hindari 777: itu berarti siapa pun di server boleh MENGUBAH berkasmu, dan pada server publik itu celah keamanan nyata.",
+            },
+          ],
           solution: "chmod 755 script.sh",
-                    susunKode: {
-                      question:
-                        "Susun perintah chmod 755 untuk memberikan izin eksekusi berkas script.sh.",
-                      potongan: [
-                        "chmod 755",
-                        "script.sh",
-                      ],
-                      pengecoh: [
-                        "chown 755",
-                        "script.py",
-                      ],
-                      pemisah: " ",
-                      explanation:
-                        "Pengubahan hak akses berkas di Linux menggunakan `chmod 755 script.sh` agar berkas dapat dieksekusi. Penggunaan perintah `chown` (yang bertugas mengubah pemilih/owner) atau berkas `.py` adalah kekeliruan umum.",
-                    },
-                  },
+          susunKode: {
+            question:
+              "Susun perintah chmod 755 untuk memberikan izin eksekusi berkas script.sh.",
+            potongan: ["chmod 755", "script.sh"],
+            pengecoh: ["chmod 777", "script.py"],
+            pemisah: " ",
+            explanation:
+              "Pengubahan hak akses berkas di Linux menggunakan `chmod 755 script.sh` agar berkas dapat dieksekusi tanpa membuka celah berbahaya 777. Keping `chmod 777` sangat menggoda pemula karena sering dianggap jalan pintas praktis untuk menyelesaikan masalah permission, tetapi itu keliru dan menjadi celah keamanan fatal di server produksi. Keping `script.py` adalah jebakan ekstensi file yang keliru karena target berkas kita adalah skrip shell script.sh.",
+          },
+        },
         {
           kind: "step",
           id: "deploy-1-4",
@@ -214,42 +254,37 @@ export const deploymentTrack: Track = {
           explanation:
             "Kekuatan utama terminal Linux terletak pada kombinasi perintah. Operator pipe (`|`) mengalirkan output dari satu perintah menjadi input bagi perintah lain. Perintah `grep` menyaring baris teks yang cocok dengan kata kunci. Operator `>` mengalihkan output dan menimpa isi file tujuan, sedangkan `>>` menambahkan teks di baris paling bawah (append) tanpa menghapus isi lama.",
           example: {
-            code: "cat access.log | grep '404' > error_404.log\ncat new_error.log >> error_404.log",
+            code: "grep '404' access.log",
             output:
-              "Seluruh baris bermuatan 404 tersaring dan tersimpan rapi di error_404.log.",
-            note: "Ingat: > menimpa file, >> menambahkan di akhir file.",
+              '192.168.1.50 - - [27/Jul/2026:10:00:23] "GET /api/user/99 HTTP/1.1" 404 142\n' +
+              '10.0.0.12 - - [27/Jul/2026:10:01:05] "GET /favicon.ico HTTP/1.1" 404 209',
+            note: "Perintah grep menyaring baris log HTTP yang memuat status eror 404.",
           },
           instruction:
-            "Tulis perintah grep untuk mencari teks `ERROR` pada berkas log `app.log`.",
-          starterCode: "# Tulis perintah grep di sini\n",
+            "Aplikasi backend mengalami kendala di produksi. Cari dan saring seluruh baris yang memuat teks `ERROR` pada berkas catatan `app.log`.",
+          starterCode: "# Saring baris log error di bawah ini\n",
           language: "text",
           tests: [
-                      {
-                        "pattern": "grep\\s+['\"]?ERROR['\"]?",
-                        "message": "Penyaringan baris memakai `grep` diikuti kata yang dicari. Bungkus dengan tanda kutip bila kata itu mengandung spasi atau karakter khusus."
-                      },
-                      {
-                        "pattern": "app\\.log$",
-                        "message": "Berkas yang dibaca ditulis setelah pola pencariannya. Ingat `grep` peka huruf besar-kecil — tambahkan `-i` bila ingin `error` dan `ERROR` sama-sama tertangkap."
-                      }
-                    ],
+            {
+              pattern: "grep\\s+['\"]?ERROR['\"]?",
+              message: "Penyaringan baris memakai `grep` diikuti kata yang dicari. Bungkus dengan tanda kutip bila kata itu mengandung spasi atau karakter khusus.",
+            },
+            {
+              pattern: "app\\.log$",
+              message: "Berkas yang dibaca ditulis setelah pola pencariannya. Ingat `grep` peka huruf besar-kecil — tambahkan `-i` bila ingin `error` dan `ERROR` sama-sama tertangkap.",
+            },
+          ],
           solution: "grep 'ERROR' app.log",
-                    susunKode: {
-                      question:
-                        "Susun perintah grep untuk mencari teks ERROR di berkas app.log.",
-                      potongan: [
-                        "grep 'ERROR'",
-                        "app.log",
-                      ],
-                      pengecoh: [
-                        "search 'ERROR'",
-                        "syslog.log",
-                      ],
-                      pemisah: " ",
-                      explanation:
-                        "Pencarian pola teks di dalam berkas log Linux menggunakan utilitas `grep 'TEKS' nama_file`. Perintah fiktif 'search' atau menggunakan berkas `syslog.log` merupakan kekeliruan yang sering terjadi saat debugging.",
-                    },
-                  },
+          susunKode: {
+            question:
+              "Susun perintah grep untuk mencari teks ERROR di berkas app.log.",
+            potongan: ["grep 'ERROR'", "app.log"],
+            pengecoh: ["search 'ERROR'", "syslog.log"],
+            pemisah: " ",
+            explanation:
+              "Pencarian pola teks di dalam berkas log Linux menggunakan utilitas `grep 'TEKS' nama_file`. Perintah fiktif 'search' atau menggunakan berkas `syslog.log` merupakan kekeliruan yang sering terjadi saat debugging.",
+          },
+        },
         {
           kind: "step",
           id: "deploy-1-5",
@@ -259,40 +294,34 @@ export const deploymentTrack: Track = {
           example: {
             code: "ps aux | grep node\nkill -9 1234",
             output:
-              "ubuntu 1234 2.5 4.1 854320 42100 ? Ssl 10:00 0:05 node server.js\nProses Node.js dengan PID 1234 berhasil dihentikan.",
+              "ubuntu 1234 98.5 4.1 854320 42100 ? R 10:00 5:05 node server.js\n$ ",
             note: "Flag -9 mengirimkan sinyal SIGKILL untuk menghentikan proses yang tidak merespons.",
           },
           instruction:
-            "Tulis perintah untuk menghentikan proses dengan PID `5678` secara paksa.",
-          starterCode: "# Tulis perintah kill di bawah ini\n",
+            "Proses aplikasi Node.js dengan Process ID `5678` mengalami deadlock dan tidak merespons sinyal terminate biasa. Hentikan proses tersebut secara paksa menggunakan sinyal SIGKILL.",
+          starterCode: "# Hentikan proses macet di bawah ini\n",
           language: "text",
           tests: [
-                      {
-                        "pattern": "kill\\s+-9",
-                        "message": "Penghentian proses memakai `kill`. Flag `-9` mengirim SIGKILL yang tidak bisa ditolak — pakai ini sebagai jalan terakhir, karena proses tidak diberi kesempatan menutup koneksi database atau menyimpan pekerjaan. Coba `kill <pid>` (SIGTERM) lebih dulu."
-                      },
-                      {
-                        "pattern": "5678$",
-                        "message": "Sebutkan PID prosesnya, yaitu angka yang kamu dapat dari `ps aux` atau `htop`."
-                      }
-                    ],
+            {
+              pattern: "kill\\s+-9",
+              message: "Penghentian proses memakai `kill`. Flag `-9` mengirim SIGKILL yang tidak bisa ditolak — pakai ini sebagai jalan terakhir, karena proses tidak diberi kesempatan menutup koneksi database atau menyimpan pekerjaan. Coba `kill <pid>` (SIGTERM) lebih dulu.",
+            },
+            {
+              pattern: "5678$",
+              message: "Sebutkan PID prosesnya, yaitu angka yang kamu dapat dari `ps aux` atau `htop`.",
+            },
+          ],
           solution: "kill -9 5678",
-                    susunKode: {
-                      question:
-                        "Susun perintah kill -9 untuk menghentikan proses PID 5678 secara paksa.",
-                      potongan: [
-                        "kill -9",
-                        "5678",
-                      ],
-                      pengecoh: [
-                        "stop -9",
-                        "9999",
-                      ],
-                      pemisah: " ",
-                      explanation:
-                        "Perintah menghentikan proses secara paksa (SIGKILL) di Linux adalah `kill -9 PID`. Penggunaan kata 'stop' (bukan perintah pembunuh proses) atau nomor PID yang salah adalah kesalahan CLI yang sering keliru dan jebakan.",
-                    },
-                  },
+          susunKode: {
+            question:
+              "Susun perintah kill -9 untuk menghentikan proses PID 5678 secara paksa.",
+            potongan: ["kill -9", "5678"],
+            pengecoh: ["stop -9", "9999"],
+            pemisah: " ",
+            explanation:
+              "Perintah menghentikan proses secara paksa (SIGKILL) di Linux adalah `kill -9 PID`. Penggunaan kata 'stop' (bukan perintah pembunuh proses) atau nomor PID yang salah adalah kesalahan CLI yang sering keliru dan jebakan.",
+          },
+        },
         {
           kind: "step",
           id: "deploy-1-6",
@@ -303,37 +332,31 @@ export const deploymentTrack: Track = {
             code: "ssh -i ~/.ssh/id_rsa ubuntu@203.0.113.195\nscp -i ~/.ssh/id_rsa build.zip ubuntu@203.0.113.195:/var/www/",
             output:
               "Welcome to Ubuntu 24.04 LTS (GNU/Linux 6.8.0-generic x86_64)\n" +
-              "ubuntu@203.0.113.195:~$\n" +
+              "ubuntu@203.0.113.195:~$ \n" +
               "build.zip                     100%  2148KB   2.1MB/s   00:01",
             note: "Kunci SSH private (~/.ssh/id_rsa) tidak boleh dibagikan kepada siapa pun.",
           },
           instruction:
-            "Tulis perintah SSH untuk masuk ke server remote sebagai user `root` di alamat IP `192.168.1.1`.",
-          starterCode: "# Tulis perintah ssh di sini\n",
+            "Lakukan koneksi remote shell terenkripsi ke server VPS sebagai pengguna `root` pada alamat IP `192.168.1.1`.",
+          starterCode: "# Buka sesi SSH remote di bawah ini\n",
           language: "text",
           tests: [
-                      {
-                        "pattern": "ssh\\s+root@192\\.168\\.1\\.1$",
-                        "message": "Koneksi remote memakai `ssh` diikuti `pengguna@host`. Untuk port tidak standar, tambahkan `-p <port>`. Catatan keamanan: login langsung sebagai `root` biasanya dimatikan di server produksi — yang dianjurkan membuat pengguna biasa lalu memakai `sudo`."
-                      }
-                    ],
+            {
+              pattern: "ssh\\s+root@192\\.168\\.1\\.1$",
+              message: "Koneksi remote memakai `ssh` diikuti `pengguna@host`. Untuk port tidak standar, tambahkan `-p <port>`. Catatan keamanan: login langsung sebagai `root` biasanya dimatikan di server produksi — yang dianjurkan membuat pengguna biasa lalu memakai `sudo`.",
+            },
+          ],
           solution: "ssh root@192.168.1.1",
-                    susunKode: {
-                      question:
-                        "Susun perintah SSH untuk masuk ke server remote root@192.168.1.1.",
-                      potongan: [
-                        "ssh",
-                        "root@192.168.1.1",
-                      ],
-                      pengecoh: [
-                        "connect",
-                        "admin@10.0.0.1",
-                      ],
-                      pemisah: " ",
-                      explanation:
-                        "Koneksi remote shell aman menggunakan protokol `ssh user@ip_address`. Kata 'connect' (bukan perintah CLI SSH) atau nama user 'admin'/'10.0.0.1' adalah bentuk kesalahan sintaksis yang sering membingungkan.",
-                    },
-                  },
+          susunKode: {
+            question:
+              "Susun perintah SSH untuk masuk ke server remote root@192.168.1.1.",
+            potongan: ["ssh", "root@192.168.1.1"],
+            pengecoh: ["connect", "admin@10.0.0.1"],
+            pemisah: " ",
+            explanation:
+              "Koneksi remote shell aman menggunakan protokol `ssh user@ip_address`. Kata 'connect' (bukan perintah CLI SSH) atau nama user 'admin'/'10.0.0.1' adalah bentuk kesalahan sintaksis yang sering membingungkan.",
+          },
+        },
         {
           kind: "step",
           id: "deploy-1-7",
@@ -349,36 +372,30 @@ export const deploymentTrack: Track = {
             note: "Perintah systemctl enable <service> memastikan service otomatis berjalan saat server reboot.",
           },
           instruction:
-            "Tulis perintah systemctl untuk memeriksa status dari service `nginx`.",
-          starterCode: "# Tulis perintah systemctl di bawah ini\n",
+            "Periksa status operasional service web server `nginx` menggunakan controller systemd untuk memastikan layanannya aktif berjalan.",
+          starterCode: "# Cek status service nginx di bawah ini\n",
           language: "text",
           tests: [
-                      {
-                        "pattern": "systemctl\\s+status",
-                        "message": "Pengelola layanan pada Linux modern adalah `systemctl`, dan subperintah pemeriksa keadaannya `status`. Ia menampilkan aktif/mati sekaligus sepuluh baris log terakhir — tempat pertama yang dilihat saat layanan tidak jalan."
-                      },
-                      {
-                        "pattern": "nginx$",
-                        "message": "Sebutkan nama layanannya di akhir. Perintah ini boleh tanpa `sudo`; yang butuh `sudo` adalah `start`, `stop`, dan `restart`."
-                      }
-                    ],
+            {
+              pattern: "systemctl\\s+status",
+              message: "Pengelola layanan pada Linux modern adalah `systemctl`, dan subperintah pemeriksa keadaannya `status`. Ia menampilkan aktif/mati sekaligus sepuluh baris log terakhir — tempat pertama yang dilihat saat layanan tidak jalan.",
+            },
+            {
+              pattern: "nginx$",
+              message: "Sebutkan nama layanannya di akhir. Perintah ini boleh tanpa `sudo`; yang butuh `sudo` adalah `start`, `stop`, dan `restart`.",
+            },
+          ],
           solution: "sudo systemctl status nginx",
-                    susunKode: {
-                      question:
-                        "Susun perintah systemctl untuk mengecek status service nginx.",
-                      potongan: [
-                        "sudo systemctl",
-                        "status nginx",
-                      ],
-                      pengecoh: [
-                        "sudo service",
-                        "check nginx",
-                      ],
-                      pemisah: " ",
-                      explanation:
-                        "Pemeriksaan status layanan sistem pada Linux berbasis systemd menggunakan `sudo systemctl status nginx`. Penggunaan klausa fiktif 'check nginx' atau sintaks lama 'service' adalah kekeliruan manajemen layanan.",
-                    },
-                  },
+          susunKode: {
+            question:
+              "Susun perintah systemctl untuk mengecek status service nginx.",
+            potongan: ["sudo systemctl", "status nginx"],
+            pengecoh: ["sudo service", "check nginx"],
+            pemisah: " ",
+            explanation:
+              "Pemeriksaan status layanan sistem pada Linux berbasis systemd menggunakan `sudo systemctl status nginx`. Penggunaan klausa fiktif 'check nginx' atau sintaks lama 'service' adalah kekeliruan manajemen layanan.",
+          },
+        },
         {
           kind: "quiz",
           id: "deploy-1-kuis",
@@ -490,46 +507,76 @@ export const deploymentTrack: Track = {
           title: "Kontainerisasi Aplikasi: Mengapa dan Bagaimana Docker Bekerja",
           body:
             "# Pengertian: Masalah 'It Works on My Machine'\n\n" +
-            "Salah satu masalah terbesar dalam pengembangan perangkat lunak adalah perbedaan environment antara laptop developer dan server produksi. Versi Node.js yang berbeda, pustaka sistem operasi yang tidak cocok, atau konfigurasi database yang tidak seragam sering kali membuat aplikasi berjalan lancar saat dites di laptop, namun mendadak crash saat di-deploy ke server.\n\n" +
-            "**Docker** menyelesaikan masalah ini dengan teknologi **kontainerisasi**. Docker membungkus kode aplikasi, runtime (misal Node.js), dependensi (`node_modules`), dan konfigurasi ke dalam satu paket terisolasi yang disebut **Container**.\n\n" +
+            "Salah satu friksi terbesar dalam siklus rekayasa perangkat lunak adalah perbedaan environment antara laptop developer dan server produksi. Versi runtime yang berbeda (misal Node.js 18 di laptop vs Node.js 22 di server), pustaka sistem Linux (*glibc*) yang tidak cocok, atau konfigurasi lokal yang tertinggal sering kali membuat aplikasi berjalan mulus saat diuji coba oleh programmer, namun mendadak melempar eror saat dirilis ke server.\n\n" +
+            "Sebelum era Docker, solusi yang digunakan adalah **Virtual Machine (VM)** (seperti VirtualBox atau VMware). Namun, VM sangat boros resource: setiap VM membutuhkan satu salinan kernel Guest OS utuh, mengonsumsi gigabytes RAM dan penyimpanan disk, serta membutuhkan waktu booting beberapa menit. **Docker** merevolusi industri dengan **kontainerisasi**: membungkus kode, runtime, dependensi, dan pustaka ke dalam unit terisolasi yang disebut **Container** yang berbagi kernel OS host secara langsung. Hasilnya, kontainer menyala dalam hitungan milidetik dan hanya berukuran megabytes!\n\n" +
             "---\n\n" +
-            "## Mental Model: Docker Image vs Docker Container\n\n" +
-            "Pahami perbedaan mendasar dua istilah ini:\n\n" +
-            "- **Docker Image:** Cetak biru (blueprint) atau template yang bersifat *read-only*. Berisi instruksi langkah demi langkah dan berkas yang dibutuhkan aplikasi. Diibaratkan sebagai **buku resep kue** atau **Class** di Object-Oriented Programming.\n" +
-            "- **Docker Container:** Wujud eksekusi nyata (instance) yang berjalan dari sebuah Image. Kontainer memiliki sistem berkas sendiri dan terisolasi dari kontainer lain. Diibaratkan sebagai **kue nyata** yang dipanggang dari resep tersebut atau **Object** hasil instansiasi Class.\n\n" +
+            "## Mental Model: Docker Image vs Container vs Volume\n\n" +
+            "Tiga konsep ini wajib dipahami secara tegas agar kamu tidak bingung:\n\n" +
+            "- **Docker Image (Cetak Biru):** Template yang bersifat *read-only* (tidak bisa diubah). Berisi snapshot berkas sistem dan instruksi aplikasi. Diibaratkan sebagai **buku resep kue** atau **Class** pada pemrograman OOP.\n" +
+            "- **Docker Container (Wujud Nyata):** Wujud eksekusi proses aktif yang diinstansiasi dari sebuah Image. Kontainer memiliki filesystem *ephemeral* (sementara) yang terisolasi. Diibaratkan sebagai **kue nyata** yang dipanggang dari resep tersebut atau **Object** hasil `new Class()`.\n" +
+            "- **Docker Volume (Penyimpanan Persisten):** Ruang penyimpanan di luar kontainer pada sistem host. Diibaratkan sebagai **wadah toples kue**: jika kuenya dimakan atau dibuang (kontainer di-stop/dihapus), wadah penyimpanannya tetap utuh.\n\n" +
             "```text\n" +
-            "Dockerfile (Instruksi Teks)\n" +
+            "Dockerfile (Resep Teks)\n" +
             "   │  (docker build)\n" +
             "   ▼\n" +
             "Docker Image (Cetak Biru Read-Only)\n" +
-            "   │  (docker run)\n" +
-            "   ├──► Container 1 (App Instance - Port 3000)\n" +
-            "   ├──► Container 2 (App Instance - Port 3001)\n" +
-            "   └──► Container 3 (App Instance - Port 3002)\n" +
+            "   │  (docker run -p 8080:3000)\n" +
+            "   ├──► Container 1 (Host Port 8080 ──► App Port 3000)\n" +
+            "   └──► Container 2 (Host Port 8081 ──► App Port 3000)\n" +
             "```\n\n" +
             "---\n\n" +
-            "## Anatomi Instruksi Dockerfile\n\n" +
-            "| Instruksi | Fungsi | Contoh |\n" +
-            "|---|---|---|\n" +
-            "| `FROM` | Menentukan base image dasar yang dipakai | `FROM node:20-alpine` |\n" +
-            "| `WORKDIR` | Menentukan folder kerja utama di dalam container | `WORKDIR /app` |\n" +
-            "| `COPY` | Menyalin berkas dari host laptop ke dalam container | `COPY package*.json ./` |\n" +
-            "| `RUN` | Mengeksekusi perintah build saat **pembuatan Image** | `RUN npm install` |\n" +
-            "| `EXPOSE` | Mendokumentasikan port yang dibuka oleh container | `EXPOSE 3000` |\n" +
-            "| `USER` | Mengubah pengguna pelaksana agar tidak memakai root | `USER node` |\n" +
-            '| `CMD` | Perintah utama saat **Container dijalankan** | `CMD ["node", "server.js"]` |\n\n' +
+            "## Perbedaan Kritis: RUN vs CMD vs ENTRYPOINT\n\n" +
+            "Ini adalah pertanyaan technical interview nomor satu seputar Dockerfile:\n\n" +
+            "| Instruksi | Kapan Dieksekusi? | Tujuan Utama | Contoh Penggunaan |\n" +
+            "|---|---|---|---|\n" +
+            "| `RUN` | **Image Build Time** | Menjalankan perintah dan menyimpan hasilnya ke layer Image baru | `RUN npm ci` atau `RUN apt-get update` |\n" +
+            '| `CMD` | **Container Runtime** | Perintah default saat kontainer dinyalakan. Bisa di-override mudah via CLI | `CMD ["node", "server.js"]` |\n' +
+            '| `ENTRYPOINT` | **Container Runtime** | Perintah mutlak kontainer. Argumen dari `CMD` diteruskan ke sini | `ENTRYPOINT ["python"]` |\n\n' +
+            "### Peringatan Keras: Exec Form vs Shell Form\n" +
+            "Selalu gunakan format **Exec Form (JSON Array)** untuk `CMD`:\n" +
+            '- ✅ **Exec Form:** `CMD ["node", "app.js"]`. Proses dijalankan langsung sebagai **PID 1**, sehingga sinyal shutdown OS (`SIGTERM`) dari `docker stop` langsung diterima aplikasi untuk graceful shutdown.\n' +
+            '- ❌ **Shell Form:** `CMD node app.js`. Proses dibungkus oleh `/bin/sh -c`. Akibatnya, sinyal shutdown tertahan di shell, aplikasi tidak sempat menutup koneksi database, dan setelah timeout 10 detik Docker terpaksa membunuhnya secara paksa (`SIGKILL`).\n\n' +
             "---\n\n" +
-            "## Analogi Dunia Nyata: Kontainer Kargo Kapal Laut\n\n" +
-            "Sebelum ada standar kontainer kargo internasional, pengiriman barang di pelabuhan sangat rumit karena ukuran karung, peti kayu, dan drum berbeda-beda. Ketika peti kargo standar diciptakan, kapal kargo, truk, dan derek pelabuhan bisa mengangkut muatan apa saja tanpa peduli isinya (pisang, mobil, atau pakaian). Docker adalah standar kontainer kargo bagi aplikasi komputer.\n\n" +
+            "## Pemetaan Port Host vs Container (`-p host:container`)\n\n" +
+            "Di laptop, aplikasi di dalam kontainer berjalan di jaringan virtual terisolasi. Agar browser laptopmu bisa mengakses web server kontainer, kamu harus melakukan *port binding*:\n\n" +
+            "```text\n" +
+            "docker run -d -p 8080:3000 my-node-app\n" +
+            "                ▲    ▲\n" +
+            "                │    └────── Port internal di dalam container (aplikasi listen di 3000)\n" +
+            "                └─────────── Port eksternal di laptop host (dibuka di http://localhost:8080)\n" +
+            "```\n\n" +
+            "---\n\n" +
+            "## Siklus Hidup & Debugging Kontainer (Interactive Exec)\n\n" +
+            "Saat aplikasi di dalam kontainer melempar eror atau tidak merespons, jangan menebak-nebak. Gunakan perintah investigasi berikut:\n\n" +
+            "1. **Melihat status:** `docker ps` (kontainer aktif) dan `docker ps -a` (termasuk yang mati/exited dengan kode eror).\n" +
+            "2. **Membaca log langsung:** `docker logs -f --tail 100 <container_name>` (flag `-f` untuk live streaming).\n" +
+            "3. **Masuk ke dalam kontainer:** `docker exec -it <container_name> sh` (atau `bash`). Kamu masuk ke terminal di dalam kontainer untuk memeriksa berkas, koneksi database, atau variabel lingkungan.\n" +
+            "4. **Membersihkan sampah disk:** `docker system prune -a` (menghapus kontainer mati dan cache layer tak terpakai agar disk laptop tidak penuh).\n\n" +
+            "---\n\n" +
+            "## Optimasi Layer Caching & Multi-Stage Build\n\n" +
+            "Docker membangun image dari atas ke bawah. Setiap baris instruksi menghasilkan layer cache. Jika ada layer yang berubah, seluruh layer di bawahnya otomatis batal dan dibangun ulang dari awal:\n\n" +
+            "```dockerfile\n" +
+            "# Pola Efisien (Caching Bekerja Cepat):\n" +
+            "COPY package*.json ./     # Layer ini hanya rebuild jika dependensi berubah\n" +
+            "RUN npm ci\n" +
+            "COPY . .                  # Kode sumber berubah tiap saat, tapi npm ci tidak diulang!\n" +
+            "```\n\n" +
+            "Dengan **Multi-stage Build**, kita memisahkan stage kompilasi berat (Node compiler, TypeScript) dengan stage akhir produksi (Alpine minimalis). Hasil build disalin dengan `COPY --from=builder /app/dist ./dist`. Ukuran image terpangkas drastis dari 1.2 GB menjadi hanya 65 MB!\n\n" +
+            "---\n\n" +
+            "## Keamanan Produksi: .dockerignore & User Non-Root\n\n" +
+            "1. **Berkas `.dockerignore`:** Wajib mengecualikan `node_modules`, `.env`, `.git`, dan `dist`. Tanpa ini, folder dependensi lokal laptopmu akan ikut terkirim ke daemon build context.\n" +
+            "2. **User Non-Root:** Secara default Docker menjalankan proses sebagai `root`. Di Dockerfile produksi, selalu tambahkan instruksi `USER node` (atau user terbatas) sebelum `CMD` agar peretas tidak mendapatkan akses root jika menemukan celah aplikasi.\n\n" +
             "---\n\n" +
             "## Jebakan & Kesalahan Umum Pemula\n\n" +
-            "1. **Merusak Caching Layer Dockerfile:** Menuliskan `COPY . .` *sebelum* `RUN npm install`. Akibatnya, setiap kali kamu mengubah satu baris kode di file source, Docker terpaksa mengulang unduhan `npm install` dari awal selama beberapa menit!\n" +
-            "2. **Menyimpan Data di Sistem Berkas Container Tanpa Volume:** Sistem berkas kontainer bersifat sementara (*ephemeral*). Jika container database dihapus, seluruh data di dalamnya ikut musnah kecuali kamu menyambungkannya ke **Docker Volume**.\n" +
-            "3. **Tidak Menyiapkan `.dockerignore`:** Lupa mengecualikan folder `node_modules` dan `.env` lokal di `.dockerignore` akan membuat proses `docker build` sangat lambat dan berpotensi membocorkan kunci rahasia ke dalam Docker Image.\n" +
-            "4. **Menjalankan Container sebagai Root:** Secara bawaan Docker menjalankan proses sebagai `root`. Di lingkungan produksi, selalu gunakan instruksi `USER node` atau user non-root lainnya demi alasan keamanan.\n\n" +
+            "1. **Mengira Mengedit File di Kontainer Mengubah Image:** Perubahan yang kamu buat di dalam kontainer yang sedang berjalan akan hilang begitu kontainer dihapus. Image bersifat immutable.\n" +
+            "2. **Menulis `COPY . .` Sebelum `RUN npm install`:** Kesalahan ini membuang cache Docker. Setiap kali kamu mengedit 1 baris kode CSS/JS, Docker terpaksa mengunduh ulang seluruh pustaka npm selama beberapa menit.\n" +
+            "3. **Lupa Memberikan Volume untuk Database:** Menyimpan data database di sistem berkas kontainer biasa berakibat fatal: sekali kontainer dihapus (`docker rm`), seluruh data pelanggan hilang permanen.\n" +
+            "4. **Tertukar Menulis Port Host dan Container:** Mengetik `-p 3000:8080` padahal server aplikasi mendengarkan di port 3000 membuat aplikasi tidak bisa dibuka di `localhost:3000`.\n\n" +
             "---\n\n" +
-            "## Kaitan ke Dunia Kerja\n\n" +
-            "Di industri software saat ini, Docker telah menjadi standar de-facto. Tim DevOps dan Backend memanfaatkan Docker untuk menyamakan environment lokal, menguji integrasi di CI/CD pipeline, hingga melakukan deployment berskala besar menggunakan Kubernetes atau AWS ECS.",
+            "## Kaitan ke Dunia Kerja & Technical Interview\n\n" +
+            "Hampir seluruh perusahaan teknologi global maupun startup Indonesia (Gojek, Tokopedia, Traveloka) mensyaratkan Docker. Dalam wawancara kerja, kamu sering diuji:\n" +
+            "- *\"Bagaimana caramu mengoptimalkan waktu build Dockerfile di pipeline CI/CD?\"* (Jawab: Manfaatkan layer caching dependensi dan terapkan multi-stage build).\n" +
+            "- *\"Kenapa data database di container hilang setelah server restart?\"* (Jawab: Karena tidak dipasang Docker Named Volume).",
         },
         {
           kind: "step",
@@ -544,36 +591,30 @@ export const deploymentTrack: Track = {
             note: "Flag -d menjalankan container di background (detached mode), dan -p memetakan port host:container.",
           },
           instruction:
-            "Tuliskan perintah docker untuk mengunduh image `nginx:alpine` dari Docker Hub.",
-          starterCode: "# Tulis perintah docker pull di sini\n",
+            "Unduh image resmi web server Nginx dengan tag varian ringan `alpine` dari registry Docker Hub.",
+          starterCode: "# Unduh image docker di bawah ini\n",
           language: "text",
           tests: [
-                      {
-                        "pattern": "docker\\s+pull",
-                        "message": "Pengunduhan image dari registry memakai subperintah `pull`."
-                      },
-                      {
-                        "pattern": "nginx:alpine$",
-                        "message": "Sebutkan nama image beserta tag-nya, dipisah titik dua. Selalu sebut tag secara eksplisit — tanpa itu Docker memakai `latest`, yang berarti isi image bisa berubah tanpa kamu ubah apa pun. Varian `alpine` dipilih karena ukurannya jauh lebih kecil."
-                      }
-                    ],
+            {
+              pattern: "docker\\s+pull",
+              message: "Pengunduhan image dari registry memakai subperintah `pull`.",
+            },
+            {
+              pattern: "nginx:alpine$",
+              message: "Sebutkan nama image beserta tag-nya, dipisah titik dua. Selalu sebut tag secara eksplisit — tanpa itu Docker memakai `latest`, yang berarti isi image bisa berubah tanpa kamu ubah apa pun. Varian `alpine` dipilih karena ukurannya jauh lebih kecil.",
+            },
+          ],
           solution: "docker pull nginx:alpine",
-                    susunKode: {
-                      question:
-                        "Susun perintah docker pull untuk mengunduh image nginx:alpine.",
-                      potongan: [
-                        "docker pull",
-                        "nginx:alpine",
-                      ],
-                      pengecoh: [
-                        "docker fetch",
-                        "nginx:latest_ver",
-                      ],
-                      pemisah: " ",
-                      explanation:
-                        "Pengunduhan image Docker dari registri menggunakan perintah `docker pull nama_image:tag`. Penggunaan kata 'fetch' atau tag fiktif 'latest_ver' adalah bentuk kekeliruan CLI Docker yang sering mengelirukan.",
-                    },
-                  },
+          susunKode: {
+            question:
+              "Susun perintah docker pull untuk mengunduh image nginx:alpine.",
+            potongan: ["docker pull", "nginx:alpine"],
+            pengecoh: ["docker fetch", "nginx:latest_ver"],
+            pemisah: " ",
+            explanation:
+              "Pengunduhan image Docker dari registri menggunakan perintah `docker pull nama_image:tag`. Penggunaan kata 'fetch' atau tag fiktif 'latest_ver' adalah bentuk kekeliruan CLI Docker yang sering mengelirukan.",
+          },
+        },
         {
           kind: "step",
           id: "deploy-2-2",
@@ -590,32 +631,26 @@ export const deploymentTrack: Track = {
             note: "Flag -f (follow) pada docker logs membuat terminal terus memperbarui tampilan log secara real-time.",
           },
           instruction:
-            "Tulis perintah docker untuk melihat daftar container yang sedang berjalan.",
-          starterCode: "# Tulis perintah melihat container di bawah ini\n",
+            "Periksa dan tampilkan seluruh kontainer Docker yang sedang aktif berjalan di sistem saat ini.",
+          starterCode: "# Tampilkan kontainer yang aktif di bawah ini\n",
           language: "text",
           tests: [
-                      {
-                        "pattern": "docker\\s+(container\\s+)?ps(\\s+-a)?$",
-                        "message": "Daftar container yang SEDANG berjalan ditampilkan `docker ps`. Untuk melihat yang sudah mati juga (biasanya inilah yang kamu butuhkan saat container gagal menyala), tambahkan flag `-a`."
-                      }
-                    ],
+            {
+              pattern: "docker\\s+(container\\s+)?ps(\\s+-a)?$",
+              message: "Daftar container yang SEDANG berjalan ditampilkan `docker ps`. Untuk melihat yang sudah mati juga (biasanya inilah yang kamu butuhkan saat container gagal menyala), tambahkan flag `-a`.",
+            },
+          ],
           solution: "docker ps",
-                    susunKode: {
-                      question:
-                        "Susun perintah docker ps untuk melihat kontainer yang aktif.",
-                      potongan: [
-                        "docker",
-                        "ps",
-                      ],
-                      pengecoh: [
-                        "docker-cli",
-                        "list",
-                      ],
-                      pemisah: " ",
-                      explanation:
-                        "Perintah untuk menampilkan daftar kontainer Docker yang sedang aktif berjalan adalah `docker ps`. Penggunaan kata 'list' atau CLI 'docker-cli' adalah bentuk istilah fiktif yang jebakan bagi pembelajar baru.",
-                    },
-                  },
+          susunKode: {
+            question:
+              "Susun perintah docker ps untuk melihat kontainer yang aktif.",
+            potongan: ["docker", "ps"],
+            pengecoh: ["docker-cli", "list"],
+            pemisah: " ",
+            explanation:
+              "Perintah untuk menampilkan daftar kontainer Docker yang sedang aktif berjalan adalah `docker ps`. Penggunaan kata 'list' atau CLI 'docker-cli' adalah bentuk istilah fiktif yang jebakan bagi pembelajar baru.",
+          },
+        },
         {
           kind: "step",
           id: "deploy-2-3",
@@ -637,32 +672,26 @@ export const deploymentTrack: Track = {
             note: "Sintaks CMD ditulis menggunakan format JSON Array: ['perintah', 'argumen'].",
           },
           instruction:
-            "Tentukan base image menggunakan Node.js versi 20 varian alpine pada baris awal Dockerfile.",
-          starterCode: "# Tulis baris FROM di bawah ini\n",
+            "Tetapkan base image resmi Node.js versi 20 varian ringan alpine pada baris pertama berkas Dockerfile.",
+          starterCode: "# Tentukan base image di bawah ini\n",
           language: "text",
           tests: [
-                      {
-                        "pattern": "FROM\\s+node:20-alpine$",
-                        "message": "Baris pertama Dockerfile selalu instruksi `FROM` yang menyebut base image beserta tag versinya. Sebut versi Node secara eksplisit — memakai `node:latest` berarti build hari ini dan bulan depan bisa memakai versi Node yang berbeda, dan itu sumber \"kok tiba-tiba error di server\"."
-                      }
-                    ],
+            {
+              pattern: "FROM\\s+node:20-alpine$",
+              message: "Baris pertama Dockerfile selalu instruksi `FROM` yang menyebut base image beserta tag versinya. Sebut versi Node secara eksplisit — memakai `node:latest` berarti build hari ini dan bulan depan bisa memakai versi Node yang berbeda, dan itu sumber \"kok tiba-tiba error di server\".",
+            },
+          ],
           solution: "FROM node:20-alpine",
-                    susunKode: {
-                      question:
-                        "Susun instruksi FROM node:20-alpine pada Dockerfile.",
-                      potongan: [
-                        "FROM",
-                        "node:20-alpine",
-                      ],
-                      pengecoh: [
-                        "IMPORT",
-                        "node:ubuntu-slim",
-                      ],
-                      pemisah: " ",
-                      explanation:
-                        "Instruksi awal Dockerfile untuk menentukan base image menggunakan katakunci `FROM`. Penggunaan kata 'IMPORT' atau varian image 'node:ubuntu-slim' yang bukan alpine adalah kesalahan sintaksis Dockerfile yang jebakan.",
-                    },
-                  },
+          susunKode: {
+            question:
+              "Susun instruksi FROM node:20-alpine pada Dockerfile.",
+            potongan: ["FROM", "node:20-alpine"],
+            pengecoh: ["IMPORT", "node:ubuntu-slim"],
+            pemisah: " ",
+            explanation:
+              "Instruksi awal Dockerfile untuk menentukan base image menggunakan katakunci `FROM`. Penggunaan kata 'IMPORT' atau varian image 'node:ubuntu-slim' yang bukan alpine adalah kesalahan sintaksis Dockerfile yang jebakan.",
+          },
+        },
         {
           kind: "step",
           id: "deploy-2-4",
@@ -685,32 +714,26 @@ export const deploymentTrack: Track = {
             note: "Label CACHED menandakan Docker melompati langkah tersebut karena tidak ada perubahan file manifest.",
           },
           instruction:
-            "Salin berkas `package.json` beserta pasangannya ke direktori kerja saat ini menggunakan pola wildcard asterisk.",
-          starterCode: "# Tulis perintah COPY package di bawah ini\n",
+            "Salin berkas manifes `package.json` dan lockfile-nya ke direktori kerja saat ini menggunakan pola wildcard asterisk agar memanfaatkan layer caching secara optimal.",
+          starterCode: "# Salin file manifes dependensi di bawah ini\n",
           language: "text",
           tests: [
-                      {
-                        "pattern": "COPY\\s+package.*\\.json\\s+\\./?$",
-                        "message": "Kunci layer caching: salin dulu HANYA berkas manifest (`package.json` dan `package-lock.json`, bisa diwakili pola dengan tanda bintang) ke direktori kerja, jalankan `npm ci`, baru salin sisa kodenya. Kalau seluruh folder disalin lebih dulu, setiap perubahan satu baris kode membatalkan cache dan membuat dependency diunduh ulang."
-                      }
-                    ],
+            {
+              pattern: "COPY\\s+package.*\\.json\\s+\\./?$",
+              message: "Kunci layer caching: salin dulu HANYA berkas manifest (`package.json` dan `package-lock.json`, bisa diwakili pola dengan tanda bintang) ke direktori kerja, jalankan `npm ci`, baru salin sisa kodenya. Kalau seluruh folder disalin lebih dulu, setiap perubahan satu baris kode membatalkan cache dan membuat dependency diunduh ulang.",
+            },
+          ],
           solution: "COPY package*.json ./",
-                    susunKode: {
-                      question:
-                        "Susun instruksi COPY package*.json ./ pada Dockerfile.",
-                      potongan: [
-                        "COPY package*.json",
-                        "./",
-                      ],
-                      pengecoh: [
-                        "ADD package.json",
-                        "/tmp/",
-                      ],
-                      pemisah: " ",
-                      explanation:
-                        "Menyalin file konfigurasi dependensi ke direktori kerja kontainer menggunakan `COPY package*.json ./`. Menyalin ke lokasi acak `/tmp/` atau melupakan wildcard `*` adalah kesalahan Dockerfile yang sering membingungkan.",
-                    },
-                  },
+          susunKode: {
+            question:
+              "Susun instruksi COPY package*.json ./ pada Dockerfile.",
+            potongan: ["COPY package*.json", "./"],
+            pengecoh: ["ADD package.json", "/tmp/"],
+            pemisah: " ",
+            explanation:
+              "Menyalin file konfigurasi dependensi ke direktori kerja kontainer menggunakan `COPY package*.json ./`. Menyalin ke lokasi acak `/tmp/` atau melupakan wildcard `*` adalah kesalahan Dockerfile yang sering membingungkan.",
+          },
+        },
         {
           kind: "step",
           id: "deploy-2-5",
@@ -733,36 +756,30 @@ export const deploymentTrack: Track = {
             note: "Flag --from=builder menyalin artefak dari stage sebelumnya tanpa membawa file sampah build.",
           },
           instruction:
-            "Pindahkan folder `/app/dist` yang dihasilkan dari stage bernama `builder` ke lokasi `./dist` pada stage final.",
-          starterCode: "# Tulis perintah COPY --from di bawah ini\n",
+            "Pada stage final multi-stage build, salin folder hasil kompilasi `/app/dist` dari stage bernama `builder` ke folder `./dist`.",
+          starterCode: "# Salin artefak kompilasi dari builder di bawah ini\n",
           language: "text",
           tests: [
-                      {
-                        "pattern": "COPY\\s+--from=builder",
-                        "message": "Pada multi-stage build, penyalinan dari tahap sebelumnya memakai flag `--from=` diikuti nama tahapnya (yang diberi lewat `AS builder`)."
-                      },
-                      {
-                        "pattern": "/app/dist\\s+(\\./dist|/app/dist|\\.)$",
-                        "message": "Sebutkan jalur sumber di tahap builder, lalu tujuannya di image akhir. Inilah yang membuat image produksi hanya berisi hasil build — tanpa devDependencies dan tanpa kode sumber, sehingga ukurannya bisa turun dari 1,2 GB ke puluhan MB."
-                      }
-                    ],
+            {
+              pattern: "COPY\\s+--from=builder",
+              message: "Pada multi-stage build, penyalinan dari tahap sebelumnya memakai flag `--from=` diikuti nama tahapnya (yang diberi lewat `AS builder`).",
+            },
+            {
+              pattern: "/app/dist\\s+(\\./dist|/app/dist|\\.)$",
+              message: "Sebutkan jalur sumber di tahap builder, lalu tujuannya di image akhir. Inilah yang membuat image produksi hanya berisi hasil build — tanpa devDependencies dan tanpa kode sumber, sehingga ukurannya bisa turun dari 1,2 GB ke puluhan MB.",
+            },
+          ],
           solution: "COPY --from=builder /app/dist ./dist",
-                    susunKode: {
-                      question:
-                        "Susun instruksi COPY dari stage builder ke direktori dist pada Dockerfile multi-stage.",
-                      potongan: [
-                        "COPY --from=builder",
-                        "/app/dist ./dist",
-                      ],
-                      pengecoh: [
-                        "COPY --stage=builder",
-                        "/build/output ./dist",
-                      ],
-                      pemisah: " ",
-                      explanation:
-                        "Penyalinan artefak hasil kompilasi dari stage sebelumnya pada multi-stage build Docker menggunakan `COPY --from=nama_stage path_asal path_tujuan`. Bendera `--stage` atau path fiktif adalah jebakan sintaks.",
-                    },
-                  },
+          susunKode: {
+            question:
+              "Susun instruksi COPY dari stage builder ke direktori dist pada Dockerfile multi-stage.",
+            potongan: ["COPY --from=builder", "/app/dist ./dist"],
+            pengecoh: ["COPY --stage=builder", "/build/output ./dist"],
+            pemisah: " ",
+            explanation:
+              "Penyalinan artefak hasil kompilasi dari stage sebelumnya pada multi-stage build Docker menggunakan `COPY --from=nama_stage path_asal path_tujuan`. Bendera `--stage` atau path fiktif adalah jebakan sintaks.",
+          },
+        },
         {
           kind: "step",
           id: "deploy-2-6",
@@ -777,36 +794,30 @@ export const deploymentTrack: Track = {
             note: "Format -v adalah nama_volume:path_folder_dalam_container.",
           },
           instruction:
-            "Tuliskan perintah docker run di background (-d) dengan menyambungkan volume `db_data` ke direktori `/var/lib/mysql` pada image `mysql`.",
-          starterCode: "# Tulis perintah docker run di bawah ini\n",
+            "Jalankan kontainer MySQL di latar belakang (`-d`) dan pasang named volume `db_data` ke direktori data `/var/lib/mysql`.",
+          starterCode: "# Jalankan kontainer dengan volume di bawah ini\n",
           language: "text",
           tests: [
-                      {
-                        "pattern": "docker\\s+run\\s.*-v\\s",
-                        "message": "Data yang harus bertahan dipasang lewat flag `-v` (volume) pada `docker run`."
-                      },
-                      {
-                        "pattern": "db_data:/var/lib/mysql",
-                        "message": "Formatnya `<nama-volume>:<jalur-di-dalam-container>`. Jalur di sisi kanan harus tepat folder tempat database menyimpan datanya. Tanpa volume, `docker rm` menghapus seluruh isi database — dan itu kehilangan yang tidak bisa dibatalkan."
-                      }
-                    ],
+            {
+              pattern: "docker\\s+run\\s.*-v\\s",
+              message: "Data yang harus bertahan dipasang lewat flag `-v` (volume) pada `docker run`.",
+            },
+            {
+              pattern: "db_data:/var/lib/mysql",
+              message: "Formatnya `<nama-volume>:<jalur-di-dalam-container>`. Jalur di sisi kanan harus tepat folder tempat database menyimpan datanya. Tanpa volume, `docker rm` menghapus seluruh isi database — dan itu kehilangan yang tidak bisa dibatalkan.",
+            },
+          ],
           solution: "docker run -d -v db_data:/var/lib/mysql mysql",
-                                                                                susunKode: {
-                                                                                  question:
-                                                                                    "Susun perintah docker run dengan volume db_data:/var/lib/mysql.",
-                                                                                  potongan: [
-                                                                                    "docker run -d -v",
-                                                                                    "db_data:/var/lib/mysql mysql",
-                                                                                  ],
-                                                                                  pengecoh: [
-                                                                                    "docker exec -d -v",
-                                                                                    "db_data:/var/db/mysql mysql",
-                                                                                  ],
-                                                                                  pemisah: " ",
-                                                                                  explanation:
-                                                                                    "Menjalankan kontainer baru dengan mounting volume persisten menggunakan `docker run -d -v nama_volume:path_tujuan nama_image`. Penggunaan `docker exec` (khusus perintah dalam kontainer aktif) atau path `/var/db/mysql` adalah kekeliruan fatal.",
-                                                                                },
-                                                                              },
+          susunKode: {
+            question:
+              "Susun perintah docker run dengan volume db_data:/var/lib/mysql.",
+            potongan: ["docker run -d -v", "db_data:/var/lib/mysql mysql"],
+            pengecoh: ["docker exec -d -v", "db_data:/var/db/mysql mysql"],
+            pemisah: " ",
+            explanation:
+              "Menjalankan kontainer baru dengan mounting volume persisten menggunakan `docker run -d -v nama_volume:path_tujuan nama_image`. Penggunaan `docker exec` (khusus perintah dalam kontainer aktif) atau path `/var/db/mysql` adalah kekeliruan fatal.",
+          },
+        },
         {
           kind: "step",
           id: "deploy-2-7",
@@ -820,32 +831,26 @@ export const deploymentTrack: Track = {
             note: "Tanpa .dockerignore, node_modules laptopmu akan ikut ter-copy dan merusak instalasi di container.",
           },
           instruction:
-            "Tuliskan nama direktori dependensi Node.js yang wajib dicantumkan dalam file `.dockerignore`.",
-          starterCode: "# Tulis baris abaikan folder di bawah ini\n",
+            "Di dalam berkas `.dockerignore`, tentukan nama direktori dependensi lokal Node.js agar tidak ikut tersalin ke dalam Docker image saat proses build.",
+          starterCode: "# .dockerignore\n.git\n.env\n# Tuliskan direktori dependensi lokal yang harus diabaikan di bawah ini:\n",
           language: "text",
           tests: [
-                      {
-                        "pattern": "^node_modules/?$",
-                        "message": "Isi `.dockerignore` dengan nama folder dependency yang tidak boleh ikut masuk image. Alasannya dua: ukurannya besar, dan isinya hasil kompilasi di sistem operasimu yang bisa tidak cocok dengan Linux di dalam container. Formatnya satu pola per baris, tanpa tanda kutip."
-                      }
-                    ],
+            {
+              pattern: "node_modules/?$",
+              message: "Isi `.dockerignore` dengan nama folder dependency yang tidak boleh ikut masuk image. Alasannya dua: ukurannya besar, dan isinya hasil kompilasi di sistem operasimu yang bisa tidak cocok dengan Linux di dalam container. Formatnya satu pola per baris, tanpa tanda kutip.",
+            },
+          ],
           solution: "node_modules",
-                    susunKode: {
-                      question:
-                        "Susun penulisan node_modules untuk berkas .dockerignore.",
-                      potongan: [
-                        "node_",
-                        "modules",
-                      ],
-                      pengecoh: [
-                        "vendor_",
-                        "packages",
-                      ],
-                      pemisah: "",
-                      explanation:
-                        "Folder dependensi lokal Node.js yang wajib dikecualikan agar tidak terikut dalam build context Docker adalah `node_modules` di berkas `.dockerignore`. Menulis 'vendor_packages' (istilah PHP) adalah jebakan.",
-                    },
-                  },
+          susunKode: {
+            question:
+              "Susun penulisan node_modules untuk berkas .dockerignore.",
+            potongan: ["node_", "modules"],
+            pengecoh: ["vendor_", "packages"],
+            pemisah: "",
+            explanation:
+              "Folder dependensi lokal Node.js yang wajib dikecualikan agar tidak terikut dalam build context Docker adalah `node_modules` di berkas `.dockerignore`. Menulis 'vendor_packages' (istilah PHP) adalah jebakan.",
+          },
+        },
         {
           kind: "step",
           id: "deploy-2-8",
@@ -864,32 +869,26 @@ export const deploymentTrack: Track = {
             note: "Instruksi USER node wajib diletakkan sebelum CMD agar aplikasi dieksekusi tanpa hak privileges root.",
           },
           instruction:
-            "Tuliskan instruksi Dockerfile untuk beralih ke pengguna non-root bernama `node`.",
-          starterCode: "# Tulis instruksi USER di bawah ini\n",
+            "Tambahkan instruksi pada Dockerfile untuk beralih ke akun pengguna non-root bawaan image bernama `node` demi keamanan.",
+          starterCode: "FROM node:20-alpine\nWORKDIR /app\nCOPY --chown=node:node . .\n# Alihkan hak eksekusi ke user non-root di bawah ini sebelum CMD\n",
           language: "text",
           tests: [
-                      {
-                        "pattern": "USER\\s+node$",
-                        "message": "Instruksi `USER` mengganti pengguna yang menjalankan proses di dalam container. Tanpa itu, aplikasimu berjalan sebagai root — dan kalau ada celah, penyerang mendapat hak penuh di dalam container. Image resmi Node sudah menyediakan pengguna tak-berhak bernama sama dengan nama runtime-nya. Letakkan instruksi ini SETELAH semua operasi yang butuh hak tulis."
-                      }
-                    ],
+            {
+              pattern: "USER\\s+node$",
+              message: "Instruksi `USER` mengganti pengguna yang menjalankan proses di dalam container. Tanpa itu, aplikasimu berjalan sebagai root — dan kalau ada celah, penyerang mendapat hak penuh di dalam container. Image resmi Node sudah menyediakan pengguna tak-berhak bernama sama dengan nama runtime-nya. Letakkan instruksi ini SETELAH semua operasi yang butuh hak tulis.",
+            },
+          ],
           solution: "USER node",
-                    susunKode: {
-                      question:
-                        "Susun instruksi USER node pada Dockerfile untuk keamanan non-root.",
-                      potongan: [
-                        "USER",
-                        "node",
-                      ],
-                      pengecoh: [
-                        "SWITCH",
-                        "app_user",
-                      ],
-                      pemisah: " ",
-                      explanation:
-                        "Mengubah konteks pengguna eksekusi di dalam Dockerfile demi keamanan non-root menggunakan instruksi `USER node`. Perintah fiktif 'SWITCH' atau nama pengguna 'app_user' mengelirukan pembelajar secara jebakan.",
-                    },
-                  },
+          susunKode: {
+            question:
+              "Susun instruksi USER node pada Dockerfile untuk keamanan non-root.",
+            potongan: ["USER", "node"],
+            pengecoh: ["SWITCH", "app_user"],
+            pemisah: " ",
+            explanation:
+              "Mengubah konteks pengguna eksekusi di dalam Dockerfile demi keamanan non-root menggunakan instruksi `USER node`. Perintah fiktif 'SWITCH' atau nama pengguna 'app_user' mengelirukan pembelajar secara jebakan.",
+          },
+        },
         {
           kind: "quiz",
           id: "deploy-2-kuis",
@@ -1009,54 +1008,95 @@ export const deploymentTrack: Track = {
           title: "Orkestrasi Multi-Kontainer dengan Docker Compose & Environment Variables",
           body:
             "# Pengertian: Mengapa Membutuhkan Docker Compose?\n\n" +
-            "Aplikasi web modern jarang berdiri sendiri. Biasanya aplikasi Node.js/Express membutuhkan **PostgreSQL** sebagai database utama dan **Redis** sebagai in-memory cache/session store. Jika kamu menjalankan ketiga komponen ini menggunakan perintah `docker run` biasa, kamu harus mengetikkan puluhan argumen CLI yang panjang untuk setiap container, menyambungkannya ke network internal manual, dan mengingat urutan menyalakannya.\n\n" +
-            "**Docker Compose** adalah alat deklaratif untuk mendefinisikan dan mengoperasikan aplikasi multi-kontainer melalui satu berkas konfigurasi YAML bernama **`compose.yaml`** (atau `docker-compose.yml`). Cukup jalankan `docker compose up -d`, dan seluruh stack aplikasimu akan menyala bersamaan!\n\n" +
+            "Aplikasi web modern di industri hampir tidak pernah berdiri sebagai satu service tunggal. Arsitektur backend standar biasanya membutuhkan minimal 3 komponen:\n" +
+            "1. **Aplikasi Backend (Node.js/Express):** Melayani REST API atau GraphQL.\n" +
+            "2. **Database Relasional (PostgreSQL):** Menyimpan data transaksi pelanggan secara persisten.\n" +
+            "3. **In-Memory Cache (Redis):** Menyimpan sesi login (*session store*), rate limiting, dan antrean tugas background.\n\n" +
+            "Jika kamu menjalankan ketiga service ini menggunakan perintah `docker run` biasa, kamu harus mengetikkan baris perintah terminal yang sangat panjang untuk setiap container, mengingat port mapping, membuat virtual network manual, dan mengingat urutan menyalakannya. Jika laptop di-restart, kamu harus mengulangi semuanya.\n\n" +
+            "**Docker Compose** menyelesaikan kerumitan ini secara deklaratif. Cukup definisikan seluruh arsitektur multi-kontainer dalam satu berkas konfigurasi YAML bernama **`compose.yaml`** (atau `docker-compose.yml`). Dengan satu perintah `docker compose up -d`, seluruh stack aplikasimu akan menyala bersamaan!\n\n" +
             "---\n\n" +
-            "## Mental Model: Arsitektur Multi-Service Compose\n\n" +
-            "Dalam file `compose.yaml`, setiap container disebut sebagai **service**. Docker Compose otomatis membuatkan **virtual network internal**. Antar service dapat saling berkomunikasi menggunakan **nama service-nya sebagai hostname DNS**.\n\n" +
+            "## Mental Model: Internal DNS Network & 'The Localhost Trap'\n\n" +
+            "Docker Compose otomatis membuatkan **Virtual Bridge Network** terisolasi untuk seluruh service yang terdaftar di dalam file. Setiap service secara otomatis didaftarkan ke server DNS internal Docker menggunakan **Nama Service sebagai Hostname**.\n\n" +
             "```text\n" +
-            "                      [ Laptop Host / Publik ]\n" +
-            "                                 │ (Port 3000:3000)\n" +
+            "                      [ Laptop Host / Browser ]\n" +
+            "                                 │ (Akses http://localhost:3000)\n" +
             "                                 ▼\n" +
             "┌─────────────────────────────────────────────────────────────────┐\n" +
             "│ Docker Internal Network (app_default)                           │\n" +
             "│                                                                 │\n" +
-            "│  ┌──────────────────┐   http://postgres:5432   ┌─────────────┐  │\n" +
-            "│  │  Service: 'app'  │ ───────────────────────► │ Service:    │  │\n" +
-            "│  │  (Node.js API)   │                          │ 'postgres'  │  │\n" +
-            "│  └────────┬─────────┘                          └─────────────┘  │\n" +
-            "│           │ http://redis:6379                                   │\n" +
+            "│  ┌──────────────────┐   postgres://postgres:5432 ┌─────────────┐│\n" +
+            "│  │  Service: 'app'  │ ─────────────────────────► │ Service:    ││\n" +
+            "│  │  (Node.js API)   │                            │ 'postgres'  ││\n" +
+            "│  └────────┬─────────┘                            └─────────────┘│\n" +
+            "│           │ redis://redis:6379                                  │\n" +
             "│           ▼                                                     │\n" +
             "│  ┌──────────────────┐                                           │\n" +
             "│  │  Service: 'redis'│                                           │\n" +
             "│  └──────────────────┘                                           │\n" +
             "└─────────────────────────────────────────────────────────────────┘\n" +
             "```\n\n" +
+            "### Jebakan Terbesar Pemula: Localhost di Dalam Container\n" +
+            "- **Miskonsepsi:** Di file `.env` aplikasi, pemula menulis `DATABASE_URL=postgres://user:pass@localhost:5432/mydb`.\n" +
+            "- **Fakta:** Di dalam container `app`, kata `localhost` merujuk ke **container app itu sendiri**, bukan ke laptop host dan bukan ke container database! Karena di dalam container app tidak ada engine PostgreSQL yang berjalan di port 5432, aplikasi langsung crash dengan eror `ECONNREFUSED`.\n" +
+            "- **Solusi Benar:** Gunakan nama service Compose sebagai hostname: `postgres://user:pass@postgres:5432/mydb`.\n\n" +
             "---\n\n" +
             "## Anatomi File `compose.yaml`\n\n" +
-            "| Kata Kunci | Fungsi | Contoh |\n" +
+            "| Kata Kunci | Fungsi Utama | Contoh Penggunaan |\n" +
             "|---|---|---|\n" +
-            "| `services:` | Wadah utama tempat mendaftarkan daftar kontainer | `services:` |\n" +
-            "| `build:` | Menentukan lokasi Dockerfile jika ingin mem-build image lokal | `build: .` |\n" +
+            "| `services:` | Wadah utama tempat mendaftarkan seluruh kontainer | `services:` |\n" +
+            "| `build:` | Membangun image dari Dockerfile lokal | `build: .` |\n" +
             "| `image:` | Menggunakan image siap pakai dari Docker Hub | `image: postgres:16-alpine` |\n" +
-            "| `ports:` | Mapping port `host:container` | `- '3000:3000'` |\n" +
-            "| `environment:` | Menyuntikkan variabel lingkungan ke container | `- DB_HOST=postgres` |\n" +
-            "| `env_file:` | Membaca file `.env` lokal otomatis | `env_file: .env` |\n" +
-            "| `volumes:` | Melampirkan volume agar data tetap bertahan | `- db_data:/var/lib/postgresql/data` |\n" +
-            "| `depends_on:` | Memastikan urutan startup antar service | `depends_on: [postgres]` |\n" +
-            "| `restart:` | Kebijakan otomatisasi restart jika container crash | `restart: unless-stopped` |\n\n" +
+            "| `ports:` | Memetakan port `host:container` | `- '3000:3000'` |\n" +
+            "| `environment:` | Menyuntikkan variabel lingkungan secara eksplisit | `- DB_HOST=postgres` |\n" +
+            "| `env_file:` | Membaca berkas variabel lingkungan lokal | `env_file: .env` |\n" +
+            "| `volumes:` | Melampirkan volume persisten atau bind mount | `- db_data:/var/lib/postgresql/data` |\n" +
+            "| `depends_on:` | Mengatur urutan penyalaan antar service | `depends_on: [postgres]` |\n" +
+            "| `restart:` | Kebijakan menyalakan ulang saat crash | `restart: unless-stopped` |\n" +
+            '| `healthcheck:` | Menguji kesiapan operasional kontainer secara berkala | `test: ["CMD", "pg_isready"]` |\n\n' +
+            "---\n\n" +
+            "## Startup Order & Healthcheck Sebenarnya\n\n" +
+            "Banyak developer pemula mengira menuliskan `depends_on: [postgres]` sudah menjamin aplikasi aman terhubung ke database. Padahal, `depends_on` standar hanya menunggu kontainer `postgres` berstatus *Started* (proses sistem Linux-nya berjalan), padahal engine database PostgreSQL membutuhkan waktu 3–5 detik untuk membaca disk dan membuka socket port 5432.\n\n" +
+            "Akibatnya, aplikasi `app` menyala terlalu cepat, mencoba koneksi, dan langsung crash loop. Solusi standar industri adalah menggabungkan dengan **Healthcheck**:\n\n" +
+            "```yaml\n" +
+            "services:\n" +
+            "  postgres:\n" +
+            "    image: postgres:16-alpine\n" +
+            "    healthcheck:\n" +
+            '      test: ["CMD-SHELL", "pg_isready -U postgres"]\n' +
+            "      interval: 5s\n" +
+            "      retries: 5\n" +
+            "  app:\n" +
+            "    build: .\n" +
+            "    depends_on:\n" +
+            "      postgres:\n" +
+            "        condition: service_healthy\n" +
+            "```\n\n" +
+            "---\n\n" +
+            "## Perbedaan Setup: Development vs Production\n\n" +
+            "1. **Lingkungan Development (`compose.yaml`):**\n" +
+            "   - Menggunakan **bind mount** (`volumes: ['./:/app']`) agar saat kamu mengedit file di VS Code laptop, aplikasi di kontainer otomatis memuat ulang (*hot-reload*).\n" +
+            "   - Port database (5432) dan Redis (6379) sering di-expose ke host (`ports: ['5432:5432']`) agar developer bisa membuka GUI Database Viewer (seperti DBeaver atau TablePlus).\n" +
+            "2. **Lingkungan Production (`compose.prod.yaml`):**\n" +
+            "   - **DILARANG memakai bind mount.** Aplikasi harus menggunakan image ter-build statis yang aman dan immutable.\n" +
+            "   - **Port database TIDAK BOLEH di-expose ke host.** Database hanya boleh diakses di internal Docker Network oleh service backend.\n\n" +
             "---\n\n" +
             "## Analogi Dunia Nyata: Konduktor Orkestra Musik\n\n" +
-            "Bayangkan aplikasi web sebagai grup musik orkestra. Service `app` adalah penyanyi utama, `postgres` adalah pemain piano, dan `redis` adalah pemain drum. Tanpa konduktor, setiap pemain harus datang dan mulai main sendiri-sendiri. Docker Compose adalah **konduktor orkestra** yang memberi aba-aba agar piano dan drum siap di panggung lebih dulu sebelum penyanyi mulai bernyanyi.\n\n" +
+            "Bayangkan arsitektur aplikasimu sebagai kelompok orkestra simfoni. Service `app` adalah penyanyi solo, `postgres` adalah pemain piano, dan `redis` adalah pemain drum. Tanpa konduktor, setiap musisi datang dan mulai bernyanyi sembarangan sebelum piano siap ditala. Docker Compose adalah **konduktor orkestra** yang memberi aba-aba agar piano dan drum siap dan berada di posisi yang tepat (`healthcheck`) sebelum penyanyi mulai bernyanyi.\n\n" +
             "---\n\n" +
             "## Jebakan & Kesalahan Umum Pemula\n\n" +
-            "1. **Menggunakan `localhost` untuk Mengakses Database Antar Container:** Di dalam container `app`, `localhost` merujuk ke container `app` itu sendiri — bukan ke laptop host atau container database. Gunakan nama service (misal `DATABASE_URL=postgres://user:pass@postgres:5432/mydb`).\n" +
-            "2. **Memasukkan File `.env` yang Berisi Secret ke Git:** Berkas `.env` sering kali berisi kredensial database dan API key. Selalu daftarkan `.env` di `.gitignore`. Gunakan `.env.example` sebagai template kosong untuk developer lain.\n" +
-            "3. **Mengabaikan Indentasi Spasi YAML:** Format YAML sangat sensitif terhadap spasi. Menggunakan Tab alih-alih Spasi (biasanya 2 spasi per level) akan menyebabkan error *YAML parse failure*.\n" +
-            "4. **Ketergantungan Palsu Tanpa Healthcheck:** Menuliskan `depends_on: [postgres]` hanya menunggu container `postgres` *mulai*, bukan menunggu PostgreSQL *siap menerima koneksi database*. Kombinasikan dengan `healthcheck` dan `condition: service_healthy`.\n\n" +
+            "1. **Menuliskan `localhost` untuk Memanggil Container Lain:** Selalu gunakan nama service Compose (misal `postgres:5432` atau `redis:6379`).\n" +
+            "2. **Meng-commit Berkas `.env` ke Git:** Berkas `.env` memuat kredensial sensitif. Selalu masukkan `.env` ke dalam `.gitignore`, dan sediakan `.env.example` dengan nilai dummy untuk panduan tim.\n" +
+            "3. **Sensitivitas Format Spasi YAML:** Format YAML mengharamkan karakter Tab. Gunakan 2 spasi konsisten per level indentasi.\n" +
+            "4. **Menjalankan `docker compose down -v` di Server Produksi:** Flag `-v` akan **menghapus volume persisten database**! Di produksi, cukup jalankan `docker compose down` tanpa flag `-v`.\n\n" +
             "---\n\n" +
-            "## Kaitan ke Dunia Kerja\n\n" +
-            "Setiap tim software profesional menyediakan file `compose.yaml` di root repository. Pengembang baru yang bergabung ke tim cukup melakukan `git clone` lalu `docker compose up -d` untuk memiliki seluruh environment pengembangan lokal (Database, Redis, API) yang identik hanya dalam hitungan detik.",
+            "## Kaitan ke Dunia Kerja & Standar Tim Modern\n\n" +
+            "Di perusahaan teknologi terkemuka, file `compose.yaml` adalah standar emas onboarding tim rekayasa. Ketika seorang software engineer baru bergabung ke tim di hari pertama, ia tidak perlu membuang waktu 2 hari menginstal PostgreSQL, Redis, dan dependensi lokal. Cukup:\n" +
+            "```bash\n" +
+            "git clone <repo>\n" +
+            "cp .env.example .env\n" +
+            "docker compose up -d\n" +
+            "```\n" +
+            "Seluruh lingkungan kerja siap digunakan dalam hitungan menit.",
         },
         {
           kind: "step",
@@ -1083,32 +1123,26 @@ export const deploymentTrack: Track = {
             note: "Sub-perintah up -d membuat seluruh layanan berjalan di mode detached (background).",
           },
           instruction:
-            "Tulis perintah docker compose untuk menjalankan seluruh layanan di background.",
-          starterCode: "# Tulis perintah docker compose di bawah ini\n",
+            "Jalankan seluruh service multi-kontainer yang terdefinisi pada compose di latar belakang (detached mode).",
+          starterCode: "# Nyalakan seluruh stack di bawah ini\n",
           language: "text",
           tests: [
-                      {
-                        "pattern": "docker[- ]compose\\s+up\\s+-d$",
-                        "message": "Seluruh stack dinyalakan dengan `docker compose up`. Flag `-d` (detached) melepasnya ke latar belakang sehingga terminalmu bebas — tanpa flag itu, menutup terminal ikut mematikan stack. Perhatikan: bentuk modern memakai spasi (`docker compose`), bentuk lama memakai tanda hubung."
-                      }
-                    ],
+            {
+              pattern: "docker[- ]compose\\s+up\\s+-d$",
+              message: "Seluruh stack dinyalakan dengan `docker compose up`. Flag `-d` (detached) melepasnya ke latar belakang sehingga terminalmu bebas — tanpa flag itu, menutup terminal ikut mematikan stack. Perhatikan: bentuk modern memakai spasi (`docker compose`), bentuk lama memakai tanda hubung.",
+            },
+          ],
           solution: "docker compose up -d",
-                    susunKode: {
-                      question:
-                        "Susun perintah docker compose up -d untuk menjalankan layanan di background.",
-                      potongan: [
-                        "docker compose",
-                        "up -d",
-                      ],
-                      pengecoh: [
-                        "docker-stack",
-                        "start -d",
-                      ],
-                      pemisah: " ",
-                      explanation:
-                        "Menjalankan seluruh layanan pada berkas docker-compose.yml secara detached di background menggunakan `docker compose up -d`. Perintah `start` atau `docker-stack` tidak melakukan build atau penyiapan kontainer baru dan jebakan.",
-                    },
-                  },
+          susunKode: {
+            question:
+              "Susun perintah docker compose up -d untuk menjalankan layanan di background.",
+            potongan: ["docker compose", "up -d"],
+            pengecoh: ["docker-stack", "start -d"],
+            pemisah: " ",
+            explanation:
+              "Menjalankan seluruh layanan pada berkas docker-compose.yml secara detached di background menggunakan `docker compose up -d`. Perintah `start` atau `docker-stack` tidak melakukan build atau penyiapan kontainer baru dan jebakan.",
+          },
+        },
         {
           kind: "step",
           id: "deploy-3-2",
@@ -1129,34 +1163,26 @@ export const deploymentTrack: Track = {
             note: "Jangan pernah meng-commit file .env yang berisi kredensial asli ke repository Git!",
           },
           instruction:
-            "Suntikkan nilai dari variabel lingkungan bernama `DATABASE_URL` menggunakan tanda dolar dan kurung kurawal.",
-          starterCode: "# Tulis interpolasi variabel di bawah ini\n",
+            "Suntikkan nilai variabel lingkungan `DATABASE_URL` dari file .env ke dalam konfigurasi compose menggunakan sintaks interpolasi shell.",
+          starterCode: "services:\n  api:\n    environment:\n      - DATABASE_URL=# Tulis sintaks interpolasi variabel di sini\n",
           language: "text",
           tests: [
-                      {
-                        "pattern": "\\$\\{DATABASE_URL\\}$",
-                        "message": "Nilai dari `.env` dirujuk di compose dengan bentuk `${NAMA_VARIABEL}`. Kurung kurawal wajib. Dengan cara ini berkas compose bisa ikut ke repo, sementara nilai rahasianya tinggal di `.env` yang tidak di-commit."
-                      }
-                    ],
+            {
+              pattern: "\\$\\{DATABASE_URL\\}",
+              message: "Nilai dari `.env` dirujuk di compose dengan bentuk `${NAMA_VARIABEL}`. Kurung kurawal wajib. Dengan cara ini berkas compose bisa ikut ke repo, sementara nilai rahasianya tinggal di `.env` yang tidak di-commit.",
+            },
+          ],
           solution: "${DATABASE_URL}",
-                    susunKode: {
-                      question:
-                        "Susun interpolasi variabel lingkungan DATABASE_URL di Docker Compose.",
-                      potongan: [
-                        "${",
-                        "DATABASE_URL",
-                        "}",
-                      ],
-                      pengecoh: [
-                        "$(",
-                        "DB_CONN_STR",
-                        ")",
-                      ],
-                      pemisah: "",
-                      explanation:
-                        "Interpolasi variabel lingkungan pada file Docker Compose menggunakan sintaks `${NAMA_VARIABEL}`. Penggunaan tanda kurung biasa `$()` (sintaks subshell command execution) adalah kekeliruan sintaksis YAML/Compose.",
-                    },
-                  },
+          susunKode: {
+            question:
+              "Susun interpolasi variabel lingkungan DATABASE_URL di Docker Compose.",
+            potongan: ["${", "DATABASE_URL", "}"],
+            pengecoh: ["$(", "DB_CONN_STR", ")"],
+            pemisah: "",
+            explanation:
+              "Interpolasi variabel lingkungan pada file Docker Compose menggunakan sintaks `${NAMA_VARIABEL}`. Penggunaan tanda kurung biasa `$()` (sintaks subshell command execution) adalah kekeliruan sintaksis YAML/Compose.",
+          },
+        },
         {
           kind: "step",
           id: "deploy-3-3",
@@ -1165,9 +1191,7 @@ export const deploymentTrack: Track = {
             "Untuk tingkat keamanan yang lebih tinggi di lingkungan produksi atau Swarm, gunakan fitur **Docker Secrets**. Daripada menyebar file `.env` di server, Secrets membaca berkas rahasia (seperti `./db_password.txt`) dan menyuntikkannya langsung ke memori in-memory container (`/run/secrets/`). Cara ini mencegah password terekspos saat seseorang menjalankan perintah `docker inspect`.",
           example: {
             code:
-              "secrets:\n" +
-              "  db_password:\n" +
-              "    file: ./db_password.txt\n\n" +
+              "secrets:\n  db_password:\n    file: ./db_password.txt\n\n" +
               "services:\n" +
               "  db:\n" +
               "    image: postgres:16-alpine\n" +
@@ -1178,8 +1202,8 @@ export const deploymentTrack: Track = {
             note: "File db_password.txt dipasang sebagai mount point yang hanya bisa dibaca oleh container.",
           },
           instruction:
-            "Konfigurasi secrets di compose untuk password database yang mengarah ke berkas lokal `./db_password.txt`.",
-          starterCode: "secrets:\n  db_password:\n    # Tulis properti konfigurasi file di sini\n",
+            "Konfigurasikan Docker secret bernama db_password pada file compose agar mengambil nilai dari berkas lokal `./db_password.txt`.",
+          starterCode: "secrets:\n  db_password:\n    # Tentukan sumber file secret di bawah ini\n",
           language: "text",
           tests: [
             {
@@ -1188,22 +1212,16 @@ export const deploymentTrack: Track = {
             },
           ],
           solution: "file: ./db_password.txt",
-                    susunKode: {
-                      question:
-                        "Susun pengkonfigurasian secrets file: ./db_password.txt di Docker Compose.",
-                      potongan: [
-                        "file:",
-                        "./db_password.txt",
-                      ],
-                      pengecoh: [
-                        "path:",
-                        "/etc/secrets/db_password.txt",
-                      ],
-                      pemisah: " ",
-                      explanation:
-                        "Mendefinisikan lokasi berkas rahasia di Docker Compose secrets menggunakan properti `file: ./path_file`. Penggunaan properti fiktif `path:` atau lokasi absolut luar adalah kesalahan konfigurasi yang keliru.",
-                    },
-                  },
+          susunKode: {
+            question:
+              "Susun pengkonfigurasian secrets file: ./db_password.txt di Docker Compose.",
+            potongan: ["file:", "./db_password.txt"],
+            pengecoh: ["path:", "/etc/secrets/db_password.txt"],
+            pemisah: " ",
+            explanation:
+              "Mendefinisikan lokasi berkas rahasia di Docker Compose secrets menggunakan properti `file: ./path_file`. Penggunaan properti fiktif `path:` atau lokasi absolut luar adalah kesalahan konfigurasi yang keliru.",
+          },
+        },
         {
           kind: "step",
           id: "deploy-3-4",
@@ -1224,32 +1242,26 @@ export const deploymentTrack: Track = {
             note: "restart: unless-stopped memastikan container bangkit kembali bahkan setelah server fisik di-reboot.",
           },
           instruction:
-            "Atur kebijakan mulai ulang sehingga container akan selalu di-restart saat crash, kecuali jika dihentikan manual oleh administrator.",
-          starterCode: "# Tulis restart policy di sini\n",
+            "Tetapkan kebijakan restart pada service aplikasi agar selalu otomatis dinyalakan kembali saat crash atau reboot, kecuali jika sengaja dihentikan oleh admin.",
+          starterCode: "services:\n  web:\n    # Tulis kebijakan restart di bawah ini\n",
           language: "text",
           tests: [
-                      {
-                        "pattern": "restart:\\s*['\"]?unless-stopped['\"]?$",
-                        "message": "Kebijakan restart diatur lewat kunci `restart`. Nilai yang dipakai di produksi adalah yang membuat container selalu naik lagi setelah crash ATAU setelah server reboot, kecuali kamu sendiri yang menghentikannya. Nilai `always` mirip tapi ia juga menyalakan ulang container yang sengaja kamu stop."
-                      }
-                    ],
+            {
+              pattern: "restart:\\s*['\"]?unless-stopped['\"]?$",
+              message: "Kebijakan restart diatur lewat kunci `restart`. Nilai yang dipakai di produksi adalah yang membuat container selalu naik lagi setelah crash ATAU setelah server reboot, kecuali kamu sendiri yang menghentikannya. Nilai `always` mirip tapi ia juga menyalakan ulang container yang sengaja kamu stop.",
+            },
+          ],
           solution: "restart: unless-stopped",
-                                        susunKode: {
-                                          question:
-                                            "Susun kebijakan restart: unless-stopped pada Docker Compose.",
-                                          potongan: [
-                                            "restart:",
-                                            "unless-stopped",
-                                          ],
-                                          pengecoh: [
-                                            "restart_policy:",
-                                            "always-except-stop",
-                                          ],
-                                          pemisah: " ",
-                                          explanation:
-                                            "Kebijakan restart kontainer di Docker Compose menggunakan `restart: unless-stopped` agar kontainer otomatis menyala kembali kecuali dihentikan manual. Nama opsi 'always-except-stop' adalah kesalahan atribut yang jebakan.",
-                                        },
-                                      },
+          susunKode: {
+            question:
+              "Susun kebijakan restart: unless-stopped pada Docker Compose.",
+            potongan: ["restart:", "unless-stopped"],
+            pengecoh: ["restart_policy:", "always-except-stop"],
+            pemisah: " ",
+            explanation:
+              "Kebijakan restart kontainer di Docker Compose menggunakan `restart: unless-stopped` agar kontainer otomatis menyala kembali kecuali dihentikan manual. Nama opsi 'always-except-stop' adalah kesalahan atribut yang jebakan.",
+          },
+        },
         {
           kind: "step",
           id: "deploy-3-5",
@@ -1273,32 +1285,26 @@ export const deploymentTrack: Track = {
             note: "Image bertag alpine memiliki ukuran sangat ringan (Redis Alpine hanya berukuran ~30MB).",
           },
           instruction:
-            "Konfigurasikan layanan cache agar memakai image redis dengan tag `alpine`.",
-          starterCode: "# Tulis image redis di bawah ini\n",
+            "Konfigurasikan service in-memory cache pada compose agar menggunakan base image resmi `redis` dengan tag varian `alpine`.",
+          starterCode: "services:\n  cache:\n    # Tentukan image redis alpine di bawah ini\n",
           language: "text",
           tests: [
-                      {
-                        "pattern": "image:\\s*['\"]?redis:alpine['\"]?$",
-                        "message": "Sebuah service yang memakai image siap pakai cukup menyebut kunci `image` beserta nama dan tag-nya. Untuk cache/session, varian ringan `alpine` sudah cukup. Bandingkan dengan service aplikasimu sendiri yang memakai `build:` karena image-nya dibangun dari Dockerfile."
-                      }
-                    ],
+            {
+              pattern: "image:\\s*['\"]?redis:alpine['\"]?$",
+              message: "Sebuah service yang memakai image siap pakai cukup menyebut kunci `image` beserta nama dan tag-nya. Untuk cache/session, varian ringan `alpine` sudah cukup. Bandingkan dengan service aplikasimu sendiri yang memakai `build:` karena image-nya dibangun dari Dockerfile.",
+            },
+          ],
           solution: "image: redis:alpine",
-                                                                                                                                                                susunKode: {
-                                                                                                                                                                  question:
-                                                                                                                                                                    "Susun pendefinisian image: redis:alpine di Docker Compose.",
-                                                                                                                                                                  potongan: [
-                                                                                                                                                                    "image:",
-                                                                                                                                                                    "redis:alpine",
-                                                                                                                                                                  ],
-                                                                                                                                                                  pengecoh: [
-                                                                                                                                                                    "container:",
-                                                                                                                                                                    "redis:latest-build",
-                                                                                                                                                                  ],
-                                                                                                                                                                  pemisah: " ",
-                                                                                                                                                                  explanation:
-                                                                                                                                                                    "Penetapan image yang digunakan oleh suatu service di Docker Compose menggunakan sintaks `image: nama:tag`. Atribut fiktif 'container' atau tag 'latest-build' adalah bentuk kekeliruan YAML Compose yang jebakan.",
-                                                                                                                                                                },
-                                                                                                                                                              },
+          susunKode: {
+            question:
+              "Susun pendefinisian image: redis:alpine di Docker Compose.",
+            potongan: ["image:", "redis:alpine"],
+            pengecoh: ["container:", "redis:latest-build"],
+            pemisah: " ",
+            explanation:
+              "Penetapan image yang digunakan oleh suatu service di Docker Compose menggunakan sintaks `image: nama:tag`. Atribut fiktif 'container' atau tag 'latest-build' adalah bentuk kekeliruan YAML Compose yang jebakan.",
+          },
+        },
         {
           kind: "step",
           id: "deploy-3-6",
@@ -1317,32 +1323,26 @@ export const deploymentTrack: Track = {
             note: "Perintah docker compose down menghentikan container sekaligus menghapus virtual network bawaannya.",
           },
           instruction:
-            "Jalankan perintah docker compose yang bertugas menghentikan serta menghapus kontainer dan jaringan dari susunan compose.",
-          starterCode: "# Tulis penghentian stack di sini\n",
+            "Hentikan dan bersihkan seluruh kontainer beserta virtual network yang dibuat oleh Docker Compose.",
+          starterCode: "# Hentikan dan bersihkan stack di bawah ini\n",
           language: "text",
           tests: [
-                      {
-                        "pattern": "docker[- ]compose\\s+down$",
-                        "message": "Stack dihentikan sekaligus dibersihkan (container dan network-nya) dengan subperintah `down`. Bedanya dengan `stop`: `stop` hanya mematikan, `down` juga menghapus container-nya. Volume TIDAK ikut terhapus kecuali kamu menambahkan `-v` — dan flag itu yang harus kamu hindari di server produksi."
-                      }
-                    ],
+            {
+              pattern: "docker[- ]compose\\s+down$",
+              message: "Stack dihentikan sekaligus dibersihkan (container dan network-nya) dengan subperintah `down`. Bedanya dengan `stop`: `stop` hanya mematikan, `down` juga menghapus container-nya. Volume TIDAK ikut terhapus kecuali kamu menambahkan `-v` — dan flag itu yang harus kamu hindari di server produksi.",
+            },
+          ],
           solution: "docker compose down",
-                    susunKode: {
-                      question:
-                        "Susun perintah docker compose down untuk menghentikan seluruh layanan.",
-                      potongan: [
-                        "docker compose",
-                        "down",
-                      ],
-                      pengecoh: [
-                        "docker-down",
-                        "stop_all",
-                      ],
-                      pemisah: " ",
-                      explanation:
-                        "Menghentikan dan menghapus kontainer, network, serta volume sementara yang dibuat Docker Compose dilakukan dengan perintah `docker compose down`. Sintaks 'stop_all' atau 'docker-down' adalah istilah fiktif yang keliru.",
-                    },
-                  },
+          susunKode: {
+            question:
+              "Susun perintah docker compose down untuk menghentikan seluruh layanan.",
+            potongan: ["docker compose", "down"],
+            pengecoh: ["docker-down", "stop_all"],
+            pemisah: " ",
+            explanation:
+              "Menghentikan dan menghapus kontainer, network, serta volume sementara yang dibuat Docker Compose dilakukan dengan perintah `docker compose down`. Sintaks 'stop_all' atau 'docker-down' adalah istilah fiktif yang keliru.",
+          },
+        },
         {
           kind: "quiz",
           id: "deploy-3-kuis",
@@ -1457,11 +1457,39 @@ export const deploymentTrack: Track = {
           title: "Panduan Deploy Server VPS: Linux Hardening, Nginx Proxy, dan HTTPS SSL",
           body:
             "# Pengertian: Apa itu VPS dan Mengapa Kita Membutuhkannya?\n\n" +
-            "**VPS (Virtual Private Server)** adalah komputer server virtual berkinerja tinggi yang disewa dari penyedia cloud (seperti DigitalOcean, AWS EC2, Hetzner, atau Biznet Gio) yang menyala 24 jam nonstop dengan alamat **IP Publik statis**.\n\n" +
-            "Membedakan dengan penyedia PaaS (seperti Vercel), VPS memberi kamu hak akses superuser (`root`) penuh. Kamu bertanggung jawab mengonfigurasi keamanan sistem operasi (firewall), memasang web server (**Nginx**), mengarahkan nama domain (**DNS A Record**), dan mengamankan lalu lintas dengan sertifikat SSL terenkripsi (**HTTPS**).\n\n" +
+            "**VPS (Virtual Private Server)** adalah komputer server virtual berbasis cloud (disediakan oleh penyedia seperti DigitalOcean, AWS EC2, Hetzner, Linode, atau Biznet Gio) yang beroperasi 24 jam nonstop dengan alamat **IP Publik statis**.\n\n" +
+            "Berbeda dengan platform PaaS (seperti Vercel atau Render) yang menyembunyikan infrastruktur dasar, menyewa VPS memberi kamu kendali penuh sebagai superuser (`root`). Kamu bertanggung jawab penuh atas keamanan sistem operasi, penataan firewall, konfigurasi web server reverse proxy (**Nginx**), pengalihan nama domain (**DNS A Record**), dan sertifikat keamanan terenkripsi (**HTTPS SSL/TLS**). Biaya VPS umumnya sangat flat dan murah (mulai dari $4–$5 per bulan) untuk beban kerja backend dan database yang berjalan terus-menerus.\n\n" +
             "---\n\n" +
-            "## Mental Model: Arsitektur Alur Trafik Web Server Produksi\n\n" +
-            "Dalam arsitektur deployment VPS modern, pengguna internet tidak pernah mengakses port aplikasi (misal port 3000) secara langsung. **Nginx** bertindak sebagai **Reverse Proxy** di pintu depan (port 80/443), menerima permintaan publik, mengelola enkripsi HTTPS, lalu meneruskannya ke kontainer aplikasi internal.\n\n" +
+            "## Standar Industri: Linux VPS Hardening dari Nol\n\n" +
+            "Saat pertama kali menerima server VPS baru, server tersebut dalam kondisi rentan terhadap serangan otomatis (*bot brute-force*). Lakukan 4 tahapan hardening wajib:\n\n" +
+            "1. **Pembaruan Sistem Operasi:**\n" +
+            "   ```bash\n" +
+            "   sudo apt update && sudo apt upgrade -y\n" +
+            "   ```\n" +
+            "2. **Membuat User Non-Root Khusus Deploy:**\n" +
+            "   Jangan pernah mengoperasikan aplikasi sehari-hari sebagai user `root`:\n" +
+            "   ```bash\n" +
+            "   adduser deployer\n" +
+            "   usermod -aG sudo deployer\n" +
+            "   ```\n" +
+            "3. **Memasang Kunci SSH & Mematikan Password Login:**\n" +
+            "   Salin public key komputermu ke `/home/deployer/.ssh/authorized_keys`. Lalu buka `/etc/ssh/sshd_config` dan ubah:\n" +
+            "   ```text\n" +
+            "   PasswordAuthentication no\n" +
+            "   PermitRootLogin no\n" +
+            "   ```\n" +
+            "   Muat ulang service SSH: `sudo systemctl restart ssh`. Kini penyerang tidak bisa menebak password servermu!\n" +
+            "4. **Mengunci Port dengan UFW Firewall:**\n" +
+            "   Hanya buka port yang benar-benar esensial:\n" +
+            "   ```bash\n" +
+            "   sudo ufw allow 22/tcp   # Port SSH (WAJIB di-allow sebelum enable!)\n" +
+            "   sudo ufw allow 80/tcp   # Port HTTP Nginx\n" +
+            "   sudo ufw allow 443/tcp  # Port HTTPS SSL Nginx\n" +
+            "   sudo ufw enable\n" +
+            "   ```\n\n" +
+            "---\n\n" +
+            "## Mental Model: Arsitektur Nginx Reverse Proxy Produksi\n\n" +
+            "Dalam arsitektur produksi, kontainer aplikasi (port 3000) dan database (port 5432) **TIDAK PERNAH terekspos langsung ke internet publik**. **Nginx** dipasang di pintu depan server sebagai **Reverse Proxy**.\n\n" +
             "```text\n" +
             "Pengguna Internet (Browser)\n" +
             "       │\n" +
@@ -1470,38 +1498,79 @@ export const deploymentTrack: Track = {
             "┌─────────────────────────────────────────────────────────────┐\n" +
             "│ Server VPS (IP Publik: 203.0.113.195)                        │\n" +
             "│                                                             │\n" +
-            "│  UFW Firewall (Membuka Port 22, 80, 443 saja)                │\n" +
-            "│       │                                                     │\n" +
-            "│       ▼                                                     │\n" +
+            "│  UFW Firewall (Port 22, 80, 443 terbuka)                    │\n" +
+            "│       │\n" +
+            "│       ▼\n" +
             "│  Nginx Reverse Proxy (SSL Termination / Certbot)            │\n" +
-            "│       │                                                     │\n" +
+            "│       │\n" +
             "│       │  proxy_pass http://127.0.0.1:3000                   │\n" +
-            "│       ▼                                                     │\n" +
+            "│       ▼\n" +
             "│  Docker Container (App Node.js Listening di Port 3000)      │\n" +
+            "│       │ (Jaringan Internal Docker)\n" +
+            "│       ▼\n" +
+            "│  Docker Container (Postgres Database di Port 5432 Terisolasi)│\n" +
             "└─────────────────────────────────────────────────────────────┘\n" +
             "```\n\n" +
             "---\n\n" +
-            "## Tahapan Deployment VPS dari Nol\n\n" +
-            "| Langkah | Komponen | Perintah / Aktivitas Utama |\n" +
-            "|---|---|---|\n" +
-            "| 1 | **Hardening VPS** | `sudo ufw allow 22,80,443/tcp && sudo ufw enable` |\n" +
-            "| 2 | **Clone & Run** | `git clone <repo> && docker compose up -d` |\n" +
-            "| 3 | **Nginx Config** | Mengonfigurasi `proxy_pass http://127.0.0.1:3000;` |\n" +
-            "| 4 | **DNS Record** | Menambahkan **A Record** nama domain ke IP Publik VPS |\n" +
-            "| 5 | **HTTPS SSL** | `sudo certbot --nginx -d domainku.com` |\n" +
-            "| 6 | **Zero Downtime**| `sudo systemctl reload nginx` saat pembaruan rilis |\n\n" +
+            "## Anatomi Blok Konfigurasi Nginx Server\n\n" +
+            "Berkas konfigurasi diletakkan di `/etc/nginx/sites-available/app.conf` dan di-link ke `sites-enabled/`:\n\n" +
+            "```nginx\n" +
+            "server {\n" +
+            "    listen 80;\n" +
+            "    server_name myapp.com www.myapp.com;\n" +
+            "\n" +
+            "    location / {\n" +
+            "        proxy_pass http://127.0.0.1:3000;\n" +
+            "        proxy_http_version 1.1;\n" +
+            "\n" +
+            "        # Meneruskan info identitas asli pengunjung ke Node.js:\n" +
+            "        proxy_set_header Host $host;\n" +
+            "        proxy_set_header X-Real-IP $remote_addr;\n" +
+            "        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;\n" +
+            "        proxy_set_header X-Forwarded-Proto $scheme;\n" +
+            "\n" +
+            "        # Dukungan WebSocket (Realtime Socket.io / Next.js HMR):\n" +
+            "        proxy_set_header Upgrade $http_upgrade;\n" +
+            '        proxy_set_header Connection "upgrade";\n' +
+            "    }\n" +
+            "}\n" +
+            "```\n" +
+            "Uji keabsahan sintaks sebelum menerapkan: `sudo nginx -t`.\n\n" +
             "---\n\n" +
-            "## Analogi Dunia Nyata: Resepsionis Gedung dan Sertifikat Kredensial\n\n" +
-            "Bayangkan VPS sebagai gedung perkantoran. **UFW Firewall** adalah satpam di gerbang luar yang memeriksa kartu identitas. **Nginx** adalah **resepsionis gedung** di lobi utama. Ketika tamu datang meminta bertemu 'Departemen Keuangan' (domainku.com), resepsionis memeriksa dokumen sertifikat resmi (**Let's Encrypt SSL**), lalu mengantarkan tamu ke ruang kerja internal nomor 3000 (port kontainer) tanpa perlu tamu tahu nomor rahasia ruangan tersebut.\n\n" +
+            "## Domain, DNS Propagasi, dan HTTPS SSL Otomatis\n\n" +
+            "1. **DNS A Record:** Di dashboard penyedia domain (Cloudflare, Namecheap, Niagahoster), buat record:\n" +
+            "   - **Type:** `A`\n" +
+            "   - **Name:** `@` (atau subdomain `api`)\n" +
+            "   - **Value:** IP Publik VPS (misal `203.0.113.195`)\n" +
+            "   - **TTL:** Auto (atau 300 detik)\n" +
+            "2. **Cek Propagasi:** Di terminal lokal, ketik `dig +short myapp.com` atau `ping myapp.com`. Pastikan responnya sudah mengembalikan IP VPS milikmu sebelum melangkah ke tahap SSL!\n" +
+            "3. **Certbot (Let's Encrypt SSL):** Jalankan satu perintah sakti:\n" +
+            "   ```bash\n" +
+            "   sudo certbot --nginx -d myapp.com -d www.myapp.com\n" +
+            "   ```\n" +
+            "   Certbot akan otomatis memverifikasi kepemilikan domain via HTTP ACME challenge, mengunduh sertifikat SSL gratis, memperbarui konfigurasi Nginx menjadi HTTPS port 443, dan mengatur auto-redirect dari HTTP ke HTTPS.\n\n" +
+            "---\n\n" +
+            "## Zero-Downtime Deployment & Rollback Manual\n\n" +
+            "- **Reload vs Restart Nginx:** Selalu gunakan `sudo systemctl reload nginx`. Perintah `reload` memuat konfigurasi baru secara *graceful* di latar belakang tanpa memutus sambungan pengunjung yang sedang aktif bertransaksi di website. Perintah `restart` mematikan proses sejenak sehingga pengunjung mendapat layar putih/eror connection refused.\n" +
+            "- **Alur Rilis Ulang Aplikasi:**\n" +
+            "  ```bash\n" +
+            "  git pull origin main\n" +
+            "  docker compose pull\n" +
+            "  docker compose up -d --no-deps --build app\n" +
+            "  ```\n" +
+            "- **Rollback Cepat:** Jika rilis baru memiliki bug kritis yang meloloskan eror di produksi, jangan panik. Rollback ke tag image versi sebelumnya: ubah tag di `compose.yaml` menjadi image lama (misal `app:v1.2.0`), lalu jalankan `docker compose up -d app`.\n\n" +
+            "---\n\n" +
+            "## Analogi Dunia Nyata: Resepsionis Gedung & Paspor Kredensial\n\n" +
+            "Bayangkan server VPS sebagai gedung kantor kedutaan besar. **UFW Firewall** adalah pos satpam gerbang depan. **Nginx** adalah **resepsionis lobi utama**. Tamu luar tidak diizinkan masuk ke ruang brankas (database port 5432). Tamu hanya berbicara dengan resepsionis di lobi (port 80/443). Resepsionis memvalidasi keaslian paspor tamu (**Sertifikat SSL Let's Encrypt**), lalu menyambungkan pembicaraan via interkom internal ke staf divisi aplikasi di lantai 30 (port 3000).\n\n" +
             "---\n\n" +
             "## Jebakan & Kesalahan Umum Pemula\n\n" +
-            "1. **Mengekspos Port Container Langsung ke Publik:** Membuka port database 5432 atau port aplikasi 3000 langsung ke IP publik tanpa Nginx/Firewall sangat berbahaya. Penyerang dapat melakukan brute-force serangan ke port tersebut.\n" +
-            "2. **Lupa Memasang `proxy_set_header` di Nginx:** Tanpa `proxy_set_header Host $host;` dan `X-Forwarded-For`, aplikasi Node.js di dalam container akan menganggap seluruh IP pengunjung adalah `127.0.0.1` (IP Nginx itu sendiri).\n" +
-            "3. **Mengabaikan Propagasi DNS:** Setelah memperbarui A Record di dashboard domain (Cloudflare/Namecheap), perubahan butuh waktu (propagation time) dari beberapa menit hingga 24 jam. Jangan terburu-buru menguji Certbot sebelum DNS benar-benar mengarah ke VPS.\n" +
-            "4. **Menggunakan `systemctl restart nginx` alih-alih `reload`:** Perintah `restart` mematikan proses Nginx sejenak (menyebabkan downtime bagi pengunjung yang sedang aktif). Perintah `reload` memuat konfigurasi baru secara *graceful* tanpa memutus koneksi aktif.\n\n" +
+            "1. **Mengekspos Port Database ke Publik:** Menulis `ports: ['5432:5432']` di compose VPS membuat port PostgreSQL terbuka ke seluruh dunia. Ribuan bot peretas otomatis mem-brute force password database tiap detiknya.\n" +
+            "2. **Menjalankan Certbot Sebelum DNS Selesai Propagasi:** Jika domain belum mengarah ke IP VPS saat Certbot dipanggil, Let's Encrypt gagal memvalidasi domain. Jika dicoba berulang-ulang, IP VPS kamu akan terkena *rate limit penalty* selama 1 minggu!\n" +
+            "3. **Lupa `proxy_set_header Host $host`:** Tanpa header ini, aplikasi Express/Next.js di kontainer mengira alamat servernya adalah `127.0.0.1:3000`. Fitur redirect autentikasi dan pembuatan cookie sesi akan rusak total.\n" +
+            "4. **Menggunakan `restart` Nginx di Jam Ramai:** Menggunakan restart memutus ribuan sesi HTTP pengunjung yang sedang aktif.\n\n" +
             "---\n\n" +
-            "## Kaitan ke Dunia Kerja\n\n" +
-            "Menguasai alur deployment VPS dari server bersih sampai HTTPS aktif adalah pembeda utama antara developer pemula dan senior. Di perusahaan startup dan industri software, kamu diharapkan mampu mengelola infrastruktur mandiri, mengonfigurasi Nginx reverse proxy, serta menangani domain dan keamanan SSL SSL/TLS.",
+            "## Kaitan ke Dunia Kerja & Standar DevOps\n\n" +
+            "Mampu menyiapkan server VPS dari kondisi kosongan sampai aplikasi live dengan HTTPS terenkripsi adalah garis pemisah antara developer junior yang hanya bisa 'ngoding di laptop' dan engineer profesional yang siap bertanggung jawab atas rilis produksi perusahaan.",
         },
         {
           kind: "step",
@@ -1522,36 +1591,30 @@ export const deploymentTrack: Track = {
             note: "Selalu pastikan port 22/tcp sudah di-allow sebelum mengaktifkan UFW agar koneksi SSH tidak terputus.",
           },
           instruction:
-            "Tulis perintah ufw untuk mengizinkan trafik masuk pada port HTTP `80/tcp`.",
-          starterCode: "# Tulis perintah ufw allow di bawah ini\n",
+            "Buka port lalu lintas masuk untuk protokol HTTP standar (`80/tcp`) pada firewall UFW server VPS.",
+          starterCode: "# Izinkan port HTTP di bawah ini\n",
           language: "text",
           tests: [
-                      {
-                        "pattern": "ufw\\s+allow",
-                        "message": "Firewall bawaan Ubuntu diatur dengan `ufw`, dan subperintah pengizinnya `allow`."
-                      },
-                      {
-                        "pattern": "80(/tcp)?$",
-                        "message": "Sebutkan port yang dibuka; boleh ditambah protokolnya setelah garis miring. Urutan aman saat menyalakan firewall: izinkan dulu SSH (22), baru `ufw enable` — kalau terbalik, kamu terkunci di luar servermu sendiri."
-                      }
-                    ],
+            {
+              pattern: "ufw\\s+allow",
+              message: "Firewall bawaan Ubuntu diatur dengan `ufw`, dan subperintah pengizinnya `allow`.",
+            },
+            {
+              pattern: "80(/tcp)?$",
+              message: "Sebutkan port yang dibuka; boleh ditambah protokolnya setelah garis miring. Urutan aman saat menyalakan firewall: izinkan dulu SSH (22), baru `ufw enable` — kalau terbalik, kamu terkunci di luar servermu sendiri.",
+            },
+          ],
           solution: "sudo ufw allow 80/tcp",
-                                        susunKode: {
-                                          question:
-                                            "Susun perintah ufw allow 80/tcp untuk membuka port HTTP.",
-                                          potongan: [
-                                            "sudo ufw allow",
-                                            "80/tcp",
-                                          ],
-                                          pengecoh: [
-                                            "sudo firewall-cmd allow",
-                                            "9090/tcp",
-                                          ],
-                                          pemisah: " ",
-                                          explanation:
-                                            "Membuka port lalu lintas masuk pada firewall Uncomplicated Firewall (UFW) Ubuntu menggunakan `sudo ufw allow 80/tcp`. Penggunaan CLI 'firewall-cmd' atau port '9090/tcp' adalah kekeliruan istilah CLI firewall yang jebakan.",
-                                        },
-                                      },
+          susunKode: {
+            question:
+              "Susun perintah ufw allow 80/tcp untuk membuka port HTTP.",
+            potongan: ["sudo ufw allow", "80/tcp"],
+            pengecoh: ["sudo firewall-cmd allow", "9090/tcp"],
+            pemisah: " ",
+            explanation:
+              "Membuka port lalu lintas masuk pada firewall Uncomplicated Firewall (UFW) Ubuntu menggunakan `sudo ufw allow 80/tcp`. Penggunaan CLI 'firewall-cmd' atau port '9090/tcp' adalah kekeliruan istilah CLI firewall yang jebakan.",
+          },
+        },
         {
           kind: "step",
           id: "deploy-4-2",
@@ -1572,36 +1635,30 @@ export const deploymentTrack: Track = {
             note: "Pastikan file .env di VPS berisi kredensial produksi yang aman dan tidak di-commit ke Git.",
           },
           instruction:
-            "Unduh salinan repository dari alamat `https://github.com/user/app.git` ke server VPS.",
-          starterCode: "# Tulis perintah git clone di bawah ini\n",
+            "Unduh repository kode aplikasi dari alamat `https://github.com/user/app.git` ke server VPS.",
+          starterCode: "# Clone repositori di bawah ini\n",
           language: "text",
           tests: [
-                      {
-                        "pattern": "git\\s+clone",
-                        "message": "Kode diambil ke server dengan `git clone` diikuti URL repositorinya."
-                      },
-                      {
-                        "pattern": "https://github\\.com/user/app\\.git$",
-                        "message": "Untuk server, URL HTTPS lebih praktis pada repo publik. Untuk repo privat, siapkan deploy key lalu pakai URL SSH — jangan menyimpan token di riwayat perintah server."
-                      }
-                    ],
+            {
+              pattern: "git\\s+clone",
+              message: "Kode diambil ke server dengan `git clone` diikuti URL repositorinya.",
+            },
+            {
+              pattern: "https://github\\.com/user/app\\.git$",
+              message: "Untuk server, URL HTTPS lebih praktis pada repo publik. Untuk repo privat, siapkan deploy key lalu pakai URL SSH — jangan menyimpan token di riwayat perintah server.",
+            },
+          ],
           solution: "git clone https://github.com/user/app.git",
-                    susunKode: {
-                      question:
-                        "Susun perintah git clone repositori aplikasi ke VPS.",
-                      potongan: [
-                        "git clone",
-                        "https://github.com/user/app.git",
-                      ],
-                      pengecoh: [
-                        "git pull-repo",
-                        "https://github.com/user/repository.git",
-                      ],
-                      pemisah: " ",
-                      explanation:
-                        "Mengunduh salinan repositori Git awal ke server VPS menggunakan `git clone URL`. Penggunaan perintah fiktif 'git pull-repo' atau pergantian nama repositori adalah jebakan istilah Git CLI yang sering mengelirukan.",
-                    },
-                  },
+          susunKode: {
+            question:
+              "Susun perintah git clone repositori aplikasi ke VPS.",
+            potongan: ["git clone", "https://github.com/user/app.git"],
+            pengecoh: ["git pull-repo", "https://github.com/user/repository.git"],
+            pemisah: " ",
+            explanation:
+              "Mengunduh salinan repositori Git awal ke server VPS menggunakan `git clone URL`. Penggunaan perintah fiktif 'git pull-repo' atau pergantian nama repositori adalah jebakan istilah Git CLI yang sering mengelirukan.",
+          },
+        },
         {
           kind: "step",
           id: "deploy-4-3",
@@ -1624,32 +1681,26 @@ export const deploymentTrack: Track = {
             note: "Instruksi proxy_pass wajib diakhiri dengan titik koma (;) khas sintaks Nginx.",
           },
           instruction:
-            "Instruksikan Nginx agar meneruskan setiap permintaan ke alamat loopback lokal di port `3000`.",
-          starterCode: "# Tulis baris proxy_pass di bawah ini\n",
+            "Di dalam blok `location /` Nginx, teruskan setiap permintaan pengunjung ke alamat internal loopback pada port `3000`.",
+          starterCode: "  location / {\n    # Teruskan request ke aplikasi internal di bawah ini\n  }\n",
           language: "text",
           tests: [
-                      {
-                        "pattern": "proxy_pass\\s+http://(127\\.0\\.0\\.1|localhost):3000;?$",
-                        "message": "Penerusan permintaan di Nginx memakai direktif `proxy_pass` diikuti alamat aplikasimu, dan diakhiri titik koma seperti semua direktif Nginx. Arahkan ke localhost, bukan ke IP publik server — aplikasi Node sebaiknya hanya mendengarkan dari dalam, dan hanya Nginx yang menghadap internet."
-                      }
-                    ],
+            {
+              pattern: "proxy_pass\\s+http://(127\\.0\\.0\\.1|localhost):3000;?$",
+              message: "Penerusan permintaan di Nginx memakai direktif `proxy_pass` diikuti alamat aplikasimu, dan diakhiri titik koma seperti semua direktif Nginx. Arahkan ke localhost, bukan ke IP publik server — aplikasi Node sebaiknya hanya mendengarkan dari dalam, dan hanya Nginx yang menghadap internet.",
+            },
+          ],
           solution: "proxy_pass http://127.0.0.1:3000;",
-                    susunKode: {
-                      question:
-                        "Susun arahan proxy_pass Nginx ke server lokal port 3000.",
-                      potongan: [
-                        "proxy_pass",
-                        "http://127.0.0.1:3000;",
-                      ],
-                      pengecoh: [
-                        "reverse_proxy",
-                        "tcp://127.0.0.1:3000;",
-                      ],
-                      pemisah: " ",
-                      explanation:
-                        "Pengarahan lalu lintas HTTP reverse proxy Nginx ke aplikasi lokal menggunakan arahan `proxy_pass http://127.0.0.1:3000;`. Penggunaan 'reverse_proxy' (sintaks server Caddy) atau 'tcp://' adalah kesalahan Nginx yang jebakan.",
-                    },
-                  },
+          susunKode: {
+            question:
+              "Susun arahan proxy_pass Nginx ke server lokal port 3000.",
+            potongan: ["proxy_pass", "http://127.0.0.1:3000;"],
+            pengecoh: ["reverse_proxy", "tcp://127.0.0.1:3000;"],
+            pemisah: " ",
+            explanation:
+              "Pengarahan lalu lintas HTTP reverse proxy Nginx ke aplikasi lokal menggunakan arahan `proxy_pass http://127.0.0.1:3000;`. Penggunaan 'reverse_proxy' (sintaks server Caddy) atau 'tcp://' adalah kesalahan Nginx yang jebakan.",
+          },
+        },
         {
           kind: "step",
           id: "deploy-4-4",
@@ -1668,34 +1719,26 @@ export const deploymentTrack: Track = {
             note: "Perintah dig atau ping digunakan untuk memverifikasi apakah propagasi DNS sudah selesai.",
           },
           instruction:
-            "Tuliskan baris konfigurasi zona DNS record bertipe `A` yang memetakan domain `example.com` ke alamat IP server `203.0.113.195`.",
-          starterCode: "# Tulis DNS A record di sini\n",
+            "Tuliskan baris konfigurasi DNS record bertipe `A` yang memetakan domain `example.com.` ke alamat IPv4 publik server `203.0.113.195`.",
+          starterCode: "; Konfigurasi DNS Zone\n; Tulis A record di bawah ini\n",
           language: "text",
           tests: [
-                      {
-                        "pattern": "(example\\.com\\.?|@)\\s+(IN\\s+)?A\\s+203\\.0\\.113\\.195$",
-                        "message": "Satu baris DNS berisi nama, jenis record, dan nilainya. Untuk mengarahkan domain ke sebuah alamat IPv4, jenis record-nya `A` (untuk IPv6 namanya `AAAA`). Perubahan DNS tidak instan — ia menyebar mengikuti nilai TTL, jadi jangan menyimpulkan setelan salah dalam lima menit pertama."
-                      }
-                    ],
+            {
+              pattern: "(example\\.com\\.?|@)\\s+(IN\\s+)?A\\s+203\\.0\\.113\\.195$",
+              message: "Satu baris DNS berisi nama, jenis record, dan nilainya. Untuk mengarahkan domain ke sebuah alamat IPv4, jenis record-nya `A` (untuk IPv6 namanya `AAAA`). Perubahan DNS tidak instan — ia menyebar mengikuti nilai TTL, jadi jangan menyimpulkan setelan salah dalam lima menit pertama.",
+            },
+          ],
           solution: "example.com. IN A 203.0.113.195",
-                    susunKode: {
-                      question:
-                        "Susun rekaman DNS A Record untuk memetakan domain ke IP server.",
-                      potongan: [
-                        "example.com.",
-                        "IN A",
-                        "203.0.113.195",
-                      ],
-                      pengecoh: [
-                        "site.org.",
-                        "TYPE A",
-                        "127.0.0.1",
-                      ],
-                      pemisah: " ",
-                      explanation:
-                        "Penulisan DNS record tipe A untuk mengarahkan nama domain ke IP publik VPS menggunakan format `domain. IN A IP_Address`. Kata 'TYPE A' atau IP loopback '127.0.0.1' adalah kekeliruan konfigurasi DNS yang jebakan.",
-                    },
-                  },
+          susunKode: {
+            question:
+              "Susun rekaman DNS A Record untuk memetakan domain ke IP server.",
+            potongan: ["example.com.", "IN A", "203.0.113.195"],
+            pengecoh: ["site.org.", "TYPE A", "127.0.0.1"],
+            pemisah: " ",
+            explanation:
+              "Penulisan DNS record tipe A untuk mengarahkan nama domain ke IP publik VPS menggunakan format `domain. IN A IP_Address`. Kata 'TYPE A' atau IP loopback '127.0.0.1' adalah kekeliruan konfigurasi DNS yang jebakan.",
+          },
+        },
         {
           kind: "step",
           id: "deploy-4-5",
@@ -1709,39 +1752,33 @@ export const deploymentTrack: Track = {
               "Successfully received certificate.\n" +
               "Deploying certificate to VirtualHost /etc/nginx/sites-enabled/app.conf\n" +
               "Congratulations! You have successfully enabled https://domainku.com",
-            note: "Certbot otomatis menambahkan timer systemd untuk memperbarui sertifikat tiap 90 hari. Empat baris keluarannya adalah cerita berurutan, dan kata kerjanya menandai tahapan: *Requesting* (sedang meminta) → *received* (sudah diterima) → *Deploying* (sedang memasang) → *enabled* (sudah diaktifkan). Perhatikan polanya — akhiran **-ing** berarti *sedang berlangsung*, akhiran **-ed** berarti *sudah selesai*. Satu pola itu saja cukup untuk membaca hampir semua keluaran perkakas: kamu langsung tahu mana yang masih berjalan dan mana yang sudah tuntas. *Successfully* = dengan berhasil, dan munculnya kata itu adalah tanda kamu boleh melanjutkan.",
+            note: "Certbot otomatis menambahkan timer systemd untuk memperbarui sertifikat tiap 90 hari.",
           },
           instruction:
-            "Tulis perintah certbot untuk mendapatkan dan mengonfigurasi SSL Nginx secara otomatis pada domain `myapp.com`.",
-          starterCode: "# Tulis perintah certbot di bawah ini\n",
+            "Gunakan Certbot dengan plugin Nginx untuk menerbitkan dan memasang sertifikat SSL Let's Encrypt secara otomatis pada domain `myapp.com`.",
+          starterCode: "# Terbitkan sertifikat SSL otomatis di bawah ini\n",
           language: "text",
           tests: [
-                      {
-                        "pattern": "certbot\\s+--nginx",
-                        "message": "Sertifikat gratis Let's Encrypt diminta dengan `certbot`. Flag `--nginx` membuatnya sekaligus menyunting konfigurasi Nginx dan memasang pengalihan ke HTTPS."
-                      },
-                      {
-                        "pattern": "-d\\s+myapp\\.com$",
-                        "message": "Domain yang disertifikasi disebut lewat flag `-d` (boleh diulang untuk beberapa domain). Prasyaratnya: DNS domain itu sudah menunjuk ke server ini, karena Let's Encrypt memverifikasi lewat HTTP. Pembaruan otomatis sudah dipasang certbot lewat timer systemd."
-                      }
-                    ],
+            {
+              pattern: "certbot\\s+--nginx",
+              message: "Sertifikat gratis Let's Encrypt diminta dengan `certbot`. Flag `--nginx` membuatnya sekaligus menyunting konfigurasi Nginx dan memasang pengalihan ke HTTPS.",
+            },
+            {
+              pattern: "-d\\s+myapp\\.com$",
+              message: "Domain yang disertifikasi disebut lewat flag `-d` (boleh diulang untuk beberapa domain). Prasyaratnya: DNS domain itu sudah menunjuk ke server ini, karena Let's Encrypt memverifikasi lewat HTTP. Pembaruan otomatis sudah dipasang certbot lewat timer systemd.",
+            },
+          ],
           solution: "sudo certbot --nginx -d myapp.com",
-                    susunKode: {
-                      question:
-                        "Susun perintah certbot --nginx untuk mengkonfigurasi SSL.",
-                      potongan: [
-                        "sudo certbot --nginx",
-                        "-d myapp.com",
-                      ],
-                      pengecoh: [
-                        "sudo letsencrypt-cli",
-                        "--domain myapp.com",
-                      ],
-                      pemisah: " ",
-                      explanation:
-                        "Pemasangan sertifikat SSL Let's Encrypt secara otomatis untuk Nginx menggunakan client `sudo certbot --nginx -d domain`. Nama CLI 'letsencrypt-cli' atau bendera `--domain` adalah kekeliruan perintah yang sering membingungkan.",
-                    },
-                  },
+          susunKode: {
+            question:
+              "Susun perintah certbot --nginx untuk mengkonfigurasi SSL.",
+            potongan: ["sudo certbot --nginx", "-d myapp.com"],
+            pengecoh: ["sudo letsencrypt-cli", "--domain myapp.com"],
+            pemisah: " ",
+            explanation:
+              "Pemasangan sertifikat SSL Let's Encrypt secara otomatis untuk Nginx menggunakan client `sudo certbot --nginx -d domain`. Nama CLI 'letsencrypt-cli' atau bendera `--domain` adalah kekeliruan perintah yang sering membingungkan.",
+          },
+        },
         {
           kind: "step",
           id: "deploy-4-6",
@@ -1759,32 +1796,26 @@ export const deploymentTrack: Track = {
             note: "Gunakan reload alih-alih restart agar pengguna tidak mengalami layar blank saat deploy.",
           },
           instruction:
-            "Muat ulang konfigurasi service web server Nginx secara graceful menggunakan systemctl tanpa memutus koneksi aktif.",
-          starterCode: "# Tulis reload Nginx di bawah ini\n",
+            "Muat ulang konfigurasi web server Nginx secara graceful tanpa memutus koneksi pengguna aktif menggunakan controller systemd.",
+          starterCode: "# Muat ulang konfigurasi Nginx di bawah ini\n",
           language: "text",
           tests: [
-                      {
-                        "pattern": "systemctl\\s+reload\\s+nginx$",
-                        "message": "Setelah mengubah konfigurasi, pakai `reload` — ia memuat ulang konfigurasi tanpa memutus koneksi yang sedang berjalan. `restart` mematikan lalu menyalakan, dan itu berarti beberapa detik pengunjung mendapat error. Biasakan menjalankan `nginx -t` lebih dulu untuk memeriksa sintaksnya."
-                      }
-                    ],
+            {
+              pattern: "systemctl\\s+reload\\s+nginx$",
+              message: "Setelah mengubah konfigurasi, pakai `reload` — ia memuat ulang konfigurasi tanpa memutus koneksi yang sedang berjalan. `restart` mematikan lalu menyalakan, dan itu berarti beberapa detik pengunjung mendapat error. Biasakan menjalankan `nginx -t` lebih dulu untuk memeriksa sintaksnya.",
+            },
+          ],
           solution: "sudo systemctl reload nginx",
-                    susunKode: {
-                      question:
-                        "Susun perintah systemctl reload nginx untuk memuat ulang konfigurasi Nginx.",
-                      potongan: [
-                        "sudo systemctl",
-                        "reload nginx",
-                      ],
-                      pengecoh: [
-                        "sudo service",
-                        "refresh nginx",
-                      ],
-                      pemisah: " ",
-                      explanation:
-                        "Menerapkan perubahan file konfigurasi Nginx tanpa memutuskan koneksi pengguna yang sedang aktif menggunakan `sudo systemctl reload nginx`. Penggunaan kata 'refresh' adalah kekeliruan istilah yang sering keliru.",
-                    },
-                  },
+          susunKode: {
+            question:
+              "Susun perintah systemctl reload nginx untuk memuat ulang konfigurasi Nginx.",
+            potongan: ["sudo systemctl", "reload nginx"],
+            pengecoh: ["sudo service", "refresh nginx"],
+            pemisah: " ",
+            explanation:
+              "Menerapkan perubahan file konfigurasi Nginx tanpa memutuskan koneksi pengguna yang sedang aktif menggunakan `sudo systemctl reload nginx`. Penggunaan kata 'refresh' adalah kekeliruan istilah yang sering keliru.",
+          },
+        },
         {
           kind: "quiz",
           id: "deploy-4-kuis",
@@ -1903,46 +1934,97 @@ export const deploymentTrack: Track = {
           id: "deploy-5-m1",
           title: "Otomatisasi Deployment & CI/CD Pipeline (GitHub Actions & PaaS)",
           body:
-            "# Pengertian: Apa itu CI/CD?\n\n" +
-            "Secara tradisional, proses pengujian dan deployment dilakukan secara manual: developer menjalankan tes di laptop, meng-compile build, lalu mengunduh file ke server via FTP atau SSH. Proses manual ini rentan terhadap **human error** (misal lupa menjalankan tes atau salah menimpa file produksi).\n\n" +
-            "**CI/CD (Continuous Integration & Continuous Deployment)** mengotomatiskan seluruh alur kerja ini:\n\n" +
-            "- **Continuous Integration (CI):** Setiap kali ada pengembang yang mendorong kode (`git push`) atau membuka **Pull Request (PR)**, sistem otomatis mengeksekusi Linter dan Unit Testing untuk memastikan kode baru tidak merusak sistem.\n" +
-            "- **Continuous Deployment (CD):** Setelah PR disetujui dan di-merge ke branch utama (`main`), sistem otomatis mem-build Docker Image dan mempublikasikannya langsung ke server produksi tanpa campur tangan manusia.\n\n" +
+            "# Pengertian: Mengapa CI/CD Menjadi Standar Mutlak Industri?\n\n" +
+            "Di masa lalu, proses rilis perangkat lunak dilakukan secara manual dan menegangkan: programmer menguji kode di komputernya, meng-compile build secara lokal, lalu mengunggah berkas zip ke server produksi melalui FTP atau SCP tengah malam. Praktik manual ini sangat berbahaya karena dipenuhi **Human Error** (misal: developer lupa menjalankan tes, dependensi lokal tertinggal, atau salah menimpa file konfigurasi di server).\n\n" +
+            "**CI/CD (Continuous Integration & Continuous Deployment)** adalah metodologi rekayasa modern yang mengotomatiskan seluruh alur verifikasi dan pengiriman kode dari repository Git ke server produksi tanpa campur tangan manusia:\n\n" +
+            "- **Continuous Integration (CI):** Setiap kali developer melakukan `git push` atau membuka **Pull Request (PR)**, server otomatis (*runner*) akan membuat lingkungan pengujian bersih, menginstal dependensi (`npm ci`), menjalankan linter, dan mengeksekusi rangkaian automated unit/integration test. Jika ada satu tes saja yang gagal, PR ditolak secara otomatis.\n" +
+            "- **Continuous Deployment (CD):** Begitu PR disetujui (*merged*) ke cabang utama (`main`), pipeline CD otomatis memicu build Docker Image, mengunggah image ke registry, dan memperbarui kontainer di server produksi tanpa downtime.\n\n" +
             "---\n\n" +
-            "## Mental Model: Alur Kerja GitHub Actions Pipeline\n\n" +
-            "Di GitHub, alur CI/CD dikonfigurasi melalui berkas YAML di folder **`.github/workflows/`**.\n\n" +
+            "## PaaS (Vercel/Railway) vs VPS (IaaS): Kapan Memilih yang Mana?\n\n" +
+            "Sebagai software engineer profesional, kamu harus tahu kapan harus memilih PaaS dan kapan harus mengelola VPS sendiri:\n\n" +
+            "| Parameter | PaaS (Vercel / Railway / Render) | VPS (DigitalOcean / AWS EC2 / Hetzner) |\n" +
+            "|---|---|---||\n" +
+            "| **Setup Awal** | Instan (Tinggal klik sambungkan GitHub) | Manual (Install OS, Docker, UFW, Nginx, SSL) |\n" +
+            "| **Beban Operasional** | Nol (Serverless / Managed by platform) | Mandiri (Wajib pantau disk, memory, patching security) |\n" +
+            "| **Preview URL** | Otomatis ada URL unik per Pull Request | Harus dikonfigurasi sendiri dengan subdomain dinamis |\n" +
+            "| **Struktur Biaya** | Berbasis pemakaian (Bisa melonjak saat trafik tinggi) | Flat dan terprediksi ($4–$20/bulan terlepas dari trafik) |\n" +
+            "| **Kesesuaian Use Case**| Frontend, Next.js/React, MVP produk baru, prototipe | Backend berat, WebSocket 24/7, Redis cache, database |\n\n" +
+            "---\n\n" +
+            "## Mental Model: Arsitektur Pipeline GitHub Actions\n\n" +
+            "Di GitHub, alur CI/CD dikonfigurasi dalam berkas YAML di folder **`.github/workflows/`** (misal `deploy.yml`):\n\n" +
             "```text\n" +
-            "Developer Push Kode / Buka Pull Request\n" +
-            "                │\n" +
-            "                ▼\n" +
-            "GitHub Actions Runner (Virtual Machine Ubuntu Clean)\n" +
-            "  ├── Step 1: Checkout Repository (actions/checkout@v4)\n" +
-            "  ├── Step 2: Setup Node.js Environment (actions/setup-node@v4)\n" +
-            "  ├── Step 3: Install Dependensi (npm ci)\n" +
-            "  ├── Step 4: Run Linter & Test (npm test)   ◄── [Tahap CI]\n" +
-            "  └── Step 5: (Jika Merge to Main) Deploy    ◄── [Tahap CD]\n" +
+            "Developer Push Kode / Merge ke Main Branch\n" +
+            "                    │\n" +
+            "                    ▼\n" +
+            "GitHub Actions Runner (VM Ubuntu Bersih di Cloud)\n" +
+            "  ├── 1. Checkout Repository (actions/checkout@v4)\n" +
+            "  ├── 2. Setup Node.js (actions/setup-node@v4)\n" +
+            "  ├── 3. Install Dependensi Bersih (npm ci)              ◄── [Tahap CI]\n" +
+            "  ├── 4. Jalankan Linter & Unit Test (npm test)          ◄── [Tahap CI]\n" +
+            "  ├── 5. Login ke Container Registry (ghcr.io / Docker Hub)    │\n" +
+            "  ├── 6. Build & Push Docker Image Tagged (commit-sha)         │ [Tahap CD]\n" +
+            "  └── 7. SSH ke VPS & Eksekusi 'docker compose up -d'    ◄─────┘\n" +
             "```\n\n" +
             "---\n\n" +
-            "## Perbandingan PaaS (Vercel/Railway) vs IaaS (VPS)\n\n" +
-            "| Fitur / Karakteristik | PaaS (Vercel / Railway / Render) | IaaS (VPS: DigitalOcean / AWS EC2) |\n" +
-            "|---|---|---|\n" +
-            "| **Pengelolaan Server** | Terkelola Otomatis (Zero Config) | Manual (Install OS, Nginx, Docker) |\n" +
-            "| **Preview Deployment**| Otomatis ada per Pull Request | Harus dikonfigurasi sendiri |\n" +
-            "| **Skalabilitas** | Otomatis Scaling | Manual Scaling (Tambah RAM/CPU) |\n" +
-            "| **Biaya** | Gratis di awal, mahal saat trafik raksasa | Murah & Flat (misal $5/bulan) |\n" +
-            "| **Kontrol** | Terbatas pada aturan platform | Kontrol Akar (Root) 100% Bebas |\n\n" +
+            "## Anatomi Berkas Workflow YAML Lengkap\n\n" +
+            "```yaml\n" +
+            "name: CI/CD Pipeline\n" +
+            "on:\n" +
+            "  push:\n" +
+            "    branches: [main]\n" +
+            "  pull_request:\n" +
+            "    branches: [main]\n" +
+            "\n" +
+            "jobs:\n" +
+            "  test:\n" +
+            "    runs-on: ubuntu-latest\n" +
+            "    steps:\n" +
+            "      - uses: actions/checkout@v4\n" +
+            "      - uses: actions/setup-node@v4\n" +
+            "        with:\n" +
+            "          node-version: 20\n" +
+            "          cache: 'npm'\n" +
+            "      - run: npm ci\n" +
+            "      - run: npm test\n" +
+            "\n" +
+            "  deploy:\n" +
+            "    needs: test\n" +
+            "    if: github.ref == 'refs/heads/main'\n" +
+            "    runs-on: ubuntu-latest\n" +
+            "    steps:\n" +
+            "      - uses: appleboy/ssh-action@v1\n" +
+            "        with:\n" +
+            "          host: ${{ secrets.VPS_HOST }}\n" +
+            "          username: deployer\n" +
+            "          key: ${{ secrets.SSH_PRIVATE_KEY }}\n" +
+            "          script: |\n" +
+            "            cd /var/www/app\n" +
+            "            git pull origin main\n" +
+            "            docker compose up -d --build\n" +
+            "```\n\n" +
+            "---\n\n" +
+            "## Manajemen Rahasia (Secrets) & Masking Sensor Otomatis\n\n" +
+            "Jangan pernah menuliskan SSH Private Key, password database, atau API token secara polos di file YAML workflow. Siapa pun yang memiliki akses baca ke repository dapat mencuri kredensialmu.\n\n" +
+            "1. Buka menu **Settings > Secrets and variables > Actions** di repository GitHub milikmu.\n" +
+            "2. Buat secret baru (misal `SSH_PRIVATE_KEY`, `VPS_HOST`).\n" +
+            "3. Panggil secret di workflow menggunakan sintaks ekspresi: `${{ secrets.NAMA_SECRET }}`.\n" +
+            "4. **Masking Otomatis:** GitHub Runner secara cerdas menyamarkan seluruh nilai secret menjadi `***` pada log tampilan rilis, sehingga kredensial aman dari intipan tim luar.\n\n" +
+            "---\n\n" +
+            "## Mengapa Wajib Memakai `npm ci` di Lingkungan CI Runner?\n\n" +
+            "- `npm install` dapat memperbarui file `package-lock.json` secara diam-diam dan mengunduh versi patch minor paket yang berbeda jika terdapat simbol caret (`^`).\n" +
+            "- `npm ci` (*Clean Install*) bekerja secara deterministik: ia menghapus folder `node_modules` lama dan mengunduh dependensi **tepat sesuai hash dan versi yang terkunci di package-lock.json**. Jika lockfile tidak sinkron dengan `package.json`, `npm ci` langsung melempar eror.\n\n" +
             "---\n\n" +
             "## Analogi Dunia Nyata: Ban Berjalan Pabrik Otomotif\n\n" +
-            "Bayangkan merakit mobil di pabrik modern. **CI** adalah pemindai sensor otomatis di sepanjang ban berjalan yang memeriksa apakah setiap baut terpasang kencang. Jika ada baut longgar, ban berjalan berhenti (build gagal). **CD** adalah robot yang otomatis mengecat dan mengantarkan mobil yang lolos ujian ke truk pengiriman tanpa perlu didorong manual oleh pekerja.\n\n" +
+            "Bayangkan merakit mobil di pabrik modern. **CI** adalah pemindai sensor otomatis di sepanjang ban berjalan yang memeriksa apakah setiap baut terpasang kencang dan rem berfungsi normal. Jika ada satu baut longgar, alarm berbunyi dan ban berjalan berhenti (Pull Request gagal dimerge). **CD** adalah robot otomatis yang mengecat mobil yang telah lolos uji kendali mutu, mengisinya dengan bahan bakar, dan mengirimkannya ke dealer tanpa perlu didorong manual oleh montir.\n\n" +
             "---\n\n" +
             "## Jebakan & Kesalahan Umum Pemula\n\n" +
-            "1. **Menuliskan Password/SSH Key Polos di File Workflow YAML:** File `.github/workflows/ci.yml` tersimpan di repository. Memasukkan kredensial polos di sana akan membocorkannya ke publik. Gunakan **GitHub Repository Secrets** (`${{ secrets.SECRET_NAME }}`).\n" +
-            "2. **Menjalankan Job Deployment di Setiap Pull Request:** Pastikan tahap CD hanya berjalan ketika event `push` terjadi pada branch `main` atau `master` menggunakan klausa kondisional `if: github.ref == 'refs/heads/main'`.\n" +
-            "3. **Menggunakan `npm install` alih-alih `npm ci` di Runner:** Di CI runner, gunakan `npm ci` agar instalasi dependensi strictly mengikuti versi persis di `package-lock.json`.\n" +
-            "4. **Lupa Memasang Action Timeout:** Jika sebuah tes menggantung (infinite loop), runner akan terus menyala dan menguras kuota menit gratis GitHub Actions milikmu.\n\n" +
+            "1. **Menjalankan Job Deployment di Event `pull_request`:** Jangan pernah mendeploy saat PR dibuat! Pasang selalu filter kondisional `if: github.ref == 'refs/heads/main'` agar tahap rilis hanya berjalan saat kode sudah sah dimerge ke cabang utama.\n" +
+            "2. **Menyimpan Kredensial Produksi di Git Commit:** Menuliskan secret langsung di file teks repositori adalah penyebab nomor satu pembobolan database dan tagihan cloud AWS membengkak.\n" +
+            "3. **Tidak Menetapkan Batas Waktu (`timeout-minutes`):** Jika salah satu unit test mengalami infinite loop, runner GitHub Actions akan terus menyala berjam-jam dan menghabiskan kuota gratis bulanan akunmu.\n" +
+            "4. **Menggunakan `npm install` alih-alih `npm ci`:** Mengakibatkan hasil build di CI tidak identik dengan lingkungan komputer lokal developer.\n\n" +
             "---\n\n" +
-            "## Kaitan ke Dunia Kerja\n\n" +
-            "Kemampuan menyusun pipeline CI/CD dengan GitHub Actions atau Vercel adalah syarat utama dalam budaya kerja DevOps dan Agile modern. Perusahaan tidak lagi menerima rilis manual 'upload via FTP'. Setiap perubahan kode wajib melewati pemeriksaan tes otomatis di PR sebelum bisa masuk ke produksi.",
+            "## Kaitan ke Dunia Kerja & Budaya Agile Modern\n\n" +
+            "Di industri software berskala besar, developer melakukan *deploy* puluhan kali dalam sehari. Budaya ini hanya bisa terwujud jika pipeline CI/CD sudah matang. Memahami struktur GitHub Actions, runner caching, dan manajemen secret adalah keterampilan wajib yang dicari oleh setiap tim rekayasa perangkat lunak modern.",
         },
         {
           kind: "step",
@@ -1959,32 +2041,26 @@ export const deploymentTrack: Track = {
             note: "Command vercel --prod langsung mempublikasikan aplikasi ke URL produksi tanpa perlu setting Nginx.",
           },
           instruction:
-            "Tuliskan perintah CLI Vercel untuk melakukan publikasi aplikasi secara langsung ke lingkungan produksi.",
-          starterCode: "# Tulis perintah vercel di bawah ini\n",
+            "Publikasikan aplikasi web secara langsung ke lingkungan produksi menggunakan perintah CLI Vercel.",
+          starterCode: "# Deploy ke production di bawah ini\n",
           language: "text",
           tests: [
-                      {
-                        "pattern": "vercel\\s+--prod$",
-                        "message": "CLI Vercel men-deploy ke lingkungan produksi bila diberi flag `--prod`. Tanpa flag itu, yang dibuat deployment preview dengan URL sendiri. Inilah inti PaaS: kamu tidak mengurus server, hanya menyerahkan kode."
-                      }
-                    ],
+            {
+              pattern: "vercel\\s+--prod$",
+              message: "CLI Vercel men-deploy ke lingkungan produksi bila diberi flag `--prod`. Tanpa flag itu, yang dibuat deployment preview dengan URL sendiri. Inilah inti PaaS: kamu tidak mengurus server, hanya menyerahkan kode.",
+            },
+          ],
           solution: "vercel --prod",
-                    susunKode: {
-                      question:
-                        "Susun perintah Vercel CLI vercel --prod untuk rilis produksi.",
-                      potongan: [
-                        "vercel",
-                        "--prod",
-                      ],
-                      pengecoh: [
-                        "vercel-deploy",
-                        "--production",
-                      ],
-                      pemisah: " ",
-                      explanation:
-                        "Mempublikasikan aplikasi web langsung ke lingkungan produksi pada Vercel CLI menggunakan perintah `vercel --prod`. Penggunaan bendera panjang `--production` atau CLI 'vercel-deploy' adalah kesalahan yang keliru.",
-                    },
-                  },
+          susunKode: {
+            question:
+              "Susun perintah Vercel CLI vercel --prod untuk rilis produksi.",
+            potongan: ["vercel", "--prod"],
+            pengecoh: ["vercel-deploy", "--production"],
+            pemisah: " ",
+            explanation:
+              "Mempublikasikan aplikasi web langsung ke lingkungan produksi pada Vercel CLI menggunakan perintah `vercel --prod`. Penggunaan bendera panjang `--production` atau CLI 'vercel-deploy' adalah kesalahan yang keliru.",
+          },
+        },
         {
           kind: "step",
           id: "deploy-5-2",
@@ -2010,32 +2086,26 @@ export const deploymentTrack: Track = {
             note: "Event on: [push, pull_request] memastikan skrip otomatis berjalan saat ada commit baru maupun PR.",
           },
           instruction:
-            "Konfigurasikan baris pemicu `on:` agar workflow otomatis berjalan apabila terdapat dorongan kode (`push`) maupun usulan perubahan (`pull_request`).",
-          starterCode: "# Tulis baris on di bawah ini\n",
+            "Konfigurasikan baris pemicu `on:` pada file workflow GitHub Actions agar berjalan otomatis saat ada event `push` maupun `pull_request`.",
+          starterCode: "name: CI Workflow\n# Tentukan pemicu event di bawah ini:\n",
           language: "text",
           tests: [
-                      {
-                        "pattern": "on:\\s*\\[\\s*push\\s*,\\s*pull_request\\s*\\]$",
-                        "message": "Bagian `on:` menentukan kejadian pemicu workflow, dan beberapa pemicu ditulis sebagai array YAML di dalam kurung siku dipisah koma. Dua pemicu paling umum: setiap dorongan commit, dan setiap Pull Request — yang kedua itulah yang membuat test berjalan sebelum kode di-merge."
-                      }
-                    ],
+            {
+              pattern: "on:\\s*\\[\\s*push\\s*,\\s*pull_request\\s*\\]$",
+              message: "Bagian `on:` menentukan kejadian pemicu workflow, dan beberapa pemicu ditulis sebagai array YAML di dalam kurung siku dipisah koma. Dua pemicu paling umum: setiap dorongan commit, dan setiap Pull Request — yang kedua itulah yang membuat test berjalan sebelum kode di-merge.",
+            },
+          ],
           solution: "on: [push, pull_request]",
-                                        susunKode: {
-                                          question:
-                                            "Susun event pemicu push dan pull_request di GitHub Actions.",
-                                          potongan: [
-                                            "on:",
-                                            "[push, pull_request]",
-                                          ],
-                                          pengecoh: [
-                                            "trigger:",
-                                            "[commit, merge_request]",
-                                          ],
-                                          pemisah: " ",
-                                          explanation:
-                                            "Penentu event pemicu eksekusi workflow GitHub Actions menggunakan blok `on: [push, pull_request]`. Penggunaan nama event 'commit' atau 'merge_request' (istilah GitLab CI) adalah jebakan antar-CI yang sering keliru.",
-                                        },
-                                      },
+          susunKode: {
+            question:
+              "Susun event pemicu push dan pull_request di GitHub Actions.",
+            potongan: ["on:", "[push, pull_request]"],
+            pengecoh: ["trigger:", "[commit, merge_request]"],
+            pemisah: " ",
+            explanation:
+              "Penentu event pemicu eksekusi workflow GitHub Actions menggunakan blok `on: [push, pull_request]`. Penggunaan nama event 'commit' atau 'merge_request' (istilah GitLab CI) adalah jebakan antar-CI yang sering keliru.",
+          },
+        },
         {
           kind: "step",
           id: "deploy-5-3",
@@ -2058,36 +2128,30 @@ export const deploymentTrack: Track = {
             note: "Menggunakan npm ci di CI runner memastikan versi dependensi persis sama dengan package-lock.json.",
           },
           instruction:
-            "Tambahkan satu step khusus yang menjalankan skrip pengujian bawaan Node Package Manager (`npm test`).",
-          starterCode: "# Tulis step npm test di bawah ini\n",
+            "Tambahkan satu item step pada job CI yang mengeksekusi skrip automated test bawaan (`npm test`).",
+          starterCode: "    steps:\n      - uses: actions/checkout@v4\n      - run: npm ci\n      # Tambahkan step eksekusi pengujian di bawah ini:\n",
           language: "text",
           tests: [
-                      {
-                        "pattern": "-\\s+run:",
-                        "message": "Satu langkah yang menjalankan perintah shell ditulis sebagai item daftar YAML dengan kunci `run:`. Perhatikan tanda hubung dan spasi sesudahnya — indentasi YAML tidak boleh memakai tab."
-                      },
-                      {
-                        "pattern": "npm\\s+test$",
-                        "message": "Isi dengan perintah pengujian proyeknya. Di CI, biasanya didahului langkah `npm ci` (bukan `npm install`) supaya versi paket persis mengikuti lockfile."
-                      }
-                    ],
+            {
+              pattern: "-\\s+run:",
+              message: "Satu langkah yang menjalankan perintah shell ditulis sebagai item daftar YAML dengan kunci `run:`. Perhatikan tanda hubung dan spasi sesudahnya — indentasi YAML tidak boleh memakai tab.",
+            },
+            {
+              pattern: "npm\\s+test$",
+              message: "Isi dengan perintah pengujian proyeknya. Di CI, biasanya didahului langkah `npm ci` (bukan `npm install`) supaya versi paket persis mengikuti lockfile.",
+            },
+          ],
           solution: "- run: npm test",
-                    susunKode: {
-                      question:
-                        "Susun step workflow - run: npm test di GitHub Actions.",
-                      potongan: [
-                        "- run:",
-                        "npm test",
-                      ],
-                      pengecoh: [
-                        "- exec:",
-                        "npm run testing",
-                      ],
-                      pemisah: " ",
-                      explanation:
-                        "Menjalankan perintah terminal di dalam step GitHub Actions workflow menggunakan instruksi `- run: perintah`. Menggantikan kata `run` dengan `exec` adalah kesalahan sintaksis YAML workflow yang sering keliru.",
-                    },
-                  },
+          susunKode: {
+            question:
+              "Susun step workflow - run: npm test di GitHub Actions.",
+            potongan: ["- run:", "npm test"],
+            pengecoh: ["- exec:", "npm run testing"],
+            pemisah: " ",
+            explanation:
+              "Menjalankan perintah terminal di dalam step GitHub Actions workflow menggunakan instruksi `- run: perintah`. Menggantikan kata `run` dengan `exec` adalah kesalahan sintaksis YAML workflow yang sering keliru.",
+          },
+        },
         {
           kind: "step",
           id: "deploy-5-4",
@@ -2108,36 +2172,30 @@ export const deploymentTrack: Track = {
             note: "Klausa if mencegah rilis otomatis dari cabang percobaan (feature branch).",
           },
           instruction:
-            "Tambahkan blok kondisional (`if:`) agar job deployment ini hanya dijalankan apabila referensi cabang merujuk tepat ke branch `refs/heads/main`.",
-          starterCode: "# Tulis klausa if di bawah ini\n",
+            "Tambahkan klausa kondisional `if:` pada job deployment agar hanya dieksekusi apabila referensi branch merujuk tepat ke `refs/heads/main`.",
+          starterCode: "  deploy:\n    needs: test\n    # Tambahkan filter cabang main di bawah ini:\n    runs-on: ubuntu-latest\n",
           language: "text",
           tests: [
-                      {
-                        "pattern": "if:\\s*github\\.ref",
-                        "message": "Sebuah langkah dijalankan bersyarat lewat kunci `if:`, dan konteks yang berisi referensi git saat ini adalah `github.ref`."
-                      },
-                      {
-                        "pattern": "['\"]refs/heads/main['\"]$",
-                        "message": "Bandingkan dengan referensi branch utama dalam bentuk lengkapnya (`refs/heads/<branch>`), bukan hanya nama branch-nya. Tanpa syarat ini, setiap Pull Request akan ikut men-deploy ke produksi."
-                      }
-                    ],
+            {
+              pattern: "if:\\s*github\\.ref",
+              message: "Sebuah langkah dijalankan bersyarat lewat kunci `if:`, dan konteks yang berisi referensi git saat ini adalah `github.ref`.",
+            },
+            {
+              pattern: "['\"]refs/heads/main['\"]$",
+              message: "Bandingkan dengan referensi branch utama dalam bentuk lengkapnya (`refs/heads/<branch>`), bukan hanya nama branch-nya. Tanpa syarat ini, setiap Pull Request akan ikut men-deploy ke produksi.",
+            },
+          ],
           solution: "if: github.ref == 'refs/heads/main'",
-                                        susunKode: {
-                                          question:
-                                            "Susun kondisi filter cabang utama refs/heads/main di GitHub Actions.",
-                                          potongan: [
-                                            "if: github.ref ==",
-                                            "'refs/heads/main'",
-                                          ],
-                                          pengecoh: [
-                                            "when: branch ==",
-                                            "'main_branch'",
-                                          ],
-                                          pemisah: " ",
-                                          explanation:
-                                            "Kondisi eksekusi job GitHub Actions membatasi branch utama menggunakan `if: github.ref == 'refs/heads/main'`. Kata 'when:' atau nama branch 'main_branch' adalah jebakan istilah CI lain yang sering membingungkan pembelajar.",
-                                        },
-                                      },
+          susunKode: {
+            question:
+              "Susun kondisi filter cabang utama refs/heads/main di GitHub Actions.",
+            potongan: ["if: github.ref ==", "'refs/heads/main'"],
+            pengecoh: ["when: branch ==", "'main_branch'"],
+            pemisah: " ",
+            explanation:
+              "Kondisi eksekusi job GitHub Actions membatasi branch utama menggunakan `if: github.ref == 'refs/heads/main'`. Kata 'when:' atau nama branch 'main_branch' adalah jebakan istilah CI lain yang sering membingungkan pembelajar.",
+          },
+        },
         {
           kind: "step",
           id: "deploy-5-5",
@@ -2157,34 +2215,26 @@ export const deploymentTrack: Track = {
             note: "GitHub Actions otomatis menyamarkan (masking) nilai secrets menjadi *** di tampilan log rilis.",
           },
           instruction:
-            "Panggil variabel rahasia bernama `DEPLOY_KEY` dari vault repository menggunakan sintaks ekspresi interpolasi rahasia bawaan GitHub.",
-          starterCode: "# Tulis interpolasi secrets di bawah ini\n",
+            "Panggil variabel rahasia bernama `DEPLOY_KEY` dari vault repository menggunakan sintaks ekspresi interpolasi rahasia GitHub Actions.",
+          starterCode: "      with:\n        key: # Sisipkan ekspresi rahasia DEPLOY_KEY di sini\n",
           language: "text",
           tests: [
-                      {
-                        "pattern": "\\$\\{\\{\\s*secrets\\.DEPLOY_KEY\\s*\\}\\}$",
-                        "message": "Nilai rahasia di GitHub Actions dibaca lewat konteks `secrets` di dalam kurung kurawal ganda. Nilainya disimpan di Settings → Secrets, tidak pernah muncul di log (GitHub menyensornya otomatis), dan tidak tersedia untuk Pull Request dari fork — itu sengaja, supaya orang luar tidak bisa mencuri kredensialmu lewat PR."
-                      }
-                    ],
+            {
+              pattern: "\\$\\{\\{\\s*secrets\\.DEPLOY_KEY\\s*\\}\\}$",
+              message: "Nilai rahasia di GitHub Actions dibaca lewat konteks `secrets` di dalam kurung kurawal ganda. Nilainya disimpan di Settings → Secrets, tidak pernah muncul di log (GitHub menyensornya otomatis), dan tidak tersedia untuk Pull Request dari fork — itu sengaja, supaya orang luar tidak bisa mencuri kredensialmu lewat PR.",
+            },
+          ],
           solution: "${{ secrets.DEPLOY_KEY }}",
-                    susunKode: {
-                      question:
-                        "Susun interpolasi rahasia DEPLOY_KEY di GitHub Actions.",
-                      potongan: [
-                        "${{",
-                        "secrets.DEPLOY_KEY",
-                        "}}",
-                      ],
-                      pengecoh: [
-                        "${",
-                        "env.DEPLOY_KEY",
-                        "}$",
-                      ],
-                      pemisah: "",
-                      explanation:
-                        "Membaca variabel rahasia (repository secrets) pada GitHub Actions menggunakan ekspresi interpolasi `${{ secrets.NAMA_SECRET }}`. Penggunaan tanda `${` tanpa kurawal ganda adalah kekeliruan sintaks yang sering keliru.",
-                    },
-                  },
+          susunKode: {
+            question:
+              "Susun interpolasi rahasia DEPLOY_KEY di GitHub Actions.",
+            potongan: ["${{", "secrets.DEPLOY_KEY", "}}"],
+            pengecoh: ["${", "env.DEPLOY_KEY", "}$"],
+            pemisah: "",
+            explanation:
+              "Membaca variabel rahasia (repository secrets) pada GitHub Actions menggunakan ekspresi interpolasi `${{ secrets.NAMA_SECRET }}`. Penggunaan tanda `${` tanpa kurawal ganda adalah kekeliruan sintaks yang sering keliru.",
+          },
+        },
         {
           kind: "step",
           id: "deploy-5-6",
@@ -2200,32 +2250,26 @@ export const deploymentTrack: Track = {
             note: "Preview deployment mempermudah verifikasi tampilan bersama tim tanpa mengganggu server produksi utama.",
           },
           instruction:
-            "Tuliskan perintah CLI Vercel untuk mempublikasikan aplikasi ke lingkungan pratinjau (`--preview`).",
-          starterCode: "# Tulis perintah vercel preview di bawah ini\n",
+            "Buat deployment pratinjau (preview environment) menggunakan CLI Vercel untuk menguji perubahan tampilan sebelum rilis utama.",
+          starterCode: "# Deploy ke preview environment di bawah ini\n",
           language: "text",
           tests: [
-                      {
-                        "pattern": "vercel\\s+--preview$",
-                        "message": "Setiap Pull Request idealnya punya URL sendiri agar reviewer bisa mencoba hasilnya, bukan hanya membaca diff. CLI Vercel membuatnya dengan flag `--preview` (dan itu perilaku default-nya tanpa `--prod`)."
-                      }
-                    ],
+            {
+              pattern: "vercel\\s+--preview$",
+              message: "Setiap Pull Request idealnya punya URL sendiri agar reviewer bisa mencoba hasilnya, bukan hanya membaca diff. CLI Vercel membuatnya dengan flag `--preview` (dan itu perilaku default-nya tanpa `--prod`).",
+            },
+          ],
           solution: "vercel --preview",
-                    susunKode: {
-                      question:
-                        "Susun perintah Vercel CLI vercel --preview untuk lingkungan pratinjau.",
-                      potongan: [
-                        "vercel",
-                        "--preview",
-                      ],
-                      pengecoh: [
-                        "vercel-cli",
-                        "--staging",
-                      ],
-                      pemisah: " ",
-                      explanation:
-                        "Mempublikasikan aplikasi ke lingkungan pratinjau (preview environment) menggunakan perintah `vercel --preview`. Penggunaan bendera `--staging` atau nama CLI 'vercel-cli' adalah kekeliruan yang keliru.",
-                    },
-                  },
+          susunKode: {
+            question:
+              "Susun perintah Vercel CLI vercel --preview untuk lingkungan pratinjau.",
+            potongan: ["vercel", "--preview"],
+            pengecoh: ["vercel-cli", "--staging"],
+            pemisah: " ",
+            explanation:
+              "Mempublikasikan aplikasi ke lingkungan pratinjau (preview environment) menggunakan perintah `vercel --preview`. Penggunaan bendera `--staging` atau nama CLI 'vercel-cli' adalah kekeliruan yang keliru.",
+          },
+        },
         {
           kind: "quiz",
           id: "deploy-5-kuis",
@@ -2344,58 +2388,98 @@ export const deploymentTrack: Track = {
           id: "deploy-6-m1",
           title: "Pemantauan Server, Tracking Error, Backup, dan Penanganan Insiden",
           body:
-            "# Pengertian: Mengapa Monitoring Sangat Penting?\n\n" +
-            "Deployment bukanlah akhir dari perjalanan sebuah aplikasi, melainkan awal dari fase operasional. Di lingkungan produksi, server dapat mengalami masalah sewaktu-waktu: memori RAM penuh, harddisk tersumbat log, database terkunci, atau aplikasi mengalami unhandled crash.\n\n" +
-            "Tujuan utama dari **Monitoring & Observability** adalah mengetahui bahwa aplikasimu sedang bermasalah **sebelum pengguna komplain di media sosial**. Modul ini membahas 4 pilar utama operasional server produksi:\n\n" +
-            "1. **Log Management:** Membaca catatan aktivitas aplikasi dan server.\n" +
-            "2. **Uptime & Health Checking:** Pemantauan status aktif/mati secara otomatis.\n" +
-            "3. **Error Tracking (Sentry):** Menangkap exception crash lengkap dengan stack trace.\n" +
-            "4. **Database Backup & Disaster Recovery:** Menyelamatkan data dari ancaman kehancuran total.\n\n" +
+            "# Pengertian: Mengapa Monitoring Sangat Penting di Industri?\n\n" +
+            "Tahap *deployment* bukanlah akhir dari tanggung jawab seorang software engineer, melainkan awal dari fase operasional produksi (*Day 2 Operations*). Di lingkungan nyata, hal-hal buruk pasti akan terjadi cepat atau lambat: memori server bocor (*memory leak*), harddisk tersumbat catatan log, koneksi database mencapai batas pool, atau API pihak ketiga mati mendadak.\n\n" +
+            "Prinsip utama dari **Monitoring & Observability** adalah: **Tim engineering harus mengetahui adanya masalah dan memperbaikinya sebelum pengguna membuat komplain di media sosial.** Modul ini membahas 4 pilar utama operasional server produksi modern:\n\n" +
+            "1. **Structured Log Management:** Membaca dan menganalisis rekaman transaksi aplikasi.\n" +
+            "2. **Uptime & Health Checking:** Memantau ketersediaan sistem 24/7 dengan notifikasi instan.\n" +
+            "3. **Real-time Error Tracking (Sentry):** Menangkap exception crash lengkap dengan stack trace dan konteks pengguna.\n" +
+            "4. **Disaster Recovery & Database Backup Drill:** Menyelamatkan data bisnis saat server fisik rusak total.\n\n" +
             "---\n\n" +
             "## Mental Model: Ekosistem Pemantauan Server Produksi\n\n" +
             "```text\n" +
             "                                ┌─────────────────────────────────┐\n" +
             "                                │ Uptime Monitoring (UptimeRobot) │\n" +
-            "                                │ Ping Endpoint /health (tiap 5m) │\n" +
+            "                                │ Ping Endpoint /health (tiap 1m) │\n" +
             "                                └────────────────┬────────────────┘\n" +
-            "                                                 │ (Alert jika Down)\n" +
+            "                                                 │ (Alert ke Telegram/Slack jika Down)\n" +
             "                                                 ▼\n" +
             "┌─────────────────────────┐            ┌─────────────────────────┐\n" +
             "│  Pengguna / Client Web  │ ─────────► │  Server VPS / Container │\n" +
             "└─────────────────────────┘            └────────────┬────────────┘\n" +
             "                                                    │\n" +
             "                ┌───────────────────────────────────┼──────────────────────────────────┐\n" +
-            "                │ (Crash Exception)                 │ (Log Transaksi)                  │ (Jadwal Backup)\n" +
+            "                │ (Crash Exception)                 │ (Log Transaksi Terstruktur)      │ (Jadwal Otomasi Backup)\n" +
             "                ▼                                   ▼                                  ▼\n" +
             "┌───────────────────────────────┐ ┌──────────────────────────────────┐ ┌───────────────────────────────┐\n" +
             "│ Error Tracker (Sentry.io)     │ │ Structured Logs (docker logs)    │ │ Scheduled Backup (pg_dump)   │\n" +
-            "│ Menangkap Stacktrace & Error  │ │ Mencatat Rekaman HTTP & Debug    │ │ Mengirimkan Backup ke AWS S3  │\n" +
+            "│ Menangkap Stacktrace & State  │ │ Rotasi Log Max-Size 10MB         │ │ Unggah ke Offsite AWS S3/R2 │\n" +
             "└───────────────────────────────┘ └──────────────────────────────────┘ └───────────────────────────────┘\n" +
             "```\n\n" +
             "---\n\n" +
-            "## Ringkasan Tools & Perintah Pemantauan\n\n" +
-            "| Fitur / Komponen | Tool / Perintah | Kegunaan Utama |\n" +
-            "|---|---|---|\n" +
-            "| **Log Terminal** | `docker logs -f --tail 100 <container>` | Membaca 100 baris log terakhir kontainer |\n" +
-            "| **Uptime Checking**| `/health` endpoint + UptimeRobot | Notifikasi Telegram/Email jika server mati |\n" +
-            "| **Error Tracking**| `Sentry.init({ dsn: '...' })` | Menangkap crash unhandled JavaScript/Node |\n" +
-            "| **Metrik Disk** | `df -h` | Memeriksa kapasitas ruang sisa di harddisk VPS |\n" +
-            "| **Metrik RAM** | `free -m` | Memeriksa ketersediaan memori RAM |\n" +
-            "| **Metrik CPU** | `htop` / `top` | Memantau proses yang memakan daya CPU tinggi |\n" +
-            "| **DB Backup** | `pg_dump -U user db > backup.sql` | Membuang (*dump*) data PostgreSQL ke berkas SQL |\n" +
-            "| **Evaluasi** | Budaya **Post-Mortem** | Laporan analisis insiden tanpa menyalahkan (*blameless*) |\n\n" +
+            "## Log Terstruktur & Bahaya Fatal Log Bloat di Docker\n\n" +
+            "Di aplikasi produksi, hindari menggunakan `console.log('error disini')` berupa teks polos acak. Gunakan pustaka logging terstruktur (seperti **Pino** atau **Winston**) yang mencetak format JSON:\n" +
+            "```json\n" +
+            '{"level":"error","time":"2026-07-28T10:00:05Z","userId":42,"reqId":"abc-123","msg":"Payment gateway timeout"}\n' +
+            "```\n\n" +
+            "### Jebakan Nomor Satu VPS: Harddisk Penuh Akibat Log Docker!\n" +
+            "Secara bawaan, Docker menyimpan log kontainer dalam format JSON di `/var/lib/docker/containers/` **tanpa batasan ukuran**. Setelah beroperasi selama 3–6 bulan, file log ini dapat membengkak hingga 30–50 GB dan menghabiskan 100% sisa ruang harddisk VPS! Ketika disk penuh, PostgreSQL otomatis mogok (*read-only lock*) dan server mati total.\n\n" +
+            "**Solusi Wajib Industri:** Tambahkan konfigurasi rotasi log pada `compose.yaml`:\n" +
+            "```yaml\n" +
+            "services:\n" +
+            "  app:\n" +
+            "    logging:\n" +
+            '      driver: "json-file"\n' +
+            "      options:\n" +
+            '        max-size: "10m"   # Maksimal 10 Megabytes per file log\n' +
+            '        max-file: "3"     # Simpan maksimal 3 file lama, sisanya dihapus otomatis\n' +
+            "```\n\n" +
             "---\n\n" +
-            "## Analogi Dunia Nyata: Ruang Kontrol Kokpit Pesawat Terbang\n\n" +
-            "Bayangkan menjalankan server produksi seperti menerbangkan pesawat komersial. **Log** adalah kotak hitam (*black box*) yang mencatat setiap peristiwa. **Uptime Monitoring** adalah alaram indikator ketinggian. **Sentry** adalah sistem peringatan dini kegagalan mesin, dan **Post-Mortem** adalah investigasi Komite Keselamatan Penerbangan setelah terjadi insiden untuk memastikan kesalahan serupa tidak pernah terulang.\n\n" +
+            "## Uptime Monitoring & Endpoint Health Check yang Benar\n\n" +
+            "Jangan membuat endpoint `/health` yang hanya mengembalikan status statis `{ status: 'ok' }`. Endpoint kesehatan yang baik wajib memverifikasi koneksi komponen penting di belakang layar:\n\n" +
+            "```javascript\n" +
+            "app.get('/health', async (req, res) => {\n" +
+            "  try {\n" +
+            "    await db.query('SELECT 1');       // Verifikasi database aktif\n" +
+            "    await redis.ping();               // Verifikasi redis aktif\n" +
+            "    res.status(200).json({ status: 'healthy', uptime: process.uptime() });\n" +
+            "  } catch (err) {\n" +
+            "    res.status(503).json({ status: 'unhealthy', error: err.message });\n" +
+            "  }\n" +
+            "});\n" +
+            "```\n" +
+            "Daftarkan URL `https://myapp.com/health` ke layanan monitoring gratis (seperti **UptimeRobot** atau **Better Stack**). Atur agar notifikasi instan dikirim ke bot Telegram atau webhook channel Slack tim ketika HTTP status bukan 200.\n\n" +
+            "---\n\n" +
+            "## Backup Database di Lingkungan Docker & Golden Rule of Restore\n\n" +
+            "Jika database PostgreSQL kamu berjalan di dalam kontainer Docker, menjalankan `pg_dump` langsung di terminal host VPS akan gagal jika client postgresql tidak terinstal di host. Perintah industri yang benar adalah mengeksekusinya via Docker CLI:\n\n" +
+            "```bash\n" +
+            "# 1. Ekstrak backup dari container database:\n" +
+            "docker exec -t db_container pg_dump -U postgres mydb > backup_$(date +%F).sql\n" +
+            "\n" +
+            "# 2. Kompresi dan kirim ke Cloud Storage terpisah (Offsite):\n" +
+            "gzip backup_*.sql\n" +
+            "aws s3 cp backup_*.sql.gz s3://my-backup-bucket/db/\n" +
+            "```\n\n" +
+            "### The Golden Rule of Backup:\n" +
+            '> **"Backup yang belum pernah diuji coba proses restore-nya BUKANLAH backup."**\n' +
+            "Banyak tragedi perusahaan terjadi di mana tim merasa tenang karena memiliki skrip backup otomatis harian. Saat server terbakar, baru disadari bahwa file backup selama 6 bulan terakhir kosong (`0 bytes`) karena password database salah! Selalu jadwalkan simulasi restore secara berkala ke database lokal untuk membuktikan file SQL tersebut benar-benar bisa di-import kembali.\n\n" +
+            "---\n\n" +
+            "## Budaya & Format Post-Mortem Blameless\n\n" +
+            "Ketika insiden server mati terjadi di produksi, tim engineering profesional pantang menyalahkan individu (*no blaming individual*). Pendekatan yang benar adalah **Blameless Post-Mortem**: berasumsi bahwa setiap orang berniat baik, dan jika ada kesalahan tombol yang ditekan, itu adalah kegagalan sistem pengaman (*guardrails*).\n\n" +
+            "Dokumen Post-Mortem memuat 4 bagian utama:\n" +
+            "1. **Ringkasan & Dampak:** Waktu mulai, waktu pulih, total durasi downtime, dan estimasi transaksi yang terhambat.\n" +
+            "2. **Timeline Kronologis:** Kejadian menit demi menit dari alarm pertama berbunyi sampai mitigasi selesai.\n" +
+            "3. **Root Cause Analysis (5 Whys):** Bertanya *mengapa* 5 kali untuk menemukan akar masalah struktural (bukan sekadar gejala).\n" +
+            "4. **Action Items (Pencegahan):** Daftar pekerjaan teknis terstruktur dengan penanggung jawab dan tenggat waktu agar insiden yang sama tidak pernah bisa terulang kembali.\n\n" +
             "---\n\n" +
             "## Jebakan & Kesalahan Umum Pemula\n\n" +
-            "1. **Menyimpan Backup Database di VPS yang Sama:** Jika server VPS milikmu terbakar atau mengalami kerusakan disk total, file backup yang tersimpan di server yang sama akan **ikut hancur**. Selalu kirimkan backup ke penyimpanan luar (*offsite storage* seperti AWS S3 atau Cloudflare R2).\n" +
-            "2. **Backup yang Belum Pernah Diuji Restore BUKANLAH Backup:** Banyak developer merasa aman karena memiliki skrip backup harian. Saat bencana terjadi, baru disadari bahwa file backup tersebut korup atau password kuncinya hilang. Selalu lakukan **uji simulasikan restore** secara berkala.\n" +
-            "3. **Membiarkan Log Membengkak Tanpa Logrotate:** Log aplikasi dan Docker yang ditulis terus-menerus tanpa rotasi akan memenuhi ruang disk VPS hingga 100%. Disk penuh adalah penyebab nomor satu pembekuan database PostgreSQL/MySQL.\n" +
-            "4. **Menyalahkan Individu saat Terjadi Insiden (Blaming Culture):** Saat server down, fokus utama Post-Mortem haruslah memperbaiki **kekurangan sistem atau otomatisasi** (*blameless post-mortem*), bukan mencari kambing hitam siapa yang salah menekan tombol.\n\n" +
+            "1. **Menyimpan Backup Database di VPS yang Sama:** Jika VPS mengalami kerusakan harddisk total atau data center terbakar, file backup yang ada di dalamnya ikut musnah. Backup wajib dikirim ke *Offsite Storage* (AWS S3, Cloudflare R2, Google Cloud Storage).\n" +
+            "2. **Mengabaikan `docker stats` dan `df -h`:** Menunggu server mati baru mengecek kapasitas. Jadwalkan alaram jika pemakaian disk mencapai >80%.\n" +
+            "3. **Membanjiri Sentry dengan Error Tidak Penting:** Menangkap seluruh error 404 user akan menguras kuota Sentry. Saring hanya unhandled exception 5xx dan critical failure.\n" +
+            "4. **Mencari Kambing Hitam Pasca Insiden:** Menghukum developer pembuat bug merusak transparansi tim dan membuat anggota tim takut melaporkan masalah di kemudian hari.\n\n" +
             "---\n\n" +
-            "## Kaitan ke Dunia Kerja\n\n" +
-            "Di dunia profesional, peran SRE (Site Reliability Engineer) dan On-Call Engineer bertanggung jawab menjaga persentase SLA (Service Level Agreement, misal 99.9% uptime). Mampu mengonfigurasi Sentry, membaca log Docker, mengatur backup terenkripsi, serta memimpin sesi Post-Mortem adalah nilai plus yang sangat dihargai oleh perusahaan tech modern.",
+            "## Kaitan ke Dunia Kerja & Peran Site Reliability Engineering (SRE)\n\n" +
+            "Di industri software skala global, stabilitas sistem diukur menggunakan SLA (Service Level Agreement, misal 99.9% = batas toleransi downtime hanya 43 menit per bulan). Engineer yang menguasai observability, logging rotasi, strategi disaster recovery, dan disiplin penanganan insiden adalah talenta berharga tinggi yang menjadi tulang punggung keandalan sistem korporat.",
         },
         {
           kind: "step",
@@ -2412,35 +2496,29 @@ export const deploymentTrack: Track = {
           },
           instruction:
             "Tampilkan cuplikan rekaman riwayat log dari kontainer bernama `app`, terbatas hanya pada `100` baris terakhir.",
-          starterCode: "# Tulis perintah docker logs di bawah ini\n",
+          starterCode: "# Baca riwayat log kontainer di bawah ini\n",
           language: "text",
           tests: [
-                      {
-                        "pattern": "docker\\s+logs",
-                        "message": "Log container dibaca dengan `docker logs` diikuti nama atau id container."
-                      },
-                      {
-                        "pattern": "--tail\\s+100\\s+app$",
-                        "message": "Batasi jumlah baris terakhir dengan flag `--tail` agar tidak menunggu ribuan baris tercetak. Untuk memantau log yang terus masuk, tambahkan `-f`. Berhentilah memakai `docker logs` sebagai satu-satunya sumber saat produksi: container yang dihapus membawa log-nya pergi."
-                      }
-                    ],
+            {
+              pattern: "docker\\s+logs",
+              message: "Log container dibaca dengan `docker logs` diikuti nama atau id container.",
+            },
+            {
+              pattern: "--tail\\s+100\\s+app$",
+              message: "Batasi jumlah baris terakhir dengan flag `--tail` agar tidak menunggu ribuan baris tercetak. Untuk memantau log yang terus masuk, tambahkan `-f`. Berhentilah memakai `docker logs` sebagai satu-satunya sumber saat produksi: container yang dihapus membawa log-nya pergi.",
+            },
+          ],
           solution: "docker logs --tail 100 app",
-                    susunKode: {
-                      question:
-                        "Susun perintah docker logs --tail 100 app untuk membaca log kontainer.",
-                      potongan: [
-                        "docker logs",
-                        "--tail 100 app",
-                      ],
-                      pengecoh: [
-                        "docker read-log",
-                        "--last 100 app",
-                      ],
-                      pemisah: " ",
-                      explanation:
-                        "Membaca cuplikan riwayat log kontainer Docker terbatas pada sekian baris terakhir menggunakan `docker logs --tail N nama_container`. Penggunaan bendera '--last' atau CLI 'read-log' adalah kekeliruan yang keliru.",
-                    },
-                  },
+          susunKode: {
+            question:
+              "Susun perintah docker logs --tail 100 app untuk membaca log kontainer.",
+            potongan: ["docker logs", "--tail 100 app"],
+            pengecoh: ["docker read-log", "--last 100 app"],
+            pemisah: " ",
+            explanation:
+              "Membaca cuplikan riwayat log kontainer Docker terbatas pada sekian baris terakhir menggunakan `docker logs --tail N nama_container`. Penggunaan bendera '--last' atau CLI 'read-log' adalah kekeliruan yang keliru.",
+          },
+        },
         {
           kind: "step",
           id: "deploy-6-2",
@@ -2460,36 +2538,30 @@ export const deploymentTrack: Track = {
             note: "Endpoint /health sebaiknya juga mengecek apakah koneksi ke Database dan Redis masih aktif.",
           },
           instruction:
-            "Tulis perintah `curl` dengan flag `-f` untuk menguji kesehatan endpoint `/health` pada server lokal port 3000.",
-          starterCode: "# Tulis perintah curl di bawah ini\n",
+            "Uji ketersediaan endpoint `/health` pada server lokal port 3000 dengan perintah `curl` berflag `-f` agar mengembalikan exit-code error jika status HTTP gagal.",
+          starterCode: "# Lakukan health check di bawah ini\n",
           language: "text",
           tests: [
-                      {
-                        "pattern": "curl\\s+-f",
-                        "message": "Pemeriksaan endpoint dari terminal memakai `curl`. Flag `-f` membuatnya mengembalikan status keluar tidak-nol saat HTTP-nya error — itu yang membuat perintah ini bisa dipakai di skrip monitoring dan healthcheck Docker."
-                      },
-                      {
-                        "pattern": "http://(localhost|127\\.0\\.0\\.1):3000/health$",
-                        "message": "Arahkan ke endpoint kesehatan aplikasimu. Endpoint itu sebaiknya juga memeriksa koneksi database, bukan sekadar membalas 200 — kalau tidak, monitoring bilang \"sehat\" sementara aplikasi tidak bisa melayani apa pun."
-                      }
-                    ],
+            {
+              pattern: "curl\\s+-f",
+              message: "Pemeriksaan endpoint dari terminal memakai `curl`. Flag `-f` membuatnya mengembalikan status keluar tidak-nol saat HTTP-nya error — itu yang membuat perintah ini bisa dipakai di skrip monitoring dan healthcheck Docker.",
+            },
+            {
+              pattern: "http://(localhost|127\\.0\\.0\\.1):3000/health$",
+              message: "Arahkan ke endpoint kesehatan aplikasimu. Endpoint itu sebaiknya juga memeriksa koneksi database, bukan sekadar membalas 200 — kalau tidak, monitoring bilang \"sehat\" sementara aplikasi tidak bisa melayani apa pun.",
+            },
+          ],
           solution: "curl -f http://localhost:3000/health",
-                                        susunKode: {
-                                          question:
-                                            "Susun perintah curl -f untuk health check endpoint /health.",
-                                          potongan: [
-                                            "curl -f",
-                                            "http://localhost:3000/health",
-                                          ],
-                                          pengecoh: [
-                                            "ping-url -f",
-                                            "http://localhost:3000/status",
-                                          ],
-                                          pemisah: " ",
-                                          explanation:
-                                            "Pengujian endpoint kesehatan HTTP yang mengembalikan fail-code jika HTTP status >= 400 menggunakan `curl -f URL`. CLI 'ping-url' atau endpoint `/status` adalah bentuk kesalahan testing yang jebakan dalam operasional.",
-                                        },
-                                      },
+          susunKode: {
+            question:
+              "Susun perintah curl -f untuk health check endpoint /health.",
+            potongan: ["curl -f", "http://localhost:3000/health"],
+            pengecoh: ["ping-url -f", "http://localhost:3000/status"],
+            pemisah: " ",
+            explanation:
+              "Pengujian endpoint kesehatan HTTP yang mengembalikan fail-code jika HTTP status >= 400 menggunakan `curl -f URL`. CLI 'ping-url' atau endpoint `/status` adalah bentuk kesalahan testing yang jebakan dalam operasional.",
+          },
+        },
         {
           kind: "step",
           id: "deploy-6-3",
@@ -2508,37 +2580,30 @@ export const deploymentTrack: Track = {
             note: "Sentry memangkas waktu investigasi bug produksi dari hitungan jam menjadi hitungan menit.",
           },
           instruction:
-            "Panggil fungsi inisialisasi dari objek Sentry dan masukkan objek konfigurasi berisi key DSN bernilai string `'my-dsn'`.",
-          starterCode: "// Tulis Sentry.init di bawah ini\n",
+            "Inisialisasi SDK error tracking Sentry pada aplikasi dengan memasukkan objek konfigurasi berisi key DSN bernilai `'my-dsn'`.",
+          starterCode: "// Inisialisasi Sentry di bawah ini\n",
           language: "text",
           tests: [
-                      {
-                        "pattern": "Sentry\\.init\\(",
-                        "message": "Inisialisasi SDK error tracking dipanggil sekali di titik paling awal aplikasi, sebelum kode lain berjalan — kalau tidak, error yang terjadi lebih dulu tidak terlaporkan."
-                      },
-                      {
-                        "pattern": "dsn\\s*:\\s*['\"]my-dsn['\"]",
-                        "message": "Opsi wajibnya `dsn`, yaitu alamat proyekmu di Sentry. Nilainya diambil dari variabel lingkungan di proyek nyata; DSN memang bukan rahasia besar, tapi menuliskannya langsung di kode berarti tidak bisa dibedakan antar lingkungan."
-                      }
-                    ],
+            {
+              pattern: "Sentry\\.init\\(",
+              message: "Inisialisasi SDK error tracking dipanggil sekali di titik paling awal aplikasi, sebelum kode lain berjalan — kalau tidak, error yang terjadi lebih dulu tidak terlaporkan.",
+            },
+            {
+              pattern: "dsn\\s*:\\s*['\"]my-dsn['\"]",
+              message: "Opsi wajibnya `dsn`, yaitu alamat proyekmu di Sentry. Nilainya diambil dari variabel lingkungan di proyek nyata; DSN memang bukan rahasia besar, tapi menuliskannya langsung di kode berarti tidak bisa dibedakan antar lingkungan.",
+            },
+          ],
           solution: "Sentry.init({ dsn: 'my-dsn' });",
-                                                                                                                                                                susunKode: {
-                                                                                                                                                                  question:
-                                                                                                                                                                    "Susun inisialisasi SDK Sentry dengan DSN key my-dsn.",
-                                                                                                                                                                  potongan: [
-                                                                                                                                                                    "Sentry.init({",
-                                                                                                                                                                    "dsn: 'my-dsn'",
-                                                                                                                                                                    "});",
-                                                                                                                                                                  ],
-                                                                                                                                                                  pengecoh: [
-                                                                                                                                                                    "Sentry.connect({",
-                                                                                                                                                                    "dsn_key: 'my-dsn'",
-                                                                                                                                                                  ],
-                                                                                                                                                                  pemisah: " ",
-                                                                                                                                                                  explanation:
-                                                                                                                                                                    "Inisialisasi SDK pelacakan eror Sentry pada aplikasi menggunakan metode `Sentry.init({ dsn: 'DSN_KEY' })`. Metode 'Sentry.connect' atau properti 'dsn_key' adalah kesalahan API SDK Sentry yang keliru dan jebakan.",
-                                                                                                                                                                },
-                                                                                                                                                              },
+          susunKode: {
+            question:
+              "Susun inisialisasi SDK Sentry dengan DSN key my-dsn.",
+            potongan: ["Sentry.init({", "dsn: 'my-dsn'", "});"],
+            pengecoh: ["Sentry.connect({", "dsn_key: 'my-dsn'"],
+            pemisah: " ",
+            explanation:
+              "Inisialisasi SDK pelacakan eror Sentry pada aplikasi menggunakan metode `Sentry.init({ dsn: 'DSN_KEY' })`. Metode 'Sentry.connect' atau properti 'dsn_key' adalah kesalahan API SDK Sentry yang keliru dan jebakan.",
+          },
+        },
         {
           kind: "step",
           id: "deploy-6-4",
@@ -2555,8 +2620,8 @@ export const deploymentTrack: Track = {
             note: "Flag -h membuat ukuran disk ditampilkan dalam unit GB/MB yang mudah dibaca manusia.",
           },
           instruction:
-            "Tulis perintah Linux untuk memeriksa sisa ruang kapasitas disk dalam format human-readable (`df -h`).",
-          starterCode: "# Tulis perintah df di sini\n",
+            "Periksa sisa kapasitas ruang penyimpanan harddisk di server Linux dalam format unit yang mudah dibaca manusia.",
+          starterCode: "# Periksa kapasitas disk di bawah ini\n",
           language: "text",
           tests: [
             {
@@ -2565,22 +2630,16 @@ export const deploymentTrack: Track = {
             },
           ],
           solution: "df -h",
-                    susunKode: {
-                      question:
-                        "Susun perintah df -h untuk mengecek sisa kapasitas disk.",
-                      potongan: [
-                        "df",
-                        "-h",
-                      ],
-                      pengecoh: [
-                        "disk-free",
-                        "-human",
-                      ],
-                      pemisah: " ",
-                      explanation:
-                        "Pemeriksaan sisa kapasitas penyimpanan disk pada Linux dalam format yang mudah dibaca manusia (human-readable) menggunakan perintah `df -h`. Perintah fiktif 'disk-free' mengelirukan pemula secara jebakan.",
-                    },
-                  },
+          susunKode: {
+            question:
+              "Susun perintah df -h untuk mengecek sisa kapasitas disk.",
+            potongan: ["df", "-h"],
+            pengecoh: ["disk-free", "-human"],
+            pemisah: " ",
+            explanation:
+              "Pemeriksaan sisa kapasitas penyimpanan disk pada Linux dalam format yang mudah dibaca manusia (human-readable) menggunakan perintah `df -h`. Perintah fiktif 'disk-free' mengelirukan pemula secara jebakan.",
+          },
+        },
         {
           kind: "step",
           id: "deploy-6-5",
@@ -2595,36 +2654,30 @@ export const deploymentTrack: Track = {
             note: "Selalu kirimkan berkas backup ke tempat penyimpanan luar (offsite storage) di luar VPS utama.",
           },
           instruction:
-            "Tulis perintah command-line `pg_dump` untuk mem-backup database PostgreSQL bernama `mydb` milik user `postgres` ke dalam berkas `backup.sql` menggunakan operator redirect `>`.",
-          starterCode: "# Tulis perintah pg_dump di bawah ini\n",
+            "Cadangkan seluruh skema dan data database PostgreSQL `mydb` milik user `postgres` ke dalam berkas `backup.sql` menggunakan alat `pg_dump` dan operator redirect `>`.",
+          starterCode: "# Ekstrak backup database di bawah ini\n",
           language: "text",
           tests: [
-                      {
-                        "pattern": "pg_dump\\s+-U\\s+postgres",
-                        "message": "Backup PostgreSQL memakai `pg_dump` dengan pengguna disebut lewat flag `-U`."
-                      },
-                      {
-                        "pattern": "mydb\\s*>\\s*backup\\.sql$",
-                        "message": "Sebutkan nama database, lalu alihkan keluarannya ke berkas dengan tanda `>`. Yang paling sering dilupakan: backup tanpa pernah diuji restore itu belum tentu backup — jadwalkan latihan restore secara berkala."
-                      }
-                    ],
+            {
+              pattern: "pg_dump\\s+-U\\s+postgres",
+              message: "Backup PostgreSQL memakai `pg_dump` dengan pengguna disebut lewat flag `-U`.",
+            },
+            {
+              pattern: "mydb\\s*>\\s*backup\\.sql$",
+              message: "Sebutkan nama database, lalu alihkan keluarannya ke berkas dengan tanda `>`. Yang paling sering dilupakan: backup tanpa pernah diuji restore itu belum tentu backup — jadwalkan latihan restore secara berkala.",
+            },
+          ],
           solution: "pg_dump -U postgres mydb > backup.sql",
-                                        susunKode: {
-                                          question:
-                                            "Susun perintah pg_dump untuk membuat backup database PostgreSQL.",
-                                          potongan: [
-                                            "pg_dump -U postgres",
-                                            "mydb > backup.sql",
-                                          ],
-                                          pengecoh: [
-                                            "postgres_dump -u postgres",
-                                            "mydb < backup.sql",
-                                          ],
-                                          pemisah: " ",
-                                          explanation:
-                                            "Membuat cadangan (backup) database PostgreSQL ke dalam berkas teks SQL menggunakan utilitas CLI `pg_dump -U user dbname > output.sql`. Menggunakan pengarah `<` adalah kesalahan fatal yang jebakan dalam backup.",
-                                        },
-                                      },
+          susunKode: {
+            question:
+              "Susun perintah pg_dump untuk membuat backup database PostgreSQL.",
+            potongan: ["pg_dump -U postgres", "mydb > backup.sql"],
+            pengecoh: ["postgres_dump -u postgres", "mydb < backup.sql"],
+            pemisah: " ",
+            explanation:
+              "Membuat cadangan (backup) database PostgreSQL ke dalam berkas teks SQL menggunakan utilitas CLI `pg_dump -U user dbname > output.sql`. Menggunakan pengarah `<` adalah kesalahan fatal yang jebakan dalam backup.",
+          },
+        },
         {
           kind: "step",
           id: "deploy-6-6",
@@ -2642,32 +2695,26 @@ export const deploymentTrack: Track = {
             note: "Post-Mortem yang baik memicu perbaikan otomatisasi dan daya tahan sistem secara jangka panjang.",
           },
           instruction:
-            "Tuliskan perintah terminal untuk membaca dokumen catatan analisis evaluasi insiden bernama `postmortem.md` menggunakan `cat`.",
-          starterCode: "# Tulis perintah cat postmortem di bawah ini\n",
+            "Kaji catatan evaluasi pasca-insiden dengan menampilkan seluruh isi berkas laporan `postmortem.md` ke layar terminal menggunakan perintah `cat`.",
+          starterCode: "# Baca dokumen laporan insiden di bawah ini\n",
           language: "text",
           tests: [
-                      {
-                        "pattern": "cat\\s+postmortem\\.md$",
-                        "message": "Isi berkas dibaca ke layar dengan `cat` diikuti nama berkasnya. Dokumen post-mortem ditulis tanpa menyalahkan orang (*blameless*) dan berisi empat hal: apa yang terjadi, dampaknya ke pengguna, akar masalahnya, dan tindakan pencegahan yang sudah dijadwalkan."
-                      }
-                    ],
+            {
+              pattern: "cat\\s+postmortem\\.md$",
+              message: "Isi berkas dibaca ke layar dengan `cat` diikuti nama berkasnya. Dokumen post-mortem ditulis tanpa menyalahkan orang (*blameless*) dan berisi empat hal: apa yang terjadi, dampaknya ke pengguna, akar masalahnya, dan tindakan pencegahan yang sudah dijadwalkan.",
+            },
+          ],
           solution: "cat postmortem.md",
-                    susunKode: {
-                      question:
-                        "Susun perintah cat postmortem.md untuk membaca laporan insiden.",
-                      potongan: [
-                        "cat",
-                        "postmortem.md",
-                      ],
-                      pengecoh: [
-                        "read-file",
-                        "incident_report.md",
-                      ],
-                      pemisah: " ",
-                      explanation:
-                        "Membaca isi berkas teks laporan evaluasi pasca-insiden di terminal Linux menggunakan utilitas standar `cat nama_file.md`. Penggunaan perintah fiktif 'read-file' adalah jebakan istilah CLI yang keliru.",
-                    },
-                  },
+          susunKode: {
+            question:
+              "Susun perintah cat postmortem.md untuk membaca laporan insiden.",
+            potongan: ["cat", "postmortem.md"],
+            pengecoh: ["read-file", "incident_report.md"],
+            pemisah: " ",
+            explanation:
+              "Membaca isi berkas teks laporan evaluasi pasca-insiden di terminal Linux menggunakan utilitas standar `cat nama_file.md`. Penggunaan perintah fiktif 'read-file' adalah jebakan istilah CLI yang keliru.",
+          },
+        },
         {
           kind: "quiz",
           id: "deploy-6-kuis",

@@ -33,81 +33,138 @@ export const dataAnalysisTrack: Track = {
           title: "Persiapan, Instalasi Environment Data Science & Dasar pandas",
           body: `# Persiapan, Instalasi Environment Data Science & Dasar pandas
 
-Selamat datang di track **Analisis Data & Visualisasi**! Sebelum memproses jutaan baris data, kamu perlu menyiapkan **Environment Data Science** yang stabil dan memahami alat kerja utama seorang Data Analyst: **library pandas**.
+Selamat datang di track **Analisis Data & Visualisasi**! Sebelum memproses jutaan baris data transaksi, kamu perlu menyiapkan **Environment Data Science** yang stabil dan memahami alat kerja utama seorang Data Analyst: **library pandas**.
 
 ---
 
-## 1. Pemasangan Environment Python & pandas
+## 1. Pemasangan Environment Python & Setup Kerja Harian
 
-Di dunia nyata, Data Analyst bekerja dengan kombinasi Python, Jupyter Notebook, dan editor modern seperti VS Code.
+Di dunia kerja, Data Analyst bekerja dengan kombinasi Python, Jupyter Notebook, dan editor modern seperti VS Code. 
 
 ### Pilihan A: Local Machine (VS Code / Jupyter)
 1. Pastikan Python 3.10+ sudah terpasang (\`python3 --version\`).
-2. Pasang paket dasar Data Science melalui terminal:
+2. Buat virtual environment agar dependensi proyek terisolasi rapi:
    \`\`\`bash
-   pip install pandas numpy matplotlib seaborn jupyter
+   python3 -m venv venv
+   source venv/bin/activate  # macOS / Linux
+   # venv\\Scripts\\activate   # Windows
    \`\`\`
-3. Buka VS Code dan pasang ekstensi **Python** dan **Jupyter**. Buat file baru ber-ekstensi \`.ipynb\` untuk mulai menulis kode dalam bentuk cell interaktif.
+3. Pasang paket dasar analisis data dan visualisasi:
+   \`\`\`bash
+   pip install pandas numpy matplotlib seaborn jupyter openpyxl sqlalchemy
+   \`\`\`
+4. Buka VS Code, pasang ekstensi **Python** dan **Jupyter**, lalu buat berkas baru ber-ekstensi \`.ipynb\` untuk mulai menulis kode cell-by-cell.
 
-### Pilihan B: Cloud (Google Colab)
-Jika perangkatmu terbatas, gunakan **Google Colab** (colab.research.google.com). Seluruh library (pandas, numpy, matplotlib) sudah terpasang secara default dan siap pakai langsung dari browser tanpa instalasi apa pun.
+### Pilihan B: Cloud Environment (Google Colab)
+Jika perangkat laptopmu memiliki RAM terbatas, gunakan **Google Colab** (\`colab.research.google.com\`). Lingkungan cloud ini sudah dilengkapi library data science terkini tanpa perlu instalasi lokal.
 
 ---
 
-## 2. Mengenal DataFrame & Series
+## 2. Mental Model: Berpikir Vektorial vs Berpikir Sel Excel
 
-**pandas** adalah library Python yang mengubah data mentah (CSV, Excel, SQL) menjadi struktur data tabular yang cepat dan fleksibel. Dua objek utama di pandas adalah:
-- **Series**: Array 1 dimensi (ibarat satu kolom tunggal di tabel Excel).
-- **DataFrame**: Tabel 2 dimensi (gabungan dari banyak Series yang berbagi indeks baris yang sama).
+Banyak pemula yang beralih dari Excel ke Python membawa kebiasaan lama: **mengedit data sel demi sel**. Di Python, kebiasaan ini berwujud perulangan baris menggunakan \`for index, row in df.iterrows()\`.
 
-### Diagram Anatomi DataFrame
+> [!CAUTION]
+> **Jangan Pernah Menggunakan \`for\` Loop untuk Mengolah Baris DataFrame!**
+> Operasi \`for\` di Python dijalankan di tingkat interpreter yang sangat lambat karena harus membuat objek Series baru di setiap baris. pandas dirancang di atas bahasa C/Fortran (NumPy) yang memanfaatkan **Operasi Vektor (Vectorization)**. Operasi vektor memproses seluruh kolom dalam satu instruksi CPU instan.
+
+| Metode Kalkulasi | Waktu Eksekusi (1 Juta Baris) | Catatan Kinerja |
+|---|---|---|
+| Python \`for row in df.iterrows()\` | ~45 - 60 detik | Sangat lambat, hindari di kode produksi |
+| pandas \`.apply(lambda ...)\` | ~3 - 5 detik | Lebih baik, tapi tetap iterasi Python tingkat baris |
+| **Operasi Vektor (\`df['A'] * df['B']\`)** | **~0.02 detik** | **Standar industri, tercepat (100x - 1000x lebih cepat)** |
+
+---
+
+## 3. Anatomi DataFrame & Series: Index Sebagai Peta Kunci
+
+Dua struktur data fundamental di pandas adalah:
+- **Series**: Array 1 dimensi berlabel (ibarat satu kolom tunggal beserta indeks barisnya).
+- **DataFrame**: Tabel 2 dimensi tabular yang terdiri dari kumpulan Series yang berbagi indeks yang sama.
 
 \`\`\`text
-                  [Kolom 0: 'nama']  [Kolom 1: 'gaji']  <- (dtypes: object, int64)
-Indeks 0  ---->    "Budi"             12000000
-Indeks 1  ---->    "Siti"             15000000
-Indeks 2  ---->    "Andi"             10000000
-                   ^                  ^
-                   |                  |
-               Series 1            Series 2
+                      [Kolom 0: 'nama']  [Kolom 1: 'gaji']  [Kolom 2: 'wilayah']  <- (dtypes: object, int64, category)
+Indeks 0 (Key) ───►      "Budi"             12000000            "Jakarta"
+Indeks 1 (Key) ───►      "Siti"             15000000            "Surabaya"
+Indeks 2 (Key) ───►      "Andi"             10000000            "Bandung"
+                           ▲                  ▲                   ▲
+                           │                  │                   │
+                        Series 1           Series 2            Series 3
 \`\`\`
 
----
-
-## 3. Tabel Rujukan Operasi Utama pandas
-
-| Operasi | Sintaks Utama | Kuis & Kegunaan Utama |
-|---|---|---|
-| Cek Tipe Data | \`df.dtypes\` | Memastikan angka tidak bertipe string |
-| Konversi Tipe | \`df['col'].astype(int)\` | Mengubah tipe data kolom |
-| Label Select | \`df.loc[:, ['A', 'B']]\` | Mengambil data berbasis Nama Label |
-| Index Select | \`df.iloc[0:5, 0:2]\` | Mengambil data berbasis Posisi Indeks |
-| Filtering | \`df[df['kat'].isin(['A', 'B'])]\` | Filter dengan daftar pilihan |
-| Grouping | \`df.groupby('dept').agg({'gaji': 'mean'})\` | Agregasi bertingkat |
-| Joining | \`pd.merge(df1, df2, on='id', how='left')\` | Menggabungkan dua DataFrame (SQL JOIN) |
-| Reshaping | \`df.pivot_table(index='thn', values='sales')\` | Transposisi tabel Wide vs Long |
-| Time Series | \`df.resample('M').sum()\` / \`df.rolling(7).mean()\` | Agregasi bulanan & Moving Average |
+Tipe data (\`dtypes\`) kolom sangat menentukan konsumsi memori:
+- \`int64\` / \`float64\`: Angka numerik untuk perhitungan metrik.
+- \`object\`: String teks bebas. Sangat boros RAM jika datanya berupa kategori berulang.
+- \`category\`: Tipe khusus pandas untuk string berulang (misal: 'Jakarta', 'Bandung'). Mengubah kolom teks berulang menjadi \`category\` dapat **menghemat hingga 80% RAM**.
+- \`datetime64[ns]\`: Tipe waktu untuk analisis deret waktu.
 
 ---
 
-## 4. Analogi Dunia Nyata
+## 4. Seleksi Presisi yang Tidak Membingungkan: loc vs iloc
 
-Bayangkan DataFrame sebagai **lemari arsip digital superkomputer**. Bila di Excel kamu harus mengklik sel satu per satu secara manual dengan mouse, di pandas kamu memberikan instruksi bahasa Python yang dapat memproses 10 juta baris data dalam hitungan detik secara otomatis.
+Dua method pencarian lokasi di pandas sering membuat pemula frustrasi karena terlihat mirip. Perbedaannya sangat tegas:
 
----
-
-## 5. Jebakan & Kesalahan Umum (Common Pitfalls)
+1. **\`df.loc[baris, kolom]\` (Label-Based)**:
+   - Memilih data berdasarkan **nama label teks** baris dan kolom.
+   - Sifat pengirisan (*slicing*): **INCLUSIVE** (elemen batas akhir ikut terambil).
+   - Contoh: \`df.loc[0:2, ['nama', 'gaji']]\` akan mengambil label 0, 1, dan 2.
+2. **\`df.iloc[baris, kolom]\` (Integer Position-Based)**:
+   - Memilih data murni berdasarkan **posisi urutan indeks angka fisik** (dimulai dari 0).
+   - Sifat pengirisan (*slicing*): **EXCLUSIVE** (seperti slicing Python murni, batas akhir tidak ikut).
+   - Contoh: \`df.iloc[0:2, 0:2]\` hanya mengambil baris indeks ke-0 dan ke-1.
 
 > [!WARNING]
-> 1. **Tertukar antara \`.loc\` dan \`.iloc\`**: \`.loc\` berbasis nama label (termasuk batas akhir / inclusive), sedangkan \`.iloc\` berbasis urutan angka (tidak termasuk batas akhir / exclusive).
-> 2. **Chained Indexing Assignment (\`SettingWithCopyWarning\`)**: Menulis \`df[df['a'] > 5]['b'] = 10\` akan memicu peringatan karena pandas bingung apakah kamu mengubah slice atau DataFrame asli. Gunakan \`.loc\`: \`df.loc[df['a'] > 5, 'b'] = 10\`.
-> 3. **Lambat karena Overuse \`.apply()\`**: Memakai \`.apply(lambda ...)\` pada jutaan baris jauh lebih lambat daripada fungsi vektor bawaan pandas (seperti \`df['a'] + df['b']\` atau \`df['col'].str.lower()\`).
+> **Jebakan Index Pasca-Filtering**: Ketika kamu memfilter DataFrame (\`df_filtered = df[df['gaji'] > 12000000]\`), baris yang lolos mungkin memiliki index \`[1, 5, 12]\`. Menjalankan \`df_filtered.loc[0]\` akan melempar galat \`KeyError\` karena label 0 sudah terbuang. Sebaliknya, \`df_filtered.iloc[0]\` tetap aman mengambil baris pertama fisik.
 
 ---
 
-## 6. Kaitan ke Dunia Kerja
+## 5. Matriks Operasi Inti: pandas vs Excel vs SQL
 
-Di industri, 80% tugas harian seorang **Data Analyst** dan **Data Engineer** melibatkan pengolahan data menggunakan pandas. Mulai dari mengekstrak transaksi mentah dari database SQL, membersihkan data yang rumpang, hingga menghitung KPI bulanan untuk manajemen bisnis. Tanpa penguasaan pandas yang solid, analisis skala besar di perusahaan akan terasa sangat lambat.`,
+| Operasi Analitik | pandas (Python) | Rumus Excel | Klausul SQL |
+|---|---|---|---|
+| Filter Data | \`df[df['status'].isin(['A', 'B'])]\` | Filter / \`FILTER()\` | \`WHERE status IN ('A', 'B')\` |
+| Filter Ganda | \`df[(df['gaji'] > 10jt) & (df['wilayah'] == 'JKT')]\` | \`AND(A2>10jt, B2="JKT")\` | \`WHERE gaji > 10jt AND wilayah = 'JKT'\` |
+| Filter Ekspresif | \`df.query("gaji > 10000000 and status == 'aktif'")\` | Advanced Filter | \`WHERE gaji > 10000000 AND status = 'aktif'\` |
+| Agregasi Group | \`df.groupby('dept').agg({'gaji': ['mean', 'max']})\` | Pivot Table | \`GROUP BY dept\` |
+| Gabung Tabel | \`pd.merge(df1, df2, on='id', how='left')\` | \`XLOOKUP()\` / \`VLOOKUP()\` | \`LEFT JOIN df2 ON df1.id = df2.id\` |
+| Reshape Wide ke Long | \`df.melt(id_vars=['id'], value_vars=['q1', 'q2'])\` | Power Query Unpivot | \`UNPIVOT\` |
+| Reshape Long ke Wide | \`df.pivot_table(index='thn', values='omset', aggfunc='sum')\` | Pivot Table | \`PIVOT\` / \`CASE WHEN\` |
+| Time Series Bulanan | \`df.resample('ME').sum()\` | Group by Month | \`DATE_TRUNC('month', date)\` |
+| Deret Waktu Moving Avg | \`df['omset'].rolling(7).mean()\` | \`AVERAGE(offset)\` | \`AVG(omset) OVER (ROWS 6 PRECEDING)\` |
+
+---
+
+## 6. Jebakan & Kesalahan Umum (Common Pitfalls)
+
+> [!WARNING]
+> 1. **\`SettingWithCopyWarning\` saat Chained Assignment**: Menulis \`df[df['status'] == 'aktif']['gaji'] = 15000000\` memicu peringatan karena kamu memodifikasi salinan (*copy*) sementara. Cara yang benar: gunakan \`.loc\`: \`df.loc[df['status'] == 'aktif', 'gaji'] = 15000000\`.
+> 2. **Lupa \`.reset_index()\` setelah \`.groupby()\`**: Setelah menjalankan groupby, kolom pengelompokan berubah menjadi Index baris. Pemula sering bingung mengapa kolom tersebut tidak bisa diakses seperti biasa. Selalu tambahkan \`.reset_index()\` di akhir agregasi: \`df.groupby('dept')['gaji'].mean().reset_index()\`.
+> 3. **Lupa Re-assignment**: Perintah \`df['gaji'].astype(int)\` atau \`df.drop_duplicates()\` tidak mengubah DataFrame asli jika tidak di-assign balik (\`df['gaji'] = df['gaji'].astype(int)\`).
+> 4. **Overuse \`.apply()\`**: Memakai lambda untuk manipulasi teks padahal pandas menyediakan *vectorized string accessor* (\`.str.strip()\`, \`.str.lower()\`) yang jauh lebih efisien.
+
+---
+
+## 7. Kaitan ke Dunia Kerja: Data Extraction Pipeline
+
+Di industri e-commerce dan perbankan, analis tidak diberikan file CSV rapi di desktop. Alur kerja nyata dimulai dari **Database Warehouse**:
+
+\`\`\`python
+# Pipeline Ekstraksi Database ke pandas di Industri
+from sqlalchemy import create_engine
+import pandas as pd
+
+engine = create_engine("postgresql://user:pass@warehouse-db:5432/retail")
+query = """
+    SELECT order_id, customer_id, order_date, total_amount, status
+    FROM orders
+    WHERE order_date >= CURRENT_DATE - INTERVAL '90 days'
+"""
+# Tarik jutaan baris langsung ke DataFrame pandas
+df_orders = pd.read_sql(query, con=engine, parse_dates=['order_date'])
+print(f"Data transaksi berhasil ditarik: {df_orders.shape[0]:,} baris.")
+\`\`\`
+
+Kemampuan menulis transformasi pandas yang cepat dan bersih adalah kualifikasi teknis wajib nomor satu di setiap interview kerja Data Analyst.`,
         },
         {
           kind: "step",
@@ -125,15 +182,15 @@ Di industri, 80% tugas harian seorang **Data Analyst** dan **Data Engineer** mel
           starterCode: "# Tulis astype di bawah ini\n",
           language: "text",
           tests: [
-                      {
-                        "pattern": "\\.astype\\(\\s*int\\s*\\)",
-                        "message": "Konversi tipe kolom memakai method `.astype(<tipe>)`. Jebakannya: `.astype(int)` langsung gagal kalau kolomnya memuat NaN atau teks — untuk data kotor, `pd.to_numeric(..., errors='coerce')` lebih aman."
-                      },
-                      {
-                        "pattern": "df\\[\\s*['\"]price['\"]\\s*\\]\\s*=",
-                        "message": "Hasil konversi TIDAK mengubah DataFrame dengan sendirinya; ia harus ditugaskan kembali ke kolomnya. Ini sumber \"kode saya jalan tapi tipenya tidak berubah\" yang paling sering."
-                      }
-                    ],
+            {
+              pattern: "\\.astype\\(\\s*(?:['\"]int(?:64)?['\"]|int)\\s*\\)",
+              message: "Konversi tipe kolom memakai method `.astype(<tipe>)`. Jebakannya: `.astype(int)` langsung gagal kalau kolomnya memuat NaN atau teks — untuk data kotor, `pd.to_numeric(..., errors='coerce')` lebih aman.",
+            },
+            {
+              pattern: "df\\[\\s*['\"]price['\"]\\s*\\]\\s*=",
+              message: "Hasil konversi TIDAK mengubah DataFrame dengan sendirinya; ia harus ditugaskan kembali ke kolomnya. Ini sumber \"kode saya jalan tapi tipenya tidak berubah\" yang paling sering.",
+            },
+          ],
           solution: "df['price'] = df['price'].astype(int)",
           susunKode: {
             question:
@@ -210,8 +267,20 @@ Di industri, 80% tugas harian seorang **Data Analyst** dan **Data Engineer** mel
           language: "text",
           tests: [
             {
-              pattern: "filtered\\s*=\\s*df\\[\\s*df\\[\\s*['\"]status['\"]\\s*\\]\\.isin\\(\\s*\\[\\s*['\"]active['\"]\\s*,\\s*['\"]pending['\"]\\s*\\]\\s*\\)\\s*\\]",
-              message: "Gunakan metode .isin(['active', 'pending'])",
+              pattern: "filtered\\s*=\\s*df\\[",
+              message: "Simpan hasil penyaringan baris ke variabel `filtered` dengan memfilter `df[...]`.",
+            },
+            {
+              pattern: "df\\[\\s*['\"]status['\"]\\s*\\]\\.isin\\(",
+              message: "Saring kolom `'status'` menggunakan method `.isin(...)`.",
+            },
+            {
+              pattern: "['\"]active['\"]",
+              message: "Sertakan nilai `'active'` di dalam list pilihan `.isin([...])`.",
+            },
+            {
+              pattern: "['\"]pending['\"]",
+              message: "Sertakan nilai `'pending'` di dalam list pilihan `.isin([...])`.",
             },
           ],
           solution: "filtered = df[df['status'].isin(['active', 'pending'])]",
@@ -335,13 +404,25 @@ Di industri, 80% tugas harian seorang **Data Analyst** dan **Data Engineer** mel
             note: "Melt sangat berguna saat ingin mengubah kolom-kolom tanggal menjadi 1 kolom deret waktu.",
           },
           instruction:
-            "Tuliskan sintaks `df.pivot_table()` dengan `index='year'`, `values='sales'`, dan fungsi agregasi `'sum'`, lalu simpan ke variabel `pivot`.",
+            "Gunakan `df.pivot_table()` untuk merekapitulasi data penjualan dengan menjadikan kolom `'year'` sebagai indeks baris, kolom `'sales'` sebagai nilai yang dihitung, dan fungsi agregasi `'sum'`. Simpan hasilnya ke variabel `pivot`.",
           starterCode: "# Tulis pivot_table di sini\n",
           language: "text",
           tests: [
             {
-              pattern: "pivot\\s*=\\s*df\\.pivot_table\\(\\s*index\\s*=\\s*['\"]year['\"]\\s*,\\s*values\\s*=\\s*['\"]sales['\"]\\s*,\\s*aggfunc\\s*=\\s*['\"]sum['\"]\\s*\\)",
-              message: "Gunakan sintaks df.pivot_table sesuai instruksi",
+              pattern: "pivot\\s*=\\s*df\\.pivot_table\\(",
+              message: "Panggil method `df.pivot_table(...)` dan simpan hasilnya ke variabel `pivot`.",
+            },
+            {
+              pattern: "index\\s*=\\s*['\"]year['\"]",
+              message: "Tentukan indeks baris tabel pivot dengan `index='year'`.",
+            },
+            {
+              pattern: "values\\s*=\\s*['\"]sales['\"]",
+              message: "Tentukan kolom nilai yang diagregasikan dengan `values='sales'`.",
+            },
+            {
+              pattern: "aggfunc\\s*=\\s*['\"]sum['\"]",
+              message: "Tentukan fungsi agregasi penjumlahan dengan `aggfunc='sum'`.",
             },
           ],
           solution: "pivot = df.pivot_table(index='year', values='sales', aggfunc='sum')",
@@ -419,8 +500,8 @@ Di industri, 80% tugas harian seorang **Data Analyst** dan **Data Engineer** mel
             note: "Rolling average berguna untuk memperhalus fluktuasi grafik tren harian.",
           },
           instruction:
-            "Tuliskan perintah pandas untuk menghitung Moving Average 7 hari pada kolom `'sales'` dari `df` menggunakan `.rolling(7).mean()` dan simpan ke kolom `'moving_avg'`.",
-          starterCode: "# Tulis rolling mean di sini\n",
+            "Hitung nilai Moving Average (rata-rata bergerak) dengan jendela waktu 7 periode pada kolom `'sales'` dari DataFrame `df`. Simpan hasil perhitungan tersebut ke kolom baru bernama `'moving_avg'`.",
+          starterCode: "# Tulis moving average 7 periode di sini\n",
           language: "text",
           tests: [
                       {
@@ -538,79 +619,163 @@ Di industri, 80% tugas harian seorang **Data Analyst** dan **Data Engineer** mel
           title: "Strategi Data Cleaning & Pra-pemrosesan Data",
           body: `# Strategi Data Cleaning & Pra-pemrosesan Data
 
-Ada pepatah terkenal di industri data: **"Garbage In, Garbage Out"**. Sehebat apa pun algoritma atau dashboard yang kamu buat, jika data masukannya kotor dan berantakan, maka kesimpulan bisnis yang dihasilkan akan salah fatal.
+Ada pepatah paling terkenal di industri data: **"Garbage In, Garbage Out"**. Sehebat apa pun algoritma machine learning atau dashboard visualisasi yang kamu bangun, jika data masukannya kotor, kesimpulan bisnis yang dihasilkan akan salah fatal dan merugikan perusahaan.
 
 ---
 
-## 1. Masalah Utama Data di Dunia Nyata
+## 1. Realitas Data di Dunia Nyata: Mengapa 80% Waktu Habis di Sini?
 
-Di dunia nyata, data jarang sekali hadir dalam kondisi bersih. Beberapa masalah klasik meliputi:
-1. **Missing Values (Nilai Kosong)**: Sel bernilai \`NaN\` atau \`None\` akibat gagal sistem / pengguna tidak mengisi form.
-2. **Duplikasi Data**: Baris transaksi terkirim dua kali akibat koneksi internet terputus.
-3. **Format String Berantakan**: Nama kota tertulis acak (\`"Jakarta"\`, \`" jakarta "\`, \`"JAKARTA"\`).
-4. **Parsing Tanggal Rusak**: String \`"31/02/2024"\` atau format campuran YYYY-MM-DD dan DD-MM-YYYY.
-5. **Pencilan Ekstrem (Outlier)**: Angka transaksi Rp 9.999.999.999 akibat input salah oleh kasir.
+Di tutorial online, dataset sering kali sudah bersih dan siap diolah. Namun di dunia kerja nyata, data berasal dari formulir pengguna yang tidak tervalidasi, log server yang terputus, atau integrasi sistem warisan (*legacy database*).
+
+Beberapa masalah klasik data mentah meliputi:
+1. **Missing Values**: Sel bernilai \`NaN\`, \`None\`, atau string kosong akibat field formulir opsional atau kegagalan sensor.
+2. **Duplikasi Transaksi**: Pengguna mengklik tombol checkout dua kali saat koneksi internet lambat.
+3. **Format Teks Berantakan**: Nama kota yang sama diinput berbeda (\`"Jakarta"\`, \`" jakarta "\`, \`"DKI JAKARTA"\`, \`"jkt"\`).
+4. **Parsing Tanggal Rusak**: Tanggal berformat ambigu (\`"03/04/2026"\` — apakah 3 April atau 4 Maret?) atau memuat teks error seperti \`"N/A"\`.
+5. **Pencilan Tidak Masuk Akal (Anomali Input)**: Nilai usia 999 tahun atau harga barang Rp -50.000 akibat kesalahan sistem kasir.
 
 ---
 
-## 2. Diagram Alur Pipeline Data Cleaning
+## 2. Karakteristik Khusus & Keunikan Data Lokal Indonesia
+
+Bekerja dengan dataset di Indonesia memerlukan keahlian pembersihan data spesifik:
+
+### A. Format Mata Uang & Angka Desimal
+Data dari laporan keuangan Indonesia sering memuat simbol rupiah, titik sebagai pemisah ribuan, dan koma sebagai pemisah desimal:
+\`\`\`python
+# Contoh: "Rp 1.500.000,50" -> 1500000.50 (float)
+df['nominal_bersih'] = (
+    df['harga_mentah']
+    .str.replace('Rp', '', regex=False)
+    .str.replace('.', '', regex=False)
+    .str.replace(',', '.', regex=False)
+    .str.strip()
+    .astype(float)
+)
+\`\`\`
+
+### B. Preservasi Angka Nol di Depan (Leading Zeros)
+Kolom seperti **Nomor Induk Kependudukan (NIK)**, **Nomor Telepon (0812...)**, atau **Kode Pos** yang terbaca otomatis sebagai integer akan kehilangan angka 0 di depan (misal \`0812345\` menjadi \`812345\`).
+- **Solusi**: Pastikan kolom dibaca sebagai string sejak awal (\`dtype={'nik': str}\`), atau perbaiki dengan \`.str.zfill(16)\`.
+
+### C. Tanggal Berbahasa Indonesia
+Data lokal sering menuliskan nama bulan dalam bahasa Indonesia: \`"17 Agustus 2026"\`. Ini harus dipetakan ke format standar sebelum diparsing dengan \`pd.to_datetime\`.
+
+---
+
+## 3. Matriks Strategi Penanganan Missing Values
+
+Banyak pemula langsung menjalankan \`df.dropna()\` begitu melihat nilai kosong. Ini tindakan berbahaya yang bisa membuang separuh data pentingmu.
+
+| Kondisi Data | Tindakan yang Disarankan | Metode pandas | Trade-off & Risiko |
+|---|---|---|---|
+| ID unik / Kunci relasi hilang | Hapus Baris | \`df.dropna(subset=['order_id'])\` | Data tanpa ID tidak bisa digabungkan |
+| Kolom kosong > 70% & tidak esensial | Hapus Kolom | \`df.drop(columns=['catatan_opsional'])\` | Kehilangan fitur yang mungkin berguna |
+| Numerik Distribusi Miring (Gaji/Harga) | Imputasi **Median** | \`df['gaji'].fillna(df['gaji'].median())\` | Tahan terhadap pencilan ekstrem |
+| Numerik Distribusi Normal Simetris | Imputasi **Mean** | \`df['tinggi'].fillna(df['tinggi'].mean())\` | Mempertahankan rata-rata populasi |
+| Kategori / Teks Berulang | Imputasi **Modus** | \`df['kota'].fillna(df['kota'].mode()[0])\` | Mengisi dengan kategori terpopuler |
+| Deret Waktu / Transaksi Finansial | Forward Fill | \`df['kurs'].ffill()\` | Mengasumsikan nilai sama dengan kemarin |
+| Butuh Jejak Investigasi | Flag Indicator | \`df['gaji_was_na'] = df['gaji'].isna()\` | Menandai baris agar model tahu ada imputasi |
+
+---
+
+## 4. Deteksi Outlier: Metode Tukey IQR vs Z-Score
+
+Pencilan (*outlier*) adalah nilai data yang menyimpang jauh dari kumpulan data lainnya.
 
 \`\`\`text
-[Data Mentah (Dirty CSV/SQL)]
+                  Q1 - 1.5*IQR          Q1 (25%)    Median     Q3 (75%)      Q3 + 1.5*IQR
+                       │                   │          │           │               │
+  Outlier Bawah <──────┤═══════════════════[==========|===========]═══════════════├──────► Outlier Atas
+                       Batas Bawah                Interquartile                  Batas Atas
+                                                   Range (IQR)
+\`\`\`
+
+1. **Metode Interquartile Range (IQR - Tukey's Fences)**:
+   - Hitung kuartil: \`Q1 = df['val'].quantile(0.25)\` dan \`Q3 = df['val'].quantile(0.75)\`.
+   - Rentang IQR: \`IQR = Q3 - Q1\`.
+   - Batas Bawah: \`lower_bound = Q1 - 1.5 * IQR\`.
+   - Batas Atas: \`upper_bound = Q3 + 1.5 * IQR\`.
+   - **Kelebihan**: Tahan terhadap nilai ekstrem itu sendiri karena berbasis persentil.
+2. **Metode Z-Score**:
+   - Menghitung seberapa banyak standar deviasi suatu nilai berada dari rata-rata: \`z = (x - mean) / std\`.
+   - Nilai dengan \`|z| > 3\` biasanya ditandai sebagai pencilan.
+   - **Kelemahan**: Rata-rata dan standar deviasi sendiri sudah terdistorsi oleh pencilan ekstrem.
+
+> **Keputusan Bisnis**: Jangan langsung menghapus outlier! Bedakan **Kesalahan Teknis** (misal input harga barang Rp 0 atau kuantitas 999999) dengan **Anomali Bisnis Bernilai** (misal pelanggan B2B yang memborong barang bernilai ratusan juta rupiah).
+
+---
+
+## 5. Diagram Alur Pipeline Data Cleaning Reproducible
+
+\`\`\`text
+[Data Mentah Kotor (CSV/SQL)]
        │
        ▼
-[1. Diagnosis Awal] ────────► df.isna().sum(), df.duplicated().sum()
+[1. Diagnosis Awal] ────────► df.info(), df.isna().sum(), df.duplicated().sum()
        │
        ▼
-[2. Cleaning String] ───────► df['col'].str.strip().str.lower()
+[2. Cleaning String] ───────► .str.strip(), .str.lower(), regex format mata uang
        │
        ▼
-[3. Parsing Tanggal] ───────► pd.to_datetime(df['col'], errors='coerce')
+[3. Parsing Tanggal] ───────► pd.to_datetime(df['tgl'], errors='coerce')
        │
        ▼
-[4. Penanganan Missing] ────► fillna(median) / dropna() / flag
+[4. Standarisasi Nilai] ────► .replace({'jkt': 'jakarta'}), tangani kategori inkonsisten
        │
        ▼
-[5. Deteksi Outlier] ───────► IQR (Q1 - 1.5*IQR s/d Q3 + 1.5*IQR)
+[5. Strategi Missing] ──────► fillna(median) / dropna(subset=['id']) / indicator flag
        │
        ▼
-[Clean DataFrame] ──────────► Siap untuk Analisis & Visualisasi
+[6. Filter Outlier/Error] ──► Filter batas bawah/atas IQR & buang duplikat identik
+       │
+       ▼
+[7. Reset Indeks] ──────────► .reset_index(drop=True)
+       │
+       ▼
+[Clean DataFrame Siap Analisis]
 \`\`\`
 
 ---
 
-## 3. Tabel Rujukan Operasi Cleaning pandas
-
-| Masalah Data | Metode pandas | Catatan & Trade-off |
-|---|---|---|
-| Cek Nilai Kosong | \`df.isna().sum()\` | Menghitung jumlah NaN per kolom |
-| Hapus Duplikat | \`df.drop_duplicates()\` | Menghapus baris duplikat identik |
-| Imputasi Median | \`df['col'].fillna(df['col'].median())\` | Tahan terhadap pencilan dibanding Mean |
-| Accessor Teks | \`df['col'].str.strip().str.lower()\` | Menghapus spasi & menyamakan huruf |
-| Cast Tanggal | \`pd.to_datetime(df['col'], errors='coerce')\` | Mengubah string rusak menjadi NaT |
-| Pemetaan Kategori | \`df['col'].replace({'jkt': 'Jakarta'})\` | Menyeragamkan sinonim kata |
-| Deteksi Outlier | \`IQR = Q3 - Q1\` | Menghitung batas pencilan bawah/atas |
-
----
-
-## 4. Analogi Dunia Nyata
-
-Proses **Data Cleaning** ibarat **menyiangi dan mencuci bahan makanan di dapur restoran**. Kamu tidak bisa memasak sayur yang masih berlumpur atau berulat. Seorang koki (Data Analyst) harus membersihkan bahan-bahannya terlebih dahulu sebelum menyajikannya menjadi hidangan lezat (Laporan Eksekutif).
-
----
-
-## 5. Jebakan & Kesalahan Umum (Common Pitfalls)
+## 6. Jebakan & Kesalahan Umum (Common Pitfalls)
 
 > [!WARNING]
-> 1. **Mengisi Nilai Kosong dengan Mean pada Data Skewed**: Jika data pendapatan memuat 1 milyarder, mengisi nilai kosong dengan rata-rata (\`mean\`) akan mendistorsi nilai kelompok. Gunakan **Median**.
-> 2. **Lupa Menggunakan \`.str\` Accessor**: Menulis \`df['nama'].lower()\` akan menghasilkan AttributeError. Wajib menggunakan \`df['nama'].str.lower()\`.
-> 3. **Menghapus Baris Kosong Tanpa Memeriksa Persentase**: Menjalankan \`df.dropna()\` secara membabi buta dapat menghapus 50% data pentingmu jika tidak dianalisis persentase missing value per kolomnya terlebih dahulu.
+> 1. **Perbedaan Fatal Antara \`.map()\` dan \`.replace()\`**: Menulis \`df['kota'].map({'jkt': 'Jakarta'})\` akan mengubah semua nama kota lain yang tidak ada di kamus menjadi \`NaN\`! Selalu gunakan \`.replace({'jkt': 'Jakarta'})\` untuk memperbarui nilai parsial.
+> 2. **Parsing Tanggal Tanpa \`errors='coerce'\`**: Jika ada satu saja baris string tanggal yang rusak (seperti \`"31-02-2026"\`), \`pd.to_datetime\` akan melempar error dan mematikan seluruh program. Dengan \`errors='coerce'\`, nilai rusak diubah secara aman menjadi \`NaT\` (Not a Time).
+> 3. **Indeks Bolong Pasca \`.drop_duplicates()\`**: Menghapus baris duplikat meninggalkan celah pada nomor indeks. Selalu akhiri pipeline pembersihan dengan \`.reset_index(drop=True)\`.
 
 ---
 
-## 6. Kaitan ke Dunia Kerja
+## 7. Kaitan ke Dunia Kerja: Fungsi Pipeline Reusable
 
-Tim manajerial perusahaan mengambil keputusan bernilai miliaran rupiah berdasarkan laporan analitik. Bila analis tidak teliti dalam data cleaning (misal transaksi terduplikasi tidak dihapus), perusahaan bisa membuang anggaran pemasaran untuk segmen yang salah. Pipeline pembersihan data yang reproducible dan terdokumentasi adalah kualifikasi utama dalam lowongan Data Analyst.`,
+Di lingkungan produksi (*production environment*), analis membungkus seluruh alur pembersihan ke dalam satu fungsi teruji:
+
+\`\`\`python
+def clean_transactions_pipeline(raw_df: pd.DataFrame) -> pd.DataFrame:
+    """Pipeline pembersihan otomatis transaksi e-commerce."""
+    df = raw_df.copy()
+    
+    # 1. Hapus duplikat transaksi identik
+    df = df.drop_duplicates(subset=['order_id'])
+    
+    # 2. Parsing tanggal & tangani format rusak
+    df['order_date'] = pd.to_datetime(df['order_date'], errors='coerce')
+    df = df.dropna(subset=['order_date'])
+    
+    # 3. Rapikan teks status & kategori
+    df['status'] = df['status'].str.strip().str.lower()
+    df['status'] = df['status'].replace({'settled': 'success', 'paid': 'success'})
+    
+    # 4. Imputasi nilai ongkir yang kosong dengan median
+    median_ongkir = df['shipping_cost'].median()
+    df['shipping_cost'] = df['shipping_cost'].fillna(median_ongkir)
+    
+    # 5. Reset index akhir
+    return df.reset_index(drop=True)
+\`\`\`
+
+Fungsi modular seperti ini dapat langsung diuji dengan unit test dan disematkan ke dalam orchestrator data modern (seperti Apache Airflow atau Prefect).`,
         },
         {
           kind: "step",
@@ -758,7 +923,7 @@ Tim manajerial perusahaan mengambil keputusan bernilai miliaran rupiah berdasark
             note: "errors='coerce' otomatis mengubah format tanggal rusak menjadi NaT (Not a Time).",
           },
           instruction:
-            "Tuliskan konversi kolom `'date'` ke Datetime menggunakan `pd.to_datetime` dengan opsi `errors='coerce'`.",
+            "Konversikan kolom `'date'` pada `df` ke tipe datetime secara aman menggunakan `pd.to_datetime`. Pasang opsi penanganan error agar format tanggal yang cacat otomatis diubah menjadi `NaT` alih-alih melempar exception.",
           starterCode: "# Tulis pd.to_datetime di sini\n",
           language: "text",
           tests: [
@@ -805,8 +970,16 @@ Tim manajerial perusahaan mengambil keputusan bernilai miliaran rupiah berdasark
           language: "text",
           tests: [
             {
-              pattern: "df\\[\\s*['\"]status['\"]\\s*\\]\\s*=\\s*df\\[\\s*['\"]status['\"]\\s*\\]\\.replace\\(\\s*\\{\\s*['\"]act['\"]\\s*:\\s*['\"]active['\"]\\s*\\}\\s*\\)",
-              message: "Gunakan replace dictionary sesuai instruksi",
+              pattern: "df\\[\\s*['\"]status['\"]\\s*\\]\\s*=",
+              message: "Tugaskan kembali hasil pembaruan ke kolom `df['status']`.",
+            },
+            {
+              pattern: "\\.replace\\(\\s*\\{",
+              message: "Gunakan method `.replace({...})` dengan argumen dictionary pemetaan.",
+            },
+            {
+              pattern: "['\"]act['\"]\\s*:\\s*['\"]active['\"]",
+              message: "Petakan nilai `'act'` ke `'active'` di dalam dictionary: `{'act': 'active'}`.",
             },
           ],
           solution: "df['status'] = df['status'].replace({'act': 'active'})",
@@ -838,7 +1011,7 @@ Tim manajerial perusahaan mengambil keputusan bernilai miliaran rupiah berdasark
             note: "Data yang berada di bawah batas ini teridentifikasi sebagai pencilan bawah.",
           },
           instruction:
-            "Berdasarkan kuartil pertama `Q1` dan jangkauan antar-kuartil `IQR`, hitung batas bawah pencilan (lower bound) dengan rumus `Q1 - 1.5 * IQR` dan simpan ke variabel `lower_bound`.",
+            "Berdasarkan kuartil pertama `Q1` dan jangkauan antar-kuartil `IQR` yang sudah tersedia, hitung batas bawah pencilan (lower fence) menggunakan standar Tukey (1.5 kali IQR di bawah Q1) dan simpan ke variabel `lower_bound`.",
           starterCode: "# Hitung batas bawah pencilan\n",
           language: "text",
           tests: [
@@ -886,15 +1059,19 @@ Tim manajerial perusahaan mengambil keputusan bernilai miliaran rupiah berdasark
           tests: [
             {
               pattern: "def clean_data\\(\\s*raw_df\\s*\\):",
-              message: "Definisikan fungsi clean_data(raw_df).",
+              message: "Definisikan fungsi `clean_data(raw_df)`.",
             },
             {
-              pattern: "df\\s*=\\s*raw_df\\.drop_duplicates\\(\\)\\.reset_index\\(\\s*drop\\s*=\\s*True\\s*\\)",
-              message: "Panggil .drop_duplicates().reset_index(drop=True) dan simpan ke variabel df.",
+              pattern: "raw_df\\.drop_duplicates\\(\\)",
+              message: "Hapus baris duplikat dengan memanggil `.drop_duplicates()` pada `raw_df`.",
+            },
+            {
+              pattern: "\\.reset_index\\(\\s*drop\\s*=\\s*True\\s*\\)",
+              message: "Reset indeks dengan `.reset_index(drop=True)` agar susunan nomor baris kembali teratur tanpa celah.",
             },
             {
               pattern: "return\\s+df",
-              message: "Kembalikan objek DataFrame df dengan return df.",
+              message: "Kembalikan objek DataFrame `df` bersih dengan `return df`.",
             },
           ],
           solution: "def clean_data(raw_df):\n    df = raw_df.drop_duplicates().reset_index(drop=True)\n    return df",
@@ -1009,71 +1186,124 @@ Tim manajerial perusahaan mengambil keputusan bernilai miliaran rupiah berdasark
           title: "Statistik Deskriptif & Inferensial Praktis untuk Analis",
           body: `# Statistik Deskriptif & Inferensial Praktis untuk Analis
 
-Banyak orang mengira statistik di dunia kerja membutuhkan rumus matematika rumit. Padahal, tugas utama **Data Analyst** adalah menggunakan **intuisi statistik praktis** agar tidak salah mengambil kesimpulan bisnis dari data sampel.
+Banyak orang mengira statistik di dunia kerja membutuhkan rumus kalkulus dan matematika abstrak. Padahal, tugas utama seorang **Data Analyst** adalah memiliki **intuisi statistik praktis** untuk memisahkan mana perubahan angka yang merupakan **sinyal bisnis asli** dan mana yang sekadar **derau acak (noise)**.
 
 ---
 
-## 1. Pemusatan Data: Mean vs Median
+## 1. Pemusatan Data: Kapan Rata-Rata (Mean) Menipu?
 
-- **Mean (Rata-rata)**: Jumlah total dibagi jumlah sampel. Sangat rentan terdistorsi oleh pencilan (outlier) ekstrem.
-- **Median (Nilai Tengah)**: Nilai yang tepat berada di tengah setelah data diurutkan. Tahan terhadap pencilan.
+Dalam rapat manajemen, kamu akan sering mendengar kalimat: *"Rata-rata penjualan kita naik!"*. Sebagai analis yang kritis, pertanyaan pertamamu adalah: *"Apakah kenaikan itu didorong oleh semua pelanggan, atau cuma satu pelanggan raksasa?"*.
 
-> **Kapan Mean Menipu?**
-> Jika 5 karyawan bergaji Rp 5 juta dan 1 direktur bergaji Rp 200 juta, rata-rata gaji adalah Rp 37,5 juta. Angka ini menipu! Median gaji adalah Rp 5 juta, yang jauh lebih mencerminkan kenyataan mayoritas karyawan.
+- **Mean (Rata-rata)**: Menjumlahkan semua nilai dibagi jumlah sampel. Sangat rentan terdistorsi oleh pencilan (*outlier*).
+- **Median (Nilai Tengah)**: Nilai yang tepat berada di posisi 50% setelah seluruh data diurutkan. Kebal terhadap pencilan.
 
----
-
-## 2. Sebaran Data: Standar Deviasi & Persentil
-
-- **Standar Deviasi (std)**: Mengukur seberapa jauh variasi data menyebar dari nilai rata-ratanya.
-- **Persentil (Quantile)**: Nilai batas bawah persentase data. Contoh: **P95** (Persentil ke-95) artinya 95% data berada di bawah nilai tersebut. Di dunia backend/SRE, latency server selalu diukur dengan P95 atau P99 untuk memastikan 95% pengguna mendapat respon cepat.
-
----
-
-## 3. Matriks Rujukan Konsep Statistik Praktis
-
-| Konsep Statistik | Fungsi / Indikator | Contoh Kasus Nyata |
-|---|---|---|
-| Median | Pemusatan Tahan Outlier | Harga rumah, gaji karyawan |
-| P95 / P99 | Ambang Batas Ekstrem | Latency respon server API |
-| Korelasi (\`corr()\`) | Hubungan Tren (-1 s/d 1) | Biaya iklan vs jumlah transaksi |
-| Random Sampling | Keterwakilan Populasi | Survei kepuasan pelanggan |
-| P-Value (< 0.05) | Signifikansi Eksperimen | Pengujian A/B Testing fitur baru |
-| Margin of Error | Ketidakpastian Prediksi | Laporan hasil pemilu / survei (\`43% ± 2%\`) |
+> [!NOTE]
+> **Studi Kasus Gaji Karyawan di Perusahaan**:
+> Bayangkan sebuah tim berisi 6 orang:
+> - 5 orang staf bergaji Rp 5.000.000, Rp 5.000.000, Rp 6.000.000, Rp 6.000.000, dan Rp 7.000.000.
+> - 1 orang direktur bergaji Rp 200.000.000.
+> 
+> Bila dihitung:
+> - **Mean**: Rp 38.166.666 (Memberikan ilusi bahwa karyawan di tim tersebut sangat sejahtera!).
+> - **Median**: Rp 6.000.000 (Mencerminkan kenyataan riil penghasilan mayoritas staf).
+> 
+> **Aturan Praktis**: Jika selisih antara Mean dan Median sangat jauh, datamu condong (*skewed*). Gunakan **Median** untuk melaporkan nilai transaksi belanja, harga rumah, atau gaji.
 
 ---
 
-## 4. Diagram Korelasi vs Kausalitas
+## 2. Ukuran Sebaran: Standar Deviasi & Persentil (P95/P99)
+
+Mengetahui nilai tengah saja belum cukup; kamu harus tahu seberapa jauh data menyebar di sekitar nilai tengah tersebut.
+
+- **Standar Deviasi (std)**: Mengukur variabilitas data. Semakin kecil standar deviasi, semakin konsisten performa bisnismu.
+- **Persentil (Quantile)**: Membagi data terurut menjadi 100 bagian sama besar.
+  - **P50**: Median (50% data di bawah nilai ini).
+  - **P90 / P95**: Nilai ambang batas 90% atau 95% data terendah.
+
+### Mengapa Tim Teknologi Memantau Latency dengan P95?
+Jika sistem pembayaran melaporkan rata-rata waktu loading 200 milidetik, manajemen mungkin merasa aman. Namun jika nilai **P95 latency** adalah 5.000 milidetik (5 detik), artinya **5 dari setiap 100 pengguna mengalami loading lambat parah** yang berisiko membatalkan transaksi checkout. Di dunia engineering dan produk digital, P95 dan P99 adalah standar emas pemantauan performa.
+
+---
+
+## 3. Korelasi Bukan Kausalitas (Correlation != Causation)
+
+Koefisien korelasi Pearson (\`r\`) bernilai antara -1 hingga +1:
+- \`+1\`: Hubungan linier positif sempurna.
+- \`0\`: Tidak ada hubungan linier sama sekali.
+- \`-1\`: Hubungan linier negatif sempurna.
 
 \`\`\`text
-[Penjualan Es Krim Naik] ─────── (Korelasi Statistik 0.9) ───────► [Kasus Tenggelam Naik]
-            ▲                                                                ▲
-            │                                                                │
-            └─────────────── [Faktor Pengganggu: CUACA PANAS] ───────────────┘
+[Penjualan Es Krim Meningkat] ────── (Korelasi Kuat r = 0.88) ──────► [Jumlah Korban Tenggelam Naik]
+              ▲                                                                   ▲
+              │                                                                   │
+              └──────────────── [Faktor Ketiga: GELOMBANG PANAS] ────────────────┘
 \`\`\`
 
-> **Pelajaran Penting**: Korelasi tinggi **TIDAK SAMA** dengan kausalitas (hubungan sebab-akibat). Es krim tidak menyebabkan orang tenggelam; cuaca panas adalah faktor ketiga (*confounding variable*) yang mendorong kedua hal terjadi bersamaan.
+Dua variabel yang bergerak searah belum tentu memiliki hubungan sebab-akibat langsung. Keduanya bisa dipicu oleh faktor pengganggu ketiga (*confounding variable*). Mengklaim bahwa melarang es krim akan menyelamatkan korban tenggelam adalah kesalahan analisis fatal yang sering menampar analis pemula di ruang rapat direksi.
 
 ---
 
-## 5. Analogi Dunia Nyata
+## 4. Paradoks Simpson (Simpson's Paradox): Jebakan Agregasi
 
-Menganalisis data sampel tanpa mempertimbangkan bias ibarat **wawancara penumpang di dalam pesawat komersial lalu menyimpulkan bahwa semua orang di bumi punya tiket pesawat**. Orang yang tidak punya tiket tidak pernah terdata (*Survivorship Bias*).
+Paradoks Simpson terjadi ketika sebuah tren data yang konsisten pada sub-kelompok individual **berbalik arah secara dramatis** saat seluruh data digabungkan ke tingkat total.
+
+### Bukti Nyata: A/B Testing Promosi E-Commerce
+Manajemen menguji dua varian banner promo: Varian A (desain lama) vs Varian B (desain baru).
+
+| Segmen Pengguna | Varian A (Lama) | Varian B (Baru) | Pemenang Segmen |
+|---|---|---|---|
+| **Pengguna Mobile** | **15.0%** (150 konversi / 1.000 visit) | **12.0%** (60 konversi / 500 visit) | **Varian A Menang!** |
+| **Pengguna Desktop** | **30.0%** (300 konversi / 1.000 visit) | **28.0%** (700 konversi / 2.500 visit) | **Varian A Menang!** |
+| **TOTAL KESELURUHAN** | **22.5%** (450 konversi / 2.000 visit) | **25.3%** (760 konversi / 3.000 visit) | **Varian B Terlihat Menang!** |
+
+> [!CAUTION]
+> **Mengapa Varian B Terlihat Menang di Tingkat Total?**
+> Karena Varian B mendapatkan 83% traffic-nya dari pengguna Desktop yang secara alami memiliki daya beli dan konversi dasar lebih tinggi! Padahal di masing-masing platform, Varian A selalu mengalahkan Varian B. Jika analis hanya melihat angka total, perusahaan akan meluncurkan varian promo yang salah ke pasar.
 
 ---
 
-## 6. Jebakan & Kesalahan Umum (Common Pitfalls)
+## 5. A/B Testing Dasar & Cara Mengambil Keputusan
+
+Eksperimen terkontrol adalah satu-satunya cara ilmiah membuktikan kausalitas.
+
+1. **Hipotesis Nol ((H_0))**: Anggapan dasar bahwa tidak ada perbedaan efek antara varian kontrol dan perlakuan.
+2. **Tingkat Signifikansi ((alpha = 0.05))**: Batas toleransi bahwa perbedaan yang kita lihat murni terjadi akibat kebetulan acak (maksimal 5%).
+3. **P-Value**: Probabilitas mendapatkan hasil ekstrem jika (H_0) benar. Jika **p-value < 0.05**, kita menolak (H_0) dan menyatakan hasilnya signifikan secara statistik.
 
 > [!WARNING]
-> 1. **Simpson's Paradox**: Tren data yang terlihat positif di kelompok gabungan justru berbalik menjadi negatif saat data dipecah per kategori. Selalu periksa data teragregasi berdasarkan kelompok penting!
-> 2. **Menyatakan Kepastian 100%**: Melaporkan "Konversi pasti 45%" tanpa menyebut margin of error (\`± 2%\`) adalah bentuk penyampaian yang menyesatkan eksekutif.
-> 3. **P-Hacking di A/B Testing**: Mengabaikan batas signifikansi (\`p-value < 0.05\`) dan menghentikan pengujian secara prematur saat angka sementara terlihat bagus.
+> **Dosa Terbesar: The Peeking Problem**:
+> Mengintip grafik p-value setiap jam dan menghentikan pengujian seketika saat p-value menyentuh angka 0.049 akan meningkatkan tingkat alarm palsu (*false positive rate*) dari 5% menjadi lebih dari 30%! Tetapkan ukuran sampel minimum di awal menggunakan kalkulator power analysis sebelum eksperimen dijalankan, dan jangan ambil kesimpulan sebelum sampel terpenuhi.
 
 ---
 
-## 7. Kaitan ke Dunia Kerja
+## 6. Melaporkan Ketidakpastian Secara Jujur
 
-Manajemen perusahaan bergantung pada analis untuk mengambil keputusan ber-risiko. Dengan menguasai statistik praktis, kamu bisa membedakan mana perubahan angka yang merupakan **sinyal bisnis asli** dan mana yang sekadar **fluktuasi acak (noise)**. Ketajaman ini membangun kredibilitasmu di mata direksi.`,
+Data sampel selalu membawa ketidakpastian. Analis yang kredibel tidak pernah menyatakan kepastian mutlak tanpa konteks batas kesalahan (*Margin of Error*).
+
+\`\`\`python
+# Format Pelaporan Angka Estimasi yang Kredibel
+rata_rata_konversi = 12.4
+margin_error = 1.2
+print(f"Estimasi Konversi: {rata_rata_konversi:.1f}% +/- {margin_error:.1f}% (95% Confidence Interval)")
+# Output: Estimasi Konversi: 12.4% +/- 1.2% (95% Confidence Interval)
+\`\`\`
+
+Menyampaikan rentang estimasi membantu pemangku kepentingan memahami skenario terbaik (*best case*) dan skenario terburuk (*worst case*) sebelum mengalokasikan anggaran bisnis bernilai miliaran.
+
+---
+
+## 7. Jebakan & Bias Statistik (Common Pitfalls)
+
+> [!WARNING]
+> 1. **Survivorship Bias**: Menganalisis pelanggan setia yang bertahan tanpa memeriksa alasan pelanggan yang churn. Ini ibarat meneliti pesawat tempur Perang Dunia yang selamat untuk menebalkan bajanya di bagian yang tertembak, padahal pesawat yang tertembak di mesin tidak pernah kembali untuk diteliti!
+> 2. **Selection Bias**: Melakukan survei aplikasi hanya kepada pengguna yang memberikan rating bintang 5 di Play Store.
+> 3. **P-Hacking**: Menguji 50 metrik berbeda hingga menemukan 1 metrik yang secara kebetulan memiliki p-value < 0.05 lalu mengklaimnya sebagai keberhasilan fitur.
+
+---
+
+## 8. Kaitan ke Dunia Kerja
+
+Manajemen puncak mengandalkan analis untuk mengambil keputusan bisnis bernilai tinggi. Dengan memahami statistik praktis, kamu melindungi perusahaan dari keputusan impulsif, membedakan tren bisnis nyata dari kebetulan statistik, dan membangun reputasi sebagai analis yang teliti dan berintegritas.`,
         },
         {
           kind: "step",
@@ -1132,8 +1362,8 @@ Manajemen perusahaan bergantung pada analis untuk mengambil keputusan ber-risiko
             note: "P95 dan P99 adalah metrik standar pengujian latency di sistem backend.",
           },
           instruction:
-            "Tuliskan perintah pandas untuk menghitung persentil ke-95 (`quantile(0.95)`) dari kolom `'latency'` pada DataFrame `df` dan simpan ke variabel `p95`.",
-          starterCode: "# Tulis quantile 0.95 di sini\n",
+            "Hitung nilai ambang batas persentil ke-95 (P95) dari kolom `'latency'` pada DataFrame `df` menggunakan fungsi persentil pandas, lalu simpan hasilnya ke variabel `p95`.",
+          starterCode: "# Hitung persentil P95 latensi di sini\n",
           language: "text",
           tests: [
                       {
@@ -1267,13 +1497,17 @@ Manajemen perusahaan bergantung pada analis untuk mengambil keputusan ber-risiko
             note: "Nilai alpha standar industri untuk signifikansi adalah 5% (0.05).",
           },
           instruction:
-            "Tuliskan pengondisian Python `if p_value < 0.05:` yang mencetak string `'Statistically Significant'`.",
-          starterCode: "# Tulis if p_value di bawah ini\n",
+            "Sebuah pengujian A/B menghasilkan angka probabilitas acak pada variabel `p_value`. Tuliskan blok pengondisian `if` untuk mengevaluasi apakah `p_value` lebih kecil dari batas signifikansi standar industri (0.05). Jika terpenuhi, cetak string `'Statistically Significant'`.",
+          starterCode: "# Evaluasi signifikansi p_value pada batas alpha 0.05\n",
           language: "text",
           tests: [
             {
-              pattern: "if\\s+p_value\\s*<\\s*0\\.05\\s*:\\s*\\n?\\s*print\\(\\s*[\"']Statistically Significant[\"']\\s*\\)",
-              message: "Gunakan pengondisian p_value < 0.05",
+              pattern: "if\\s+p_value\\s*<\\s*0\\.05\\s*:",
+              message: "Evaluasi pengondisian apakah `p_value < 0.05`.",
+            },
+            {
+              pattern: "print\\(\\s*[\"']Statistically Significant[\"']\\s*\\)",
+              message: "Cetak string `'Statistically Significant'` saat kondisi terpenuhi.",
             },
           ],
           solution: 'if p_value < 0.05:\n    print("Statistically Significant")',
@@ -1489,76 +1723,126 @@ Manajemen perusahaan bergantung pada analis untuk mengambil keputusan ber-risiko
           title: "Prinsip & Teknik Visualisasi Data Efektif",
           body: `# Prinsip & Teknik Visualisasi Data Efektif
 
-Visualisasi data bukan sekadar menghias slide presentasi dengan gambar berwarna-warni. **Visualisasi Data yang Baik** adalah alat komunikasi visual yang menyampaikan insight kompleks secara instan, jujur, dan mudah dipahami oleh audiens bisnis.
+Visualisasi data bukan sekadar menghias slide presentasi dengan grafik berwarna-warni. **Visualisasi Data yang Efektif** adalah instrumen komunikasi visual yang memandu audiens memahami pola rumit dan mengambil keputusan bisnis yang tepat dalam hitungan detik.
 
 ---
 
 ## 1. Anatomi Matplotlib: Figure vs Axes
 
-Matplotlib menggunakan hierarki berbasis objek untuk menyusun grafik:
-- **Figure**: Kanvas utama luar (bingkai gambar keseluruhan).
-- **Axes**: Sub-area plot di dalam Figure tempat sumbu X/Y, batang, garis, dan titik digambar.
+Matplotlib menggunakan hierarki berorientasi objek (*Object-Oriented API*). Memahami hierarki ini membedakan analis pemula yang bingung mengatur tata letak dengan analis profesional:
+
+- **Figure**: Kanvas utama luar (bingkai gambar keseluruhan jendela/kertas).
+- **Axes**: Sub-area plot di dalam Figure tempat sumbu koordinat X/Y, batang diagram, garis kurva, dan anotasi digambar.
 
 \`\`\`python
-# Pendekatan Berbasis Objek Standar Industri
 import matplotlib.pyplot as plt
 
-fig, ax = plt.subplots(figsize=(8, 5))
-ax.plot(x, y, label='Tren Penjualan')
-ax.set_title('Pertumbuhan Penjualan Bulanan 2024')
-ax.set_xlabel('Bulan')
-ax.set_ylabel('Omset (Juta Rp)')
+# Inisialisasi kanvas berorientasi objek standar industri
+fig, ax = plt.subplots(figsize=(10, 5), dpi=300)
+
+# Gambar grafik langsung ke objek ax
+ax.plot(df['bulan'], df['omset'], color='#1f77b4', linewidth=2.5, label='Omset 2026')
+ax.set_title('Tren Pertumbuhan Omset Bulanan', fontsize=14, pad=15)
+ax.set_xlabel('Bulan Transaksi', fontsize=11)
+ax.set_ylabel('Total Omset (Juta Rp)', fontsize=11)
+
+# Simpan dengan resolusi tinggi tanpa teks terpotong
+plt.savefig('tren_omset.png', dpi=300, bbox_inches='tight')
 \`\`\`
+
+Pendekatan \`fig, ax\` memungkinkan kamu membuat multi-panel grafik (*subplots*) berdampingan secara mandiri dalam satu kanvas tanpa saling menimpa.
 
 ---
 
-## 2. Pohon Keputusan Pemilihan Jenis Chart
+## 2. Pohon Keputusan Pemilihan Jenis Chart (Chart Chooser)
+
+Banyak analis membuat grafik yang keliru bukan karena salah koding, melainkan karena **salah memilih bentuk diagram**.
 
 \`\`\`text
-Pertanyaan Bisnis yang Ingin Dijawab?
- ├── Tren Berkelanjutan sepanjang Waktu?  ─────► Line Chart (ax.plot)
- ├── Perbandingan Antar Kategori?         ─────► Bar Chart (ax.bar)
- ├── Sebaran/Distribusi Nilai Tunggal?    ─────► Histogram (ax.hist)
- ├── Korelasi Antara 2 Variabel Kontinu?  ─────► Scatter Plot (ax.scatter)
- └── Deteksi Outlier & Distribusi Grup?   ─────► Box Plot (sns.boxplot)
+Pertanyaan Analisis Bisnis yang Ingin Dijawab?
+ ├── 1. Perubahan/Tren Sepanjang Waktu Kontinu? ────► Line Chart (ax.plot)
+ │      Contoh: Omset harian 365 hari, churn rate bulanan
+ │
+ ├── 2. Perbandingan Nominal Antar Kategori?
+ │      ├── Kategori <= 5 nama pendek ─────────────► Vertical Bar Chart (ax.bar)
+ │      └── Kategori > 5 atau label nama panjang ──► Horizontal Bar Chart (ax.barh)
+ │           Contoh: Peringkat penjualan 38 provinsi di Indonesia
+ │
+ ├── 3. Hubungan / Korelasi 2 Variabel Kontinu? ───► Scatter Plot (ax.scatter)
+ │      Contoh: Biaya iklan digital vs jumlah unduhan aplikasi
+ │
+ ├── 4. Sebaran Distribusi 1 Variabel Numerik? ────► Histogram (ax.hist)
+ │      Contoh: Distribusi usia pelanggan atau nominal belanja keranjang
+ │
+ └── 5. Perbandingan Sebaran Multi-Grup & Outlier? ─► Box Plot / Violin Plot (sns.boxplot)
+        Contoh: Perbandingan sebaran gaji antar departemen
 \`\`\`
 
 ---
 
-## 3. Matriks Rujukan Library Visualisasi Python
+## 3. Matriks Komparasi Library Visualisasi Python
 
-| Library | Keunggulan Utama | Metode Kunci |
+| Library | Filosofi Utama | Kapan Wajib Digunakan? |
 |---|---|---|
-| Matplotlib | Kontrol tingkat rendah presisi (fig, ax) | \`plt.subplots()\`, \`ax.set_ylim()\`, \`plt.savefig()\` |
-| Seaborn | Chart statistik otomatis dari DataFrame | \`sns.heatmap()\`, \`sns.boxplot()\`, \`sns.barplot()\` |
+| **Matplotlib** | Kontrol tingkat rendah (*low-level control*) penuh pada setiap piksel, sumbu, dan teks | Laporan cetak resmi, penataan multi-axes kompleks, kustomisasi visual kustom |
+| **Seaborn** | Visualisasi statistik tingkat tinggi terintegrasi langsung dengan DataFrame pandas | Eksplorasi korelasi cepat (\`sns.heatmap\`), perbandingan distribusi kategori (\`sns.boxplot\`) |
+| **Plotly** | Visualisasi interaktif berbasis JavaScript (hover tooltip, zoom, pan) | Presentasi web dinamis, aplikasi analitik interaktif (Streamlit/Dash) |
 
 ---
 
-## 4. Etika & Kejujuran Visual (Zero Baseline)
+## 4. Prinsip Data-Ink Ratio (Edward Tufte) & Decluttering
+
+Pakar visualisasi data Edward Tufte memperkenalkan konsep **Data-Ink Ratio**: porsi tinta pada grafik yang digunakan untuk menyampaikan informasi data sesungguhnya, dibagi total tinta yang dihabiskan.
+
+> **Tujuan Analis**: Maksimalkan Data-Ink Ratio dengan membuang seluruh elemen visual yang tidak informatif (*Chart Junk*)!
+
+\`\`\`text
+[Grafik Berantakan / Chart Junk]          [Grafik Bersih / Decluttered]
+┌──────────────────────────────┐          ┌──────────────────────────────┐
+│ [3D Shadow] [Gridline Hitam] │   ===>   │ Omset naik 24% di Q2         │  <- Action Headline
+│ [Warna Pelangi Tiap Batang]  │          │ █                            │
+│ [Border Kotak Tebal Sekeliling│          │ █   █                        │  <- Batang Fokus Berwarna
+│ [Legenda Terpisah di Pojok]  │          │ ░   ░   ░                  │  <- Batang Konteks Abu-abu
+└──────────────────────────────┘          └──────────────────────────────┘
+\`\`\`
+
+### Langkah Praktis Decluttering:
+1. **Hapus Border Atas dan Kanan**: \`ax.spines['top'].set_visible(False)\` dan \`ax.spines['right'].set_visible(False)\`.
+2. **Lembutkan Garis Grid**: Jangan gunakan gridline hitam pekat; gunakan warna abu-abu muda tipis (\`alpha=0.3\`) hanya pada sumbu utama.
+3. **Pelabelan Langsung (Direct Labeling)**: Tuliskan label nama kategori tepat di atas batang atau di ujung garis kurva daripada memaksa mata audiens melompat bolak-balik melihat kotak legenda di sudut.
+
+---
+
+## 5. Psikologi Persepsi Visual & Atribut Pra-atentif
+
+Otak manusia memproses **Atribut Pra-atentif (Preattentive Attributes)** seperti warna, posisi, dan ukuran dalam waktu kurang dari 250 milidetik sebelum kesadaran aktif bekerja.
+
+- **Aturan Warna 90/10**: Gunakan warna abu-abu netral (\`#d3d3d3\` atau \`#708090\`) untuk 90% data latar belakang sebagai konteks pembanding. Gunakan **1 warna aksen kontras** (misal: biru tua atau oranye) HANYA untuk titik data atau kategori penting yang ingin kamu diskusikan.
+- **Anotasi Presisi**: Gunakan \`ax.annotate('Promo Flash Sale', xy=(x_val, y_val), xytext=(...), arrowprops=...)\` untuk menjelaskan peristiwa bisnis penting di balik lonjakan grafik.
+
+---
+
+## 6. Etika Visual: Sumbu Y Wajib Mulai dari 0 (Zero Baseline)
 
 > [!IMPORTANT]
-> **Aturan Emas Bar Chart**: Sumbu Y pada Grafik Batang **WAJIB** dimulai dari angka 0 (\`ax.set_ylim(bottom=0)\`). Memotong sumbu Y (misal mulai dari angka 90) akan membuat perbedaan angka kecil (98 vs 100) terlihat secara visual seolah-olah bernilai 5 kali lipat. Ini adalah bentuk manipulasi visual yang dilarang keras di industri.
+> **Aturan Wajib Bar Chart**: Sumbu vertikal (Y) pada diagram batang **HARUS SELALU DIMULAI DARI ANGKA 0** (\`ax.set_ylim(bottom=0)\`).
+> Pada grafik batang, audiens menilai besaran kuantitas dari panjang fisik batang tersebut. Memotong sumbu Y (misal grafik dimulai dari 95 untuk membandingkan 96 vs 100) membuat perbedaan kecil tampak 500% lebih besar secara visual. Ini adalah bentuk manipulasi data yang merusak integritas profesional analis.
+> *(Catatan: Line Chart diperbolehkan tidak dimulai dari 0 jika tujuannya memantau fluktuasi halus seperti indeks harga saham, asalkan diberi keterangan sumbu yang sangat jelas).*
 
 ---
 
-## 5. Analogi Dunia Nyata
-
-Grafik tanpa judul dan anotasi ibarat **peta tanpa nama jalan dan petunjuk arah**. Pembaca akan menghabiskan waktu menebak-nebak apa maksud dari titik-titik data tersebut alih-alih mengambil keputusan.
-
----
-
-## 6. Jebakan & Kesalahan Umum (Common Pitfalls)
+## 7. Jebakan & Kesalahan Umum (Common Pitfalls)
 
 > [!WARNING]
-> 1. **Memotong Sumbu Y pada Bar Chart**: Memperdaya audiens eksekutif dengan perbedaan batang yang tampak fantastis padahal angkanya hampir sama.
-> 2. **Chart Junk (Over-decorating)**: Menggunakan efek 3D, shadow tebal, dan garis grid yang menyilaukan mata sehingga menutupi pesan utama grafik.
-> 3. **Pie Chart dengan Banyak Kategori**: Mata manusia sulit membandingkan sudut lingkaran jika kategori lebih dari 5. Gunakan Horizontal Bar Chart!
+> 1. **Pie Chart dengan Terlalu Banyak Kategori**: Mata manusia sangat buruk dalam membedakan sudut lingkaran jika irisannya lebih dari 5. Gantilah dengan Horizontal Bar Chart!
+> 2. **Grafik 3D Pseudo-Volume**: Efek 3D mendistorsi sudut perspektif sehingga batang di depan terlihat lebih besar daripada batang di belakang meski nilainya lebih kecil.
+> 3. **Lupa Memberi Satuan pada Label Sumbu**: Menulis label angka "10, 20, 30" tanpa keterangan apakah satuannya Juta Rupiah, Ribu Unit, atau Persen membuat audiens menebak-nebak.
 
 ---
 
-## 7. Kaitan ke Dunia Kerja
+## 8. Kaitan ke Dunia Kerja: Visualisasi untuk Presentasi Direksi
 
-Grafik beresolusi tinggi yang disimpan dengan \`plt.savefig('chart.png', dpi=300, bbox_inches='tight')\` adalah komponen utama dokumen laporan mingguan di perusahaan. Analis yang mampu membuat grafik bersih (*decluttered*) dengan anotasi yang tepat selalu dipercaya untuk mengisi slide presentasi jajaran Direksi.`,
+Grafik yang disimpan dengan resolusi tinggi (\`plt.savefig('output.png', dpi=300, bbox_inches='tight')\`) adalah aset utama dokumen rapat pimpinan. Analis yang mampu menyajikan grafik bersih (*decluttered*) dengan pesan bisnis instan selalu mendapatkan kepercayaan lebih tinggi dari jajaran manajemen dibandingkan analis yang menampilkan grafik standar bawaan sistem yang berantakan.`,
         },
         {
           kind: "step",
@@ -1916,69 +2200,119 @@ Grafik beresolusi tinggi yang disimpan dengan \`plt.savefig('chart.png', dpi=300
           title: "Business Intelligence & Pembuatan Dashboard Interaktif",
           body: `# Business Intelligence & Pembuatan Dashboard Interaktif
 
-Aplikasi **Business Intelligence (BI)** seperti **Looker Studio** (Google Data Studio), **Tableau**, dan **Power BI** memungkinkan pemangku kepentingan (*stakeholders*) memantau kesehatan bisnis secara mandiri (*self-service*) melalui dashboard interaktif.
+Aplikasi **Business Intelligence (BI)** modern seperti **Google Looker Studio**, **Microsoft Power BI**, dan **Tableau** adalah jembatan vital antara data mentah dengan eksekusi bisnis sehari-hari. Dashboard BI memungkinkan manajemen memantau metrik kesehatan perusahaan secara mandiri (*self-service analytics*) tanpa bergantung pada pembuatan laporan manual yang lambat.
 
 ---
 
-## 1. Fondasi BI: Dimensi vs Metrik
+## 1. Fondasi Arsitektur BI: Dimensi vs Metrik & Star Schema
 
-Setiap grafik atau tabel di BI Tools dibangun dari dua jenis kolom utama:
-- **Dimensi (Dimension)**: Data kualitatif/kategori yang digunakan untuk memecah data (misal: *Wilayah*, *Kategori Produk*, *Tanggal*).
-- **Metrik (Metric)**: Angka kuantitatif yang diagregasi (misal: *Sum of Sales*, *Average Order Value*, *Count of Customers*).
+Semua visualisasi di BI Tools dibangun dari dua jenis kolom:
+- **Dimensi (Dimension)**: Data kualitatif kategorikal yang digunakan untuk memotong, memfilter, dan mengelompokkan data (misal: *Nama Kota*, *Kategori Produk*, *Tipe Pelanggan*, *Tanggal Transaksi*).
+- **Metrik (Metric)**: Angka kuantitatif yang dapat dihitung dan diagregasi (misal: *Total Penjualan*, *Jumlah Pesanan*, *Rata-rata Margin*).
 
-> **Rumus Pertanyaan Bisnis**: \`"Tampilkan [Metrik] yang dipecah berdasarkan [Dimensi]"\`. Contoh: *"Berapa Total Omset (Metrik) per Kota (Dimensi)?"*
+> **Formula Pertanyaan Bisnis Standar**: \`"Tampilkan [Metrik] yang dipecah berdasarkan [Dimensi]"\`. Contoh: *"Tampilkan Total Omset (Metrik) berdasarkan Provinsi (Dimensi)"*.
 
----
-
-## 2. Diagram Pola Layout Dashboard (Z-Pattern)
+### Konsep Pemodelan Data: Star Schema
+Di lingkungan analitik enterprise, tabel data disusun dalam skema bintang (*Star Schema*):
+- **Tabel Fakta (Fact Table)**: Tabel transaksi pusat yang sangat panjang, memuat metrik angka dan foreign key (misal: \`fact_orders\`).
+- **Tabel Dimensi (Dimension Table)**: Tabel master atribut deskriptif yang terhubung ke tabel fakta via relasi One-to-Many (\`dim_customers\`, \`dim_products\`, \`dim_date\`).
 
 \`\`\`text
-[ Top Left: Scorecards / KPI ] ────────► [ Top Right: Tren Utama / Line Chart ]
-           │                                             │
-           ▼                                             ▼
-[ Mid: Breakdown / Bar Chart ] ────────► [ Bottom: Detail Tabel Breakdown ]
+                  ┌──────────────────┐
+                  │  dim_customers   │
+                  └────────┬─────────┘
+                           │ 1
+                           │ N
+┌──────────────┐  1      N ┌──────────────────┐ N      1  ┌──────────────┐
+│ dim_products ├───────────┤   fact_orders    ├───────────┤   dim_date   │
+└──────────────┘           └──────────────────┘           └──────────────┘
 \`\`\`
 
-> **Aturan Tata Letak**: Susun komponen dari kiri-atas ke kanan-bawah sesuai alur baca mata manusia. Tempatkan 3-4 indikator utama (*Scorecard*) di paling atas, disusul tren waktu, baru detail tabel di paling bawah.
+---
+
+## 2. Diagram Pola Layout Dashboard Manajemen (Z-Pattern)
+
+Mata manusia membaca dokumen dari kiri-atas meluncur ke kanan-atas, lalu turun ke kiri-bawah dan kanan-bawah (**Z-Pattern**). Susunlah dashboard sesuai hierarki keputusan bisnis:
+
+\`\`\`text
+┌────────────────────────────────────────────────────────────────────────┐
+│ [1. HEADER: Judul Laporan & Date Range Control (Filter Tanggal)]       │
+├────────────────────────────────────────────────────────────────────────┤
+│ [2. SCORECARDS / KPI CARDS] (Top Left ➔ Top Right)                     │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌─────────────┐ │
+│  │ Total Omset  │  │ Total Orders │  │ AOV (Avg Rp) │  │ Churn Rate  │ │
+│  │ Rp 1.45 M    │  │ 12,450       │  │ Rp 116.4 Rb  │  │ 3.2%        │ │
+│  └──────────────┘  └──────────────┘  └──────────────┘  └─────────────┘ │
+├────────────────────────────────────────────────────────────────────────┤
+│ [3. TREN WAKTU & PERBANDINGAN KATEGORI] (Mid-Section)                  │
+│  ┌───────────────────────────────┐  ┌────────────────────────────────┐ │
+│  │ Tren Omset Harian (Line Chart)│  │ Top 5 Kategori Laku (Bar Chart)│ │
+│  └───────────────────────────────┘  └────────────────────────────────┘ │
+├────────────────────────────────────────────────────────────────────────┤
+│ [4. DETAIL OPERASIONAL] (Bottom-Section)                               │
+│  ┌───────────────────────────────────────────────────────────────────┐ │
+│  │ Tabel Breakdown Transaksi Terinci (Bisa Di-filter & Di-export CSV)│ │
+│  └───────────────────────────────────────────────────────────────────┘ │
+└────────────────────────────────────────────────────────────────────────┘
+\`\`\`
 
 ---
 
-## 3. Komparasi Platform BI Tools Populer
+## 3. Dosa Terbesar Calculated Field: Menghitung Rasio Non-Aditif
 
-| Fitur | Google Looker Studio | Tableau | Microsoft Power BI |
+**Calculated Field** memungkinkan kamu membuat rumus metrik turunan langsung di dalam dashboard BI tanpa mengubah database mentah.
+
+> [!CAUTION]
+> **Jebakan Rasio Agregat: Mengapa \`AVG(Margin %)\` Salah Fatal?**
+> Bayangkan dua transaksi berikut:
+> - Transaksi A (kecil): Revenue Rp 100.000, Profit Rp 50.000 (Margin = 50%).
+> - Transaksi B (besar): Revenue Rp 10.000.000, Profit Rp 500.000 (Margin = 5%).
+> 
+> Bila kamu menghitung rata-rata dari kolom margin:
+> \`AVG(Margin %) = (50% + 5%) / 2 = 27.5%\` (SALAH BESAR!).
+> 
+> Realitas keuangan bisnis sesungguhnya:
+> \`Total Profit (Rp 550.000) / Total Revenue (Rp 10.100.000) = 5.44%\`!
+> 
+> **Aturan Wajib**: Rasio harus selalu dihitung dari jumlah total dibagi jumlah total:
+> \`SUM(Profit) / SUM(Revenue)\`. Jangan pernah merata-ratakan persentase!
+
+---
+
+## 4. Komparasi Platform BI Populer di Industri
+
+| Parameter | Google Looker Studio | Microsoft Power BI | Tableau |
 |---|---|---|---|
-| Biaya | Gratis (Web-based) | Berbayar (Enterprise) | Berbayar / Freemium |
-| Integrasi Utama | Google Sheets, BigQuery | SQL Server, Snowflake | Azure, MS Excel, SQL |
-| Kemudahan Pemula | Sangat Tinggi (Drag & Drop) | Sedang - Tinggi | Sedang |
-| Calculated Field | Sintaks mirip SQL/Formil | DAX & Tableau Calc | DAX (Data Analysis Expressions) |
+| **Model Biaya** | 100% Gratis (Cloud Web) | Berbayar per user (Pro) / Desktop Gratis | Berbayar lisensi enterprise |
+| **Konektor Alami** | Google Sheets, BigQuery, Google Analytics | Microsoft Excel, Azure, SQL Server | SQL Server, Snowflake, Salesforce |
+| **Bahasa Rumus** | Formula sintaks mirip SQL / Spreadsheet | DAX (Data Analysis Expressions) | Tableau Calculated Fields / LOD |
+| **Pengguna Target** | Startup, Digital Agency, UKM | Korporasi, Manufaktur, Perbankan | Perusahaan Enterprise Skala Global |
+| **Kemudahan Pemula** | Paling Cepat & Ramah Pemula | Sedang (DAX butuh kurva belajar) | Menengah ke Tinggi |
 
 ---
 
-## 4. Format Scorecard & Filter Tanggal
+## 5. Fitur Interaktivitas yang Menghidupkan Dashboard
 
-- **Kartu Scorecard**: Menampilkan 1 angka KPI utama (misal Total Omset Bulan Ini). Selalu format sesuai standar lokal (seperti \`Rp 12.500.000\` menggunakan titik pemisah ribuan).
-- **Control Date Range (Date Slicer)**: Filter tanggal adalah komponen paling vital di dashboard. Pengguna dapat memilih rentang waktu (*This Month*, *Last Quarter*, *Year to Date*) tanpa meminta bantuan analis.
-
----
-
-## 5. Analogi Dunia Nyata
-
-Dashboard BI ibarat **Dashboard di dalam Mobil Balap**. Pengemudi (CEO / Manajer) tidak perlu membuka kap mesin dan memeriksa oli secara manual saat menyetir; mereka cukup melihat jarum spedometer dan indikator bensin untuk mengambil keputusan instan.
+Dashboard statis tidak ada bedanya dengan berkas PDF kaku. Dashboard modern harus memiliki interaktivitas:
+1. **Date Range Slicer**: Pemilih rentang waktu (misal: *Bulan Berjalan vs Bulan Lalu*, *Year to Date*) yang mengontrol seluruh chart secara simultan.
+2. **Cross-Filtering**: Mengklik salah satu batang diagram batang (misal provinsi "Jawa Timur") otomatis memfilter line chart dan scorecard di sekelilingnya agar hanya menampilkan transaksi Jawa Timur.
+3. **Drill-Down Hierarchy**: Memungkinkan pengguna mengklik kategori tingkat tinggi untuk melihat rincian sub-kategori tanpa membuka halaman baru.
+4. **Scheduled Refresh & Email Delivery**: Menjadwalkan pengiriman laporan PDF otomatis setiap hari Senin pukul 08.00 pagi ke email direksi via sistem penjadwalan terintegrasi.
 
 ---
 
-## 6. Jebakan & Kesalahan Umum (Common Pitfalls)
+## 6. Jebakan & Kesalahan Desain Dashboard (Common Pitfalls)
 
 > [!WARNING]
-> 1. **Salah Menghitung Rasio di Calculated Field**: Menghitung rata-rata persentase margin per baris (\`AVG(Margin %)\`) akan menghasilkan angka yang salah fatal. Wajib menggunakan total profit dibagi total omset: \`SUM(Profit) / SUM(Revenue)\`.
-> 2. **Menjejalkan 20 Chart di Satu Halaman**: Memicu kebingungan visual (*cognitive overload*). Batasi 4-6 chart per halaman dashboard.
-> 3. **Lupa Menjadwalkan Scheduled Refresh**: Menampilkan data basi tanpa fitur auto-refresh akan membuat keputusan manajemen terlambat.
+> 1. **Dashboard Seperti Kokpit Pesawat (Overcrowding)**: Menjejali lebih dari 10 grafik ke dalam satu halaman. Batasi 4 hingga 6 komponen visual per layar agar fokus eksekutif tidak terdistraksi.
+> 2. **Menampilkan Data Basi Tanpa Auto-Refresh**: Manajemen mengambil keputusan berdasarkan data yang belum menyegarkan transaksi kemarin. Selalu periksa status koneksi data source.
+> 3. **Format Angka Tidak Konsisten**: Menampilkan angka \`1450000\` tanpa simbol mata uang dan tanpa titik ribuan (\`Rp 1.450.000\`). Scorecard wajib menggunakan format angka yang langsung terbaca.
 
 ---
 
 ## 7. Kaitan ke Dunia Kerja
 
-Kemampuan membangun dashboard Looker Studio atau Power BI yang bersih dan interaktif membuat kamu menjadi pahlawan bagi tim manajemen. Stakeholder dapat mengecek performa penjualan setiap pagi secara otomatis tanpa membebani tim data dengan permintaan laporan manual bulanan.`,
+Kemampuan membangun dashboard Looker Studio atau Power BI yang intuitif, cepat diakses, dan bebas galat logika perhitungan mengubah posisimu dari sekadar pengolah data teknis menjadi **mitra analitik strategis** yang dipercaya oleh jajaran manajemen perusahaan.`,
         },
         {
           kind: "step",
@@ -2236,7 +2570,7 @@ Kemampuan membangun dashboard Looker Studio atau Power BI yang bersih dan intera
             output: "['looker studio']",
           },
           instruction:
-            "Buat dictionary bernama `alat_bi` berisi tiga alat: `'looker studio'` bernilai `'gratis'`, `'tableau'` bernilai `'berbayar'`, dan `'power bi'` bernilai `'berbayar'`.",
+            "Sebagai analis, kamu diminta memetakan model lisensi biaya dari tiga alat Business Intelligence terpopuler (`'looker studio'`, `'tableau'`, dan `'power bi'`). Buat dictionary `alat_bi` dengan nama ketiga alat tersebut sebagai kuncinya (semua huruf kecil) dan tentukan status biayanya sebagai nilai string: `'gratis'` untuk alat berbasis cloud Google, dan `'berbayar'` untuk kedua alat enterprise lainnya.",
           starterCode: "# Petakan alat BI dan status biayanya\n",
           language: "text",
           tests: [
@@ -2289,7 +2623,7 @@ Kemampuan membangun dashboard Looker Studio atau Power BI yang bersih dan intera
             output: "0 7 * * 1",
           },
           instruction:
-            "Buat dictionary bernama `jadwal_laporan` dengan kunci `'penerima'` berisi `'direktur@toko.id'` dan kunci `'cron'` berisi jadwal setiap hari Senin pukul 08.00 (`'0 8 * * 1'`).",
+            "Untuk mengotomatiskan pengiriman email PDF dashboard mingguan ke pimpinan, buat dictionary `jadwal_laporan`. Isi kunci `'penerima'` dengan alamat `'direktur@toko.id'`, dan tentukan ekspresi string pada kunci `'cron'` untuk jadwal rutin setiap hari Senin pukul 08:00 pagi (menit 0, jam 8, setiap hari dalam bulan, setiap bulan, hari ke-1).",
           starterCode: "# Susun konfigurasi pengiriman laporan terjadwal\n",
           language: "text",
           tests: [
@@ -2420,67 +2754,107 @@ Kemampuan membangun dashboard Looker Studio atau Power BI yang bersih dan intera
           title: "Seni Data Storytelling & Komunikasi Hasil Analisis",
           body: `# Seni Data Storytelling & Komunikasi Hasil Analisis
 
-Sehebat apa pun analisis data dan pemodelan yang kamu buat, kinerjamu tidak akan berdampak jika kamu gagal menyampaikannya kepada pengambil keputusan. **Data Storytelling** adalah seni menerjemahkan angka mentah menjadi narasi bisnis yang menggerakkan aksi nyata.
+Sehebat apa pun query SQL yang kamu tulis, sebersih apa pun pipeline pandas yang kamu rancang, dan serumit apa pun pemodelan statistik yang kamu bangun, **seluruh kinerjamu akan bernilai nol jika kamu gagal menyampaikannya kepada pengambil keputusan bisnis**.
+
+**Data Storytelling** adalah seni menerjemahkan angka mentah dan grafik analitik menjadi narasi bisnis terstruktur yang menggerakkan aksi nyata.
 
 ---
 
-## 1. Mengenali Audiens: Eksekutif vs Tim Teknis
+## 1. Mengenali Audiens: Eksekutif C-Level vs Tim Rekan Teknis
 
-Isi datamu boleh sama, namun penyampaiannya harus disesuaikan dengan siapa yang duduk di depanmu:
-- **C-Level / Eksekutif**: Menginginkan ringkasan instan, dampak terhadap pendapatan/biaya, dan pilihan rekomendasi keputusan. Jangan habiskan waktu mereka dengan pemaparan sintaks Python atau metode data cleaning!
-- **Tim Teknis / Rekan Analis**: Membutuhkan metodologi, definisi variabel, langkah pembersihan, validasi sampel, dan batasan model.
+Presentasi analitik yang gagal hampir selalu bermula dari kesalahan membaca siapa yang duduk di depan layar presentasi:
+
+| Kebutuhan Audiens | Jajaran Eksekutif (CEO, CFO, Direktur) | Tim Manajer & Rekan Teknis (Lead, Dev, Analis) |
+|---|---|---|
+| **Alokasi Waktu** | 2 - 5 menit pertama sangat menentukan | 30 - 60 menit sesi bedah metodologi |
+| **Fokus Utama** | Dampak pendapatan (*revenue*), biaya (*cost*), dan risiko bisnis | Kualitas data, validitas sampel, dan asumsi algoritma |
+| **Bahasa yang Dipakai** | Metrik bisnis (GMV, Churn, ROI, CAC, LTV) | Sintaks Python, fungsi \`fillna()\`, dan skor p-value |
+| **Format yang Disukai** | **BLUF (Bottom Line Up Front)** & 1 Halaman Executive Summary | Jupyter Notebook terperinci dan diagram alur pipeline |
+
+> [!IMPORTANT]
+> **Prinsip BLUF (Bottom Line Up Front)**: Jangan bercerita secara kronologis seperti novel misteri (*"Pertama kami membersihkan missing value, lalu kami membuat pivot..."*). Sampaikan kesimpulan utama dan rekomendasi tindakan di kalimat pertama!
 
 ---
 
-## 2. Struktur Narasi 3 Tahap
+## 2. Struktur Piramida Minto (The Minto Pyramid Principle)
+
+Standar emas komunikasi bisnis di konsultan manajemen top dunia (seperti McKinsey & BCG) adalah **The Minto Pyramid Principle**:
 
 \`\`\`text
-[1. KONTEKS (Latar Belakang)]
-     │  Latar situasi bisnis saat ini (misal: "Churn rate naik 3 bulan terakhir")
-     ▼
-[2. TEMUAN DATA (Actionable Insight)]
-     │  Temuan mengejutkan dari data (misal: "62% churn terjadi setelah pembayaran gagal")
-     ▼
-[3. REKOMENDASI AKSI (Rencana Keputusan)]
-     └─► Usulan konkret (misal: "Aktifkan otomatisasi percoba ulang pembayaran gateway X")
+                  ┌──────────────────────────────────────────────┐
+                  │ 1. KESIMPULAN UTAMA / REKOMENDASI (PUNCAK)   │
+                  │ "Kurangi alokasi kuota mitra kurir X 40%..."  │
+                  └──────────────────────┬───────────────────────┘
+                                         │
+        ┌────────────────────────────────┼────────────────────────────────┐
+        ▼                                ▼                                ▼
+┌───────────────────────┐┌───────────────────────┐┌───────────────────────┐
+│ Argumen Bukti 1:      ││ Argumen Bukti 2:      ││ Argumen Bukti 3:      │
+│ 62% keterlambatan kirim││ Retensi pembeli turun││ Kerugian finansial   │
+│ terpusat di kurir X   ││ 15% pasca telat kirim ││ refund Rp 450 Juta    │
+└───────────────────────┘└───────────────────────┘└───────────────────────┘
 \`\`\`
 
 ---
 
-## 3. Matriks Perbedaan Observation vs Actionable Insight
+## 3. Alur Narasi 3 Bagian: Konteks ➔ Temuan Kunci ➔ Tindakan Rekomendasi
 
-| Jenis Pernyataan | Kalimat Contoh | Kualitas & Reaksi Audiens |
+Dalam presentasi slide, gunakan alur tiga babak yang alami:
+1. **Konteks (The Context)**: Situasi bisnis awal yang disepakati bersama.
+   - *Contoh*: *"Target tingkat pembatalan pesanan perusahaan kita di kuartal kedua adalah di bawah 4%."*
+2. **Temuan Kunci (The Data Insight)**: Temuan mengejutkan dari eksplorasi data yang menjelaskan akar masalah.
+   - *Contoh*: *"Data menunjukkan pembatalan melonjak menjadi 8.2%, dan 74% di antaranya terjadi khusus pada metode pengiriman reguler di wilayah Bekasi akibat overload gudang mitra."*
+3. **Rekomendasi Tindakan (The Actionable Recommendation)**: Usulan keputusan bisnis konkret yang terukur.
+   - *Contoh*: *"Segera alihkan 50% pesanan Bekasi ke gudang mitra alternatif mulai minggu depan untuk menyelamatkan potensi omset Rp 280 Juta."*
+
+---
+
+## 4. Matriks Komparasi: Data Observation vs Actionable Insight
+
+| Kategori | Contoh Pernyataan | Respon Audiens Bisnis |
 |---|---|---|
-| Data Observation | *"Penjualan di wilayah Bekasi turun 15% pada bulan Mei."* | Buruk. Audiens bertanya: *"Lalu kita harus bagaimana?"* |
-| Actionable Insight | *"Penjualan Bekasi turun 15% akibat keterlambatan kurir mitra A, sehingga rekomendasinya adalah mengalihkan 50% kuota pengiriman ke mitra B bulan ini."* | Sangat Baik! Mengarahkan langsung pada keputusan bisnis konkret. |
+| **Data Observation** (Lemah) | *"Penjualan produk kategori elektronik turun 10% di bulan Mei."* | Audiens bertanya: *"Terus kenapa? Kita harus ngapain?"* |
+| **Actionable Insight** (Kuat) | *"Penjualan elektronik turun 10% di bulan Mei akibat kehabisan stok varian terpopuler selama 12 hari berturut-turut, sehingga rekomendasinya adalah meningkatkan safety stock supplier A sebesar 25% menjelang tanggal kembar bulan depan."* | Audiens langsung menyetujui anggaran dan mengeksekusi tindakan. |
 
 ---
 
-## 4. Prinsip "One Slide, One Key Takeaway"
+## 5. Anatomi Slide Eksekutif: "One Slide, One Key Takeaway"
 
-> [!IMPORTANT]
-> **Gunakan Action Headline**: Jangan gunakan label judul slide generik seperti \`"Grafik Penjualan Bulanan"\`. Gantilah dengan pesan utama berupa kalimat lengkap: \`"Penjualan Turun 12% Sejak Kenaikan Biaya Pengiriman di Bulan Mei"\`. Bila seluruh slide ditutup dan audiens hanya membaca judulnya, pesan analisismu harus tetap tersampaikan!
+Jangan biarkan audiens menebak pesan di dalam grafik. Terapkan prinsip **Action Headline**:
 
----
+- ❌ **Judul Lemah (Label Deskriptif)**: \`"Grafik Penjualan Bulanan 2026"\`
+- ✅ **Judul Kuat (Action Headline)**: \`"Penjualan Turun 12% Sejak Kenaikan Biaya Ongkir pada Bulan Mei"\`
 
-## 5. Analogi Dunia Nyata
-
-Data Storytelling ibarat **tugas seorang dokter spesialis saat menjelaskan hasil X-ray kepada pasien**. Pasien tidak perlu membaca rumus gelombang elektromagnetik mesin X-ray; pasien hanya perlu tahu di mana letak cedera, seberapa parah kondisinya, dan obat apa yang harus diminum hari ini.
+> **Aturan 3 Detik**: Jika semua diagram pada slide ditutup dan audiens hanya membaca satu baris judul utamanya, poin keputusan bisnis analisismu sudah harus tersampaikan secara utuh!
 
 ---
 
-## 6. Jebakan & Kesalahan Umum (Common Pitfalls)
+## 6. Seni Menghadapi Sanggahan Data (Handling Pushback)
+
+Ketika presentasi di hadapan pimpinan atau departemen lain yang kinerjanya kamu sorot, kamu pasti akan menghadapi pertanyaan bernada menyanggah: *"Angka kamu salah! Sistem internal kami mencatat hasilnya baik-baik saja!"*.
+
+Tiga langkah elegan menghadapi sanggahan tanpa defensif:
+1. **Langkah 1: Akui Keraguan Secara Tenang**: *"Pertanyaan yang sangat baik, wajar bila ada perbedaan angka dengan laporan internal divisi bapak."*
+2. **Langkah 2: Buka Definisi & Batasan Data Secara Transparan**: *"Angka ini ditarik dari tabel transaksi order sukses periode 1 hingga 30 Juni, mengecualikan transaksi yang dibatalkan oleh pembeli."*
+3. **Langkah 3: Tawarkan Validasi Silang Pasca-Rapat**: *"Saya sangat senang bila bisa mencocokkan definisi filter data bersama tim bapak besok siang untuk memastikan integritas angkanya."*
+
+> [!TIP]
+> **Teknik Pre-Wiring (Sosialisasi Awal)**: Sebelum rapat besar dengan jajaran direksi, temui pemangku kepentingan kunci secara informal 1-on-1 untuk memperlihatkan temuan awal. Jika ada perbedaan angka atau temuan sensitif, selesaikan lebih dulu sebelum dipresentasikan di forum resmi.
+
+---
+
+## 7. Jebakan & Etika Penyajian Data (Common Pitfalls)
 
 > [!WARNING]
-> 1. **Membawa Slide Metodologi ke Rapat Direksi**: Kehilangan perhatian eksekutif di 2 menit pertama karena sibuk menjelaskan rumitnya fungsi \`fillna()\`.
-> 2. **Sikap Defensif Saat Data Dipertanyakan**: Membantah sekeras mungkin saat stakeholder meragukan angka. Sikap yang benar: *"Terima kasih atas masukannya, datanya bersumber dari tabel transaksi X periode Y, saya siap menguji silang bersama tim besok."*
-> 3. **Manipulasi Visual demi Menyenangkan Atasan**: Mengubah skala sumbu grafik agar tren buruk terlihat seperti kenaikan. Ini merusak integritas profesi analis.
+> 1. **Cherry-Picking Periode Waktu**: Sengaja memilih rentang tanggal tertentu yang hanya menampilkan tren kenaikan demi menyenangkan atasan, padahal tren tahunan sebenarnya sedang anjlok.
+> 2. **Bersikap Defensif dan Menyerang Balik**: Mempertahankan harga diri dengan mendebat stakeholder secara emosional. Integritas analis dibangun dari bukti data dan transparansi metode.
+> 3. **Slide Penuh Teks Ukuran 10pt**: Memindahkan laporan teks utuh ke dalam slide presentasi sehingga audiens sibuk membaca daripada mendengarkan penjelasanmu.
 
 ---
 
-## 7. Kaitan ke Dunia Kerja
+## 8. Kaitan ke Dunia Kerja
 
-Data Storytelling adalah keahlian pembeda utama yang membedakan **Data Analyst Junior** (sebatas pembuat query dan grafik) dengan **Senior Data Analyst / Lead** yang dipercaya menghadiri rapat strategis direksi untuk menentukan arah ekspansi perusahaan.`,
+Data Storytelling adalah keahlian yang membedakan **Data Analyst Junior** (yang hanya mengeksekusi tiket query) dengan **Lead Analyst / Head of BI** yang dipercaya menjadi penasihat strategis para pengambil keputusan utama perusahaan.`,
         },
         {
           kind: "step",
@@ -2493,7 +2867,7 @@ Data Storytelling adalah keahlian pembeda utama yang membedakan **Data Analyst J
             output: "temuan",
           },
           instruction:
-            "Buat dictionary bernama `isi_presentasi` dengan dua kunci: `'eksekutif'` berisi list `['temuan', 'dampak', 'rekomendasi']`, dan `'teknis'` berisi list `['sumber data', 'metode', 'asumsi']`.",
+            "Saat merancang bahan presentasi, susun materi agar tepat sasaran bagi dua kelompok audiens. Buat dictionary `isi_presentasi` dengan dua kunci: `'eksekutif'` yang memuat list tiga fokus bisnis utama (`'temuan'`, `'dampak'`, dan `'rekomendasi'`), serta `'teknis'` yang memuat list tiga komponen metodologi data (`'sumber data'`, `'metode'`, dan `'asumsi'`).",
           starterCode: "# Susun isi presentasi menurut audiensnya\n",
           language: "text",
           tests: [
@@ -2871,81 +3245,121 @@ Data Storytelling adalah keahlian pembeda utama yang membedakan **Data Analyst J
           title: "Panduan Proyek Portofolio Data Analysis End-to-End",
           body: `# Panduan Proyek Portofolio Data Analysis End-to-End
 
-Proyek **End-to-End (E2E)** adalah karya portofolio paling berharga yang akan membedakanmu dari ribuan pelamar Data Analyst lainnya. Di proyek ini, kamu membuktikan kemampuan memecahkan masalah dari awal hingga akhir tanpa petunjuk langkah demi langkah.
+Sebuah portofolio proyek **End-to-End (E2E)** adalah bukti kompetensi paling bernilai yang membedakanmu dari ribuan pelamar posisi Data Analyst lainnya. Sertifikat kelulusan kursus hanya membuktikan kamu pernah menonton video; portofolio E2E membuktikan kamu **mampu memecahkan masalah bisnis riil dari awal hingga akhir secara mandiri**.
 
 ---
 
-## 1. Pemilihan Dataset Publik Indonesia
+## 1. Mengapa Proyek Dataset Klise Langsung Ditolak Recruiter?
 
-Untuk portofolio yang relevan dengan pasar industri Indonesia, gunakan sumber data publik terpercaya:
-- **BPS (Badan Pusat Statistik)**: Data statistik resmi inflasi, demografi, dan ekonomi daerah (\`bps.go.id\`).
-- **Satu Data Indonesia**: Portal data terbuka pemerintah lintas instansi (\`data.go.id\`).
-- **Kaggle**: Dataset bertema retail, e-commerce, dan fintech (filter dataset berlisensi publik).
+Banyak pelamar pemula mengunggah proyek portofolio dengan dataset populer dari tutorial lama:
+- ❌ Dataset Titanic (*Prediksi penumpang selamat*)
+- ❌ Dataset Bunga Iris (*Klasifikasi spesies bunga*)
+- ❌ Dataset Boston Housing (*Prediksi harga rumah 1970-an*)
+
+> [!CAUTION]
+> **Pandangan Hiring Manager**:
+> Ketika recruiter melihat proyek Titanic atau Iris di CV-mu, mereka berasumsi proyek tersebut hanyalah salinan kode tutorial internet tanpa pemikiran mandiri. Perekrut ingin melihat kemampuanmu menangani **data mentah yang kotor, konteks industri nyata, dan masalah bisnis lokal**.
 
 ---
 
-## 2. Diagram Alur Siklus Proyek Analitik E2E
+## 2. Sumber Dataset Publik Berkualitas Tinggi di Indonesia
+
+Gunakan data publik Indonesia yang relevan dengan tantangan industri nasional:
+- **BPS (Badan Pusat Statistik - \`bps.go.id\`)**: Data inflasi bulanan, indeks harga konsumen, data ketenagakerjaan daerah, dan sensus ekonomi mikro.
+- **Satu Data Indonesia (\`data.go.id\`)**: Portal satu data resmi kementerian dan pemerintah daerah (data transportasi, logistik pangan, kesehatan).
+- **Kaggle & GitHub Komunitas**: Dataset transaksi e-commerce publik (misal: Brazilian Olist E-commerce yang dimodifikasi, Tokopedia product reviews, data logistik pengiriman paket retail).
+
+---
+
+## 3. Diagram Siklus Hidup Penuh Proyek Analitik (The Full Cycle)
 
 \`\`\`text
-[1. Business Question] ──────► Tentukan 3-5 pertanyaan kunci sebelum menyentuh data
-       │
-       ▼
-[2. Data Extraction] ───────► Query SQL / Download CSV Dataset Publik
-       │
-       ▼
-[3. pandas Cleaning] ───────► Tangani missing values, format string, cast tanggal
-       │
-       ▼
-[4. Exploratory Data] ──────► Matplotlib / Seaborn & uji statistik korelasi
-       │
-       ▼
-[5. Interactive BI] ────────► Bangun Dashboard publik di Looker Studio / Power BI
-       │
-       ▼
-[6. Portfolio Repo] ────────► Tulis README.md & Executive Summary di GitHub
+[1. PROBLEM SCOPING] ───────► Merumuskan 3 pertanyaan bisnis kunci yang terukur
+         │
+         ▼
+[2. DATA EXTRACTION] ───────► Mengambil data mentah (Query SQL / CSV / API Publik)
+         │
+         ▼
+[3. DATA WRANGLING] ────────► Pembersihan pandas: missing value, format rupiah, tanggal
+         │
+         ▼
+[4. EXPLORATORY DATA (EDA)] ► Matplotlib/Seaborn: Uji korelasi, sebaran, & identifikasi tren
+         │
+         ▼
+[5. INTERACTIVE DASHBOARD] ─► Publikasikan dashboard interaktif di Google Looker Studio
+         │
+         ▼
+[6. EXECUTIVE SUMMARY] ─────► Tulis laporan ringkas 1 halaman (Konteks, Insight, Aksi)
+         │
+         ▼
+[7. GITHUB & LINKEDIN] ─────► Repositori terstruktur + Postingan ringkasan insight
 \`\`\`
 
 ---
 
-## 3. Matriks Rujukan Komponen Repository GitHub
+## 4. Merumuskan Pertanyaan Bisnis Sebelum Menyentuh Data
 
-| Berkas / Direktori | Isi & Kegunaan | Standar Kualitas |
-|---|---|---|
-| \`README.md\` | Halaman muka repositori | Berisi Judul, Problem Statement, Tautan Dashboard, & Rekomendasi |
-| \`notebooks/\` | File Jupyter Notebook (\`.ipynb\`) | Kode bersih ber-komentar tanpa cetakan error berantakan |
-| \`data/\` | Dataset mentah & bersih | Menyebut lisensi & sumber dataset asal |
-| \`reports/\` | Slide presentasi / PDF | Executive Summary 1 halaman untuk jajaran eksekutif |
+Analisis tanpa tujuan bisnis akan berubah menjadi pembuatan grafik acak tanpa makna. Rumuskan **3 Pertanyaan Bisnis Kunci** yang terikat keputusan:
+1. *Kategori produk mana yang margin keuntungannya turun paling tajam pada kuartal ini dan apa akar penyebabnya?*
+2. *Wilayah pengiriman mana yang memiliki tingkat keterlambatan di atas SLA 5% sehingga memicu pembatalan pesanan?*
+3. *Segmen pelanggan mana yang memiliki nilai transaksi belanja tertinggi (AOV) namun menunjukkan tanda-tanda retensi menurun?*
 
 ---
 
-## 4. Format Executive Summary 1 Halaman
+## 5. Struktur Standar Repositori GitHub Profesional
 
-> [!IMPORTANT]
-> **Tiga Komponen Wajib Laporan Eksekutif**:
-> 1. **Ringkasan Temuan Utamanya**: 2-3 kalimat temuan mengejutkan dari data.
-> 2. **Rekomendasi Bisnis**: Usulan tindakan konkret yang dapat dieksekusi.
-> 3. **Catatan Keterbatasan Data**: Jujur mengakui batas kesimpulan (misal: *"Data bulan Mei tidak mencakup wilayah X akibat migrasi kasir"*). Catatan keterbatasan justru meningkatkan kepercayaan penilai terhadap integritas analis.
+Repositori GitHub portofoliomu harus tersusun rapi layaknya proyek rekayasa perangkat lunak produksi:
+
+\`\`\`text
+ecommerce-retention-analysis/
+├── README.md               <- Wajah utama portofolio (TL;DR, screenshot, link dashboard)
+├── data/
+│   ├── raw/                <- Petunjuk download dataset mentah (jangan upload file raksasa)
+│   └── processed/          <- Sampel data bersih siap pakai
+├── notebooks/              <- Jupyter Notebook bersih (.ipynb) tanpa pesan error berserakan
+│   ├── 01_data_cleaning.ipynb
+│   └── 02_exploratory_analysis.ipynb
+├── sql/                    <- Skrip ekstraksi query SQL
+│   └── extract_orders.sql
+├── reports/                <- Dokumen Executive Summary PDF 1 halaman
+└── requirements.txt        <- Daftar dependensi library (pandas, matplotlib, seaborn)
+\`\`\`
 
 ---
 
-## 5. Analogi Dunia Nyata
+## 6. Template Executive Summary 1 Halaman Berstandar Konsultan
 
-Proyek End-to-End ibarat **membangun rumah dari sketsa arsitek hingga kunci diserahkan ke pemilik**. Kamu tidak cuma memasang batu bata (menulis skrip Python), tetapi merancang fondasi (pertanyaan bisnis), mengecat dinding (visualisasi), hingga memasang perabotan (dashboard interaktif).
+Dokumen laporan eksekutif di folder \`reports/\` atau pada badan utama \`README.md\` harus memuat empat komponen wajib:
+
+1. **Ringkasan Temuan (Executive Summary)**:
+   *"Tingkat pembatalan pesanan meningkat sebesar 8.2% pada kuartal kedua, terkonsentrasi pada dua wilayah penyangga logistik di Jawa Barat."*
+2. **Temuan Kunci Berbasis Angka**:
+   - 74% pembatalan pesanan disebabkan keterlambatan kirim yang melebihi batas 3 hari.
+   - Kerugian potensi GMV akibat pesanan batal mencapai Rp 450 Juta dalam 90 hari terakhir.
+3. **Rekomendasi Tindakan Terukur**:
+   - Audit operasional dan lakukan renegosiasi SLA terhadap mitra kurir wilayah Bekasi.
+   - Tambahkan fitur opsi penyesuaian jadwal kirim otomatis di aplikasi pembeli.
+4. **Catatan Keterbatasan Data**:
+   *"Data transaksi bulan Mei tidak mencakup transaksi outlet fisik akibat migrasi sistem kasir POS."*
 
 ---
 
-## 6. Jebakan & Kesalahan Umum (Common Pitfalls)
+## 7. Jebakan Portofolio yang Membuat Lamaran Ditolak (Common Pitfalls)
 
 > [!WARNING]
-> 1. **Koding Tanpa Pertanyaan Bisnis**: Mengunduh dataset lalu membuat 20 grafik acak tanpa arah tujuan yang jelas.
-> 2. **Menyimpan Data Sensitif (PII Leak)**: Lupa menyamarkan nama pelanggan, nomor telepon, atau alamat email di repositori publik.
-> 3. **README Repositori Kosong**: Hanya mengunggah file \`.ipynb\` tanpa penjelasan konteks cara menjalankan kode atau tautan ke dashboard.
+> 1. **Kebocoran Data Pribadi (PII Leak)**: Lupa menyamarkan nama asli pelanggan, nomor telepon, atau alamat email. Selalu lakukan anonimisasi data sebelum dipublikasikan ke GitHub!
+> 2. **README Kosong**: Repositori yang hanya berisi file \`.ipynb\` tanpa penjelasan konteks masalah dan tanpa tautan dashboard live di halaman \`README.md\`.
+> 3. **Notebook Kotor Penuh Pesan Error**: Mengunggah Jupyter Notebook yang dipenuhi jejak baris traceback error merah dan cell koding eksperimen yang tidak berurutan. Jalankan *"Restart Kernel and Run All Cells"* sebelum commit!
 
 ---
 
-## 7. Kaitan ke Dunia Kerja
+## 8. Kaitan ke Dunia Kerja: Menghadapi Portofolio Walkthrough
 
-Ketika perekrut (*recruiter*) membuka akun GitHub milikmu, mereka tidak punya waktu membaca 500 baris kode Python. Mereka akan langsung melihat **README.md**, mencoba **tautan Looker Studio**, dan membaca **Executive Summary**. Repositori E2E yang rapi adalah bukti nyata kompetensimu sebagai Data Analyst profesional.`,
+Ketika lolos ke tahap wawancara kerja teknis (*Technical Interview*), interviewer akan meminta kamu menceritakan proyek portofoliomu dalam waktu 3 menit. Gunakan kerangka **Metode STAR**:
+- **Situation**: *"Perusahaan e-commerce menghadapi lonjakan pembatalan pesanan..."*
+- **Task**: *"Tugas saya adalah mengidentifikasi akar penyebab dan memetakan wilayah terdampak..."*
+- **Action**: *"Saya mengekstrak 50.000 transaksi via SQL, membersihkan data dengan pandas, dan membangun dashboard Looker Studio..."*
+- **Result**: *"Hasilnya, kami menemukan 74% masalah ada pada mitra kurir X, dan rekomendasi pengalihan kuota berhasil memitigasi potensi rugi Rp 280 Juta."*`,
         },
         {
           kind: "step",
@@ -3212,13 +3626,13 @@ Ketika perekrut (*recruiter*) membuka akun GitHub milikmu, mereka tidak punya wa
             note: "Kerapian repository mencerminkan kedisiplinan kerja.",
           },
           instruction:
-            "Tuliskan struktur file README markdown yang memuat header `# Portfolio Analytics` dan subheader `## Dashboard Link`.",
+            "Kamu sedang menyusun kerangka berkas `README.md` repositori portofolio analitik. Tuliskan dua baris header awal dalam format Markdown: judul utama berlevel 1 (`#`) bernama `'Portfolio Analytics'`, diikuti baris baru sub-judul berlevel 2 (`##`) bernama `'Dashboard Link'`.",
           starterCode: "# Tulis Markdown README di sini\n",
           language: "text",
           tests: [
             {
-              pattern: "#\\s+Portfolio Analytics\\s*\\n\\s*##\\s+Dashboard Link",
-              message: "Tuliskan `# Portfolio Analytics` disusul `## Dashboard Link`",
+              pattern: "#\\s+Portfolio Analytics\\s*\\r?\\n\\s*##\\s+Dashboard Link",
+              message: "Tuliskan `# Portfolio Analytics` disusul baris baru `## Dashboard Link`.",
             },
           ],
           solution: "# Portfolio Analytics\n## Dashboard Link",
