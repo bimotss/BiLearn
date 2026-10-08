@@ -56,6 +56,10 @@ function FlashcardSessionContent({
   >({});
   const [announcement, setAnnouncement] = useState("");
 
+  const prevPartNumber = part.partNumber > 1 ? part.partNumber - 1 : null;
+  const nextPartNumber = part.partNumber < 10 ? part.partNumber + 1 : null;
+  const nextPartSlug = nextPartNumber ? `bagian-${nextPartNumber}` : null;
+
   const isRoundComplete = currentIndex >= queue.length;
   const currentCard: JapaneseFlashcardItem | undefined = queue[currentIndex];
 
@@ -225,17 +229,67 @@ function FlashcardSessionContent({
       )}
 
       {/* Header & Navigasi */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 dark:border-white/[0.08] pb-3">
-        <Link
-          href="/flashcards/jepang"
-          className="inline-flex items-center gap-2 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-800/80 px-3.5 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 shadow-2xs hover:bg-slate-100 dark:hover:bg-slate-700 hover:border-slate-300 dark:hover:border-white/20 transition cursor-pointer"
-        >
-          <span aria-hidden="true" className="text-sm font-bold">←</span>
-          <span>Kembali ke Daftar Bagian</span>
-        </Link>
-        <span className="text-xs font-semibold text-rose-600 dark:text-rose-400 uppercase tracking-wider">
-          JLPT N5 — Vol. 1 · {part.title}
-        </span>
+      <div className="space-y-3 border-b border-slate-200 dark:border-white/[0.08] pb-3">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <Link
+            href="/flashcards/jepang"
+            className="inline-flex items-center gap-2 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-800/80 px-3.5 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 shadow-2xs hover:bg-slate-100 dark:hover:bg-slate-700 hover:border-slate-300 dark:hover:border-white/20 transition cursor-pointer"
+          >
+            <span aria-hidden="true" className="text-sm font-bold">←</span>
+            <span>Kembali ke Daftar Bagian</span>
+          </Link>
+
+          {/* Navigasi Cepat Bagian Sebelumnya / Berikutnya */}
+          <div className="flex items-center gap-1.5 text-xs">
+            {prevPartNumber ? (
+              <Link
+                href={`/flashcards/jepang/n5/vol-1/bagian-${prevPartNumber}${activeMode === "kuis" ? "?tab=kuis" : ""}`}
+                className="cursor-pointer px-2.5 py-1 rounded-lg border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 font-semibold transition"
+                title={`Ke Bagian ${prevPartNumber}`}
+              >
+                ← Bagian {prevPartNumber}
+              </Link>
+            ) : null}
+
+            <span className="text-xs font-bold text-rose-600 dark:text-rose-400 uppercase tracking-wider px-1">
+              {part.title} ({part.startNo}–{part.endNo})
+            </span>
+
+            {nextPartNumber ? (
+              <Link
+                href={`/flashcards/jepang/n5/vol-1/bagian-${nextPartNumber}${activeMode === "kuis" ? "?tab=kuis" : ""}`}
+                className="cursor-pointer px-2.5 py-1 rounded-lg border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 font-semibold transition"
+                title={`Ke Bagian ${nextPartNumber}`}
+              >
+                Bagian {nextPartNumber} →
+              </Link>
+            ) : null}
+          </div>
+        </div>
+
+        {/* Quick Switcher 10 Bagian */}
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5 pt-1 text-xs">
+          <span className="text-slate-400 dark:text-slate-500 font-semibold text-[11px] mr-1 shrink-0 uppercase tracking-wider">
+            Pindah:
+          </span>
+          {Array.from({ length: 10 }, (_, i) => i + 1).map((num) => {
+            const isCurrent = num === part.partNumber;
+            return (
+              <Link
+                key={num}
+                href={`/flashcards/jepang/n5/vol-1/bagian-${num}${activeMode === "kuis" ? "?tab=kuis" : ""}`}
+                className={`cursor-pointer shrink-0 h-7 px-2.5 rounded-lg flex items-center justify-center font-bold text-xs transition-all ${
+                  isCurrent
+                    ? "bg-rose-600 text-white shadow-xs"
+                    : "border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-900/60 text-slate-600 dark:text-slate-400 hover:border-rose-400 hover:text-rose-600 dark:hover:text-rose-300"
+                }`}
+                title={`Buka Bagian ${num} (Kosakata nomor ${num * 10 - 9}–${num * 10})`}
+              >
+                Bagian {num}
+              </Link>
+            );
+          })}
+        </div>
       </div>
 
       {/* Mode Switcher: Flashcard vs Kuis */}
@@ -272,6 +326,7 @@ function FlashcardSessionContent({
 
       {activeMode === "kuis" ? (
         <PartQuizView
+          key={part.slug}
           part={part}
           cards={initialCards}
           allDeckCards={allDeckCards}
@@ -580,6 +635,21 @@ function FlashcardSessionContent({
             >
               <span>Uji Ingatanmu (Mulai Kuis {initialCards.length * 3} Soal) →</span>
             </button>
+
+            {nextPartNumber && (
+              <Link
+                href={`/flashcards/jepang/n5/vol-1/${nextPartSlug}`}
+                className="cursor-pointer w-full rounded-xl border border-rose-500/30 bg-rose-500/[0.06] hover:bg-rose-500/[0.12] text-rose-700 dark:text-rose-300 py-3 text-sm font-bold transition-all flex items-center justify-center gap-2"
+              >
+                <span>Lanjut ke Flashcard Bagian {nextPartNumber} (No. {nextPartNumber * 10 - 9}–{nextPartNumber * 10}) →</span>
+              </Link>
+            )}
+
+            {part.partNumber === 10 && (
+              <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3.5 text-center text-xs sm:text-sm font-semibold text-emerald-800 dark:text-emerald-300">
+                🎉 Selamat! Kamu telah menyelesaikan seluruh 10 Bagian Flashcard JLPT N5 Vol. 1!
+              </div>
+            )}
 
             {unmemorizedCards.length > 0 ? (
               <button

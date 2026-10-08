@@ -49,6 +49,7 @@ export default async function FlashcardPartPage({
 
   return (
     <FlashcardSessionView
+      key={part.slug}
       part={part}
       initialCards={cards}
       allDeckCards={japaneseN5Vol1Deck.items}

@@ -51,6 +51,21 @@ export function generatePartQuizQuestions(
         }
       }
 
+      if (chosenDistractors.length < 3 && fallbackDeckCards.length > 0) {
+        const fallbackDistractors = shuffle(
+          fallbackDeckCards.filter(
+            (c) => c.meaning.toLowerCase() !== card.meaning.toLowerCase() && c.id !== card.id
+          )
+        );
+        for (const c of fallbackDistractors) {
+          if (!seen.has(c.meaning)) {
+            seen.add(c.meaning);
+            chosenDistractors.push(c.meaning);
+            if (chosenDistractors.length === 3) break;
+          }
+        }
+      }
+
       const options = shuffle([card.meaning, ...chosenDistractors]);
 
       type1Questions.push({
@@ -80,6 +95,21 @@ export function generatePartQuizQuestions(
           seen.add(c.term);
           chosenDistractors.push(c.term);
           if (chosenDistractors.length === 3) break;
+        }
+      }
+
+      if (chosenDistractors.length < 3 && fallbackDeckCards.length > 0) {
+        const fallbackDistractors = shuffle(
+          fallbackDeckCards.filter(
+            (c) => c.term !== card.term && c.id !== card.id
+          )
+        );
+        for (const c of fallbackDistractors) {
+          if (!seen.has(c.term)) {
+            seen.add(c.term);
+            chosenDistractors.push(c.term);
+            if (chosenDistractors.length === 3) break;
+          }
         }
       }
 
@@ -120,6 +150,26 @@ export function generatePartQuizQuestions(
           seen.add(opt);
           chosenDistractors.push(opt);
           if (chosenDistractors.length === 3) break;
+        }
+      }
+
+      if (chosenDistractors.length < 3 && fallbackDeckCards.length > 0) {
+        const fallbackDistractors = shuffle(
+          fallbackDeckCards.filter(
+            (c) =>
+              c.id !== card.id &&
+              c.term !== card.term &&
+              c.hiragana !== card.hiragana &&
+              c.meaning.toLowerCase() !== card.meaning.toLowerCase()
+          )
+        );
+        for (const c of fallbackDistractors) {
+          const opt = formatOption(c);
+          if (!seen.has(opt)) {
+            seen.add(opt);
+            chosenDistractors.push(opt);
+            if (chosenDistractors.length === 3) break;
+          }
         }
       }
 

@@ -38,6 +38,9 @@ export function PartQuizView({
     }>
   >([]);
 
+  const nextPartNumber = part.partNumber < 10 ? part.partNumber + 1 : null;
+  const nextPartSlug = nextPartNumber ? `bagian-${nextPartNumber}` : null;
+
   const totalQuestions = questions.length;
   const currentQ = questions[currentIndex];
   const progressPct = totalQuestions > 0 ? Math.round((currentIndex / totalQuestions) * 100) : 0;
@@ -635,12 +638,27 @@ export function PartQuizView({
 
           {/* Tombol Aksi */}
           <div className="space-y-3 pt-2">
+            {nextPartNumber && (
+              <Link
+                href={`/flashcards/jepang/n5/vol-1/${nextPartSlug}?tab=kuis`}
+                className="cursor-pointer w-full rounded-xl bg-gradient-to-r from-rose-600 to-orange-600 hover:from-rose-500 hover:to-orange-500 py-3 text-sm font-bold text-white shadow-xs transition-all flex items-center justify-center gap-2"
+              >
+                <span>Lanjut ke Kuis Bagian {nextPartNumber} (No. {nextPartNumber * 10 - 9}–{nextPartNumber * 10}) →</span>
+              </Link>
+            )}
+
+            {part.partNumber === 10 && (
+              <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3.5 text-center text-xs sm:text-sm font-semibold text-emerald-800 dark:text-emerald-300">
+                🎉 Selamat! Kamu telah menyelesaikan seluruh 10 Bagian Kuis JLPT N5 Vol. 1!
+              </div>
+            )}
+
             <button
               type="button"
               onClick={handleRestartQuiz}
-              className="cursor-pointer w-full rounded-xl bg-rose-600 hover:bg-rose-500 active:bg-rose-700 py-3 text-sm font-bold text-white shadow-xs transition-all"
+              className="cursor-pointer w-full rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-100 py-3 text-sm font-bold shadow-xs transition-all"
             >
-              Ulangi Kuis (Acak Soal Baru)
+              Ulangi Kuis Bagian Ini (Acak Soal Baru)
             </button>
 
             {onSwitchToFlashcard && (
