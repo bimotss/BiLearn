@@ -1,18 +1,21 @@
 "use client";
 
 import { useCallback, useSyncExternalStore } from "react";
+import type { PartQuizRecord } from "@/lib/flashcard-types";
 
 export type FlashcardCardStatus = "unstudied" | "not-memorized" | "memorized";
 
 export interface FlashcardProgressData {
   version: 1;
   cards: Record<string, "not-memorized" | "memorized">;
+  quizScores?: Record<string, PartQuizRecord>;
 }
 
 const STORAGE_KEY = "bilearn-flashcards-v1";
 const EMPTY_DATA: FlashcardProgressData = {
   version: 1,
   cards: {},
+  quizScores: {},
 };
 
 let cacheRaw: string | null = null;
@@ -21,7 +24,7 @@ let memoryWarning: string | null = null;
 
 function sanitizeData(parsed: unknown): FlashcardProgressData {
   if (!parsed || typeof parsed !== "object") {
-    return { version: 1, cards: {} };
+    return { version: 1, cards: {}, quizScores: {} };
   }
 
   const obj = parsed as Record<string, unknown>;
@@ -34,9 +37,30 @@ function sanitizeData(parsed: unknown): FlashcardProgressData {
     }
   }
 
+  const rawQuiz =
+    obj.quizScores && typeof obj.quizScores === "object"
+      ? (obj.quizScores as Record<string, unknown>)
+      : {};
+  const cleanQuiz: Record<string, PartQuizRecord> = {};
+
+  for (const [slug, val] of Object.entries(rawQuiz)) {
+    if (typeof slug === "string" && val && typeof val === "object") {
+      const q = val as Record<string, unknown>;
+      if (typeof q.bestScore === "number" && typeof q.totalQuestions === "number") {
+        cleanQuiz[slug] = {
+          bestScore: q.bestScore,
+          totalQuestions: q.totalQuestions,
+          lastScore: typeof q.lastScore === "number" ? q.lastScore : q.bestScore,
+          updatedAt: typeof q.updatedAt === "string" ? q.updatedAt : new Date().toISOString(),
+        };
+      }
+    }
+  }
+
   return {
     version: 1,
     cards: cleanCards,
+    quizScores: cleanQuiz,
   };
 }
 
@@ -164,6 +188,35 @@ export function useFlashcardProgress() {
     [data]
   );
 
+  const getPartQuizScore = useCallback(
+    (partSlug: string): PartQuizRecord | undefined => {
+      return data.quizScores?.[partSlug];
+    },
+    [data]
+  );
+
+  const savePartQuizScore = useCallback(
+    (partSlug: string, score: number, total: number) => {
+      const current = getSnapshot();
+      const existing = current.quizScores?.[partSlug];
+      const bestScore = existing ? Math.max(existing.bestScore, score) : score;
+      const next: FlashcardProgressData = {
+        ...current,
+        quizScores: {
+          ...current.quizScores,
+          [partSlug]: {
+            bestScore,
+            totalQuestions: total,
+            lastScore: score,
+            updatedAt: new Date().toISOString(),
+          },
+        },
+      };
+      write(next);
+    },
+    []
+  );
+
   return {
     ready,
     data,
@@ -172,5 +225,8 @@ export function useFlashcardProgress() {
     markCard,
     getPartMemorizedCount,
     getTotalMemorizedCount,
+    getPartQuizScore,
+    savePartQuizScore,
   };
 }
+

@@ -6,8 +6,13 @@ import { japaneseN5Vol1Deck } from "@/data/flashcards";
 import { useFlashcardProgress } from "@/lib/flashcards-progress";
 
 export function JapaneseDeckOverview() {
-  const { ready, storageWarning, getTotalMemorizedCount, getPartMemorizedCount } =
-    useFlashcardProgress();
+  const {
+    ready,
+    storageWarning,
+    getTotalMemorizedCount,
+    getPartMemorizedCount,
+    getPartQuizScore,
+  } = useFlashcardProgress();
 
   const deck = japaneseN5Vol1Deck;
   const allCardIds = useMemo(() => deck.items.map((c) => c.id), [deck]);
@@ -109,6 +114,7 @@ export function JapaneseDeckOverview() {
             const partTotal = part.itemIds.length;
             const partPct = Math.round((partMemorized / partTotal) * 100);
             const isCompleted = partMemorized === partTotal;
+            const quizRecord = ready ? getPartQuizScore(part.slug) : undefined;
 
             return (
               <div
@@ -154,18 +160,48 @@ export function JapaneseDeckOverview() {
                       />
                     </div>
                   </div>
+
+                  {/* Indikator Skor Kuis Objektif */}
+                  <div className="flex justify-between items-center text-xs mt-3 pt-2.5 border-t border-slate-100 dark:border-white/[0.05]">
+                    <span className="text-slate-500 dark:text-slate-400">
+                      Kuis Objektif ({part.itemIds.length * 3} Soal)
+                    </span>
+                    {quizRecord ? (
+                      <span
+                        className={`font-bold font-mono px-2 py-0.5 rounded-md text-[11px] ${
+                          quizRecord.bestScore / (quizRecord.totalQuestions || (part.itemIds.length * 3)) >= 0.8
+                            ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20"
+                            : "bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20"
+                        }`}
+                      >
+                        ⭐ {quizRecord.bestScore}/{quizRecord.totalQuestions || (part.itemIds.length * 3)} ({Math.round((quizRecord.bestScore / (quizRecord.totalQuestions || (part.itemIds.length * 3))) * 100)}%)
+                      </span>
+                    ) : (
+                      <span className="text-slate-400 dark:text-slate-500 text-[11px] bg-slate-100 dark:bg-white/[0.04] px-2 py-0.5 rounded-md">
+                        Belum Dikerjakan
+                      </span>
+                    )}
+                  </div>
                 </div>
 
-                <div className="mt-5 pt-3 border-t border-slate-200 dark:border-white/[0.06]">
+                {/* Tombol Aksi: Flashcard & Kuis */}
+                <div className="mt-5 pt-3 border-t border-slate-200 dark:border-white/[0.06] grid grid-cols-2 gap-2">
                   <Link
                     href={`/flashcards/jepang/n5/vol-1/${part.slug}`}
-                    className={`cursor-pointer inline-flex w-full items-center justify-center rounded-xl py-2.5 text-xs sm:text-sm font-bold transition-all duration-200 ${
+                    className={`cursor-pointer inline-flex items-center justify-center rounded-xl py-2 px-3 text-xs font-bold transition-all duration-200 ${
                       isCompleted
                         ? "border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700"
-                        : "bg-gradient-to-r from-rose-600 to-orange-600 text-white shadow-md shadow-rose-600/20 hover:from-rose-500 hover:to-orange-500 hover:scale-[1.01]"
+                        : "bg-gradient-to-r from-rose-600 to-orange-600 text-white shadow-xs hover:from-rose-500 hover:to-orange-500 hover:scale-[1.01]"
                     }`}
                   >
-                    {partMemorized > 0 ? "Lanjutkan Latihan Flashcard →" : "Mulai Sesi Flashcard →"}
+                    🎴 Flashcard
+                  </Link>
+
+                  <Link
+                    href={`/flashcards/jepang/n5/vol-1/${part.slug}?tab=kuis`}
+                    className="cursor-pointer inline-flex items-center justify-center rounded-xl py-2 px-3 text-xs font-bold border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-800/80 text-slate-800 dark:text-slate-200 hover:border-rose-400 dark:hover:border-rose-500/40 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all shadow-2xs"
+                  >
+                    Kuis ({part.itemIds.length * 3} Soal)
                   </Link>
                 </div>
               </div>

@@ -11,6 +11,7 @@ import {
   japaneseN5Parts,
   japaneseN5Vol1Deck,
   getPartCards,
+  generatePartQuizQuestions,
 } from "../src/data/flashcards";
 import type { JapaneseFlashcardItem, FlashcardPart } from "../src/lib/flashcard-types";
 
@@ -379,6 +380,98 @@ function runStorageSanitizationCheck() {
   }
 }
 
+function runPartQuizVerification() {
+  console.log("\n── 6. Verifikasi Generator Kuis Objektif & Tipe Soal Baru ──");
+
+  const part1Cards = getPartCards(japaneseN5Vol1Deck, japaneseN5Parts[0]);
+  const allCards = japaneseCards;
+
+  // 1. Verifikasi total soal default (30 soal = 10 Tipe 1 + 10 Tipe 2 + 10 Tipe 3)
+  const allQuestions = generatePartQuizQuestions(part1Cards, allCards, "all");
+  if (allQuestions.length === 30) {
+    reportPass("Mode default kuis menghasilkan tepat 30 soal (10 soal per tipe untuk 10 kartu).");
+  } else {
+    reportFail(`Total soal kuis adalah ${allQuestions.length}, diharapkan 30.`);
+  }
+
+  // 2. Verifikasi distribusi tipe soal
+  const t1 = allQuestions.filter((q) => q.type === "kanji-to-meaning");
+  const t2 = allQuestions.filter((q) => q.type === "meaning-to-kanji");
+  const t3 = allQuestions.filter((q) => q.type === "kanji-to-hiragana-meaning");
+
+  if (t1.length === 10 && t2.length === 10 && t3.length === 10) {
+    reportPass("Distribusi tipe kuis seimbang: 10 Kanji➔Arti, 10 Arti➔Kanji, 10 Kanji➔Hiragana+Arti.");
+  } else {
+    reportFail(`Distribusi tipe salah: T1=${t1.length}, T2=${t2.length}, T3=${t3.length}.`);
+  }
+
+  // 3. Verifikasi Tipe 3 (Kanji -> Hiragana + Arti)
+  let t3Valid = true;
+  for (const q of t3) {
+    const expectedAnswer = `${q.card.hiragana} · ${q.card.meaning}`;
+    if (q.prompt !== q.card.term) {
+      reportFail(`Soal Tipe 3 (${q.id}): prompt bukan kanji (${q.prompt} vs ${q.card.term}).`);
+      t3Valid = false;
+      break;
+    }
+    if (q.correctAnswer !== expectedAnswer) {
+      reportFail(`Soal Tipe 3 (${q.id}): correctAnswer salah (${q.correctAnswer} vs ${expectedAnswer}).`);
+      t3Valid = false;
+      break;
+    }
+    if (q.options.length !== 4) {
+      reportFail(`Soal Tipe 3 (${q.id}): jumlah opsi adalah ${q.options.length}, diharapkan 4.`);
+      t3Valid = false;
+      break;
+    }
+    if (new Set(q.options).size !== 4) {
+      reportFail(`Soal Tipe 3 (${q.id}): opsi pilihan ganda tidak unik.`);
+      t3Valid = false;
+      break;
+    }
+    if (!q.options.includes(expectedAnswer)) {
+      reportFail(`Soal Tipe 3 (${q.id}): correctAnswer tidak ada di daftar options.`);
+      t3Valid = false;
+      break;
+    }
+    for (const opt of q.options) {
+      if (!opt.includes(" · ")) {
+        reportFail(`Soal Tipe 3 (${q.id}): opsi '${opt}' tidak memuat pemisah ' · ' antara hiragana dan arti.`);
+        t3Valid = false;
+        break;
+      }
+    }
+  }
+
+  if (t3Valid) {
+    reportPass("Seluruh 10 soal Tipe 3 valid: prompt berupa Kanji, kunci & opsi berupa 'Hiragana · Arti', 4 opsi unik.");
+  }
+
+  // 4. Verifikasi filter per tipe
+  const qFilterHiragana = generatePartQuizQuestions(part1Cards, allCards, "kanji-to-hiragana-meaning");
+  if (
+    qFilterHiragana.length === 10 &&
+    qFilterHiragana.every((q) => q.type === "kanji-to-hiragana-meaning")
+  ) {
+    reportPass("Filter 'kanji-to-hiragana-meaning' menghasilkan tepat 10 soal khusus Hiragana + Arti.");
+  } else {
+    reportFail("Filter 'kanji-to-hiragana-meaning' tidak menghasilkan 10 soal homogen.");
+  }
+
+  const qFilterMeaning = generatePartQuizQuestions(part1Cards, allCards, "kanji-to-meaning");
+  const qFilterKanji = generatePartQuizQuestions(part1Cards, allCards, "meaning-to-kanji");
+  if (
+    qFilterMeaning.length === 10 &&
+    qFilterKanji.length === 10 &&
+    qFilterMeaning.every((q) => q.type === "kanji-to-meaning") &&
+    qFilterKanji.every((q) => q.type === "meaning-to-kanji")
+  ) {
+    reportPass("Filter kuis individual 'kanji-to-meaning' dan 'meaning-to-kanji' berfungsi tepat.");
+  } else {
+    reportFail("Filter kuis individual gagal diverifikasi.");
+  }
+}
+
 function main() {
   console.log("=== BILEARN FLASHCARD JEPANG VERIFICATION SUITE ===\n");
   runDataIntegrityCheck();
@@ -386,6 +479,7 @@ function main() {
   runBadFixturesCheck();
   runBehaviorAndStateSimulation();
   runStorageSanitizationCheck();
+  runPartQuizVerification();
 
   console.log("\n──────────────────────────────────────────────────");
   if (failures === 0) {

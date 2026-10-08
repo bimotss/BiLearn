@@ -56,3 +56,7 @@ export function getPartCards(deck: FlashcardDeck, part: FlashcardPart): Japanese
 export function getCardById(cardId: string): JapaneseFlashcardItem | undefined {
   return japaneseCards.find((card) => card.id === cardId);
 }
+
+export { generatePartQuizQuestions } from "./quiz-generator";
+export type { QuizQuestionFilter } from "./quiz-generator";
+

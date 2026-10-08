@@ -1,13 +1,18 @@
 "use client";
 
-import { useState, useCallback, useEffect, useMemo } from "react";
+import { useState, useCallback, useEffect, useMemo, Suspense } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import type { FlashcardPart, JapaneseFlashcardItem } from "@/lib/flashcard-types";
 import { useFlashcardProgress } from "@/lib/flashcards-progress";
+
+import { PartQuizView } from "./PartQuizView";
 
 interface FlashcardSessionViewProps {
   part: FlashcardPart;
   initialCards: JapaneseFlashcardItem[];
+  allDeckCards?: JapaneseFlashcardItem[];
+  initialTab?: "flashcard" | "kuis";
 }
 
 function shuffleArray<T>(items: T[]): T[] {
@@ -19,12 +24,28 @@ function shuffleArray<T>(items: T[]): T[] {
   return result;
 }
 
-export function FlashcardSessionView({
+function FlashcardSessionContent({
   part,
   initialCards,
+  allDeckCards = [],
+  initialTab = "flashcard",
 }: FlashcardSessionViewProps) {
-  const { ready, storageWarning, getStatus, markCard, getPartMemorizedCount } =
-    useFlashcardProgress();
+  const searchParams = useSearchParams();
+  const requestedTab = searchParams.get("tab");
+
+  const {
+    ready,
+    storageWarning,
+    getStatus,
+    markCard,
+    getPartMemorizedCount,
+    getPartQuizScore,
+  } = useFlashcardProgress();
+
+  const [userSelectedMode, setUserSelectedMode] = useState<"flashcard" | "kuis" | null>(null);
+  const activeMode = userSelectedMode ?? (requestedTab === "kuis" ? "kuis" : initialTab);
+  const setActiveMode = setUserSelectedMode;
+  const quizRecord = ready ? getPartQuizScore(part.slug) : undefined;
 
   const [queue, setQueue] = useState<JapaneseFlashcardItem[]>(initialCards);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -126,7 +147,7 @@ export function FlashcardSessionView({
         return;
       }
 
-      if (isRoundComplete) return;
+      if (activeMode !== "flashcard" || isRoundComplete) return;
 
       // Navigasi kartu sebelumnya
       if (e.key === "Backspace" || e.key === "ArrowUp") {
@@ -159,7 +180,7 @@ export function FlashcardSessionView({
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isRoundComplete, isAnswerShown, handleRevealAnswer, handleRate, currentIndex, handlePrevCard]);
+  }, [activeMode, isRoundComplete, isAnswerShown, handleRevealAnswer, handleRate, currentIndex, handlePrevCard]);
 
   const handleRepeatUnmemorized = (shuffle = false) => {
     if (unmemorizedCards.length === 0) return;
@@ -217,7 +238,46 @@ export function FlashcardSessionView({
         </span>
       </div>
 
-      {!isRoundComplete && currentCard ? (
+      {/* Mode Switcher: Flashcard vs Kuis */}
+      <div className="flex border-b border-slate-200 dark:border-white/[0.08] gap-2">
+        <button
+          type="button"
+          onClick={() => setActiveMode("flashcard")}
+          className={`cursor-pointer flex items-center gap-2 px-4 py-2.5 text-xs sm:text-sm font-bold border-b-2 transition-all -mb-px rounded-t-xl ${
+            activeMode === "flashcard"
+              ? "border-rose-500 text-rose-700 dark:border-rose-400 dark:text-rose-300 bg-rose-500/10 dark:bg-white/[0.04]"
+              : "border-transparent text-slate-500 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-white dark:hover:bg-white/[0.02]"
+          }`}
+        >
+          <span>🎴</span>
+          <span>Mode Flashcard ({initialCards.length} Kartu)</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveMode("kuis")}
+          className={`cursor-pointer flex items-center gap-2 px-4 py-2.5 text-xs sm:text-sm font-bold border-b-2 transition-all -mb-px rounded-t-xl ${
+            activeMode === "kuis"
+              ? "border-rose-500 text-rose-700 dark:border-rose-400 dark:text-rose-300 bg-rose-500/10 dark:bg-white/[0.04]"
+              : "border-transparent text-slate-500 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-white dark:hover:bg-white/[0.02]"
+          }`}
+        >
+          <span>Mode Kuis ({initialCards.length * 3} Soal)</span>
+          {quizRecord && (
+            <span className="rounded-full bg-slate-100 dark:bg-white/10 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 text-[10px] px-2 py-0.5 font-mono">
+              {quizRecord.bestScore}/{quizRecord.totalQuestions || (initialCards.length * 3)}
+            </span>
+          )}
+        </button>
+      </div>
+
+      {activeMode === "kuis" ? (
+        <PartQuizView
+          part={part}
+          cards={initialCards}
+          allDeckCards={allDeckCards}
+          onSwitchToFlashcard={() => setActiveMode("flashcard")}
+        />
+      ) : !isRoundComplete && currentCard ? (
         <div className="space-y-4">
           {/* Posisi, Aksi Acak & Bar Progress Sesi */}
           <div className="flex flex-wrap items-center justify-between gap-2 text-xs font-medium text-slate-500 dark:text-slate-400">
@@ -513,6 +573,14 @@ export function FlashcardSessionView({
 
           {/* Pilihan Aksi Lanjutan */}
           <div className="space-y-3 pt-2">
+            <button
+              type="button"
+              onClick={() => setActiveMode("kuis")}
+              className="cursor-pointer w-full rounded-xl bg-rose-600 hover:bg-rose-500 active:bg-rose-700 py-3.5 text-sm font-bold text-white shadow-xs hover:shadow transition-all flex items-center justify-center gap-2"
+            >
+              <span>Uji Ingatanmu (Mulai Kuis {initialCards.length * 3} Soal) →</span>
+            </button>
+
             {unmemorizedCards.length > 0 ? (
               <button
                 type="button"
@@ -556,3 +624,18 @@ export function FlashcardSessionView({
     </div>
   );
 }
+
+export function FlashcardSessionView(props: FlashcardSessionViewProps) {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-slate-950 flex items-center justify-center text-slate-400">
+          Memuat sesi...
+        </div>
+      }
+    >
+      <FlashcardSessionContent {...props} />
+    </Suspense>
+  );
+}
+

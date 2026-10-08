@@ -34,3 +34,27 @@ export interface FlashcardDeck {
   parts: FlashcardPart[];
   items: JapaneseFlashcardItem[];
 }
+
+export type PartQuizQuestionType =
+  | "kanji-to-meaning"
+  | "meaning-to-kanji"
+  | "kanji-to-hiragana-meaning";
+
+export interface PartQuizQuestion {
+  id: string;
+  cardId: string;
+  type: PartQuizQuestionType;
+  prompt: string;
+  promptSub?: string;
+  options: string[];
+  correctAnswer: string;
+  card: JapaneseFlashcardItem;
+}
+
+export interface PartQuizRecord {
+  bestScore: number;
+  totalQuestions: number;
+  lastScore: number;
+  updatedAt: string;
+}
+

@@ -47,5 +47,12 @@ export default async function FlashcardPartPage({
 
   const cards = getPartCards(japaneseN5Vol1Deck, part);
 
-  return <FlashcardSessionView part={part} initialCards={cards} />;
+  return (
+    <FlashcardSessionView
+      part={part}
+      initialCards={cards}
+      allDeckCards={japaneseN5Vol1Deck.items}
+    />
+  );
 }
+
